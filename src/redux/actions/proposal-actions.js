@@ -731,7 +731,7 @@ export const onGetValidatedProposalDetails = (
   };
 };
 
-function applyMyUserRoleFilter(questions) {
+function applyMyUserRoleFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -842,7 +842,7 @@ function applyAnsweredFilter(questions, flags) {
   return filteredQuestions;
 }
 
-function applyInterestedPartyFilter(questions) {
+function applyInterestedPartyFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -856,11 +856,11 @@ function applyInterestedPartyFilter(questions) {
   return filteredQuestions;
 }
 
-function applyShowInactiveQuestionsFilter(questions) {
+function applyShowInactiveQuestionsFilter(questions, flags) {
   return questions;
 }
 
-function applyMilestoneFilter(questions, milestone) {
+function applyMilestoneFilter(questions, flags, milestone) {
   let filteredQuestions = cloneDeep(questions);
   if (milestone) {
     filteredQuestions = fromJS(filteredQuestions)
@@ -885,7 +885,7 @@ function filterGroup(
     return uniqBy(filterCallback(allQuestions, flags), 'questionId');
   }
   return uniqBy(
-    [...filteredQuestions, ...filterCallback(allQuestions, filterName, flags)],
+    [...filteredQuestions, ...filterCallback(allQuestions, flags, filterName)],
     'questionId'
   );
 }
@@ -978,6 +978,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
     const searchQuery = selectQuery(getState());
+    const flags = state.proposal.get('eventflag');
     dispatch({
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
@@ -1002,7 +1003,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyMyUserRoleFilter
+              applyMyUserRoleFilter,
+              flags
             );
             break;
           case 'answered':
@@ -1010,7 +1012,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyAnsweredFilter
+              applyAnsweredFilter,
+              flags
             );
             break;
           case 'unanswered':
@@ -1018,7 +1021,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyUnAnsweredFilter
+              applyUnAnsweredFilter,
+              flags
             );
             break;
           case 'verificationRequired':
@@ -1026,7 +1030,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyVerificationRequiredFilter
+              applyVerificationRequiredFilter,
+              flags
             );
             break;
           case 'interestedParty':
@@ -1034,7 +1039,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyInterestedPartyFilter
+              applyInterestedPartyFilter,
+              flags
             );
             break;
           case 'showInactiveQuestions':
@@ -1042,7 +1048,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyShowInactiveQuestionsFilter
+              applyShowInactiveQuestionsFilter,
+              flags
             );
             break;
           default:
@@ -1051,6 +1058,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
               filteredQuestions,
               logic,
               applyMilestoneFilter,
+              flags,
               filterName
             );
             break;

@@ -127,6 +127,11 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Verification Required',
         className: CLASS_QUES_FIL_R1_C1
       },
+      showInactiveQuestions: {
+        checked: false,
+        label: 'Include N/A Questions',
+        className: 'questions-filter__row3-col1'
+      },
       logic: 'OR'
     },
     rolegroup: {
@@ -140,14 +145,8 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Informed',
         className: 'questions-filter__row2-col1'
       },
-      showInactiveQuestions: {
-        checked: false,
-        label: 'Include N/A Questions',
-        className: 'questions-filter__row3-col1'
-      },
       logic: 'AND'
     },
-
     milestoneGroup: {}
   }),
   filteredProposalQuestions: Map({}),
