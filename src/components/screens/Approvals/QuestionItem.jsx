@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
 import IconButton from 'apollo-react/components/IconButton';
+import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import InfoIcon from 'apollo-react-icons/Info';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import CalendarIcon from './CalendarIcon';
@@ -54,6 +57,8 @@ const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
 
 const QuestionItem = ({
   questionId = '',
+  questionHint,
+  questionHintJSON,
   approvalSectionTitle = '',
   disabled,
   isQuesFreezed,
@@ -72,6 +77,7 @@ const QuestionItem = ({
   const isShowQuestion = shouldShowQuestion(question, approvalFilters);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
+  const questionTextRef2 = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -314,6 +320,41 @@ const QuestionItem = ({
         return <FallbackComponent />;
     }
   };
+  const renderQuestionHint = () => {
+    const { questionHint, questionHintJSON } = question;
+    if (questionHint) {
+      return (
+        <div className="question-hint" style={{ paddingLeft: '10px' }}>
+          <Tooltip
+            variant="light"
+            tabIndex={-1}
+            title={
+              questionHintJSON ? (
+                <RichTextEditor
+                  variant="view"
+                  defaultValue={JSON.parse(questionHintJSON)}
+                  ref={questionTextRef2}
+                />
+              ) : (
+                <div>{questionHint}</div>
+              )
+            }
+            placement="top"
+          >
+            <IconButton
+              color="primary"
+              style={{ margin: 0 }}
+              size="small"
+              className="question-tooltip-icon"
+            >
+              <InfoIcon style={{ fontSize: '16px' }} />
+            </IconButton>
+          </Tooltip>
+        </div>
+      );
+    }
+    return null;
+  };
 
   const questionRender = useMemo(
     () =>
@@ -331,7 +372,29 @@ const QuestionItem = ({
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
                 <span ref={questionTextRef}>
-                  <QuestionLabel questionLabel={question?.questionText || ''} />
+                  <Grid
+                    item
+                    xs={10}
+                    style={{
+                      display: 'flex',
+                      float: 'left',
+                      paddingTop: '4px'
+                    }}
+                  >
+                    <QuestionLabel
+                      questionLabel={question?.questionText || ''}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    style={{
+                      display: 'flex',
+                      float: 'left'
+                    }}
+                  >
+                    {renderQuestionHint()}
+                  </Grid>
                 </span>
                 {locked ? (
                   <Typography variant="subtitle1" className="status-txt">
@@ -405,7 +468,7 @@ QuestionItem.defaultProps = {
     visible: false,
     active: false
   },
-  updateQuestionVisibility: () => { }
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
