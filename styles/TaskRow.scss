@@ -350,6 +350,7 @@
             line-height: 1.2;
             .public-DraftEditor-content {
               padding: 0;
+              overflow-wrap: anywhere;
               .public-DraftStyleDefault-block {
                 margin: 0;
               }

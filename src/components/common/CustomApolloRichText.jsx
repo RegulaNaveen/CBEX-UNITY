@@ -131,7 +131,7 @@ function handleHyperLinkOpportunityStrategy(
 ) {
   const text = contentBlock.getText();
 
-  const regex = /(http(s)?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,3}\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)|\b(http\S+)/g;
+  const regex = /(http(s)?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,4}\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)|\b(http\S+)/g;
 
   let matchArr, start;
   while ((matchArr = regex.exec(text)) !== null) {
@@ -508,6 +508,11 @@ const CustomApolloRichText = ({
   const blur = () => {
     setIsFocused(false);
     setSearchTag(null);
+    const html =
+      richTextEditorRef.current.editorRef &&
+      richTextEditorRef.current.editorRef.current &&
+      richTextEditorRef.current.editorRef.current.editor &&
+      richTextEditorRef.current.editorRef.current.editor.innerHTML;
     const htmlHidden =
       richTextEditorRefHidden.current.editorRef &&
       richTextEditorRefHidden.current.editorRef.current &&
@@ -519,6 +524,7 @@ const CustomApolloRichText = ({
       richTextEditorRefHidden.current.state.editorState.getCurrentContent();
     const resultObj = {
       ...richTextData,
+      html,
       htmlExport: htmlHidden,
       docExport: valueHidden
     };
