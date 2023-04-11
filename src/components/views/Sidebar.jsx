@@ -347,11 +347,6 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
-              {isOpen && (
-                <div style={{ display: 'none' }}>
-                  <NotepadWrapper key={id} />
-                </div>
-              )}
               {MANUAL_REFRESH && (
                 <Tooltip title="Refresh Proposal Sources" placement="right">
                   <SyncIcon
