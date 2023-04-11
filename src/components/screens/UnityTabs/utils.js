@@ -32,18 +32,28 @@ const isCarryForwarded = (answer = {}) =>
   answer.userName === 'CarryForwardAnswer';
 
 // answeredFilter => Only answered
-const answeredFilter: Boolean = question => {
+const answeredFilter: Boolean = (question, flags) => {
   const lastAnswer = getLastAnswer(question);
-  return (
-    !isAnswerEmpty(lastAnswer.answer) &&
-    !isUnityPredicted(lastAnswer) &&
-    !isCarryForwarded(lastAnswer)
-  );
+  if (flags['carryForwardAnswerFlag']) {
+    return (
+      !isAnswerEmpty(lastAnswer.answer) &&
+      !isUnityPredicted(lastAnswer) &&
+      !isCarryForwarded(lastAnswer)
+    );
+  }
+  !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
 };
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
-const unansweredFilter: Boolean = question => {
+const unansweredFilter: Boolean = (question, flags) => {
   const lastAnswer = getLastAnswer(question);
-  return isAnswerEmpty(lastAnswer.answer);
+  if (flags['carryForwardAnswerFlag']) {
+    return (
+      isAnswerEmpty(lastAnswer.answer) ||
+      isUnityPredicted(lastAnswer) ||
+      isCarryForwarded(lastAnswer)
+    );
+  }
+  return isAnswerEmpty(lastAnswer.answer) || isUnityPredicted(lastAnswer);
 };
 const responsibleFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
@@ -68,7 +78,11 @@ const informedFilter: Boolean = question => {
   return false;
 };
 
-export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
+export const shouldShowQuestion = (
+  question = {},
+  unityTabfilters,
+  flags = {}
+): Boolean => {
   try {
     const filterAnswers = [];
     const alltabFilter = unityTabfilters;
@@ -94,10 +108,10 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
         filterAnswers.push(true);
       } else {
         if (appliedFilters.includes('answered')) {
-          filterAnswers.push(answeredFilter(question));
+          filterAnswers.push(answeredFilter(question, flags));
         }
         if (appliedFilters.includes('unanswered')) {
-          filterAnswers.push(unansweredFilter(question));
+          filterAnswers.push(unansweredFilter(question, flags));
         }
       }
       const milestonefilter = alltabFilter.filter(
@@ -112,7 +126,7 @@ export const shouldShowQuestion = (question = {}, unityTabfilters): Boolean => {
       }
 
       if (appliedFilters.includes('verificationRequired')) {
-        filterAnswers.push(verificationRequiredFilter(question));
+        filterAnswers.push(verificationRequiredFilter(question, flags));
       }
       // console.log(`filterAnswers`, filterAnswers);
     }
@@ -142,7 +156,11 @@ export const shouldShowSection = (sectionId, tabId) => {
     questionIds.forEach(questionId => {
       const questionObj =
         proposalQuestions.find(i => i.questionId === questionId) || {};
-      const isQuestionVisible = shouldShowQuestion(questionObj, unityFilters);
+      const isQuestionVisible = shouldShowQuestion(
+        questionObj,
+        unityFilters,
+        flags
+      );
       visibilityArr.push(isQuestionVisible);
     });
     const returnValue =
