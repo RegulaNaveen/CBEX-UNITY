@@ -359,7 +359,7 @@ class AnswerHistory extends Component<Props> {
     this.closeModalWindow();
   };
 
-  onAcceptCarryForwardAnswer = carryForwardAnswer => {
+  onAcceptCarryForwardAnswer = (carryForwardAnswer, cfProposalId = '') => {
     const {
       trackEvent,
       eventCategories,
@@ -396,7 +396,9 @@ class AnswerHistory extends Component<Props> {
         selectedBid.get('id'),
         questionId,
         carryForwardAnswer.get('answer'),
-        userData
+        userData,
+        false,
+        cfProposalId
       );
     } else {
       setProposalAnswer(
@@ -406,7 +408,8 @@ class AnswerHistory extends Component<Props> {
         String(carryForwardAnswer.get('answer')).trim(),
         userData,
         '',
-        false
+        false,
+        cfProposalId
       );
     }
     let action = 'Answer History';
@@ -1123,7 +1126,9 @@ class AnswerHistory extends Component<Props> {
                     size="small"
                     type="button"
                     className="answer-history-accept"
-                    onClick={() => this.onAcceptCarryForwardAnswer(_answer)}
+                    onClick={() =>
+                      this.onAcceptCarryForwardAnswer(_answer, cfProposalId)
+                    }
                   >
                     Accept
                   </button>
