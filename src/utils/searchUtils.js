@@ -31,7 +31,8 @@ export async function getSearchResults({
   questionsForCustomersEnabled,
   allTabs,
   filteredQuestionsMap,
-  sectionsUnfiltered
+  sectionsUnfiltered,
+  allFlags
 }) {
   let finalResult = {
     count: 0,
@@ -57,7 +58,8 @@ export async function getSearchResults({
       filteredQuestionsMap,
       approvalFilters,
       unityTabFilters,
-      sectionsUnfiltered
+      sectionsUnfiltered,
+      allFlags
     });
     if (activeTab !== 1) {
       if (questionsForCustomersEnabled) {
@@ -106,7 +108,8 @@ export async function getSearchResults({
           filteredQuestionsMap,
           approvalFilters,
           unityTabFilters,
-          sectionsUnfiltered
+          sectionsUnfiltered,
+          allFlags
         });
         if (tab.tabIndex !== 1 && !verticalTabSearched) {
           if (questionsForCustomersEnabled) {
@@ -152,7 +155,8 @@ export function searchInTab({
   approvals,
   filteredQuestionsMap,
   approvalFilters,
-  unityTabFilters
+  unityTabFilters,
+  allFlags
 }) {
   // do nothing on timeline, documents tabs
   if (tabIndex === 1 || tabIndex === 3) {
@@ -164,7 +168,8 @@ export function searchInTab({
       regexp,
       filteredQuestionsMap,
       approvals,
-      approvalFilters
+      approvalFilters,
+      allFlags
     );
     return;
   }
@@ -193,7 +198,11 @@ export function searchInTab({
           return (
             questions[questionKey]['active'] &&
             questions[questionKey]['visible'] &&
-            customTabShouldShowQuestion(questions[questionKey], unityTabFilters)
+            customTabShouldShowQuestion(
+              questions[questionKey],
+              unityTabFilters,
+              allFlags
+            )
           );
         } else {
           return (
@@ -326,7 +335,8 @@ export function searchInApprovals(
   regexp,
   questionsMap,
   approvals,
-  approvalFilters
+  approvalFilters,
+  allFlags
 ) {
   // searching approvals
   approvals.forEach(approval => {
@@ -371,7 +381,7 @@ export function searchInApprovals(
             question =>
               question['active'] &&
               question['visible'] &&
-              shouldShowQuestion(question, approvalFilters)
+              shouldShowQuestion(question, approvalFilters, allFlags)
           )
           .forEach(question => {
             updateSearchMatches({
@@ -461,7 +471,7 @@ export function searchInApprovals(
             question =>
               question['active'] &&
               question['visible'] &&
-              shouldShowQuestion(question, approvalFilters)
+              shouldShowQuestion(question, approvalFilters, allFlags)
           )
           .forEach(question => {
             updateSearchMatches({
@@ -552,7 +562,9 @@ export function searchInApprovals(
     if (Array.isArray(approval.ApprovalSectionLeftQuestions)) {
       approval.ApprovalSectionLeftQuestions.filter(questionId => {
         const question = questionsMap[questionId];
-        return question && shouldShowQuestion(question, approvalFilters);
+        return (
+          question && shouldShowQuestion(question, approvalFilters, allFlags)
+        );
       }).forEach(questionId => {
         const question = questionsMap[questionId];
         if (question) {
@@ -639,7 +651,9 @@ export function searchInApprovals(
     if (Array.isArray(approval.ApprovalSectionRightQuestions)) {
       approval.ApprovalSectionRightQuestions.filter(questionId => {
         const question = questionsMap[questionId];
-        return question && shouldShowQuestion(question, approvalFilters);
+        return (
+          question && shouldShowQuestion(question, approvalFilters, allFlags)
+        );
       }).forEach(questionId => {
         const question = questionsMap[questionId];
         if (question) {
