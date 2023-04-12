@@ -17,6 +17,7 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
 import moment from 'moment';
+import { EditorState } from 'apollo-react/node_modules/draft-js';
 import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
@@ -51,6 +52,7 @@ import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
 import YesNoQuestion from './InputComponents/YesNoQuestion';
 import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
+import { compositeDecorator } from '../../common/CustomApolloRichText';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -322,6 +324,21 @@ const QuestionItem = ({
 
   const renderQuestionHint = () => {
     const { questionHint, questionHintJSON } = question;
+
+    function handleHintRef(hintRef) {
+      questionTextRef2.current = hintRef;
+      setTimeout(() => {
+        // updating question hint with decorators
+        if (questionTextRef2.current !== null) {
+          const editorState = questionTextRef2.current.state.editorState;
+          const newEditorState = EditorState.set(editorState, {
+            decorator: compositeDecorator
+          });
+          questionTextRef2.current.setState({ editorState: newEditorState });
+        }
+      }, 700);
+    }
+
     if (questionHint) {
       return (
         <div className="question-hint">
@@ -333,7 +350,7 @@ const QuestionItem = ({
                 <RichTextEditor
                   variant="view"
                   defaultValue={JSON.parse(questionHintJSON)}
-                  ref={questionTextRef2}
+                  ref={handleHintRef}
                 />
               ) : (
                 <div>{questionHint}</div>

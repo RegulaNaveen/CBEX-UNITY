@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isEmpty, xor, isString, has, isObject } from 'lodash';
 import { List } from 'immutable';
@@ -10,6 +10,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import ReactDOM from 'react-dom';
 import Checkbox from 'apollo-react/components/Checkbox';
+import { EditorState } from 'apollo-react/node_modules/draft-js';
 import { Edit } from '../../../svg/index';
 import { parseStringifyJson } from '../../../../utils/helpers';
 import Autocomplete from '../../../common/atoms/inputs/AutoComplete';
@@ -43,6 +44,7 @@ import TextArea from '../../../common/atoms/inputs/TextArea';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
 import withIdleStateDetection from '../../../HOC/IdleStateDetector';
 import { formatTheDate, parseMomentDate } from '../../../../utils/DateUtils';
+import { compositeDecorator } from '../../../common/CustomApolloRichText';
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
   QuestionDatePicker
 );
@@ -91,20 +93,34 @@ const AnswerInput = props => {
     ''
   );
   const [selectedDay, setSelectedDay] = useState(' ');
-  const noneditableField = useSelector((state) => getnoneditableField(state));
+  const noneditableField = useSelector(state => getnoneditableField(state));
   // const issetNotApplicableQuestion = useSelector(setNotApplicableQuestion);
 
-  const userData = useSelector((state) => getUserData(state));
+  const userData = useSelector(state => getUserData(state));
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const socketContext = useContext(SocketContext);
   const [selectedRow, setSelectedRow] = useState(false);
 
-  const allFlags = useSelector((state) => state.proposal.get('eventflag'));
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
-  const integrationsData = useSelector((state) => getIntegrations(state));
-  const showNaCheckbox = useSelector((state) => getShowNaCheckbox(state));
+  const integrationsData = useSelector(state => getIntegrations(state));
+  const showNaCheckbox = useSelector(state => getShowNaCheckbox(state));
+  const questionTextRef2 = useRef(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      // updating question hint with decorators
+      if (questionTextRef2.current !== null) {
+        const editorState = questionTextRef2.current.state.editorState;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef2.current.setState({ editorState: newEditorState });
+      }
+    }, 700);
+  }, [questionTextRef2]);
 
   const gridColRatio = [10, 2];
 
@@ -128,7 +144,7 @@ const AnswerInput = props => {
     return false;
   };
 
-  const CustomModal = (props) => {
+  const CustomModal = props => {
     const modalRoot = document.getElementById('modal-wrapper');
     return ReactDOM.createPortal(props.children, modalRoot);
   };
@@ -143,7 +159,7 @@ const AnswerInput = props => {
       getUserEmail() !== questionData.questionLockInfo?.userInfo
     );
   };
-  const callSelectRow = (value) => {
+  const callSelectRow = value => {
     // call question unlock
     setSelectedRow(value);
   };
@@ -187,12 +203,12 @@ const AnswerInput = props => {
     }
   }
   const answer = lastAnswer && lastAnswer?.get('answer');
-  const integrationsArray = integrationsData?.data.map((item) => {
+  const integrationsArray = integrationsData?.data.map(item => {
     return item.questionId;
   });
   integrationvalidation = integrationsArray?.includes(qvicon);
   integrationmatch = integrationvalidation;
-  integrationsData?.data.map((item) => {
+  integrationsData?.data.map(item => {
     if (item.questionId.includes(qvicon)) destinationArray = item.destination;
   });
   if (
@@ -209,7 +225,7 @@ const AnswerInput = props => {
       answerValue = '';
     }
   }
-  const trackMatomoEventSubmitAnswer = (data) => {
+  const trackMatomoEventSubmitAnswer = data => {
     trackEvent({
       category: eventCategories.pd(),
       action: events
@@ -237,7 +253,7 @@ const AnswerInput = props => {
     });
   };
 
-  const trackMatomoEventAnswerHistory = (data) => {
+  const trackMatomoEventAnswerHistory = data => {
     trackEvent({
       category: eventCategories.pd(),
       action: `Answer History: Clicked On ${questionText} (${sectionName})`,
@@ -262,7 +278,7 @@ const AnswerInput = props => {
     });
   };
 
-  const handleVerifyPredictedAnsClick = (predictedAnswer) => {
+  const handleVerifyPredictedAnsClick = predictedAnswer => {
     setIconColor('#015ff1');
     dispatch(
       setProposalAnswerData(
@@ -275,14 +291,14 @@ const AnswerInput = props => {
     );
   };
 
-  const handleUncheckNaQuestion = async (type) => {
+  const handleUncheckNaQuestion = async type => {
     const answersData = await getProposalAnswer(proposalId, questionId);
 
     if (answersData[answersData.length - 1]?.answer === 'N/A') {
       answersData.pop();
     }
   };
-  const renderNACheckbox = (type) => {
+  const renderNACheckbox = type => {
     if (showNaCheckbox) {
       return (
         <div style={{ width: '10px', marginRight: '30px' }}>
@@ -374,7 +390,7 @@ const AnswerInput = props => {
   const setQuestionToDisplayHistory = (selectedAnswer: string) => {
     const questionHistory = allSections
       .valueSeq()
-      .find((sections) => sections.getIn(['questions', selectedAnswer]))
+      .find(sections => sections.getIn(['questions', selectedAnswer]))
       .getIn(['questions', selectedAnswer]);
     setSelectedQuestionForHistory(questionHistory);
     setIsHistoryModalShown(true);
@@ -423,11 +439,11 @@ const AnswerInput = props => {
     const s1 = valueForText
       .trim()
       .split(' ')
-      .filter((v) => v.trim().length > 0);
+      .filter(v => v.trim().length > 0);
     const s2 = valueForText
       .trim()
       .split(' ')
-      .filter((v) => v.trim().length > 0);
+      .filter(v => v.trim().length > 0);
     if (isEmpty(s1)) setChangeIcon('#b7b7b7');
     else setChangeIcon('#00c221');
 
@@ -519,6 +535,7 @@ const AnswerInput = props => {
                             <RichTextEditor
                               variant="view"
                               defaultValue={JSON.parse(questionHintJSON)}
+                              ref={questionTextRef2}
                             />
                           ) : (
                             <div>{questionHint}</div>
@@ -712,7 +729,7 @@ const AnswerInput = props => {
                 changeIcon={changeIcon}
                 isCurrentBid={isCurrentBid}
                 sfObject={sfObject}
-                handleVerifyPredictedAnsClick={(predictedAnswer) =>
+                handleVerifyPredictedAnsClick={predictedAnswer =>
                   handleVerifyPredictedAnsClick(predictedAnswer)
                 }
                 hasDifferentSFanswer={hasDifferentSFanswer}
