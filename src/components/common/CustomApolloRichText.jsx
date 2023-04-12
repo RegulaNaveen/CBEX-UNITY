@@ -131,8 +131,7 @@ function handleHyperLinkOpportunityStrategy(
 ) {
   const text = contentBlock.getText();
 
-  const regex = /(http(s)?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,4}\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)|\b(http\S+)/g;
-
+  const regex = /(http(s)?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{0,256}?\.[a-z0-9]{1,4}\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)|\b(http\S+)/g;
   let matchArr, start;
   while ((matchArr = regex.exec(text)) !== null) {
     start = matchArr.index;
