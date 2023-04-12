@@ -425,11 +425,8 @@ const UnityTab = ({
       setShowApprovalTab(true);
     } else {
       setShowApprovalTab(false);
-      if (urlParams && urlParams?.get('viewType')?.includes('approval')) {
-        history.push(`${window.location.pathname}`);
-        if (window && window.scrollTo) {
-          window.scrollTo(0, 0);
-        }
+      if (window && window.scrollTo) {
+        window.scrollTo(0, 0);
       }
     }
     if (
