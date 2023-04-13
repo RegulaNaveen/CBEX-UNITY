@@ -61,13 +61,38 @@ const getAnswer = ans => {
 
 const getFullProposalTeamString = proposalUsers => {
   if (!isArray(proposalUsers)) return '';
-  let proposalTeamStr = ``;
 
-  proposalUsers?.map(({ userName, userEmail }) => {
-    proposalTeamStr += userName ? `<a href=${userEmail}>${userName}</a>, ` : ``;
-  });
+  const proposalTeamStr = proposalUsers
+    .map(user => {
+      const hyperlink = document.createElement('a');
+      hyperlink.href = `https://outlook.office.com/mail/deeplink/compose?to=${user.userEmail}`;
+      hyperlink.textContent = user.userName;
+      hyperlink.target = '_blank';
+      return hyperlink.outerHTML;
+    })
+    .join(', ');
 
   return proposalTeamStr;
+};
+
+const replaceAnswerToQuestionsPlaceholders = (eventBodyStr, questions) => {
+  const regexNotResolved = new RegExp(`\\[(.*?)]`, 'gi');
+
+  questions.forEach(question => {
+    const { questionText, questionId, answers } = question;
+    const regex = new RegExp(
+      `\\[${questionText.toLowerCase().replace(/ /g, '_')}:${questionId}\\]`,
+      'gi'
+    );
+
+    // replace all instances of the placeholder with the question answer
+    eventBodyStr = eventBodyStr.replace(regex, getAnswer(answers));
+  });
+  eventBodyStr = eventBodyStr.replace(
+    regexNotResolved,
+    match => `<span style="color:#f00">${match}</span>`
+  );
+  return eventBodyStr;
 };
 
 const getQuestionsForTheCustomer = questions => {
@@ -76,7 +101,6 @@ const getQuestionsForTheCustomer = questions => {
   questions
     ?.sort((a, b) => a.questionOrder - b.questionOrder)
     ?.map(questionData => {
-      console.log({ questionData });
       if (
         questionData?.isCustomQuestion &&
         questionData.section.sectionName ===
@@ -122,6 +146,7 @@ function updateEventSubjectBody(str, data) {
       str = str.replaceAll(key, obj[key]);
     }
   }
+  str = replaceAnswerToQuestionsPlaceholders(str, proposalQuestions);
 
   return str;
 }
