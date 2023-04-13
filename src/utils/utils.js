@@ -76,23 +76,27 @@ const getFullProposalTeamString = proposalUsers => {
 };
 
 const replaceAnswerToQuestionsPlaceholders = (eventBodyStr, questions) => {
-  const regexNotResolved = new RegExp(`\\[(.*?)]`, 'gi');
+  const regexPlaceholdersNotResolved = new RegExp(`\\[(.*?)]`, 'gi');
+  let updatedEventBodyStr = eventBodyStr;
 
   questions.forEach(question => {
     const { questionText, questionId, answers } = question;
-    const regex = new RegExp(
+    const regexPlaceholders = new RegExp(
       `\\[${questionText.toLowerCase().replace(/ /g, '_')}:${questionId}\\]`,
       'gi'
     );
 
-    // replace all instances of the placeholder with the question answer
-    eventBodyStr = eventBodyStr.replace(regex, getAnswer(answers));
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      regexPlaceholders,
+      getAnswer(answers)
+    );
   });
-  eventBodyStr = eventBodyStr.replace(
-    regexNotResolved,
+
+  updatedEventBodyStr = updatedEventBodyStr.replace(
+    regexPlaceholdersNotResolved,
     match => `<span style="color:#f00">${match}</span>`
   );
-  return eventBodyStr;
+  return updatedEventBodyStr;
 };
 
 const getQuestionsForTheCustomer = questions => {
