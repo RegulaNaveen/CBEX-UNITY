@@ -336,7 +336,8 @@ export const resumeSearchAction = ({
       questionsForCustomersEnabled: allFlags.questionsForCustomerTab,
       allTabs,
       filteredQuestionsMap,
-      sectionsUnfiltered
+      sectionsUnfiltered,
+      allFlags
     });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;

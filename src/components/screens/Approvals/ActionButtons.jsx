@@ -61,6 +61,7 @@ const ActionButtons = ({
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const allOppData = useSelector(getOpportunityData)?.toJS();
+  const flags = useSelector(state => state.proposal.get('eventflag'));
   const pId = selectedBid?.id;
   const opportunityData = allOppData[pId];
 
@@ -198,7 +199,8 @@ const ActionButtons = ({
       approval,
       cloneDeep(proposalQuestions),
       proposalDetails,
-      approvalFilters
+      approvalFilters,
+      flags
     );
     trackMatomoEventSubmitAnswer('Email', approval);
     try {

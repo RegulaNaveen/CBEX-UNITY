@@ -316,7 +316,8 @@ export const setProposalAnswerData = (
   answer: string,
   userData: Object,
   editorData: any,
-  disableLoader = false
+  disableLoader = false,
+  cfProposalId = null
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch(setApprovalQuestionLoading(questionId, true));
@@ -335,7 +336,8 @@ export const setProposalAnswerData = (
         questionId,
         answer,
         userData,
-        editorData
+        editorData,
+        cfProposalId
       );
       // Check is price modeler question
       const allQuestions = selectProposalQuestions(getState());
@@ -731,7 +733,7 @@ export const onGetValidatedProposalDetails = (
   };
 };
 
-function applyMyUserRoleFilter(questions) {
+function applyMyUserRoleFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -745,7 +747,7 @@ function applyMyUserRoleFilter(questions) {
   return filteredQuestions;
 }
 
-function applyUnAnsweredFilter(questions) {
+function applyUnAnsweredFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -753,19 +755,36 @@ function applyUnAnsweredFilter(questions) {
       .filter(val => {
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
-        return (
-          (Answer &&
-            Answer.length &&
-            !Boolean(String(Answer[Answer.length - 1].answer).trim().length)) ||
-          !Boolean(Answer.length)
-        );
+        if (flags['carryForwardAnswerFlag']) {
+          return (
+            (Answer &&
+              Answer.length &&
+              (!Boolean(
+                String(Answer[Answer.length - 1].answer).trim().length
+              ) ||
+                Answer[Answer.length - 1].userName === 'UnityPredictedAnswer' ||
+                Answer[Answer.length - 1].userName === 'CarryForwardAnswer')) ||
+            !Boolean(Answer.length)
+          );
+        } else {
+          return (
+            (Answer &&
+              Answer.length &&
+              (!Boolean(
+                String(Answer[Answer.length - 1].answer).trim().length
+              ) ||
+                Answer[Answer.length - 1].userName ===
+                  'UnityPredictedAnswer')) ||
+            !Boolean(Answer.length)
+          );
+        }
       })
       .toJS();
   }
   return filteredQuestions;
 }
 
-function applyVerificationRequiredFilter(questions) {
+function applyVerificationRequiredFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -773,21 +792,29 @@ function applyVerificationRequiredFilter(questions) {
       .filter(val => {
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
-        return (
-          (Answer &&
+        if (flags['carryForwardAnswerFlag']) {
+          return (
+            (Answer &&
+              Answer.length &&
+              Answer[Answer.length - 1].userName === 'UnityPredictedAnswer') ||
+            (Answer &&
+              Answer.length &&
+              Answer[Answer.length - 1].userName === 'CarryForwardAnswer')
+          );
+        } else {
+          return (
+            Answer &&
             Answer.length &&
-            Answer[Answer.length - 1].userName === 'UnityPredictedAnswer') ||
-          (Answer &&
-            Answer.length &&
-            Answer[Answer.length - 1].userName === 'CarryForwardAnswer')
-        );
+            Answer[Answer.length - 1].userName === 'UnityPredictedAnswer'
+          );
+        }
       })
       .toJS();
   }
   return filteredQuestions;
 }
 
-function applyAnsweredFilter(questions) {
+function applyAnsweredFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -795,20 +822,29 @@ function applyAnsweredFilter(questions) {
       .filter(question => {
         let Answer = question.get('answers', []);
         Answer = Answer.toJS();
-        return (
-          Answer &&
-          Answer.length &&
-          String(Answer[Answer.length - 1].answer).trim().length > 0 &&
-          Answer[Answer.length - 1].userName !== 'UnityPredictedAnswer' &&
-          Answer[Answer.length - 1].userName !== 'CarryForwardAnswer'
-        );
+        if (flags['carryForwardAnswerFlag']) {
+          return (
+            Answer &&
+            Answer.length &&
+            String(Answer[Answer.length - 1].answer).trim().length > 0 &&
+            Answer[Answer.length - 1].userName !== 'UnityPredictedAnswer' &&
+            Answer[Answer.length - 1].userName !== 'CarryForwardAnswer'
+          );
+        } else {
+          return (
+            Answer &&
+            Answer.length &&
+            String(Answer[Answer.length - 1].answer).trim().length > 0 &&
+            Answer[Answer.length - 1].userName !== 'UnityPredictedAnswer'
+          );
+        }
       })
       .toJS();
   }
   return filteredQuestions;
 }
 
-function applyInterestedPartyFilter(questions) {
+function applyInterestedPartyFilter(questions, flags) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
   if (role) {
@@ -822,11 +858,11 @@ function applyInterestedPartyFilter(questions) {
   return filteredQuestions;
 }
 
-function applyShowInactiveQuestionsFilter(questions) {
+function applyShowInactiveQuestionsFilter(questions, flags) {
   return questions;
 }
 
-function applyMilestoneFilter(questions, milestone) {
+function applyMilestoneFilter(questions, flags, milestone) {
   let filteredQuestions = cloneDeep(questions);
   if (milestone) {
     filteredQuestions = fromJS(filteredQuestions)
@@ -844,18 +880,23 @@ function filterGroup(
   allQuestions,
   logic,
   filterCallback,
+  flags = {},
   filterName = ''
 ) {
   if (logic === 'AND') {
-    return uniqBy(filterCallback(allQuestions), 'questionId');
+    return uniqBy(filterCallback(allQuestions, flags), 'questionId');
   }
   return uniqBy(
-    [...filteredQuestions, ...filterCallback(allQuestions, filterName)],
+    [...filteredQuestions, ...filterCallback(allQuestions, flags, filterName)],
     'questionId'
   );
 }
 
-export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
+export function getQuestionsFilterApplied(
+  questionsArr,
+  questionsFilter,
+  flags
+) {
   let filteredQuestions = questionsArr;
   questionsFilter.entrySeq().forEach(([groupName, group]) => {
     let withinGroupFilteredQuestions = [];
@@ -875,7 +916,8 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
             withinGroupFilteredQuestions,
             filteredQuestions,
             logic,
-            applyMyUserRoleFilter
+            applyMyUserRoleFilter,
+            flags
           );
           break;
         case 'answered':
@@ -883,7 +925,8 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
             withinGroupFilteredQuestions,
             filteredQuestions,
             logic,
-            applyAnsweredFilter
+            applyAnsweredFilter,
+            flags
           );
           break;
         case 'unanswered':
@@ -891,7 +934,8 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
             withinGroupFilteredQuestions,
             filteredQuestions,
             logic,
-            applyUnAnsweredFilter
+            applyUnAnsweredFilter,
+            flags
           );
           break;
         case 'verificationRequired':
@@ -899,14 +943,16 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
             withinGroupFilteredQuestions,
             filteredQuestions,
             logic,
-            applyVerificationRequiredFilter
+            applyVerificationRequiredFilter,
+            flags
           );
         case 'interestedParty':
           withinGroupFilteredQuestions = filterGroup(
             withinGroupFilteredQuestions,
             filteredQuestions,
             logic,
-            applyInterestedPartyFilter
+            applyInterestedPartyFilter,
+            flags
           );
           break;
         default:
@@ -915,6 +961,7 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
             filteredQuestions,
             logic,
             applyMilestoneFilter,
+            flags,
             filterName
           );
           break;
@@ -933,6 +980,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
   return async (dispatch, getState) => {
     const state = getState();
     const searchQuery = selectQuery(getState());
+    const flags = state.proposal.get('eventflag');
     dispatch({
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
@@ -957,7 +1005,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyMyUserRoleFilter
+              applyMyUserRoleFilter,
+              flags
             );
             break;
           case 'answered':
@@ -965,7 +1014,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyAnsweredFilter
+              applyAnsweredFilter,
+              flags
             );
             break;
           case 'unanswered':
@@ -973,7 +1023,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyUnAnsweredFilter
+              applyUnAnsweredFilter,
+              flags
             );
             break;
           case 'verificationRequired':
@@ -981,7 +1032,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyVerificationRequiredFilter
+              applyVerificationRequiredFilter,
+              flags
             );
             break;
           case 'interestedParty':
@@ -989,7 +1041,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyInterestedPartyFilter
+              applyInterestedPartyFilter,
+              flags
             );
             break;
           case 'showInactiveQuestions':
@@ -997,7 +1050,8 @@ export function onQuestionsFilterApplied(questionsFilter) {
               withinGroupFilteredQuestions,
               filteredQuestions,
               logic,
-              applyShowInactiveQuestionsFilter
+              applyShowInactiveQuestionsFilter,
+              flags
             );
             break;
           default:
@@ -1006,6 +1060,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
               filteredQuestions,
               logic,
               applyMilestoneFilter,
+              flags,
               filterName
             );
             break;
