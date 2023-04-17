@@ -16,7 +16,7 @@ const BidCostDetails = () => {
 
   let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
   if (stage.length > 0) {
-    stage = stage[0].answers[0]?.answer;
+    stage = stage[0].currentSFanswer?.value;
     stage = Number(stage.substring(0, 2));
   }
   const [bidCostValue, setBidCostValue] = useState({
@@ -41,8 +41,11 @@ const BidCostDetails = () => {
   const options2 = { currency: 'USD' };
   const numberFormat2 = new Intl.NumberFormat('en-US', options2);
 
-  const bidVal = numberFormat2.format(bidCostValue?.bidValue);
-
+  // const bidVal = numberFormat2.format(bidCostValue?.bidValue);
+  const bidVal =
+    bidCostValue?.bidValue === ''
+      ? ''
+      : numberFormat2.format(bidCostValue?.bidValue);
   const options3 = { currency: 'USD' };
   const numberFormat3 = new Intl.NumberFormat('en-US', options3);
 
@@ -53,9 +56,11 @@ const BidCostDetails = () => {
       [stage >= 4 && bidCostValue?.bidValue === ''
         ? 'Opportunity Amount: '
         : 'Total Bid Value: ']:
-        (stage >= 4 && bidCostValue?.bidValue === ''
+        stage >= 4 && bidCostValue?.bidValue === ''
           ? bidCostValue?.amount
-          : bidVal) || 'N/A'
+          : bidVal
+          ? `USD ${bidVal}`
+          : 'N/A'
     },
 
     { 'Bottom Line Labor Discount: ': bottomLineVal },
@@ -105,9 +110,21 @@ const BidCostDetails = () => {
                 <h3>{Object.keys(item)[0]}</h3>
 
                 <i>
-                  {Object.values(item)[0] === ''
-                    ? 'N/A'
-                    : Object.values(item)[0]}
+                  {Object.keys(item)[0].trim() === 'Amount' ? (
+                    <i>{Object.values(item)[0] || 0}</i>
+                  ) : (
+                    <i>
+                      {[
+                        'Budget Tools:',
+                        'Bottom Line Labor Discount:',
+                        'Total Bid Value:'
+                      ].includes(Object.keys(item)[0].trim()) &&
+                      (Object.values(item)[0].trim() === '' ||
+                        Object.values(item)[0].trim() === '0')
+                        ? 'N/A'
+                        : Object.values(item)[0]}
+                    </i>
+                  )}
                 </i>
               </div>
             );

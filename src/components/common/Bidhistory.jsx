@@ -46,6 +46,13 @@ const BidHistory = () => {
     }
   };
 
+  let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
+  if (stage.length > 0) {
+    stage = stage[0].currentSFanswer?.value;
+
+    stage = Number(stage.substring(0, 2));
+  }
+
   useEffect(() => {
     let bidValue = '';
     proposalQuestion.forEach(item => {
@@ -55,8 +62,10 @@ const BidHistory = () => {
         }
       }
     });
-    setBidVal(bidValue);
-  }, [bidVal]);
+    if (bidValue !== bidVal) {
+      setBidVal(bidValue);
+    }
+  }, [bidVal, proposalQuestion]);
 
   useEffect(() => {
     if (!isQuestionAnswered && showHoverText) {
@@ -189,6 +198,8 @@ const BidHistory = () => {
                 !bidCostDetailFlag ? (
                   <div className="bid-history-pricemodeler-content">
                     {bidVal && isCurrentBid ? (
+                      <BidCostDetails />
+                    ) : !bidVal && isCurrentBid && stage >= 4 ? (
                       <BidCostDetails />
                     ) : (
                       <PriceModeler />
