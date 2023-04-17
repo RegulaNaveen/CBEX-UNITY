@@ -1076,7 +1076,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, cfBidNo)}</p>
+                <p>{getUserName(userName, cfBidNo, answer == '')}</p>
                 {renderAnswers()}
               </div>
             </div>
@@ -1112,6 +1112,7 @@ class AnswerHistory extends Component<Props> {
               !isQuesFreezed &&
               selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
+              answer !== '' &&
               userName === 'CarryForwardAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
