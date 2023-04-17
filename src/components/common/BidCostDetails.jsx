@@ -16,9 +16,8 @@ const BidCostDetails = () => {
 
   let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
   if (stage.length > 0) {
-    stage = stage[0].answers[0]?.answer;
+    stage = stage[0].currentSFanswer?.value;
     stage = Number(stage.substring(0, 2));
-    console.log('stage', stage);
   }
   const [bidCostValue, setBidCostValue] = useState({
     bidValue: '',
@@ -67,7 +66,7 @@ const BidCostDetails = () => {
     { 'Bottom Line Labor Discount: ': bottomLineVal },
     { 'Budget Tools: ': bidCostValue?.budgetTools }
   ];
-  console.log('newBidItem', newBidItem);
+
   useEffect(() => {
     let bidValue = '';
     let bottomLine = '';
@@ -109,11 +108,8 @@ const BidCostDetails = () => {
             return (
               <div className="bid-cost_details-item" key={key}>
                 <h3>{Object.keys(item)[0]}</h3>
-                {/* {console.log('first', Object.values(item)[0])}; */}
+
                 <i>
-                  {/* {Object.values(item)[0] === ''
-                    ? 'N/A'
-                    : Object.values(item)[0]} */}
                   {Object.keys(item)[0].trim() === 'Amount' ? (
                     <i>{Object.values(item)[0] || 0}</i>
                   ) : (
