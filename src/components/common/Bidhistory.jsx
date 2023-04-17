@@ -7,7 +7,8 @@ import chevronDown from '../../../img/chevron-down.svg';
 import {
   getBidList,
   getSelectedBid,
-  getIsQuestionAnswered
+  getIsQuestionAnswered,
+  getProposalQuestions
 } from '../../redux/selectors/proposal';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
@@ -23,6 +24,7 @@ const BidHistory = () => {
   const currentbidNo = new URLSearchParams(winLocationSearch).get('bidNo');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
+  const [bidVal, setBidVal] = useState(false);
   const dispatch = useDispatch();
 
   const bidList = useSelector(getBidList);
@@ -31,6 +33,7 @@ const BidHistory = () => {
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
+  const proposalQuestion = useSelector(getProposalQuestions);
 
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -42,6 +45,27 @@ const BidHistory = () => {
       handleCollapse();
     }
   };
+
+  let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
+  if (stage.length > 0) {
+    stage = stage[0].currentSFanswer?.value;
+
+    stage = Number(stage.substring(0, 2));
+  }
+
+  useEffect(() => {
+    let bidValue = '';
+    proposalQuestion.forEach(item => {
+      if (item?.section?.sectionName === 'Details-For-Backend') {
+        if (item?.sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
+          item?.answers?.forEach(i => (bidValue = String(i?.answer).trim()));
+        }
+      }
+    });
+    if (bidValue !== bidVal) {
+      setBidVal(bidValue);
+    }
+  }, [bidVal, proposalQuestion]);
 
   useEffect(() => {
     if (!isQuestionAnswered && showHoverText) {
@@ -173,7 +197,13 @@ const BidHistory = () => {
                 (selectedView === null && isCurrentBid) ||
                 !bidCostDetailFlag ? (
                   <div className="bid-history-pricemodeler-content">
-                    <PriceModeler />
+                    {bidVal && isCurrentBid ? (
+                      <BidCostDetails />
+                    ) : !bidVal && isCurrentBid && stage >= 4 ? (
+                      <BidCostDetails />
+                    ) : (
+                      <PriceModeler />
+                    )}
                   </div>
                 ) : (
                   (selectedView === 'questions' || selectedView === null) && (
