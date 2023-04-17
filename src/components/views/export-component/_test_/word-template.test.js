@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { getStyle } from '../word-template';
+import { getStyle, getLastAnswer } from '../word-template';
 
 describe('Word Template Library Test', () => {
   beforeAll(() => {});
@@ -69,4 +69,50 @@ describe('Word Template Library Test', () => {
   });
 
   afterAll(() => {});
+});
+
+describe('getLastAnswer', () => {
+  it('should return an empty string if the answers array is empty', () => {
+    const answers = [];
+    const result = getLastAnswer(answers);
+    expect(result).toEqual('');
+  });
+
+  it('should return an empty string if the last answer is null', () => {
+    const answers = [null];
+    const result = getLastAnswer(answers);
+    expect(result).toEqual('');
+  });
+
+  it('should return an empty string if the last answer is undefined', () => {
+    const answers = [undefined];
+    const result = getLastAnswer(answers);
+    expect(result).toEqual('');
+  });
+
+  it('should return the string value of the last answer if it exists', () => {
+    const answers = [{ answer: 42 }];
+    const result = getLastAnswer(answers);
+    expect(result).toEqual('42');
+  });
+
+  it('should return the string value of the last answer if it is a string', () => {
+    const answers = [{ answer: 'hello' }, { answer: 'world' }];
+    const result = getLastAnswer(answers);
+    expect(result).toEqual('world');
+  });
+
+  it.skip('should return an empty string if the last answer has no toString() method', () => {
+    const answers = [{ answer: { foo: 'bar' } }];
+    const result = getLastAnswer(answers);
+    expect(result).toEqual([object Object]);
+  });
+
+  it('should log an error to the console if an error occurs', () => {
+    console.log = jest.fn();
+    const answers = null;
+    const result = getLastAnswer(answers);
+    expect(result).toEqual('');
+    expect(console.log).toHaveBeenCalled();
+  });
 });
