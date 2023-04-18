@@ -492,37 +492,21 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   };
 
-  onSelectValues = (
+  onSelectValues = async (
     selectedValues: Array<string>,
     lastAnswer: Array<string>
   ) => {
-    const { multiselectFuncCall } = this.state;
-    this.setState({ multiselectFuncCall: multiselectFuncCall + 1 }, () => {
-      if (multiselectFuncCall > 2) {
-        const {
-          setProposalAnswer,
-          proposalId,
-          questionId,
-          userData
-        } = this.props;
-        if (
-          !isEqual(lastAnswer, selectedValues) &&
-          selectedValues !== undefined
-        ) {
-          const response = setProposalAnswer(
-            this.context,
-            proposalId,
-            questionId,
-            selectedValues,
-            userData
-          );
-          if (response) {
-            this.setState({ multiselectFuncCall: 0 });
-          }
-        }
-        this.trackMatomoEventSubmitAnswer(selectedValues);
-      }
-    });
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    if (!isEqual(lastAnswer, selectedValues) && selectedValues !== undefined) {
+      await setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        selectedValues,
+        userData
+      );
+    }
+    this.trackMatomoEventSubmitAnswer(selectedValues);
   };
 
   displayAnswerOnHistory = () => {
