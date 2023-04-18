@@ -74,7 +74,7 @@ const CalendarIcon = ({ question }) => {
         isLatestAnsRejectedCFA ||
         (bidAnswerCopy === false && latestAnsweredBidNo !== null)
       ) {
-        return <CalendarWithMinus />;
+        return <IndeterminateIcon data-testid="indeterminate-icon" />;
       }
     }
     // No Answers i.e lastAnswer is an Empty Object {}
