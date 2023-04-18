@@ -137,6 +137,11 @@ export const setProposalAnswer = async (
         onGoingAnswer = omit(onGoingAnswer, [questionId]);
       }
       return res;
+    })
+    .catch(err => {
+      if (newAxios.isCancel(err)) {
+        return { data: '' };
+      }
     });
 };
 
