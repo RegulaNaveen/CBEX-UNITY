@@ -339,37 +339,39 @@ export const setProposalAnswerData = (
         editorData,
         cfProposalId
       );
-      // Check is price modeler question
-      const allQuestions = selectProposalQuestions(getState());
-      if (isPriceModelerQuestion(questionId, allQuestions)) {
-        await getPriceModelerData(proposalId)(dispatch);
-      }
-      await socketContext.questionAnswerUpdateWrapper(questionId, data);
-      dispatch({
-        type: PROPOSAL_ANSWER,
-        payload: {
-          data: Array.isArray(data.answers) ? data.answers : data,
-          questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+      if (data) {
+        // Check is price modeler question
+        const allQuestions = selectProposalQuestions(getState());
+        if (isPriceModelerQuestion(questionId, allQuestions)) {
+          await getPriceModelerData(proposalId)(dispatch);
         }
-      });
-
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
-      if (!disableLoader) {
+        await socketContext.questionAnswerUpdateWrapper(questionId, data);
         dispatch({
-          type: PROPOSAL_ANSWER_LOADING,
-          payload: { questionId, loading: false }
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data: Array.isArray(data.answers) ? data.answers : data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
         });
+
+        const { modifiedQuestions } = data;
+        if (!isEmpty(modifiedQuestions)) {
+          modifiedQuestions.forEach(question => {
+            dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+          });
+        }
+        dispatch(onQuestionsFilterApplied(questionsFilter));
+        if (!disableLoader) {
+          dispatch({
+            type: PROPOSAL_ANSWER_LOADING,
+            payload: { questionId, loading: false }
+          });
+        }
+        dispatch(setApprovalQuestionLoading(questionId, false));
+        dispatch(setUnityTabQuestionLoading(questionId, false));
+        return { success: true };
       }
-      dispatch(setApprovalQuestionLoading(questionId, false));
-      dispatch(setUnityTabQuestionLoading(questionId, false));
-      return { success: true };
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
