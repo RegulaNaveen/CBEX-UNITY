@@ -118,8 +118,10 @@ function areBothAnswersSame(answer1, answer2) {
 function isAnswerEmpty(answer) {
   if (List.isList(answer)) {
     return answer.size === 0;
+  } else if (answer === ' ') {
+    return true;
   } else {
-    return answer === ' ';
+    return answer === '';
   }
 }
 
@@ -1076,7 +1078,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, cfBidNo, answer == '')}</p>
+                <p>{getUserName(userName, cfBidNo, isAnswerEmpty(answer))}</p>
                 {renderAnswers()}
               </div>
             </div>
@@ -1112,7 +1114,7 @@ class AnswerHistory extends Component<Props> {
               !isQuesFreezed &&
               selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
-              answer !== '' &&
+              isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
