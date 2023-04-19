@@ -51,7 +51,6 @@ const NotepadWrapper = ({ trackEvent }) => {
   };
 
   const triggerWebsocketNotesApi = async proposalId => {
-    await websocketNotesApi(proposalId);
     if (!wsInstance) {
       createNewNotesSocketConnection(proposalId);
     } else {
@@ -67,9 +66,7 @@ const NotepadWrapper = ({ trackEvent }) => {
     let loaderReference;
     const newProposalID = selectedBid.get('id');
     if (proposalIdState !== newProposalID) {
-      loaderReference = setTimeout(() => {
-        triggerWebsocketNotesApi(newProposalID);
-      }, 2000);
+      triggerWebsocketNotesApi(newProposalID);
     }
     return () => {
       clearTimeout(loaderReference);
@@ -167,8 +164,7 @@ const NotepadWrapper = ({ trackEvent }) => {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh'
+            marginTop: '48px'
           }}
         />
       )}

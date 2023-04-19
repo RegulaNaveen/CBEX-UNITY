@@ -448,7 +448,7 @@ const WysiwygNotepad = ({
     [proposalId, wsInstance, notesUserTag, query]
   );
 
-  let dataSynced = wsInstance.synced;
+  let dataSynced = wsInstance && wsInstance.synced;
 
   useEffect(() => {
     if (
