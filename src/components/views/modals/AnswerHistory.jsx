@@ -672,12 +672,14 @@ class AnswerHistory extends Component<Props> {
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
+        answers.get(index).get('userName') !== 'AnswerPulledFromSalesforce' &&
         !isAnswerEmpty(answer) &&
         areBothAnswersSame(answer, nextAnswer);
 
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
+        answers.get(index).get('userName') !== 'AnswerPulledFromSalesforce' &&
         isAnswerEmpty(answer);
 
       // picklist answers are array so they require different check than other question types
@@ -1115,7 +1117,7 @@ class AnswerHistory extends Component<Props> {
               !isQuesFreezed &&
               selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
-              isAnswerEmpty(answer) &&
+              !isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
