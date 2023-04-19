@@ -14,11 +14,33 @@ const BidCostDetails = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalQuestion = useSelector(getProposalQuestions);
 
-  let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
-  if (stage.length > 0) {
-    stage = stage[0].currentSFanswer?.value;
-    if (stage) {
-      stage = Number(stage.substring(0, 2));
+  function findLastAnswerValueForStageName(questions) {
+    const stageNameQuestions = questions.filter(q => q.sfField === 'StageName');
+    if (stageNameQuestions.length === 0) {
+      return null;
+    }
+    const lastStageNameQuestion =
+      stageNameQuestions[stageNameQuestions.length - 1];
+    if (!lastStageNameQuestion || !lastStageNameQuestion.answers) {
+      return null;
+    }
+    const { answers } = lastStageNameQuestion;
+    if (answers.length === 0) {
+      return null;
+    }
+    const lastAnswerValue = answers[answers.length - 1].answer;
+    return lastAnswerValue;
+  }
+
+  const lastAnswerValueForStageName = findLastAnswerValueForStageName(
+    proposalQuestion
+  );
+
+  let stageNumber = null;
+  if (lastAnswerValueForStageName) {
+    const matches = lastAnswerValueForStageName.match(/(\d+)/);
+    if (matches && matches.length > 0) {
+      stageNumber = parseInt(matches[0]);
     }
   }
   const [bidCostValue, setBidCostValue] = useState({
@@ -56,10 +78,10 @@ const BidCostDetails = () => {
 
   let newBidItem = [
     {
-      [stage >= 4 && bidCostValue?.bidValue === ''
+      [stageNumber >= 4 && bidCostValue?.bidValue === ''
         ? 'Opportunity Amount: '
         : 'Total Bid Value: ']:
-        stage >= 4 && bidCostValue?.bidValue === ''
+        stageNumber >= 4 && bidCostValue?.bidValue === ''
           ? bidCostValue?.amount !== '' && bidCostValue?.amount !== 0
             ? ` USD ${oppAmount}`
             : bidCostValue?.amount === ''
