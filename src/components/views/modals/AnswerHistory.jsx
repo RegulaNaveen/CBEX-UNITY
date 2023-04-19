@@ -1088,6 +1088,7 @@ class AnswerHistory extends Component<Props> {
                 <p className="answer-history-para">Bid {bidNo}</p>
               ) : null}
               {indexNo === 0 &&
+              !isQuesFreezed &&
               isCurrentBid === bidNo &&
               lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
