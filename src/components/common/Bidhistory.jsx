@@ -49,8 +49,9 @@ const BidHistory = () => {
   let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
   if (stage.length > 0) {
     stage = stage[0].currentSFanswer?.value;
-
-    stage = Number(stage.substring(0, 2));
+    if (stage) {
+      stage = Number(stage.substring(0, 2));
+    }
   }
 
   useEffect(() => {
@@ -72,6 +73,26 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
+
+  let content;
+
+  if (
+    selectedView === 'questions' ||
+    (selectedView === null && isCurrentBid) ||
+    !bidCostDetailFlag
+  ) {
+    if (
+      (bidVal && isCurrentBid && bidCostDetailFlag) ||
+      (!bidVal && isCurrentBid && stage >= 4 && bidCostDetailFlag) ||
+      (!isCurrentBid && bidCostDetailFlag)
+    ) {
+      content = <BidCostDetails />;
+    } else {
+      content = <PriceModeler />;
+    }
+  } else {
+    content = <BidCostDetails />;
+  }
 
   return (
     <>
@@ -193,23 +214,10 @@ const BidHistory = () => {
                     was created
                   </p>
                 </div>
-                {selectedView === 'questions' ||
-                (selectedView === null && isCurrentBid) ||
-                !bidCostDetailFlag ? (
-                  <div className="bid-history-pricemodeler-content">
-                    {bidVal && isCurrentBid ? (
-                      <BidCostDetails />
-                    ) : !bidVal && isCurrentBid && stage >= 4 ? (
-                      <BidCostDetails />
-                    ) : (
-                      <PriceModeler />
-                    )}
-                  </div>
-                ) : (
-                  (selectedView === 'questions' || selectedView === null) && (
-                    <BidCostDetails />
-                  )
-                )}
+
+                <div className="bid-history-pricemodeler-content">
+                  {content}
+                </div>
               </div>
             </div>
           )}

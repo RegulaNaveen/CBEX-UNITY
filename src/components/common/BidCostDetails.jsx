@@ -17,7 +17,9 @@ const BidCostDetails = () => {
   let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
   if (stage.length > 0) {
     stage = stage[0].currentSFanswer?.value;
-    stage = Number(stage.substring(0, 2));
+    if (stage) {
+      stage = Number(stage.substring(0, 2));
+    }
   }
   const [bidCostValue, setBidCostValue] = useState({
     bidValue: '',
@@ -40,16 +42,17 @@ const BidCostDetails = () => {
 
   const options2 = { currency: 'USD' };
   const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-
   // const bidVal = numberFormat2.format(bidCostValue?.bidValue);
   const bidVal =
     bidCostValue?.bidValue === ''
       ? ''
       : numberFormat2.format(bidCostValue?.bidValue);
+
   const options3 = { currency: 'USD' };
   const numberFormat3 = new Intl.NumberFormat('en-US', options3);
 
   const bottomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
+  const oppAmount = numberFormat3.format(bidCostValue?.amount);
 
   let newBidItem = [
     {
@@ -57,7 +60,11 @@ const BidCostDetails = () => {
         ? 'Opportunity Amount: '
         : 'Total Bid Value: ']:
         stage >= 4 && bidCostValue?.bidValue === ''
-          ? bidCostValue?.amount
+          ? bidCostValue?.amount !== '' && bidCostValue?.amount !== 0
+            ? ` USD ${oppAmount}`
+            : bidCostValue?.amount === ''
+            ? 'N/A'
+            : `${oppAmount}`
           : bidVal
           ? `USD ${bidVal}`
           : 'N/A'
