@@ -14,10 +14,34 @@ const BidCostDetails = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalQuestion = useSelector(getProposalQuestions);
 
-  let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
-  if (stage.length > 0) {
-    stage = stage[0].currentSFanswer?.value;
-    stage = Number(stage.substring(0, 2));
+  function findLastAnswerValueForStageName(questions) {
+    const stageNameQuestions = questions.filter(q => q.sfField === 'StageName');
+    if (stageNameQuestions.length === 0) {
+      return null;
+    }
+    const lastStageNameQuestion =
+      stageNameQuestions[stageNameQuestions.length - 1];
+    if (!lastStageNameQuestion || !lastStageNameQuestion.answers) {
+      return null;
+    }
+    const { answers } = lastStageNameQuestion;
+    if (answers.length === 0) {
+      return null;
+    }
+    const lastAnswerValue = answers[answers.length - 1].answer;
+    return lastAnswerValue;
+  }
+
+  const lastAnswerValueForStageName = findLastAnswerValueForStageName(
+    proposalQuestion
+  );
+
+  let stageNumber = null;
+  if (lastAnswerValueForStageName) {
+    const matches = lastAnswerValueForStageName.match(/(\d+)/);
+    if (matches && matches.length > 0) {
+      stageNumber = parseInt(matches[0]);
+    }
   }
   const [bidCostValue, setBidCostValue] = useState({
     bidValue: '',
@@ -40,24 +64,29 @@ const BidCostDetails = () => {
 
   const options2 = { currency: 'USD' };
   const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-
   // const bidVal = numberFormat2.format(bidCostValue?.bidValue);
   const bidVal =
     bidCostValue?.bidValue === ''
       ? ''
       : numberFormat2.format(bidCostValue?.bidValue);
+
   const options3 = { currency: 'USD' };
   const numberFormat3 = new Intl.NumberFormat('en-US', options3);
 
   const bottomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
+  const oppAmount = numberFormat3.format(bidCostValue?.amount);
 
   let newBidItem = [
     {
-      [stage >= 4 && bidCostValue?.bidValue === ''
+      [stageNumber >= 4 && bidCostValue?.bidValue === ''
         ? 'Opportunity Amount: '
         : 'Total Bid Value: ']:
-        stage >= 4 && bidCostValue?.bidValue === ''
-          ? bidCostValue?.amount
+        stageNumber >= 4 && bidCostValue?.bidValue === ''
+          ? bidCostValue?.amount !== '' && bidCostValue?.amount !== 0
+            ? ` USD ${oppAmount}`
+            : bidCostValue?.amount === ''
+            ? 'N/A'
+            : `${oppAmount}`
           : bidVal
           ? `USD ${bidVal}`
           : 'N/A'
