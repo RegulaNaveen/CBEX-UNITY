@@ -768,6 +768,28 @@ function applyUnAnsweredFilter(questions) {
   return filteredQuestions;
 }
 
+function applyVerificationRequiredFilter(questions) {
+  const role = localStorage.getItem('userRole');
+  let filteredQuestions = cloneDeep(questions);
+  if (role) {
+    filteredQuestions = fromJS(filteredQuestions)
+      .filter(val => {
+        let Answer = val.get('answers', []);
+        Answer = Answer.toJS();
+        return (
+          (Answer &&
+            Answer.length &&
+            Answer[Answer.length - 1].userName === 'UnityPredictedAnswer') ||
+          (Answer &&
+            Answer.length &&
+            Answer[Answer.length - 1].userName === 'CarryForwardAnswer')
+        );
+      })
+      .toJS();
+  }
+  return filteredQuestions;
+}
+
 function applyAnsweredFilter(questions) {
   const role = localStorage.getItem('userRole');
   let filteredQuestions = cloneDeep(questions);
@@ -874,6 +896,13 @@ export function getQuestionsFilterApplied(questionsArr, questionsFilter) {
             applyUnAnsweredFilter
           );
           break;
+        case 'verificationRequired':
+          withinGroupFilteredQuestions = filterGroup(
+            withinGroupFilteredQuestions,
+            filteredQuestions,
+            logic,
+            applyVerificationRequiredFilter
+          );
         case 'interestedParty':
           withinGroupFilteredQuestions = filterGroup(
             withinGroupFilteredQuestions,
@@ -947,6 +976,14 @@ export function onQuestionsFilterApplied(questionsFilter) {
               filteredQuestions,
               logic,
               applyUnAnsweredFilter
+            );
+            break;
+          case 'verificationRequired':
+            withinGroupFilteredQuestions = filterGroup(
+              withinGroupFilteredQuestions,
+              filteredQuestions,
+              logic,
+              applyVerificationRequiredFilter
             );
             break;
           case 'interestedParty':

@@ -21,7 +21,8 @@ const OpportunityLinker = Link.extend({
   addInputRules() {
     return [
       markInputRule({
-        find: /(?:^|\s)([A-Z]{3}[0-9]{5}\s)$/,
+        find: /(?:^|\s)([A-Z]{3}[0-9]{5})\s$/,
+
         type: this.type,
         getAttributes: match => {
           return {

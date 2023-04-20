@@ -347,6 +347,7 @@ class Sidebar extends Component<Props, State> {
                   }}
                 />
               </Tooltip>
+
               {MANUAL_REFRESH && (
                 <Tooltip title="Refresh Proposal Sources" placement="right">
                   <SyncIcon

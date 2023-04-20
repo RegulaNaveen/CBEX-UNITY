@@ -8,12 +8,19 @@ import Calendar from 'apollo-react-icons/Calendar';
 import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import IconButton from 'apollo-react/components/IconButton';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 import Tooltip from 'apollo-react/components/Tooltip';
 import isEmpty from 'lodash/isEmpty';
 import Grid from 'apollo-react/components/Grid';
 import indeterminate from '../../../../img/Indeterminate.svg';
-import { Outgoing, Incoming } from '../../svg';
+import {
+  Outgoing,
+  Incoming,
+  CalendarWithMinus,
+  CalendarWithNum
+} from '../../svg';
+import classNames from 'classnames';
 
 const SystemIntegrations = ({
   checkSfAnswer,
@@ -31,10 +38,19 @@ const SystemIntegrations = ({
   hasDifferentSFanswer,
   isNotepadOpen,
   disabled,
-  answers
+  answers,
+  bidAnswerCopy = false,
+  latestAnsweredBidNo = null,
+  questionId
 }) => {
   const answer = answers.reverse();
   const [latestSfAnswer, setLatestSfAnswer] = useState(false);
+  const [
+    canShowCarryForwardIndication,
+    setCanShowCarryForwardIndication
+  ] = useState(false);
+
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
   useEffect(() => {
     if (
@@ -46,6 +62,21 @@ const SystemIntegrations = ({
       setLatestSfAnswer(false);
     }
   }, [answers?.get(0)?.get('answer')]);
+
+  useEffect(() => {
+    let willShowCarryForwardIndication = canShowCarryForwardIndication;
+    if (Object.keys(allFlags).length > 0) {
+      if (allFlags['carryForwardAnswerFlag']) {
+        willShowCarryForwardIndication = true;
+      } else {
+        willShowCarryForwardIndication = false;
+      }
+
+      if (willShowCarryForwardIndication !== canShowCarryForwardIndication) {
+        setCanShowCarryForwardIndication(willShowCarryForwardIndication);
+      }
+    }
+  }, [allFlags]);
 
   const gridColRatio = isNotepadOpen ? [10, 2] : [11, 1];
   const SalesForceCondition = () => {
@@ -71,7 +102,10 @@ const SystemIntegrations = ({
           <div>
             <Incoming
               style={{ fill: '#9E54B0', height: '28px' }}
-              className="integration-icon"
+              className={classNames({
+                'integration-icon': true,
+                'icon-crm': true
+              })}
             />
           </div>
         </Tooltip>
@@ -92,7 +126,10 @@ const SystemIntegrations = ({
         >
           <div>
             <Incoming
-              className="integration-icon"
+              className={classNames({
+                'integration-icon': true,
+                'icon-crm-sf-diff': true
+              })}
               style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
             />
           </div>
@@ -121,7 +158,10 @@ const SystemIntegrations = ({
         >
           <div>
             <Incoming
-              className="integration-icon"
+              className={classNames({
+                'integration-icon': true,
+                'icon-crm-sf-diff-empty': true
+              })}
               style={{ fill: '#9e54b0', height: '28px', opacity: '50%' }}
             />
           </div>
@@ -143,7 +183,10 @@ const SystemIntegrations = ({
         >
           <div>
             <Incoming
-              className="integration-icon1"
+              className={classNames({
+                'integration-icon1': true,
+                'icon-crm-sf-empty': true
+              })}
               style={{ fill: '#b7b7b7', height: '28px' }}
             />
           </div>
@@ -186,7 +229,10 @@ const SystemIntegrations = ({
           <div>
             <Outgoing
               style={{ fill: '#00c221', height: '28px' }}
-              className="integration-icon"
+              className={classNames({
+                'integration-icon': true,
+                'qvidian-green': true
+              })}
             />
           </div>
         </Tooltip>
@@ -227,7 +273,10 @@ const SystemIntegrations = ({
           <div>
             <Outgoing
               style={{ fill: '#00c221', height: '28px' }}
-              className="integration-icon"
+              className={classNames({
+                'integration-icon': true,
+                'qvidian-green': true
+              })}
             />
           </div>
         </Tooltip>
@@ -262,7 +311,10 @@ const SystemIntegrations = ({
           <div className="wrap-integration">
             <Outgoing
               style={{ fill: '#b7b7b7', height: '28px' }}
-              className="integration-icon"
+              className={classNames({
+                'integration-icon': true,
+                'qvidian-grey': true
+              })}
             />
           </div>
         </Tooltip>
@@ -271,6 +323,64 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
+    // calculate to show carry forward indication icon only if flag is enabled
+    if (canShowCarryForwardIndication && answers.size > 0) {
+      let latestAnswer = null;
+      if (Array.isArray(answer.toJS())) {
+        latestAnswer = answer.toJS()[0];
+      }
+      const isLatestAnsRejectedCFA =
+        answer.get(1) &&
+        answer.get(1).get('userName') === 'CarryForwardAnswer' &&
+        latestAnswer === ' ';
+      const isLatestAnswerCFA =
+        answer.get(0) && answer.get(0).get('userName') === 'CarryForwardAnswer';
+      if (bidAnswerCopy && latestAnsweredBidNo !== null && isLatestAnswerCFA) {
+        return (
+          <Tooltip
+            variant="light"
+            title={`Answer derived from bid ${latestAnsweredBidNo}`}
+            placement="left"
+            tabIndex={-1}
+          >
+            <span>
+              <IconButton
+                style={{
+                  height: '24px',
+                  width: '24px',
+                  paddingLeft: '0px',
+                  paddingRight: '0px'
+                }}
+                onClick={answeronhistory}
+                className="bluecalendar"
+                tabIndex={-1}
+              >
+                <CalendarWithNum number={latestAnsweredBidNo} />
+              </IconButton>
+            </span>
+          </Tooltip>
+        );
+      } else if (
+        isLatestAnsRejectedCFA ||
+        (!bidAnswerCopy && latestAnsweredBidNo !== null)
+      ) {
+        return (
+          <IconButton
+            style={{
+              height: '24px',
+              width: '24px',
+              paddingLeft: '0px',
+              paddingRight: '0px'
+            }}
+            onClick={answeronhistory}
+            tabIndex={-1}
+          >
+            <CalendarWithMinus />
+          </IconButton>
+        );
+      }
+    }
+
     if (
       (answerdate === 'Not Answered' && !isAnswerPredicted) ||
       (lastAnswer
