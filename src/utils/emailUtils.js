@@ -72,7 +72,8 @@ export function generateApprovalEmailInfo(
   approvalSection,
   allQuestions,
   proposalDetails = {},
-  approvalFilters = []
+  approvalFilters = [],
+  flags = {}
 ) {
   let emailSubject = '';
   const emailHead = `
@@ -194,7 +195,7 @@ export function generateApprovalEmailInfo(
       });
       // applying approval filter(s)
       questionsForThisApproval = questionsForThisApproval.filter(q =>
-        shouldShowQuestion(q, approvalFilters)
+        shouldShowQuestion(q, approvalFilters, flags)
       );
       const approversQuestion = questionsForThisApproval.find(
         question => question.questionText === 'Approvers'

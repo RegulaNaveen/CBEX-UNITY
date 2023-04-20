@@ -12,9 +12,14 @@ import moment from 'moment';
 import CustomModal from '../../common/CustomModal';
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
-import { selectProposalQuestions } from '../../../redux/selectors/proposal';
+import {
+  getOpportunityData,
+  selectProposalQuestions
+} from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
 import { updateEventSubjectBody } from '../../../utils/utils';
+import { isMap } from 'lodash';
+// import { getOpportunityData } from '../../../redux/selectors/proposal';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = ['Expected team members', 'All assigned team members'];
@@ -34,14 +39,16 @@ const EventLauncher = ({
   const userData = useSelector(getUserData);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const eventFlag = allFlags.eventLauncher || false;
-  const { isCurrent } = useSelector(state =>
+  const { isCurrent, id: proposalId } = useSelector(state =>
     state.proposal.get('selectedBid')
   )?.toJS();
+
   // Component will return null if no event found
   if (!hasEvent || !eventFlag || !isCurrent) return null;
 
   // Get proposalQuestions - Redux State
   const proposalQuestions = useSelector(selectProposalQuestions);
+  const opportunityData = useSelector(getOpportunityData);
   const eventData = parseStringifyJson(quesData?.events);
 
   const bodytoHtml = eventData?.EventBody;
@@ -105,11 +112,19 @@ const EventLauncher = ({
    * Generate Event Url Function
    */
   const generateEventUrl = (startDate, endDate, body, subject, email) => {
-    const updatedBody = updateEventSubjectBody(body, proposalDetail);
-    const updatedSubject = updateEventSubjectBody(subject, proposalDetail);
+    const placeholderData = {
+      proposalDetail,
+      proposalUsers:
+        isMap(opportunityData) &&
+        opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
+      proposalQuestions
+    };
+
+    const updatedBody = updateEventSubjectBody(body, placeholderData);
+    const updatedSubject = updateEventSubjectBody(subject, placeholderData);
     setBodyStr(updatedBody);
     const subjectStr = encodeURIComponent(
-      updatedSubject.replace(new RegExp('\\n', 'g'), '<br />')
+      updatedSubject.replace(new RegExp('\\n', 'g'), ' ')
     );
     return `https://outlook.office.com/owa?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&to=${email}&.&subject=${subjectStr}&body=Unity%20has%20copied%20your%20invite%20details%20to%20your%20clipboard.%20Press%20Control%20%E2%9C%9A%20V%20to%20paste%20this%20content%20to%20include%20it%20in%20your%20meeting%20invite%20and%20share%20it%20with%20your%20team.&online=1`;
   };
@@ -124,7 +139,12 @@ const EventLauncher = ({
 
   const copyToClipboardAndOpenModal = async () => {
     try {
-      const updatedBody = updateEventSubjectBody(bodytoHtml, proposalDetail);
+      const placeholderData = {
+        proposalDetail,
+        proposalUsers: opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
+        proposalQuestions
+      };
+      const updatedBody = updateEventSubjectBody(bodytoHtml, placeholderData);
       const blob = new Blob([updatedBody], { type: 'text/html' });
       const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
       await navigator.clipboard.write([clipboardItem]);

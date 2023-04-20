@@ -124,8 +124,10 @@ function areBothAnswersSame(answer1, answer2) {
 function isAnswerEmpty(answer) {
   if (List.isList(answer)) {
     return answer.size === 0;
+  } else if (answer === ' ') {
+    return true;
   } else {
-    return answer === ' ';
+    return answer === '';
   }
 }
 
@@ -365,7 +367,7 @@ class AnswerHistory extends Component<Props> {
     this.closeModalWindow();
   };
 
-  onAcceptCarryForwardAnswer = carryForwardAnswer => {
+  onAcceptCarryForwardAnswer = (carryForwardAnswer, cfProposalId = '') => {
     const {
       trackEvent,
       eventCategories,
@@ -402,7 +404,9 @@ class AnswerHistory extends Component<Props> {
         selectedBid.get('id'),
         questionId,
         carryForwardAnswer.get('answer'),
-        userData
+        userData,
+        false,
+        cfProposalId
       );
     } else {
       setProposalAnswer(
@@ -412,7 +416,8 @@ class AnswerHistory extends Component<Props> {
         String(carryForwardAnswer.get('answer')).trim(),
         userData,
         '',
-        false
+        false,
+        cfProposalId
       );
     }
     let action = 'Answer History';
@@ -576,7 +581,7 @@ class AnswerHistory extends Component<Props> {
   };
 
   renderContent = () => {
-    const { opportunityData, selectedBid } = this.props;
+    const { opportunityData, selectedBid, isQuesFreezed } = this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
@@ -759,6 +764,20 @@ class AnswerHistory extends Component<Props> {
         }
 
         if (isAcceptedCarryForwardedAnswer) {
+          let cfBidNoPrevAnswer = null;
+          const cfProposalIdPrevAnswer = answers
+            .get(index + 1)
+            .get('cfProposalId');
+          if (
+            cfProposalIdPrevAnswer &&
+            opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+              .proposalDetails?.bidNo
+          ) {
+            cfBidNoPrevAnswer = opportunityData
+              .get(cfProposalIdPrevAnswer)
+              .toJS().proposal.proposalDetails.bidNo;
+          }
+
           return (
             <span key={uuidv4()} className="carry-forwarded-section">
               {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
@@ -770,13 +789,33 @@ class AnswerHistory extends Component<Props> {
                   `${_answer.get('answer')}`
                 )
               ) : (
-                <b>Validated Carry Forwarded Answer</b>
+                <b>
+                  Validated{' '}
+                  {getUserName(
+                    'CarryForwardAnswer',
+                    cfBidNoPrevAnswer
+                  ).toLowerCase()}
+                </b>
               )}
             </span>
           );
         }
 
-        if (doesPicklistAcceptedCarryForwardAnswer)
+        if (doesPicklistAcceptedCarryForwardAnswer) {
+          let cfBidNoPrevAnswer = null;
+          const cfProposalIdPrevAnswer = answers
+            .get(index + 1)
+            .get('cfProposalId');
+          if (
+            cfProposalIdPrevAnswer &&
+            opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+              .proposalDetails?.bidNo
+          ) {
+            cfBidNoPrevAnswer = opportunityData
+              .get(cfProposalIdPrevAnswer)
+              .toJS().proposal.proposalDetails.bidNo;
+          }
+
           return (
             <span key={uuidv4()} className="carry-forwarded-section">
               {answers.get(index).get('userName') === 'CarryForwardAnswer' &&
@@ -788,15 +827,44 @@ class AnswerHistory extends Component<Props> {
                   </li>
                 ))
               ) : (
-                <b>Validated Carry Forwarded Answer</b>
+                <b>
+                  Validated{' '}
+                  {getUserName(
+                    'CarryForwardAnswer',
+                    cfBidNoPrevAnswer
+                  ).toLowerCase()}
+                </b>
               )}
             </span>
           );
+        }
 
         if (isRejectedCarryForwardedAnswer) {
+          let cfBidNoPrevAnswer = null;
+          const cfProposalIdPrevAnswer = answers
+            .get(index + 1)
+            .get('cfProposalId');
+          if (
+            cfProposalIdPrevAnswer &&
+            opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+              .proposalDetails?.bidNo
+          ) {
+            cfBidNoPrevAnswer = opportunityData
+              .get(cfProposalIdPrevAnswer)
+              .toJS().proposal.proposalDetails.bidNo;
+          }
+
           return (
             <span key={uuidv4()} className="carry-forwarded-section">
-              {<b>Rejected Carry Forwarded Answer</b>}
+              {
+                <b>
+                  Rejected{' '}
+                  {getUserName(
+                    'CarryForwardAnswer',
+                    cfBidNoPrevAnswer
+                  ).toLowerCase()}
+                </b>
+              }
             </span>
           );
         }
@@ -1016,7 +1084,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, cfBidNo)}</p>
+                <p>{getUserName(userName, cfBidNo, isAnswerEmpty(answer))}</p>
                 {renderAnswers()}
               </div>
             </div>
@@ -1026,6 +1094,7 @@ class AnswerHistory extends Component<Props> {
                 <p className="answer-history-para">Bid {bidNo}</p>
               ) : null}
               {indexNo === 0 &&
+              !isQuesFreezed &&
               isCurrentBid === bidNo &&
               lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
@@ -1049,8 +1118,10 @@ class AnswerHistory extends Component<Props> {
                 </div>
               ) : null}
               {indexNo === 0 &&
+              !isQuesFreezed &&
               selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
+              isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
@@ -1065,7 +1136,9 @@ class AnswerHistory extends Component<Props> {
                     size="small"
                     type="button"
                     className="answer-history-accept"
-                    onClick={() => this.onAcceptCarryForwardAnswer(_answer)}
+                    onClick={() =>
+                      this.onAcceptCarryForwardAnswer(_answer, cfProposalId)
+                    }
                   >
                     Accept
                   </button>

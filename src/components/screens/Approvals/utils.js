@@ -30,14 +30,28 @@ const isCarryForwarded = (answer = {}) =>
   answer.userName === 'CarryForwardAnswer';
 
 // answeredFilter => Only answered
-const answeredFilter: Boolean = question => {
+const answeredFilter: Boolean = (question, flags) => {
   const lastAnswer = getLastAnswer(question);
+  if (flags['carryForwardAnswerFlag']) {
+    return (
+      !isAnswerEmpty(lastAnswer.answer) &&
+      !isUnityPredicted(lastAnswer) &&
+      !isCarryForwarded(lastAnswer)
+    );
+  }
   return !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
 };
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
-const unansweredFilter: Boolean = question => {
+const unansweredFilter: Boolean = (question, flags) => {
   const lastAnswer = getLastAnswer(question);
-  return isAnswerEmpty(lastAnswer.answer);
+  if (flags['carryForwardAnswerFlag']) {
+    return (
+      isAnswerEmpty(lastAnswer.answer) ||
+      isUnityPredicted(lastAnswer) ||
+      isCarryForwarded(lastAnswer)
+    );
+  }
+  return isAnswerEmpty(lastAnswer.answer) || isUnityPredicted(lastAnswer);
 };
 const responsibleFilter: Boolean = question => {
   const userRole = localStorage.getItem('userRole') || '';
@@ -57,12 +71,19 @@ const informedFilter: Boolean = question => {
   return false;
 };
 
-const verificationRequiredFilter = question => {
+export const verificationRequiredFilter = (question, flags) => {
   const lastAnswer = getLastAnswer(question);
-  return isUnityPredicted(lastAnswer) || isCarryForwarded(lastAnswer);
+  if (flags['carryForwardAnswerFlag']) {
+    return isUnityPredicted(lastAnswer) || isCarryForwarded(lastAnswer);
+  }
+  return isUnityPredicted(lastAnswer);
 };
 
-export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
+export const shouldShowQuestion = (
+  question = {},
+  approvalfilters,
+  flags = {}
+): Boolean => {
   try {
     const filterAnswers = [];
     const appliedFilters = approvalfilters
@@ -87,15 +108,15 @@ export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
         filterAnswers.push(true);
       } else {
         if (appliedFilters.includes('answered')) {
-          filterAnswers.push(answeredFilter(question));
+          filterAnswers.push(answeredFilter(question, flags));
         }
         if (appliedFilters.includes('unanswered')) {
-          filterAnswers.push(unansweredFilter(question));
+          filterAnswers.push(unansweredFilter(question, flags));
         }
       }
 
       if (appliedFilters.includes('verificationRequired')) {
-        filterAnswers.push(verificationRequiredFilter(question));
+        filterAnswers.push(verificationRequiredFilter(question, flags));
       }
     }
     return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
@@ -105,7 +126,7 @@ export const shouldShowQuestion = (question = {}, approvalfilters): Boolean => {
   }
 };
 
-export const shouldShowSection = sectionId => {
+export const shouldShowSection = (sectionId, flags) => {
   try {
     const state = store.getState();
     const allApprovals = state.approvals.allApprovals;
@@ -122,7 +143,8 @@ export const shouldShowSection = sectionId => {
         proposalQuestions.find(i => i.questionId === questionId) || {};
       const isQuestionVisible = shouldShowQuestion(
         questionObj,
-        approvalsFilters
+        approvalsFilters,
+        flags
       );
       visibilityArr.push(isQuestionVisible);
     });

@@ -127,6 +127,11 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Verification Required',
         className: CLASS_QUES_FIL_R1_C1
       },
+      showInactiveQuestions: {
+        checked: false,
+        label: 'Include N/A Questions',
+        className: 'questions-filter__row3-col1'
+      },
       logic: 'OR'
     },
     rolegroup: {
@@ -140,14 +145,8 @@ const INITIAL_STATE: Map = fromJS({
         label: 'Informed',
         className: 'questions-filter__row2-col1'
       },
-      showInactiveQuestions: {
-        checked: false,
-        label: 'Include N/A Questions',
-        className: 'questions-filter__row3-col1'
-      },
       logic: 'AND'
     },
-
     milestoneGroup: {}
   }),
   filteredProposalQuestions: Map({}),
@@ -986,7 +985,8 @@ const onSetQuestion = (state: Map, action: Object): Map => {
   let questionsFilter = state.get('questionsFilter');
   const filterQuestionsVal = getQuestionsFilterApplied(
     updatedProposalQuestions,
-    questionsFilter
+    questionsFilter,
+    state.get('eventflag')
   );
   let selectedBidId = state.getIn(['selectedBid', 'id']);
 
@@ -1115,7 +1115,8 @@ const onEditQuestion = (state, action) => {
   ];
   const filterQuestionsVal = getQuestionsFilterApplied(
     updatedQuestions,
-    questionsFilter
+    questionsFilter,
+    state.get('eventflag')
   );
 
   return state
@@ -1201,12 +1202,13 @@ const setPriceModulerFields = (state, action) => {
 };
 
 const setBidCostDataFields = (state, action) => {
-  const { bidValue, bottomLine, budgetTools } = action.payload;
+  const { bidValue, bottomLine, budgetTools, amount } = action.payload;
 
   return state.set(
     'bidCostDetails',
     fromJS({
       totalBidValue: bidValue,
+      amount,
       bottomLineLaborDiscount: bottomLine,
       budgetTools
     })

@@ -83,7 +83,7 @@ const Approvals = () => {
         {!isEmpty(approvals) ? (
           approvals.map(approval => (
             <Section
-              key={approval.ApprovalSectionId}
+              keyForward={approval.key}
               sectionId={approval.ApprovalSectionId}
               title={approval.ApprovalSectionTitle}
             />

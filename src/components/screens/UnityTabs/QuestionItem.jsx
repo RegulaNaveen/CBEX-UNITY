@@ -43,15 +43,14 @@ import { autoNavigationCompletedAction } from '../../../redux/actions/search-act
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 
 import TextQuestion from './InputComponents/TextQuestion';
-import NumberQuestion from './InputComponents/NumberQuestion';
-import DateQuestion from './InputComponents/DateQuestion';
-import RadioQuestion from './InputComponents/RadioQuestion';
-import SelectQuestion from './InputComponents/SelectQuestion';
-import MultiSelectQuestion from './InputComponents/MultiSelectQuestion';
-import YesNoQuestion from './InputComponents/YesNoQuestion';
-import CheckBoxQuestion from './InputComponents/CheckBoxQuestion';
-import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
-import { compositeDecorator } from '../../common/CustomApolloRichText';
+import NumberQuestion from '../Approvals/InputComponents/NumberQuestion';
+import DateQuestion from '../Approvals/InputComponents/DateQuestion';
+import RadioQuestion from '../Approvals/InputComponents/RadioQuestion';
+import SelectQuestion from '../Approvals/InputComponents/SelectQuestion';
+import MultiSelectQuestion from '../Approvals/InputComponents/MultiSelectQuestion';
+import YesNoQuestion from '../Approvals/InputComponents/YesNoQuestion';
+import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
+import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -85,7 +84,8 @@ const QuestionItem = ({
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
   const unityTabFilters = useSelector(state => state.unitytab.filters);
-  const isShowQuestion = shouldShowQuestion(question, unityTabFilters);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+  const isShowQuestion = shouldShowQuestion(question, unityTabFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const [screenSize, setScreen] = useState('');
   const [iconColor, seticonColor] = useState('#00c221');
@@ -136,9 +136,6 @@ const QuestionItem = ({
       window.removeEventListener('resize', resize);
     };
   }, []);
-
-  // Component will return null in case of empty question value
-  if (isEmpty(question)) return null;
 
   const socketContext = useContext(SocketContext);
   const [isShowHistory, setIsShowHistory] = useState(false);
@@ -462,7 +459,9 @@ const QuestionItem = ({
       integration,
       questionId,
       sfObject,
-      hasDifferentSFanswer
+      hasDifferentSFanswer,
+      bidAnswerCopy = false,
+      latestAnsweredBidNo = null
     } = question;
     const loading =
       unityQuestionStatus?.questionId === questionId &&
@@ -578,6 +577,8 @@ const QuestionItem = ({
         answerText={answerText}
         hasDifferentSFanswer={hasDifferentSFanswer}
         disabled={integrationLocked}
+        bidAnswerCopy={bidAnswerCopy}
+        latestAnsweredBidNo={latestAnsweredBidNo}
       />
     );
   };
@@ -612,7 +613,7 @@ const QuestionItem = ({
     default:
       break;
   }
-  return useMemo(
+  const questionRender = useMemo(
     () =>
       isShowQuestion ? (
         <>
@@ -696,6 +697,11 @@ const QuestionItem = ({
       // highlightQuestionId
     ]
   );
+
+  // Component will return null in case of empty question value
+  if (isEmpty(question)) return null;
+
+  return questionRender;
 };
 
 QuestionItem.defaultProps = {

@@ -22,7 +22,7 @@ import { autoNavigationCompletedAction } from '../../../redux/actions/search-act
 
 export const ApprovalContext = createContext();
 
-const Section = ({ sectionId, title, testVisibility }) => {
+const Section = ({ sectionId, title, testVisibility, keyForward }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
   const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
@@ -43,12 +43,13 @@ const Section = ({ sectionId, title, testVisibility }) => {
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
+  const flags = useSelector(state => state.proposal.get('eventflag'));
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setSectionVisibility(shouldShowSection(sectionId));
-  }, [approvalFilters]);
+    setSectionVisibility(shouldShowSection(sectionId, flags));
+  }, [approvalFilters, flags]);
 
   useEffect(() => {
     let shouldExpand = expanded;
@@ -162,7 +163,7 @@ const Section = ({ sectionId, title, testVisibility }) => {
                   <SectionFreezed
                     archiveIndex={index}
                     {...item}
-                    key={`archive-${index}-${item.id}`}
+                    key={`archive-${index}-${item.id}-${keyForward}`}
                   />
                 ))}
 
@@ -170,6 +171,7 @@ const Section = ({ sectionId, title, testVisibility }) => {
               <SectionActive
                 {...omit(approval, ['ArchivedData'])}
                 setIsAllActiveDisplayed={setIsAllActiveDisplayed}
+                key={keyForward}
               />
             </AccordionDetails>
           </CustomAccordion>

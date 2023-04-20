@@ -76,7 +76,8 @@ const QuestionItem = ({
     : useSelector(getQuestion(questionId));
   const activeQuestionInfo = useSelector(getQuestion(questionId));
   const approvalFilters = useSelector(state => state.approvals.filters);
-  const isShowQuestion = shouldShowQuestion(question, approvalFilters);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+  const isShowQuestion = shouldShowQuestion(question, approvalFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);

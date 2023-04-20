@@ -13,8 +13,17 @@ const BidCostDetails = () => {
   const dispatch = useDispatch();
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const proposalQuestion = useSelector(getProposalQuestions);
+
+  let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
+  if (stage.length > 0) {
+    stage = stage[0].currentSFanswer?.value;
+    if (stage) {
+      stage = Number(stage.substring(0, 2));
+    }
+  }
   const [bidCostValue, setBidCostValue] = useState({
     bidValue: '',
+    amount: '',
     bottomLine: '',
     budgetTools: ''
   });
@@ -26,25 +35,41 @@ const BidCostDetails = () => {
   }, [
     memoizeBid,
     bidCostValue?.bidValue,
+    bidCostValue?.amount,
     bidCostValue?.bottomLine,
     bidCostValue?.budgetTools
   ]);
 
   const options2 = { currency: 'USD' };
   const numberFormat2 = new Intl.NumberFormat('en-US', options2);
-
-  const bidVal = numberFormat2.format(bidCostValue?.bidValue);
+  // const bidVal = numberFormat2.format(bidCostValue?.bidValue);
+  const bidVal =
+    bidCostValue?.bidValue === ''
+      ? ''
+      : numberFormat2.format(bidCostValue?.bidValue);
 
   const options3 = { currency: 'USD' };
   const numberFormat3 = new Intl.NumberFormat('en-US', options3);
 
   const bottomLineVal = numberFormat3.format(bidCostValue?.bottomLine);
+  const oppAmount = numberFormat3.format(bidCostValue?.amount);
 
-  const newBidItem = [
+  let newBidItem = [
     {
-      'Total Bid Value: ':
-        bidVal === 0 || bidVal === '0' ? 'N/A' : `USD ${bidVal}`
+      [stage >= 4 && bidCostValue?.bidValue === ''
+        ? 'Opportunity Amount: '
+        : 'Total Bid Value: ']:
+        stage >= 4 && bidCostValue?.bidValue === ''
+          ? bidCostValue?.amount !== '' && bidCostValue?.amount !== 0
+            ? ` USD ${oppAmount}`
+            : bidCostValue?.amount === ''
+            ? 'N/A'
+            : `${oppAmount}`
+          : bidVal
+          ? `USD ${bidVal}`
+          : 'N/A'
     },
+
     { 'Bottom Line Labor Discount: ': bottomLineVal },
     { 'Budget Tools: ': bidCostValue?.budgetTools }
   ];
@@ -53,26 +78,29 @@ const BidCostDetails = () => {
     let bidValue = '';
     let bottomLine = '';
     let budgetTools = '';
+    let amount = '';
 
-    proposalQuestion.forEach((item) => {
+    proposalQuestion.forEach(item => {
       if (item?.section?.sectionName === 'Details-For-Backend') {
         if (item?.sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
-          item?.answers?.forEach((i) => (bidValue = String(i?.answer).trim()));
+          item?.answers?.forEach(i => (bidValue = String(i?.answer).trim()));
         }
+        if (item?.sfField === 'Amount') {
+          item?.answers?.forEach(i => (amount = String(i?.answer).trim()));
+        }
+
         if (item?.sfField === 'Bottom_Line_Labor_Discount__c') {
-          item?.answers?.forEach(
-            (i) => (bottomLine = String(i?.answer).trim())
-          );
+          item?.answers?.forEach(i => (bottomLine = String(i?.answer).trim()));
         }
         if (item?.sfField === 'Budget_Tools__c') {
-          item?.answers?.forEach(
-            (i) => (budgetTools = String(i?.answer).trim())
-          );
+          item?.answers?.forEach(i => (budgetTools = String(i?.answer).trim()));
         }
       }
     });
+
     setBidCostValue({
       bidValue,
+      amount,
       bottomLine,
       budgetTools: budgetTools?.split(',')?.join(', ')
     });
@@ -87,12 +115,23 @@ const BidCostDetails = () => {
             return (
               <div className="bid-cost_details-item" key={key}>
                 <h3>{Object.keys(item)[0]}</h3>
+
                 <i>
-                  {Object.values(item)[0] === '' ||
-                  Object.values(item)[0] === 0 ||
-                  Object.values(item)[0] === '0'
-                    ? 'N/A'
-                    : Object.values(item)[0] || 'N/A'}
+                  {Object.keys(item)[0].trim() === 'Amount' ? (
+                    <i>{Object.values(item)[0] || 0}</i>
+                  ) : (
+                    <i>
+                      {[
+                        'Budget Tools:',
+                        'Bottom Line Labor Discount:',
+                        'Total Bid Value:'
+                      ].includes(Object.keys(item)[0].trim()) &&
+                      (Object.values(item)[0].trim() === '' ||
+                        Object.values(item)[0].trim() === '0')
+                        ? 'N/A'
+                        : Object.values(item)[0]}
+                    </i>
+                  )}
                 </i>
               </div>
             );
