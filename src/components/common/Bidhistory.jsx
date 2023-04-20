@@ -24,15 +24,16 @@ const BidHistory = () => {
   const currentbidNo = new URLSearchParams(winLocationSearch).get('bidNo');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
-  const [bidVal, setBidVal] = useState(false);
+  const [bidVal, setBidVal] = useState('');
   const dispatch = useDispatch();
-
+  // const [stage, setStage] = useState(null);
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
+
   const proposalQuestion = useSelector(getProposalQuestions);
 
   const handleCollapse = () => {
@@ -46,12 +47,53 @@ const BidHistory = () => {
     }
   };
 
-  let stage = proposalQuestion.filter(v => v.sfField === 'StageName');
-  if (stage.length > 0) {
-    stage = stage[0].currentSFanswer?.value;
-    if (stage) {
-      stage = Number(stage.substring(0, 2));
+  function findLastAnswerValueForStageName(questions) {
+    const stageNameQuestions = questions.filter(q => q.sfField === 'StageName');
+    if (stageNameQuestions.length === 0) {
+      return null;
     }
+    const lastStageNameQuestion =
+      stageNameQuestions[stageNameQuestions.length - 1];
+    if (!lastStageNameQuestion || !lastStageNameQuestion.answers) {
+      return null;
+    }
+    const { answers } = lastStageNameQuestion;
+    if (answers.length === 0) {
+      return null;
+    }
+    const lastAnswerValue = answers[answers.length - 1].answer;
+    return lastAnswerValue;
+  }
+  const lastAnswerValueForStageName = findLastAnswerValueForStageName(
+    proposalQuestion
+  );
+
+  let stageNumber = null;
+  if (lastAnswerValueForStageName) {
+    const matches = lastAnswerValueForStageName.match(/(\d+)/);
+    if (matches && matches.length > 0) {
+      stageNumber = parseInt(matches[0]);
+    }
+  }
+
+  let content;
+
+  if (
+    selectedView === 'questions' ||
+    (selectedView === null && isCurrentBid) ||
+    !bidCostDetailFlag
+  ) {
+    if (
+      (bidVal && isCurrentBid && bidCostDetailFlag) ||
+      (!bidVal && isCurrentBid && stageNumber >= 4 && bidCostDetailFlag) ||
+      (!isCurrentBid && bidCostDetailFlag)
+    ) {
+      content = <BidCostDetails />;
+    } else {
+      content = <PriceModeler />;
+    }
+  } else {
+    content = <BidCostDetails />;
   }
 
   useEffect(() => {
@@ -63,9 +105,8 @@ const BidHistory = () => {
         }
       }
     });
-    if (bidValue !== bidVal) {
-      setBidVal(bidValue);
-    }
+
+    setBidVal(bidValue);
   }, [bidVal, proposalQuestion]);
 
   useEffect(() => {
@@ -73,26 +114,6 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
-
-  let content;
-
-  if (
-    selectedView === 'questions' ||
-    (selectedView === null && isCurrentBid) ||
-    !bidCostDetailFlag
-  ) {
-    if (
-      (bidVal && isCurrentBid && bidCostDetailFlag) ||
-      (!bidVal && isCurrentBid && stage >= 4 && bidCostDetailFlag) ||
-      (!isCurrentBid && bidCostDetailFlag)
-    ) {
-      content = <BidCostDetails />;
-    } else {
-      content = <PriceModeler />;
-    }
-  } else {
-    content = <BidCostDetails />;
-  }
 
   return (
     <>
