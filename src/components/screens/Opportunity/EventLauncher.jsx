@@ -120,8 +120,12 @@ const EventLauncher = ({
       proposalQuestions
     };
 
-    const updatedBody = updateEventSubjectBody(body, placeholderData);
-    const updatedSubject = updateEventSubjectBody(subject, placeholderData);
+    const updatedBody = updateEventSubjectBody(body, placeholderData, 'body');
+    const updatedSubject = updateEventSubjectBody(
+      subject,
+      placeholderData,
+      'subject'
+    );
     setBodyStr(updatedBody);
     const subjectStr = encodeURIComponent(
       updatedSubject.replace(new RegExp('\\n', 'g'), ' ')
@@ -144,7 +148,11 @@ const EventLauncher = ({
         proposalUsers: opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
         proposalQuestions
       };
-      const updatedBody = updateEventSubjectBody(bodytoHtml, placeholderData);
+      const updatedBody = updateEventSubjectBody(
+        bodytoHtml,
+        placeholderData,
+        'body'
+      );
       const blob = new Blob([updatedBody], { type: 'text/html' });
       const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
       await navigator.clipboard.write([clipboardItem]);

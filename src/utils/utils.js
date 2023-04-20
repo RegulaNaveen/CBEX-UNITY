@@ -1,7 +1,9 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable array-callback-return */
 import jwt_decode from 'jwt-decode';
 import { cloneDeep, isArray, isEmpty, isString } from 'lodash';
+import ANSWER_TYPES from '../constants/answerTypes';
 import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
@@ -59,37 +61,52 @@ const getAnswer = ans => {
   }
 };
 
-const getFullProposalTeamString = proposalUsers => {
-  if (!isArray(proposalUsers)) return '';
+const getFullProposalTeamString = (updateField, questions) => {
+  const relevantQuestions = questions?.filter(
+    q =>
+      q.visible &&
+      (q.active || q.isCustomQuestion) &&
+      q.section.sectionName === 'Proposal Team'
+  );
+  const isSubjectUpdate = updateField === 'subject';
 
-  const proposalTeamStr = proposalUsers
-    .map(user => {
-      const hyperlink = document.createElement('a');
-      hyperlink.href = `https://outlook.office.com/mail/deeplink/compose?to=${user.userEmail}`;
-      hyperlink.textContent = user.userName;
-      hyperlink.target = '_blank';
-      return hyperlink.outerHTML;
+  return relevantQuestions
+    ?.flatMap(q => (q?.answers?.slice(-1)[0]?.answer || '')?.split(','))
+    .map(answer => {
+      if (isSubjectUpdate) {
+        return answer?.replace(/\s*\([^)]*\)/g, '');
+      }
+      const [name, email] = answer?.trim()?.split('(');
+      const emailWithoutParenthesis = email?.replace(')', '');
+      return emailWithoutParenthesis
+        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+        : name?.trim();
     })
+    .filter(answer => answer)
     .join(', ');
-
-  return proposalTeamStr;
 };
 
-const replaceAnswerToQuestionsPlaceholders = (eventBodyStr, questions) => {
-  const regexPlaceholdersNotResolved = new RegExp(`\\[(.*?)]`, 'gi');
+const replaceAnswerToQuestionsPlaceholders = (
+  eventBodyStr,
+  questions,
+  updateField
+) => {
+  const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
   let updatedEventBodyStr = eventBodyStr;
+  const relevantQuestions = questions?.filter(q => q.visible && q.active);
 
-  questions.forEach(question => {
-    const { questionText, questionId, answers } = question;
-    const regexPlaceholders = new RegExp(
-      `\\[${questionText.toLowerCase().replace(/ /g, '_')}:${questionId}\\]`,
-      'gi'
-    );
+  relevantQuestions.forEach(({ questionId, answers }) => {
+    const regexPlaceholders = new RegExp(`\\[(.*?):${questionId}\\]`, 'gi');
+    const answer =
+      updateField === 'body'
+        ? getAnswer(answers)
+        : answers?.slice(-1)[0]?.answer ?? '';
 
-    updatedEventBodyStr = updatedEventBodyStr.replace(
-      regexPlaceholders,
-      getAnswer(answers)
-    );
+    if (answers)
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexPlaceholders,
+        answer
+      );
   });
 
   updatedEventBodyStr = updatedEventBodyStr.replace(
@@ -99,37 +116,40 @@ const replaceAnswerToQuestionsPlaceholders = (eventBodyStr, questions) => {
   return updatedEventBodyStr;
 };
 
-const getQuestionsForTheCustomer = questions => {
-  let html = '<ul>';
+const getQuestionsForTheCustomer = (questions, updateField) => {
+  const isSubjectUpdate = updateField === 'subject';
+  const relevantQuestions = questions?.filter(
+    q =>
+      q.isCustomQuestion &&
+      q.section.sectionName === 'Questions_for_the_Customer_left_panel'
+  );
 
-  questions
-    ?.sort((a, b) => a.questionOrder - b.questionOrder)
-    ?.map(questionData => {
-      if (
-        questionData?.isCustomQuestion &&
-        questionData.section.sectionName ===
-          'Questions_for_the_Customer_left_panel'
-      ) {
-        const answer = getAnswer(questionData.answers);
-
-        html += `<li>${questionData.questionHTML}</li>`;
-        if (
-          answer &&
-          questionData.answers[questionData.answers.length - 1]?.answer?.trim()
+  return isSubjectUpdate
+    ? relevantQuestions
+        ?.map(
+          q => `${q.questionText} \r\n${q.answers?.slice(-1)[0]?.answer} \r\n`
         )
-          html += `<ul><li>${answer}</li></ul>`;
-      }
-    });
-  html += '</ul>';
-
-  return html;
+        .join('')
+    : `<ul>${relevantQuestions
+        ?.map(
+          q =>
+            `<li>${q.questionHTML}</li>${
+              getAnswer(q.answers)
+                ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
+                : ''
+            }`
+        )
+        .join('')}</ul>`;
 };
 
 /**
  * @returns {string[]}
  */
-function updateEventSubjectBody(str, data) {
-  const { proposalDetail, proposalUsers, proposalQuestions } = data;
+function updateEventSubjectBody(
+  str,
+  { proposalDetail, proposalQuestions },
+  updateField
+) {
   const obj = {
     '[opportunity_number]': proposalDetail['CRM #'],
     '[line_of_business]': proposalDetail['Line of business'],
@@ -140,20 +160,29 @@ function updateEventSubjectBody(str, data) {
     '[bid_no]': proposalDetail['bidNo'],
     '[unity_link]': `<a href=${window.location.href}>${window.location.href}</a>`,
     '[todays_date]': `${formatTheDate(new Date())}`,
-    '[full_proposal_team]': getFullProposalTeamString(proposalUsers),
-    '[questions_for_the_customers]': getQuestionsForTheCustomer(
+    '[full_proposal_team]': getFullProposalTeamString(
+      updateField,
       proposalQuestions
+    ),
+    '[questions_for_the_customers]': getQuestionsForTheCustomer(
+      proposalQuestions,
+      updateField
     )
   };
-  for (const key in obj) {
+
+  Object.keys(obj).forEach(key => {
     if (str.includes(key)) {
       str = str.replaceAll(key, obj[key]);
     }
-  }
-  str = replaceAnswerToQuestionsPlaceholders(str, proposalQuestions);
+  });
 
-  return str;
+  return replaceAnswerToQuestionsPlaceholders(
+    str,
+    proposalQuestions,
+    updateField
+  );
 }
+
 function isUserUbuildAdmin() {
   if (!localStorage.getItem('id_token')) return false;
 
