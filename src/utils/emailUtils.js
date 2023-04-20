@@ -1,6 +1,5 @@
 import moment from 'moment';
 import {
-  URL_REGEXP,
   PROPOSAL_TEAM_USER_MATCH_REGEXP,
   RTE_DATA_ATTR_REGEXP,
   PROPOSAL_TEAM_EMAIL_MATCH_REGEXP
@@ -45,17 +44,6 @@ function handleHyperlinks(answer, config) {
       return moment(answer).format('DD-MMM-YYYY');
   } catch (error) {
     console.log('Error in formatDate');
-  }
-  if (typeof answer === 'string') {
-    let chunks = answer.split(' ');
-    chunks = chunks.map(chunk => {
-      if (URL_REGEXP.test(chunk)) {
-        return `<a href="${chunk}">${chunk}</a>`;
-      } else {
-        return chunk;
-      }
-    });
-    return chunks.join(' ');
   }
   if (answer) {
     return answer.toString();
@@ -269,12 +257,13 @@ export function generateApprovalEmailInfo(
       } else {
         answerHTML =
           question.answers.length > 0
-            ? (question.answers[question.answers.length - 1].formattedAnswer &&
+            ? (question.answers[question.answers.length - 1] &&
+                question.answers[question.answers.length - 1].formattedAnswer &&
                 question.answers[question.answers.length - 1].formattedAnswer
-                  .htmlExport &&
+                  .html &&
                 handleHyperlinks(
                   question.answers[question.answers.length - 1].formattedAnswer
-                    .htmlExport,
+                    .html,
                   question.answerConfiguration
                 )) ||
               `<p>${handleHyperlinks(

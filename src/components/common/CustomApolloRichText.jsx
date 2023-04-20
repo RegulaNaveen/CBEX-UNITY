@@ -5,6 +5,7 @@ import {
   EditorState,
   SelectionState,
   Modifier,
+  Entity,
   convertToRaw,
   convertFromRaw,
   CompositeDecorator
@@ -13,14 +14,16 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
+import Link from 'apollo-react-icons/Link';
 import useUpdateEffect from '../../hooks/useUpdateEffect';
 import TagUserList from './TagUserList';
-
 import { QUESTION_UNLOCK_TIMEOUT } from '../../constants/app';
 import {
   MentionComponentWithEmail,
   MentionComponentWithName,
-  MentionComponentWithLink
+  MentionComponentWithLink,
+  MentionComponentWithCopiedHyperlink,
+  MentionComponentWithHyperLink
 } from './ApolloRichTextComponents/MentionComponent';
 
 let CAN_DECORATE_LINKS = false;
@@ -105,7 +108,36 @@ function handleUserTagStrategy(contentBlock, callback, contentState) {
     );
   }, callback);
 }
+// Strategy function for link entities
+function handleHyperlinkOpportunityStrategy(
+  contentBlock,
+  callback,
+  contentState
+) {
+  contentBlock.findEntityRanges(character => {
+    const entityKey = character.getEntity();
 
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === 'LINK'
+    );
+  }, callback);
+}
+// Strategy function for link matches
+function handleHyperLinkOpportunityStrategy(
+  contentBlock,
+  callback,
+  contentState
+) {
+  const text = contentBlock.getText();
+
+  const regex = /(http(s)?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{0,256}?\.[a-z0-9]{1,4}\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)|\b(http\S+)/g;
+  let matchArr, start;
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index;
+    callback(start, start + matchArr[0].length);
+  }
+}
 // decorator for DraftJS Editor Component
 export const compositeDecorator = new CompositeDecorator([
   {
@@ -115,6 +147,14 @@ export const compositeDecorator = new CompositeDecorator([
   {
     strategy: handleLinkOpportunityStrategy,
     component: MentionComponentWithLink
+  },
+  {
+    strategy: handleHyperlinkOpportunityStrategy,
+    component: MentionComponentWithCopiedHyperlink
+  },
+  {
+    strategy: handleHyperLinkOpportunityStrategy,
+    component: MentionComponentWithHyperLink
   }
 ]);
 
@@ -126,6 +166,14 @@ export const compositeDecoratorHidden = new CompositeDecorator([
   {
     strategy: handleLinkOpportunityStrategy,
     component: MentionComponentWithLink
+  },
+  {
+    strategy: handleHyperlinkOpportunityStrategy,
+    component: MentionComponentWithCopiedHyperlink
+  },
+  {
+    strategy: handleHyperLinkOpportunityStrategy,
+    component: MentionComponentWithHyperLink
   }
 ]);
 
@@ -480,6 +528,11 @@ const CustomApolloRichText = ({
   const blur = () => {
     setIsFocused(false);
     setSearchTag(null);
+    const html =
+      richTextEditorRef.current.editorRef &&
+      richTextEditorRef.current.editorRef.current &&
+      richTextEditorRef.current.editorRef.current.editor &&
+      richTextEditorRef.current.editorRef.current.editor.innerHTML;
     const htmlHidden =
       richTextEditorRefHidden.current.editorRef &&
       richTextEditorRefHidden.current.editorRef.current &&
@@ -491,6 +544,7 @@ const CustomApolloRichText = ({
       richTextEditorRefHidden.current.state.editorState.getCurrentContent();
     const resultObj = {
       ...richTextData,
+      html,
       htmlExport: htmlHidden,
       docExport: valueHidden
     };
@@ -614,6 +668,124 @@ const CustomApolloRichText = ({
     }
   };
 
+  function hyperLinkHandler() {
+    const { editorState } = richTextEditorRef.current.state;
+    const selectionState = editorState.getSelection();
+
+    const contentState = editorState.getCurrentContent();
+
+    const selectedText = editorState
+      .getCurrentContent()
+      .getBlockForKey(selectionState.getStartKey())
+      .getText()
+      .slice(selectionState.getStartOffset(), selectionState.getEndOffset());
+    const linkName = selectedText;
+    let linkAddress;
+    let linkInstance;
+    function getLinkAddress() {
+      const startKey = selectionState.getStartKey();
+
+      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+
+      const index = selectionState.getStartOffset();
+      const linkKey = blockWithLinkAtBeginning.getEntityAt(index);
+
+      if (linkKey !== null) {
+        linkInstance = Entity.get(linkKey);
+
+        const datatest = linkInstance.getData();
+
+        const { url } = datatest;
+        if (url !== null) {
+          linkAddress = window.prompt('Link Address:', url);
+        } else {
+          linkAddress = window.prompt('Link Address:', 'Enter url');
+        }
+      } else {
+        linkAddress = window.prompt('Link Address:', 'Enter url');
+      }
+
+      return linkAddress;
+    }
+
+    linkAddress = getLinkAddress();
+
+    if (linkAddress !== null) {
+      const editorStateHidden =
+        richTextEditorRefHidden.current.state.editorState;
+
+      const link = linkAddress;
+
+      contentState.createEntity('LINK', 'MUTABLE', {
+        url: link,
+        target: '_blank'
+      });
+
+      const entityKey = contentState.getLastCreatedEntityKey();
+
+      const contentStateWithLink = Modifier.replaceText(
+        contentState,
+        selectionState,
+        linkName,
+        editorState.getCurrentInlineStyle(),
+        entityKey
+      );
+      let newSelectionState = selectionState.merge({
+        anchorOffset: selectionState.getAnchorOffset(),
+        focusOffset: selectionState.getAnchorOffset() + linkName.length
+      });
+      const contentStateWithEntity = Modifier.applyEntity(
+        contentStateWithLink,
+        newSelectionState,
+        entityKey
+      );
+
+      let newEditorState = EditorState.set(editorState, {
+        currentContent: contentStateWithEntity
+      });
+
+      newEditorState = EditorState.forceSelection(
+        newEditorState,
+        newSelectionState
+      );
+
+      const newContentStateRaw = convertToRaw(
+        newEditorState.getCurrentContent()
+      );
+      const text = newContentStateRaw.blocks
+        .map(item => item.text)
+        .filter(item => !isEmpty(item.trim()))
+        .join(' ');
+
+      const html =
+        richTextEditorRef.current.editorRef &&
+        richTextEditorRef.current.editorRef.current &&
+        richTextEditorRef.current.editorRef.current.editor &&
+        richTextEditorRef.current.editorRef.current.editor.innerHTML;
+
+      const htmlHidden =
+        richTextEditorRefHidden.current.editorRef &&
+        richTextEditorRefHidden.current.editorRef.current &&
+        richTextEditorRefHidden.current.editorRef.current.editor &&
+        richTextEditorRefHidden.current.editorRef.current.editor.innerHTML;
+
+      const valueHidden =
+        richTextEditorRefHidden.current &&
+        richTextEditorRefHidden.current.state.editorState &&
+        richTextEditorRefHidden.current.state.editorState.getCurrentContent();
+
+      const resultObj = {
+        text,
+        value: newContentStateRaw,
+        html,
+        htmlExport: htmlHidden,
+        docExport: valueHidden
+      };
+      setRichTextData(resultObj);
+      richTextEditorRef.current.setState({ editorState: newEditorState });
+      resetUnlockTimer();
+    }
+  }
   // Render Popover RichText Editor
   return (
     <>
@@ -646,6 +818,13 @@ const CustomApolloRichText = ({
             ref={richTextEditorRef}
             key={richTextKeyRef.current}
             onFocus={handleFocus}
+            customControllers={(editorState, onChange) => (
+              <>
+                <div className="style-button-group">
+                  <Link className="icon-button" onClick={hyperLinkHandler} />
+                </div>
+              </>
+            )}
           />
         </div>
         <div style={{ display: 'none' }}>

@@ -67,10 +67,16 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
       if (Array.isArray(entityRanges) && entityRanges.length > 0) {
         entityRanges = entityRanges.reverse();
         entityRanges.forEach(entity => {
-          mentions.push({
-            start: offset + entity.offset,
-            end: offset + entity.offset + entity.length
-          });
+          if (
+            formattedAnswerJSON.value.entityMap &&
+            formattedAnswerJSON.value.entityMap[entity.key] &&
+            formattedAnswerJSON.value.entityMap[entity.key].type === 'MENTION'
+          ) {
+            mentions.push({
+              start: offset + entity.offset,
+              end: offset + entity.offset + entity.length
+            });
+          }
         });
       }
 

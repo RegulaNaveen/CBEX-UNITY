@@ -30,6 +30,7 @@
   .RichEditor-editor .public-DraftEditorPlaceholder-root,
   .RichEditor-editor .public-DraftEditor-content {
     padding: 5px;
+    overflow-wrap: anywhere;
   }
 
   .RichEditor-editor .public-DraftEditorPlaceholder-root {
@@ -39,6 +40,7 @@
 
   .RichEditor-editor .public-DraftEditor-content {
     min-height: 0px !important;
+    overflow-wrap: anywhere;
   }
 
   .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
@@ -219,6 +221,7 @@
       margin: 0px !important;
       padding: 0;
       margin-block-start: 0px;
+      overflow-wrap: anywhere;
     }
   }
   .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
@@ -405,6 +408,7 @@
   .RichEditor-editor .public-DraftEditorPlaceholder-root,
   .RichEditor-editor .public-DraftEditor-content {
     padding: 5px;
+    overflow-wrap: anywhere;
   }
 
   .RichEditor-editor .public-DraftEditorPlaceholder-root {
@@ -414,6 +418,7 @@
 
   .RichEditor-editor .public-DraftEditor-content {
     min-height: 0px !important;
+    overflow-wrap: anywhere;
   }
 
   .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
@@ -594,6 +599,7 @@
       margin: 0px !important;
       padding: 0;
       margin-block-start: 0px;
+      overflow-wrap: anywhere;
     }
   }
   .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
