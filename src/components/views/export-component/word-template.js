@@ -389,9 +389,11 @@ function getFormattedTextTable(formatedTextBlocks) {
 export function formatDate(answer, config) {
   try {
     if (answer === 'N/A' && config && config.type === 'date') return 'N/A';
+    if (answer === ' ' && config && config.type === 'date') return ' ';
 
-    if (answer && config && config.type === 'date')
+    if (answer && config && config.type === 'date') {
       return moment(answer).format('DD-MMM-YYYY');
+    }
   } catch (error) {
     console.log('Error in formatDate');
   }
