@@ -227,7 +227,7 @@ const EventLauncher = ({
         error={isEmpty(filteredEmails)}
         helperText={
           isEmpty(filteredEmails)
-            ? "Doesen't have valid email id for this option"
+            ? "Doesn't have valid email id for this option"
             : ''
         }
       >
