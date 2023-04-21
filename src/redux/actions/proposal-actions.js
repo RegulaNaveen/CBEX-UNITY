@@ -492,7 +492,7 @@ export const updateAnswerFromWebSocket = (
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
-      console.log('Error in updating answer from WS', error);
+      console.log('Error in updating answer from WS', err);
     }
   };
 };
