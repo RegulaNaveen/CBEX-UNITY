@@ -137,7 +137,7 @@ export const shouldShowQuestion = (
   }
 };
 
-export const shouldShowSection = (sectionId, tabId) => {
+export const shouldShowSection = (sectionId, tabId, flags) => {
   try {
     const state = store.getState();
     let tab = state.unitytab.allTabs[tabId];

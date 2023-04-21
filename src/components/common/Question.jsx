@@ -161,7 +161,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       screenWidth: '',
       enableRichtext: false,
       focusedSpan: false,
-      blurredSpan: false
+      blurredSpan: false,
+      multiselectFuncCall: 0
     };
   }
 
@@ -491,14 +492,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   };
 
-  onSelectValues = (
+  onSelectValues = async (
     selectedValues: Array<string>,
     lastAnswer: Array<string>
   ) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-
     if (!isEqual(lastAnswer, selectedValues) && selectedValues !== undefined) {
-      setProposalAnswer(
+      await setProposalAnswer(
         this.context,
         proposalId,
         questionId,
@@ -506,7 +506,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData
       );
     }
-
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
 

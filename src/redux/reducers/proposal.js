@@ -1202,12 +1202,13 @@ const setPriceModulerFields = (state, action) => {
 };
 
 const setBidCostDataFields = (state, action) => {
-  const { bidValue, bottomLine, budgetTools } = action.payload;
+  const { bidValue, bottomLine, budgetTools, amount } = action.payload;
 
   return state.set(
     'bidCostDetails',
     fromJS({
       totalBidValue: bidValue,
+      amount,
       bottomLineLaborDiscount: bottomLine,
       budgetTools
     })

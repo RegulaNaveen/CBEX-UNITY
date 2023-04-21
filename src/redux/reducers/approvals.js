@@ -46,6 +46,7 @@ const setApprovals = (state, action) => {
     fetching: false,
     allApprovals: payload.map(i => ({
       ...i,
+      key: `${i.ApprovalSectionId}-${Date.now()}`,
       ArchivedData: i.ArchivedData?.reverse() || []
     }))
   };
@@ -68,6 +69,7 @@ const duplicateApproval = (state, action) => {
 
       return {
         ...approval,
+        key: `${approval.ApprovalSectionId}-${Date.now()}`,
         ArchivedData: approval.ArchivedData.concat([newFreezedData])
       };
     }
@@ -83,7 +85,11 @@ const deleteApprovals = (state, action) => {
   const modifiedApprovals = state.allApprovals.map(approval => {
     if (approval.ApprovalSectionId === sectionId) {
       const removedLastData = approval.ArchivedData.slice(0, -1);
-      return { ...approval, ArchivedData: removedLastData };
+      return {
+        ...approval,
+        key: `${approval.ApprovalSectionId}-${Date.now()}`,
+        ArchivedData: removedLastData
+      };
     }
     return approval;
   });
