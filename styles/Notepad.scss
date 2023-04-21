@@ -87,6 +87,7 @@
           }
           .public-DraftEditor-content {
             height: calc(100% - 16px);
+            overflow-wrap: anywhere;
           }
         }
       }
