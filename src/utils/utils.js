@@ -86,6 +86,29 @@ const getFullProposalTeamString = (updateField, questions) => {
     .join(', ');
 };
 
+const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
+  switch (answerConfiguration?.type) {
+    case ANSWER_TYPES.TEXT: {
+      return updateField === 'body'
+        ? getAnswer(answers)
+        : answers?.slice(-1)[0]?.answer ?? '';
+    }
+    case ANSWER_TYPES.NUMBER:
+    case ANSWER_TYPES.DATE:
+    case ANSWER_TYPES.RADIO:
+    case ANSWER_TYPES.SELECT:
+    case ANSWER_TYPES.SELECT_LOOKUP:
+    case ANSWER_TYPES.YES_NO: {
+      return answers?.slice(-1)[0]?.answer ?? '';
+    }
+    case ANSWER_TYPES.PICKLIST_LOOKUP:
+    case ANSWER_TYPES.PICKLIST:
+    case ANSWER_TYPES.CHECKBOX: {
+      return answers?.slice(-1)[0]?.answer?.toString() ?? '';
+    }
+  }
+};
+
 const replaceAnswerToQuestionsPlaceholders = (
   eventBodyStr,
   questions,
@@ -95,19 +118,29 @@ const replaceAnswerToQuestionsPlaceholders = (
   let updatedEventBodyStr = eventBodyStr;
   const relevantQuestions = questions?.filter(q => q.visible && q.active);
 
-  relevantQuestions.forEach(({ questionId, answers }) => {
-    const regexPlaceholders = new RegExp(`\\[(.*?):${questionId}\\]`, 'gi');
-    const answer =
-      updateField === 'body'
-        ? getAnswer(answers)
-        : answers?.slice(-1)[0]?.answer ?? '';
-
-    if (answers)
-      updatedEventBodyStr = updatedEventBodyStr.replace(
-        regexPlaceholders,
-        answer
+  relevantQuestions.forEach(
+    ({ questionText, questionId, answers, answerConfiguration }) => {
+      const regexPlaceholders = new RegExp(
+        `\\[${questionText
+          ?.toLowerCase()
+          ?.replace(/[^\w\s]/gi, '')
+          ?.replace(/\s+/g, '_')}:${questionId}\\]`,
+        'gi'
       );
-  });
+
+      if (answers) {
+        const answer = handleAnswerTypes(
+          answerConfiguration,
+          answers,
+          updateField
+        );
+        updatedEventBodyStr = updatedEventBodyStr.replace(
+          regexPlaceholders,
+          answer
+        );
+      }
+    }
+  );
 
   updatedEventBodyStr = updatedEventBodyStr.replace(
     regexPlaceholdersNotResolved,
