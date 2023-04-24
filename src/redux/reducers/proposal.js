@@ -563,13 +563,10 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
     payload: { data, questionId: referenceId, hasDifferentSFanswer }
   } = action;
 
-  const proposalId = Array.isArray(data)
-    ? data[data.length - 1].proposalId
-    : data.proposalId;
   const selectedBidId = state.getIn(['selectedBid', 'id']);
+  const isCurrent = state.getIn(['selectedBid', 'isCurrent']);
 
-  // case  when user is not in the same proposal Id
-  if (selectedBidId !== proposalId) {
+  if (!isCurrent) {
     return state;
   }
 
