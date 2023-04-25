@@ -19,7 +19,8 @@ import {
   updatePriceModelerEstimateAction,
   editProposalQuestionfromSocket,
   deleteProposalQuestionFromSocket,
-  setProposalQuestionFromSocket
+  setProposalQuestionFromSocket,
+  widgetUpdate
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -356,7 +357,8 @@ const SocketContextProvider = props => {
           onApprovalSectionDuplicating,
           onApprovalSectionDuplicated,
           onApprovalSectionDeleting,
-          onApprovalSectionDeleted
+          onApprovalSectionDeleted,
+          widgetUpdate
         } = props;
 
         // On Message Recieve
@@ -470,6 +472,11 @@ const SocketContextProvider = props => {
               break;
             case 'COST_ESTIMATE_UPDATE':
               updatePriceModelerEstimate(data.data);
+              break;
+            case 'WIDGET_UPDATE':
+              const { proposalId, typeOfWidget } = data.data;
+              widgetUpdate(proposalId, typeOfWidget);
+
               break;
             default:
               break;
@@ -775,7 +782,8 @@ const mapDispatchToProps = {
   onApprovalSectionDuplicating: onApprovalSectionDuplicatingAction,
   onApprovalSectionDuplicated: onApprovalSectionDuplicatedAction,
   onApprovalSectionDeleting: onApprovalSectionDeletingAction,
-  onApprovalSectionDeleted: onApprovalSectionDeletedAction
+  onApprovalSectionDeleted: onApprovalSectionDeletedAction,
+  widgetUpdate
 };
 
 export default connect(

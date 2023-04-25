@@ -400,3 +400,7 @@ export const selectVTabUserPreference = createSelector(
   selectProposal,
   proposal => proposal?.get('vTabUserPreference', {}).toJS()
 );
+
+export const selectCurrentWidget = createSelector(selectProposal, proposal =>
+  proposal?.get('showWidget')
+);
