@@ -302,7 +302,7 @@ function getHeaderInfoRows(details) {
 function getProposalTeamsRows(questions) {
   const coreTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         CORE_TEAM[question.questionText] &&
         question.section.sectionName === PT_SECTION
@@ -310,7 +310,7 @@ function getProposalTeamsRows(questions) {
     .sort((a, b) => a.questionOrder - b.questionOrder);
   const otherTeamQuestions = questions
     .filter(
-      (question) =>
+      question =>
         shouldInclude(question) &&
         question.section.sectionName === PT_SECTION &&
         !CORE_TEAM[question.questionText]
@@ -323,15 +323,15 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Core Team Members </div>`;
     html += `<div id="resp-table-header"> Name </div>`;
     html += `</div>`;
-    const getEmailID = (str) => {
+    const getEmailID = str => {
       return String(str).match(
         /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
       );
     };
-    coreTeamQuestions.forEach((question) => {
-      const { questionText, answers } = question;
+    coreTeamQuestions.forEach(question => {
+      const { questionText, answers, questionHTML } = question;
       html += `<div class="resp-table-row">`;
-      html += `<div class="table-header-cell">${questionText}</div>`;
+      html += `<div class="table-header-cell">${questionHTML}</div>`;
       const coreTeamQuestionsAnswer = checkFormattedAnswer(answers);
       let emailLink = '';
       let otherTeamArray;
@@ -339,7 +339,7 @@ function getProposalTeamsRows(questions) {
         otherTeamArray = coreTeamQuestionsAnswer.split(',');
       }
       let Arrayedanother = [];
-      otherTeamArray?.forEach((item) => {
+      otherTeamArray?.forEach(item => {
         const nameArray = item.substring(0, item.indexOf('('));
         const emailId = getEmailID(item);
         return emailId !== null
@@ -366,16 +366,16 @@ function getProposalTeamsRows(questions) {
     html += `<div id="resp-table-header"> Name</div>`;
     html += `</div>`;
     otherTeamQuestions.forEach((question, index) => {
-      const { questionText, answers } = question;
+      const { questionText, answers, questionHTML } = question;
       html += `<div class="resp-table-row">`;
-      html += `<div class="table-header-cell">${questionText} </div>`;
+      html += `<div class="table-header-cell">${questionHTML} </div>`;
       const otherTeamQuestionsAnswer = checkFormattedAnswer(answers);
       let otherTeamArray;
       if (otherTeamQuestionsAnswer) {
         otherTeamArray = otherTeamQuestionsAnswer.split(',');
       }
       let Arrayedanother = [];
-      otherTeamArray?.forEach((item) => {
+      otherTeamArray?.forEach(item => {
         const nameArray = item.substring(0, item.indexOf('('));
         const emailId = getEmailID(item);
         return emailId !== null
@@ -407,7 +407,7 @@ function questionTables(allQuestions, proposalQuestions) {
   let html = ``;
   // Remove not visible questions
   let questions = proposalQuestions
-    .filter((question) => {
+    .filter(question => {
       return (
         shouldInclude(question) &&
         question.section.sectionName !== PT_SECTION &&
@@ -421,7 +421,7 @@ function questionTables(allQuestions, proposalQuestions) {
   const sections = {};
   let ordereredSections = [];
   // Populate the section map
-  questions.forEach((question) => {
+  questions.forEach(question => {
     try {
       let section = question.section.sectionName || '';
       if (section === 'Questions_for_the_Customer_left_panel') {
@@ -438,10 +438,10 @@ function questionTables(allQuestions, proposalQuestions) {
     }
   });
   ordereredSections = ordereredSections.filter(
-    (v) => v !== 'Questions for the Customer'
+    v => v !== 'Questions for the Customer'
   );
   ordereredSections.unshift('Questions for the Customer');
-  ordereredSections.forEach((section) => {
+  ordereredSections.forEach(section => {
     if (section === QC_SECTION) {
       html += `<div id="resp-table" class="questionTable table marginTop20">`;
       html += `<div class="resp-table-row">`;
@@ -450,24 +450,19 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       let questionsToCustomerLeftSection = allQuestions
         .filter(
-          (question) =>
+          question =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION_LEFT_PANEL
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerLeftSection.forEach((question) => {
+      questionsToCustomerLeftSection.forEach(question => {
+        console.log('question html', questionHTML);
         const temporalDivElement = document.createElement('div');
         temporalDivElement.innerHTML = question.questionHTML;
-        const finalAnswer = !isEqual(
-          temporalDivElement.innerText,
-          question.questionText
-        )
-          ? question.questionText
-          : question.questionHTML;
-        const questionHTML = finalAnswer;
+
         if (question.questionText.length > 1) {
           html += `<div class="resp-table-row">`;
-          html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+          html += `<div class="table-header-cell"> ${question.questionHTML} </div>`;
           html += `<div class="table-header-cell"> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
@@ -481,15 +476,15 @@ function questionTables(allQuestions, proposalQuestions) {
       });
       let questionsToCustomerRightSection = allQuestions
         .filter(
-          (question) =>
+          question =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerRightSection.forEach((question) => {
-        const { questionText } = question;
+      questionsToCustomerRightSection.forEach(question => {
+        const { questionText, questionHTML } = question;
         html += `<div class="resp-table-row">`;
-        html += `<div class="table-header-cell"> ${questionText}</div>`;
+        html += `<div class="table-header-cell"> ${questionHTML}</div>`;
         html += `<div class="table-header-cell"> ${formatDate(
           checkFormattedAnswer(question.answers),
           question.answerConfiguration
@@ -509,19 +504,14 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       sections[section]
         .sort((a, b) => a.questionOrder - b.questionOrder)
-        .forEach((question) => {
-          const { answers } = question;
+        .forEach(question => {
+          const { answers, questionHTML } = question;
+
           const temporalDivElement = document.createElement('div');
           temporalDivElement.innerHTML = question.questionHTML;
-          const finalAnswer = !isEqual(
-            temporalDivElement.innerText,
-            question.questionText
-          )
-            ? question.questionText
-            : question.questionHTML;
-          const questionHTML = finalAnswer;
+
           const questionType = question?.answerConfiguration?.type;
-          const getEmailID = (str) => {
+          const getEmailID = str => {
             return String(str).match(
               /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
             );
@@ -531,7 +521,7 @@ function questionTables(allQuestions, proposalQuestions) {
           if (question.questionText.length > 1) {
             html += `<div class="resp-table-row">`;
             html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-            html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
+            html += `<div class="table-header-cell"  style=${questionTypeValidation}> ${formatDate(
               checkFormattedAnswer(question.answers),
               question.answerConfiguration
             )} <span class="blueColorText">${
