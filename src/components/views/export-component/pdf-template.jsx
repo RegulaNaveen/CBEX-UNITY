@@ -521,7 +521,7 @@ function questionTables(allQuestions, proposalQuestions) {
           if (question.questionText.length > 1) {
             html += `<div class="resp-table-row">`;
             html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-            html += `<div class="table-header-cell" > style=${questionTypeValidation}> ${formatDate(
+            html += `<div class="table-header-cell"  style=${questionTypeValidation}> ${formatDate(
               checkFormattedAnswer(question.answers),
               question.answerConfiguration
             )} <span class="blueColorText">${
