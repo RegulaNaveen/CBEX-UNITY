@@ -108,7 +108,8 @@ const {
   SET_ACTIVE_TABINDEX,
   SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
-  SET_V_TAB_USER_PREFERENCE
+  SET_V_TAB_USER_PREFERENCE,
+  WIDGET_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -492,7 +493,7 @@ export const updateAnswerFromWebSocket = (
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
-      console.log('Error in updating answer from WS', error);
+      console.log('Error in updating answer from WS', err);
     }
   };
 };
@@ -1644,6 +1645,18 @@ export const setVTabUserPreferenceAction = (tabIndex, collapsed = false) => {
       payload: {
         tabIndex,
         collapsed
+      }
+    });
+  };
+};
+
+export const widgetUpdate = (proposalId, typeOfWidget) => {
+  return dispatch => {
+    dispatch({
+      type: WIDGET_UPDATE,
+      payload: {
+        proposalId,
+        typeOfWidget
       }
     });
   };
