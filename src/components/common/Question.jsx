@@ -10,7 +10,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
-import Tooltip from 'apollo-react/components/Tooltip';
+import Popover from 'apollo-react/components/Popover';
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
@@ -98,7 +98,8 @@ type State = {
   selectedDay: string,
   selectedRow: Boolean,
   changeIcon: '',
-  check: 'false'
+  check: 'false',
+  anchorEl: null
 };
 
 type Props = {
@@ -163,7 +164,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       screenWidth: '',
       enableRichtext: false,
       focusedSpan: false,
-      blurredSpan: false
+      blurredSpan: false,
+      anchorEl: null
     };
   }
 
@@ -1538,6 +1540,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
+      anchorEl,
       enableRichtext,
       focusedSpan,
       blurredSpan
@@ -1622,10 +1625,31 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 {/* Question Hint */}
                 {questionHint && (
                   <div className="question-hint">
-                    <Tooltip
-                      variant="light"
-                      tabIndex={-1}
-                      title={
+                    <IconButton
+                      color="primary"
+                      size="small"
+                      className="question-tooltip-icon"
+                      onClick={(e) => this.setState({anchorEl: e.currentTarget})}
+                    >      
+                      <InfoIcon className="info-icon" />
+                    </IconButton>
+                    <Popover
+                      open={!!anchorEl}
+                      anchorEl={anchorEl}
+                      onClose={() => this.setState({anchorEl: null})}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                      PaperProps={{
+                        style: { borderColor: '#e9e9e9', boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', padding: 5, inlineSize: '150px', overflowWrap: 'break-work' },
+                      }}
+                    >
+                      <Typography>{
                         questionHintJSON ? (
                           <RichTextEditor
                             variant="view"
@@ -1636,17 +1660,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
                           <div>{questionHint}</div>
                         )
                       }
-                      placement="top"
-                    >
-                      <IconButton
-                        color="primary"
-                        style={{ margin: 0 }}
-                        size="small"
-                        className="question-tooltip-icon"
-                      >
-                        <InfoIcon style={{ fontSize: '16px' }} />
-                      </IconButton>
-                    </Tooltip>
+                      </Typography>
+                    </Popover>
                   </div>
                 )}
               </div>
