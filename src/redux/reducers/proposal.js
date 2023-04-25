@@ -73,7 +73,8 @@ const {
   SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE,
-  CHANGE_BID_STATUS_OPERATION
+  CHANGE_BID_STATUS_OPERATION,
+  WIDGET_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -189,7 +190,11 @@ const INITIAL_STATE: Map = fromJS({
   activeTabIndex: 0, // Strategy Development, Approvals, Documents,
   activeVTabIndex: 0, // Questions for Customer, Notepad, Proposal Team
   vTabUserPreference: {},
-  panelStatus: false
+  panelStatus: false,
+  showWidget: {
+    currentWidget: 'PriceModeler',
+    proposalId: ''
+  }
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -322,7 +327,8 @@ const setOpportunityInfo = (state, action) => {
           'pertinentDetails',
           proposal.proposal.proposalDetails.pertinentDetails
         )
-        .set('proposalDate', proposal.proposal.proposalDate);
+        .set('proposalDate', proposal.proposal.proposalDate)
+        .set('typeOfWidget', proposal.proposal.typeOfWidget);
     }
     opportunityData = opportunityData.set(
       proposal.proposal.proposalId,
@@ -394,7 +400,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     agreementId: agreementId || '',
     accountId: accountId || '',
     opportunityId: proposalDetails['opportunityId'],
-    proposalDate
+    proposalDate,
+    typeOfWidget: payload.bid.typeOfWidget
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
@@ -1258,6 +1265,15 @@ const setVTabUserPreference = (state, action) => {
   return state.set('vTabUserPreference', fromJS(currentUserPreference));
 };
 
+const setWidgetUpdate = (state, action) => {
+  const { proposalId, typeOfWidget } = action.payload;
+
+  const currentWidget =
+    typeOfWidget === 'Bid_Cost' ? 'BidCostDetail' : 'PriceModeler';
+
+  return state.set('showWidget', { currentWidget, proposalId });
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1333,7 +1349,8 @@ const actionMap = {
   [SET_V_TAB_ACTIVE_INDEX]: setVTabActiveTabIndex,
   [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference,
   [CHANGE_BID_STATUS_OPERATION]: (state, { payload }) =>
-    state.set('changeBidStatus', payload)
+    state.set('changeBidStatus', payload),
+  [WIDGET_UPDATE]: setWidgetUpdate
 };
 
 export default function(
