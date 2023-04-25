@@ -8,7 +8,7 @@ import Typography from 'apollo-react/components/Typography';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import InfoIcon from 'apollo-react-icons/Info';
-import Tooltip from 'apollo-react/components/Tooltip';
+import Popover from 'apollo-react/components/Popover';
 import { EditorState } from 'apollo-react/node_modules/draft-js';
 import { Map, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
@@ -80,6 +80,7 @@ const QuestionItem = ({
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -322,6 +323,7 @@ const QuestionItem = ({
         return <FallbackComponent />;
     }
   };
+
   const renderQuestionHint = () => {
     const { questionHint, questionHintJSON } = question;
 
@@ -341,31 +343,50 @@ const QuestionItem = ({
     if (questionHint) {
       return (
         <div className="question-hint" style={{ paddingLeft: '10px' }}>
-          <Tooltip
-            variant="light"
-            tabIndex={-1}
-            title={
-              questionHintJSON ? (
-                <RichTextEditor
-                  variant="view"
-                  defaultValue={JSON.parse(questionHintJSON)}
-                  ref={handleHintRef}
-                />
-              ) : (
-                <div>{questionHint}</div>
-              )
-            }
-            placement="top"
-          >
-            <IconButton
+            <IconButton 
               color="primary"
-              style={{ margin: 0 }}
               size="small"
-              className="question-tooltip-icon"
+              className="question-tooltip-icon" 
+              onClick={(e) => setAnchorEl(e.currentTarget)}
             >
               <InfoIcon style={{ fontSize: '16px' }} />
             </IconButton>
-          </Tooltip>
+            <Popover
+              className="popover-approval"
+              open={!!anchorEl}
+              anchorEl={anchorEl}
+              onClose={() => setAnchorEl(null)}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              PaperProps={{
+                style: { 
+                  borderColor: '#e9e9e9', 
+                  boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
+                  padding: 5,
+                  inlineSize: '150px',
+                  overflowWrap: 'break-work'
+                },
+              }}
+            >
+              <Typography>{
+                questionHintJSON ? (
+                  <RichTextEditor
+                    variant="view"
+                    defaultValue={JSON.parse(questionHintJSON)}
+                    ref={handleHintRef}
+                  />
+                ) : (
+                  <div>{questionHint}</div>
+                )
+              }
+              </Typography>
+            </Popover>
         </div>
       );
     }
@@ -460,7 +481,8 @@ const QuestionItem = ({
       approvalFilters,
       currentSearchResult,
       highlightQuestionId,
-      locked
+      locked,
+      anchorEl
     ]
   );
 
