@@ -10,6 +10,7 @@ import { useLazyLoad, useUpdateEffect } from '../../../hooks';
 import CollapsibleList from '../../common/CollapsibleList';
 import { SocketContext } from '../../../context/SocketContext';
 import { QuestionsRefContext } from './Questions';
+import { selectSections } from '../../../redux/selectors';
 
 const NUM_PER_PAGE = 2;
 
@@ -37,7 +38,6 @@ const QuestionsSectionMapping = ({
     state => state.proposal.get('selectedBid').toJS().id
   );
 
-  // Reset Lazy onUpdate allSectionsExpanded
   useEffect(() => {
     if (allSectionsExpanded) {
       if (isQuestionsFiltersEnabled) {
@@ -114,39 +114,54 @@ const QuestionsSectionMapping = ({
 
   // Func to render CollapsibleList Component
   const renderAllSection = (section, indx) => {
+    let showSection = true;
     const sectionName = section.get('sectionName');
+    const sectionData = section.toJS();
     const sectionOrder = section.get('sectionOrder');
+
     const questions = section.get('questions');
+    const isVisible = Object.values(sectionData.questions).some(
+      val => val.questionApproval === false
+    );
+    if (isVisible) {
+      showSection = true;
+    } else {
+      showSection = false;
+    }
 
     if (sectionName !== 'Proposal Team')
       return (
         <QuestionsRefContext.Consumer key={sectionName}>
-          {questionsRef => (
-            <CollapsibleList
-              data-testid="question-section-test-id"
-              questions={questions}
-              title={sectionName}
-              milestone={filterMilestone}
-              key={sectionOrder}
-              setTabFromQuestionNotes={(val, title, flag) =>
-                setTabFromQuestionNotes(val, title, flag)
-              }
-              onAddQuestion={value => onAddQuestion(value)}
-              isCheckedAll={
-                sidebarscroll &&
-                sidebarscroll.length &&
-                sidebarscroll === sectionName
-                  ? true
-                  : allSectionsExpanded
-              }
-              isFirstSection={indx < 1}
-              setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-              isNotepadOpen={isNotepadOpen}
-              listIndex={indx}
-              questionsRef={questionsRef}
-              onExpandDone={onExpandDone}
-            />
-          )}
+          {questionsRef => {
+            if (showSection) {
+              return (
+                <CollapsibleList
+                  data-testid="question-section-test-id"
+                  questions={questions}
+                  title={sectionName}
+                  milestone={filterMilestone}
+                  key={sectionOrder}
+                  setTabFromQuestionNotes={(val, title, flag) =>
+                    setTabFromQuestionNotes(val, title, flag)
+                  }
+                  onAddQuestion={value => onAddQuestion(value)}
+                  isCheckedAll={
+                    sidebarscroll &&
+                    sidebarscroll.length &&
+                    sidebarscroll === sectionName
+                      ? true
+                      : allSectionsExpanded
+                  }
+                  isFirstSection={indx < 1}
+                  setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                  isNotepadOpen={isNotepadOpen}
+                  listIndex={indx}
+                  questionsRef={questionsRef}
+                  onExpandDone={onExpandDone}
+                />
+              );
+            }
+          }}
         </QuestionsRefContext.Consumer>
       );
   };
