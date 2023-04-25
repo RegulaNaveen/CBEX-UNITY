@@ -319,7 +319,9 @@ const loadSidebar = props => {
             <Typography variant="body2" className="boldtext sidebaropenfont">
               {phase
                 ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
-                  phase?.split(' ')[1]
+                  detailsForBackendSectionData?.phase ||
+                  phase?.split(' ')[1] ||
+                  phase
                 : placeholder}
             </Typography>
           </Paper>
@@ -524,7 +526,9 @@ const loadSidebar = props => {
               <Typography variant="body2" className="boldtext">
                 {phase
                   ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
-                    phase?.split(' ')[1]
+                    detailsForBackendSectionData?.phase ||
+                    phase?.split(' ')[1] ||
+                    phase
                   : placeholder}
               </Typography>
             </Paper>

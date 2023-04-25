@@ -41,8 +41,10 @@ function parseUrl(decoratedText) {
   let urlWithHttp;
   if (decoratedText.startsWith('http')) {
     urlWithHttp = decoratedText;
-  } else {
+  } else if (decoratedText.startsWith('www')) {
     urlWithHttp = `https://${decoratedText}`;
+  } else {
+    urlWithHttp = `https://www.${decoratedText}`;
   }
 
   return urlWithHttp;
