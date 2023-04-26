@@ -24,6 +24,7 @@ const NotepadWrapper = ({ trackEvent }) => {
   const [proposalIdState, setProposalIdState] = useState(undefined);
   const [showNetworkChip, setShowNetworkChip] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [synced, setSynced] = useState(false);
 
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
@@ -46,6 +47,10 @@ const NotepadWrapper = ({ trackEvent }) => {
         }
       });
 
+      wsProvider.on('synced', syncState => {
+        setSynced(syncState);
+      });
+
       setWsInstance(wsProvider);
     }
   };
@@ -66,7 +71,9 @@ const NotepadWrapper = ({ trackEvent }) => {
     let loaderReference;
     const newProposalID = selectedBid.get('id');
     if (proposalIdState !== newProposalID) {
-      triggerWebsocketNotesApi(newProposalID);
+      loaderReference = setTimeout(() => {
+        triggerWebsocketNotesApi(newProposalID);
+      }, 2000);
     }
     return () => {
       clearTimeout(loaderReference);
@@ -155,6 +162,7 @@ const NotepadWrapper = ({ trackEvent }) => {
           wsInstance={wsInstance}
           ydoc={ydoc}
           proposalId={proposalIdState}
+          synced={synced}
         />
       ) : (
         <Loader
