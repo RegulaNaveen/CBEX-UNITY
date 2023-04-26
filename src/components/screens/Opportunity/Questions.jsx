@@ -603,10 +603,14 @@ class Questions extends Component {
                       horizontal: 'center',
                     }}
                     PaperProps={{
-                      style: { borderColor: '#e9e9e9', boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', padding: 5 },
+                      style: { 
+                        borderColor: '#e9e9e9', 
+                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
+                        padding: 10 
+                      },
                     }}
                   >
-                    <Typography>{showNaCheckbox ? 'NA ON' : 'NA OFF'}</Typography>
+                    <Typography variant="body2">{showNaCheckbox ? 'NA ON' : 'NA OFF'}</Typography>
                   </Popover>
                 </>
               </div>

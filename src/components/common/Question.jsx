@@ -1634,6 +1634,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                       <InfoIcon className="info-icon" />
                     </IconButton>
                     <Popover
+                      className="popover-strategy-question"
                       open={!!anchorEl}
                       anchorEl={anchorEl}
                       onClose={() => this.setState({anchorEl: null})}
@@ -1646,7 +1647,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
                         horizontal: 'center',
                       }}
                       PaperProps={{
-                        style: { borderColor: '#e9e9e9', boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', padding: 5, inlineSize: '150px', overflowWrap: 'break-work' },
+                        style: { 
+                          borderColor: '#e9e9e9', 
+                          boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
+                          padding: 10, 
+                          maxInlineSize: '300px', 
+                        },
                       }}
                     >
                       <Typography>{

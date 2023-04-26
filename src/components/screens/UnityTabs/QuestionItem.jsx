@@ -348,11 +348,12 @@ const QuestionItem = ({
             color="primary"
             size="small"
             className="question-tooltip-icon"
-            onClick={(e) => {console.log("anchorEl", anchorEl), setAnchorEl(e.currentTarget), console.log("anchorEl", anchorEl)}}
+            onClick={(e) => setAnchorEl(e.currentTarget)}
           >      
             <InfoIcon className="info-icon" style={{ fontSize: '16px' }}/>
           </IconButton>
           <Popover
+            className="popover-custom-tab"
             open={!!anchorEl}
             anchorEl={anchorEl}
             onClose={() => setAnchorEl(null)}
@@ -368,9 +369,9 @@ const QuestionItem = ({
               style: { 
                 borderColor: '#e9e9e9', 
                 boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                padding: 5, 
-                inlineSize: '150px', 
-                overflowWrap: 'break-work' 
+                padding: 10, 
+                maxInlineSize: '300px', 
+                overflowWrap: 'break-word' 
               },
             }}
           >
