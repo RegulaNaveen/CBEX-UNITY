@@ -71,7 +71,9 @@ const NotepadWrapper = ({ trackEvent }) => {
     let loaderReference;
     const newProposalID = selectedBid.get('id');
     if (proposalIdState !== newProposalID) {
-      triggerWebsocketNotesApi(newProposalID);
+      loaderReference = setTimeout(() => {
+        triggerWebsocketNotesApi(newProposalID);
+      }, 2000);
     }
     return () => {
       clearTimeout(loaderReference);
