@@ -456,7 +456,6 @@ function questionTables(allQuestions, proposalQuestions) {
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
-        console.log('question html', questionHTML);
         const temporalDivElement = document.createElement('div');
         temporalDivElement.innerHTML = question.questionHTML;
 
