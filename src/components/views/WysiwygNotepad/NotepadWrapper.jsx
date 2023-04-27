@@ -24,7 +24,6 @@ const NotepadWrapper = ({ trackEvent }) => {
   const [proposalIdState, setProposalIdState] = useState(undefined);
   const [showNetworkChip, setShowNetworkChip] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [synced, setSynced] = useState(false);
 
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
@@ -45,10 +44,6 @@ const NotepadWrapper = ({ trackEvent }) => {
           setShowNetworkChip(true);
           setIsOnline(false);
         }
-      });
-
-      wsProvider.on('synced', syncState => {
-        setSynced(syncState);
       });
 
       setWsInstance(wsProvider);
@@ -162,7 +157,6 @@ const NotepadWrapper = ({ trackEvent }) => {
           wsInstance={wsInstance}
           ydoc={ydoc}
           proposalId={proposalIdState}
-          synced={synced}
         />
       ) : (
         <Loader
