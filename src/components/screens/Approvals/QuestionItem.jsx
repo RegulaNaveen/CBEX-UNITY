@@ -368,9 +368,8 @@ const QuestionItem = ({
                 style: { 
                   borderColor: '#e9e9e9', 
                   boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                  padding: 5,
-                  inlineSize: '150px',
-                  overflowWrap: 'break-work'
+                  padding: 10,
+                  maxInlineSize: '300px',
                 },
               }}
             >

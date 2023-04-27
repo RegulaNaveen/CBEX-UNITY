@@ -77,13 +77,12 @@ const PriceModeler = () => {
           style: { 
             borderColor: '#e9e9e9', 
             boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-            padding: 5, 
-            inlineSize: 150, 
-            overflowWrap: 'break-word'
+            padding: 10, 
+            maxInlineSize: 300, 
           },
         }}
       >
-        <Typography>The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses</Typography>
+        <Typography variant="body2">The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses</Typography>
       </Popover>
     </>
   );

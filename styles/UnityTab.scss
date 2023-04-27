@@ -86,3 +86,14 @@
   bottom: 3px;
   left: 5px;
 }
+
+.popover-custom-tab {
+  .RichEditor-editor .public-DraftEditor-content {
+    font-size: 14px !important;
+    display: contents !important;
+  }
+  
+  .public-DraftStyleDefault-block {
+    margin-bottom: 0 !important;
+  }
+}
