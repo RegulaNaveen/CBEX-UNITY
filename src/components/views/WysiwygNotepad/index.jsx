@@ -50,8 +50,7 @@ const WysiwygNotepad = ({
   trackEvent,
   wsInstance,
   ydoc,
-  proposalId,
-  synced
+  proposalId
 }) => {
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
@@ -474,7 +473,7 @@ const WysiwygNotepad = ({
     }
   }, [query, currentSearchResult, editor, dataSynced]);
 
-  if (!synced) {
+  if (!dataSynced) {
     return (
       <Loader
         type="TailSpin"
