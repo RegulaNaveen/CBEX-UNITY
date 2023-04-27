@@ -112,7 +112,11 @@ function checkFormattedAnswer(answers) {
     if (lastAnswer?.formattedAnswer) {
       if (isString(lastAnswer?.formattedAnswer)) {
         try {
-          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+          if (lastAnswer.userName === 'CarryForwardAnswer') {
+            formattedAnswer = JSON.parse(
+              JSON.parse(lastAnswer?.formattedAnswer)
+            );
+          } else formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
         } catch {
           return (lastAnswer && lastAnswer.answer.toString()) || '';
         }
@@ -456,7 +460,6 @@ function questionTables(allQuestions, proposalQuestions) {
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
       questionsToCustomerLeftSection.forEach(question => {
-        console.log('question html', questionHTML);
         const temporalDivElement = document.createElement('div');
         temporalDivElement.innerHTML = question.questionHTML;
 
