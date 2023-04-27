@@ -112,7 +112,11 @@ function checkFormattedAnswer(answers) {
     if (lastAnswer?.formattedAnswer) {
       if (isString(lastAnswer?.formattedAnswer)) {
         try {
-          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+          if (lastAnswer.userName === 'CarryForwardAnswer') {
+            formattedAnswer = JSON.parse(
+              JSON.parse(lastAnswer?.formattedAnswer)
+            );
+          } else formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
         } catch {
           return (lastAnswer && lastAnswer.answer.toString()) || '';
         }
