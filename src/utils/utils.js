@@ -364,7 +364,11 @@ function getUserInitials(userName, lastChangedInBid) {
     if (lastChangedInBid) return `B${lastChangedInBid}`;
     return 'B';
   }
-  return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
+
+  return userName
+    ?.split(' ')
+    ?.map(n => n[0].toUpperCase())
+    ?.join('');
 }
 
 function getUserName(userName, lastChangedInBid, answerEmpty = false) {
