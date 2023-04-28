@@ -630,3 +630,14 @@
 ._question-tab > div > div > button {
   margin-right: 25px !important;
 }
+
+.popover-strategy-question {
+  .RichEditor-editor .public-DraftEditor-content {
+    font-size: 14px !important;
+    display: contents !important; 
+  }
+  
+  .public-DraftStyleDefault-block {
+    margin-bottom: 0 !important;
+  }
+}

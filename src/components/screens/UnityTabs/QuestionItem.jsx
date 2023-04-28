@@ -12,7 +12,7 @@ import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import Box from 'apollo-react/components/Box';
 import Typography from 'apollo-react/components/Typography';
-import Tooltip from 'apollo-react/components/Tooltip';
+import Popover from 'apollo-react/components/Popover';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
 import { Map, List, fromJS } from 'immutable';
@@ -92,7 +92,9 @@ const QuestionItem = ({
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
+
   useEffect(() => {
     updateQuestionVisibility(questionId, isShowQuestion);
   }, [unityTabFilters]);
@@ -401,10 +403,38 @@ const QuestionItem = ({
     if (questionHint) {
       return (
         <div className="question-hint">
-          <Tooltip
-            variant="light"
-            tabIndex={-1}
-            title={
+          <IconButton
+            color="primary"
+            size="small"
+            className="question-tooltip-icon"
+            onClick={(e) => setAnchorEl(e.currentTarget)}
+          >      
+            <InfoIcon className="info-icon" style={{ fontSize: '16px' }}/>
+          </IconButton>
+          <Popover
+            className="popover-custom-tab"
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            PaperProps={{
+              style: { 
+                borderColor: '#e9e9e9', 
+                boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
+                padding: 10, 
+                maxInlineSize: '300px', 
+                overflowWrap: 'break-word' 
+              },
+            }}
+          >
+            <Typography>{
               questionHintJSON ? (
                 <RichTextEditor
                   variant="view"
@@ -415,17 +445,8 @@ const QuestionItem = ({
                 <div>{questionHint}</div>
               )
             }
-            placement="top"
-          >
-            <IconButton
-              color="primary"
-              style={{ margin: 0 }}
-              size="small"
-              className="question-tooltip-icon"
-            >
-              <InfoIcon style={{ fontSize: '16px' }} />
-            </IconButton>
-          </Tooltip>
+            </Typography>
+          </Popover>
         </div>
       );
     }

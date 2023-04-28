@@ -15,6 +15,8 @@ import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import Switch from 'apollo-react/components/Switch';
 import Tooltip from 'apollo-react/components/Tooltip';
+import Popover from 'apollo-react/components/Popover';
+import Typography from 'apollo-react/components/Typography';
 import InfoIcon from 'apollo-react-icons/Info';
 import IconButton from 'apollo-react/components/IconButton';
 import moment from 'moment';
@@ -121,7 +123,8 @@ type State = {
   showModal: boolean,
   selectedQuestionForHistory: string,
   isHistoryModalShown: boolean,
-  showFilter: boolean
+  showFilter: boolean,
+  anchorEl: null
 };
 
 const MANUAL_REFRESH = false;
@@ -143,7 +146,8 @@ class Questions extends Component {
       open: false,
       isNotepadOpen: true,
       totalWidth: '',
-      proposalNoteRender: true
+      proposalNoteRender: true,
+      anchorEl: null
     };
     this.questionsRef = createRef(null);
   }
@@ -546,7 +550,8 @@ class Questions extends Component {
     const {
       showModal,
       selectedQuestionForHistory,
-      isHistoryModalShown
+      isHistoryModalShown,
+      anchorEl
     } = this.state;
     const allSections = isQuestionsFiltersEnabled ? filteredSections : sections;
     const minPixelToExclude = 20;
@@ -576,16 +581,38 @@ class Questions extends Component {
                   onChange={this.handleOnChangeNaSwitch}
                   size="small"
                 />
-                <Tooltip
-                  variant="light"
-                  disableTouchListener
-                  title={showNaCheckbox ? 'NA ON' : 'NA OFF'}
-                  placement="top"
-                >
-                  <IconButton color="primary">
-                    <InfoIcon />
+                <>
+                  <IconButton
+                    color="primary"
+                    size="small"
+                    className="question-tooltip-icon"
+                    onClick={(e) => this.setState({anchorEl: e.currentTarget})}
+                  >      
+                    <InfoIcon className="info-icon" />
                   </IconButton>
-                </Tooltip>
+                  <Popover
+                    open={!!anchorEl}
+                    anchorEl={anchorEl}
+                    onClose={() => this.setState({anchorEl: null})}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                    PaperProps={{
+                      style: { 
+                        borderColor: '#e9e9e9', 
+                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
+                        padding: 10 
+                      },
+                    }}
+                  >
+                    <Typography variant="body2">{showNaCheckbox ? 'NA ON' : 'NA OFF'}</Typography>
+                  </Popover>
+                </>
               </div>
               <div className="tasklist-mid-menu-separator" />
               <div className="taskList-icons-wrapper">
