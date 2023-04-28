@@ -51,6 +51,7 @@ const NotepadWrapper = ({ trackEvent }) => {
   };
 
   const triggerWebsocketNotesApi = async proposalId => {
+    await websocketNotesApi(proposalId);
     if (!wsInstance) {
       createNewNotesSocketConnection(proposalId);
     } else {
