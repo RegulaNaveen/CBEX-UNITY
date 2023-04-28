@@ -151,16 +151,19 @@ const replaceAnswerToQuestionsPlaceholders = (
 
 const getQuestionsForTheCustomer = (questions, updateField) => {
   const isSubjectUpdate = updateField === 'subject';
-  const relevantQuestions = questions?.filter(
-    q =>
-      q.isCustomQuestion &&
-      q.section.sectionName === 'Questions_for_the_Customer_left_panel'
-  );
-
+  const relevantQuestions = questions
+    ?.filter(
+      q =>
+        q.isCustomQuestion &&
+        q.section.sectionName === 'Questions_for_the_Customer_left_panel'
+    )
+    ?.sort((a, b) => a.questionOrder - b.questionOrder);
   return isSubjectUpdate
     ? relevantQuestions
         ?.map(
-          q => `${q.questionText} \r\n${q.answers?.slice(-1)[0]?.answer} \r\n`
+          q =>
+            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+              ''} \r\n`
         )
         .join('')
     : `<ul>${relevantQuestions
@@ -191,7 +194,10 @@ function updateEventSubjectBody(
     '[therapeutic_area]': proposalDetail['Therapeutic area'],
     '[protocol_number]': proposalDetail['Protocol number'],
     '[bid_no]': proposalDetail['bidNo'],
-    '[unity_link]': `<a href=${window.location.href}>${window.location.href}</a>`,
+    '[unity_link]':
+      updateField === 'body'
+        ? `<a href=${window.location.href}>${window.location.href}</a>`
+        : `${window.location.href}`,
     '[todays_date]': `${formatTheDate(new Date())}`,
     '[full_proposal_team]': getFullProposalTeamString(
       updateField,
@@ -358,7 +364,11 @@ function getUserInitials(userName, lastChangedInBid) {
     if (lastChangedInBid) return `B${lastChangedInBid}`;
     return 'B';
   }
-  return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
+
+  return userName
+    ?.split(' ')
+    ?.map(n => n[0].toUpperCase())
+    ?.join('');
 }
 
 function getUserName(userName, lastChangedInBid, answerEmpty = false) {
