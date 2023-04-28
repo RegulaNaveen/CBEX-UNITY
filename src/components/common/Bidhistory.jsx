@@ -26,6 +26,7 @@ const BidHistory = () => {
   const currentbidNo = new URLSearchParams(winLocationSearch).get('bidNo');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
+  const [bidVal, setBidVal] = useState('');
   const dispatch = useDispatch();
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
@@ -33,7 +34,9 @@ const BidHistory = () => {
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
+
   const currentWidget = useSelector(selectCurrentWidget);
+
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
 
@@ -59,6 +62,20 @@ const BidHistory = () => {
       break;
     }
   }
+
+  useEffect(() => {
+    let bidValue = '';
+
+    proposalQuestion.forEach(item => {
+      if (item?.section?.sectionName === 'Details-For-Backend') {
+        if (item?.sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
+          item?.answers?.forEach(i => (bidValue = String(i?.answer).trim()));
+        }
+      }
+    });
+
+    setBidVal(bidValue);
+  }, [bidVal, proposalQuestion]);
 
   useEffect(() => {
     if (!isQuestionAnswered && showHoverText) {
@@ -188,16 +205,16 @@ const BidHistory = () => {
                 </div>
 
                 <div className="bid-history-pricemodeler-content">
-                  {currentWidget.currentWidget === 'BidCost' ||
-                  showBidCostDetail ? (
+                  <>
+                    {(showBidCostDetail ||
+                      bidVal ||
+                      currentWidget.currentWidget === 'BidCostDetail') &&
                     bidCostDetailFlag ? (
                       <BidCostDetails />
                     ) : (
                       <PriceModeler />
-                    )
-                  ) : (
-                    <PriceModeler />
-                  )}
+                    )}
+                  </>
                 </div>
               </div>
             </div>
