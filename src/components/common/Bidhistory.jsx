@@ -34,9 +34,9 @@ const BidHistory = () => {
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
-  console.log('bidCostDetailFlag', bidCostDetailFlag);
+
   const currentWidget = useSelector(selectCurrentWidget);
-  console.log('first', currentWidget.currentWidget);
+
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
 
