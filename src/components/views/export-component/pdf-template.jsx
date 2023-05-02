@@ -112,7 +112,11 @@ function checkFormattedAnswer(answers) {
     if (lastAnswer?.formattedAnswer) {
       if (isString(lastAnswer?.formattedAnswer)) {
         try {
-          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+          if (lastAnswer.userName === 'CarryForwardAnswer') {
+            formattedAnswer = JSON.parse(
+              JSON.parse(lastAnswer?.formattedAnswer)
+            );
+          } else formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
         } catch {
           return (lastAnswer && lastAnswer.answer.toString()) || '';
         }
@@ -450,24 +454,18 @@ function questionTables(allQuestions, proposalQuestions) {
       html += `</div>`;
       let questionsToCustomerLeftSection = allQuestions
         .filter(
-          (question) =>
+          question =>
             shouldInclude(question) &&
             question.section.sectionName === QC_SECTION_LEFT_PANEL
         )
         .sort((a, b) => a.questionOrder - b.questionOrder);
-      questionsToCustomerLeftSection.forEach((question) => {
+      questionsToCustomerLeftSection.forEach(question => {
         const temporalDivElement = document.createElement('div');
         temporalDivElement.innerHTML = question.questionHTML;
-        const finalAnswer = !isEqual(
-          temporalDivElement.innerText,
-          question.questionText
-        )
-          ? question.questionText
-          : question.questionHTML;
-        const questionHTML = finalAnswer;
+
         if (question.questionText.length > 1) {
           html += `<div class="resp-table-row">`;
-          html += `<div class="table-header-cell"> ${questionHTML} </div>`;
+          html += `<div class="table-header-cell"> ${question.questionHTML} </div>`;
           html += `<div class="table-header-cell"> ${formatDate(
             checkFormattedAnswer(question.answers),
             question.answerConfiguration
@@ -531,7 +529,7 @@ function questionTables(allQuestions, proposalQuestions) {
           if (question.questionText.length > 1) {
             html += `<div class="resp-table-row">`;
             html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-            html += `<div class="table-header-cell" style=${questionTypeValidation}> ${formatDate(
+            html += `<div class="table-header-cell"  style=${questionTypeValidation}> ${formatDate(
               checkFormattedAnswer(question.answers),
               question.answerConfiguration
             )} <span class="blueColorText">${

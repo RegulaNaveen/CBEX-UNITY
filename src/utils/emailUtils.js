@@ -5,7 +5,7 @@ import {
   PROPOSAL_TEAM_EMAIL_MATCH_REGEXP
 } from '../constants/app';
 import { shouldShowQuestion } from '../components/screens/Approvals/utils';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isString, isEmpty } from 'lodash';
 
 export function getProposalTeamUsers(questions = []) {
   const answers = new Set();
@@ -255,22 +255,36 @@ export function generateApprovalEmailInfo(
             : ''
         );
       } else {
-        answerHTML =
-          question.answers.length > 0
-            ? (question.answers[question.answers.length - 1] &&
-                question.answers[question.answers.length - 1].formattedAnswer &&
-                question.answers[question.answers.length - 1].formattedAnswer
-                  .html &&
-                handleHyperlinks(
+        answerHTML = '';
+        if (question?.answers[question?.answers?.length - 1]?.formattedAnswer) {
+          let formatedAnswerObject =
+            isString(
+              question.answers[question.answers.length - 1].formattedAnswer
+            ) &&
+            !isEmpty(
+              question.answers[
+                question.answers.length - 1
+              ].formattedAnswer.trim()
+            )
+              ? JSON.parse(
                   question.answers[question.answers.length - 1].formattedAnswer
-                    .html,
-                  question.answerConfiguration
-                )) ||
-              `<p>${handleHyperlinks(
+                )
+              : question.answers[question.answers.length - 1].formattedAnswer;
+          answerHTML = formatedAnswerObject?.html
+            ? handleHyperlinks(
+                formatedAnswerObject.html,
+                question.answerConfiguration
+              )
+            : `<p>${handleHyperlinks(
                 question.answers[question.answers.length - 1].answer,
                 question.answerConfiguration
-              )}</p>`
-            : '';
+              )}</p>`;
+        } else if (question?.answers[question?.answers?.length - 1]?.answer) {
+          answerHTML = `<p>${handleHyperlinks(
+            question.answers[question.answers.length - 1].answer,
+            question.answerConfiguration
+          )}</p>`;
+        }
         answerHTML = answerHTML.replace(RTE_DATA_ATTR_REGEXP, '');
       }
       emailBody += `<tr>
@@ -291,6 +305,7 @@ export function generateApprovalEmailInfo(
     ccUsers = [];
     emailBody = '';
   }
+
   return {
     subject: emailSubject,
     to: toUsers,

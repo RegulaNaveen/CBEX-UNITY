@@ -100,12 +100,7 @@ const NotepadWrapper = ({ trackEvent }) => {
       const url = new URL(window.location.origin);
 
       // random value to prevent cached responses
-      url.searchParams.set(
-        'rand',
-        Math.random()
-          .toString(36)
-          .substring(2, 15)
-      );
+      url.searchParams.set('rand', Math.random().toString(36).substring(2, 15));
 
       try {
         const response = await fetch(url.toString(), { method: 'HEAD' });
@@ -167,8 +162,7 @@ const NotepadWrapper = ({ trackEvent }) => {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh'
+            marginTop: '48px'
           }}
         />
       )}
