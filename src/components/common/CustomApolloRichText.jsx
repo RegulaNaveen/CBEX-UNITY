@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+
 import {
   EditorState,
   SelectionState,
@@ -130,8 +131,7 @@ function handleHyperLinkOpportunityStrategy(
   contentState
 ) {
   const text = contentBlock.getText();
-
-  const regex = /(http(s)?:\/\/)?[-a-zA-Z0-9@:%._\+~#=]{0,256}?\.[a-z0-9]{1,4}\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)\b(?:[-a-zA-Z0-9()@:%_\+~#?&//=]*)|\b(http\S+)/g;
+  const regex = /(http\S+)?[-a-zA-Z0-9@:%._\/+~#=]{1,256}(\.[a-zA-Z]{2,4}|\/[a-zA-Z]{1,})\b([-a-zA-Z0-9@:%_\+~#?&//=]*)/g;
   let matchArr, start;
   while ((matchArr = regex.exec(text)) !== null) {
     start = matchArr.index;
@@ -144,10 +144,7 @@ export const compositeDecorator = new CompositeDecorator([
     strategy: handleUserTagStrategy,
     component: MentionComponentWithName
   },
-  {
-    strategy: handleLinkOpportunityStrategy,
-    component: MentionComponentWithLink
-  },
+
   {
     strategy: handleHyperlinkOpportunityStrategy,
     component: MentionComponentWithCopiedHyperlink
@@ -155,6 +152,10 @@ export const compositeDecorator = new CompositeDecorator([
   {
     strategy: handleHyperLinkOpportunityStrategy,
     component: MentionComponentWithHyperLink
+  },
+  {
+    strategy: handleLinkOpportunityStrategy,
+    component: MentionComponentWithLink
   }
 ]);
 
@@ -163,10 +164,7 @@ export const compositeDecoratorHidden = new CompositeDecorator([
     strategy: handleUserTagStrategy,
     component: MentionComponentWithEmail
   },
-  {
-    strategy: handleLinkOpportunityStrategy,
-    component: MentionComponentWithLink
-  },
+
   {
     strategy: handleHyperlinkOpportunityStrategy,
     component: MentionComponentWithCopiedHyperlink
@@ -174,6 +172,10 @@ export const compositeDecoratorHidden = new CompositeDecorator([
   {
     strategy: handleHyperLinkOpportunityStrategy,
     component: MentionComponentWithHyperLink
+  },
+  {
+    strategy: handleLinkOpportunityStrategy,
+    component: MentionComponentWithLink
   }
 ]);
 
