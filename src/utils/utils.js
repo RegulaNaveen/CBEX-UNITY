@@ -134,10 +134,12 @@ const replaceAnswerToQuestionsPlaceholders = (
           answers,
           updateField
         );
-        updatedEventBodyStr = updatedEventBodyStr.replace(
-          regexPlaceholders,
-          answer
-        );
+        if (updateField === 'body') {
+          updatedEventBodyStr = updatedEventBodyStr.replace(
+            regexPlaceholders,
+            answer
+          );
+        }
       }
     }
   );
