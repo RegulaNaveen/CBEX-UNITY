@@ -72,9 +72,8 @@ const SEARCH = {
 
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
-export const URL_REGEXP = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
 export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // matches proposal team individual user
-export const PROPOSAL_TEAM_EMAIL_MATCH_REGEXP = /[a-zA-Z\w]*\((.*)\)/; // matches proposal team user email
+export const PROPOSAL_TEAM_EMAIL_MATCH_REGEXP = /[a-zA-Z\w]*\((.*@.*)\)/; // matches proposal team user email
 export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // matches RichTextEditor data attributes
 export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
 export const DEFAULT_TABS_LEN = 4;

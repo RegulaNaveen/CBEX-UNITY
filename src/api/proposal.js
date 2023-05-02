@@ -114,11 +114,13 @@ export const setProposalAnswer = async (
   questionId: string,
   answer: string,
   userData: Object,
-  editorData: any
+  editorData: any,
+  cfProposalId: any
 ): Promise<Object> => {
   if (onGoingAnswer[questionId]) onGoingAnswer[questionId]();
   const payload = { answer, userData };
   if (editorData) payload.formattedAnswer = editorData;
+  if (cfProposalId !== null) payload.cfProposalId = cfProposalId;
 
   return axiosInstance
     .put(`${PROPOSAL_QUESTIONS_API_URL}/${proposalId}/${questionId}`, payload, {
@@ -135,6 +137,11 @@ export const setProposalAnswer = async (
         onGoingAnswer = omit(onGoingAnswer, [questionId]);
       }
       return res;
+    })
+    .catch(err => {
+      if (newAxios.isCancel(err)) {
+        return { data: '' };
+      }
     });
 };
 

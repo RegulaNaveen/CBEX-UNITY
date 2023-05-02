@@ -1,8 +1,13 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable array-callback-return */
 import jwt_decode from 'jwt-decode';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isArray, isEmpty, isString } from 'lodash';
+import ANSWER_TYPES from '../constants/answerTypes';
 import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
+import { formatTheDate } from './DateUtils';
 
 /**
  *
@@ -29,26 +34,194 @@ function getCountryOptions() {
   return Object.values(CountryMap);
 }
 
+const getAnswer = ans => {
+  try {
+    const lastAnswer = ans[ans.length - 1];
+    let formattedAnswer;
+    if (lastAnswer?.formattedAnswer) {
+      if (isString(lastAnswer?.formattedAnswer)) {
+        try {
+          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+        } catch {
+          return (lastAnswer && lastAnswer.answer.toString()) || '';
+        }
+      } else formattedAnswer = lastAnswer?.formattedAnswer;
+      if (formattedAnswer?.htmlExport) {
+        return formattedAnswer.htmlExport;
+      }
+      if (formattedAnswer?.html) {
+        return formattedAnswer?.html;
+      }
+    }
+
+    return (lastAnswer && lastAnswer.answer.toString()) || '';
+  } catch (error) {
+    console.log(error);
+    return '';
+  }
+};
+
+const getFullProposalTeamString = (updateField, questions) => {
+  const relevantQuestions = questions?.filter(
+    q =>
+      q.visible &&
+      (q.active || q.isCustomQuestion) &&
+      q.section.sectionName === 'Proposal Team'
+  );
+  const isSubjectUpdate = updateField === 'subject';
+
+  return relevantQuestions
+    ?.flatMap(q => (q?.answers?.slice(-1)[0]?.answer || '')?.split(','))
+    .map(answer => {
+      if (isSubjectUpdate) {
+        return answer?.replace(/\s*\([^)]*\)/g, '');
+      }
+      const [name, email] = answer?.trim()?.split('(');
+      const emailWithoutParenthesis = email?.replace(')', '');
+      return emailWithoutParenthesis
+        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+        : name?.trim();
+    })
+    .filter(answer => answer)
+    .join(', ');
+};
+
+const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
+  switch (answerConfiguration?.type) {
+    case ANSWER_TYPES.TEXT: {
+      return updateField === 'body'
+        ? getAnswer(answers)
+        : answers?.slice(-1)[0]?.answer ?? '';
+    }
+    case ANSWER_TYPES.NUMBER:
+    case ANSWER_TYPES.DATE:
+    case ANSWER_TYPES.RADIO:
+    case ANSWER_TYPES.SELECT:
+    case ANSWER_TYPES.SELECT_LOOKUP:
+    case ANSWER_TYPES.YES_NO: {
+      return answers?.slice(-1)[0]?.answer ?? '';
+    }
+    case ANSWER_TYPES.PICKLIST_LOOKUP:
+    case ANSWER_TYPES.PICKLIST:
+    case ANSWER_TYPES.CHECKBOX: {
+      return answers?.slice(-1)[0]?.answer?.toString() ?? '';
+    }
+  }
+};
+
+const replaceAnswerToQuestionsPlaceholders = (
+  eventBodyStr,
+  questions,
+  updateField
+) => {
+  const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
+  let updatedEventBodyStr = eventBodyStr;
+  const relevantQuestions = questions?.filter(q => q.visible && q.active);
+
+  relevantQuestions.forEach(
+    ({ questionText, questionId, answers, answerConfiguration }) => {
+      const regexPlaceholders = new RegExp(
+        `\\[${questionText
+          ?.toLowerCase()
+          ?.replace(/[^\w\s]/gi, '')
+          ?.replace(/\s+/g, '_')}:${questionId}\\]`,
+        'gi'
+      );
+
+      if (answers) {
+        const answer = handleAnswerTypes(
+          answerConfiguration,
+          answers,
+          updateField
+        );
+        updatedEventBodyStr = updatedEventBodyStr.replace(
+          regexPlaceholders,
+          answer
+        );
+      }
+    }
+  );
+
+  updatedEventBodyStr = updatedEventBodyStr.replace(
+    regexPlaceholdersNotResolved,
+    match => `<span style="color:#f00">${match}</span>`
+  );
+  return updatedEventBodyStr;
+};
+
+const getQuestionsForTheCustomer = (questions, updateField) => {
+  const isSubjectUpdate = updateField === 'subject';
+  const relevantQuestions = questions
+    ?.filter(
+      q =>
+        q.isCustomQuestion &&
+        q.section.sectionName === 'Questions_for_the_Customer_left_panel'
+    )
+    ?.sort((a, b) => a.questionOrder - b.questionOrder);
+  return isSubjectUpdate
+    ? relevantQuestions
+        ?.map(
+          q =>
+            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+              ''} \r\n`
+        )
+        .join('')
+    : `<ul>${relevantQuestions
+        ?.map(
+          q =>
+            `<li>${q.questionHTML}</li>${
+              getAnswer(q.answers)
+                ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
+                : ''
+            }`
+        )
+        .join('')}</ul>`;
+};
+
 /**
  * @returns {string[]}
  */
-function updateEventSubjectBody(str, data) {
+function updateEventSubjectBody(
+  str,
+  { proposalDetail, proposalQuestions },
+  updateField
+) {
   const obj = {
-    '[opportunity_number]': data['CRM #'],
-    '[line_of_business]': data['Line of business'],
-    '[customer]': data['Customer'],
-    '[product_name]': data['Product name'],
-    '[therapeutic_area]': data['Therapeutic area'],
-    '[protocol_number]': data['Protocol number'],
-    '[bid_no]': data['bidNo']
+    '[opportunity_number]': proposalDetail['CRM #'],
+    '[line_of_business]': proposalDetail['Line of business'],
+    '[customer]': proposalDetail['Customer'],
+    '[product_name]': proposalDetail['Product name'],
+    '[therapeutic_area]': proposalDetail['Therapeutic area'],
+    '[protocol_number]': proposalDetail['Protocol number'],
+    '[bid_no]': proposalDetail['bidNo'],
+    '[unity_link]':
+      updateField === 'body'
+        ? `<a href=${window.location.href}>${window.location.href}</a>`
+        : `${window.location.href}`,
+    '[todays_date]': `${formatTheDate(new Date())}`,
+    '[full_proposal_team]': getFullProposalTeamString(
+      updateField,
+      proposalQuestions
+    ),
+    '[questions_for_the_customers]': getQuestionsForTheCustomer(
+      proposalQuestions,
+      updateField
+    )
   };
-  for (const key in obj) {
+
+  Object.keys(obj).forEach(key => {
     if (str.includes(key)) {
       str = str.replaceAll(key, obj[key]);
     }
-  }
-  return str;
+  });
+
+  return replaceAnswerToQuestionsPlaceholders(
+    str,
+    proposalQuestions,
+    updateField
+  );
 }
+
 function isUserUbuildAdmin() {
   if (!localStorage.getItem('id_token')) return false;
 
@@ -191,14 +364,23 @@ function getUserInitials(userName, lastChangedInBid) {
     if (lastChangedInBid) return `B${lastChangedInBid}`;
     return 'B';
   }
-  return userName.split(' ')[0].charAt(0) + userName.split(' ')[1].charAt(0);
+
+  return userName
+    ?.split(' ')
+    ?.map(n => n[0].toUpperCase())
+    ?.join('');
 }
 
-function getUserName(userName, lastChangedInBid) {
+function getUserName(userName, lastChangedInBid, answerEmpty = false) {
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
-    if (lastChangedInBid) return `Answer derived from bid ${lastChangedInBid}`;
+    if (lastChangedInBid) {
+      if (answerEmpty) {
+        return `Answer not derived from bid ${lastChangedInBid}`;
+      }
+      return `Answer derived from bid ${lastChangedInBid}`;
+    }
     return 'Answer derived from bid';
   }
   return userName;

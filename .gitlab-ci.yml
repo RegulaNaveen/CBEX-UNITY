@@ -95,9 +95,6 @@ dev:
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -139,9 +136,6 @@ dev2:
     - cat $devaccount > build.env #(Skip if creating env in production account)
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -183,9 +177,6 @@ deploydev2:
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -227,9 +218,6 @@ buildl4:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -273,9 +261,6 @@ demo:
     - cat $frontendacmdev >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -319,9 +304,6 @@ qa:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -364,9 +346,6 @@ uat:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
@@ -408,9 +387,6 @@ prod:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
-    #- yarn cache clean
-    #- yarn install --legacy-peer-deps
-    #- yarn build:$Environment
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment

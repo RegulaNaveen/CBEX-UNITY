@@ -67,10 +67,16 @@ function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
       if (Array.isArray(entityRanges) && entityRanges.length > 0) {
         entityRanges = entityRanges.reverse();
         entityRanges.forEach(entity => {
-          mentions.push({
-            start: offset + entity.offset,
-            end: offset + entity.offset + entity.length
-          });
+          if (
+            formattedAnswerJSON.value.entityMap &&
+            formattedAnswerJSON.value.entityMap[entity.key] &&
+            formattedAnswerJSON.value.entityMap[entity.key].type === 'MENTION'
+          ) {
+            mentions.push({
+              start: offset + entity.offset,
+              end: offset + entity.offset + entity.length
+            });
+          }
         });
       }
 
@@ -118,8 +124,10 @@ function areBothAnswersSame(answer1, answer2) {
 function isAnswerEmpty(answer) {
   if (List.isList(answer)) {
     return answer.size === 0;
+  } else if (answer === ' ') {
+    return true;
   } else {
-    return answer === ' ';
+    return answer === '';
   }
 }
 
@@ -359,7 +367,7 @@ class AnswerHistory extends Component<Props> {
     this.closeModalWindow();
   };
 
-  onAcceptCarryForwardAnswer = carryForwardAnswer => {
+  onAcceptCarryForwardAnswer = (carryForwardAnswer, cfProposalId = '') => {
     const {
       trackEvent,
       eventCategories,
@@ -396,7 +404,9 @@ class AnswerHistory extends Component<Props> {
         selectedBid.get('id'),
         questionId,
         carryForwardAnswer.get('answer'),
-        userData
+        userData,
+        false,
+        cfProposalId
       );
     } else {
       setProposalAnswer(
@@ -406,7 +416,8 @@ class AnswerHistory extends Component<Props> {
         String(carryForwardAnswer.get('answer')).trim(),
         userData,
         '',
-        false
+        false,
+        cfProposalId
       );
     }
     let action = 'Answer History';
@@ -667,12 +678,14 @@ class AnswerHistory extends Component<Props> {
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
+        answers.get(index).get('userName') !== 'AnswerPulledFromSalesforce' &&
         !isAnswerEmpty(answer) &&
         areBothAnswersSame(answer, nextAnswer);
 
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
+        answers.get(index).get('userName') !== 'AnswerPulledFromSalesforce' &&
         isAnswerEmpty(answer);
 
       // picklist answers are array so they require different check than other question types
@@ -1073,7 +1086,7 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, cfBidNo)}</p>
+                <p>{getUserName(userName, cfBidNo, isAnswerEmpty(answer))}</p>
                 {renderAnswers()}
               </div>
             </div>
@@ -1083,6 +1096,7 @@ class AnswerHistory extends Component<Props> {
                 <p className="answer-history-para">Bid {bidNo}</p>
               ) : null}
               {indexNo === 0 &&
+              !isQuesFreezed &&
               isCurrentBid === bidNo &&
               lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
@@ -1109,6 +1123,7 @@ class AnswerHistory extends Component<Props> {
               !isQuesFreezed &&
               selectedBid.get('isCurrent', false) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
+              !isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (
                 <div className="answer-meta-buttons">
                   <button
@@ -1123,7 +1138,9 @@ class AnswerHistory extends Component<Props> {
                     size="small"
                     type="button"
                     className="answer-history-accept"
-                    onClick={() => this.onAcceptCarryForwardAnswer(_answer)}
+                    onClick={() =>
+                      this.onAcceptCarryForwardAnswer(_answer, cfProposalId)
+                    }
                   >
                     Accept
                   </button>

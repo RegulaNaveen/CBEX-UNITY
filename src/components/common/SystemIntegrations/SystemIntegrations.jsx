@@ -44,6 +44,7 @@ const SystemIntegrations = ({
   questionId
 }) => {
   const answer = answers.reverse();
+  // console.log('answer', answer.toJS());
   const [latestSfAnswer, setLatestSfAnswer] = useState(false);
   const [
     canShowCarryForwardIndication,
@@ -382,6 +383,40 @@ const SystemIntegrations = ({
     }
 
     if (
+      lastAnswer
+        ?.toJS()
+        .answer?.toString()
+        .trim().length < 1 &&
+      answer?.get(1)?.get('userName') === 'UnityPredictedAnswer' &&
+      !loading
+    ) {
+      return (
+        <IconButton
+          style={{
+            textAlign: 'center',
+            outline: 'none',
+            border: 'none',
+            backgroundColor: 'transparent',
+            color: '#297dfd',
+            cursor: 'pointer',
+            width: '24px',
+            height: '24px'
+          }}
+          type="button"
+          onClick={answeronhistory}
+          className="integration-buttons"
+          tabIndex={-1}
+        >
+          <img
+            src={indeterminate}
+            alt="indeterminate"
+            className="integration-icon-varsha"
+          />
+        </IconButton>
+      );
+    }
+
+    if (
       (answerdate === 'Not Answered' && !isAnswerPredicted) ||
       (lastAnswer
         ?.toJS()
@@ -410,6 +445,7 @@ const SystemIntegrations = ({
         </IconButton>
       );
     }
+
     if (
       isAnswerPredicted &&
       !loading &&

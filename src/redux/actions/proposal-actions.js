@@ -108,7 +108,8 @@ const {
   SET_ACTIVE_TABINDEX,
   SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
-  SET_V_TAB_USER_PREFERENCE
+  SET_V_TAB_USER_PREFERENCE,
+  WIDGET_UPDATE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -316,7 +317,8 @@ export const setProposalAnswerData = (
   answer: string,
   userData: Object,
   editorData: any,
-  disableLoader = false
+  disableLoader = false,
+  cfProposalId = null
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch(setApprovalQuestionLoading(questionId, true));
@@ -335,39 +337,42 @@ export const setProposalAnswerData = (
         questionId,
         answer,
         userData,
-        editorData
+        editorData,
+        cfProposalId
       );
-      // Check is price modeler question
-      const allQuestions = selectProposalQuestions(getState());
-      if (isPriceModelerQuestion(questionId, allQuestions)) {
-        await getPriceModelerData(proposalId)(dispatch);
-      }
-      await socketContext.questionAnswerUpdateWrapper(questionId, data);
-      dispatch({
-        type: PROPOSAL_ANSWER,
-        payload: {
-          data: Array.isArray(data.answers) ? data.answers : data,
-          questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
+      if (data) {
+        // Check is price modeler question
+        const allQuestions = selectProposalQuestions(getState());
+        if (isPriceModelerQuestion(questionId, allQuestions)) {
+          await getPriceModelerData(proposalId)(dispatch);
         }
-      });
-
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
-      if (!disableLoader) {
+        await socketContext.questionAnswerUpdateWrapper(questionId, data);
         dispatch({
-          type: PROPOSAL_ANSWER_LOADING,
-          payload: { questionId, loading: false }
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data: Array.isArray(data.answers) ? data.answers : data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
         });
+
+        const { modifiedQuestions } = data;
+        if (!isEmpty(modifiedQuestions)) {
+          modifiedQuestions.forEach(question => {
+            dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+          });
+        }
+        dispatch(onQuestionsFilterApplied(questionsFilter));
+        if (!disableLoader) {
+          dispatch({
+            type: PROPOSAL_ANSWER_LOADING,
+            payload: { questionId, loading: false }
+          });
+        }
+        dispatch(setApprovalQuestionLoading(questionId, false));
+        dispatch(setUnityTabQuestionLoading(questionId, false));
+        return { success: true };
       }
-      dispatch(setApprovalQuestionLoading(questionId, false));
-      dispatch(setUnityTabQuestionLoading(questionId, false));
-      return { success: true };
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
@@ -488,7 +493,7 @@ export const updateAnswerFromWebSocket = (
       }
       dispatch(onQuestionsFilterApplied(questionsFilter));
     } catch (err) {
-      console.log('Error in updating answer from WS', error);
+      console.log('Error in updating answer from WS', err);
     }
   };
 };
@@ -1640,6 +1645,18 @@ export const setVTabUserPreferenceAction = (tabIndex, collapsed = false) => {
       payload: {
         tabIndex,
         collapsed
+      }
+    });
+  };
+};
+
+export const widgetUpdate = (proposalId, typeOfWidget) => {
+  return dispatch => {
+    dispatch({
+      type: WIDGET_UPDATE,
+      payload: {
+        proposalId,
+        typeOfWidget
       }
     });
   };

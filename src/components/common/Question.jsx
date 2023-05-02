@@ -57,7 +57,9 @@ import Autocomplete from './atoms/inputs/AutoComplete';
 import QuestionDatePicker from './atoms/inputs/QuestionDatePicker';
 import SFAnswerValidationWrapper from './SFAnswerValidationWrapper';
 import ANSWER_TYPES from '../../constants/answerTypes';
-import CustomApolloRichText from './CustomApolloRichText';
+import CustomApolloRichText, {
+  compositeDecorator
+} from './CustomApolloRichText';
 import { DEFAULT } from '../../constants/app';
 import AutoCompleteWithAddOption from '../views/modals/AutoCompleteWithAddOption';
 import { SocketContext } from '../../context/SocketContext';
@@ -161,7 +163,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       screenWidth: '',
       enableRichtext: false,
       focusedSpan: false,
-      blurredSpan: false
+      blurredSpan: false,
+      multiselectFuncCall: 0
     };
   }
 
@@ -226,6 +229,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
       ) {
         this.setSelectRow(false);
       }
+    }
+
+    // updating question text with decorators
+    if (this.questionTextRef1.current !== null) {
+      const editorState = this.questionTextRef1.current.state.editorState;
+      const newEditorState = EditorState.set(editorState, {
+        decorator: compositeDecorator
+      });
+      this.questionTextRef1.current.setState({ editorState: newEditorState });
     }
   }
 
@@ -491,14 +503,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   };
 
-  onSelectValues = (
+  onSelectValues = async (
     selectedValues: Array<string>,
     lastAnswer: Array<string>
   ) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
-
     if (!isEqual(lastAnswer, selectedValues) && selectedValues !== undefined) {
-      setProposalAnswer(
+      await setProposalAnswer(
         this.context,
         proposalId,
         questionId,
@@ -506,7 +517,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData
       );
     }
-
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
 
@@ -1394,6 +1404,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
     );
   };
 
+  handleQuestionHintRef = questionHintRef => {
+    this.questionTextRef2.current = questionHintRef;
+    setTimeout(() => {
+      // updating question hint with decorators
+      if (this.questionTextRef2.current !== null) {
+        const editorState = this.questionTextRef2.current.state.editorState;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        this.questionTextRef2.current.setState({ editorState: newEditorState });
+      }
+    }, 700);
+  };
+
   render() {
     const {
       answers,
@@ -1606,7 +1630,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                           <RichTextEditor
                             variant="view"
                             defaultValue={JSON.parse(questionHintJSON)}
-                            ref={this.questionTextRef2}
+                            ref={this.handleQuestionHintRef}
                           />
                         ) : (
                           <div>{questionHint}</div>

@@ -38,13 +38,14 @@ const Section = ({ sectionId, title, tabId }) => {
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
+  const flags = useSelector(state => state.proposal.get('eventflag'));
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const result = shouldShowSection(sectionId, tabId);
+    const result = shouldShowSection(sectionId, tabId, flags);
     setSectionVisibility(result);
-  }, [tabId, unityTabFilters, tabSection]);
+  }, [tabId, unityTabFilters, tabSection, flags]);
 
   useEffect(() => {
     let shouldExpand = expanded;
