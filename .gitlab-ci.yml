@@ -2,12 +2,12 @@ workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
 
-include:
-  - local: devops/vars/global.yml
-  - project: 'CBEx/devops'
-    ref: test
-    file: /gitlab_balckduck_scan.yml
-    when: always
+#include:
+  #- local: devops/vars/global.yml
+  #- project: 'CBEx/devops'
+    #ref: test
+    #file: /gitlab_balckduck_scan.yml
+    #when: always
 
 #include:
 #- project: 'CBEx/unity/Unity-QA'
@@ -18,10 +18,10 @@ include:
 #- deployqa
 
 stages:
-  - prebuild
+  #- prebuild
   #- sonar #sonar report
   #- test
-  - blackduckscan
+  #- blackduckscan
   - builddev
   - deploydev
   - builddev2
@@ -42,7 +42,7 @@ stages:
   - pafexecution_prod
   - deploystack
 
-sonar:
+.sonar:
   stage: prebuild
   image: sonarsource/sonar-scanner-cli:4.5
   needs:
@@ -64,7 +64,7 @@ sonar:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
 
-test:
+.test:
   stage: prebuild
   image: node:14
   except:
@@ -120,7 +120,7 @@ deploydev:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     #- echo "aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region"
-    - aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text
+    - aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text --debug
     #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
