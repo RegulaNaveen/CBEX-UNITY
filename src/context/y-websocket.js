@@ -147,6 +147,9 @@ const setupWS = provider => {
       if (event.data === 'refresg=') {
         return;
       }
+      if (event.data === 'sync/failec=') {
+        provider.emit('sync_failed', []);
+      }
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(
         provider,
