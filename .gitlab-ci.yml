@@ -87,6 +87,7 @@ dev:
   variables:
     Environment: $CI_JOB_NAME
   only:
+    - - dev-4.8-deployissu
     - dev
     - tags
     - dev-buildcheck
@@ -112,6 +113,7 @@ deploydev:
   needs:
     - dev
   only:
+    - dev-4.8-deployissu
     - dev
     - tags
   script:
