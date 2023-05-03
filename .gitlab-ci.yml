@@ -23,7 +23,7 @@ stages:
   #- test
   - blackduckscan
   - builddev
-  - deploydev
+  # - deploydev
   - builddev2
   - deploydev2
   - buildl4
@@ -106,7 +106,7 @@ dev:
     - docker
   environment: dev
 
-deploydev:
+.deploydev:
   stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -141,6 +141,7 @@ dev2:
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
+  
     paths:
       - dist/
       - build.env
