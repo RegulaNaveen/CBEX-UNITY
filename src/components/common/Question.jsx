@@ -10,12 +10,16 @@ import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
 import InfoIcon from 'apollo-react-icons/Info';
-import Tooltip from 'apollo-react/components/Tooltip';
+import Popover from 'apollo-react/components/Popover';
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
 import classNames from 'classnames';
 import Checkbox from 'apollo-react/components/Checkbox';
 import Highlighter from 'react-highlight-words';
+import {
+  EditorState,
+  CompositeDecorator
+} from 'apollo-react/node_modules/draft-js';
 import { Edit } from '../svg';
 import Dropdown from './atoms/inputs/Dropdown';
 import TextArea from './atoms/inputs/TextArea';
@@ -74,10 +78,6 @@ import {
   selectPrevSearchResult,
   selectQuery
 } from '../../redux/selectors/search';
-import {
-  EditorState,
-  CompositeDecorator
-} from 'apollo-react/node_modules/draft-js';
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
@@ -98,7 +98,8 @@ type State = {
   selectedDay: string,
   selectedRow: Boolean,
   changeIcon: '',
-  check: 'false'
+  check: 'false',
+  anchorEl: null
 };
 
 type Props = {
@@ -164,7 +165,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       enableRichtext: false,
       focusedSpan: false,
       blurredSpan: false,
-      multiselectFuncCall: 0
+      anchorEl: null
     };
   }
 
@@ -233,7 +234,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     // updating question text with decorators
     if (this.questionTextRef1.current !== null) {
-      const editorState = this.questionTextRef1.current.state.editorState;
+      const { editorState } = this.questionTextRef1.current.state;
       const newEditorState = EditorState.set(editorState, {
         decorator: compositeDecorator
       });
@@ -832,7 +833,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         ? formattedAnswer
         : parseStringifyJson(formattedAnswer);
 
-    let richTextData = parseFormattedData || {
+    const richTextData = parseFormattedData || {
       html: '',
       value: { blocks: [] },
       htmlExport: ''
@@ -888,10 +889,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
           !isEqual(richTextData.value, data.value) &&
           !isEmpty(data.text.trim())
         ) {
-          let prevAnswerBlocks = richTextData?.value?.blocks.filter(
+          const prevAnswerBlocks = richTextData?.value?.blocks.filter(
             block => block.text.length > 0
           );
-          let answerBlocks = data?.value?.blocks.filter(
+          const answerBlocks = data?.value?.blocks.filter(
             block => block.text.length > 0
           );
           if (isEqual(prevAnswerBlocks, answerBlocks)) {
@@ -1203,7 +1204,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         );
       case 'select-lookup':
         // Count max no of strings in single select lookup
-        const multilineFlag = answerValue.length > 42 ? true : false;
+        const multilineFlag = answerValue.length > 42;
 
         return (
           <SFAnswerValidationWrapper
@@ -1409,7 +1410,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     setTimeout(() => {
       // updating question hint with decorators
       if (this.questionTextRef2.current !== null) {
-        const editorState = this.questionTextRef2.current.state.editorState;
+        const { editorState } = this.questionTextRef2.current.state;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
         });
@@ -1420,7 +1421,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
   render() {
     const {
-      answers,
       questionText,
       answerConfiguration,
       milestone,
@@ -1458,6 +1458,27 @@ export class TaskRow extends React.PureComponent<Props, State> {
       bidAnswerCopy,
       latestAnsweredBidNo
     } = this.props;
+    let { answers } = this.props;
+    let conditionBlankPredicted = false;
+
+    answers = answers.reverse();
+    answers.forEach((_answer, index) => {
+      const currentAnswer =
+        isObject(answers?.get(index)?.get('answer')) &&
+        answers?.get(index)?.get('answer').size === 0
+          ? ' '
+          : answers?.get(index)?.get('answer');
+      conditionBlankPredicted =
+        answers.size &&
+        isString(currentAnswer) &&
+        isEmpty(currentAnswer.trim()) &&
+        answers?.get(index + 1)?.get('userName') === 'UnityPredictedAnswer';
+      if (conditionBlankPredicted) {
+        answers = answers.delete(index).delete(index);
+      }
+    });
+    answers = answers.reverse();
+
     const questionID = answers.get('questionId');
     const quesData = questionData?.toJS();
     const hasEvent = quesData?.events && !isEmpty(quesData?.events);
@@ -1479,7 +1500,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const proposalCreationDate = proposalTimeStamp
       ? proposalTimeStamp.substring(0, proposalTimeStamp.indexOf('T'))
       : '';
-    const integrationLocked = this.isQuestionLockedByOther() ? true : false;
+    const integrationLocked = !!this.isQuestionLockedByOther();
     const dateIsAfter = moment(proposalCreationDate).isAfter(
       moment(deploymentDate)
     );
@@ -1538,6 +1559,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       iconColor,
       changeIcon,
       screenWidth,
+      anchorEl,
       enableRichtext,
       focusedSpan,
       blurredSpan
@@ -1622,11 +1644,40 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 {/* Question Hint */}
                 {questionHint && (
                   <div className="question-hint">
-                    <Tooltip
-                      variant="light"
-                      tabIndex={-1}
-                      title={
-                        questionHintJSON ? (
+                    <IconButton
+                      color="primary"
+                      size="small"
+                      className="question-tooltip-icon"
+                      onClick={e =>
+                        this.setState({ anchorEl: e.currentTarget })
+                      }
+                    >
+                      <InfoIcon className="info-icon" />
+                    </IconButton>
+                    <Popover
+                      className="popover-strategy-question"
+                      open={!!anchorEl}
+                      anchorEl={anchorEl}
+                      onClose={() => this.setState({ anchorEl: null })}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center'
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center'
+                      }}
+                      PaperProps={{
+                        style: {
+                          borderColor: '#e9e9e9',
+                          boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                          padding: 10,
+                          maxInlineSize: '300px'
+                        }
+                      }}
+                    >
+                      <Typography>
+                        {questionHintJSON ? (
                           <RichTextEditor
                             variant="view"
                             defaultValue={JSON.parse(questionHintJSON)}
@@ -1634,19 +1685,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
                           />
                         ) : (
                           <div>{questionHint}</div>
-                        )
-                      }
-                      placement="top"
-                    >
-                      <IconButton
-                        color="primary"
-                        style={{ margin: 0 }}
-                        size="small"
-                        className="question-tooltip-icon"
-                      >
-                        <InfoIcon style={{ fontSize: '16px' }} />
-                      </IconButton>
-                    </Tooltip>
+                        )}
+                      </Typography>
+                    </Popover>
                   </div>
                 )}
               </div>
@@ -1716,6 +1757,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             disabled={integrationLocked}
             bidAnswerCopy={bidAnswerCopy}
             latestAnsweredBidNo={latestAnsweredBidNo}
+            questionId={qId}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
