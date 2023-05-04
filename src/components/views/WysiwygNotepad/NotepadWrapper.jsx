@@ -179,7 +179,8 @@ const NotepadWrapper = ({ trackEvent }) => {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            marginTop: '48px'
+            alignItems: 'center',
+            height: '100vh'
           }}
         />
       )}
