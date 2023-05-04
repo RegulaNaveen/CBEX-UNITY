@@ -24,6 +24,7 @@ const NotepadWrapper = ({ trackEvent }) => {
   const [proposalIdState, setProposalIdState] = useState(undefined);
   const [showNetworkChip, setShowNetworkChip] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [firstSyncDone, setFirstSyncDone] = useState(false);
 
   const createNewNotesSocketConnection = proposalId => {
     const storedValue = `doc-${proposalId}`;
@@ -45,6 +46,16 @@ const NotepadWrapper = ({ trackEvent }) => {
           setIsOnline(false);
         }
       });
+
+      wsProvider.on('synced', syncState => {
+        if (!firstSyncDone && syncState) {
+          setFirstSyncDone(true);
+        }
+      });
+
+      // setting firstSyncDone to true on sync failure
+      // happens when data is too large to sent through websocket
+      wsProvider.on('sync_failed', () => setFirstSyncDone(true));
 
       setWsInstance(wsProvider);
     }
@@ -158,6 +169,7 @@ const NotepadWrapper = ({ trackEvent }) => {
           wsInstance={wsInstance}
           ydoc={ydoc}
           proposalId={proposalIdState}
+          firstSyncDone={firstSyncDone}
         />
       ) : (
         <Loader
