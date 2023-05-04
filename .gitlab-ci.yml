@@ -122,7 +122,9 @@ deploydev:
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     #- aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text --debug --region "us-east-1"
     #- aws cloudfront list-distributions --query "DistributionList.Items[*].{cname:Aliases.Items}"
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+    - aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text
   tags:
     - docker
   environment: dev
