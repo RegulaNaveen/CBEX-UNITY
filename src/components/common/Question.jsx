@@ -1412,7 +1412,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
   render() {
     const {
-      answers,
       questionText,
       answerConfiguration,
       milestone,
@@ -1450,6 +1449,27 @@ export class TaskRow extends React.PureComponent<Props, State> {
       bidAnswerCopy,
       latestAnsweredBidNo
     } = this.props;
+    let { answers } = this.props;
+    let conditionBlankPredicted = false;
+
+    answers = answers.reverse();
+    answers.forEach((_answer, index) => {
+      const currentAnswer =
+        isObject(answers?.get(index)?.get('answer')) &&
+        answers?.get(index)?.get('answer').size === 0
+          ? ' '
+          : answers?.get(index)?.get('answer');
+      conditionBlankPredicted =
+        answers.size &&
+        isString(currentAnswer) &&
+        isEmpty(currentAnswer.trim()) &&
+        answers?.get(index + 1)?.get('userName') === 'UnityPredictedAnswer';
+      if (conditionBlankPredicted) {
+        answers = answers.delete(index).delete(index);
+      }
+    });
+    answers = answers.reverse();
+
     const questionID = answers.get('questionId');
     const quesData = questionData?.toJS();
     const hasEvent = quesData?.events && !isEmpty(quesData?.events);
@@ -1728,6 +1748,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             disabled={integrationLocked}
             bidAnswerCopy={bidAnswerCopy}
             latestAnsweredBidNo={latestAnsweredBidNo}
+            questionId={qId}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
