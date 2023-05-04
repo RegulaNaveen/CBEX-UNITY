@@ -144,10 +144,10 @@ const setupWS = provider => {
       const firstChar = event.data.charAt(0);
       const lastChar = event.data.charAt(event.data.length - 1);
       if (firstChar === '{' && lastChar === '}') return;
+      provider.wsLastMessageReceived = time.getUnixTime();
       if (event.data === 'refresg=') {
         return;
       }
-      provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(
         provider,
         new Uint8Array(fromBase64(event.data)),
