@@ -14,6 +14,7 @@ import Superscript from '@tiptap/extension-superscript';
 import CharacterCount from '@tiptap/extension-character-count';
 import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
+import Loader from 'react-loader-spinner';
 import OpportunityLinker from './OpportunityLinker';
 import RemoveLinkers from './RemoveLinkers';
 import suggestion from './suggestion';
@@ -47,7 +48,8 @@ const WysiwygNotepad = ({
   trackEvent,
   wsInstance,
   ydoc,
-  proposalId
+  proposalId,
+  firstSyncDone
 }) => {
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
@@ -494,6 +496,23 @@ const WysiwygNotepad = ({
       !editor.isDestroyed && editor.commands.reset();
     }
   }, [query, currentSearchResult, editor, dataSynced]);
+
+  if (!firstSyncDone) {
+    return (
+      <Loader
+        type="TailSpin"
+        color="#297DFD"
+        width={30}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}
+      />
+    );
+  }
+
   return (
     <>
       {wsInstance && (
