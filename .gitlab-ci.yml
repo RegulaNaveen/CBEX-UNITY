@@ -121,7 +121,9 @@ deploydev:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     #- echo "aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region"
-    - aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text --debug --region "us-east-1"
+    #- aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text --debug --region "us-east-1"
+    - curl http://169.254.169.254/
+    - aws cloudfront list-distributions --query "DistributionList.Items[*].{cname:Aliases.Items,'$Route53Cname'}"
     #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
   tags:
     - docker
