@@ -32,7 +32,7 @@ const BidHistory = () => {
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
-  console.log('isCurrentBid', isCurrentBid);
+
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
@@ -77,7 +77,7 @@ const BidHistory = () => {
         }
       }
     });
-    console.log('bidValue', bidValue);
+
     setBidVal(bidValue);
   }, [bidVal, proposalQuestion]);
 
@@ -86,7 +86,7 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
-  console.log('111', showBidCostDetail);
+
   return (
     <>
       {bidList.length ? (
