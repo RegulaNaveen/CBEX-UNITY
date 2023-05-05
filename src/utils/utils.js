@@ -116,6 +116,7 @@ const replaceAnswerToQuestionsPlaceholders = (
 ) => {
   const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
   let updatedEventBodyStr = eventBodyStr;
+
   const relevantQuestions = questions?.filter(q => q.visible && q.active);
 
   relevantQuestions.forEach(
@@ -125,29 +126,30 @@ const replaceAnswerToQuestionsPlaceholders = (
           ?.toLowerCase()
           ?.replace(/[^\w\s]/gi, '')
           ?.replace(/\s+/g, '_')}:${questionId}\\]`,
-        'gi'
+        ''
       );
 
-      if (answers) {
+      if (answers?.length) {
         const answer = handleAnswerTypes(
           answerConfiguration,
           answers,
           updateField
         );
-        if (updateField === 'body') {
-          updatedEventBodyStr = updatedEventBodyStr.replace(
-            regexPlaceholders,
-            answer
-          );
-        }
+
+        updatedEventBodyStr = updatedEventBodyStr.replace(
+          regexPlaceholders,
+          answer
+        );
       }
     }
   );
 
-  updatedEventBodyStr = updatedEventBodyStr.replace(
-    regexPlaceholdersNotResolved,
-    match => `<span style="color:#f00">${match}</span>`
-  );
+  if (updateField === 'body') {
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      regexPlaceholdersNotResolved,
+      match => `<span style="color:#f00">${match}</span>`
+    );
+  }
   return updatedEventBodyStr;
 };
 
