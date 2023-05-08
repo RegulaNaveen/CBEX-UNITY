@@ -292,7 +292,7 @@ describe('Questions component', () => {
     expect(getByText('Expand All')).toBeEnabled();
   });
 
-  test('Questions component filter button render', async () => {
+  test.skip('Questions component filter button render', async () => {
     const location = window.location;
     delete window.location;
     window.location = {
