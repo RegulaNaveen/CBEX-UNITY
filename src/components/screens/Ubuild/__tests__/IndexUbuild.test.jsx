@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { UbuildShell } from './index';
-import Toolbar from '../../views/UbuildToolbar';
+import { UbuildShell } from '../index';
+import Toolbar from '../../../views/UbuildToolbar';
 
 describe('UbuildShell', () => {
   let props;
