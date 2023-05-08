@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { render, fireEvent } from '@testing-library/react';
-
+import { REDUX_TYPES } from '../../../constants';
 import { store } from '../../../store';
 import PriceModeler from '../PriceModeler';
 
@@ -14,25 +14,17 @@ describe('render the pricemodeler component', () => {
         );
     });
 
-    test('displays estimated price', () => {
-        const priceModeler = {
-            cost: '1000',
-            therapeutic: 'Oncology',
-            sites: '10',
-            phase: 'Phase 2',
-            patients: '100',
-            regions: 'US'
-          };
-        jest.mock('react-redux', () => ({
-            useSelector: jest.fn().mockImplementation(callback => callback(priceModeler))
-        }));
-        const { getByText, getByTestId } = render(
+    test('price modeler recalculating state', async () => {
+        const { SET_PRICE_MODELER_RECALCULATING } = REDUX_TYPES.PROPOSAL;
+        store.dispatch({type: SET_PRICE_MODELER_RECALCULATING, payload: true});
+        const { getByText, getByTestId } = await render(
             <Provider store={store}>
                 <PriceModeler />
             </Provider>
         );
         expect(getByText('Price Modeler Estimate')).toBeInTheDocument();
         expect(getByTestId("price-modeler-icon")).toBeInTheDocument();
+        expect(getByTestId("price-modeler-recalc-loader")).toBeInTheDocument();
     });
 
     test('test click of the icon button', () => {
@@ -42,7 +34,6 @@ describe('render the pricemodeler component', () => {
                 <PriceModeler />
             </Provider>
         );
-
         const iconButton = getByTestId("price-modeler-icon");
         fireEvent.click(iconButton);
         expect(getByText(DEFAULT_TEXT)).toBeInTheDocument();

@@ -1545,7 +1545,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           selectedRow ? 'selected-task-table-row' : ''
         } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
-        data-testid="question"
+        data-testid="strategy-development-question"
       >
         <Grid container className="question-title-grid">
           <Grid item xs={gridColRatio[0]} className="question-grid-item">
@@ -1616,6 +1616,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 {questionHint && (
                   <div className="question-hint">
                     <IconButton
+                      data-testid="question-tooltip-button"
                       color="primary"
                       size="small"
                       className="question-tooltip-icon"
@@ -1626,6 +1627,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                       <InfoIcon className="info-icon" />
                     </IconButton>
                     <Popover
+                      data-testid="question-popover"
                       className="popover-strategy-question"
                       open={!!anchorEl}
                       anchorEl={anchorEl}
