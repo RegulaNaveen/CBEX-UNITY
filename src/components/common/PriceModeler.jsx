@@ -4,7 +4,9 @@ import map from 'lodash/map';
 import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Tooltip from 'apollo-react/components/Tooltip';
+import Popover from 'apollo-react/components/Popover';
 import CircularProgress from 'apollo-react/components/CircularProgress';
+import Typography from 'apollo-react/components/Typography';
 import { useSelector } from 'react-redux';
 import {
   getPriceModuler,
@@ -37,6 +39,7 @@ const PriceModeler = () => {
   const [loading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const priceModeler = useSelector(getPriceModuler)?.toJS();
   const isPriceModelerRecalculating = useSelector(
@@ -48,20 +51,41 @@ const PriceModeler = () => {
 
   // Price Modeler Tooltip
   const infoIconWithTooltip = (
-    <Tooltip
-      variant="light"
-      tabIndex={-1}
-      title="The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses"
-      placement="top"
-    >
+    <>
       <IconButton
+        data-testid="price-modeler-icon"
         color="primary"
         size="small"
         className="question-tooltip-icon"
-      >
+        onClick={(e) => setAnchorEl(e.currentTarget)}
+      >      
         <InfoIcon className="info-icon" />
       </IconButton>
-    </Tooltip>
+      <Popover
+        className="price-modeler-popover"
+        open={!!anchorEl}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        PaperProps={{
+          style: { 
+            borderColor: '#e9e9e9', 
+            boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
+            padding: 10, 
+            maxInlineSize: 300, 
+          },
+        }}
+      >
+        <Typography variant="body2">The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses</Typography>
+      </Popover>
+    </>
   );
 
   return (

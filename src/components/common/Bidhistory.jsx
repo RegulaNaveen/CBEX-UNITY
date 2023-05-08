@@ -26,14 +26,19 @@ const BidHistory = () => {
   const currentbidNo = new URLSearchParams(winLocationSearch).get('bidNo');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
+  const [bidVal, setBidVal] = useState('');
+  const [showBidCostDetail, setShowBidCostDetail] = useState(false);
   const dispatch = useDispatch();
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
+
   const currentWidget = useSelector(selectCurrentWidget);
+
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
 
@@ -47,18 +52,34 @@ const BidHistory = () => {
       handleCollapse();
     }
   };
-  let showBidCostDetail = false;
-  for (const [key, value] of Object.entries(allOppData)) {
-    const {
-      isCurrent,
-      proposal: { typeOfWidget }
-    } = value;
 
-    if (isCurrent && typeOfWidget === 'Bid_Cost') {
-      showBidCostDetail = true;
-      break;
+  useEffect(() => {
+    for (const [key, value] of Object.entries(allOppData)) {
+      const {
+        isCurrent,
+        proposal: { typeOfWidget }
+      } = value;
+
+      if (isCurrent && typeOfWidget === 'Bid_Cost') {
+        setShowBidCostDetail(true);
+        break;
+      }
     }
-  }
+  }, [isCurrentBid]);
+
+  useEffect(() => {
+    let bidValue = '';
+
+    proposalQuestion.forEach(item => {
+      if (item?.section?.sectionName === 'Details-For-Backend') {
+        if (item?.sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
+          item?.answers?.forEach(i => (bidValue = String(i?.answer).trim()));
+        }
+      }
+    });
+
+    setBidVal(bidValue);
+  }, [bidVal, proposalQuestion]);
 
   useEffect(() => {
     if (!isQuestionAnswered && showHoverText) {
@@ -188,16 +209,17 @@ const BidHistory = () => {
                 </div>
 
                 <div className="bid-history-pricemodeler-content">
-                  {currentWidget.currentWidget === 'BidCost' ||
-                  showBidCostDetail ? (
+                  <>
+                    {(showBidCostDetail ||
+                      !isCurrentBid ||
+                      bidVal ||
+                      currentWidget.currentWidget === 'BidCostDetail') &&
                     bidCostDetailFlag ? (
                       <BidCostDetails />
                     ) : (
                       <PriceModeler />
-                    )
-                  ) : (
-                    <PriceModeler />
-                  )}
+                    )}
+                  </>
                 </div>
               </div>
             </div>

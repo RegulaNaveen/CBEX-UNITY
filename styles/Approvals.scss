@@ -214,3 +214,14 @@
     font-style: italic;
   }
 }
+
+.popover-approval {
+  .RichEditor-editor .public-DraftEditor-content {
+    font-size: 14px !important;
+    display: contents !important;
+  }
+  
+  .public-DraftStyleDefault-block {
+    margin-bottom: 0 !important;
+  }
+}

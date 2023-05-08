@@ -14,6 +14,7 @@ import Superscript from '@tiptap/extension-superscript';
 import CharacterCount from '@tiptap/extension-character-count';
 import Mention from '@tiptap/extension-mention';
 import moment from 'moment';
+import Loader from 'react-loader-spinner';
 import OpportunityLinker from './OpportunityLinker';
 import RemoveLinkers from './RemoveLinkers';
 import suggestion from './suggestion';
@@ -47,7 +48,8 @@ const WysiwygNotepad = ({
   trackEvent,
   wsInstance,
   ydoc,
-  proposalId
+  proposalId,
+  firstSyncDone
 }) => {
   const dispatch = useDispatch();
   const [notesUserTag, setNotesUserTag] = useState(false);
@@ -74,9 +76,7 @@ const WysiwygNotepad = ({
           if (!localStorage.getItem('notepadStartDuration')) {
             localStorage.setItem(
               'notepadStartDuration',
-              moment()
-                .utc()
-                .format('MMMM Do YYYY, h:mm:ss a')
+              moment().utc().format('MMMM Do YYYY, h:mm:ss a')
             );
           }
         });
@@ -175,9 +175,7 @@ const WysiwygNotepad = ({
           matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
           matamoObj.name = `Notepad: Duration ${localStorage.getItem(
             'notepadStartDuration'
-          )} - ${moment()
-            .utc()
-            .format('MMMM Do YYYY, h:mm:ss a')}`;
+          )} - ${moment().utc().format('MMMM Do YYYY, h:mm:ss a')}`;
           matamoObj.customDimensions = [
             JSON.stringify(proposalDetails),
             { user: userEmail },
@@ -445,7 +443,7 @@ const WysiwygNotepad = ({
     },
     [proposalId, wsInstance, notesUserTag, query]
   );
-  let dataSynced = wsInstance.synced;
+  let dataSynced = wsInstance && wsInstance.synced;
   let view,
     state = '';
   if (editor) {
@@ -498,6 +496,23 @@ const WysiwygNotepad = ({
       !editor.isDestroyed && editor.commands.reset();
     }
   }, [query, currentSearchResult, editor, dataSynced]);
+
+  if (!firstSyncDone) {
+    return (
+      <Loader
+        type="TailSpin"
+        color="#297DFD"
+        width={30}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh'
+        }}
+      />
+    );
+  }
+
   return (
     <>
       {wsInstance && (

@@ -350,6 +350,10 @@ describe('Questions component', () => {
 
     fireEvent.change(getByTestId('mark-na-btn'));
     expect(getByTestId('mark-na-btn')).toBeEnabled();
+
+    const tooltipButton = getByTestId('questions-tooltip-button');
+    fireEvent.click(tooltipButton);
+    expect(getByTestId('questions-popover')).toBeInTheDocument();
   });
 
   test('Questions component Sidebar component render', async () => {
