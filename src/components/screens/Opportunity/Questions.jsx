@@ -583,6 +583,7 @@ class Questions extends Component {
                 />
                 <>
                   <IconButton
+                    data-testid="questions-tooltip-button"
                     color="primary"
                     size="small"
                     className="question-tooltip-icon"
@@ -591,6 +592,7 @@ class Questions extends Component {
                     <InfoIcon className="info-icon" />
                   </IconButton>
                   <Popover
+                    data-testid="questions-popover"
                     open={!!anchorEl}
                     anchorEl={anchorEl}
                     onClose={() => this.setState({anchorEl: null})}
