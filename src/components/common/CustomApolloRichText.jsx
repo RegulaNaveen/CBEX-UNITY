@@ -131,7 +131,17 @@ function handleHyperLinkOpportunityStrategy(
   contentState
 ) {
   const text = contentBlock.getText();
-  const regex = /(http\S+)?[-a-zA-Z0-9@:%._\/+~#=]{1,256}(\.[a-zA-Z]{2,4}|\/[a-zA-Z]{1,})\b([-a-zA-Z0-9@:%_\+~#?&//=]*)/g;
+  const regex = /((http|https):\/\/[-a-zA-Z0-9@:%._\+~#//=]{0,256})\b([-a-zA-Z0-9@:%_+~#?&=]*)/g;
+  let matchArr, start;
+  while ((matchArr = regex.exec(text)) !== null) {
+    start = matchArr.index;
+    callback(start, start + matchArr[0].length);
+  }
+}
+// Strategy function for link matches
+function handleLinkWithoutHtttp(contentBlock, callback, contentState) {
+  const text = contentBlock.getText();
+  const regex = /(?=[a-zA-Z])[-a-zA-Z0-9@:%._\+~#=]{1,256}(?<!\/)(\.[a-zA-Z]{2,4})\b([-a-zA-Z0-9@:%_+~#?&=]*)/g;
   let matchArr, start;
   while ((matchArr = regex.exec(text)) !== null) {
     start = matchArr.index;
@@ -149,10 +159,16 @@ export const compositeDecorator = new CompositeDecorator([
     strategy: handleHyperlinkOpportunityStrategy,
     component: MentionComponentWithCopiedHyperlink
   },
+
   {
     strategy: handleHyperLinkOpportunityStrategy,
     component: MentionComponentWithHyperLink
   },
+  {
+    strategy: handleLinkWithoutHtttp,
+    component: MentionComponentWithHyperLink
+  },
+
   {
     strategy: handleLinkOpportunityStrategy,
     component: MentionComponentWithLink
@@ -169,8 +185,13 @@ export const compositeDecoratorHidden = new CompositeDecorator([
     strategy: handleHyperlinkOpportunityStrategy,
     component: MentionComponentWithCopiedHyperlink
   },
+
   {
     strategy: handleHyperLinkOpportunityStrategy,
+    component: MentionComponentWithHyperLink
+  },
+  {
+    strategy: handleLinkWithoutHtttp,
     component: MentionComponentWithHyperLink
   },
   {

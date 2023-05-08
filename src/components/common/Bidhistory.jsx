@@ -27,10 +27,12 @@ const BidHistory = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
   const [bidVal, setBidVal] = useState('');
+  const [showBidCostDetail, setShowBidCostDetail] = useState(false);
   const dispatch = useDispatch();
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
@@ -50,18 +52,20 @@ const BidHistory = () => {
       handleCollapse();
     }
   };
-  let showBidCostDetail = false;
-  for (const [key, value] of Object.entries(allOppData)) {
-    const {
-      isCurrent,
-      proposal: { typeOfWidget }
-    } = value;
 
-    if (isCurrent && typeOfWidget === 'Bid_Cost') {
-      showBidCostDetail = true;
-      break;
+  useEffect(() => {
+    for (const [key, value] of Object.entries(allOppData)) {
+      const {
+        isCurrent,
+        proposal: { typeOfWidget }
+      } = value;
+
+      if (isCurrent && typeOfWidget === 'Bid_Cost') {
+        setShowBidCostDetail(true);
+        break;
+      }
     }
-  }
+  }, [isCurrentBid]);
 
   useEffect(() => {
     let bidValue = '';
@@ -207,6 +211,7 @@ const BidHistory = () => {
                 <div className="bid-history-pricemodeler-content">
                   <>
                     {(showBidCostDetail ||
+                      !isCurrentBid ||
                       bidVal ||
                       currentWidget.currentWidget === 'BidCostDetail') &&
                     bidCostDetailFlag ? (
