@@ -1,27 +1,27 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { Provider } from 'react-redux';
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { List, Map, OrderedMap } from "immutable";
 
 import { store } from '../../../store';
 import Question from "../Question";
 
 const answersList = List([
-    {
+    Map({
         "user": "AnswerPulledFromSalesforce",
         "userName": "AnswerPulledFromSalesforce",
         "userRole": "AnswerPulledFromSalesforce",
         "date": "2023-02-01T12:56:41.433Z",
-        "answer": [
+        "answer": List([
             "Viral hepatitis C"
-        ],
+        ]),
         "formattedAnswer": [
             "Viral hepatitis C"
         ],
         "proposalId": "93c77a01-5e31-4191-9b2f-cfac782a21af",
         "updatedInPG": false
-    },
+    }),
 ]);
 const answerConfigurationMap = Map({
     "type": "picklist-lookup",
@@ -63,7 +63,7 @@ const currentSFanswerMap = Map({
     "time": "2023-02-08T09:47:45.821Z"
 });
 
-describe.skip('test for question component', () => {
+describe('test for question component', () => {
     const defaultProps = {
         answers: answersList,
         questionText: 'Indication',
@@ -79,11 +79,11 @@ describe.skip('test for question component', () => {
         //currentSFanswer: currentSFanswerMap,
         qvidianIntegration: '',
         hasDifferentSFanswer: true,
-        questionHint: '',
+        questionHint: 'Note: The information entered here can be pulled into the Challenge Call template in Qvidian.',
         questionHintHTML: '',
         questionHTML: '<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8vq7g\" data-offset-key=\"fao2w-0-0\"><div data-offset-key=\"fao2w-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"fao2w-0-0\"><span data-text=\"true\">Indication(</span></span></div></div></div>',
         questionJSON: "{\"blocks\":[{\"key\":\"fao2w\",\"text\":\"Indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
-        questionHintJSON: '',
+        questionHintJSON: '{\"blocks\":[{\"key\":\"fao2w\",\"text\":\"Indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}',
         sectionName: "Opportunity Information from CRM (for Team review)",
         roleNames: roleNamesList,
         setEditQuestionData: jest.fn(),
@@ -101,13 +101,16 @@ describe.skip('test for question component', () => {
         showNaCheckbox: false,
     };
 
-    test('render question component without crashing', () => {
-        const { getByTestId } = render(
+    test('render question component without crashing', async () => {
+        const { getByTestId } = await render(
             <Provider store={store}>
                 <Question {...defaultProps} />
             </Provider>
         );
 
-        expect(getByTestId('question')).toBeInTheDocument();
+        expect(getByTestId('strategy-development-question')).toBeInTheDocument();
+        const tooltipButton = getByTestId('question-tooltip-button');
+        fireEvent.click(tooltipButton);
+        expect(getByTestId('question-popover')).toBeInTheDocument();
     });
 })

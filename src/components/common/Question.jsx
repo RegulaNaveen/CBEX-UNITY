@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 // @flow
@@ -35,7 +36,8 @@ import {
   setProposalAnswerLoading,
   deleteProposalUserFromDB,
   setNotApplicableQuestion,
-  setNotApplicableLoader
+  setNotApplicableLoader,
+  widgetUpdate
 } from '../../redux/actions/proposal-actions';
 import {
   getUserData,
@@ -81,15 +83,17 @@ import {
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
-const QuestionDatePickerWithIdleStateDetection =
-  withIdleStateDetection(QuestionDatePicker);
+const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
+  QuestionDatePicker
+);
 const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
 const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
 const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
-const CheckBoxQuestionsIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestions);
+const CheckBoxQuestionsIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestions
+);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -350,8 +354,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
   /**
    * Func to save data onBlur RichText Editor
    */
-  handleRichTextChange = editorData => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+  handleRichTextChange = async editorData => {
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      sfField,
+      widgetUpdates
+    } = this.props;
     const { value, html, text, htmlExport } = editorData;
 
     if (isEmpty(text)) this.setState({ changeIcon: '#b7b7b7' });
@@ -359,7 +370,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const editorText = text.trim() || ' ';
 
-    setProposalAnswer(
+    await setProposalAnswer(
       this.context,
       proposalId,
       questionId,
@@ -371,6 +382,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
         htmlExport
       }
     );
+    if (sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
+      if (editorText && editorText?.length > 0)
+        widgetUpdates(proposalId, 'Bid_Cost');
+    }
     this.trackMatomoEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
@@ -411,7 +426,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   onClickChange = async (selectedValue: string, lastAnswer: string) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      sfField,
+      widgetUpdates
+    } = this.props;
     if (lastAnswer !== selectedValue) {
       const dataResponse = await setProposalAnswer(
         this.context,
@@ -420,6 +442,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
         selectedValue,
         userData
       );
+      if (sfField === 'StageName' && selectedValue) {
+        const stage = parseInt(selectedValue.match(/\d+/)[0]) >= 4;
+        if (stage) widgetUpdates(proposalId, 'Bid_Cost');
+      }
       this.trackMatomoEventSubmitAnswer(selectedValue);
       return dataResponse;
       // eslint-disable-next-line no-else-return
@@ -921,8 +947,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (this.quesTextInnerLeftRef.current) {
           // Change title style for richEdit icon
-          const { style: quesTitleLStyle, firstChild } =
-            this.quesTextInnerLeftRef.current;
+          const {
+            style: quesTitleLStyle,
+            firstChild
+          } = this.quesTextInnerLeftRef.current;
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
@@ -1367,7 +1395,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(answer.get('answer').toString().trim());
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
     return false;
   };
@@ -1565,7 +1598,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           selectedRow ? 'selected-task-table-row' : ''
         } ${NaLoading ? 'fade-area' : ''} `}
         style={{ margin: '2px 0px' }}
-        data-testid="question"
+        data-testid="strategy-development-question"
       >
         <Grid container className="question-title-grid">
           <Grid item xs={gridColRatio[0]} className="question-grid-item">
@@ -1636,6 +1669,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 {questionHint && (
                   <div className="question-hint">
                     <IconButton
+                      data-testid="question-tooltip-button"
                       color="primary"
                       size="small"
                       className="question-tooltip-icon"
@@ -1646,6 +1680,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                       <InfoIcon className="info-icon" />
                     </IconButton>
                     <Popover
+                      data-testid="question-popover"
                       className="popover-strategy-question"
                       open={!!anchorEl}
                       anchorEl={anchorEl}
@@ -1785,6 +1820,7 @@ const mapStateToProps = (state: Object) => ({
 });
 
 export default connect(mapStateToProps, {
+  widgetUpdates: widgetUpdate,
   setProposalAnswer: setProposalAnswerData,
   setAnswerLoading: setProposalAnswerLoading,
   deleteProposalUser: deleteProposalUserFromDB,

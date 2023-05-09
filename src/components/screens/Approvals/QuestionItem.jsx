@@ -344,7 +344,8 @@ const QuestionItem = ({
     if (questionHint) {
       return (
         <div className="question-hint" style={{ paddingLeft: '10px' }}>
-            <IconButton 
+            <IconButton
+              data-testid="approval-icon-button" 
               color="primary"
               size="small"
               className="question-tooltip-icon" 
@@ -353,6 +354,7 @@ const QuestionItem = ({
               <InfoIcon style={{ fontSize: '16px' }} />
             </IconButton>
             <Popover
+              data-testid="popover-approval"
               className="popover-approval"
               open={!!anchorEl}
               anchorEl={anchorEl}
