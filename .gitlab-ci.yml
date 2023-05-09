@@ -23,7 +23,7 @@ stages:
   - test
   - blackduckscan
   - builddev
-  # - deploydev
+  - deploydev
   - builddev2
   - deploydev2
   - buildl4
@@ -105,7 +105,7 @@ dev:
     - docker
   environment: dev
 
-.deploydev:
+deploydev:
   stage: deploydev
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
@@ -117,9 +117,7 @@ dev:
     - aws --version
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-    #- aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text
   tags:
     - docker
   environment: dev
@@ -162,7 +160,6 @@ deploydev2:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -203,7 +200,6 @@ deploydev2:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -246,7 +242,6 @@ deployl4:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -291,7 +286,6 @@ deploydemo:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -333,7 +327,6 @@ deployqa:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -376,7 +369,6 @@ deployuat:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -418,7 +410,6 @@ deployprod:
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    #- aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions --query "DistributionList.Items[?starts_with(AliasICPRecordals[0].CNAME, '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -480,7 +471,7 @@ pafexecution_prod:
     branch: Unity_QA_Testing
     strategy: depend
 
-deploystack:
+.deploystack:
   stage: deploystack
   rules:
     #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
