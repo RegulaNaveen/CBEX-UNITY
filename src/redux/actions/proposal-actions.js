@@ -797,12 +797,20 @@ function applyVerificationRequiredFilter(questions, flags) {
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
           return (
-            (Answer &&
+            ((Answer &&
               Answer.length &&
               Answer[Answer.length - 1].userName === 'UnityPredictedAnswer') ||
-            (Answer &&
-              Answer.length &&
-              Answer[Answer.length - 1].userName === 'CarryForwardAnswer')
+              (Answer &&
+                Answer.length &&
+                Answer[Answer.length - 1].userName === 'CarryForwardAnswer')) &&
+            !(
+              (Answer &&
+                Answer.length &&
+                !Boolean(
+                  String(Answer[Answer.length - 1].answer).trim().length
+                )) ||
+              !Boolean(Answer.length)
+            )
           );
         } else {
           return (

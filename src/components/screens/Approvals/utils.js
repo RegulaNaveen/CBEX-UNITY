@@ -74,7 +74,10 @@ const informedFilter: Boolean = question => {
 export const verificationRequiredFilter = (question, flags) => {
   const lastAnswer = getLastAnswer(question);
   if (flags['carryForwardAnswerFlag']) {
-    return isUnityPredicted(lastAnswer) || isCarryForwarded(lastAnswer);
+    return (
+      (isUnityPredicted(lastAnswer) || isCarryForwarded(lastAnswer)) &&
+      !isAnswerEmpty(lastAnswer.answer)
+    );
   }
   return isUnityPredicted(lastAnswer);
 };
