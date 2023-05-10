@@ -1347,6 +1347,13 @@ export const getOpportunity = (
         type: UNITY_TABS.SET_UNITY_TABS,
         payload: data[0]?.proposal?.customUnityTabs || []
       });
+      dispatch({
+        type: WIDGET_UPDATE,
+        payload: {
+          proposalId: data[0].proposal.proposalId,
+          typeOfWidget: data[0]?.proposal?.typeOfWidget || ''
+        }
+      });
       // get approvals data for current bid
       const currentBidDetails = proposalsData.find(
         proposal => proposal.isCurrent
