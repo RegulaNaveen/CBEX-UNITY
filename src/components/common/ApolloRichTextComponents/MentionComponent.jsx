@@ -66,6 +66,7 @@ export function MentionComponentWithCopiedHyperlink(props) {
         href={urlWithHttp}
         target="_blank"
         rel="noreferrer"
+        data-testid="decorated-copied-link"
       >
         {props.children}
       </a>
@@ -76,6 +77,7 @@ export function MentionComponentWithCopiedHyperlink(props) {
 export function MentionComponentWithHyperLink(props) {
   const { decoratedText } = props;
   const urlWithHttp = parseUrl(decoratedText);
+  console.log('decoratedText', decoratedText);
 
   return (
     <a
@@ -83,6 +85,7 @@ export function MentionComponentWithHyperLink(props) {
       href={urlWithHttp}
       target="_blank"
       rel="noreferrer"
+      data-testid="decorated-link"
     >
       {props.children}
     </a>

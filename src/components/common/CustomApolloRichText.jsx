@@ -288,6 +288,7 @@ const CustomApolloRichText = ({
       clearTimeout(prevUnlockTimeout);
       return prevUnlockTimeout;
     });
+
     if (clear) {
       setUnlockTimeout(null);
     } else {
@@ -844,7 +845,11 @@ const CustomApolloRichText = ({
             customControllers={(editorState, onChange) => (
               <>
                 <div className="style-button-group">
-                  <Link className="icon-button" onClick={hyperLinkHandler} />
+                  <Link
+                    data-testid="custom-hyperlink-button"
+                    className="icon-button"
+                    onClick={hyperLinkHandler}
+                  />
                 </div>
               </>
             )}
