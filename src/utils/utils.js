@@ -103,7 +103,7 @@ const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
         : answers?.slice(-1)[0]?.answer ?? '';
     }
     default:
-      return answers?.slice(-1)[0]?.answer ?? '';
+      return answers?.slice(-1)[0]?.answer?.toString() ?? '';
   }
 };
 
