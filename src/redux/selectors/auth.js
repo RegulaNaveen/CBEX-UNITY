@@ -1,37 +1,37 @@
 // @flow
 import { Map } from 'immutable'; // NOSONAR
 
-export const getAuthData = (auth: Map): Map => auth.get('authData');
+export const getAuthData = (auth: Map): Map => auth?.get('authData');
 
-export const isAuthLoading = (auth: Map): boolean => auth.get('isAuthLoading');
+export const isAuthLoading = (auth: Map): boolean => auth?.get('isAuthLoading');
 
-export const authHasErrors = (auth: Map): string => auth.get('authError');
+export const authHasErrors = (auth: Map): string => auth?.get('authError');
 
 export const getForgotPasswordData = (auth: Map): Map =>
-  auth.get('forgotPasswordSuccess');
+  auth?.get('forgotPasswordSuccess');
 
 export const isForgotPasswordLoading = (auth: Map): boolean =>
-  auth.get('forgotPasswordLoading');
+  auth?.get('forgotPasswordLoading');
 
 export const getForgotPasswordError = (auth: Map): string =>
-  auth.get('forgotPasswordError');
+  auth?.get('forgotPasswordError');
 
 export const getResetPasswordData = (auth: Map): Map =>
-  auth.get('resetPasswordSuccess');
+  auth?.get('resetPasswordSuccess');
 
 export const isResetPasswordLoading = (auth: Map): boolean =>
-  auth.get('resetPasswordLoading');
+  auth?.get('resetPasswordLoading');
 
 export const getResetPasswordError = (auth: Map): string =>
-  auth.get('resetPasswordError');
+  auth?.get('resetPasswordError');
 
-export const isLogout = (auth: Map): Map => auth.get('isLogout');
+export const isLogout = (auth: Map): Map => auth?.get('isLogout');
 
 export const isLogoutLoading = (auth: Map): boolean =>
-  auth.get('isLogoutLoading');
+  auth?.get('isLogoutLoading');
 
 export const logoutHasErrors = (auth: Map): string =>
-  auth.get('logoutHasErrors');
+  auth?.get('logoutHasErrors');
 
 export const getChangeRoleError = (auth: Map): Map =>
-  auth.get('changeRoleError');
+  auth?.get('changeRoleError');
