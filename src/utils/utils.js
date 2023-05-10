@@ -70,20 +70,29 @@ const getFullProposalTeamString = (updateField, questions) => {
   );
   const isSubjectUpdate = updateField === 'subject';
 
-  return relevantQuestions
+  const uniqueNames = new Set(); // to keep track of unique names
+
+  const result = relevantQuestions
     ?.flatMap(q => (q?.answers?.slice(-1)[0]?.answer || '')?.split(','))
     .map(answer => {
-      if (isSubjectUpdate) {
-        return answer?.replace(/\s*\([^)]*\)/g, '');
-      }
       const [name, email] = answer?.trim()?.split('(');
       const emailWithoutParenthesis = email?.replace(')', '');
-      return emailWithoutParenthesis
+      const uniqueName = isSubjectUpdate
+        ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
+        : emailWithoutParenthesis
         ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
         : name?.trim();
+
+      if (!uniqueNames.has(uniqueName)) {
+        uniqueNames.add(uniqueName);
+        return uniqueName;
+      }
+      return null;
     })
     .filter(answer => answer)
     .join(', ');
+
+  return result;
 };
 
 const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
@@ -93,19 +102,8 @@ const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
         ? getAnswer(answers)
         : answers?.slice(-1)[0]?.answer ?? '';
     }
-    case ANSWER_TYPES.NUMBER:
-    case ANSWER_TYPES.DATE:
-    case ANSWER_TYPES.RADIO:
-    case ANSWER_TYPES.SELECT:
-    case ANSWER_TYPES.SELECT_LOOKUP:
-    case ANSWER_TYPES.YES_NO: {
-      return answers?.slice(-1)[0]?.answer ?? '';
-    }
-    case ANSWER_TYPES.PICKLIST_LOOKUP:
-    case ANSWER_TYPES.PICKLIST:
-    case ANSWER_TYPES.CHECKBOX: {
+    default:
       return answers?.slice(-1)[0]?.answer?.toString() ?? '';
-    }
   }
 };
 
@@ -114,7 +112,6 @@ const replaceAnswerToQuestionsPlaceholders = (
   questions,
   updateField
 ) => {
-  const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
   let updatedEventBodyStr = eventBodyStr;
 
   const relevantQuestions = questions?.filter(q => q.visible && q.active);
@@ -126,7 +123,7 @@ const replaceAnswerToQuestionsPlaceholders = (
           ?.toLowerCase()
           ?.replace(/[^\w\s]/gi, '')
           ?.replace(/\s+/g, '_')}:${questionId}\\]`,
-        ''
+        'gi'
       );
 
       if (answers?.length) {
@@ -145,6 +142,7 @@ const replaceAnswerToQuestionsPlaceholders = (
   );
 
   if (updateField === 'body') {
+    const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
     updatedEventBodyStr = updatedEventBodyStr.replace(
       regexPlaceholdersNotResolved,
       match => `<span style="color:#f00">${match}</span>`
