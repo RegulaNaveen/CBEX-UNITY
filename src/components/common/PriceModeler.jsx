@@ -53,6 +53,7 @@ const PriceModeler = () => {
   const infoIconWithTooltip = (
     <>
       <IconButton
+        data-testid="price-modeler-icon"
         color="primary"
         size="small"
         className="question-tooltip-icon"
