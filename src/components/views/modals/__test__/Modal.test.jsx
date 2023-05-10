@@ -1,13 +1,10 @@
-// Import dependencies
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-// Import component to test
 import Modal from '../Modal';
 
 describe('Modal component', () => {
   it('should render its children', () => {
-    // Render the component with some children
     render(
       <Modal>
         <h1>Test Modal</h1>
