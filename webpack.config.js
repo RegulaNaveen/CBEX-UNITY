@@ -69,8 +69,8 @@ module.exports = env => {
       port: 8080,
       host: 'localhost',
       historyApiFallback: true,
-      hot: true
-      // open: 'chrome',
+      hot: true,
+      open: true
       // disableHostCheck: true
     },
     plugins: [
