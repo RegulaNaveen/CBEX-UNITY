@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/lab/Alert';
 import { useSelector, useDispatch } from 'react-redux';
 import ReduxSnackbar from '../ReduxSnackbar/ReduxSnackbar';
 import {

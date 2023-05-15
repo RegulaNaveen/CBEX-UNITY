@@ -10,7 +10,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { configure } from 'enzyme';
 import thunk from 'redux-thunk';
 import { Map, fromJS } from 'immutable';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import * as data from '../../screens/Proposal/__tests__/data.json';
 import UnityFooter from '../Footer';
 
