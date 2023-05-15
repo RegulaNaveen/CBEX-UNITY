@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Avatar } from '@material-ui/core';
+import { Avatar } from '@mui/material';
 import ArrowDown from 'apollo-react-icons/ArrowDown';
 import ArrowUp from 'apollo-react-icons/ArrowUp';
 

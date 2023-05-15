@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import ChevronRight from 'apollo-react-icons/ChevronRight';
 
 const CustomAccordionSummary = ({ children, className }) => {

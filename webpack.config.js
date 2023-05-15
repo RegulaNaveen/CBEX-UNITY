@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = env => {
   const apiEnv = JSON.stringify(env.API_ENV);
+
   return {
     entry: ['@babel/polyfill', path.resolve(__dirname, 'src/index.jsx')],
     output: {
@@ -23,14 +24,14 @@ module.exports = env => {
           include: /node_modules/,
           type: 'javascript/auto'
         },
-        {
-          test: /\.(js|jsx)$/,
-          enforce: 'pre',
-          loader: 'eslint-loader',
-          options: {
-            emitWarning: true
-          }
-        },
+        // {
+        //   test: /\.(js|jsx)$/,
+        //   enforce: 'pre',
+        //   loader: 'eslint-loader',
+        //   options: {
+        //     emitWarning: true
+        //   }
+        // },
         {
           test: /\.css$/i,
           use: ['style-loader', 'css-loader']
@@ -57,23 +58,32 @@ module.exports = env => {
       ]
     },
     resolve: {
-      extensions: ['.js', '.jsx', '.mjs']
+      extensions: ['.js', '.jsx', '.mjs'],
+      fallback: {
+        querystring: require.resolve('querystring-es3'),
+        'react-error-overlay': '6.0.9'
+      }
     },
     devServer: {
-      contentBase: path.resolve(__dirname, 'dist'),
+      // contentBase: path.resolve(__dirname, 'dist'),
       port: 8080,
       host: 'localhost',
       historyApiFallback: true,
-      hot: true,
-      open: 'chrome',
-      disableHostCheck: true
+      hot: true
+      // open: 'chrome',
+      // disableHostCheck: true
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         favicon: `./img/favicon/favicon-${apiEnv.replace(/['"]+/g, '')}.ico`
       }),
-      new webpack.DefinePlugin({ 'process.env.API_ENV': apiEnv })
+      new webpack.DefinePlugin({
+        'process.env.API_ENV': apiEnv
+      }),
+      new webpack.EnvironmentPlugin({
+        'process.env.API_ENV': apiEnv
+      })
     ]
   };
 };

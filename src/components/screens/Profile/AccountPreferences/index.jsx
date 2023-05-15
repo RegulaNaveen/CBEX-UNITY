@@ -2,9 +2,9 @@ import Grid from 'apollo-react/components/Grid';
 import React, { useEffect, useState } from 'react';
 import Loader from 'apollo-react/components/Loader';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar from '@mui/material/Snackbar';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from '@mui/lab/Alert';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
