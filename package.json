@@ -30,6 +30,7 @@
   "license": "ISC",
   "dependencies": {
     "@datapunt/matomo-tracker-react": "^0.5.1",
+    "@date-io/moment": "^2.16.1",
     "@material-ui/styles": "^4.11.5",
     "@mui/lab": "5.0.0-alpha.129",
     "@mui/material": "5.13.0",
