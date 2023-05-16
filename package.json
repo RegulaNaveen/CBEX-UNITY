@@ -18,7 +18,7 @@
     "build:prod": "webpack --mode production --env.API_ENV=PROD",
     "coverage": "yarn test -- --env=jsdom --coverage --watchAll=false --timeout=3000",
     "test": "jest",
-    "clear_jest": "jest --maxWorkers 2 --clearCache",
+    "clear_jest": "jest  --clearCache",
     "lint:fix": "eslint --ext .js,.jsx src test --fix",
     "flow:chk": "yarn run flow",
     "lint:chk": "eslint src/**/*.js src/**/*.jsx",
