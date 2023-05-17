@@ -40,11 +40,23 @@ module.exports = env => {
           test: /\.s[ac]ss$/i,
           use: [
             // Creates `style` nodes from JS strings
-            'style-loader',
+            {
+              loader: 'style-loader'
+            },
             // Translates CSS into CommonJS
-            'css-loader',
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'resolve-url-loader'
+            },
             // Compiles Sass to CSS
-            'sass-loader'
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
           ]
         },
         {
@@ -53,7 +65,7 @@ module.exports = env => {
         },
         {
           test: /\.(otf|ttf|woff|woff2)$/,
-          loader: 'file-loader'
+          type: 'asset/resource'
         }
       ]
     },
