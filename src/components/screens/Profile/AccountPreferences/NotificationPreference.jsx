@@ -20,11 +20,7 @@ const NotificationPreference = ({
   return (
     <div>
       <Card interactive className="card-wrapper">
-        <Typography
-          className="card-heading"
-          variant="title2"
-          gutterBottom
-        >
+        <Typography className="card-heading" variant="title2" gutterBottom>
           {NOTIFICATION_PREFERENCE}
         </Typography>
         <tr className="notification-tr-head-wrap">
@@ -33,6 +29,7 @@ const NotificationPreference = ({
               {NOTIFICATION}
             </Typography>
           </th>
+          <th></th>
           <th className="th-two">
             <Typography
               className="card-label size-14"
@@ -78,6 +75,7 @@ const NotificationPreference = ({
                         {title}
                       </Typography>
                     </td>
+                    <td></td>
                     <td className="td-two">
                       <Checkbox
                         disabled={
