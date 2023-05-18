@@ -89,6 +89,7 @@ function VerticalTabsCollapsiblePanel({
         return (
           <div onClick={e => handleTabChange(e, 0)}>
             <VerticalTab
+              textColor="primary"
               icon={
                 <QuestionsForCustomerIcon
                   fill={
@@ -108,6 +109,7 @@ function VerticalTabsCollapsiblePanel({
         return (
           <div onClick={e => handleTabChange(e, 1)}>
             <VerticalTab
+              textColor="primary"
               icon={
                 <NotesIcon
                   fill={
@@ -126,6 +128,7 @@ function VerticalTabsCollapsiblePanel({
         return (
           <div onClick={e => handleTabChange(e, 2)}>
             <VerticalTab
+              textColor="primary"
               icon={
                 <ProposalTeamIcon
                   fill={
