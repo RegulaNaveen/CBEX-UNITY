@@ -178,9 +178,8 @@ function AccountPreferences() {
           sm={12}
           xs={12}
           className="acc-pref-wrapper"
-          spacing={2}
         >
-          <Grid item md={6} sm={12} xs={12}>
+          <Grid item md={6} sm={12} xs={12} className="acc-card-container">
             <AccountPreference
               name={name}
               email={email}
@@ -199,7 +198,7 @@ function AccountPreferences() {
               errorUpdatingTimezone={errorUpdatingTimezone}
             />
           </Grid>
-          <Grid item md={6} sm={12} xs={12}>
+          <Grid item md={6} sm={12} xs={12} className="acc-card-container">
             <NotificationPreference
               userPreference={userPreference}
               handleUserPreferenceChange={handleUserPreferenceChange}
