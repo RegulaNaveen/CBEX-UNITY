@@ -38,6 +38,10 @@
     &.ques-temp-info {
       pointer-events: none;
       margin-left: 0 !important;
+
+      color: #646464;
+      font-weight: 800;
+      font-family: 'ProximaNova-Regular';
     }
     &.switch-temp-btn {
       span.MuiButton-label {
