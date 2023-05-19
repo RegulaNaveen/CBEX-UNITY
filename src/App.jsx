@@ -52,7 +52,7 @@ const App = () => (
                   component={OpportunityComponent}
                 />
                 <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
-                <Redirect to={Login} />
+                <Redirect to={LOGIN} />
               </Switch>
             </SessionHandler>
           </BrowserRouter>

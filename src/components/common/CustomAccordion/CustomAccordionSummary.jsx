@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import AccordionSummary from '@mui/material/AccordionSummary';
-import ChevronRight from 'apollo-react-icons/ChevronRight';
+import ChevronDown from 'apollo-react-icons/ChevronDown';
 
 const CustomAccordionSummary = ({ children, className }) => {
   return (
     <AccordionSummary
-      expandIcon={<ChevronRight />}
+      expandIcon={<ChevronDown fontSize="small" />}
       className={`custom-accordion-summary ${className || ''}`}
     >
       {children}

@@ -236,7 +236,7 @@ class Documents extends Component<Props, State> {
                     {data &&
                       Array.isArray(data) &&
                       data.length > 0 &&
-                      data.map(_v => (
+                      data.map((_v, idx) => (
                         <li
                           onClick={() =>
                             this.openAdditonalUrl(_v.link, _v.linkdesc)
@@ -244,6 +244,7 @@ class Documents extends Component<Props, State> {
                           className={
                             selectedBid === _v.linkdesc ? 'selectedBid' : ''
                           }
+                          key={`addt-bid-detail-${idx}`}
                         >
                           {_v.linkdesc}
                         </li>

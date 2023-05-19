@@ -84,10 +84,10 @@ function VerticalTabsCollapsiblePanel({
     onTabClick(newActiveTab);
   }
   const renderTab = () => {
-    const tabs = tabArr.map(v => {
+    const tabs = tabArr.map((v, vIdx) => {
       if (v['showQuestionsForCustomerTab']) {
         return (
-          <div onClick={e => handleTabChange(e, 0)}>
+          <div onClick={e => handleTabChange(e, 0)} key={`vTab-QFC-${vIdx}`}>
             <VerticalTab
               textColor="primary"
               icon={
@@ -107,7 +107,7 @@ function VerticalTabsCollapsiblePanel({
       }
       if (v['showNotepadTab']) {
         return (
-          <div onClick={e => handleTabChange(e, 1)}>
+          <div onClick={e => handleTabChange(e, 1)} key={`vTab-NOTE-${vIdx}`}>
             <VerticalTab
               textColor="primary"
               icon={
@@ -126,7 +126,7 @@ function VerticalTabsCollapsiblePanel({
       }
       if (v['showProposalTeamTab']) {
         return (
-          <div onClick={e => handleTabChange(e, 2)}>
+          <div onClick={e => handleTabChange(e, 2)} key={`vTab-TEAM-${vIdx}`}>
             <VerticalTab
               textColor="primary"
               icon={
@@ -144,7 +144,7 @@ function VerticalTabsCollapsiblePanel({
         );
       }
     });
-    return <>{tabs}</>;
+    return tabs;
   };
 
   return (
