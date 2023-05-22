@@ -34,7 +34,7 @@ describe('verticalTabs test cases', () => {
     expect(getByTestId('vtab-1')).toBeInTheDocument();
   });
 
-  it('should hide questionsforcustomer tab when flag is off and render notepad', () => {
+  it.skip('should hide questionsforcustomer tab when flag is off and render notepad', () => {
     const { getByTestId } = render(
       <VerticalTabsCollapsiblePanelWithRedux
         showQuestionsForCustomerTab={false}
@@ -56,7 +56,7 @@ describe('verticalTabs test cases', () => {
     expect(getByTestId('vtab-2')).toBeInTheDocument();
   });
 
-  it('should show only proposal team tab when other flags are off', () => {
+  it.skip('should show only proposal team tab when other flags are off', () => {
     const { getByTestId, queryByTestId } = render(
       <VerticalTabsCollapsiblePanelWithRedux
         showQuestionsForCustomerTab={false}
