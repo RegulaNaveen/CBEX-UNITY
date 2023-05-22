@@ -5,7 +5,7 @@ import CollapsibleList from '../CollapsibleList';
 import configureMockStore from 'redux-mock-store';
 import { configure, mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { getSelectedSection, selectNotes } from '../../../redux/selectors';
 import {
   getProposalDetails,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { useHistory } from 'react-router-dom';
 import { RECENT_ACTIVITY } from '../../../routes';
 import * as notificationActions from '../../../redux/actions/notification-actions';

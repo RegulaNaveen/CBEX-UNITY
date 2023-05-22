@@ -66,7 +66,7 @@ sonar:
 
 test:
   stage: prebuild
-  image: node:14
+  image: node:18
   except:
     - qa
     - uat
@@ -83,7 +83,7 @@ test:
 
 dev:
   stage: builddev
-  image: node:14
+  image: node:18
   variables:
     Environment: $CI_JOB_NAME
   only:
@@ -124,7 +124,7 @@ deploydev:
 
 dev2:
   stage: builddev2
-  image: node:14
+  image: node:18
   variables:
     Environment: $CI_JOB_NAME
   when: manual
@@ -140,7 +140,6 @@ dev2:
     - npm install --legacy-peer-deps
     - npm run build:$Environment
   artifacts:
-  
     paths:
       - dist/
       - build.env
@@ -167,7 +166,7 @@ deploydev2:
 
 .dev3:
   stage: builddev3
-  image: node:12
+  image: node:18
   when: manual
   variables:
     Environment: $CI_JOB_NAME
@@ -207,7 +206,7 @@ deploydev2:
 
 buildl4:
   stage: buildl4
-  image: node:14
+  image: node:18
   when: manual
   variables:
     Environment: l4
@@ -249,7 +248,7 @@ deployl4:
 
 demo:
   stage: builddemo
-  image: node:14
+  image: node:18
   variables:
     Environment: $CI_JOB_NAME
   when: manual
@@ -293,7 +292,7 @@ deploydemo:
 
 qa:
   stage: buildqa
-  image: node:14
+  image: node:18
   # needs:
   #   - deploydev
   when: manual
@@ -334,12 +333,12 @@ deployqa:
 
 uat:
   stage: builduat
-  image: node:14
+  image: node:18
   variables:
     Environment: $CI_JOB_NAME
   # needs:
   #   - deploydev
-    #- pafexecution_regression
+  #- pafexecution_regression
   when: manual
   only:
     - tags
@@ -376,7 +375,7 @@ deployuat:
 
 prod:
   stage: buildprod
-  image: node:14
+  image: node:18
   variables:
     Environment: $CI_JOB_NAME
   only:

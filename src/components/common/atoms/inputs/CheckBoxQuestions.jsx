@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
 import { isEqual, isEmpty, isObject, isString, isArray } from 'lodash';
-import { FormControl } from '@material-ui/core';
+import { FormControl } from '@mui/material';
 import { connect } from 'react-redux';
 import useUpdateEffect from '../../../../hooks/useUpdateEffect';
 import { getLookUpOptionsSelector } from '../../../../redux/selectors';

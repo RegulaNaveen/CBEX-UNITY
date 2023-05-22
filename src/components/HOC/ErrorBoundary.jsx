@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { ErrorBoundary } from 'react-error-boundary';
 
 // Fallback UI Component

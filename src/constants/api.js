@@ -2,7 +2,8 @@
 import { isUserUbuildAdmin } from '../utils/utils';
 
 // @flow
-const environment = process.env.API_ENV;
+// const environment = process.env.API_ENV;
+let environment = process.env.API_ENV;
 
 //* PROPOSAL
 let PROPOSAL_API_ENDPOINT = '';
@@ -158,6 +159,23 @@ switch (environment) {
       'wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://gni5ivpjhh.execute-api.us-east-1.amazonaws.com/production';
+    break;
+  case 'DEV':
+    // DEV Data
+    PROPOSAL_API_ENDPOINT =
+      'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
+    NORMAL_AUTH_API_ENDPOINT =
+      'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
+    COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
+    CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
+    REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+    UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
+    SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
+    SOCKET_URL =
+      'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
+    NOTES_SOCKET_URL =
+      'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     break;
   default:
     // DEV Data

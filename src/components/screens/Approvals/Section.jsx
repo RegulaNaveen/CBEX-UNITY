@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import Loader from 'apollo-react/components/Loader';
 import isEmpty from 'lodash/isEmpty';
 import Highlighter from 'react-highlight-words';

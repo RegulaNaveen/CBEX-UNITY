@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
+import Autocomplete from 'apollo-react/components/Autocomplete';
 import { connect } from 'react-redux';
 import { getLookUpOptionsSelector } from '../../../../redux/selectors';
 
@@ -84,7 +84,7 @@ const AutocompleteText = props => {
           : 'autocomplete autocomplete-text'
       }`}
     >
-      <AutocompleteV2
+      <Autocomplete
         fullWidth
         multiple={multiple}
         source={listOptions || []}

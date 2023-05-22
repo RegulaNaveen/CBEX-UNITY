@@ -161,17 +161,8 @@
           align-items: center;
           justify-content: flex-start;
 
-          .MuiSwitch-track {
-            height: 24px;
-            width: 48px;
-          }
-          .MuiSwitch-switchBase {
-            top: -8px;
-            left: -8px;
-          }
-          .MuiSwitch-thumb {
-            width: 22px;
-            height: 22px;
+          .MuiFormControlLabel-root {
+            margin-right: 0;
           }
         }
 
@@ -395,17 +386,8 @@
           align-items: center;
           justify-content: flex-start;
 
-          .MuiSwitch-track {
-            height: 24px;
-            width: 48px;
-          }
-          .MuiSwitch-switchBase {
-            top: -8px;
-            left: -8px;
-          }
-          .MuiSwitch-thumb {
-            width: 22px;
-            height: 22px;
+          .MuiFormControlLabel-root {
+            margin-right: 0;
           }
         }
 
@@ -634,9 +616,9 @@
 .popover-strategy-question {
   .RichEditor-editor .public-DraftEditor-content {
     font-size: 14px !important;
-    display: contents !important; 
+    display: contents !important;
   }
-  
+
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }
