@@ -1,7 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Accordion from '@material-ui/core/Accordion';
+import Accordion from '@mui/material/Accordion';
 
 const CustomAccordion = ({ children, className, ...props }) => {
   return (

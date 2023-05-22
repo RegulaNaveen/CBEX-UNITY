@@ -32,7 +32,7 @@
 .drawer-header {
   display: flex;
   justify-content: space-between;
-  padding: 12px 6px 12px 14px;
+  padding: 12px 10px 12px 14px;
 }
 .iconBadge {
   background: $error;
@@ -65,8 +65,8 @@
 .notification-gear-icon {
   color: $neutral7;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
 }
 
 .notification-item {
@@ -95,7 +95,7 @@
 }
 .envelope-icon {
   color: $neutral7;
-  height: 14px;
+  height: 24px;
   cursor: pointer;
 }
 .view-all-notifications {
@@ -167,7 +167,7 @@
   cursor: pointer;
 }
 
-.notification-scrollbar{
+.notification-scrollbar {
   max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -175,10 +175,10 @@
 .notification-scrollbar::-webkit-scrollbar {
   width: 7px;
   height: 7px;
-  }
-  
+}
+
 .notification-scrollbar::-webkit-scrollbar-thumb {
   background: #c1c1c1;
-  border-radius:10px;
-  height:10px;
-  }
+  border-radius: 10px;
+  height: 10px;
+}

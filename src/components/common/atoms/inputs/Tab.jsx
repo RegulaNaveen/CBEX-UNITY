@@ -826,9 +826,10 @@ const UnityTab = ({
                 onTabClick={handleVerticalTabClick}
               />
             ) : null}
-            {visibleTabs().map(item => {
+            {visibleTabs().map((item, idx) => {
               return (
                 <Suspense
+                  key={`${item.label}-${idx}`}
                   fallback={
                     <Spinner
                       type="TailSpin"

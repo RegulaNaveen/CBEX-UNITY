@@ -6,7 +6,7 @@ import Search from 'apollo-react/components/Search';
 import Cog from 'apollo-react-icons/Cog';
 import Card from 'apollo-react/components/Card';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import Divider from '@material-ui/core/Divider';
+import Divider from '@mui/material/Divider';
 import { isEmpty, orderBy } from 'lodash';
 import PropTypes from 'prop-types';
 import ProfileLayout from '../ProfileLayout';

@@ -7,13 +7,13 @@ import CloseCircle from 'apollo-react-icons/CloseCircle';
 import Button from 'apollo-react/components/Button';
 import Typography from 'apollo-react/components/Typography';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import List from '@material-ui/core/List';
+import List from '@mui/material/List';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import Divider from '@material-ui/core/Divider';
+import Divider from '@mui/material/Divider';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import ListItem from '@material-ui/core/ListItem';
+import ListItem from '@mui/material/ListItem';
 import { logout } from '../../../../redux/actions/auth-actions';
 import { LOGIN, PROFILE, RECENT_ACTIVITY } from '../../../../routes';
 import { PROFILE as PROFILE_CONSTANTS } from '../../../../constants/app';
@@ -37,8 +37,14 @@ const SideNav = ({ name, role }) => {
       <div className="layout">
         <div className="upperPart">
           <div className="profilePic">
-            <Avatar className="profileAvtar" alt="avatar" src="" size="extraLarge">
-              {name && name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+            <Avatar
+              className="profileAvtar"
+              alt="avatar"
+              src=""
+              size="extraLarge"
+            >
+              {name &&
+                name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
             </Avatar>
           </div>
           <div className="userDetails">

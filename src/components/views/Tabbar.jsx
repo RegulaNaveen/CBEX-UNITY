@@ -252,6 +252,7 @@ class Tabbar extends Component<Props, State> {
         <div className="tabs-items">
           <ul className="tabs">
             {children &&
+              children?.length &&
               children.map((item, index) => (
                 <TabItem
                   key={uuidv4()}
@@ -292,7 +293,9 @@ class Tabbar extends Component<Props, State> {
   }
 }
 
-export default connect(null, {
+const TabBarComponent = connect(null, {
   setProposalView: setProposalTypeView,
   filterProposals: onFilteringProposals
 })(MatomoHOC(Tabbar));
+
+export default TabBarComponent;

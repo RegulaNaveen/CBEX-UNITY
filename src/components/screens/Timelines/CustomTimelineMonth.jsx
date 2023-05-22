@@ -9,7 +9,7 @@ import clsx from 'clsx';
 
 import chunk from 'lodash/chunk';
 
-import DateRangePicker from 'apollo-react/components/DateRangePickerV2';
+import DateRangePicker from 'apollo-react/components/DateRangePicker';
 
 import * as animationFrame from 'dom-helpers/animationFrame';
 import { views } from 'react-big-calendar/lib/utils/constants';

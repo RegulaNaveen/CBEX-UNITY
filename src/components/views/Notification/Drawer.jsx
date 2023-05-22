@@ -5,7 +5,7 @@ import { RECENT_ACTIVITY } from '../../../routes';
 import { connect } from 'react-redux';
 import Bell from 'apollo-react-icons/Bell';
 import Cog from 'apollo-react-icons/Cog';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Typography from 'apollo-react/components/Typography';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { getUnreadNotifications } from '../../../redux/selectors';
@@ -63,7 +63,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                 className="toolbar-account-info"
                 style={{
                   display: 'flex',
-                  justifyContent: notificationCount ? 'start' : 'center',
+                  justifyContent: notificationCount ? 'start' : 'center'
                 }}
               >
                 {notificationCount != 0 && (
@@ -138,10 +138,10 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
 };
 
 const mapStateToProps = (state: Map) => ({
-  unreadNotifications: getUnreadNotifications(state),
+  unreadNotifications: getUnreadNotifications(state)
 });
 
 const mapDispatchToProps = {
-  setNotifications: notificationActions.setNotification,
+  setNotifications: notificationActions.setNotification
 };
 export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(Drawer));
