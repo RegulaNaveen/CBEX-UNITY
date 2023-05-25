@@ -17,11 +17,11 @@ describe('proposal api functions', () => {
     sandbox.stub(axiosInstance, 'get').resolves({
       data: []
     });
-    expect(getUsersListApiCall()).resolves.toBe({ data: [] });
+    expect(getUsersListApiCall()).resolves.toStrictEqual([]);
   });
 
   test('getUsersListApiCall should throw error on failure', () => {
-    sandbox.stub(axiosInstance, 'get').rejects('Unauthorized access');
-    expect(() => getUsersListApiCall()).rejects.toBe('Unauthorized access');
+    sandbox.stub(axiosInstance, 'get').rejects(['Unauthorized access']);
+    expect(() => getUsersListApiCall()).rejects.toStrictEqual(['Unauthorized access']);
   });
 });

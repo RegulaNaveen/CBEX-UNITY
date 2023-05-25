@@ -40,7 +40,7 @@ describe('Search component unit tests', () => {
   });
 
   it('should hide when flag is off', () => {
-    const { queryByTestId } = render(<SearchWithRedux />);
+    const { queryByTestId, rerender } = render(<SearchWithRedux />);
     expect(queryByTestId('toolbar-search-container')).toBeInTheDocument();
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_FLAG,
@@ -48,6 +48,7 @@ describe('Search component unit tests', () => {
         searchFlag: false
       }
     });
+    rerender();
     expect(queryByTestId('toolbar-search-container')).not.toBeInTheDocument();
   });
 
@@ -142,12 +143,13 @@ describe('Search component unit tests', () => {
       getByTestId,
       findByText,
       queryByText,
-      debug
     } = render(<SearchWithRedux />);
     store.dispatch({ type: SEARCH.OPEN });
     store.dispatch({ type: SEARCH.UPDATE_QUERY, payload: 'test' });
     store.dispatch({ type: SEARCH.DO_SEARCH });
-    expect(getByText('Searching...')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByText('Searching...')).toBeInTheDocument();
+    })
     store.dispatch({
       type: SEARCH.UPDATE_SEARCH_RESULTS,
       payload: {
@@ -170,11 +172,12 @@ describe('Search component unit tests', () => {
         autoNavigatedToCurrentResult: true
       }
     });
-    expect(queryByText('Searching...')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(queryByText('Searching...')).not.toBeInTheDocument();
+    })
     expect(queryByTestId('search-next')).toBeInTheDocument();
     expect(queryByTestId('search-prev')).toBeInTheDocument();
     fireEvent.click(getByTestId('search-next'));
-    debug();
     expect(await findByText('2 of 2')).toBeInTheDocument();
     fireEvent.click(getByTestId('search-prev'));
     expect(await findByText('1 of 2')).toBeInTheDocument();
