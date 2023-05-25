@@ -19,6 +19,12 @@ exports[`Test CollapsibleList Component matchsnapshot of collapsiblelist compone
           <img
             alt="question arrow"
             class="task-icon"
+            src="function SvgChevronRight(props) {
+  return React.createElement(
+    'svg', 
+    Object.assign({}, props, {'data-file-name': SvgChevronRight.name})
+  );
+}"
           />
         </button>
         <div
@@ -56,6 +62,12 @@ exports[`Test CollapsibleList Component matchsnapshot of collapsiblelist compone
         <img
           alt="question arrow"
           class="task-icon"
+          src="function SvgChevronRight(props) {
+  return React.createElement(
+    'svg', 
+    Object.assign({}, props, {'data-file-name': SvgChevronRight.name})
+  );
+}"
         />
       </button>
       <div
