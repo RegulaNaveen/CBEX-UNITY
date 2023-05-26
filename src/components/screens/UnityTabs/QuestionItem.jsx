@@ -41,6 +41,7 @@ import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegratio
 import EventLauncher from '../Opportunity/EventLauncher';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
+import { compositeDecorator } from '../../common/CustomApolloRichText';
 
 import TextQuestion from './InputComponents/TextQuestion';
 import NumberQuestion from '../Approvals/InputComponents/NumberQuestion';

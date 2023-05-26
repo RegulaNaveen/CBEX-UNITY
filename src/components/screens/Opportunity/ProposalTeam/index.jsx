@@ -256,7 +256,7 @@ function ProposalTeam() {
             size="small"
             disabled={!isCurrentBid}
           >
-            <Plus fontSize="extraSmall" style={{ minWidth: 'none'}} />
+            <Plus fontSize="extraSmall" />
             <span style={{ verticalAlign: 'top' }}> Add New Question</span>
           </Link>
         </div>
