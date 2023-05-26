@@ -10,7 +10,7 @@ import '../../../styles/modals/CustomModal.scss';
  */
 const CustomModal = ({ className, modalStyle, ...props }) => {
   const styles = { modal: modalStyle };
-  const useStyles = makeStyles(styles);
+  const useStyles = makeStyles(styles, { index: 1 });
   const classes = useStyles();
 
   return (
