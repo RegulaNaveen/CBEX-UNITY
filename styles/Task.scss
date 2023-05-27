@@ -231,6 +231,11 @@
         * {
           color: $neptune-primary;
         }
+        
+        .plus-icon-add-new-question {
+          min-width: none !important;
+          margin-right: 0;
+        }
       }
 
       @include commonStyle;
@@ -384,6 +389,11 @@
         margin: 20px 0 0;
         * {
           color: $neptune-primary;
+        }
+
+        .plus-icon-add-new-question {
+          min-width: none !important;
+          margin-right: 0;
         }
       }
 
