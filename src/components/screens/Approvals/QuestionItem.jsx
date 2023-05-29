@@ -422,7 +422,7 @@ const QuestionItem = ({
                   >
                     <QuestionLabel
                       questionLabel={question?.questionText || ''}
-                    />
+                    />   
                   </Grid>
                   <Grid
                     item
@@ -434,16 +434,15 @@ const QuestionItem = ({
                   >
                     {renderQuestionHint()}
                   </Grid>
-                </span>
-                {locked ? (
+                </span>      
+              </Grid>
+              {locked ? (
+                <Grid item xs={12}>
                   <Typography variant="subtitle1" className="status-txt">
                     {activeQuestionInfo.questionLockInfo?.userName} is typing...
                   </Typography>
-                ) : null}
-              </Grid>
-              <Grid item xs={2}>
-                {' '}
-              </Grid>
+                </Grid>
+              ) : null}
               <Grid item xs={10} className="answer-input">
                 {renderQuestion()}
               </Grid>

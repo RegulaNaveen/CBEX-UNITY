@@ -382,7 +382,7 @@ class CollapsibleList extends Component<Props, State> {
                   onClick={() => onAddQuestion(title)}
                   size="small"
                 >
-                  <Plus fontSize="extraSmall" />
+                  <Plus className="plus-icon-add-new-question" fontSize="extraSmall" />
                   <span style={{ verticalAlign: 'top' }}>
                     {' '}
                     Add New Question
