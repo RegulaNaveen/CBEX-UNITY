@@ -176,6 +176,8 @@ const Autocomplete = props => {
           resetUnlockTimer(true);
         }}
         disabled={disabled || false}
+        showCheckboxes={false}
+        popupIcon={<></>}
       />
     </div>
   );
