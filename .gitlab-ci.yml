@@ -71,9 +71,11 @@ test:
     - qa
     - uat
   script:
-    - yarn install #v1.22.5
+    #- yarn install #v1.22.5
     #- yarn test
-    - yarn coverage
+    #- yarn coverage
+    - npm install --legacy-peer-deps
+    - npm run coverage
   artifacts:
     paths:
       - coverage/

@@ -18,6 +18,7 @@ import {
   selectAutoNavigatedToCurrentResult,
   selectCurrentSearchResult
 } from '../../../redux/selectors/search';
+import { getProposalQuestions } from '../../../redux/selectors/proposal';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 export const ApprovalContext = createContext();
@@ -44,12 +45,13 @@ const Section = ({ sectionId, title, testVisibility, keyForward }) => {
     selectAutoNavigatedToCurrentResult
   );
   const flags = useSelector(state => state.proposal.get('eventflag'));
+  const questions = useSelector(getProposalQuestions);
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setSectionVisibility(shouldShowSection(sectionId, flags));
-  }, [approvalFilters, flags]);
+  }, [approvalFilters, flags, questions]);
 
   useEffect(() => {
     let shouldExpand = expanded;
