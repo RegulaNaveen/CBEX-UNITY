@@ -4,13 +4,29 @@
   }
 }
 .switch-temp-modal {
-  color: black;
-  border: none;
-  margin: 0;
-  padding: 0;
-  font-size: 16px;
-  background: white;
-  box-shadow: none;
-  border-radius: 4px;
+  color: black !important ;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-left: 0px !important;
+  font-size: 16px !important;
+  flex-direction: column;
+  background: white !important;
+  line-height: normal !important;
+  top: auto !important;
+  width: auto !important;
+  font-weight: normal !important;
+  right: auto !important;
+  bottom: auto !important;
+  opacity: unset !important;
+  display: block !important;
+  height: auto !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+  text-align: unset;
   max-width: 558px !important;
+}
+
+.css-2wkfg8.MuiInputLabel-root {
+  overflow: hidden;
 }
