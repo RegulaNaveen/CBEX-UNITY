@@ -26,6 +26,7 @@ import {
   MentionComponentWithCopiedHyperlink,
   MentionComponentWithHyperLink
 } from './ApolloRichTextComponents/MentionComponent';
+import { cloneDeep } from 'lodash';
 
 let CAN_DECORATE_LINKS = false;
 
@@ -396,6 +397,21 @@ const CustomApolloRichText = ({
             style: refStyle
           } = richTextEditorRef.current.editorRef.current.editorContainer;
           refStyle.height = 'auto';
+        }
+      }
+
+      if (richTextEditorRef.current) {
+        let newEditorState;
+        try {
+          newEditorState = EditorState.createWithContent(
+            convertFromRaw(cloneDeep(INITIAL_DATA.value))
+          );
+        } catch (error) {
+          newEditorState = EditorState.createEmpty();
+        } finally {
+          richTextEditorRef.current.setState({
+            editorState: newEditorState
+          });
         }
       }
     }, 100);
