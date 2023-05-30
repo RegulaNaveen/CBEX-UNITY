@@ -1,13 +1,7 @@
 /* eslint-disable dot-notation */
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  Suspense,
-  useMemo
-} from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import Tab from 'apollo-react/components/Tab';
