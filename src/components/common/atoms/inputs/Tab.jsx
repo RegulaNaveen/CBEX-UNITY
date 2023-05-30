@@ -135,6 +135,7 @@ const UnityTab = ({
     }
   ];
   const [tabs, setTabs] = useState(defaultTabs);
+  const [tabStatus, setTabStatus] = useState(false);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [tabLoaded, setTabloaded] = useState(false);
@@ -195,6 +196,7 @@ const UnityTab = ({
   };
   useEffect(() => {
     if (switchTempStatus === 'success' && tabs?.length > 5) {
+      setTabStatus(false);
       dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
   }, [switchTempStatus]);
@@ -210,6 +212,7 @@ const UnityTab = ({
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
     if (!currentviewType) {
+      setTabStatus(false);
       setTabloaded(false);
       if (tabs.length > 5) {
         const refreshTab = tabs.slice(0, 5);
@@ -261,6 +264,7 @@ const UnityTab = ({
     if (changeBidStatus && currentviewType) {
       if (tabs.length > 5) {
         const refreshTab = tabs.slice(0, 5);
+        setTabStatus(false);
         setTabs([...refreshTab]);
       }
       setTabloaded(false);
@@ -348,7 +352,9 @@ const UnityTab = ({
     if (newTab && newTab?.length) {
       const finalTab = [...tabs, ...newTab];
       const calculateTabList = checkTabsVisibility(finalTab);
+      console.log('calculateTabList :>> ', calculateTabList);
       setTabs(calculateTabList);
+      setTabStatus(true);
       setNewTab([...[]]);
     }
   }, [newTab]);
@@ -781,7 +787,7 @@ const UnityTab = ({
 
   const renderTabList = () => {
     const tabList = tabs;
-    if (tabList && tabList?.length > 15) {
+    if (tabList && tabList?.length && tabStatus) {
       return (
         <Tabs
           value={value}
