@@ -12,6 +12,7 @@
       width: 100%;
       justify-content: space-between;
       align-items: center;
+      max-width: none !important;
       & > div {
         margin-top: 0;
         max-width: none !important;
@@ -23,6 +24,14 @@
     max-width: none !important;
   }
   .jss50.jss51.jss44 {
+    max-width: none !important;
+  }
+
+  .makeStyles-root-27.unity-footer {
+    max-width: none !important;
+  }
+
+  .jss27.unity-footer {
     max-width: none !important;
   }
 
