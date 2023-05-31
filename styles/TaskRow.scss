@@ -39,15 +39,6 @@
       }
     }
 
-    button {
-      outline: none;
-      border: none;
-      background-color: transparent;
-      color: $neptune-secondary;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
     .date-picker {
       & > div {
         margin-top: 0;
@@ -146,15 +137,6 @@
       .answered {
         margin-left: 4px;
       }
-    }
-
-    button {
-      outline: none;
-      border: none;
-      background-color: transparent;
-      color: $neptune-secondary;
-      cursor: pointer;
-      font-size: 16px;
     }
 
     .date-picker {

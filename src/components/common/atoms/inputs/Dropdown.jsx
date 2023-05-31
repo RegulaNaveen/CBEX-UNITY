@@ -160,10 +160,8 @@ class Dropdown extends PureComponent<Props, State> {
       setTimeout(() => {
         this.setState({ isFocused: false, isCollapsed: true });
         setSelectRow(false);
-        if (lockedBySelf) {
-          // call to unlock question
-          this.context.questionUnlockWrapper(questionId);
-        }
+        // call to unlock question
+        this.context.questionUnlockWrapper(questionId);
         if (toggleWatch) {
           toggleWatch(false);
         }

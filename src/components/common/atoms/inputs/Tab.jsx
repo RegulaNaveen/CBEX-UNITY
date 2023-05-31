@@ -135,6 +135,7 @@ const UnityTab = ({
     }
   ];
   const [tabs, setTabs] = useState(defaultTabs);
+  const [tabStatus, setTabStatus] = useState(false);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [tabLoaded, setTabloaded] = useState(false);
@@ -195,6 +196,7 @@ const UnityTab = ({
   };
   useEffect(() => {
     if (switchTempStatus === 'success' && tabs?.length > 5) {
+      setTabStatus(false);
       dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
   }, [switchTempStatus]);
@@ -210,6 +212,7 @@ const UnityTab = ({
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
     if (!currentviewType) {
+      setTabStatus(false);
       setTabloaded(false);
       if (tabs.length > 5) {
         const refreshTab = tabs.slice(0, 5);
@@ -261,6 +264,7 @@ const UnityTab = ({
     if (changeBidStatus && currentviewType) {
       if (tabs.length > 5) {
         const refreshTab = tabs.slice(0, 5);
+        setTabStatus(false);
         setTabs([...refreshTab]);
       }
       setTabloaded(false);
@@ -326,10 +330,31 @@ const UnityTab = ({
   }, [tabRefresh]);
   // Refresh Tab more button when switch template
 
+  const checkTabsVisibility = finalTabList => {
+    let tabsToReturn = finalTabList;
+    const isApprovalTab = approvalsFlag;
+    if (!isApprovalTab || !showApprovalTab) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
+    }
+    if (!allFlags?.showTimelineFlag) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timeline');
+    }
+    if (!enableValidateTab) {
+      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
+    }
+    tabsToReturn = tabsToReturn.map((vc, i) => {
+      vc.value = i;
+      return vc;
+    });
+    return tabsToReturn;
+  };
   useEffect(() => {
     if (newTab && newTab?.length) {
       const finalTab = [...tabs, ...newTab];
-      setTabs(finalTab);
+      const calculateTabList = checkTabsVisibility(finalTab);
+      console.log('calculateTabList :>> ', calculateTabList);
+      setTabs(calculateTabList);
+      setTabStatus(true);
       setNewTab([...[]]);
     }
   }, [newTab]);
@@ -548,29 +573,6 @@ const UnityTab = ({
     }
   }
 
-  /**
-   * Decides which tabs to be rendered
-   * @returns Array of objects
-   */
-  const visibleTabs = () => {
-    let tabsToReturn = tabs;
-    const isApprovalTab = approvalsFlag;
-    if (!isApprovalTab || !showApprovalTab) {
-      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Approvals');
-    }
-    if (!allFlags?.showTimelineFlag) {
-      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timeline');
-    }
-    if (!enableValidateTab) {
-      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
-    }
-    tabsToReturn = tabsToReturn.map((vc, i) => {
-      vc.value = i;
-      return vc;
-    });
-    return tabsToReturn;
-  };
-
   const renderVerticleTabsComponent = activeVerticleTab => {
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
@@ -783,6 +785,33 @@ const UnityTab = ({
     }
   };
 
+  const renderTabList = () => {
+    const tabList = tabs;
+    if (tabList && tabList?.length && tabStatus) {
+      return (
+        <Tabs
+          value={value}
+          onChange={handleChangeTab}
+          key={currentRefreshRate}
+          truncate
+          size="medium"
+          className="_question-tab"
+        >
+          {tabList.map(item => {
+            return (
+              <Tab
+                key={uuid()}
+                label={item.label}
+                value={item.value}
+                className="unity-tab-list"
+              />
+            );
+          })}
+        </Tabs>
+      );
+    }
+  };
+
   const renderTab = () => {
     let activeVerticleTab = null;
     if (!showQuestionsForCustomerTab) {
@@ -796,20 +825,7 @@ const UnityTab = ({
     }
     return (
       <>
-        <div className="tab-size">
-          <Tabs
-            value={value}
-            onChange={handleChangeTab}
-            key={currentRefreshRate}
-            truncate
-            size="medium"
-            className="_question-tab"
-          >
-            {visibleTabs().map(item => {
-              return <Tab key={uuid()} label={item.label} value={item.value} />;
-            })}
-          </Tabs>
-        </div>
+        <div className="tab-size">{renderTabList()}</div>
         <div style={{ padding: 20, paddingTop: 5 }}>
           <div id="fullwidth-view-above-vertical-tabs" />
           <div style={{ display: 'flex', marginTop: '16px' }}>
@@ -826,7 +842,7 @@ const UnityTab = ({
                 onTabClick={handleVerticalTabClick}
               />
             ) : null}
-            {visibleTabs().map((item, idx) => {
+            {tabs?.map((item, idx) => {
               return (
                 <Suspense
                   key={`${item.label}-${idx}`}
