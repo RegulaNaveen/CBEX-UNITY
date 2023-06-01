@@ -529,14 +529,16 @@ const UnityTab = ({
         if (!isNotepadOpen) {
           setSystemTriggeredClick(true);
         }
-        setTimeout(() => {
-          panelRef.scrollIntoView({
-            behaviour: 'smooth',
-            block: 'center',
-            inline: 'nearest'
-          });
-          dispatch(autoNavigationCompletedAction());
-        }, 700);
+        if (currentSearchResult.vTab == 1) {
+          setTimeout(() => {
+            panelRef.scrollIntoView({
+              behaviour: 'smooth',
+              block: 'center',
+              inline: 'nearest'
+            });
+            dispatch(autoNavigationCompletedAction());
+          }, 700);
+        }
       }
     }
   }, [currentSearchResult]);

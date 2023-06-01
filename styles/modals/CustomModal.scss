@@ -1,4 +1,5 @@
 .custom-modal {
+  border: none !important;
   .MuiTypography-h3 {
     font-size: 20px;
   }
@@ -16,6 +17,7 @@
   top: auto !important;
   width: auto !important;
   font-weight: normal !important;
+  left: auto !important;
   right: auto !important;
   bottom: auto !important;
   opacity: unset !important;
@@ -23,7 +25,7 @@
   height: auto !important;
   box-shadow: none !important;
   border-radius: 4px !important;
-  text-align: unset;
+  text-align: unset !important;
   max-width: 558px !important;
 }
 
