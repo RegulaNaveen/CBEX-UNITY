@@ -37,9 +37,11 @@ export default function ReduxSnackbar() {
       onClose={handleClose}
       key={key}
     >
-      <Alert severity="success" onClose={handleClose}>
-        {message}
-      </Alert>
+      <div>
+        <Alert severity="success" onClose={handleClose}>
+          {message}
+        </Alert>
+      </div>
     </Snackbar>
   );
 }
