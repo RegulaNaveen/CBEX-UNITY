@@ -661,6 +661,7 @@ class Questions extends Component {
                   </div>
                 )}
                 <Button
+                  className="taskList-filter-icon-wrapper"
                   data-testid="addquestionbtn"
                   variant="secondary"
                   size="small"
