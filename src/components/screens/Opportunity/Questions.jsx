@@ -661,10 +661,11 @@ class Questions extends Component {
                   </div>
                 )}
                 <Button
+                  className="taskList-filter-icon-wrapper"
                   data-testid="addquestionbtn"
                   variant="secondary"
                   size="small"
-                  icon={<Filter className="taskList-filter-icon" fontSize="extraSmall" />}
+                  icon={<Filter fontSize="extraSmall" />}
                   onClick={() => this.handleFilterClick()}
                 >
                   {activeQuestionsFilterCount

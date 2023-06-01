@@ -223,9 +223,11 @@
             }
           }
 
-          .taskList-filter-icon {
-            min-width: 0;
-            margin-right: 7px;
+          .taskList-filter-icon-wrapper {
+              svg {
+                min-width: 0;
+                margin-right: 7px;
+              }
           }
         }
       }
@@ -452,9 +454,11 @@
             }
           }
 
-          .taskList-filter-icon {
-            min-width: 0;
-            margin-right: 7px;
+          .taskList-filter-icon-wrapper {
+              svg {
+                min-width: 0;
+                margin-right: 7px;
+              }
           }
         }
       }
