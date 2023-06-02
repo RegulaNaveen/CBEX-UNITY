@@ -13,6 +13,9 @@
       & > div {
         margin-top: 0;
         max-width: none !important;
+        & > div {
+          max-width: none !important;
+        }
       }
     }
   }
