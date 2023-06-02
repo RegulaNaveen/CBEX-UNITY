@@ -348,16 +348,6 @@ const UnityTab = ({
     });
     return tabsToReturn;
   };
-  useEffect(() => {
-    if (newTab && newTab?.length) {
-      const finalTab = [...tabs, ...newTab];
-      const calculateTabList = checkTabsVisibility(finalTab);
-      console.log('calculateTabList :>> ', calculateTabList);
-      setTabs(calculateTabList);
-      setTabStatus(true);
-      setNewTab([...[]]);
-    }
-  }, [newTab]);
 
   useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
@@ -543,6 +533,38 @@ const UnityTab = ({
     }
   }, [currentSearchResult]);
 
+  useEffect(() => {
+    if (newTab && newTab?.length) {
+      const finalTab = [...tabs, ...newTab];
+      const calculateTabList = checkTabsVisibility(finalTab);
+      setTabs(calculateTabList);
+      setTabStatus(true);
+      setNewTab([...[]]);
+    }
+  }, [newTab]);
+
+  useEffect(() => {
+    if (
+      newTab &&
+      !newTab?.length &&
+      allFlags &&
+      typeof allFlags === 'object' &&
+      Object.keys(allFlags)?.length > 0
+    ) {
+      let finalTab = [...tabs];
+      if (allFlags && !allFlags?.approvalsFlag) {
+        finalTab = finalTab.filter(item => item.label !== 'Approvals');
+      }
+      if (allFlags && !allFlags?.showTimelineFlag) {
+        finalTab = finalTab.filter(item => item.label !== 'Timeline');
+      }
+      if (!enableValidateTab) {
+        finalTab = finalTab.filter(item => item.label !== 'Validate');
+      }
+      setTabs(finalTab);
+      setTabStatus(true);
+    }
+  }, [newTab]);
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
