@@ -86,4 +86,10 @@
       margin-right: 0;
     }
   }
+
+  .custom-autocomplete {
+    .MuiAutocomplete-popupIndicator {
+      display: none;
+    }
+  }
 }
