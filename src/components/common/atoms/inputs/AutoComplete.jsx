@@ -177,7 +177,6 @@ const Autocomplete = props => {
         }}
         disabled={disabled || false}
         showCheckboxes={false}
-        popupIcon={<></>}
       />
     </div>
   );

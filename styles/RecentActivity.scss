@@ -92,7 +92,7 @@
 }
 
 .notification-item-dots {
-  color: #df216d;
+  color: #df216d !important;
   height: 14px !important;
   margin-top: 4px !important;
 }
@@ -103,6 +103,7 @@
 .notification-content-data {
   padding-top: 4px;
   font-size: 14px;
+  color: #000000DE;
   a {
     color: $neptune-primary !important;
     text-decoration: none;
