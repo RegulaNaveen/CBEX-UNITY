@@ -247,3 +247,11 @@
     text-align: center;
   }
 }
+
+.dd-wrapper .dd-list .dd-list-item {
+  color: black !important;
+}
+.dd-wrapper .dd-list .dd-list-item.active {
+  background-color: white;
+  color: black;
+}
