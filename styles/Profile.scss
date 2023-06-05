@@ -27,6 +27,7 @@
     color: $neutral8;
     font-weight: 600;
     font-family: 'Proxima Nova';
+    font-size: 40px;
   }
   .grey-text {
     color: #7f7f7f;
@@ -246,4 +247,12 @@
     line-height: 24px;
     text-align: center;
   }
+}
+
+.dd-wrapper .dd-list .dd-list-item {
+  color: black !important;
+}
+.dd-wrapper .dd-list .dd-list-item.active {
+  background-color: #ecf3ff;
+  color: black;
 }

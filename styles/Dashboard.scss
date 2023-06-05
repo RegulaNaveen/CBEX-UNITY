@@ -1,6 +1,7 @@
 #dashboard {
   .tab-wrapper {
     padding: 10px;
+    display: inherit !important;
   }
 
   & > .tab-wrapper {
