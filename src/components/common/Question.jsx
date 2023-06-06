@@ -234,15 +234,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
       ) {
         this.setSelectRow(false);
       }
-    } else if (
-      currentSearchResult === null ||
-      (currentSearchResult !== null &&
-        currentSearchResult.searchIndex !== questionId) ||
-      (currentSearchResult.sectionName !== null &&
-        currentSearchResult.sectionName !== sectionName)
-    ) {
-      this.setSelectRow(false);
     }
+    // Removing logic to fix highlight issue. need to rework in logic part
+    // else if (
+    //   currentSearchResult === null ||
+    //   (currentSearchResult !== null &&
+    //     currentSearchResult.searchIndex !== questionId) ||
+    //   (currentSearchResult.sectionName !== null &&
+    //     currentSearchResult.sectionName !== sectionName)
+    // ) {
+    //   this.setSelectRow(false);
+    // }
 
     // updating question text with decorators
     if (this.questionTextRef1.current !== null) {
