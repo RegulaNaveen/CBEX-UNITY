@@ -156,6 +156,7 @@ const Autocomplete = props => {
       <AutocompleteV2
         ref={autocompleteRef}
         fullWidth
+        open={inputVal && inputVal?.length}
         multiple
         size="small"
         options={options || []}
@@ -178,6 +179,7 @@ const Autocomplete = props => {
         disabled={disabled || false}
         showCheckboxes={false}
         popupIcon={<></>}
+        forcePopupIcon={false}
       />
     </div>
   );
