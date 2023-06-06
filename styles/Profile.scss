@@ -118,6 +118,7 @@
     grid-template-columns: 1fr 10px 0.15fr 0.15fr;
     justify-items: flex-start;
     margin-top: 1em;
+    margin-right: 35px;
   }
 
   .th-two {
@@ -125,6 +126,7 @@
   }
   .th-three {
     justify-self: center;
+    padding-left: 30px;
   }
 
   .td-two {
@@ -132,11 +134,13 @@
   }
   .td-three {
     justify-self: center;
+    padding-left: 30px;
   }
   .notification-table {
     overflow-y: auto;
     display: block;
     margin-top: 0.5em;
+    margin-right: 35px;
   }
   .notification-pref-tr {
     display: grid;
