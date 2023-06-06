@@ -139,10 +139,15 @@
       color: $neutral10;
       font-weight: 500;
     }
-    button.Mui-selected {
-      color: $white !important;
+
+    button.Mui-selected.unity-tab-list {
+      color: $black;
       font-weight: 500;
     }
+    .css-vkyzq5-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+      color: $white !important;
+    }
+
     .proposal-details {
       .tasksList-title-wrapper {
         display: flex;
@@ -371,9 +376,13 @@
       color: $neutral10;
       font-weight: 500;
     }
-    button.Mui-selected {
+
+    button.Mui-selected.unity-tab-list {
       color: $black;
       font-weight: 500;
+    }
+    .css-vkyzq5-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+      color: $white !important;
     }
     .proposal-details {
       .tasksList-title-wrapper {
