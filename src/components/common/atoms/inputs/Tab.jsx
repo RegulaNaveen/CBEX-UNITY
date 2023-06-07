@@ -197,6 +197,7 @@ const UnityTab = ({
   useEffect(() => {
     if (switchTempStatus === 'success' && tabs?.length > 5) {
       setTabStatus(false);
+      setTabloaded(false);
       dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
     }
   }, [switchTempStatus]);
@@ -534,7 +535,14 @@ const UnityTab = ({
   }, [currentSearchResult]);
 
   useEffect(() => {
-    if (newTab && newTab?.length) {
+    if (
+      newTab &&
+      newTab?.length &&
+      tabLoaded &&
+      allFlags &&
+      typeof allFlags === 'object' &&
+      Object.keys(allFlags)?.length > 0
+    ) {
       const finalTab = [...tabs, ...newTab];
       const calculateTabList = checkTabsVisibility(finalTab);
       setTabs(calculateTabList);
@@ -547,6 +555,7 @@ const UnityTab = ({
     if (
       newTab &&
       !newTab?.length &&
+      tabLoaded &&
       allFlags &&
       typeof allFlags === 'object' &&
       Object.keys(allFlags)?.length > 0
