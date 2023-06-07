@@ -52,7 +52,10 @@ const AutoCompleteWithAddOption = ({
     if (isEmpty(answer)) {
       return multiple ? [] : '';
     }
-    return multiple ? answer : answer?.trim();
+    if (multiple) {
+      return answer.filter(ans => !isEmpty(ans) && ans !== ' ');
+    }
+    return answer?.trim();
   };
 
   const [selectedVal, setSelectedVal] = useState(getAnswer());
