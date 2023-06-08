@@ -92,7 +92,6 @@ const SwitchTemplate = ({
             onClick: switchTempBtnClickHandler
           }
         ]}
-        modalStyle={{ maxWidth: 558 }}
         {...props}
       >
         {/* Modal Loading */}
@@ -135,7 +134,7 @@ const SwitchTemplate = ({
             { className: 'display-none' },
             { label: DEFAULT.CLOSE }
           ]}
-          modalStyle={{ maxWidth: 342 }}
+          className="switch-temp-warning-modal"
         />
       )}
     </>

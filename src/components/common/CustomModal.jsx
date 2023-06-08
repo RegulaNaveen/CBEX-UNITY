@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import makeStyles from '@mui/styles/makeStyles';
 import Modal from 'apollo-react/components/Modal';
 import classNames from 'classnames';
 import '../../../styles/modals/CustomModal.scss';
@@ -8,14 +7,10 @@ import '../../../styles/modals/CustomModal.scss';
 /**
  * Custom Modal: To create a modal with extra properties
  */
-const CustomModal = ({ className, modalStyle, ...props }) => {
-  const styles = { modal: modalStyle };
-  const useStyles = makeStyles(styles, { index: 1 });
-  const classes = useStyles();
-
+const CustomModal = ({ className, ...props }) => {
   return (
     <Modal
-      className={`${classes.modal} custom-modal ${classNames({
+      className={`custom-modal ${classNames({
         [className]: !!className
       })}`}
       {...props}

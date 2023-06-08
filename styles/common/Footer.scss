@@ -52,7 +52,8 @@
 
       color: #646464;
       font-weight: 800;
-      font-family: "ProximaNova-Regular", "Noto Sans", Helvetica, Arial, sans-serif;
+      font-family: 'ProximaNova-Regular', 'Noto Sans', Helvetica, Arial,
+        sans-serif;
     }
     &.switch-temp-btn {
       span.MuiButton-label {
@@ -82,4 +83,12 @@ button.no-animation {
   [class*='MuiTouchRipple-root'] {
     display: none !important;
   }
+}
+
+.switch-temp-modal {
+  max-width: 558px;
+}
+
+.switch-temp-warning-modal {
+  max-width: 342px;
 }
