@@ -222,7 +222,6 @@ const EventLauncher = ({
           onClick: launchRichTextButtonHandler
         }
       ]}
-      modalStyle={modalStyle}
     >
       <i className="content-heading">{PROPOSAL.SELECT_VARIABLES}</i>
 

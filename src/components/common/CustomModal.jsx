@@ -8,10 +8,6 @@ import '../../../styles/modals/CustomModal.scss';
  * Custom Modal: To create a modal with extra properties
  */
 const CustomModal = ({ className, ...props }) => {
-  // const styles = { modal: modalStyle };
-  // const useStyles = makeStyles(styles, { index: 1 });
-  // const classes = useStyles();
-
   return (
     <Modal
       className={`custom-modal ${classNames({

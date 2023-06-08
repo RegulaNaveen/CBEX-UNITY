@@ -328,7 +328,7 @@ export default function Search() {
         variant="warning"
         onClose={() => handleModalClose()}
         buttonProps={[{ label: DEFAULT.OK }]}
-        modalStyle={{ maxWidth: 342 }}
+        className="search-modal"
       />
     </>
   );
