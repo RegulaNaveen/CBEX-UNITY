@@ -229,8 +229,16 @@
     font-size: 14px !important;
     display: contents !important;
   }
-  
+
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }
+}
+
+.approvals-delete-confirm-modal {
+  max-width: 460px;
+}
+
+.approvals-warning-modal {
+  max-width: 342px;
 }

@@ -3,7 +3,7 @@
 /* eslint-disable dot-notation */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { styled } from '@material-ui/styles';
+import { styled } from '@mui/styles';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import {

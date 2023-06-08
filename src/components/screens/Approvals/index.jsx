@@ -123,7 +123,7 @@ const Approvals = () => {
           variant="error"
           onClose={() => setWarning(false)}
           buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
-          modalStyle={{ maxWidth: 342 }}
+          className="approvals-warning-modal"
         />
       )}
       <div id="modal-wrapper" />
