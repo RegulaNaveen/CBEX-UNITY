@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { MatomoProvider } from '@datapunt/matomo-tracker-react';
+import { StyledEngineProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { store } from './store';
 import PrivateRoute from './PrivateRoute';
 
@@ -29,34 +31,49 @@ import SocketContextProvider from './context/SocketContext';
 import ErrorBoundaryComponent from './components/HOC/ErrorBoundary';
 import ReduxSnackbar from './components/common/ReduxSnackbar/ReduxSnackbar';
 
+const theme = createTheme();
+
 const App = () => (
   <Provider store={store}>
     <SocketContextProvider>
       <MatomoProvider value={matomoInstace}>
-        <ErrorBoundaryComponent>
-          <ReduxSnackbar />
-          <BrowserRouter>
-            <SessionHandler>
-              <Switch>
-                <Route path="/" exact component={Login} />
-                <Route path={LOGIN} component={Login} />
-                <PrivateRoute path={DASHBOARD} component={DashboardComponent} />
-                <PrivateRoute path={PROPOSALS} component={ProposalComponent} />
-                <PrivateRoute path={PROFILE} component={ProfileComponent} />
-                <PrivateRoute
-                  path={RECENT_ACTIVITY}
-                  component={RecentActivityComponent}
-                />
-                <PrivateRoute
-                  path={OPPORTUNITYS}
-                  component={OpportunityComponent}
-                />
-                <PrivateRoute path={UBUILD} component={UbuildShellComponent} />
-                <Redirect to={LOGIN} />
-              </Switch>
-            </SessionHandler>
-          </BrowserRouter>
-        </ErrorBoundaryComponent>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <ErrorBoundaryComponent>
+              <ReduxSnackbar />
+              <BrowserRouter>
+                <SessionHandler>
+                  <Switch>
+                    <Route path="/" exact component={Login} />
+                    <Route path={LOGIN} component={Login} />
+                    <PrivateRoute
+                      path={DASHBOARD}
+                      component={DashboardComponent}
+                    />
+                    <PrivateRoute
+                      path={PROPOSALS}
+                      component={ProposalComponent}
+                    />
+                    <PrivateRoute path={PROFILE} component={ProfileComponent} />
+                    <PrivateRoute
+                      path={RECENT_ACTIVITY}
+                      component={RecentActivityComponent}
+                    />
+                    <PrivateRoute
+                      path={OPPORTUNITYS}
+                      component={OpportunityComponent}
+                    />
+                    <PrivateRoute
+                      path={UBUILD}
+                      component={UbuildShellComponent}
+                    />
+                    <Redirect to={LOGIN} />
+                  </Switch>
+                </SessionHandler>
+              </BrowserRouter>
+            </ErrorBoundaryComponent>
+          </ThemeProvider>
+        </StyledEngineProvider>
       </MatomoProvider>
     </SocketContextProvider>
   </Provider>
