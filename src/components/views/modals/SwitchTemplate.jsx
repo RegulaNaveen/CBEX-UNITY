@@ -92,7 +92,7 @@ const SwitchTemplate = ({
             onClick: switchTempBtnClickHandler
           }
         ]}
-        modalStyle={{ maxWidth: 558 }}
+        style={{ maxWidth: 558 }}
         {...props}
       >
         {/* Modal Loading */}
