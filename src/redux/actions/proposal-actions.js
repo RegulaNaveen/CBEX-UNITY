@@ -1429,6 +1429,10 @@ export const updateChangeBidStatusOperation = status => {
 };
 
 export const UpdateNewBid = bid => {
+  if (window && window?.location?.search) {
+    let bidNo = bid?.proposal?.proposalDetails?.bidNo;
+    updateBidNoQueryparam(bidNo);
+  }
   return dispatch => {
     dispatch({
       type: ADD_NEW_BID,
