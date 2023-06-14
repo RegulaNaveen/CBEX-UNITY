@@ -1,16 +1,27 @@
 .unity-footer {
   height: 0px !important;
+  max-width: none !important;
   border-top: 1px solid $neutral4;
 
   & > div {
+    max-width: none !important;
     & > div {
       width: 100%;
       justify-content: space-between;
       align-items: center;
+      max-width: none !important;
       & > div {
         margin-top: 0;
+        max-width: none !important;
+        & > div {
+          max-width: none !important;
+        }
       }
     }
+  }
+
+  .unity-footer {
+    max-width: none !important;
   }
 
   span.MuiButton-label {
@@ -38,6 +49,11 @@
     &.ques-temp-info {
       pointer-events: none;
       margin-left: 0 !important;
+
+      color: #646464;
+      font-weight: 800;
+      font-family: 'ProximaNova-Regular', 'Noto Sans', Helvetica, Arial,
+        sans-serif;
     }
     &.switch-temp-btn {
       span.MuiButton-label {
@@ -67,4 +83,12 @@ button.no-animation {
   [class*='MuiTouchRipple-root'] {
     display: none !important;
   }
+}
+
+.switch-temp-modal {
+  max-width: 558px;
+}
+
+.switch-temp-warning-modal {
+  max-width: 342px;
 }

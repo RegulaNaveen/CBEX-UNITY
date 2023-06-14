@@ -119,9 +119,16 @@
         justify-content: flex-end;
         align-items: center;
 
+        .email-btn svg {
+          min-width: 0;
+          margin-right: 8px;
+        }
+
         .delete-btn svg {
           font-size: 0.9375rem !important;
           margin-top: -2px;
+          min-width: 0px;
+          margin-right: 7px;
         }
       }
     }
@@ -177,6 +184,8 @@
           font-size: 16.8px;
           width: auto;
           height: 1.25rem;
+          min-width: 0;
+          margin-right: 7px;
         }
       }
     }
@@ -220,8 +229,16 @@
     font-size: 14px !important;
     display: contents !important;
   }
-  
+
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }
+}
+
+.approvals-delete-confirm-modal {
+  max-width: 460px;
+}
+
+.approvals-warning-modal {
+  max-width: 342px;
 }

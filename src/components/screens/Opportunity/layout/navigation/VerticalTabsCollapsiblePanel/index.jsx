@@ -3,7 +3,7 @@
 /* eslint-disable dot-notation */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { styled } from '@material-ui/styles';
+import { styled } from '@mui/styles';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
 import {
@@ -84,11 +84,12 @@ function VerticalTabsCollapsiblePanel({
     onTabClick(newActiveTab);
   }
   const renderTab = () => {
-    const tabs = tabArr.map(v => {
+    const tabs = tabArr.map((v, vIdx) => {
       if (v['showQuestionsForCustomerTab']) {
         return (
-          <div onClick={e => handleTabChange(e, 0)}>
+          <div onClick={e => handleTabChange(e, 0)} key={`vTab-QFC-${vIdx}`}>
             <VerticalTab
+              textColor="primary"
               icon={
                 <QuestionsForCustomerIcon
                   fill={
@@ -106,8 +107,9 @@ function VerticalTabsCollapsiblePanel({
       }
       if (v['showNotepadTab']) {
         return (
-          <div onClick={e => handleTabChange(e, 1)}>
+          <div onClick={e => handleTabChange(e, 1)} key={`vTab-NOTE-${vIdx}`}>
             <VerticalTab
+              textColor="primary"
               icon={
                 <NotesIcon
                   fill={
@@ -124,8 +126,9 @@ function VerticalTabsCollapsiblePanel({
       }
       if (v['showProposalTeamTab']) {
         return (
-          <div onClick={e => handleTabChange(e, 2)}>
+          <div onClick={e => handleTabChange(e, 2)} key={`vTab-TEAM-${vIdx}`}>
             <VerticalTab
+              textColor="primary"
               icon={
                 <ProposalTeamIcon
                   fill={
@@ -141,7 +144,7 @@ function VerticalTabsCollapsiblePanel({
         );
       }
     });
-    return <>{tabs}</>;
+    return tabs;
   };
 
   return (

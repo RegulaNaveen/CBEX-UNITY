@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import AutocompleteV2 from 'apollo-react/components/AutocompleteV2';
+import AutocompleteV2 from 'apollo-react/components/Autocomplete';
 
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
 import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
 import { API } from '../../../../constants';
 
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
-const Autocomplete = (props) => {
+const Autocomplete = props => {
   const [options, setOptions] = useState([]);
   const [value, setValue] = useState([]);
   const [inputVal, setInputVal] = useState('');
@@ -21,12 +21,12 @@ const Autocomplete = (props) => {
   const previousController = useRef();
   const { disabled } = props;
   function filter() {
-    value.map((row) => {
+    value.map(row => {
       let matched = row.email;
-      options.map((row2) => {
+      options.map(row2 => {
         let matcharray = row2.mail;
         if (matcharray == matched) {
-          const index = options.findIndex((x) => x.mail === matched);
+          const index = options.findIndex(x => x.mail === matched);
           if (index > -1) {
             options.splice(index, 1);
           }
@@ -73,7 +73,7 @@ const Autocomplete = (props) => {
   }
   useEffect(() => {
     if (Boolean(text.length)) {
-      let Val = text.split(',').map((v) => {
+      let Val = text.split(',').map(v => {
         let email = extractEmails(v) || v;
         let label = extractName(v) || email;
         return { label, email };
@@ -81,7 +81,7 @@ const Autocomplete = (props) => {
       setValue(Val);
     } else setValue([]);
   }, [text]);
-  const getData = async (searchTerm) => {
+  const getData = async searchTerm => {
     if (previousController.current) {
       previousController.current.abort();
     }
@@ -97,9 +97,9 @@ const Autocomplete = (props) => {
           'x-access-token': getAccessToken()
         }
       })
-        .then((response) => response.json())
-        .then((myJson) => {
-          updatedOptions = myJson.data.map((p) => {
+        .then(response => response.json())
+        .then(myJson => {
+          updatedOptions = myJson.data.map(p => {
             return {
               label: `${p.first_name} ${p.last_name}(${p.email.toLowerCase()})`,
               mail: `${p.email.toLowerCase()}`
@@ -115,7 +115,7 @@ const Autocomplete = (props) => {
   const handleChange = (event, newValue, reason) => {
     const { onChange } = props;
     setValue(newValue);
-    const proposaluser = newValue.map((v) => {
+    const proposaluser = newValue.map(v => {
       return v.email ? v.label + '(' + v.email + ')' : v.label;
     });
     if (proposaluser.length === 0) onChange(' ', text, reason);
@@ -131,12 +131,12 @@ const Autocomplete = (props) => {
       setCallAccept(true);
 
       getData(value);
-      elem.classList.remove('disable');
+      // elem.classList.remove('disable');
     } else {
       setCallAccept(false);
 
       setOptions([]);
-      elem.className += ' disable';
+      // elem.className += ' disable';
     }
   };
 
@@ -156,6 +156,7 @@ const Autocomplete = (props) => {
       <AutocompleteV2
         ref={autocompleteRef}
         fullWidth
+        open={inputVal && inputVal?.length}
         multiple
         size="small"
         options={options || []}
@@ -176,6 +177,9 @@ const Autocomplete = (props) => {
           resetUnlockTimer(true);
         }}
         disabled={disabled || false}
+        showCheckboxes={false}
+        popupIcon={<></>}
+        forcePopupIcon={false}
       />
     </div>
   );

@@ -92,14 +92,13 @@ const SwitchTemplate = ({
             onClick: switchTempBtnClickHandler
           }
         ]}
-        modalStyle={{ maxWidth: 558 }}
         {...props}
       >
         {/* Modal Loading */}
         {loading && <Loader isInner />}
 
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={12} className="switch-temp-description">
             {PROPOSAL.SWITCH_TEMP_MODAL_DESCRIPTION}
           </Grid>
           <Grid item xs={12} sm={9}>
@@ -135,7 +134,7 @@ const SwitchTemplate = ({
             { className: 'display-none' },
             { label: DEFAULT.CLOSE }
           ]}
-          modalStyle={{ maxWidth: 342 }}
+          className="switch-temp-warning-modal"
         />
       )}
     </>

@@ -57,8 +57,8 @@ const PriceModeler = () => {
         color="primary"
         size="small"
         className="question-tooltip-icon"
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-      >      
+        onClick={e => setAnchorEl(e.currentTarget)}
+      >
         <InfoIcon className="info-icon" />
       </IconButton>
       <Popover
@@ -68,22 +68,25 @@ const PriceModeler = () => {
         onClose={() => setAnchorEl(null)}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'center',
+          horizontal: 'center'
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'center',
+          horizontal: 'center'
         }}
         PaperProps={{
-          style: { 
-            borderColor: '#e9e9e9', 
-            boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-            padding: 10, 
-            maxInlineSize: 300, 
-          },
+          style: {
+            borderColor: '#e9e9e9',
+            boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+            padding: 10,
+            maxInlineSize: 300
+          }
         }}
       >
-        <Typography variant="body2">The fields listed below are required for an estimate to be displayed. Excludes investigator grants, vendor costs, and other expenses</Typography>
+        <Typography variant="body2">
+          The fields listed below are required for an estimate to be displayed.
+          Excludes investigator grants, vendor costs, and other expenses
+        </Typography>
       </Popover>
     </>
   );
@@ -153,7 +156,7 @@ const PriceModeler = () => {
             { className: 'display-none' },
             { label: DEFAULT.CLOSE }
           ]}
-          modalStyle={{ maxWidth: 342 }}
+          className="price-modeler-warning-modal"
         />
       )}
     </div>

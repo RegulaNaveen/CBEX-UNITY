@@ -1,4 +1,4 @@
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -7,7 +7,7 @@ import {
   selectSnackbarOpen,
   selectSnackbarOptions
 } from '../../../redux/selectors/ui';
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from '@mui/lab/Alert';
 import './styles.scss';
 import { UI } from '../../../constants/types';
 
@@ -37,9 +37,11 @@ export default function ReduxSnackbar() {
       onClose={handleClose}
       key={key}
     >
-      <Alert severity="success" onClose={handleClose}>
-        {message}
-      </Alert>
+      <div>
+        <Alert severity="success" onClose={handleClose}>
+          {message}
+        </Alert>
+      </div>
     </Snackbar>
   );
 }

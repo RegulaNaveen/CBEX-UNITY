@@ -289,7 +289,7 @@ const ActionButtons = ({
                 onClick: deleteAfterConfirmHandler
               }
             ]}
-            modalStyle={{ maxWidth: 460 }}
+            className="approvals-delete-confirm-modal"
           />
         )}
         <Tooltip

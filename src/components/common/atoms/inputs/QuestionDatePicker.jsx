@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import DatePicker from 'apollo-react/components/DatePickerV2';
+import DatePicker from 'apollo-react/components/DatePicker';
 import moment from 'moment';
 import { CloseCircle } from '../../../svg';
 

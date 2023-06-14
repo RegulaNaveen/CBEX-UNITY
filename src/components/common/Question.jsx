@@ -209,12 +209,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
       ) {
         // allow others to collapse before scrollIntoView
         setTimeout(() => {
-          this.questionTextTitleRef.current.scrollIntoView({
-            behaviour: 'smooth',
-            block: 'center',
-            inline: 'nearest'
-          });
-          this.setSelectRow(true);
+          if (this.questionTextTitleRef.current) {
+            this.questionTextTitleRef.current.scrollIntoView({
+              behaviour: 'smooth',
+              block: 'center',
+              inline: 'nearest'
+            });
+            this.setSelectRow(true);
+          }
           autoNavigationDone();
         }, 700);
       }
@@ -233,6 +235,16 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.setSelectRow(false);
       }
     }
+    // Removing logic to fix highlight issue. need to rework in logic part
+    // else if (
+    //   currentSearchResult === null ||
+    //   (currentSearchResult !== null &&
+    //     currentSearchResult.searchIndex !== questionId) ||
+    //   (currentSearchResult.sectionName !== null &&
+    //     currentSearchResult.sectionName !== sectionName)
+    // ) {
+    //   this.setSelectRow(false);
+    // }
 
     // updating question text with decorators
     if (this.questionTextRef1.current !== null) {

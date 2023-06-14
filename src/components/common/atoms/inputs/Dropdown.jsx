@@ -113,6 +113,10 @@ class Dropdown extends PureComponent<Props, State> {
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
+    if (!isCollapsed) {
+      this.ref.current.blur();
+      this.setState({ focusedValue: '' });
+    }
     this.setState({ isCollapsed: !isCollapsed });
   };
 
@@ -160,10 +164,8 @@ class Dropdown extends PureComponent<Props, State> {
       setTimeout(() => {
         this.setState({ isFocused: false, isCollapsed: true });
         setSelectRow(false);
-        if (lockedBySelf) {
-          // call to unlock question
-          this.context.questionUnlockWrapper(questionId);
-        }
+        // call to unlock question
+        this.context.questionUnlockWrapper(questionId);
         if (toggleWatch) {
           toggleWatch(false);
         }
@@ -212,14 +214,19 @@ class Dropdown extends PureComponent<Props, State> {
 
     if (event.code === 'Enter') {
       let newFocusedValue = focusedValue;
-      if (!isCollapsed) {
+      if (!isCollapsed && newFocusedValue) {
         this.setState({ isCollapsed: true, selectedValue: newFocusedValue });
         onClick(newFocusedValue);
       } else {
         if (items.size > 0 && focusedValue === '') {
           newFocusedValue = items.get(0);
+          if (newFocusedValue) {
+            this.setState({
+              isCollapsed: false,
+              focusedValue: newFocusedValue
+            });
+          }
         }
-        this.setState({ isCollapsed: false, focusedValue: newFocusedValue });
       }
       return;
     }

@@ -386,7 +386,7 @@ export const resumeSearchAction = ({
 const resetAutoNavigatedStateAfterDelay = () => {
   return async (dispatch, getState) => {
     await new Promise(resolve => {
-      setTimeout(() => resolve(), 5000);
+      setTimeout(() => resolve(), 10000);
     });
     const autoNavigated = selectAutoNavigatedToCurrentResult(getState());
     if (!autoNavigated) {

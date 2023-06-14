@@ -256,7 +256,7 @@ function ProposalTeam() {
             size="small"
             disabled={!isCurrentBid}
           >
-            <Plus fontSize="extraSmall" />
+            <Plus className="plus-icon-add-new-question" fontSize="extraSmall" />
             <span style={{ verticalAlign: 'top' }}> Add New Question</span>
           </Link>
         </div>

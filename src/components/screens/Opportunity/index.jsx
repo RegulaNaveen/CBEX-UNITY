@@ -190,6 +190,7 @@ export class Opportunity extends Component<Props, State> {
       location
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
+    const { bidStatus } = selectedBid.toJS();
     const prevProposalId = prevProps.selectedBid.get('id', '');
 
     // Bid changed
@@ -213,7 +214,7 @@ export class Opportunity extends Component<Props, State> {
       bidList.length !== prevBidList.length // check to prevent infinite rerenders
     ) {
       const bidItemToSelect = bidList.find(item => item.bidNo === bidNo);
-      if (!isEmpty(bidItemToSelect)) {
+      if (!bidStatus && !isEmpty(bidItemToSelect)) {
         changeBidInView(bidItemToSelect);
       }
     }
@@ -304,7 +305,6 @@ export class Opportunity extends Component<Props, State> {
       details,
       isOpen,
       selectedBid,
-
       match: { params }
     } = this.props;
     const { bidStatus } = selectedBid.toJS();

@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { List } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import TextField from '@material-ui/core/TextField';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
-import Autocomplete, {
-  createFilterOptions
-} from '@material-ui/lab/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/lab/Autocomplete';
+import { createFilterOptions } from '@mui/base/';
+
 import { getLookUpOptionsSelector } from '../../../redux/selectors';
 
 const filter = createFilterOptions();
@@ -52,7 +52,10 @@ const AutoCompleteWithAddOption = ({
     if (isEmpty(answer)) {
       return multiple ? [] : '';
     }
-    return multiple ? answer : answer?.trim();
+    if (multiple) {
+      return answer.filter(ans => !isEmpty(ans) && ans !== ' ');
+    }
+    return answer?.trim();
   };
 
   const [selectedVal, setSelectedVal] = useState(getAnswer());

@@ -82,6 +82,10 @@ export class CancelableADRequestApi {
               return [...firstNameMatches, ...lastNameMatches];
             }
             return [];
+          })
+          .catch(e => {
+            console.log('promise error', e);
+            return [];
           });
       }
     } catch (error) {

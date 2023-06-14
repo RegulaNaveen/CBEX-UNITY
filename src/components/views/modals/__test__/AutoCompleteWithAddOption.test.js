@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import * as data from '../../../screens/Proposal/__tests__/data.json';
 import thunk from 'redux-thunk';
-import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@mui/base/';
 import AutoCompleteWithAddOption from '../AutoCompleteWithAddOption';
 
 const middlewares = [thunk];
@@ -15,7 +15,7 @@ const proposal = Map(Object.entries(data.proposal));
 const filter = createFilterOptions();
 const initialState = {
   proposal,
-  proposalQuestions,
+  proposalQuestions
 };
 const mockStore = configureMockStore(middlewares);
 const store = mockStore(initialState);
@@ -37,7 +37,7 @@ const lovOptions = [
   'Imaging - CT scan',
   'Imaging - EEG',
   'Endoscopy',
-  'Other',
+  'Other'
 ];
 const defaultProps = {
   options: {
@@ -66,8 +66,8 @@ const defaultProps = {
       'Rater Training Services (for Rating Scales)',
       'Site Supplies and Equipment',
       'SMO - Site Management Organisations',
-      'Translations',
-    ],
+      'Translations'
+    ]
   },
   sfObject: 'Bid_History__c',
   lov: lovOptions,
@@ -100,7 +100,7 @@ describe('AutoCompleteWithAddOption component', () => {
       forceBlur: false,
       answer: ['Central ECG - ECG', 'Central ECG - Holter'],
       ...defaultProps
-    }
+    };
     const { getByTestId, getByText } = render(
       <Provider store={store}>
         <AutoCompleteWithAddOption {...props} />
@@ -117,14 +117,14 @@ describe('AutoCompleteWithAddOption component', () => {
       forceBlur: false,
       answer: 'Central ECG - ECG',
       ...defaultProps
-    }
+    };
     render(
       <Provider store={store}>
         <AutoCompleteWithAddOption {...props} />
       </Provider>
     );
     expect(screen.findByTestId('autocomplete-test')).toBeTruthy();
-  })
+  });
 
   test('check for forceblur true', () => {
     const props = {
@@ -132,14 +132,14 @@ describe('AutoCompleteWithAddOption component', () => {
       answer: ['Central ECG - ECG', 'Central ECG - Holter'],
       forceBlur: true,
       ...defaultProps
-    }
+    };
     render(
       <Provider store={store}>
         <AutoCompleteWithAddOption {...props} />
       </Provider>
     );
     expect(screen.findByTestId('autocomplete-test')).toBeTruthy();
-  })
+  });
 
   test.skip('filters the options based on the input value', () => {
     const props = {
@@ -147,7 +147,7 @@ describe('AutoCompleteWithAddOption component', () => {
       answer: 'Central ECG - ECG',
       forceBlur: true,
       ...defaultProps
-    }
+    };
 
     const { getByTestId, getByPlaceholderText } = render(
       <Provider store={store}>
@@ -166,7 +166,7 @@ describe('AutoCompleteWithAddOption component', () => {
       answer: ['Central ECG - ECG'],
       forceBlur: true,
       ...defaultProps
-    }
+    };
     const onChange = jest.fn();
     const { getByTestId, getByPlaceholderText } = render(
       <Provider store={store}>
@@ -186,7 +186,7 @@ describe('AutoCompleteWithAddOption component', () => {
       answer: ['Central ECG - ECG', 'Central ECG - Holter'],
       forceBlur: true,
       ...defaultProps
-    }
+    };
     const { getByTestId, getByPlaceholderText } = render(
       <Provider store={store}>
         <AutoCompleteWithAddOption {...props} />

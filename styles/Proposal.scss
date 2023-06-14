@@ -139,10 +139,15 @@
       color: $neutral10;
       font-weight: 500;
     }
-    button.Mui-selected {
+
+    button.Mui-selected.unity-tab-list {
       color: $black;
       font-weight: 500;
     }
+    .MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+      color: $white !important;
+    }
+
     .proposal-details {
       .tasksList-title-wrapper {
         display: flex;
@@ -161,17 +166,8 @@
           align-items: center;
           justify-content: flex-start;
 
-          .MuiSwitch-track {
-            height: 24px;
-            width: 48px;
-          }
-          .MuiSwitch-switchBase {
-            top: -8px;
-            left: -8px;
-          }
-          .MuiSwitch-thumb {
-            width: 22px;
-            height: 22px;
+          .MuiFormControlLabel-root {
+            margin-right: 0;
           }
         }
 
@@ -229,6 +225,13 @@
 
             .tasksList-add-icon {
               padding: 6px;
+            }
+          }
+
+          .taskList-filter-icon-wrapper {
+            svg {
+              min-width: 0;
+              margin-right: 7px;
             }
           }
         }
@@ -373,9 +376,13 @@
       color: $neutral10;
       font-weight: 500;
     }
-    button.Mui-selected {
+
+    button.Mui-selected.unity-tab-list {
       color: $black;
       font-weight: 500;
+    }
+    .MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+      color: $white !important;
     }
     .proposal-details {
       .tasksList-title-wrapper {
@@ -395,17 +402,8 @@
           align-items: center;
           justify-content: flex-start;
 
-          .MuiSwitch-track {
-            height: 24px;
-            width: 48px;
-          }
-          .MuiSwitch-switchBase {
-            top: -8px;
-            left: -8px;
-          }
-          .MuiSwitch-thumb {
-            width: 22px;
-            height: 22px;
+          .MuiFormControlLabel-root {
+            margin-right: 0;
           }
         }
 
@@ -462,6 +460,13 @@
 
             .tasksList-add-icon {
               padding: 6px;
+            }
+          }
+
+          .taskList-filter-icon-wrapper {
+            svg {
+              min-width: 0;
+              margin-right: 7px;
             }
           }
         }
@@ -634,9 +639,9 @@
 .popover-strategy-question {
   .RichEditor-editor .public-DraftEditor-content {
     font-size: 14px !important;
-    display: contents !important; 
+    display: contents !important;
   }
-  
+
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }

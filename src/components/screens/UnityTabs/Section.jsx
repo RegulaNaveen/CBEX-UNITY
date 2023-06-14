@@ -2,7 +2,7 @@ import React, { useState, createContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import Loader from 'apollo-react/components/Loader';
 import Highlighter from 'react-highlight-words';
 import CustomAccordion from '../../common/CustomAccordion/CustomAccordion';
@@ -14,6 +14,7 @@ import {
   selectCurrentSearchResult,
   selectAutoNavigatedToCurrentResult
 } from '../../../redux/selectors/search';
+import { getProposalQuestions } from '../../../redux/selectors/proposal';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 
 export const UnityTabContext = createContext();
@@ -39,13 +40,14 @@ const Section = ({ sectionId, title, tabId }) => {
     selectAutoNavigatedToCurrentResult
   );
   const flags = useSelector(state => state.proposal.get('eventflag'));
+  const questions = useSelector(getProposalQuestions);
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const result = shouldShowSection(sectionId, tabId, flags);
     setSectionVisibility(result);
-  }, [tabId, unityTabFilters, tabSection, flags]);
+  }, [tabId, unityTabFilters, tabSection, flags, questions]);
 
   useEffect(() => {
     let shouldExpand = expanded;
