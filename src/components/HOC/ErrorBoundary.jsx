@@ -11,8 +11,10 @@ import { getProposalDetails } from '../../redux/selectors';
 // Fallback UI Component
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <Router>
-      <Toolbar withinErrorBoundary />
+    <>
+      <Router>
+        <Toolbar withinErrorBoundary />
+      </Router>
       <div className="error-wrapper">
         <Card>
           <div className="error-boundary" role="alert">
@@ -30,7 +32,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
           </div>
         </Card>
       </div>
-    </Router>
+    </>
   );
 }
 const email = localStorage.getItem('userEmail');
