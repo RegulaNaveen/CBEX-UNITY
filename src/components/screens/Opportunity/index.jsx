@@ -31,6 +31,7 @@ import { resetFiltersAction } from '../../../redux/actions/approval-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
 import { onRefreshUserData } from '../../../redux/actions/sso-auth-actions';
 import { getSFNonEditabelField } from '../../../redux/actions/proposals-actions';
+import { saveRecentOppActivity } from '../../../api/proposals';
 import {
   getIsOpen,
   getProposalDetails,
@@ -166,6 +167,14 @@ export class Opportunity extends Component<Props, State> {
       this.setState({
         enableValidateTab: true
       });
+    }
+    if (window && window.location && window.location.href) {
+      const obj = {
+        url: window.location.href,
+        oppNo: params.id,
+        type: 'opportunity page'
+      };
+      saveRecentOppActivity(obj);
     }
 
     // Track Page view
@@ -415,6 +424,7 @@ export default compose(
     resetQuestionsFilter: resetQuestionsFilterAction,
     resetApprovalsFilter: resetFiltersAction,
     closeSearch: closeSearchAction,
-    clearSearch: clearSearchAction
+    clearSearch: clearSearchAction,
+    saverecentoppactivity: saveRecentOppActivity
   })
 )(MatomoHOC(Opportunity));

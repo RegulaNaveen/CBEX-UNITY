@@ -50,7 +50,7 @@ const Dashboard = () => {
       <Toolbar selected="dashboard" />
       <div className="tab-wrapper">
         <Tabbar>
-          <div label="My Docket">
+          <div label="Assigned">
             <MyDocketTab allFlags={allFlags} />
           </div>
           <div label="Recent">
