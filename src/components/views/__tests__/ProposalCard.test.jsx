@@ -1,8 +1,11 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { BrowserRouter as Router } from 'react-router-dom';
+import SocketContextProvider from '../../../context/SocketContext';
 import ProposalCard from '../ProposalCard';
+import { Provider } from 'react-redux';
+import { store } from '../../../store';
 
 afterEach(cleanup);
 
@@ -21,13 +24,19 @@ const props = {
   isApprovalCountPresent: true
 };
 
-describe('ProposalCard component', () => {
-  it('renders with correct content', () => {
-    const { getByText } = render(
-      <Router>
+const ProposalCardWithRedux = props => (
+  <Provider store={store}>
+    <Router>
+      <SocketContextProvider>
         <ProposalCard {...props} />
-      </Router>
-    );
+      </SocketContextProvider>
+    </Router>
+  </Provider>
+);
+
+describe('ProposalCard component', () => {
+  it('renders with correct content', async () => {
+    const { getByText } = render(<ProposalCardWithRedux {...props} />);
 
     expect(getByText(props.title)).toBeInTheDocument();
     expect(getByText(props.opportunityName)).toBeInTheDocument();
@@ -40,22 +49,17 @@ describe('ProposalCard component', () => {
   });
 
   it('renders the strategy development button', () => {
-    const { getByText } = render(
-      <Router>
-        <ProposalCard {...props} />
-      </Router>
-    );
+    const { getByText } = render(<ProposalCardWithRedux {...props} />);
 
     expect(getByText('Strategy Development')).toBeInTheDocument();
   });
 
   it('does not render the approvals count if it is not present', () => {
     const newProps = { ...props, isApprovalCountPresent: false };
-    const { queryByText } = render(
-      <Router>
-        <ProposalCard {...newProps} />
-      </Router>
+    const { queryByText, debug } = render(
+      <ProposalCardWithRedux {...newProps} />
     );
+    debug();
 
     expect(queryByText('3')).not.toBeInTheDocument();
   });

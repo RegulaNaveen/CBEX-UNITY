@@ -38,6 +38,7 @@ import { fetchAllApprovals } from './approval-actions';
 import { SEARCH, UNITY_TABS } from '../../constants/types';
 import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
+import { selectFavourites } from '../selectors/sso-auth';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -109,7 +110,8 @@ const {
   SET_PANEL_STATUS,
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE,
-  WIDGET_UPDATE
+  WIDGET_UPDATE,
+  TOGGLE_FAVOURITE
 } = REDUX_TYPES.PROPOSAL;
 
 /**
@@ -131,14 +133,24 @@ const updateBidNoQueryparam = bidNo => {
 export type ProposalInfo = {};
 
 export const getProposal = (id: string): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
 
     try {
       const data = await getProposalInfo(id);
+      const favourites = selectFavourites(getState()).toJS();
+      const favouritesMap = favourites.reduce((favMap, fav) => {
+        favMap[fav] = true;
+        return favMap;
+      }, {});
+      const isFavourite =
+        favouritesMap[`${data.proposal.proposalDetails['CRM #']}`];
       // Extracting unique milestone values from Proposal Questions
       const milestones = getUniqueMilestones(data.proposalQuestions);
-      dispatch({ type: PROPOSAL_INFO, payload: { ...data, milestones } });
+      dispatch({
+        type: PROPOSAL_INFO,
+        payload: { ...data, milestones, isFavourite }
+      });
 
       return data;
     } catch (err) {
@@ -1275,7 +1287,7 @@ export const getOpportunity = (
   bidNumber,
   flag = false
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     const bidNo = parseInt(bidNumber);
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     let selectedProposalId;
@@ -1374,6 +1386,15 @@ export const getOpportunity = (
       if (flag) {
         dispatch({ type: NEW_BID_CREATED, payload: { flag } });
       }
+      const favourites = selectFavourites(getState()).toJS();
+      const favouritesMap = favourites.reduce((favMap, fav) => {
+        favMap[fav] = true;
+        return favMap;
+      }, {});
+      dispatch({
+        type: TOGGLE_FAVOURITE,
+        payload: favouritesMap[`${id}`]
+      });
     } catch (err) {
       console.log('error occurred ', err);
       dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });

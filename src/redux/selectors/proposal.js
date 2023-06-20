@@ -404,3 +404,7 @@ export const selectVTabUserPreference = createSelector(
 export const selectCurrentWidget = createSelector(selectProposal, proposal =>
   proposal?.get('showWidget')
 );
+
+export const selectFavourite = createSelector(selectProposal, proposal =>
+  proposal?.get('favourite')
+);

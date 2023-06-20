@@ -2,10 +2,25 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import GridView from '../GridView';
+import { Provider } from 'react-redux';
+import { store } from '../../../store';
+import SocketContextProvider from '../../../context/SocketContext';
+
+const GridViewWithRedux = props => {
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <SocketContextProvider>
+          <GridView {...props} />
+        </SocketContextProvider>
+      </BrowserRouter>
+    </Provider>
+  );
+};
 
 describe('GridView component', () => {
   test('displays a message when no data is provided', () => {
-    render(<GridView data={[]} />);
+    render(<GridViewWithRedux data={[]} />);
     expect(screen.getByText('No data to show')).toBeInTheDocument();
   });
 
@@ -35,11 +50,7 @@ describe('GridView component', () => {
     const allFlags = {
       showTimelineFlag: true
     };
-    render(
-      <BrowserRouter>
-        <GridView data={data} allFlags={allFlags} />
-      </BrowserRouter>
-    );
+    render(<GridViewWithRedux data={data} allFlags={allFlags} />);
     expect(screen.getByText('Opportunity 1')).toBeInTheDocument();
     expect(screen.getByText('Customer 1')).toBeInTheDocument();
     expect(screen.getByText('Indication 1')).toBeInTheDocument();
@@ -61,11 +72,7 @@ describe('GridView component', () => {
     const allFlags = {
       showTimelineFlag: true
     };
-    render(
-      <BrowserRouter>
-        <GridView data={data} allFlags={allFlags} />
-      </BrowserRouter>
-    );
+    render(<GridViewWithRedux data={data} allFlags={allFlags} />);
 
     const timelineButton = screen.getByRole('link', { name: 'Artboard' });
     fireEvent.click(timelineButton);

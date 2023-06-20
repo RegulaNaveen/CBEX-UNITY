@@ -2,6 +2,8 @@
 import axios from 'axios';
 import qs from 'querystring';
 import { API } from '../constants';
+import { getAccessTokenFromLocalStorage } from '../SessionHandler';
+import { axiosInstance } from '../store';
 
 const {
   API_ENDPOINT,
@@ -11,6 +13,8 @@ const {
   AUTH_API_URL,
   VALIDATE_TOKEN
 } = API.AUTH;
+
+const { API_KEY, INTEGRATIONS_API_URL } = API.PROPOSAL;
 
 type Headers = {
   'Content-Type': string,
@@ -100,4 +104,44 @@ export const InitRefreshToken = () => {
         });
     }, 900000);
   }
+};
+
+export const getFavourites = async () => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${INTEGRATIONS_API_URL}/user/favourites`, {
+        headers: {
+          'x-api-key': API_KEY,
+          'x-access-token': getAccessTokenFromLocalStorage()
+        }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const toggleFavourite = async (oppNo, favourite) => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(
+        `${INTEGRATIONS_API_URL}/user/favourite/${oppNo}?toggle=${favourite}`,
+        {},
+        {
+          headers: {
+            'x-api-key': API_KEY,
+            'x-access-token': getAccessTokenFromLocalStorage()
+          }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };
