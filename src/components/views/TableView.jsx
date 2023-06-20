@@ -14,6 +14,7 @@ import Favourite from '../common/atoms/Favourite';
 import { useDispatch, useSelector } from 'react-redux';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
+import { saveRecentOppActivity } from '../../api/proposals';
 
 type Props = {
   data: Array<Object>,
@@ -88,6 +89,12 @@ const TableView = ({ data, hideStatus }: Props) => {
           favourite
         );
         updateFavouriteWrapper(row[LINK_COLUMN], favourite);
+        const obj = {
+          url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
+          oppNo: row[LINK_COLUMN],
+          type: 'opportunity page'
+        };
+        saveRecentOppActivity(obj);
         if (toggleFavouriteRes && toggleFavouriteRes.data) {
           if (toggleFavouriteRes.data.favourite) {
             await dispatch(updateFavourite(row[LINK_COLUMN], favourite));

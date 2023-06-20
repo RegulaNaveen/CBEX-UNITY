@@ -13,6 +13,7 @@ import { updateFavourite } from '../../../../redux/actions/sso-auth-actions';
 import Loader from 'apollo-react/components/Loader';
 import featureFlags from '../../../../constants/featureFlags';
 import { SocketContext } from '../../../../context/SocketContext';
+import { saveRecentOppActivity } from '../../../../api/proposals';
 
 const styles = { padding: 10 };
 const containerStyle = {
@@ -240,6 +241,14 @@ const loadSidebar = props => {
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(crm, favourite);
       updateFavouriteWrapper(crm, favourite);
+      if (window && window.location && window.location.href) {
+        const obj = {
+          url: window.location.href,
+          oppNo: crm,
+          type: 'opportunity page'
+        };
+        saveRecentOppActivity(obj);
+      }
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
           await dispatch(updateFavourite(crm, favourite));

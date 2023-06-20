@@ -13,6 +13,7 @@ import { Loader } from 'apollo-react/components/Loader/Loader';
 import { updateFavourite } from '../../redux/actions/sso-auth-actions';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
+import { saveRecentOppActivity } from '../../api/proposals';
 
 type Props = {
   title: string,
@@ -70,6 +71,12 @@ const ProposalCard = ({
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
       updateFavouriteWrapper(title, favourite);
+      const obj = {
+        url: `${window.location.origin}/opportunities/${title}`,
+        oppNo: title,
+        type: 'opportunity page'
+      };
+      saveRecentOppActivity(obj);
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
           await dispatch(updateFavourite(title, favourite));
