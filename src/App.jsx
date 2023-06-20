@@ -78,12 +78,12 @@ const App = () => (
               <Switch>
                 <Route path="/" exact component={Login} />
                 <Route exact path={LOGIN} component={Login} />
-                <Route path="/" component={Home} />
                 <PrivateRoute
                   exact
                   path={UBUILD}
                   component={UbuildShellComponent}
                 />
+                <Route path="/" component={Home} />
                 <Redirect to={LOGIN} />
               </Switch>
             </SessionHandler>
