@@ -13,6 +13,7 @@ const {
   SET_PROPOSAL_FILTERING,
   SET_PAGE,
   SET_NUM_OF_ROWS,
+  SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
@@ -26,6 +27,7 @@ const INITIAL_STATE: Map = fromJS({
   selectedViewType: 1,
   page: 1,
   numRows: 15,
+  assignTabRows: 10,
   nonEditableSF: []
 });
 
@@ -68,6 +70,9 @@ const setPage = (state, action) => state.set('page', action.payload);
 
 const setNumOfRows = (state, action) => state.set('numRows', action.payload);
 
+const setAssignedTabNumOfRows = (state, action) =>
+  state.set('assignTabRows', action.payload);
+
 const setNonEditableField = (state, action) =>
   state.set('nonEditableSF', action.payload);
 
@@ -81,6 +86,7 @@ const actionMap = {
   [SET_PROPOSAL_FILTERING]: setProposalFiltering,
   [SET_PAGE]: setPage,
   [SET_NUM_OF_ROWS]: setNumOfRows,
+  [SET_ASSIGNED_TAB_NUM_OF_ROWS]: setAssignedTabNumOfRows,
   [NON_EDITABLE_SF_FIELD]: setNonEditableField
 };
 

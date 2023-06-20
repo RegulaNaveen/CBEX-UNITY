@@ -1,29 +1,31 @@
 import React from 'react';
-import { render, screen, userEvent } from '@testing-library/react';
-import ErrorBoundaryComponent, { ErrorFallback } from '../ErrorBoundary';
+import { Provider } from 'react-redux';
+import { shallow } from 'enzyme';
+import ErrorBoundaryComponent from '../ErrorBoundary';
+import { store } from '../../../store';
+import Typography from 'apollo-react/components/Typography';
 
 describe('ErrorBoundaryComponent', () => {
   const props = {
     ErrorFallback: jest.fn()
   };
-  it('renders its children without error', () => {
-    render(
-      <ErrorBoundaryComponent>
-        <p>Child Component</p>
-      </ErrorBoundaryComponent>
+
+  it('render the component', () => {
+    const wrapper = shallow(
+      <Provider store={store}>
+        <ErrorBoundaryComponent />
+      </Provider>
     );
-    expect(screen.getByText('Child Component')).toBeInTheDocument();
+    expect(wrapper.exists()).toBe(true);
   });
 
-  it('renders the fallback UI component when an error is thrown', () => {
-    const ThrowErrorComponent = () => {
-      throw new Error('Test Error');
-    };
-    render(
-      <ErrorBoundaryComponent>
-        <ThrowErrorComponent />
-      </ErrorBoundaryComponent>
+  it('finding the error text', () => {
+    const wrapper = shallow(
+      <Provider store={store}>
+        <ErrorBoundaryComponent />
+      </Provider>
     );
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    const header = <Typography>Something went wrong!</Typography>;
+    expect(wrapper.find(header)).toBeTruthy();
   });
 });

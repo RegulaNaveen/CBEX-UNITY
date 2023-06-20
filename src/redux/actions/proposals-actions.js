@@ -6,6 +6,7 @@ import { REDUX_TYPES } from '../../constants';
 import {
   onGetAllProposals,
   onGetByStatus,
+  getRecentOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
@@ -21,6 +22,7 @@ const {
   SET_PROPOSAL_FILTERING,
   SET_PAGE,
   SET_NUM_OF_ROWS,
+  SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
@@ -230,7 +232,7 @@ export const onFilteringProposals = (
         data = response.data;
       } else if (Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await onGetByStatus(
+        const response = await getRecentOpportunity(
           filterPayload,
           'non-active',
           userEmail
@@ -292,6 +294,14 @@ export const setNumberOfRowsAction = (rowsCount: Number) => {
   return dispatch => {
     dispatch({
       type: SET_NUM_OF_ROWS,
+      payload: rowsCount
+    });
+  };
+};
+export const setAssignedTabNumberOfRowsAction = (rowsCount: Number) => {
+  return dispatch => {
+    dispatch({
+      type: SET_ASSIGNED_TAB_NUM_OF_ROWS,
       payload: rowsCount
     });
   };
