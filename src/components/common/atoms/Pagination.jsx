@@ -136,7 +136,7 @@ class Pagination extends PureComponent<Props, State> {
     return (
       <div className="pagination">
         {this.renderLeftControls()}
-        {this.chunks[current].map((page, index) => (
+        {this.chunks[current]?.map((page, index) => (
           <button
             id={page}
             key={uuidv4()}

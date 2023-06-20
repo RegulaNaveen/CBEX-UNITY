@@ -12,6 +12,8 @@ const {
   NON_EDITABLE_SF_FIELD_URL
 } = API.PROPOSAL;
 
+const { PROFILE_API_URL } = API.PROFILE;
+
 let onGoingDashboardCall;
 const { CancelToken } = newAxios;
 
@@ -33,6 +35,33 @@ export const onGetByStatus = (
   if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
 
   return axiosInstance.post(PROPOSAL_API_ALL_BY_STATUS, payload, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+    cancelToken: new CancelToken(function executor(c) {
+      onGoingDashboardCall = c;
+    }),
+    params: { userEmail, status }
+  });
+};
+
+// save opportunity for recent tab
+export const saveRecentOppActivity = (payload): Promise<Object> => {
+  if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
+  return axiosInstance.post(`${PROFILE_API_URL}/recenttab`, payload, {
+    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+    cancelToken: new CancelToken(function executor(c) {
+      onGoingDashboardCall = c;
+    })
+  });
+};
+
+// Get user last 30 days recent opportunity List for Recent Tab
+export const getRecentOpportunity = (
+  payload,
+  status: string,
+  userEmail: string
+): Promise<Object> => {
+  if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
+  return axiosInstance.get(`${PROFILE_API_URL}/recenttab`, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
     cancelToken: new CancelToken(function executor(c) {
       onGoingDashboardCall = c;
