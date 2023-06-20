@@ -9,5 +9,6 @@ export default {
   QUESTIONS_FOR_CUSTOMER_TAB: 'questionsForCustomerTab',
   PROPOSAL_TEAM_TAB: 'proposalTeamTab',
   SEARCH_FLAG: 'searchFlag',
-  BID_COST_DETAILS: 'bidCostDetail'
+  BID_COST_DETAILS: 'bidCostDetail',
+  FAVOURITE_FLAG: 'favouriteFlag'
 };

@@ -28,7 +28,8 @@ const formatProposal = (proposal: Object) => {
     verbatimIndication: proposal['verbatim indication'] || placeholder,
     proposalId: proposal.proposalId || placeholder,
     approvalsCount: proposal.approvalsCount || null,
-    isApprovalCountPresent: proposal.isApprovalCountPresent || false
+    isApprovalCountPresent: proposal.isApprovalCountPresent || false,
+    isFavourite: proposal.isFavourite || false
   };
 
   return formatted;
@@ -68,6 +69,7 @@ class GridView extends Component<Props> {
               approvalsCount={formatted.approvalsCount}
               isApprovalCountPresent={formatted.isApprovalCountPresent}
               allFlags={allFlags}
+              favourite={formatted.isFavourite}
             />
           );
         })}
