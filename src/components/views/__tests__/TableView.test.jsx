@@ -3,6 +3,9 @@ import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { BrowserRouter as Router } from 'react-router-dom';
 import TableView from '../TableView';
+import { Provider } from 'react-redux';
+import { store } from '../../../store';
+import SocketContextProvider from '../../../context/SocketContext';
 
 afterEach(cleanup);
 
@@ -11,36 +14,44 @@ const data = [
     'opportunity number': 'OPP123',
     'opportunity name': 'Test Opportunity',
     'bid due date': '2022-01-01',
-    'opportunity status': 'Active',
+    'opportunity status': 'Active'
   },
   {
     'opportunity number': 'OPP456',
     'opportunity name': 'Test Opportunity 2',
     'bid due date': '2022-02-01',
-    'opportunity status': 'Inactive',
-  },
+    'opportunity status': 'Inactive'
+  }
 ];
 
 const hideStatusData = [
   {
     'opportunity number': 'OPP123',
     'opportunity name': 'Test Opportunity',
-    'bid due date': '2022-01-01',
+    'bid due date': '2022-01-01'
   },
   {
     'opportunity number': 'OPP456',
     'opportunity name': 'Test Opportunity 2',
-    'bid due date': '2022-02-01',
-  },
+    'bid due date': '2022-02-01'
+  }
 ];
+
+const TableViewWithRedux = props => {
+  return (
+    <Provider store={store}>
+      <Router>
+        <SocketContextProvider>
+          <TableView {...props} />
+        </SocketContextProvider>
+      </Router>
+    </Provider>
+  );
+};
 
 describe('TableView component', () => {
   test('renders table headers and content correctly', () => {
-    const { getByText } = render(
-      <Router>
-        <TableView data={data} />
-      </Router>
-    );
+    const { getByText } = render(<TableViewWithRedux data={data} />);
 
     const headerOpportunityNumber = getByText(/opportunity number/i);
     const headerOpportunityName = getByText(/opportunity name/i);
@@ -63,9 +74,7 @@ describe('TableView component', () => {
 
   test('hides the opportunity status header and data correctly', () => {
     const { queryByText } = render(
-      <Router>
-        <TableView data={hideStatusData} hideStatus />
-      </Router>
+      <TableViewWithRedux data={hideStatusData} hideStatus />
     );
 
     const headerOpportunityStatus = queryByText('opportunity status');
