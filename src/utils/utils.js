@@ -64,7 +64,6 @@ const getAnswer = ans => {
 const getFullProposalTeamString = (updateField, questions) => {
   const relevantQuestions = questions?.filter(
     q =>
-      q.visible &&
       (q.active || q.isCustomQuestion) &&
       q.section.sectionName === 'Proposal Team'
   );
@@ -113,8 +112,8 @@ const replaceAnswerToQuestionsPlaceholders = (
   updateField
 ) => {
   let updatedEventBodyStr = eventBodyStr;
-
-  const relevantQuestions = questions?.filter(q => q.visible && q.active);
+  let answer;
+  const relevantQuestions = questions?.filter(q => q.active);
 
   relevantQuestions.forEach(
     ({ questionText, questionId, answers, answerConfiguration }) => {
@@ -127,11 +126,7 @@ const replaceAnswerToQuestionsPlaceholders = (
       );
 
       if (answers?.length) {
-        const answer = handleAnswerTypes(
-          answerConfiguration,
-          answers,
-          updateField
-        );
+        answer = handleAnswerTypes(answerConfiguration, answers, updateField);
 
         updatedEventBodyStr = updatedEventBodyStr.replace(
           regexPlaceholders,
@@ -141,13 +136,39 @@ const replaceAnswerToQuestionsPlaceholders = (
     }
   );
 
+  const placeholders = [
+    'opportunity_number',
+    'line_of_business',
+    'customer',
+    'product_name',
+    'therapeutic_area',
+    'protocol_number',
+    'bid_no',
+    'unity_link',
+    'todays_date',
+    'full_proposal_team',
+    'questions_for_the_customers'
+  ];
+
   if (updateField === 'body') {
-    const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
+    for (const placeholder of placeholders) {
+      const regexPlaceholder = new RegExp(
+        `\\[${placeholder}:([\\w\\s-]+)]`,
+        'gi'
+      );
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexPlaceholder,
+        `<span style="color: #000">[${placeholder}:$1]</span>`
+      );
+    }
+
+    const regexUnresolvedPlaceholders = /\[([\w\s-]+:[\w\s-]+)]/gi;
     updatedEventBodyStr = updatedEventBodyStr.replace(
-      regexPlaceholdersNotResolved,
-      match => `<span style="color:#f00">${match}</span>`
+      regexUnresolvedPlaceholders,
+      `<span style="color: #f00">$&</span>`
     );
   }
+
   return updatedEventBodyStr;
 };
 
