@@ -52,7 +52,7 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import { UBUILD, DASHBOARD } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
-import { getBidList } from '../../../redux/selectors/proposal';
+import { getBidList, selectFavourite } from '../../../redux/selectors/proposal';
 import {
   clearSearchAction,
   closeSearchAction
@@ -305,7 +305,8 @@ export class Opportunity extends Component<Props, State> {
       details,
       isOpen,
       selectedBid,
-      match: { params }
+      match: { params },
+      favourite
     } = this.props;
     const { bidStatus } = selectedBid.toJS();
     if (isLoading)
@@ -322,6 +323,7 @@ export class Opportunity extends Component<Props, State> {
           isOpen={isOpen}
           windowSize={windowSize}
           bidStatus={bidStatus}
+          favourite={favourite}
         />
         <span className="unity-tabs-container-wrapper">
           <UnityTab
@@ -387,7 +389,8 @@ const mapStateToProps = (state: Map) => ({
   isOpen: getIsOpen(state),
   selectedBid: getSelectedBid(state),
   newbidflag: getStatusOfNewBid(state),
-  bidList: getBidList(state)
+  bidList: getBidList(state),
+  favourite: selectFavourite(state)
 });
 
 export default compose(
