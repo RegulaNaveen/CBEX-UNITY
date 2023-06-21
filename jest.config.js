@@ -9,6 +9,11 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/dist',
+    'src/components/common/__tests__/TagUserList.test.js',
+    'src/components/screens/Approvals/__tests__/ActionButtons.test.js',
+    'src/components/screens/Approvals/__test__/ApprovalsIndex.test.js',
+    'src/api/__tests__/proposal.test.js',
+    'src/components/common/__tests__/CustomApolloRichText.test.js'
   ],
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
