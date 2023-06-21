@@ -74,7 +74,8 @@ const {
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE,
   CHANGE_BID_STATUS_OPERATION,
-  WIDGET_UPDATE
+  WIDGET_UPDATE,
+  TOGGLE_FAVOURITE
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -194,14 +195,16 @@ const INITIAL_STATE: Map = fromJS({
   showWidget: {
     currentWidget: 'PriceModeler',
     proposalId: ''
-  }
+  },
+  favourite: false
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
   const {
     proposalQuestions,
     proposal: { proposalDetails },
-    proposal
+    proposal,
+    isFavourite
   } = action.payload;
   let NewopportunityData = new OrderedMap({});
   let opportunityData = state.get('opportunityData');
@@ -226,6 +229,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
       return filter.set('checked', false);
     });
   });
+  state.set('favourite', isFavourite);
   // Add agreementId as well in proposal details
   // proposalDetails.agreementId = action.payload.proposal.agreementId || '';
 
@@ -1274,6 +1278,10 @@ const setWidgetUpdate = (state, action) => {
   return state.set('showWidget', { currentWidget, proposalId });
 };
 
+const onFavouriteToggle = (state, action) => {
+  return state.set('favourite', action.payload);
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1350,7 +1358,8 @@ const actionMap = {
   [SET_V_TAB_USER_PREFERENCE]: setVTabUserPreference,
   [CHANGE_BID_STATUS_OPERATION]: (state, { payload }) =>
     state.set('changeBidStatus', payload),
-  [WIDGET_UPDATE]: setWidgetUpdate
+  [WIDGET_UPDATE]: setWidgetUpdate,
+  [TOGGLE_FAVOURITE]: onFavouriteToggle
 };
 
 export default function(

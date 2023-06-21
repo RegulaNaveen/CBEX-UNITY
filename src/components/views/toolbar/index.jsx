@@ -103,13 +103,10 @@ class Toolbar extends Component<{}, State> {
           </div>
         ) : (
           <>
-            <div
-              onClick={() => window.location.replace('/dashboard')}
-              style={{ cursor: 'pointer', display: 'flex' }}
-            >
+            <Link to={DASHBOARD}>
               <p className="toolbar-title">IQVIA™</p>
               <p className="toolbar-title">Unity</p>
-            </div>
+            </Link>
             {results && (
               <div
                 onClick={() => window.location.replace('/ubuild')}

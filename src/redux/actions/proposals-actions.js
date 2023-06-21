@@ -11,6 +11,8 @@ import {
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
+import { selectFavourites } from '../selectors/sso-auth';
+import { getProposals } from '../selectors';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -25,7 +27,7 @@ const {
   NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
-const formatProposal = (proposal: Object): Object => {
+const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
   const formattedProposal = {};
 
   const {
@@ -55,6 +57,9 @@ const formatProposal = (proposal: Object): Object => {
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
     formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+    formattedProposal.isFavourite = !!favoritesMap[
+      `${proposalDetails['CRM #']}`
+    ];
     return formattedProposal;
   }
 
@@ -62,7 +67,7 @@ const formatProposal = (proposal: Object): Object => {
 };
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<Object, Object>) => {
+  return async (dispatch: Dispatch<Object, Object>, getState) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
 
     try {
@@ -70,7 +75,14 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        const formatted = proposals.map(proposal => formatProposal(proposal));
+        const favourites = selectFavourites(getState()).toJS();
+        const favouritesMap = favourites.reduce((favMap, fav) => {
+          favMap[fav] = true;
+          return favMap;
+        }, {});
+        const formatted = proposals.map(proposal =>
+          formatProposal(proposal, favouritesMap)
+        );
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -81,14 +93,21 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
 export const getProposalsByStatus = (status: string) => {
   const userEmail = localStorage.getItem('userEmail') || '';
-  return async (dispatch: Dispatch<Object, Object>) => {
+  return async (dispatch: Dispatch<Object, Object>, getState) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
     try {
       const { data } = await onGetByStatus(status, userEmail);
 
       if (data) {
         const { proposals } = data;
-        const formatted = proposals.map(proposal => formatProposal(proposal));
+        const favourites = selectFavourites(getState()).toJS();
+        const favouritesMap = favourites.reduce((favMap, fav) => {
+          favMap[fav] = true;
+          return favMap;
+        }, {});
+        const formatted = proposals.map(proposal =>
+          formatProposal(proposal, favouritesMap)
+        );
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -142,7 +161,7 @@ export const onFilteringProposals = (
   filters: FilteredData,
   tabIndex: Number
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
       const filterPayload = { source: 'es' };
       dispatch({
@@ -227,11 +246,15 @@ export const onFilteringProposals = (
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        let formatted = proposals.map(proposal => formatProposal(proposal));
-        dispatch({
-          type: ON_GET_PROPOSALS,
-          payload: { proposals: formatted }
-        });
+        const favourites = selectFavourites(getState()).toJS();
+        const favouritesMap = favourites.reduce((favMap, fav) => {
+          favMap[fav] = true;
+          return favMap;
+        }, {});
+        const formatted = proposals.map(proposal =>
+          formatProposal(proposal, favouritesMap)
+        );
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
       console.log(error);
@@ -295,6 +318,24 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
         type: NON_EDITABLE_SF_FIELD,
         payload: data
       });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateProposal = (oppNumber, favourite) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    let proposals = getProposals(getState());
+    const proposalIndex = proposals.findIndex(
+      proposal => proposal['opportunity number'] === oppNumber
+    );
+    if (proposalIndex > -1) {
+      proposals[proposalIndex]['isFavourite'] = favourite;
+      dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
   } catch (error) {
     console.log(error);

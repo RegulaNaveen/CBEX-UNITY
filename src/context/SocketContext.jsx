@@ -33,6 +33,7 @@ import {
   onApprovalSectionDeletedAction,
   onApprovalSectionDeletingAction
 } from '../redux/actions/approval-actions';
+import { updateFavourite } from '../redux/actions/sso-auth-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -165,6 +166,28 @@ const SocketContextProvider = props => {
             data: {
               latestAnswer: answer,
               questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateFavourite = (oppNumber, favourite, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'FAVOURITE',
+            data: {
+              oppNumber,
+              favourite
             }
           }
         })
@@ -358,7 +381,8 @@ const SocketContextProvider = props => {
           onApprovalSectionDuplicated,
           onApprovalSectionDeleting,
           onApprovalSectionDeleted,
-          widgetUpdate
+          widgetUpdate,
+          updateFavouriteAction
         } = props;
 
         // On Message Recieve
@@ -477,6 +501,9 @@ const SocketContextProvider = props => {
               const { proposalId, typeOfWidget } = data.data;
               widgetUpdate(proposalId, typeOfWidget);
 
+            case 'FAVOURITE':
+              const { oppNumber, favourite } = data.data;
+              updateFavouriteAction(oppNumber, favourite);
               break;
             default:
               break;
@@ -646,6 +673,12 @@ const SocketContextProvider = props => {
     );
   };
 
+  const updateFavouriteWrapper = (oppNo, favourite) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateFavourite(oppNo, favourite, null)
+    );
+  };
+
   const addQuestionWrapper = questionData => {
     waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
   };
@@ -750,7 +783,8 @@ const SocketContextProvider = props => {
         approvalSectionDuplicatingWrapper,
         approvalSectionDuplicatedWrapper,
         approvalSectionDeletingWrapper,
-        approvalSectionDeletedWrapper
+        approvalSectionDeletedWrapper,
+        updateFavouriteWrapper
       }}
     >
       {props.children}
@@ -783,7 +817,8 @@ const mapDispatchToProps = {
   onApprovalSectionDuplicated: onApprovalSectionDuplicatedAction,
   onApprovalSectionDeleting: onApprovalSectionDeletingAction,
   onApprovalSectionDeleted: onApprovalSectionDeletedAction,
-  widgetUpdate
+  widgetUpdate,
+  updateFavouriteAction: updateFavourite
 };
 
 export default connect(

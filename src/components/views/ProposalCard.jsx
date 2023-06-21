@@ -1,11 +1,19 @@
 // @flow
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ThumbsUp from 'apollo-react-icons/ThumbsUp';
 import CalenderWithNumber from '../svg/CalenderWithNumber';
 import House from 'apollo-react-icons/House';
 import { Folder } from '../svg';
 import { OPPORTUNITY } from '../../routes';
+import Favourite from '../common/atoms/Favourite';
+import { toggleFavourite } from '../../api/sso-auth';
+import { Loader } from 'apollo-react/components/Loader/Loader';
+import { updateFavourite } from '../../redux/actions/sso-auth-actions';
+import featureFlags from '../../constants/featureFlags';
+import { SocketContext } from '../../context/SocketContext';
+import { saveRecentOppActivity } from '../../api/proposals';
 
 type Props = {
   title: string,
@@ -36,8 +44,15 @@ const ProposalCard = ({
   proposalId,
   approvalsCount,
   isApprovalCountPresent,
-  allFlags
+  allFlags,
+  favourite
 }: Props) => {
+  const [favInProgress, setFavInProgress] = useState(false);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+
+  const dispatch = useDispatch();
+  const { updateFavouriteWrapper } = useContext(SocketContext);
+
   function setProposalTypeView({
     currentTarget
   }: SyntheticEvent<HTMLButtonElement>) {
@@ -51,6 +66,31 @@ const ProposalCard = ({
   const checkNoDataClass = (keyToCheck: string) =>
     keyToCheck === NO_DATA ? NO_DATA_PLACEHOLDER : undefined;
 
+  async function onFavouriteToggle(favourite) {
+    try {
+      setFavInProgress(true);
+      const toggleFavouriteRes = await toggleFavourite(title, favourite);
+      updateFavouriteWrapper(title, favourite);
+      const obj = {
+        url: `${window.location.origin}/opportunities/${title}`,
+        oppNo: title,
+        type: 'opportunity page'
+      };
+      saveRecentOppActivity(obj);
+      if (toggleFavouriteRes && toggleFavouriteRes.data) {
+        if (toggleFavouriteRes.data.favourite) {
+          await dispatch(updateFavourite(title, favourite));
+        } else {
+          await dispatch(updateFavourite(title, favourite));
+        }
+      }
+    } catch (e) {
+      console.error(`Error in updating favourite for ${title}`, e);
+    } finally {
+      setFavInProgress(false);
+    }
+  }
+
   return (
     <div className="card">
       <div className="header-section">
@@ -58,6 +98,35 @@ const ProposalCard = ({
           <p className={checkNoDataClass(title)}>{title}</p>
           <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
         </div>
+        {flags[featureFlags.FAVOURITE_FLAG] ? (
+          <div className="favourite-container">
+            {favInProgress ? (
+              <div style={{ display: 'flex', height: '24px', width: '24px' }}>
+                <span
+                  style={{
+                    marginLeft: '0px',
+                    marginTop: '6px',
+                    position: 'relative'
+                  }}
+                >
+                  <Loader
+                    isInner
+                    size={20}
+                    style={{
+                      width: '20px',
+                      height: '20px'
+                    }}
+                  />
+                </span>
+              </div>
+            ) : (
+              <Favourite
+                value={favourite}
+                onToggle={update => onFavouriteToggle(update)}
+              />
+            )}
+          </div>
+        ) : null}
       </div>
 
       <div className="info-section">

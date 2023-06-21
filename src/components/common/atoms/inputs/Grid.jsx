@@ -1,12 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
 import { getProposalQuestions } from '../../../../redux/selectors/proposal';
+import Favourite from '../Favourite';
+import { toggleFavourite } from '../../../../api/sso-auth';
+import { updateFavourite } from '../../../../redux/actions/sso-auth-actions';
+import Loader from 'apollo-react/components/Loader';
+import featureFlags from '../../../../constants/featureFlags';
+import { SocketContext } from '../../../../context/SocketContext';
+import { saveRecentOppActivity } from '../../../../api/proposals';
 
 const styles = { padding: 10 };
 const containerStyle = {
@@ -17,7 +24,7 @@ const containerStyle = {
 };
 
 const loadSidebar = props => {
-  const { data, isOpen, windowSize, bidStatus } = props;
+  const { data, isOpen, windowSize, bidStatus, favourite } = props;
   const questions = useSelector(getProposalQuestions);
   const [
     detailsForBackendSectionData,
@@ -59,6 +66,12 @@ const loadSidebar = props => {
     isLinebusinessTooltipHalfscreen,
     setisLinebusinessTooltipHalfscreen
   ] = useState(false);
+  const [favInProgress, setFavInProgress] = useState(false);
+
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+  const dispatch = useDispatch();
+  const { updateFavouriteWrapper } = useContext(SocketContext);
+
   const {
     'Bid due date': bidDueDate,
     Phase: phase,
@@ -223,6 +236,33 @@ const loadSidebar = props => {
     setDetailsForBackendAnswers(questions);
   }, [questions]);
 
+  async function onFavouriteToggle(favourite) {
+    try {
+      setFavInProgress(true);
+      const toggleFavouriteRes = await toggleFavourite(crm, favourite);
+      updateFavouriteWrapper(crm, favourite);
+      if (window && window.location && window.location.href) {
+        const obj = {
+          url: window.location.href,
+          oppNo: crm,
+          type: 'opportunity page'
+        };
+        saveRecentOppActivity(obj);
+      }
+      if (toggleFavouriteRes && toggleFavouriteRes.data) {
+        if (toggleFavouriteRes.data.favourite) {
+          await dispatch(updateFavourite(crm, favourite));
+        } else {
+          await dispatch(updateFavourite(crm, favourite));
+        }
+      }
+    } catch (e) {
+      console.error(`Error in updating favourite for ${crm}`, e);
+    } finally {
+      setFavInProgress(false);
+    }
+  }
+
   const renderProcessingTxt = (
     <span className="processing-txt">Processing</span>
   );
@@ -240,18 +280,64 @@ const loadSidebar = props => {
     return (
       <Grid container className="proposal-info-container">
         <Grid item xs={12} style={containerStyle}>
-          <Paper style={styles} className="sidebarduedatedsg open">
-            <Typography variant="body2" className="greytext sidebaropenfont">
-              Opportunity Number
-            </Typography>
-            <Typography
-              variant="body2"
-              className="boldtext sidebaropenfont"
-              style={{ cursor: 'pointer', color: 'Blue' }}
-              onClick={redirect}
-            >
-              {crm || placeholder}
-            </Typography>
+          <Paper
+            style={{
+              ...styles,
+              display: 'flex',
+              paddingLeft: '2.25rem'
+            }}
+            className="sidebarduedatedsg open"
+          >
+            <div>
+              <Typography variant="body2" className="greytext sidebaropenfont">
+                Opportunity Number
+              </Typography>
+              <Typography
+                variant="body2"
+                className="boldtext sidebaropenfont"
+                style={{ cursor: 'pointer', color: 'Blue' }}
+                onClick={redirect}
+              >
+                {crm || placeholder}
+              </Typography>
+            </div>
+            {flags[featureFlags.FAVOURITE_FLAG] ? (
+              <>
+                {favInProgress ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '50px',
+                      width: '50px',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <span
+                      style={{
+                        marginLeft: '0px',
+                        marginTop: '6px',
+                        position: 'relative'
+                      }}
+                    >
+                      <Loader
+                        isInner
+                        size={20}
+                        style={{
+                          width: '20px',
+                          height: '20px'
+                        }}
+                      />
+                    </span>
+                  </div>
+                ) : (
+                  <Favourite
+                    value={favourite}
+                    onToggle={update => onFavouriteToggle(update)}
+                  />
+                )}
+              </>
+            ) : null}
           </Paper>
           <Paper style={styles} className="sidebarduedatedsg open">
             <Typography variant="body2" className="greytext sidebaropenfont">
@@ -435,19 +521,65 @@ const loadSidebar = props => {
   return (
     <Grid container className="proposal-info-container">
       <Grid item xs={12} style={containerStyle}>
-        <Grid item xs={1}>
-          <Paper style={styles} className="duedatedsg">
-            <Typography variant="body2" className="greytext">
-              Opportunity Number
-            </Typography>
-            <Typography
-              variant="body2"
-              className="boldtext"
-              style={{ cursor: 'pointer', color: 'Blue' }}
-              onClick={redirect}
-            >
-              {crm || placeholder}
-            </Typography>
+        <Grid item xs={2}>
+          <Paper
+            style={{
+              ...styles,
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}
+            className="duedatedsg"
+          >
+            <div>
+              <Typography variant="body2" className="greytext">
+                Opportunity Number
+              </Typography>
+              <Typography
+                variant="body2"
+                className="boldtext"
+                style={{ cursor: 'pointer', color: 'Blue' }}
+                onClick={redirect}
+              >
+                {crm || placeholder}
+              </Typography>
+            </div>
+            {flags[featureFlags.FAVOURITE_FLAG] ? (
+              <>
+                {favInProgress ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '50px',
+                      width: '50px',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <span
+                      style={{
+                        marginLeft: '0px',
+                        marginTop: '6px',
+                        position: 'relative'
+                      }}
+                    >
+                      <Loader
+                        isInner
+                        size={20}
+                        style={{
+                          width: '20px',
+                          height: '20px'
+                        }}
+                      />
+                    </span>
+                  </div>
+                ) : (
+                  <Favourite
+                    value={favourite}
+                    onToggle={update => onFavouriteToggle(update)}
+                  />
+                )}
+              </>
+            ) : null}
           </Paper>
         </Grid>
         <Grid item xs={3} style={containerStyle}>
@@ -561,7 +693,7 @@ const loadSidebar = props => {
             </Paper>
           </Grid>
         </Grid>
-        <Grid item xs={3} style={containerStyle}>
+        <Grid item xs={2} style={containerStyle}>
           <Grid item xs={5}>
             <Paper style={styles} className="duedatedsg">
               <Typography variant="body2" className="greytext">
