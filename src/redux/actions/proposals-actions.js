@@ -7,6 +7,7 @@ import {
   onGetAllProposals,
   onGetByStatus,
   getRecentOpportunity,
+  getAssignedOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
@@ -205,7 +206,7 @@ export const onFilteringProposals = (
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await onGetByStatus(
+        const response = await getAssignedOpportunity(
           filterPayload,
           'active',
           userEmail
