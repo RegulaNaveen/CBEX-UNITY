@@ -221,24 +221,41 @@ export const onFilteringProposals = (
             break;
         }
       });
-
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await getAssignedOpportunity(
-          filterPayload,
-          'active',
-          userEmail
-        );
-        data = response.data;
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await onGetByStatus(
+            filterPayload,
+            'active',
+            userEmail
+          );
+          data = response.data;
+        } else {
+          const response = await getAssignedOpportunity(
+            filterPayload,
+            'active',
+            userEmail
+          );
+          data = response.data;
+        }
       } else if (Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await getRecentOpportunity(
-          filterPayload,
-          'non-active',
-          userEmail
-        );
-        data = response.data;
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await onGetByStatus(
+            filterPayload,
+            'non-active',
+            userEmail
+          );
+          data = response.data;
+        } else {
+          const response = await getRecentOpportunity(
+            filterPayload,
+            'non-active',
+            userEmail
+          );
+          data = response.data;
+        }
       } else {
         const response = await onGetAllProposals(filterPayload);
         data = response.data;
