@@ -575,22 +575,6 @@ const UnityTab = ({
     }
   }, [newTab]);
 
-  useEffect(() => {
-    if (
-      switchTempStatus &&
-      switchTempStatus === 'success' &&
-      tabLoaded &&
-      tabStatus
-    ) {
-      setTimeout(() => {
-        const className = '._question-tab > div > div > button:nth-child(1)';
-        if (document && document.querySelector(className)) {
-          document.querySelector(className).click();
-        }
-      }, 7000);
-    }
-  }, [switchTempStatus, tabStatus, newTab]);
-
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
