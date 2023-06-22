@@ -8,6 +8,7 @@ import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
 import { formatTheDate } from './DateUtils';
+import moment from 'moment';
 
 /**
  *
@@ -167,6 +168,12 @@ const replaceAnswerToQuestionsPlaceholders = (
       regexUnresolvedPlaceholders,
       `<span style="color: #f00">$&</span>`
     );
+
+    const regexDate = /\b\d{4}-\d{2}-\d{2}\b/g;
+    updatedEventBodyStr = updatedEventBodyStr.replace(regexDate, match => {
+      const formattedDate = moment(match).format('DD-MMM-YYYY');
+      return formattedDate;
+    });
   }
 
   return updatedEventBodyStr;
