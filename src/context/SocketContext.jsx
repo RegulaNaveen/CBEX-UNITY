@@ -182,7 +182,7 @@ const SocketContextProvider = props => {
       }
       ws.send(
         JSON.stringify({
-          action: 'QUESTION',
+          action: 'FAVOURITE',
           body: {
             event: 'FAVOURITE',
             data: {

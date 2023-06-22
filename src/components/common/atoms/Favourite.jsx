@@ -6,7 +6,11 @@ import StarSolid from 'apollo-react-icons/StarSolid';
 
 export default function Favourite({ value, onToggle }) {
   return (
-    <IconButton color="primary" onClick={() => onToggle(!value)}>
+    <IconButton
+      color="primary"
+      onClick={() => onToggle(!value)}
+      className="fav-icon-button"
+    >
       {value ? (
         <StarSolid style={{ color: '#fe9406' }} />
       ) : (

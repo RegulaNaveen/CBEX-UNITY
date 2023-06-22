@@ -51,3 +51,10 @@ body {
 .search-highlight {
   background-color: #0557d559 !important;
 }
+
+@media screen and (max-width: 1200px) and (min-width: 300px) {
+  .fav-icon-button {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
