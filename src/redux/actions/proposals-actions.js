@@ -227,7 +227,7 @@ export const onFilteringProposals = (
         if (Object.keys(filterPayload).length > 1) {
           const response = await onGetByStatus(
             filterPayload,
-            'active',
+            'current',
             userEmail
           );
           data = response.data;
@@ -244,7 +244,7 @@ export const onFilteringProposals = (
         if (Object.keys(filterPayload).length > 1) {
           const response = await onGetByStatus(
             filterPayload,
-            'non-active',
+            'current',
             userEmail
           );
           data = response.data;
