@@ -10,7 +10,7 @@ import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import Favourite from '../Favourite';
 import { toggleFavourite } from '../../../../api/sso-auth';
 import { updateFavourite } from '../../../../redux/actions/sso-auth-actions';
-import Loader from 'apollo-react/components/Loader';
+import CircularProgress from '@mui/material/CircularProgress';
 import featureFlags from '../../../../constants/featureFlags';
 import { SocketContext } from '../../../../context/SocketContext';
 import { saveRecentOppActivity } from '../../../../api/proposals';
@@ -284,60 +284,51 @@ const loadSidebar = props => {
             style={{
               ...styles,
               display: 'flex',
-              paddingLeft: '2.25rem'
+              justifyContent: 'center',
+              paddingLeft: '1.25rem'
             }}
             className="sidebarduedatedsg open"
           >
-            <div>
-              <Typography variant="body2" className="greytext sidebaropenfont">
-                Opportunity Number
-              </Typography>
-              <Typography
-                variant="body2"
-                className="boldtext sidebaropenfont"
-                style={{ cursor: 'pointer', color: 'Blue' }}
-                onClick={redirect}
-              >
-                {crm || placeholder}
-              </Typography>
-            </div>
-            {flags[featureFlags.FAVOURITE_FLAG] ? (
-              <>
-                {favInProgress ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      height: '50px',
-                      width: '50px',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}
-                  >
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div>
+                <Typography
+                  variant="body2"
+                  className="greytext sidebaropenfont"
+                >
+                  Opportunity Number
+                </Typography>
+                <Typography
+                  variant="body2"
+                  className="boldtext sidebaropenfont"
+                  style={{ cursor: 'pointer', color: 'Blue' }}
+                  onClick={redirect}
+                >
+                  {crm || placeholder}
+                </Typography>
+              </div>
+              {flags[featureFlags.FAVOURITE_FLAG] ? (
+                <>
+                  {favInProgress ? (
                     <span
                       style={{
-                        marginLeft: '0px',
-                        marginTop: '6px',
-                        position: 'relative'
+                        display: 'flex',
+                        height: '2.5rem',
+                        width: '2.5rem',
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
                     >
-                      <Loader
-                        isInner
-                        size={20}
-                        style={{
-                          width: '20px',
-                          height: '20px'
-                        }}
-                      />
+                      <CircularProgress size={24} color="primary" />
                     </span>
-                  </div>
-                ) : (
-                  <Favourite
-                    value={favourite}
-                    onToggle={update => onFavouriteToggle(update)}
-                  />
-                )}
-              </>
-            ) : null}
+                  ) : (
+                    <Favourite
+                      value={favourite}
+                      onToggle={update => onFavouriteToggle(update)}
+                    />
+                  )}
+                </>
+              ) : null}
+            </div>
           </Paper>
           <Paper style={styles} className="sidebarduedatedsg open">
             <Typography variant="body2" className="greytext sidebaropenfont">
@@ -521,7 +512,7 @@ const loadSidebar = props => {
   return (
     <Grid container className="proposal-info-container">
       <Grid item xs={12} style={containerStyle}>
-        <Grid item xs={2}>
+        <Grid item xs style={{ flexBasis: '9rem', maxWidth: '9rem' }}>
           <Paper
             style={{
               ...styles,
@@ -530,56 +521,43 @@ const loadSidebar = props => {
             }}
             className="duedatedsg"
           >
-            <div>
-              <Typography variant="body2" className="greytext">
-                Opportunity Number
-              </Typography>
-              <Typography
-                variant="body2"
-                className="boldtext"
-                style={{ cursor: 'pointer', color: 'Blue' }}
-                onClick={redirect}
-              >
-                {crm || placeholder}
-              </Typography>
-            </div>
-            {flags[featureFlags.FAVOURITE_FLAG] ? (
-              <>
-                {favInProgress ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      height: '50px',
-                      width: '50px',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}
-                  >
+            <div style={{ display: 'flex' }}>
+              <div>
+                <Typography variant="body2" className="greytext">
+                  Opportunity Number
+                </Typography>
+                <Typography
+                  variant="body2"
+                  className="boldtext"
+                  style={{ cursor: 'pointer', color: 'Blue' }}
+                  onClick={redirect}
+                >
+                  {crm || placeholder}
+                </Typography>
+              </div>
+              {flags[featureFlags.FAVOURITE_FLAG] ? (
+                <>
+                  {favInProgress ? (
                     <span
                       style={{
-                        marginLeft: '0px',
-                        marginTop: '6px',
-                        position: 'relative'
+                        display: 'flex',
+                        height: '2.5rem',
+                        width: '2.5rem',
+                        justifyContent: 'center',
+                        alignItems: 'center'
                       }}
                     >
-                      <Loader
-                        isInner
-                        size={20}
-                        style={{
-                          width: '20px',
-                          height: '20px'
-                        }}
-                      />
+                      <CircularProgress size={24} color="primary" />
                     </span>
-                  </div>
-                ) : (
-                  <Favourite
-                    value={favourite}
-                    onToggle={update => onFavouriteToggle(update)}
-                  />
-                )}
-              </>
-            ) : null}
+                  ) : (
+                    <Favourite
+                      value={favourite}
+                      onToggle={update => onFavouriteToggle(update)}
+                    />
+                  )}
+                </>
+              ) : null}
+            </div>
           </Paper>
         </Grid>
         <Grid item xs={3} style={containerStyle}>
@@ -637,7 +615,7 @@ const loadSidebar = props => {
             </Paper>
           </Grid>
         </Grid>
-        <Grid item xs={3} style={containerStyle}>
+        <Grid item xs style={containerStyle}>
           <Grid item xs={3}>
             <Paper style={styles} className="duedatedsg">
               <Typography variant="body2" className="greytext">
@@ -693,7 +671,7 @@ const loadSidebar = props => {
             </Paper>
           </Grid>
         </Grid>
-        <Grid item xs={2} style={containerStyle}>
+        <Grid item xs={3} style={containerStyle}>
           <Grid item xs={5}>
             <Paper style={styles} className="duedatedsg">
               <Typography variant="body2" className="greytext">
