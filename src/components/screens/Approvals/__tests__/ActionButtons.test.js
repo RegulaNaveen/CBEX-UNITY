@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import ActionButtons from '../ActionButtons';
 import { store } from '../../../../store';
-import Sinon from 'sinon';
+const Sinon = require('sinon');
 import { ApprovalContext } from '../Section';
 import {
   setAllApprovals,

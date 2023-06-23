@@ -3,7 +3,7 @@ import { render, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TagUserList from '../TagUserList';
 import { CancelableADRequestApi } from '../../../api/getADUsers';
-import Sinon from 'sinon';
+const Sinon = require('sinon');
 
 describe('TagUserList unit tests', () => {
   const sandbox = Sinon.createSandbox();
