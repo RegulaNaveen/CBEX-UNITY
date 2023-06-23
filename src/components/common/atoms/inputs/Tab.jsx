@@ -136,6 +136,7 @@ const UnityTab = ({
   ];
   const [tabs, setTabs] = useState(defaultTabs);
   const [tabStatus, setTabStatus] = useState(false);
+  const [tabPresent, setTabPresent] = useState(null);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [tabLoaded, setTabloaded] = useState(false);
@@ -546,6 +547,14 @@ const UnityTab = ({
       const finalTab = [...tabs, ...newTab];
       const calculateTabList = checkTabsVisibility(finalTab);
       setTabs(calculateTabList);
+      const winLocationSearch = window.location.search;
+      const selectView = new URLSearchParams(winLocationSearch);
+      const viewType = selectView.get('viewType');
+      if (viewType) {
+        const isPresent = calculateTabList.some(v => v.path === viewType);
+        setTabPresent(isPresent);
+      }
+
       setTabStatus(true);
       setNewTab([...[]]);
     }
@@ -574,6 +583,21 @@ const UnityTab = ({
       setTabStatus(true);
     }
   }, [newTab]);
+  useEffect(() => {
+    if (
+      switchTempStatus &&
+      switchTempStatus === 'success' &&
+      tabLoaded &&
+      tabStatus
+    ) {
+      setTimeout(() => {
+        const className = '._question-tab > div > div > button:nth-child(1)';
+        if (!tabPresent && document && document.querySelector(className)) {
+          document.querySelector(className).click();
+        }
+      }, 8000);
+    }
+  }, [switchTempStatus, tabStatus, newTab]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {

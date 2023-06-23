@@ -1342,6 +1342,10 @@ export const getOpportunity = (
         });
       }
       proposalsData.push(data[0]);
+      dispatch({
+        type: UNITY_TABS.SET_UNITY_TABS,
+        payload: []
+      });
       dispatch({ type: OPPORTUNITY_INFO, payload: proposalsData });
       dispatch({
         type: UNITY_TABS.SET_UNITY_TABS,
