@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-const Sinon = require('sinon');
+import Sinon from 'sinon';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Link from 'apollo-react-icons/Link';
 import CustomApolloRichText from '../CustomApolloRichText';

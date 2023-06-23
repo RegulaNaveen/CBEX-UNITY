@@ -1,4 +1,4 @@
-const Sinon = require('sinon');
+import Sinon from 'sinon';
 import { axiosInstance } from '../../store';
 import { getUsersListApiCall } from '../proposal';
 

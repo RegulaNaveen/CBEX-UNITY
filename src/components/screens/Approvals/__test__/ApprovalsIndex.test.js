@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 import { render as reactTestingRender } from '@testing-library/react';
 import { Map, fromJS } from 'immutable';
 import { Provider } from 'react-redux';
-const Sinon = require('sinon');
+import Sinon from 'sinon';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { store } from '../../../../store';
 import Approvals from '../index';
