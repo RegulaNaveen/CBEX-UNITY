@@ -6,10 +6,7 @@ module.exports = {
   verbose: true,
   setupFilesAfterEnv: ['./setUpTests.js'],
   snapshotSerializers: [],
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/dist',
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/dist'],
   collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleDirectories: ['node_modules', __dirname],
@@ -26,6 +23,7 @@ module.exports = {
         'lib0',
         'remixicon',
         'uuid',
+        'sinon',
         'register-service-worker'
       ].join('|') +
       ')'
