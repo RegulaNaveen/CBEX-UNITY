@@ -68,7 +68,6 @@ const getFullProposalTeamString = (updateField, questions) => {
       q.section.sectionName === 'Proposal Team'
   );
   const isSubjectUpdate = updateField === 'subject';
-
   const uniqueNames = new Set(); // to keep track of unique names
 
   const result = relevantQuestions
@@ -135,6 +134,14 @@ const replaceAnswerToQuestionsPlaceholders = (
       }
     }
   );
+
+  if (updateField === 'subject') {
+    const regexDate = /\b\d{4}-\d{2}-\d{2}\b/g;
+    updatedEventBodyStr = updatedEventBodyStr.replace(regexDate, match => {
+      const formattedDate = moment(match).format('DD-MMM-YYYY');
+      return formattedDate;
+    });
+  }
 
   const placeholders = [
     'opportunity_number',
