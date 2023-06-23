@@ -136,6 +136,7 @@ const UnityTab = ({
   ];
   const [tabs, setTabs] = useState(defaultTabs);
   const [tabStatus, setTabStatus] = useState(false);
+  const [tabPresent, setTabPresent] = useState(null);
   const [approvalsFlag, setApprovalsFlag] = useState(false);
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [tabLoaded, setTabloaded] = useState(false);
@@ -148,6 +149,7 @@ const UnityTab = ({
     state => state.proposal?.toJSON()?.switchTempCallStatus
   );
   const tabRefresh = useSelector(state => state.unitytab.tabRefresh);
+  const [switchTemplateState, setswitchTemplateState] = useState([]);
   const [showNotepadTab, setShowNotepadTab] = useState(false);
   const [showProposalTeamTab, setShowProposalTeamTab] = useState(false);
   const [isNotepadOpen, setIsNotepadOpen] = useState(true);
@@ -195,6 +197,7 @@ const UnityTab = ({
     return false;
   };
   useEffect(() => {
+    setswitchTemplateState(element => [...element, switchTempStatus]);
     if (switchTempStatus === 'success' && tabs?.length > 5) {
       setTabStatus(false);
       setTabloaded(false);
@@ -545,6 +548,14 @@ const UnityTab = ({
     ) {
       const finalTab = [...tabs, ...newTab];
       const calculateTabList = checkTabsVisibility(finalTab);
+      const winLocationSearch = window.location.search;
+      const selectView = new URLSearchParams(winLocationSearch);
+      const viewType = selectView.get('viewType');
+      if (viewType) {
+        const isPresent = calculateTabList.some(v => v.path === viewType);
+        const flagValue = isPresent ? 'present' : 'notPresent';
+        setTabPresent(flagValue);
+      }
       setTabs(calculateTabList);
       setTabStatus(true);
       setNewTab([...[]]);
@@ -570,10 +581,39 @@ const UnityTab = ({
       if (!enableValidateTab) {
         finalTab = finalTab.filter(item => item.label !== 'Validate');
       }
+      const winLocationSearch = window.location.search;
+      const selectView = new URLSearchParams(winLocationSearch);
+      const viewType = selectView.get('viewType');
+      if (viewType) {
+        const isPresent = finalTab.some(v => v.path === viewType);
+        const flagValue = isPresent ? 'present' : 'notPresent';
+        setTabPresent(flagValue);
+      }
       setTabs(finalTab);
       setTabStatus(true);
     }
   }, [newTab]);
+  useEffect(() => {
+    if (
+      switchTemplateState &&
+      switchTemplateState[0] === 'success' &&
+      !switchTemplateState[1] &&
+      tabPresent &&
+      tabPresent === 'notPresent' &&
+      tabLoaded &&
+      tabStatus
+    ) {
+      const className = '._question-tab > div > div > button:nth-child(1)';
+      if (
+        tabPresent === 'notPresent' &&
+        document &&
+        document.querySelector(className)
+      ) {
+        document.querySelector(className).click();
+        setswitchTemplateState([...[]]);
+      }
+    }
+  }, [tabPresent, tabStatus, newTab, switchTemplateState]);
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(winLocationSearch);
