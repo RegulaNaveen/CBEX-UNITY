@@ -15,7 +15,14 @@ module.exports = {
     'src/api/__tests__/proposal.test.js',
     'src/components/common/__tests__/CustomApolloRichText.test.js'
   ],
-  collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!**/node_modules/**',
+    '!**/dist/**',
+    '!**/__tests__/**',
+    '!**/__test__/**',
+    '!src/constants/**'
+  ],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleDirectories: ['node_modules', __dirname],
   coverageDirectory: '<rootDir>/coverage',
