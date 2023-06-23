@@ -38,7 +38,8 @@ module.exports = {
         'lib0',
         'remixicon',
         'uuid',
-        'register-service-worker'
+        'register-service-worker',
+        'sinon'
       ].join('|') +
       ')'
   ],
