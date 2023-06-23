@@ -242,16 +242,16 @@ export const onFilteringProposals = (
       } else if (Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getRecentOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getRecentOpportunity(
             filterPayload,
-            'non-active',
+            false,
             userEmail
           );
           data = response.data;

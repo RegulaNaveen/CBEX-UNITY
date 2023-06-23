@@ -60,14 +60,19 @@ export const getRecentOpportunity = (
   status: string,
   userEmail: string
 ): Promise<Object> => {
+  // `${PROFILE_API_URL}/recenttab`
   if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
-  return axiosInstance.get(`${PROFILE_API_URL}/recenttab`, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
-    cancelToken: new CancelToken(function executor(c) {
-      onGoingDashboardCall = c;
-    }),
-    params: { userEmail, status }
-  });
+  return axiosInstance.post(
+    'http://localhost:5000/api/user/filterrecenttab',
+    payload,
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+      cancelToken: new CancelToken(function executor(c) {
+        onGoingDashboardCall = c;
+      }),
+      params: { userEmail, status, filter: status }
+    }
+  );
 };
 
 export const getAssignedOpportunity = (
