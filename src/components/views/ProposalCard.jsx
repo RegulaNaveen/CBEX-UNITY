@@ -9,7 +9,7 @@ import { Folder } from '../svg';
 import { OPPORTUNITY } from '../../routes';
 import Favourite from '../common/atoms/Favourite';
 import { toggleFavourite } from '../../api/sso-auth';
-import { Loader } from 'apollo-react/components/Loader/Loader';
+import CircularProgress from '@mui/material/CircularProgress';
 import { updateFavourite } from '../../redux/actions/sso-auth-actions';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
@@ -103,24 +103,17 @@ const ProposalCard = ({
         {flags[featureFlags.FAVOURITE_FLAG] ? (
           <div className="favourite-container">
             {favInProgress ? (
-              <div style={{ display: 'flex', height: '24px', width: '24px' }}>
-                <span
-                  style={{
-                    marginLeft: '0px',
-                    marginTop: '6px',
-                    position: 'relative'
-                  }}
-                >
-                  <Loader
-                    isInner
-                    size={20}
-                    style={{
-                      width: '20px',
-                      height: '20px'
-                    }}
-                  />
-                </span>
-              </div>
+              <span
+                style={{
+                  display: 'flex',
+                  height: '2.5rem',
+                  width: '2.5rem',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <CircularProgress size={24} color="primary" />
+              </span>
             ) : (
               <Favourite
                 value={favourite}

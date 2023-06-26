@@ -67,7 +67,7 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
 };
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<Object, Object>, getState) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
 
     try {
@@ -75,14 +75,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        const favourites = selectFavourites(getState()).toJS();
-        const favouritesMap = favourites.reduce((favMap, fav) => {
-          favMap[fav] = true;
-          return favMap;
-        }, {});
-        const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
-        );
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -93,21 +86,14 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
 export const getProposalsByStatus = (status: string) => {
   const userEmail = localStorage.getItem('userEmail') || '';
-  return async (dispatch: Dispatch<Object, Object>, getState) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
     try {
       const { data } = await onGetByStatus(status, userEmail);
 
       if (data) {
         const { proposals } = data;
-        const favourites = selectFavourites(getState()).toJS();
-        const favouritesMap = favourites.reduce((favMap, fav) => {
-          favMap[fav] = true;
-          return favMap;
-        }, {});
-        const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
-        );
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
