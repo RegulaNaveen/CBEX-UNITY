@@ -153,7 +153,13 @@ class RecentTab extends Component<Props, State> {
         if (selectedViewType === 0) {
           return <TableView data={oldpageContent} hideStatus />;
         } else {
-          return <GridView data={oldpageContent} allFlags={allFlags} />;
+          return (
+            <GridView
+              data={oldpageContent}
+              allFlags={allFlags}
+              status={'past'}
+            />
+          );
         }
       } else {
         return (

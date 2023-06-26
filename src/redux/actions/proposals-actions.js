@@ -225,16 +225,16 @@ export const onFilteringProposals = (
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getAssignedOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getAssignedOpportunity(
             filterPayload,
-            'active',
+            false,
             userEmail
           );
           data = response.data;

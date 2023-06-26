@@ -37,7 +37,7 @@ const formatProposal = (proposal: Object) => {
 
 class GridView extends Component<Props> {
   renderContent() {
-    const { data, allFlags } = this.props;
+    const { data, allFlags, status } = this.props;
 
     if (isEmpty(data))
       return (
@@ -70,6 +70,7 @@ class GridView extends Component<Props> {
               isApprovalCountPresent={formatted.isApprovalCountPresent}
               allFlags={allFlags}
               favourite={formatted.isFavourite}
+              status={status || ''}
             />
           );
         })}
