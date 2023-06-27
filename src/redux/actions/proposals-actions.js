@@ -37,7 +37,8 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     opportunityOverview,
     usersList,
     approvalsCount,
-    isApprovalCountPresent
+    isApprovalCountPresent,
+    bidStopStatus
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
@@ -57,6 +58,7 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
     formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+    formattedProposal.bidStopStatus = bidStopStatus || false;
     formattedProposal.isFavourite = !!favoritesMap[
       `${proposalDetails['CRM #']}`
     ];

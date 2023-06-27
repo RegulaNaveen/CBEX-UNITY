@@ -29,7 +29,8 @@ type Props = {
   proposalId: string,
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
-  allFlags: object
+  allFlags: object,
+  bidStatus: boolean
 };
 
 const ProposalCard = ({
@@ -46,7 +47,8 @@ const ProposalCard = ({
   approvalsCount,
   isApprovalCountPresent,
   allFlags,
-  favourite
+  favourite,
+  bidStopStatus
 }: Props) => {
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
@@ -240,7 +242,7 @@ const ProposalCard = ({
         >
           <div>
             <p>
-              {daysRemain <= 0 ? (
+              {daysRemain <= 0 || bidStopStatus ? (
                 <Minus value="medium" style={{ color: '#df216d' }} />
               ) : (
                 daysRemain

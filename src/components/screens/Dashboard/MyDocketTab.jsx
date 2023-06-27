@@ -90,7 +90,10 @@ class RecentTab extends Component<Props, State> {
         let currentProposal = [];
         let oldProposal = [];
         proposals.filter(value => {
-          if (moment(value['bid due date']).diff(moment(), 'days') + 1 > 0) {
+          if (
+            moment(value['bid due date']).diff(moment(), 'days') + 1 > 0 &&
+            !value['bidStopStatus']
+          ) {
             currentProposal.push(value);
           } else {
             oldProposal.push(value);
@@ -115,7 +118,10 @@ class RecentTab extends Component<Props, State> {
     const oldProposal = [];
     if (proposals && proposals?.length) {
       proposals.filter(value => {
-        if (moment(value['bid due date']).diff(moment(), 'days') + 1 > 0) {
+        if (
+          moment(value['bid due date']).diff(moment(), 'days') + 1 > 0 &&
+          !value['bidStopStatus']
+        ) {
           currentProposal.push(value);
         } else {
           oldProposal.push(value);
