@@ -46,8 +46,7 @@ const ProposalCard = ({
   approvalsCount,
   isApprovalCountPresent,
   allFlags,
-  favourite,
-  status
+  favourite
 }: Props) => {
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
@@ -241,7 +240,7 @@ const ProposalCard = ({
         >
           <div>
             <p>
-              {status == 'past' ? (
+              {daysRemain <= 0 ? (
                 <Minus value="medium" style={{ color: '#df216d' }} />
               ) : (
                 daysRemain
