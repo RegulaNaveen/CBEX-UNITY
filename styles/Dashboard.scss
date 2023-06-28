@@ -66,3 +66,7 @@
   padding: 20px;
   color: #595959;
 }
+
+.assigned-tab.MuiTabs-root::before {
+  border-bottom: none;
+}

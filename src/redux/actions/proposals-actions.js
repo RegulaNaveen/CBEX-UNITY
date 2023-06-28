@@ -37,7 +37,8 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     opportunityOverview,
     usersList,
     approvalsCount,
-    isApprovalCountPresent
+    isApprovalCountPresent,
+    bidStopStatus
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
@@ -57,6 +58,7 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
     formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+    formattedProposal.bidStopStatus = bidStopStatus || false;
     formattedProposal.isFavourite = !!favoritesMap[
       `${proposalDetails['CRM #']}`
     ];
@@ -211,16 +213,16 @@ export const onFilteringProposals = (
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getAssignedOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getAssignedOpportunity(
             filterPayload,
-            'active',
+            false,
             userEmail
           );
           data = response.data;
@@ -228,16 +230,16 @@ export const onFilteringProposals = (
       } else if (Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getRecentOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getRecentOpportunity(
             filterPayload,
-            'non-active',
+            false,
             userEmail
           );
           data = response.data;

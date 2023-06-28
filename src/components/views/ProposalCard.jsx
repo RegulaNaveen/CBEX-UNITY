@@ -14,6 +14,7 @@ import { updateFavourite } from '../../redux/actions/sso-auth-actions';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
+import Minus from 'apollo-react-icons/Minus';
 
 type Props = {
   title: string,
@@ -28,7 +29,8 @@ type Props = {
   proposalId: string,
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
-  allFlags: object
+  allFlags: object,
+  bidStatus: boolean
 };
 
 const ProposalCard = ({
@@ -45,7 +47,8 @@ const ProposalCard = ({
   approvalsCount,
   isApprovalCountPresent,
   allFlags,
-  favourite
+  favourite,
+  bidStopStatus
 }: Props) => {
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
@@ -238,7 +241,13 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <div>
-            <p>{daysRemain}</p>
+            <p>
+              {daysRemain <= 0 || bidStopStatus ? (
+                <Minus value="medium" style={{ color: '#df216d' }} />
+              ) : (
+                daysRemain
+              )}
+            </p>
             <p>Days until Bid Due</p>
           </div>
         </div>
