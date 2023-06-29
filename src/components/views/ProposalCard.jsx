@@ -20,6 +20,8 @@ import CustomTooltip from './customTooltip';
 type Props = {
   title: string,
   opportunityName: string,
+  opportunityStage: string,
+  bidNo: string,
   daysRemain: number | string,
   dueDate: string,
   customer: string,
@@ -40,6 +42,8 @@ const ProposalCard = ({
   dueDate,
   customer,
   protocolNumber,
+  opportunityStage,
+  bidNo,
   phase,
   therapeuticArea,
   verbatimIndication,
@@ -133,26 +137,44 @@ const ProposalCard = ({
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
+            <b>Current Bid:</b>
+          </span>
+          <span className={checkNoDataClass(bidNo)}>{bidNo}</span>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Bid Due Date:</b>
+          </span>
+          <span className={checkNoDataClass(dueDate)}>{dueDate}</span>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Next Milestone:</b>
+          </span>
+          {/* <span className={checkNoDataClass(dueDate)}>{dueDate}</span> */}
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
             <b>Protocol Number:</b>
           </span>
           <span className={checkNoDataClass(protocolNumber)}>
             {protocolNumber}
           </span>
         </div>
-        <div className={CLASS_SECTION_DATA}>
+        {/* <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Phase:</b>
           </span>
           <span className={checkNoDataClass(phase)}>{phase}</span>
-        </div>
-        <div className={CLASS_SECTION_DATA}>
+        </div> */}
+        {/* <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Therapeutic Area:</b>
           </span>
           <span className={checkNoDataClass(therapeuticArea)}>
             {therapeuticArea}
           </span>
-        </div>
+        </div> */}
         <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Verbatim Indication:</b>
@@ -163,9 +185,11 @@ const ProposalCard = ({
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
-            <b>Bid Due Date:</b>
+            <b>Opportunity Stage:</b>
           </span>
-          <span className={checkNoDataClass(dueDate)}>{dueDate}</span>
+          <span className={checkNoDataClass(opportunityStage)}>
+            {opportunityStage}
+          </span>
         </div>
       </div>
 

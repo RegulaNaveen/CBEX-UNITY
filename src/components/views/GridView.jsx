@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
+import { connect } from 'react-redux';
 import { parseMomentDate, remainingDays } from '../../utils/DateUtils';
 
 type Props = {
@@ -19,6 +20,8 @@ const formatProposal = (proposal: Object) => {
   const formatted = {
     title: proposal['opportunity number'] || placeholder,
     opportunityName: proposal.opportunityName || placeholder,
+    opportunityStage: proposal['opportunity status'] || placeholder,
+    bidNo: proposal['bidNo'] || placeholder,
     daysRemain,
     dueDate: dueDate || placeholder,
     customer: proposal.customer || placeholder,
@@ -58,6 +61,8 @@ class GridView extends Component<Props> {
               key={uuidv4()}
               title={formatted.title}
               opportunityName={formatted.opportunityName}
+              opportunityStage={formatted.opportunityStage}
+              bidNo={formatted.bidNo}
               daysRemain={formatted.daysRemain}
               dueDate={formatted.dueDate}
               customer={formatted.customer}

@@ -1,7 +1,8 @@
 .grid-view {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   align-items: center;
+  grid-gap: 150px;
   grid-row-gap: 40px;
   padding: 20px 0 40px 0;
   max-width: 1400px;
