@@ -16,6 +16,7 @@ import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
 import Tooltip from 'apollo-react/components/Tooltip';
 import CustomTooltip from './customTooltip';
+import Minus from 'apollo-react-icons/Minus';
 
 type Props = {
   title: string,
@@ -32,7 +33,8 @@ type Props = {
   proposalId: string,
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
-  allFlags: object
+  allFlags: object,
+  bidStatus: boolean
 };
 
 const ProposalCard = ({
@@ -51,7 +53,8 @@ const ProposalCard = ({
   approvalsCount,
   isApprovalCountPresent,
   allFlags,
-  favourite
+  favourite,
+  bidStopStatus
 }: Props) => {
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
@@ -277,7 +280,13 @@ const ProposalCard = ({
         >
           <div>
             <Tooltip variant="dark" title="Days until Bid Due" placement="top">
-              <p>{daysRemain}</p>
+              <p>
+                {daysRemain <= 0 || bidStopStatus ? (
+                  <Minus value="medium" style={{ color: '#df216d' }} />
+                ) : (
+                  daysRemain
+                )}
+              </p>
             </Tooltip>
           </div>
         </div>

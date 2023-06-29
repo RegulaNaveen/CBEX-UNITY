@@ -32,7 +32,8 @@ const formatProposal = (proposal: Object) => {
     proposalId: proposal.proposalId || placeholder,
     approvalsCount: proposal.approvalsCount || null,
     isApprovalCountPresent: proposal.isApprovalCountPresent || false,
-    isFavourite: proposal.isFavourite || false
+    isFavourite: proposal.isFavourite || false,
+    bidStopStatus: proposal.bidStopStatus || false
   };
 
   return formatted;
@@ -75,6 +76,7 @@ class GridView extends Component<Props> {
               isApprovalCountPresent={formatted.isApprovalCountPresent}
               allFlags={allFlags}
               favourite={formatted.isFavourite}
+              bidStopStatus={formatted.bidStopStatus}
             />
           );
         })}
