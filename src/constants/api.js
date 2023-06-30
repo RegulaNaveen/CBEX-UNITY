@@ -163,6 +163,7 @@ switch (environment) {
   case 'DEV':
     // DEV Data
     PROPOSAL_API_ENDPOINT =
+      // 'http://localhost:5000';
       'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
     NORMAL_AUTH_API_ENDPOINT =

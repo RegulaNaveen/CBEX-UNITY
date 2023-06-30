@@ -39,7 +39,8 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     opportunityOverview,
     usersList,
     approvalsCount,
-    isApprovalCountPresent
+    isApprovalCountPresent,
+    bidStopStatus
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
@@ -59,6 +60,7 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
     formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+    formattedProposal.bidStopStatus = bidStopStatus || false;
     formattedProposal.isFavourite = !!favoritesMap[
       `${proposalDetails['CRM #']}`
     ];
@@ -69,7 +71,7 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
 };
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<Object, Object>, getState) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
 
     try {
@@ -77,14 +79,7 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        const favourites = selectFavourites(getState()).toJS();
-        const favouritesMap = favourites.reduce((favMap, fav) => {
-          favMap[fav] = true;
-          return favMap;
-        }, {});
-        const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
-        );
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -95,21 +90,14 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 
 export const getProposalsByStatus = (status: string) => {
   const userEmail = localStorage.getItem('userEmail') || '';
-  return async (dispatch: Dispatch<Object, Object>, getState) => {
+  return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
     try {
       const { data } = await onGetByStatus(status, userEmail);
 
       if (data) {
         const { proposals } = data;
-        const favourites = selectFavourites(getState()).toJS();
-        const favouritesMap = favourites.reduce((favMap, fav) => {
-          favMap[fav] = true;
-          return favMap;
-        }, {});
-        const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
-        );
+        const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -228,16 +216,16 @@ export const onFilteringProposals = (
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getAssignedOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getAssignedOpportunity(
             filterPayload,
-            'active',
+            false,
             userEmail
           );
           data = response.data;
@@ -262,16 +250,16 @@ export const onFilteringProposals = (
       } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getRecentOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getRecentOpportunity(
             filterPayload,
-            'non-active',
+            false,
             userEmail
           );
           data = response.data;

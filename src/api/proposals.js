@@ -57,16 +57,21 @@ export const saveRecentOppActivity = (payload): Promise<Object> => {
 // Get user last 30 days recent opportunity List for Recent Tab
 export const getRecentOpportunity = (
   payload,
-  status: string,
-  userEmail: string
+  status,
+  userEmail
 ): Promise<Object> => {
+  const obj = {
+    payload,
+    status: status
+  };
+
   if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
-  return axiosInstance.get(`${PROFILE_API_URL}/recenttab`, {
+  return axiosInstance.post(`${PROFILE_API_URL}/filterrecenttab`, obj, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
     cancelToken: new CancelToken(function executor(c) {
       onGoingDashboardCall = c;
     }),
-    params: { userEmail, status }
+    params: { userEmail }
   });
 };
 
@@ -75,13 +80,17 @@ export const getAssignedOpportunity = (
   status: string,
   userEmail: string
 ): Promise<Object> => {
+  const obj = {
+    payload,
+    status: status
+  };
   if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
-  return axiosInstance.get(`${PROFILE_API_URL}/assignedtab`, {
+  return axiosInstance.post(`${PROFILE_API_URL}/assignedtab`, obj, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
     cancelToken: new CancelToken(function executor(c) {
       onGoingDashboardCall = c;
     }),
-    params: { userEmail, status }
+    params: { userEmail }
   });
 };
 
