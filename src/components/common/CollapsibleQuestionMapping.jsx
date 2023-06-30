@@ -18,7 +18,10 @@ const CollapsibleQuestionMapping = ({
         questionConfig.get('isCustomQuestion', true)) &&
       (!questionConfig.get('notApplicable') || isQuestionsFiltersEnabled) &&
       !questionConfig.get('questionApproval', false); // Check should the question be visible only in the approval section
-
+    console.log(
+      'destination info here is',
+      questionConfig.get('questionDataDestinations')
+    );
     return (
       (visible || typeof visible === 'undefined') && (
         <Question
@@ -55,6 +58,9 @@ const CollapsibleQuestionMapping = ({
           isNotApplicable={questionConfig.get('notApplicable')}
           bidAnswerCopy={questionConfig.get('bidAnswerCopy', false)}
           latestAnsweredBidNo={questionConfig.get('latestAnsweredBidNo', null)}
+          questionDataDestinations={questionConfig.get(
+            'questionDataDestinations'
+          )}
         />
       )
     );
