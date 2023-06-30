@@ -14,6 +14,7 @@ import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
 import {
   getOpportunityData,
+  selectActiveTeamQuestions,
   selectProposalQuestions
 } from '../../../redux/selectors/proposal';
 import { getUserData } from '../../../redux/selectors';
@@ -23,6 +24,23 @@ import { isMap } from 'lodash';
 
 const modalStyle = { maxWidth: 545, width: '100%' };
 const attendees = ['Expected team members', 'All assigned team members'];
+
+const UnassignedRolesList = ({ unassignedRoles = [] }) => {
+  if (unassignedRoles.length === 0) return null;
+
+  return (
+    <div className="unassigned-roles-list-container">
+      <p className="desc">
+        The following roles do not have a person assigned to it:{' '}
+      </p>
+      <div className="unassigned-roles-list-scrollable">
+        {unassignedRoles.map(roleName => (
+          <p>{roleName}</p>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const EventLauncher = ({
   questionData,
@@ -50,6 +68,7 @@ const EventLauncher = ({
   const proposalQuestions = useSelector(selectProposalQuestions);
   const opportunityData = useSelector(getOpportunityData);
   const eventData = parseStringifyJson(quesData?.events);
+  const activeTeamQuestions = useSelector(selectActiveTeamQuestions);
 
   const bodytoHtml = eventData?.EventBody;
   const eventSubject = eventData?.EventSubject;
@@ -107,6 +126,22 @@ const EventLauncher = ({
     }
     return [...new Set(proposalTeam.map(i => i.email).flat())];
   }, [openModal, attendeesVal]);
+
+  const unassignedRoles =
+    attendeesVal === attendees[0]
+      ? activeTeamQuestions
+          .filter(
+            team =>
+              team.roleNames.some(role =>
+                eventData.EventRoles.includes(role)
+              ) && isEmpty(team.email)
+          )
+          .map(team => team.questionText)
+          .sort()
+      : activeTeamQuestions
+          .filter(team => isEmpty(team.email))
+          .map(team => team.questionText)
+          .sort();
 
   /**
    * Generate Event Url Function
@@ -223,8 +258,6 @@ const EventLauncher = ({
         }
       ]}
     >
-      <i className="content-heading">{PROPOSAL.SELECT_VARIABLES}</i>
-
       <RadioGroup
         label={PROPOSAL.ATTENDEES}
         aria-label="attendees"
@@ -242,6 +275,7 @@ const EventLauncher = ({
           <Radio value={item} key={item} label={item} />
         ))}
       </RadioGroup>
+      <UnassignedRolesList unassignedRoles={unassignedRoles} />
     </CustomModal>
   );
   const eventIcon = (
