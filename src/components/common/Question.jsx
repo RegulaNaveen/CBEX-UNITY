@@ -195,7 +195,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       autoNavigationDone,
       sectionName
     } = this.props;
-
     if (
       currentSearchResult !== null &&
       this.questionTextTitleRef.current !== null &&
@@ -1492,7 +1491,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       NaLoading,
       showNaCheckbox,
       bidAnswerCopy,
-      latestAnsweredBidNo
+      latestAnsweredBidNo,
+      questionDataDestinations
     } = this.props;
     let { answers } = this.props;
     let conditionBlankPredicted = false;
@@ -1554,12 +1554,15 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (dateIsAfter) {
       integrationvalidation = true;
     }
-    const integrationsArray = integrationsData?.data.map(item => {
-      return item.questionId;
-    });
-    integrationsData?.data.map(item => {
-      if (item.questionId.includes(qvicon)) destinationArray = item.destination;
-    });
+    const integrationsArray =
+      questionDataDestinations && questionDataDestinations.split(',');
+
+    // integrationsData?.data.map(item => {
+    //   return item.questionId;
+    // });
+    // integrationsData?.data.map(item => {
+    //   if (item.questionId.includes(qvicon)) destinationArray = item.destination;
+    // });
     integrationvalidation = integrationsArray?.includes(qvicon);
 
     if (qvidianIntegration) {
@@ -1796,6 +1799,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             bidAnswerCopy={bidAnswerCopy}
             latestAnsweredBidNo={latestAnsweredBidNo}
             questionId={qId}
+            questionDataDestinations={this.props.questionDataDestinations}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
