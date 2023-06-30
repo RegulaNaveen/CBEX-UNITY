@@ -58,7 +58,6 @@ const SystemIntegrations = ({
       setDataDestinations(questionDataDestinations.split(','));
   }, []);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
-  console.log('dataDestinations Array is', dataDestinations);
   useEffect(() => {
     if (
       answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce' &&
