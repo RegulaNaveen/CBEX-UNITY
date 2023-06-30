@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Toolbar from '../../views/toolbar';
 import Tabbar from '../../views/Tabbar';
 import MyDocketTab from './MyDocketTab';
+import FavoritesTab from './FavoritesTab';
 import RecentTab from './RecentTab';
 import AllTab from './AllTab';
 import * as packageJson from '../../../../package.json';
@@ -49,9 +50,12 @@ const Dashboard = () => {
     <div id="dashboard">
       <Toolbar selected="dashboard" />
       <div className="tab-wrapper">
-        <Tabbar>
+        <Tabbar allFlags={allFlags}>
           <div label="Assigned">
             <MyDocketTab allFlags={allFlags} />
+          </div>
+          <div label="Favorites">
+            <FavoritesTab allFlags={allFlags} />
           </div>
           <div label="Recent">
             <RecentTab allFlags={allFlags} />

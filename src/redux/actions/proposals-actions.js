@@ -8,11 +8,13 @@ import {
   onGetByStatus,
   getRecentOpportunity,
   getAssignedOpportunity,
+  getFavoritesOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
 import { selectFavourites } from '../selectors/sso-auth';
 import { getProposals } from '../selectors';
+import { getfetchAllFlags } from '../selectors/proposal';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -221,6 +223,7 @@ export const onFilteringProposals = (
             break;
         }
       });
+      const allFlags = getfetchAllFlags(getState());
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
@@ -239,7 +242,24 @@ export const onFilteringProposals = (
           );
           data = response.data;
         }
-      } else if (Number(tabIndex) === 1) {
+      } else if (Number(tabIndex) === 1 && allFlags.favouriteFlag) {
+        const userEmail = localStorage.getItem('userEmail') || '';
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await onGetByStatus(
+            filterPayload,
+            'current',
+            userEmail
+          );
+          data = response.data;
+        } else {
+          const response = await getFavoritesOpportunity(
+            filterPayload,
+            'non-active',
+            userEmail
+          );
+          data = response.data;
+        }
+      } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
           const response = await onGetByStatus(
@@ -255,10 +275,10 @@ export const onFilteringProposals = (
             userEmail
           );
           data = response.data;
-        }
+        } 
       } else {
-        const response = await onGetAllProposals(filterPayload);
-        data = response.data;
+          const response = await onGetAllProposals(filterPayload);
+          data = response.data;
       }
 
       if (!isEmpty(data)) {

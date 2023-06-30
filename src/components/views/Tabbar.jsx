@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Children, Component } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { debounce } from 'lodash';
@@ -7,6 +7,7 @@ import {
   setProposalTypeView,
   onFilteringProposals
 } from '../../redux/actions/proposals-actions';
+import { getfetchAllFlags } from '../../redux/selectors/proposal';
 import { SecondaryButton } from '../common/atoms/Buttons';
 import TabItem from '../common/atoms/TabItem';
 import SwitchView from '../common/SwitchView';
@@ -20,7 +21,8 @@ type Props = {
   filterProposals: Function,
   eventCategories: any,
   userActions: any,
-  trackEvent: any
+  trackEvent: any,
+  allFlags: Object
 };
 
 type State = {
@@ -86,6 +88,7 @@ class Tabbar extends Component<Props, State> {
   };
 
   handleChange = (index: number) => {
+    console.log('index', index);
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
     // Reset filters on tab switch
@@ -244,16 +247,21 @@ class Tabbar extends Component<Props, State> {
   };
 
   render() {
-    const { children } = this.props;
+    const { children, allFlags } = this.props;
     const { selected, showFilters, filterCount, filters } = this.state;
 
+    // Filter out favorite tab if flag is off
+    const latestChildren = allFlags.favouriteFlag ? 
+                            children : 
+                            children.filter(item => item.props.label !== 'Favorites');
+    
     return (
       <div className="tab-wrapper">
         <div className="tabs-items">
           <ul className="tabs">
-            {children &&
-              children?.length &&
-              children.map((item, index) => (
+            {latestChildren &&
+              latestChildren?.length &&
+              latestChildren.map((item, index) => (
                 <TabItem
                   key={uuidv4()}
                   index={index}
