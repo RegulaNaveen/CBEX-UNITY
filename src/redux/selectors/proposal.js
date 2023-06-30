@@ -1,8 +1,9 @@
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
-import { last, uniq, orderBy } from 'lodash';
+import { last, uniq, orderBy, isEmpty } from 'lodash';
 import { createSelector } from 'reselect';
 import { shouldInclude } from '../../components/views/export-component/word-template';
+import { extractEmails } from '../../utils/helpers';
 
 const generateMilestone = (proposalQuestions: Object) => {
   const flag = proposalQuestions.filter(question => question?.milestone);
@@ -211,6 +212,40 @@ export function selectProposal(state) {
 export const selectProposalQuestions = createSelector(
   selectProposal,
   proposal => proposal.get('proposalQuestions', Map({}))
+);
+
+export const selectActiveTeamQuestions = createSelector(
+  selectProposalQuestions,
+  proposalQuestions =>
+    proposalQuestions
+      .filter(
+        question =>
+          question.section.sectionName === 'Proposal Team' &&
+          question.visible === true &&
+          (question.active === true || question.isCustomQuestion === true)
+      )
+      .map(question => {
+        let email = [];
+        if (!isEmpty(question.answers)) {
+          const { answer } = [...question.answers].pop();
+          if (!isEmpty(answer.trim())) {
+            email = [
+              ...new Set(
+                answer
+                  .trim()
+                  .split(',')
+                  .map(i => extractEmails(i))
+                  .filter(i => i !== null)
+              )
+            ];
+          }
+        }
+
+        return {
+          ...question,
+          email
+        };
+      })
 );
 
 export const selectFilteredProposalQuestions = createSelector(
