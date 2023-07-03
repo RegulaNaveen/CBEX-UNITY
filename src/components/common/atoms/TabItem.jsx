@@ -20,7 +20,7 @@ const TabItem = ({ onClick, item, index, selected }: Props) => {
       className={classnames(index === selected && 'selected')}
       onClick={handleClick}
     >
-      {item.props.label}
+      {item?.props?.label}
     </li>
   );
 };

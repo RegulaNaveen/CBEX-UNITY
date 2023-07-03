@@ -8,7 +8,8 @@ import { parseMomentDate, remainingDays } from '../../utils/DateUtils';
 
 type Props = {
   data: Array<Object>,
-  allFlags: Object
+  allFlags: Object,
+  tabIndex: Number
 };
 
 const formatProposal = (proposal: Object) => {
@@ -38,7 +39,7 @@ const formatProposal = (proposal: Object) => {
 
 class GridView extends Component<Props> {
   renderContent() {
-    const { data, allFlags } = this.props;
+    const { data, allFlags, tabIndex } = this.props;
 
     if (isEmpty(data))
       return (
@@ -57,6 +58,7 @@ class GridView extends Component<Props> {
           return (
             <ProposalCard
               key={uuidv4()}
+              tabIndex={tabIndex}
               title={formatted.title}
               opportunityName={formatted.opportunityName}
               daysRemain={formatted.daysRemain}

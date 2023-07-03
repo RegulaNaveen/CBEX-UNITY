@@ -1,19 +1,19 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '../../../../store';
 import { REDUX_TYPES } from '../../../../constants';
 import { SocketContext } from '../../../../context/SocketContext';
-import RecentTab from '../RecentTab';
+import FavoritesTab from '../FavoritesTab';
 
 const { 
-  SET_PROPOSAL_FILTERING,
-  SET_PROPOSAL_VIEW_TYPE, 
-  ON_GET_PROPOSALS,
-  ON_FILTER_PROPOSALS
- } = REDUX_TYPES.PROPOSALS
+    SET_PROPOSAL_VIEW_TYPE, 
+    SET_PROPOSAL_FILTERING, 
+    ON_GET_PROPOSALS,
+    ON_FILTER_PROPOSALS 
+} = REDUX_TYPES.PROPOSALS
 
 const proposals = [
   {
@@ -30,10 +30,29 @@ const proposals = [
   }
 ];
 
-describe('testing my docket tab', () => {
+const FavoritesTabWithRedux = () => (
+  <Provider store={store}>
+    <FavoritesTab />
+  </Provider>
+);
+
+describe('testing favorites tab', () => {
   afterEach(() => {
     cleanup();
   });
+
+  test('return null if favorite flag is off', () => {
+    const { container } = render(<FavoritesTabWithRedux />);
+    act(() => {
+      store.dispatch({
+        type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+        payload: {
+          favouriteFlag: false
+        },
+      });
+    });
+    expect(container).toBeInTheDocument();
+  })
 
   test('render the component without being crashed', () => {
     store.dispatch({
@@ -42,14 +61,14 @@ describe('testing my docket tab', () => {
     })
     const { container } = render(
       <Provider store={store}>
-        <RecentTab />
+        <FavoritesTab />
       </Provider>
     );
 
     expect(container).toBeInTheDocument();
   });
 
-  test('check for filtered proposals', () => {
+  test('render the component with proposals', () => {
     store.dispatch({
       type: ON_GET_PROPOSALS, 
       payload: { proposals: proposals }
@@ -59,7 +78,7 @@ describe('testing my docket tab', () => {
       <Router>
         <Provider store={store}>
           <SocketContext.Provider value={{ updateFavouriteWrapper: jest.fn() }}>
-            <RecentTab />
+            <FavoritesTab />
           </SocketContext.Provider>
         </Provider>
       </Router> 
@@ -80,11 +99,11 @@ describe('testing my docket tab', () => {
 
     const { container } = render(
     <Router>
-      <Provider store={store}>
+        <Provider store={store}>
         <SocketContext.Provider value={{ updateFavouriteWrapper: jest.fn() }}>
-          <RecentTab />
+            <FavoritesTab />
         </SocketContext.Provider>
-      </Provider>
+        </Provider>
     </Router> 
     );
   

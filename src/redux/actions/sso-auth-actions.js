@@ -132,7 +132,7 @@ export const fetchUserFavourites = () => {
   };
 };
 
-export const updateFavourite = (oppNumber, favourite) => {
+export const updateFavourite = (oppNumber, favourite, proposalDetails) => {
   return async (dispatch, getState) => {
     try {
       let favourites = selectFavourites(getState()).toJS();
@@ -146,7 +146,7 @@ export const updateFavourite = (oppNumber, favourite) => {
         type: SET_USER_FAVOURITES,
         payload: favourites
       });
-      await dispatch(updateProposal(oppNumber, favourite));
+      await dispatch(updateProposal(oppNumber, favourite, proposalDetails));
       if (proposalInfo['CRM #']) {
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;

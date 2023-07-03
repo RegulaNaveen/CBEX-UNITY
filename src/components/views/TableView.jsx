@@ -18,10 +18,12 @@ import { saveRecentOppActivity } from '../../api/proposals';
 
 type Props = {
   data: Array<Object>,
-  hideStatus?: boolean
+  hideStatus?: boolean,
+  tabIndex: number
 };
 
-const TableView = ({ data, hideStatus }: Props) => {
+const TableView = ({ data, hideStatus, tabIndex }: Props) => {
+  console.log('tabIndex', tabIndex);
   const SKIP_COLUMNS = [
     'proposalId',
     'opportunityName',
@@ -88,7 +90,7 @@ const TableView = ({ data, hideStatus }: Props) => {
           row[LINK_COLUMN],
           favourite
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite);
+        updateFavouriteWrapper(row[LINK_COLUMN], favourite, tabIndex);
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],
