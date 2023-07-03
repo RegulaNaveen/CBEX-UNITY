@@ -106,10 +106,10 @@ export const InitRefreshToken = () => {
   }
 };
 
-export const getFavourites = async () => {
+export const getOppPrefs = async () => {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .get(`${INTEGRATIONS_API_URL}/user/favourites`, {
+      .get(`${INTEGRATIONS_API_URL}/user/opportunity/preferences`, {
         headers: {
           'x-api-key': API_KEY,
           'x-access-token': getAccessTokenFromLocalStorage()
@@ -130,6 +130,28 @@ export const toggleFavourite = async (oppNo, favourite) => {
       .put(
         `${INTEGRATIONS_API_URL}/user/favourite/${oppNo}?toggle=${favourite}`,
         {},
+        {
+          headers: {
+            'x-api-key': API_KEY,
+            'x-access-token': getAccessTokenFromLocalStorage()
+          }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const updateCustomName = async (oppNo, name) => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(
+        `${INTEGRATIONS_API_URL}/user/custom-opportunity-name/${oppNo}`,
+        { name },
         {
           headers: {
             'x-api-key': API_KEY,

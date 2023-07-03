@@ -408,3 +408,25 @@ export const selectCurrentWidget = createSelector(selectProposal, proposal =>
 export const selectFavourite = createSelector(selectProposal, proposal =>
   proposal?.get('favourite')
 );
+
+export const selectCustomName = createSelector(selectProposal, proposal =>
+  proposal?.get('customName', '')
+);
+
+export const selectNextMilestone = createSelector(selectProposal, proposal =>
+  proposal?.get('nextMilestone', '')
+);
+
+export const selectOppNoEditing = createSelector(selectProposal, proposal =>
+  proposal?.get('oppNoEditing', '')
+);
+
+export const selectCustomNameEditing = createSelector(
+  selectProposal,
+  proposal => proposal?.get('customNameEditing', '')
+);
+
+export const selectShowEditCustomNameModal = createSelector(
+  selectProposal,
+  proposal => proposal?.get('showEditCustomNameModal', false)
+);

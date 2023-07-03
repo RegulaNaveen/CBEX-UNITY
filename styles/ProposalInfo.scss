@@ -42,16 +42,34 @@
 }
 
 .proposal-info-container {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr);
   .MuiPaper-rounded {
     border-radius: unset;
     padding: 5px;
     text-align: center;
     flex: 1 1 17%;
+  }
 
-    @media screen and (max-width: 1200px) {
-      display: grid;
-      justify-content: center;
-    }
+  .custom-opp-name-container {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  @media screen and (min-width: 360px) and (max-width: 539px) {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+  @media screen and (min-width: 540px) and (max-width: 719px) {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+  @media screen and (min-width: 720px) and (max-width: 899px) {
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+  }
+  @media screen and (min-width: 900px) and (max-width: 1079px) {
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+  }
+  @media screen and (min-width: 1080px) {
+    grid-template-columns: repeat(6, minmax(150px, 1fr));
   }
 }
 
@@ -98,6 +116,7 @@
     }
     .duedatedsg {
       height: 100%;
+      text-align: left !important;
     }
     .phasedsg {
       height: 100%;

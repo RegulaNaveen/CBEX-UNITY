@@ -34,7 +34,10 @@ type Props = {
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
   allFlags: object,
-  bidStatus: boolean
+  bidStatus: boolean,
+  favourite: boolean,
+  bidStopStatus: boolean,
+  tabIndex: number
 };
 
 const ProposalCard = ({
@@ -54,8 +57,10 @@ const ProposalCard = ({
   isApprovalCountPresent,
   allFlags,
   favourite,
-  bidStopStatus
+  bidStopStatus,
+  tabIndex
 }: Props) => {
+  const proposalDetails = { tabIndex };
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
 
@@ -79,7 +84,7 @@ const ProposalCard = ({
     try {
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
-      updateFavouriteWrapper(title, favourite);
+      updateFavouriteWrapper(title, favourite, {...proposalDetails});
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,

@@ -4,12 +4,13 @@ import {
   onLoginRequest,
   onChangeUserRole,
   getUsers,
-  getFavourites
+  getOppPrefs
 } from '../../api/sso-auth';
 import { REDUX_TYPES } from '../../constants';
 import { selectFavourites } from '../selectors/sso-auth';
 import { updateProposal } from './proposals-actions';
 import { getProposalDetails, getProposals } from '../selectors';
+import { cloneDeep } from 'lodash';
 
 const {
   ON_USER_LOGIN,
@@ -20,7 +21,8 @@ const {
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
-  SET_USER_FAVOURITES
+  SET_USER_FAVOURITES,
+  SET_CUSTOM_NAME_MAP
 } = REDUX_TYPES.SSO_AUTH;
 
 const { TOGGLE_FAVOURITE } = REDUX_TYPES.PROPOSAL;
@@ -87,36 +89,56 @@ export const getAllUsers = (): ThunkAction<string, Object> => {
   };
 };
 
-export const fetchUserFavourites = () => {
+export const fetchUserOpportunityPrefs = () => {
   return async (dispatch, getState) => {
     try {
-      const favouritesResponse = await getFavourites();
-      if (favouritesResponse && Array.isArray(favouritesResponse.favourites)) {
+      const opportuntityPrefsRes = await getOppPrefs();
+      if (
+        opportuntityPrefsRes &&
+        Array.isArray(opportuntityPrefsRes.preferences)
+      ) {
+        let userFavourites = new Set(),
+          userCustomOppNameMap = {},
+          userFavouritesArr = [];
+        opportuntityPrefsRes.preferences.forEach(pref => {
+          if (pref.favourite) {
+            userFavourites.add(pref.opp_number);
+          }
+          if (pref.custom_header_tab) {
+            userCustomOppNameMap[pref.opp_number] = pref.custom_header_tab;
+          }
+        });
+        userFavouritesArr = new Array(userFavourites);
         dispatch({
           type: SET_USER_FAVOURITES,
-          payload: favouritesResponse.favourites
+          payload: new Array(userFavourites)
+        });
+        dispatch({
+          type: SET_CUSTOM_NAME_MAP,
+          payload: cloneDeep(userCustomOppNameMap)
         });
         let proposals = getProposals(getState());
         if (proposals.length > 0) {
-          const favouritesMap = favouritesResponse.favourites.reduce(
-            (favMap, fav) => {
-              favMap[fav] = true;
-              return favMap;
-            },
-            {}
-          );
+          const favouritesMap = userFavouritesArr.reduce((favMap, fav) => {
+            favMap[fav] = true;
+            return favMap;
+          }, {});
           let updatedProposals = proposals.map(proposal => {
             if (proposal && proposal['opportunity number']) {
               return {
                 ...proposal,
                 isFavourite: !!favouritesMap[
                   `${proposal['opportunity number']}`
-                ]
+                ],
+                customName:
+                  userCustomOppNameMap[`${proposal['opportunity number']}`] ||
+                  ''
               };
             } else {
               return {
                 ...proposal,
-                isFavourite: false
+                isFavourite: false,
+                customName: ''
               };
             }
           });
@@ -132,7 +154,7 @@ export const fetchUserFavourites = () => {
   };
 };
 
-export const updateFavourite = (oppNumber, favourite) => {
+export const updateFavourite = (oppNumber, favourite, proposalDetails) => {
   return async (dispatch, getState) => {
     try {
       let favourites = selectFavourites(getState()).toJS();
@@ -146,7 +168,7 @@ export const updateFavourite = (oppNumber, favourite) => {
         type: SET_USER_FAVOURITES,
         payload: favourites
       });
-      await dispatch(updateProposal(oppNumber, favourite));
+      await dispatch(updateProposal(oppNumber, favourite, proposalDetails));
       if (proposalInfo['CRM #']) {
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
