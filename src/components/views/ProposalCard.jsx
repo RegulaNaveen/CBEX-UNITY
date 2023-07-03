@@ -15,6 +15,7 @@ import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
 import Minus from 'apollo-react-icons/Minus';
+import { getFavoritesOpportunity } from '../../api/proposals';
 
 type Props = {
   title: string,
@@ -73,6 +74,8 @@ const ProposalCard = ({
     try {
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
+      const userEmail = localStorage.getItem('userEmail') || '';
+      getFavoritesOpportunity({ source: 'es' }, true, userEmail);
       updateFavouriteWrapper(title, favourite);
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,

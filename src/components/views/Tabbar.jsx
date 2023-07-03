@@ -7,7 +7,6 @@ import {
   setProposalTypeView,
   onFilteringProposals
 } from '../../redux/actions/proposals-actions';
-import { getfetchAllFlags } from '../../redux/selectors/proposal';
 import { SecondaryButton } from '../common/atoms/Buttons';
 import TabItem from '../common/atoms/TabItem';
 import SwitchView from '../common/SwitchView';
@@ -88,7 +87,6 @@ class Tabbar extends Component<Props, State> {
   };
 
   handleChange = (index: number) => {
-    console.log('index', index);
     this.trackMatomoEventTabs(index);
     this.setState({ selected: index });
     // Reset filters on tab switch
@@ -128,17 +126,6 @@ class Tabbar extends Component<Props, State> {
     });
     this.trackMatomoEventFilterChange({ ...filters, [id]: range });
   };
-
-  onDateRangeChange(id, range) {
-    const { filters } = this.state;
-    const { filterProposals } = this.props;
-
-    this.setState({ filters: { ...filters, [id]: range } }, () => {
-      const { filters: newFilters, selected } = this.state;
-      filterProposals(newFilters, selected);
-    });
-    this.trackMatomoEventFilterChange({ ...filters, [id]: range });
-  }
 
   toggleFilters = () => {
     const { showFilters } = this.state;

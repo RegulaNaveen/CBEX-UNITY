@@ -233,16 +233,16 @@ export const onFilteringProposals = (
       } else if (Number(tabIndex) === 1 && allFlags.favouriteFlag) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getFavoritesOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getFavoritesOpportunity(
             filterPayload,
-            'non-active',
+            false,
             userEmail
           );
           data = response.data;

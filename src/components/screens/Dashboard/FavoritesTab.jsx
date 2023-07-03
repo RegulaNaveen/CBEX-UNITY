@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { chunk, isEmpty } from 'lodash';
+import { chunk } from 'lodash';
 import Loader from 'react-loader-spinner';
 import Typography from 'apollo-react/components/Typography';
 import Card from 'apollo-react/components/Card';
@@ -62,6 +62,9 @@ class FavoritesTab extends Component<Props, State> {
       isFilteringProposals
     } = this.props;
 
+    const favouriteProposals = this.favoriteProposals(proposals);
+    const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
+
     const contentChanged =
       prevProps.page !== page ||
       prevProps.numRows !== numRows ||
@@ -70,7 +73,7 @@ class FavoritesTab extends Component<Props, State> {
 
     if (contentChanged) {
       const pages = chunk(
-        isFilteringProposals ? filteredProposals : proposals,
+        isFilteringProposals ? favouriteFilteredProposals : favouriteProposals,
         numRows
       );
       this.setPageContent(pages[page - 1]);
@@ -101,6 +104,9 @@ class FavoritesTab extends Component<Props, State> {
   setPageContent = (pageContent: Array<Object>) =>
     this.setState({ pageContent });
 
+  favoriteProposals = (proposals: Array<Object>) =>
+    proposals.filter(item => item.isFavourite === true);
+
   render() {
     const {
       proposals,
@@ -109,15 +115,14 @@ class FavoritesTab extends Component<Props, State> {
       filteredProposals,
       setPage,
       setRows,
-      allFlags
     } = this.props;
 
-    const showPagination = isFilteringProposals
-      ? !isEmpty(filteredProposals)
-      : !isEmpty(proposals);
+    const favouriteProposals = this.favoriteProposals(proposals);
+    const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
 
-    // Return null if favoriteFlag is off
-    if(!allFlags.favouriteFlag) return null;
+    const showPagination = isFilteringProposals
+      ? favouriteFilteredProposals.length > 15
+      : favouriteProposals.length > 15;
     
     return loading ? (
       <Loader
@@ -135,7 +140,7 @@ class FavoritesTab extends Component<Props, State> {
         {showPagination && (
           <ComplexPagination
             totalItems={
-              isFilteringProposals ? filteredProposals.length : proposals.length
+              isFilteringProposals ? favouriteFilteredProposals.length : favouriteProposals.length
             }
             getCurrentPosition={setPage}
             getMaxRows={setRows}
