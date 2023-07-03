@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import * as serviceWorker from 'register-service-worker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ serviceWorker.unregister();
 
 const Dashboard = () => {
   const { trackPageView } = useMatomo();
+  const [filterApply, setFilterApply] = useState(false);
   const dispatch = useDispatch();
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
@@ -44,14 +45,17 @@ const Dashboard = () => {
     }
     getLaunchdarklyFlags();
   }, []);
-
   return (
     <div id="dashboard">
       <Toolbar selected="dashboard" />
       <div className="tab-wrapper">
-        <Tabbar>
+        <Tabbar
+          getFilterStatus={e => {
+            setFilterApply(e);
+          }}
+        >
           <div label="Assigned">
-            <MyDocketTab allFlags={allFlags} />
+            <MyDocketTab allFlags={allFlags} filterApply={filterApply} />
           </div>
           <div label="Recent">
             <RecentTab allFlags={allFlags} />
