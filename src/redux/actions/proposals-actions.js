@@ -8,7 +8,6 @@ import {
   onGetByStatus,
   getRecentOpportunity,
   getAssignedOpportunity,
-  getFavoritesOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
@@ -212,6 +211,8 @@ export const onFilteringProposals = (
         }
       });
       const allFlags = getfetchAllFlags(getState());
+      console.log('allFlags', allFlags.favouriteFlag);
+      console.log('Number(tabIndex)', Number(tabIndex));
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
@@ -230,23 +231,9 @@ export const onFilteringProposals = (
           );
           data = response.data;
         }
-      } else if (Number(tabIndex) === 1 && allFlags.favouriteFlag) {
-        const userEmail = localStorage.getItem('userEmail') || '';
-        if (Object.keys(filterPayload).length > 1) {
-          const response = await getFavoritesOpportunity(
-            filterPayload,
-            true,
-            userEmail
-          );
-          data = response.data;
-        } else {
-          const response = await getFavoritesOpportunity(
-            filterPayload,
-            false,
-            userEmail
-          );
-          data = response.data;
-        }
+      } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
+        const response = await onGetAllProposals(filterPayload);
+        data = response.data;
       } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
@@ -349,7 +336,7 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
   }
 };
 
-export const updateProposal = (oppNumber, favourite) => async (
+export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   dispatch,
   getState
 ) => {
@@ -361,6 +348,10 @@ export const updateProposal = (oppNumber, favourite) => async (
     if (proposalIndex > -1) {
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+    const { tabIndex } = proposalDetails;
+    if(tabIndex === 1 && favourite) {
+      proposals.push(proposals.splice(proposalIndex, 1)[0]);
     }
   } catch (error) {
     console.log(error);

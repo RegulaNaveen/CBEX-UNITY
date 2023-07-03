@@ -86,9 +86,9 @@ class FavoritesTab extends Component<Props, State> {
 
     if (pageContent && pageContent.length) {
       if (selectedViewType === 0) {
-        return <TableView data={pageContent} />;
+        return <TableView data={pageContent} tabIndex={1} hideStatus/>;
       } else {
-        return <GridView data={pageContent} allFlags={allFlags} />;
+        return <GridView data={pageContent} allFlags={allFlags} tabIndex={1}/>;
       }
     } else {
       return (
@@ -105,7 +105,7 @@ class FavoritesTab extends Component<Props, State> {
     this.setState({ pageContent });
 
   favoriteProposals = (proposals: Array<Object>) =>
-    proposals.filter(item => item.isFavourite === true);
+    proposals.filter(item => item.isFavourite === true).reverse();
 
   render() {
     const {
@@ -115,6 +115,7 @@ class FavoritesTab extends Component<Props, State> {
       filteredProposals,
       setPage,
       setRows,
+      allFlags
     } = this.props;
 
     const favouriteProposals = this.favoriteProposals(proposals);
@@ -123,6 +124,9 @@ class FavoritesTab extends Component<Props, State> {
     const showPagination = isFilteringProposals
       ? favouriteFilteredProposals.length > 15
       : favouriteProposals.length > 15;
+
+    // If favourite flag is off return null
+    if(!allFlags.favouriteFlag) return null;
     
     return loading ? (
       <Loader

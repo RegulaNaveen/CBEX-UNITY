@@ -15,7 +15,6 @@ import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
 import Minus from 'apollo-react-icons/Minus';
-import { getFavoritesOpportunity } from '../../api/proposals';
 
 type Props = {
   title: string,
@@ -31,7 +30,10 @@ type Props = {
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
   allFlags: object,
-  bidStatus: boolean
+  bidStatus: boolean,
+  favourite: boolean,
+  bidStopStatus: boolean,
+  tabIndex: number
 };
 
 const ProposalCard = ({
@@ -49,8 +51,10 @@ const ProposalCard = ({
   isApprovalCountPresent,
   allFlags,
   favourite,
-  bidStopStatus
+  bidStopStatus,
+  tabIndex
 }: Props) => {
+  const proposalDetails = { tabIndex };
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
 
@@ -74,9 +78,7 @@ const ProposalCard = ({
     try {
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
-      const userEmail = localStorage.getItem('userEmail') || '';
-      getFavoritesOpportunity({ source: 'es' }, true, userEmail);
-      updateFavouriteWrapper(title, favourite);
+      updateFavouriteWrapper(title, favourite, {...proposalDetails});
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,

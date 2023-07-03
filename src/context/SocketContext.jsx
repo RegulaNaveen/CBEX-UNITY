@@ -175,7 +175,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const updateFavourite = (oppNumber, favourite, ws) => {
+  const updateFavourite = (oppNumber, favourite, proposalDetails, ws) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -187,7 +187,8 @@ const SocketContextProvider = props => {
             event: 'FAVOURITE',
             data: {
               oppNumber,
-              favourite
+              favourite,
+              ...proposalDetails
             }
           }
         })
@@ -503,7 +504,7 @@ const SocketContextProvider = props => {
 
             case 'FAVOURITE':
               const { oppNumber, favourite } = data.data;
-              updateFavouriteAction(oppNumber, favourite);
+              updateFavouriteAction(oppNumber, favourite, {...data.data});
               break;
             default:
               break;
@@ -673,9 +674,9 @@ const SocketContextProvider = props => {
     );
   };
 
-  const updateFavouriteWrapper = (oppNo, favourite) => {
+  const updateFavouriteWrapper = (oppNo, favourite, proposalDetails) => {
     waitForSocketConnectionMinInterval(() =>
-      updateFavourite(oppNo, favourite, null)
+      updateFavourite(oppNo, favourite, proposalDetails, null)
     );
   };
 
