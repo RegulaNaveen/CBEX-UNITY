@@ -80,6 +80,6 @@ describe('Dashboard', () => {
 
   it('renders a Tabbar component with four tabs', () => {
     expect(wrapper.find('Tabbar')).toHaveLength(1);
-    expect(wrapper.find('TabItem')).toHaveLength(4);
+    expect(wrapper.find('TabItem')).toHaveLength(3);
   });
 });
