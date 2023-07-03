@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
-import { connect } from 'react-redux';
 import { parseMomentDate, remainingDays } from '../../utils/DateUtils';
 
 type Props = {
@@ -20,15 +19,15 @@ const formatProposal = (proposal: Object) => {
   const formatted = {
     title: proposal['opportunity number'] || placeholder,
     opportunityName: proposal.opportunityName || placeholder,
-    opportunityStage: proposal['opportunity status'] || placeholder,
-    bidNo: proposal['bidNo'] || placeholder,
     daysRemain,
-    dueDate: dueDate || placeholder,
     customer: proposal.customer || placeholder,
+    bidNo: proposal['bidNo'] || placeholder,
+    dueDate: dueDate || placeholder,
     protocolNumber: proposal['protocol number'] || placeholder,
     phase: proposal.phase || placeholder,
     therapeuticArea: proposal.therapeuticArea || placeholder,
     verbatimIndication: proposal['verbatim indication'] || placeholder,
+    opportunityStage: proposal['opportunity status'] || placeholder,
     proposalId: proposal.proposalId || placeholder,
     approvalsCount: proposal.approvalsCount || null,
     isApprovalCountPresent: proposal.isApprovalCountPresent || false,
@@ -62,15 +61,15 @@ class GridView extends Component<Props> {
               key={uuidv4()}
               title={formatted.title}
               opportunityName={formatted.opportunityName}
-              opportunityStage={formatted.opportunityStage}
-              bidNo={formatted.bidNo}
               daysRemain={formatted.daysRemain}
-              dueDate={formatted.dueDate}
               customer={formatted.customer}
+              bidNo={formatted.bidNo}
+              dueDate={formatted.dueDate}
               protocolNumber={formatted.protocolNumber}
               phase={formatted.phase}
               therapeuticArea={formatted.therapeuticArea}
               verbatimIndication={formatted.verbatimIndication}
+              opportunityStage={formatted.opportunityStage}
               proposalId={formatted.proposalId}
               approvalsCount={formatted.approvalsCount}
               isApprovalCountPresent={formatted.isApprovalCountPresent}
