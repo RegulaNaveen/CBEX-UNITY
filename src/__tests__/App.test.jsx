@@ -31,9 +31,9 @@ describe('App Component', () => {
     expect(wrapper.find(App)).toHaveLength(1);
   });
 
-  it.only('renders Home component on dashboard route', async () => {
-    const getFavStub = sinonSandbox.stub(SSOApis, 'getFavourites').resolves({
-      favourties: ['test123']
+  it('renders Home component on dashboard route', async () => {
+    const getFavStub = sinonSandbox.stub(SSOApis, 'getOppPrefs').resolves({
+      preferences: []
     });
     localStorage.setItem('access_token', 'token');
     window.history.pushState({}, '', '/dashboard');
