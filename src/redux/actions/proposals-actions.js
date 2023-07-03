@@ -50,6 +50,7 @@ const formatProposal = (
     formattedProposal.proposalId = proposalId;
     formattedProposal.opportunityName = opportunityName;
     formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+    formattedProposal['bidNo'] = proposalDetails['bidNo'];
     formattedProposal.customer = proposalDetails.Customer;
     formattedProposal['protocol number'] = proposalDetails['Protocol number'];
     formattedProposal.phase = proposalDetails.Phase;
