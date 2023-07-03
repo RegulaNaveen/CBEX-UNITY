@@ -139,7 +139,9 @@ class Tabbar extends Component<Props, State> {
 
   toggleFilters = () => {
     const { showFilters } = this.state;
+    const { getFilterStatus } = this.props;
     this.setState({ showFilters: !showFilters });
+    getFilterStatus(!showFilters);
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
