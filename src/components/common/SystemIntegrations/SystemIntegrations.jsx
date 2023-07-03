@@ -41,7 +41,8 @@ const SystemIntegrations = ({
   answers,
   bidAnswerCopy = false,
   latestAnsweredBidNo = null,
-  questionId
+  questionId,
+  questionDataDestinations
 }) => {
   const answer = answers.reverse();
   // console.log('answer', answer.toJS());
@@ -50,9 +51,13 @@ const SystemIntegrations = ({
     canShowCarryForwardIndication,
     setCanShowCarryForwardIndication
   ] = useState(false);
+  const [dataDestinations, setDataDestinations] = useState(undefined);
 
+  useEffect(() => {
+    if (questionDataDestinations)
+      setDataDestinations(questionDataDestinations.split(','));
+  }, []);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
-
   useEffect(() => {
     if (
       answers?.get(0)?.get('userName') === 'AnswerPulledFromSalesforce' &&
@@ -198,20 +203,20 @@ const SystemIntegrations = ({
   };
 
   const QvidianValidation = () => {
-    if (integrationvalidation === true && changeIcon === '#00c221') {
+    if (dataDestinations?.length > 0 && changeIcon === '#00c221') {
       return (
         <Tooltip
           variant="light"
           title={
-            integrationvalidation ? (
+            dataDestinations ? (
               <p>
                 <b>
-                  {destinationArray?.length > 1
+                  {dataDestinations?.length > 1
                     ? 'Destinations'
                     : 'Destination'}
                 </b>
                 <br />
-                {destinationArray.map(item => {
+                {dataDestinations.map(item => {
                   return (
                     <p>
                       {item}
@@ -239,7 +244,7 @@ const SystemIntegrations = ({
         </Tooltip>
       );
     }
-    if (integrationvalidation === true) {
+    if (dataDestinations?.length > 0) {
       return lastAnswer
         ?.toJS()
         .answer?.toString()
@@ -247,15 +252,15 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            integrationvalidation ? (
+            dataDestinations ? (
               <p>
                 <b>
-                  {destinationArray?.length > 1
+                  {dataDestinations?.length > 1
                     ? 'Destinations'
                     : 'Destination'}
                 </b>
                 <br />
-                {destinationArray.map(item => {
+                {dataDestinations.map(item => {
                   return (
                     <p>
                       {item}
@@ -285,15 +290,15 @@ const SystemIntegrations = ({
         <Tooltip
           variant="light"
           title={
-            integrationvalidation ? (
+            dataDestinations ? (
               <p>
                 <b>
-                  {destinationArray?.length > 1
+                  {dataDestinations?.length > 1
                     ? 'Destinations'
                     : 'Destination'}
                 </b>
                 <br />
-                {destinationArray.map(item => {
+                {dataDestinations.map(item => {
                   return (
                     <p>
                       {item}
