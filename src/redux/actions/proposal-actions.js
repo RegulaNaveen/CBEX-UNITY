@@ -29,16 +29,22 @@ import {
   setNotApplicableQuestionApi,
   getAllProposals
 } from '../../api/proposal';
-import { getQuestionsFilters, selectProposalQuestions } from '../selectors';
+import { updateCustomName } from '../../api/sso-auth';
+import {
+  getQuestionsFilters,
+  selectProposalQuestions,
+  getProposals,
+  getProposalDetails
+} from '../selectors';
 import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
-import { SEARCH, UNITY_TABS } from '../../constants/types';
+import { SEARCH, UI, UNITY_TABS } from '../../constants/types';
 import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
-import { selectFavourites } from '../selectors/sso-auth';
+import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -111,8 +117,15 @@ const {
   SET_V_TAB_ACTIVE_INDEX,
   SET_V_TAB_USER_PREFERENCE,
   WIDGET_UPDATE,
-  TOGGLE_FAVOURITE
+  TOGGLE_FAVOURITE,
+  SET_CUSTOM_NAME,
+  SET_NEXT_MILESTONE,
+  SET_EDIT_OPP_INFO,
+  CLEAR_EDIT_OPP_INFO,
+  TOGGLE_EDIT_CUSTOM_NAME_MODAL
 } = REDUX_TYPES.PROPOSAL;
+
+const { ON_GET_PROPOSALS } = REDUX_TYPES.PROPOSALS;
 
 /**
  * Updates bidNo Query param without page reload
@@ -139,6 +152,7 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
     try {
       const data = await getProposalInfo(id);
       const favourites = selectFavourites(getState()).toJS();
+      const customNameMap = selectCustomNameMap(getState()).toJS();
       const favouritesMap = favourites.reduce((favMap, fav) => {
         favMap[fav] = true;
         return favMap;
@@ -149,12 +163,21 @@ export const getProposal = (id: string): ThunkAction<string, Object> => {
       const milestones = getUniqueMilestones(data.proposalQuestions);
       dispatch({
         type: PROPOSAL_INFO,
-        payload: { ...data, milestones, isFavourite }
+        payload: {
+          ...data,
+          milestones,
+          isFavourite,
+          customName:
+            customNameMap[`${data.proposal.proposalDetails['CRM #']}`] || ''
+        }
       });
 
       return data;
     } catch (err) {
-      dispatch({ type: PROPOSAL_INFO_ERROR, payload: err });
+      dispatch({
+        type: PROPOSAL_INFO_ERROR,
+        payload: err
+      });
     }
   };
 };
@@ -1387,6 +1410,7 @@ export const getOpportunity = (
         dispatch({ type: NEW_BID_CREATED, payload: { flag } });
       }
       const favourites = selectFavourites(getState()).toJS();
+      const customNameMap = selectCustomNameMap(getState()).toJS();
       const favouritesMap = favourites.reduce((favMap, fav) => {
         favMap[fav] = true;
         return favMap;
@@ -1394,6 +1418,14 @@ export const getOpportunity = (
       dispatch({
         type: TOGGLE_FAVOURITE,
         payload: favouritesMap[`${id}`]
+      });
+      dispatch({
+        type: SET_CUSTOM_NAME,
+        payload: customNameMap[`${id}`]
+      });
+      dispatch({
+        type: SET_NEXT_MILESTONE,
+        payload: data[0].proposal.nextMilestone
       });
     } catch (err) {
       console.log('error occurred ', err);
@@ -1699,5 +1731,64 @@ export const widgetUpdate = (proposalId, typeOfWidget) => {
         typeOfWidget
       }
     });
+  };
+};
+
+export const onEditCustomName = (oppNo, customName) => {
+  return dispatch => {
+    dispatch({
+      type: SET_EDIT_OPP_INFO,
+      payload: {
+        oppNo,
+        customName
+      }
+    });
+  };
+};
+
+export const onCancelEditCustomName = (oppNo, customName) => {
+  return dispatch => {
+    dispatch({
+      type: CLEAR_EDIT_OPP_INFO
+    });
+  };
+};
+
+export const toggleEditCustomNameModal = (show = false) => {
+  return dispatch => {
+    dispatch({ type: TOGGLE_EDIT_CUSTOM_NAME_MODAL, payload: show });
+  };
+};
+
+export const onSaveCustomName = (oppNo, customName) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await updateCustomName(oppNo, customName);
+      dispatch({
+        type: UI.SET_SNACKBAR_MSG,
+        payload: `Custom Name updated for ${oppNo}`
+      });
+      dispatch({
+        type: UI.SHOW_SNACKBAR
+      });
+      let proposals = getProposals(getState());
+      let proposalInfo = getProposalDetails(getState());
+      const proposalIndex = proposals.findIndex(
+        proposal => proposal['opportunity number'] === oppNo
+      );
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['customName'] = customName;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+      if (proposalInfo['CRM #'] == oppNo) {
+        dispatch({
+          type: SET_CUSTOM_NAME,
+          payload: customName
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
   };
 };

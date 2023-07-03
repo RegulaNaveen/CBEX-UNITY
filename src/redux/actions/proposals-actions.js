@@ -11,7 +11,7 @@ import {
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
-import { selectFavourites } from '../selectors/sso-auth';
+import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import { getProposals } from '../selectors';
 
 const {
@@ -27,7 +27,11 @@ const {
   NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
-const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
+const formatProposal = (
+  proposal: Object,
+  favoritesMap: Object,
+  customNameMap: Object = {}
+): Object => {
   const formattedProposal = {};
 
   const {
@@ -62,6 +66,8 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.isFavourite = !!favoritesMap[
       `${proposalDetails['CRM #']}`
     ];
+    formattedProposal.customName =
+      customNameMap[`${proposalDetails['CRM #']}`] || '';
     return formattedProposal;
   }
 
@@ -252,12 +258,13 @@ export const onFilteringProposals = (
       if (!isEmpty(data)) {
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
+        const customNameMap = selectCustomNameMap(getState()).toJS();
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
         }, {});
         const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
+          formatProposal(proposal, favouritesMap, customNameMap)
         );
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
