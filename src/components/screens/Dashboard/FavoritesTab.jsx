@@ -126,7 +126,7 @@ class FavoritesTab extends Component<Props, State> {
       : favouriteProposals.length > 15;
 
     // If favourite flag is off return null
-    if(!allFlags.favouriteFlag) return null;
+    if(!allFlags?.favouriteFlag) return null;
     
     return loading ? (
       <Loader

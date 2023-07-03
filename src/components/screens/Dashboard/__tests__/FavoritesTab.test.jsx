@@ -41,7 +41,7 @@ describe('testing favorites tab', () => {
     cleanup();
   });
 
-  test.only('return null if favorite flag is off', () => {
+  test('return null if favorite flag is off', () => {
     const { container } = render(<FavoritesTabWithRedux />);
     act(() => {
       store.dispatch({
