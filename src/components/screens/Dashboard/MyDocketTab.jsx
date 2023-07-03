@@ -140,7 +140,13 @@ class RecentTab extends Component<Props, State> {
   }
 
   renderSelectedView = key => {
-    const { selectedViewType, allFlags } = this.props;
+    const {
+      selectedViewType,
+      allFlags,
+      isFilteringProposals,
+      loading,
+      filterApply
+    } = this.props;
     let { newpageContent, oldpageContent, pageContent } = this.state;
     if (key == 'current') {
       if (newpageContent && newpageContent.length) {
@@ -153,7 +159,9 @@ class RecentTab extends Component<Props, State> {
         return (
           <Card className="no-info-card">
             <Typography>
-              No current opportunities are assigned to you
+              {filterApply
+                ? 'No results found'
+                : 'No current opportunities are assigned to you'}
             </Typography>
           </Card>
         );
@@ -168,7 +176,12 @@ class RecentTab extends Component<Props, State> {
       } else {
         return (
           <Card className="no-info-card">
-            <Typography>No Past opportunities were assigned to you</Typography>
+            <Typography>
+              {' '}
+              {filterApply
+                ? 'No results found'
+                : 'No Past opportunities were assigned to you'}
+            </Typography>
           </Card>
         );
       }
