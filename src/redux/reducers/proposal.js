@@ -75,7 +75,12 @@ const {
   SET_V_TAB_USER_PREFERENCE,
   CHANGE_BID_STATUS_OPERATION,
   WIDGET_UPDATE,
-  TOGGLE_FAVOURITE
+  TOGGLE_FAVOURITE,
+  SET_CUSTOM_NAME,
+  SET_NEXT_MILESTONE,
+  TOGGLE_EDIT_CUSTOM_NAME_MODAL,
+  SET_EDIT_OPP_INFO,
+  CLEAR_EDIT_OPP_INFO
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -196,7 +201,12 @@ const INITIAL_STATE: Map = fromJS({
     currentWidget: 'PriceModeler',
     proposalId: ''
   },
-  favourite: false
+  favourite: false,
+  customName: '',
+  nextMilestone: '',
+  showEditCustomNameModal: false,
+  oppNoEditing: '',
+  customNameEditing: ''
 });
 
 const onProsalInfoLoaded = (state: Map, action: Object): Map => {
@@ -204,7 +214,8 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     proposalQuestions,
     proposal: { proposalDetails },
     proposal,
-    isFavourite
+    isFavourite,
+    customName
   } = action.payload;
   let NewopportunityData = new OrderedMap({});
   let opportunityData = state.get('opportunityData');
@@ -230,6 +241,7 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     });
   });
   state.set('favourite', isFavourite);
+  state.set('customName', customName);
   // Add agreementId as well in proposal details
   // proposalDetails.agreementId = action.payload.proposal.agreementId || '';
 
@@ -332,7 +344,8 @@ const setOpportunityInfo = (state, action) => {
           proposal.proposal.proposalDetails.pertinentDetails
         )
         .set('proposalDate', proposal.proposal.proposalDate)
-        .set('typeOfWidget', proposal.proposal.typeOfWidget);
+        .set('typeOfWidget', proposal.proposal.typeOfWidget)
+        .set('nextMilestone', proposal.proposal.nextMilestone || '');
     }
     opportunityData = opportunityData.set(
       proposal.proposal.proposalId,
@@ -405,11 +418,11 @@ const onChangeBid = (state: Map, action: Object): Map => {
     accountId: accountId || '',
     opportunityId: proposalDetails['opportunityId'],
     proposalDate,
-    typeOfWidget: payload.bid.typeOfWidget
+    typeOfWidget: payload.bid.typeOfWidget,
+    nextMilestone: payload.bid.nextMilestone || ''
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
-
   if (proposalQuestions) {
     const milestones = getUniqueMilestones(proposalQuestions);
 
@@ -500,14 +513,14 @@ const addNewBid = (state: Map, action: Object): Map => {
     .set('opportunityType', data.proposal['opportunityType'] || '')
     .set('isCurrent', true)
     .set('bidStatus', data.proposal['inProgress'] || false)
-    .set('pertinentDetails', data.proposal.proposalDetails.pertinentDetails);
+    .set('pertinentDetails', data.proposal.proposalDetails.pertinentDetails)
+    .set('nextMilestone', data.proposal['nextMilestone'] || '');
 
   const proposalDetails = newopportunityData.getIn([
     selectedBid.get('id'),
     'proposal',
     'proposalDetails'
   ]);
-
   const proposalQuestions = newopportunityData.getIn([
     selectedBid.get('id'),
     'proposalQuestions'
@@ -1282,6 +1295,28 @@ const onFavouriteToggle = (state, action) => {
   return state.set('favourite', action.payload);
 };
 
+const onSetCustomName = (state, action) => {
+  return state.set('customName', action.payload);
+};
+
+const onSetNextMilestone = (state, action) => {
+  return state.set('nextMilestone', action.payload);
+};
+
+const toggleEditCustomNameModal = (state, action) => {
+  return state.set('showEditCustomNameModal', action.payload);
+};
+
+const setEditOppInfo = (state, action) => {
+  return state
+    .set('oppNoEditing', action.payload.oppNo)
+    .set('customNameEditing', action.payload.customName);
+};
+
+const clearEditOppInfo = state => {
+  return state.set('oppNoEditing', '').set('customNameEditing', '');
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1359,7 +1394,12 @@ const actionMap = {
   [CHANGE_BID_STATUS_OPERATION]: (state, { payload }) =>
     state.set('changeBidStatus', payload),
   [WIDGET_UPDATE]: setWidgetUpdate,
-  [TOGGLE_FAVOURITE]: onFavouriteToggle
+  [TOGGLE_FAVOURITE]: onFavouriteToggle,
+  [SET_CUSTOM_NAME]: onSetCustomName,
+  [SET_NEXT_MILESTONE]: onSetNextMilestone,
+  [TOGGLE_EDIT_CUSTOM_NAME_MODAL]: toggleEditCustomNameModal,
+  [SET_EDIT_OPP_INFO]: setEditOppInfo,
+  [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo
 };
 
 export default function(
