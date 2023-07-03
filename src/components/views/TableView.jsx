@@ -188,7 +188,7 @@ const TableView = ({ data, hideStatus }: Props) => {
 
             case 'opportunity status':
               const statusText = row[col]
-                .split('.')
+                ?.split('.')
                 .pop()
                 .trim();
               return (
