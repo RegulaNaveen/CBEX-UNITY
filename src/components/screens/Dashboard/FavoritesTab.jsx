@@ -21,6 +21,10 @@ import TableView from '../../views/TableView';
 import GridView from '../../views/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
 
+export const addNewFavoriteProposal = (props) => {
+  return props
+};
+
 type Props = {
   selectedViewType: 0 | 1,
   proposals: [Object],
@@ -62,6 +66,7 @@ class FavoritesTab extends Component<Props, State> {
       isFilteringProposals
     } = this.props;
 
+    proposals.push(addNewFavoriteProposal);
     const favouriteProposals = this.favoriteProposals(proposals);
     const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
 

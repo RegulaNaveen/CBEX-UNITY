@@ -60,7 +60,21 @@ const ProposalCard = ({
   bidStopStatus,
   tabIndex
 }: Props) => {
-  const proposalDetails = { tabIndex };
+  const proposalDetails = { 
+    opportunityName,
+    daysRemain,
+    dueDate,
+    customer,
+    protocolNumber,
+    opportunityStage,
+    bidNo,
+    phase,
+    therapeuticArea,
+    verbatimIndication,
+    bidStopStatus,
+    tabIndex,
+    isApprovalCountPresent, 
+  };
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
 

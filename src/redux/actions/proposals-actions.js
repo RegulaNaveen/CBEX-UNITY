@@ -8,6 +8,7 @@ import {
   onGetByStatus,
   getRecentOpportunity,
   getAssignedOpportunity,
+  getFavoritesOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
@@ -237,8 +238,13 @@ export const onFilteringProposals = (
           data = response.data;
         }
       } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
-        const response = await onGetAllProposals(filterPayload);
-        data = response.data;
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await onGetAllProposals(filterPayload);
+          data = response.data;
+        } else {
+          const response = await getFavoritesOpportunity();
+          data = response.data;
+        }
       } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
@@ -342,7 +348,7 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
   }
 };
 
-export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
+export const updateProposal = (oppNumber, favourite) => async (
   dispatch,
   getState
 ) => {
@@ -354,10 +360,6 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
     if (proposalIndex > -1) {
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
-    }
-    const { tabIndex } = proposalDetails;
-    if(tabIndex === 1 && favourite) {
-      proposals.push(proposals.splice(proposalIndex, 1)[0]);
     }
   } catch (error) {
     console.log(error);
