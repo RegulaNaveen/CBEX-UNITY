@@ -58,7 +58,6 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
   const renderTableHeaders = (columnsNames: [string]) => {
     const orderedColumns = [
       'opportunity number',
-
       'customer',
       'bidNo',
       'bid due date',
@@ -71,27 +70,39 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
     const filteredColumns = orderedColumns.filter(col =>
       columnsNames.includes(col)
     );
+
+    const skip = [...SKIP_COLUMNS];
+    if (hideStatus) skip.push(STATUS_COLUMN);
+    if (!flags[featureFlags.FAVOURITE_FLAG]) skip.push(FAV_COLUMN);
+
     return (
       <div
         key={uuidv4()}
         className="headers"
         style={{
+          display: 'grid',
           gridTemplateColumns: `repeat(${filteredColumns.length}, 1fr)`
         }}
       >
-        {filteredColumns
-          .map(col => {
-            if (col === FAV_COLUMN && flags[featureFlags.FAVOURITE_FLAG]) {
-              return '';
-            }
-            return col;
-          })
-          .map(column => {
-            const skip = [...SKIP_COLUMNS];
-            if (hideStatus) skip.push(STATUS_COLUMN);
-            if (!flags[featureFlags.FAVOURITE_FLAG]) skip.push(FAV_COLUMN);
-            return !skip.includes(column) && <h3 key={uuidv4()}>{column}</h3>;
-          })}
+        {filteredColumns.map(column => {
+          if (column === 'bidNo') {
+            return <h3 key={uuidv4()}>Current Bid</h3>; // Change the header text to "Current Bid"
+          }
+
+          if (column === 'opportunity status') {
+            return <h3 key={uuidv4()}>Opportunity Stage</h3>; // Change the header text to "Opportunity Stage"
+          }
+
+          if (column === 'isFavourite') {
+            return ' ';
+          }
+
+          if (!skip.includes(column)) {
+            return <h3 key={uuidv4()}>{column}</h3>;
+          }
+
+          return null;
+        })}
       </div>
     );
   };

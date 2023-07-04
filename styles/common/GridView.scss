@@ -12,6 +12,11 @@
     justify-items: center;
   }
 }
+@media (max-width: 1400px) and (max-height: 175vh) {
+  .grid-view {
+    grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
+  }
+}
 
 .no-info {
   font-family: $proximaNova;
