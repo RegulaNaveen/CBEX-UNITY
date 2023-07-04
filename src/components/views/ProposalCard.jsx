@@ -23,6 +23,7 @@ import {
   onEditCustomName,
   toggleEditCustomNameModal
 } from '../../redux/actions/proposal-actions';
+import classNames from 'classnames';
 
 type Props = {
   title: string,
@@ -123,23 +124,28 @@ const ProposalCard = ({
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
           <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto 1fr',
-              alignItems: 'center'
-            }}
-          >
-            <Typography
-              variant="caption"
-              className="greytext"
-              noWrap
-              title={customName || ''}
+          {flags['customOpportunityNameFlag'] ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                alignItems: 'center'
+              }}
             >
-              {customName || 'New Custom Name'}
-            </Typography>
-            <Pencil onClick={handleEditCustomName} size={10} />
-          </div>
+              <Typography
+                variant="caption"
+                className={classNames({
+                  greytext: true,
+                  'font-weight-very-light': !customName
+                })}
+                noWrap
+                title={customName || ''}
+              >
+                {customName || 'Add Custom Name'}
+              </Typography>
+              <Pencil onClick={handleEditCustomName} size={10} />
+            </div>
+          ) : null}
         </div>
         {flags[featureFlags.FAVOURITE_FLAG] ? (
           <div className="favourite-container">

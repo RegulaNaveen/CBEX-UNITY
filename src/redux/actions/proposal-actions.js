@@ -1808,3 +1808,23 @@ export const updateNextMilestone = (oppNumber, nextMilestone) => {
     }
   };
 };
+
+export const updateCustomNameAction = (oppNo, customName) => {
+  return async (dispatch, getState) => {
+    let proposals = getProposals(getState());
+    let proposalInfo = getProposalDetails(getState());
+    const proposalIndex = proposals.findIndex(
+      proposal => proposal['opportunity number'] === oppNo
+    );
+    if (proposalIndex > -1) {
+      proposals[proposalIndex]['customName'] = customName;
+      dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+    if (proposalInfo['CRM #'] == oppNo) {
+      dispatch({
+        type: SET_CUSTOM_NAME,
+        payload: customName
+      });
+    }
+  };
+};

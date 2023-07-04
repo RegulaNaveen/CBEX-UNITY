@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { MatomoProvider } from '@datapunt/matomo-tracker-react';
@@ -28,7 +28,7 @@ import ProfileComponent from './components/screens/Profile/AccountPreferences';
 import RecentActivityComponent from './components/screens/Profile/RecentActivity';
 import '../styles/App.scss';
 import matomoInstace from './utils/Matomo';
-import SocketContextProvider from './context/SocketContext';
+import SocketContextProvider, { SocketContext } from './context/SocketContext';
 import ErrorBoundaryComponent from './components/HOC/ErrorBoundary';
 import ReduxSnackbar from './components/common/ReduxSnackbar/ReduxSnackbar';
 import { fetchUserOpportunityPrefs } from './redux/actions/sso-auth-actions';
@@ -55,6 +55,8 @@ const EditCustomNameModal = ({ show }) => {
 
   const dispatch = useDispatch();
 
+  const { updateCustomNameWrapper } = useContext(SocketContext);
+
   useEffect(() => {
     setEditName(customNameEditing || '');
   }, [customNameEditing]);
@@ -75,6 +77,7 @@ const EditCustomNameModal = ({ show }) => {
       return;
     }
     dispatch(saveCustomNameAction(oppNoEditing, editName));
+    updateCustomNameWrapper(oppNoEditing, editName);
     handleEditModalClose();
   }
 
@@ -93,7 +96,7 @@ const EditCustomNameModal = ({ show }) => {
     >
       <TextField
         label="Custom Name"
-        placeholder="New Custom Name"
+        placeholder="Add Custom Name"
         defaultValue={customNameEditing}
         value={editName}
         error={error.length > 0}
