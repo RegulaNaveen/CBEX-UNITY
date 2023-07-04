@@ -352,13 +352,15 @@ const loadSidebar = props => {
               textAlign: 'left'
             }}
           >
-            <div>
+            <div style={{ maxWidth: 'calc(100% - 2rem)' }}>
               <Typography variant="body2" className="greytext">
                 Custom Name
               </Typography>
               <Typography
                 variant="body2"
                 className={customName ? 'boldtext' : 'greytext'}
+                noWrap
+                title={customName || ''}
               >
                 {customName || 'New Custom Name'}
               </Typography>

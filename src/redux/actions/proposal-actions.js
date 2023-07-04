@@ -1792,3 +1792,19 @@ export const onSaveCustomName = (oppNo, customName) => {
     }
   };
 };
+
+export const updateNextMilestone = (oppNumber, nextMilestone) => {
+  return async (dispatch, getState) => {
+    try {
+      let proposalInfo = getProposalDetails(getState());
+      if (proposalInfo['CRM #'] === oppNumber) {
+        dispatch({
+          type: SET_NEXT_MILESTONE,
+          payload: nextMilestone
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};

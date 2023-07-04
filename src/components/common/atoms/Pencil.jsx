@@ -9,6 +9,7 @@ export default function Edit({ onClick }) {
       color="primary"
       onClick={() => onClick()}
       className="edit-icon-button"
+      size="small"
     >
       <Pencil style={{ color: '#999999' }} />
     </IconButton>
