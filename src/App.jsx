@@ -86,6 +86,7 @@ const EditCustomNameModal = ({ show }) => {
       data-testid="edit-name-modal"
       open={show}
       variant="default"
+      subtitle={`Opportunity Number: ${oppNoEditing}`}
       className="edit-custom-name-modal"
       onClose={() => handleEditModalClose()}
       title={<Typography variant="h3">Edit Custom Name</Typography>}
