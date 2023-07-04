@@ -18,10 +18,12 @@ import { saveRecentOppActivity } from '../../api/proposals';
 
 type Props = {
   data: Array<Object>,
-  hideStatus?: boolean
+  hideStatus?: boolean,
+  tabIndex: number
 };
 
-const TableView = ({ data, hideStatus }: Props) => {
+const TableView = ({ data, hideStatus, tabIndex }: Props) => {
+  console.log('tabIndex', tabIndex);
   const SKIP_COLUMNS = [
     'proposalId',
     'opportunityName',
@@ -34,6 +36,7 @@ const TableView = ({ data, hideStatus }: Props) => {
   const LINK_COLUMN = 'opportunity number';
   const STATUS_COLUMN = 'opportunity status';
   const FAV_COLUMN = 'isFavourite';
+  const BIDNUM_COLUMN = 'bidNo';
   const columns = keysIn(head(data));
   const columnsLength =
     columns.length - SKIP_COLUMNS.length - (hideStatus ? 1 : 0);
@@ -52,27 +55,57 @@ const TableView = ({ data, hideStatus }: Props) => {
     setFavInProgress(favInProgressCopy);
   }
 
-  const renderTableHeaders = (columnsNames: [string]) => (
-    <div
-      key={uuidv4()}
-      className="headers"
-      style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
-    >
-      {columnsNames
-        .map(col => {
-          if (col === FAV_COLUMN && flags[featureFlags.FAVOURITE_FLAG]) {
-            return '';
+  const renderTableHeaders = (columnsNames: [string]) => {
+    const orderedColumns = [
+      'opportunity number',
+      'customer',
+      'bidNo',
+      'bid due date',
+      'protocol number',
+      'verbatim indication',
+      'opportunity status',
+      'isFavourite'
+    ];
+
+    const filteredColumns = orderedColumns.filter(col =>
+      columnsNames.includes(col)
+    );
+
+    const skip = [...SKIP_COLUMNS];
+    if (hideStatus) skip.push(STATUS_COLUMN);
+    if (!flags[featureFlags.FAVOURITE_FLAG]) skip.push(FAV_COLUMN);
+
+    return (
+      <div
+        key={uuidv4()}
+        className="headers"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${filteredColumns.length}, 1fr)`
+        }}
+      >
+        {filteredColumns.map(column => {
+          if (column === 'bidNo') {
+            return <h3 key={uuidv4()}>Current Bid</h3>; // Change the header text to "Current Bid"
           }
-          return col;
-        })
-        .map(column => {
-          const skip = [...SKIP_COLUMNS];
-          if (hideStatus) skip.push(STATUS_COLUMN);
-          if (!flags[featureFlags.FAVOURITE_FLAG]) skip.push(FAV_COLUMN);
-          return !skip.includes(column) && <h3 key={uuidv4()}>{column}</h3>;
+
+          if (column === 'opportunity status') {
+            return <h3 key={uuidv4()}>Opportunity Stage</h3>; // Change the header text to "Opportunity Stage"
+          }
+
+          if (column === 'isFavourite') {
+            return ' ';
+          }
+
+          if (!skip.includes(column)) {
+            return <h3 key={uuidv4()}>{column}</h3>;
+          }
+
+          return null;
         })}
-    </div>
-  );
+      </div>
+    );
+  };
 
   const renderTableContent = (_data: Array<Object>) => (
     <div key={uuidv4()} className="table-grid">
@@ -81,6 +114,18 @@ const TableView = ({ data, hideStatus }: Props) => {
   );
 
   const renderRow = (row, rowIndex) => {
+    const orderedColumns = [
+      'opportunity number',
+
+      'customer',
+      'bidNo',
+      'bid due date',
+      'protocol number',
+      'verbatim indication',
+      'opportunity status',
+      'isFavourite'
+    ];
+    const filteredColumns = orderedColumns.filter(col => columns.includes(col));
     async function onFavouriteToggle(favourite) {
       try {
         updateFavInProgress(true, rowIndex);
@@ -88,7 +133,7 @@ const TableView = ({ data, hideStatus }: Props) => {
           row[LINK_COLUMN],
           favourite
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite);
+        updateFavouriteWrapper(row[LINK_COLUMN], favourite, tabIndex);
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],
@@ -122,17 +167,25 @@ const TableView = ({ data, hideStatus }: Props) => {
       <div
         key={uuidv4()}
         className="row"
-        style={{ gridTemplateColumns: `repeat(${columnsLength}, 1fr)` }}
+        style={{
+          gridTemplateColumns: `repeat(${filteredColumns.length}, 1fr)`
+        }}
       >
-        {renderCols.map(col => {
+        {orderedColumns.map(col => {
           switch (col) {
-            case LINK_COLUMN:
+            case 'opportunity number':
               return (
                 <div key={uuidv4()} className="cell">
                   <Link to={`${OPPORTUNITY}${row[col]}`}>{row[col]}</Link>
                 </div>
               );
-            case DATE_COLUMN:
+            case 'bidNo':
+              return (
+                <div key={uuidv4()} className="cell">
+                  <p>{row[BIDNUM_COLUMN]}</p>
+                </div>
+              );
+            case 'bid due date':
               return (
                 <div key={uuidv4()} className="cell">
                   <p
@@ -145,7 +198,18 @@ const TableView = ({ data, hideStatus }: Props) => {
                   </p>
                 </div>
               );
-            case FAV_COLUMN:
+
+            case 'opportunity status':
+              const statusText = row[col]
+                ?.split('.')
+                .pop()
+                .trim();
+              return (
+                <div key={uuidv4()} className="cell">
+                  <p>{statusText}</p>
+                </div>
+              );
+            case 'isFavourite':
               return (
                 <div key={uuidv4()} className="cell">
                   {favInProgress[rowIndex] ? (

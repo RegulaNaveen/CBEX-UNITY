@@ -14,11 +14,21 @@ import { updateFavourite } from '../../redux/actions/sso-auth-actions';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
+import Tooltip from 'apollo-react/components/Tooltip';
+import CustomTooltip from './customTooltip';
 import Minus from 'apollo-react-icons/Minus';
+import Typography from 'apollo-react/components/Typography';
+import Pencil from '../common/atoms/Pencil';
+import {
+  onEditCustomName,
+  toggleEditCustomNameModal
+} from '../../redux/actions/proposal-actions';
 
 type Props = {
   title: string,
   opportunityName: string,
+  opportunityStage: string,
+  bidNo: string,
   daysRemain: number | string,
   dueDate: string,
   customer: string,
@@ -30,7 +40,10 @@ type Props = {
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
   allFlags: object,
-  bidStatus: boolean
+  bidStatus: boolean,
+  favourite: boolean,
+  bidStopStatus: boolean,
+  tabIndex: number
 };
 
 const ProposalCard = ({
@@ -40,6 +53,8 @@ const ProposalCard = ({
   dueDate,
   customer,
   protocolNumber,
+  opportunityStage,
+  bidNo,
   phase,
   therapeuticArea,
   verbatimIndication,
@@ -48,8 +63,11 @@ const ProposalCard = ({
   isApprovalCountPresent,
   allFlags,
   favourite,
-  bidStopStatus
+  bidStopStatus,
+  tabIndex,
+  customName
 }: Props) => {
+  const proposalDetails = { tabIndex };
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
 
@@ -73,7 +91,7 @@ const ProposalCard = ({
     try {
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
-      updateFavouriteWrapper(title, favourite);
+      updateFavouriteWrapper(title, favourite, { ...proposalDetails });
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,
@@ -94,12 +112,34 @@ const ProposalCard = ({
     }
   }
 
+  function handleEditCustomName() {
+    dispatch(onEditCustomName(title, customName));
+    dispatch(toggleEditCustomNameModal(true));
+  }
+
   return (
     <div className="card">
       <div className="header-section">
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
           <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto 1fr',
+              alignItems: 'center'
+            }}
+          >
+            <Typography
+              variant="caption"
+              className="greytext"
+              noWrap
+              title={customName || ''}
+            >
+              {customName || 'New Custom Name'}
+            </Typography>
+            <Pencil onClick={handleEditCustomName} size={10} />
+          </div>
         </div>
         {flags[featureFlags.FAVOURITE_FLAG] ? (
           <div className="favourite-container">
@@ -134,26 +174,44 @@ const ProposalCard = ({
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
+            <b>Current Bid:</b>
+          </span>
+          <span className={checkNoDataClass(bidNo)}>{bidNo}</span>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Bid Due Date:</b>
+          </span>
+          <span className={checkNoDataClass(dueDate)}>{dueDate}</span>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Next Milestone:</b>
+          </span>
+          {/* <span className={checkNoDataClass(dueDate)}>{dueDate}</span> */}
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
             <b>Protocol Number:</b>
           </span>
           <span className={checkNoDataClass(protocolNumber)}>
             {protocolNumber}
           </span>
         </div>
-        <div className={CLASS_SECTION_DATA}>
+        {/* <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Phase:</b>
           </span>
           <span className={checkNoDataClass(phase)}>{phase}</span>
-        </div>
-        <div className={CLASS_SECTION_DATA}>
+        </div> */}
+        {/* <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Therapeutic Area:</b>
           </span>
           <span className={checkNoDataClass(therapeuticArea)}>
             {therapeuticArea}
           </span>
-        </div>
+        </div> */}
         <div className={CLASS_SECTION_DATA}>
           <span>
             <b>Verbatim Indication:</b>
@@ -164,9 +222,15 @@ const ProposalCard = ({
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
-            <b>Bid Due Date:</b>
+            <b>Opportunity Stage:</b>
           </span>
-          <span className={checkNoDataClass(dueDate)}>{dueDate}</span>
+          <span className={checkNoDataClass(opportunityStage)}>
+            {opportunityStage &&
+              opportunityStage
+                .split('.')
+                .pop()
+                .trim()}
+          </span>
         </div>
       </div>
 
@@ -178,9 +242,14 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <House fontSize="large" htmlColor="#b350bf" />
+            <Tooltip
+              variant="dark"
+              title="Strategy Development"
+              placement="top"
+            >
+              <House fontSize="large" background-color="#9E54B0" />
+            </Tooltip>
           </Link>
-          <p>Strategy Development</p>
         </div>
         {allFlags?.showTimelineFlag && (
           <div
@@ -190,9 +259,13 @@ const ProposalCard = ({
             onClick={setProposalTypeView}
           >
             <Link to={`${OPPORTUNITY}${title}?viewType=timelines`}>
-              <CalenderWithNumber fontSize="large" style={{ height: '36px' }} />
+              <CustomTooltip title="Timeline">
+                <CalenderWithNumber
+                  fontSize="large"
+                  style={{ height: '36px' }}
+                />
+              </CustomTooltip>
             </Link>
-            <p>Timeline</p>
           </div>
         )}
 
@@ -204,22 +277,24 @@ const ProposalCard = ({
           disabled={!isApprovalCountPresent}
         >
           {!isApprovalCountPresent ? (
-            <ThumbsUp
-              fontSize="large"
-              htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-              style={{ transform: 'scaleX(-1)', height: '41px' }}
-            />
-          ) : (
-            <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
+            <Tooltip variant="dark" title="Approvals" placement="top">
               <ThumbsUp
                 fontSize="large"
                 htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-                style={{ transform: 'scaleX(-1)', height: '36px' }}
+                style={{ transform: 'scaleX(-1)', height: '41px' }}
               />
+            </Tooltip>
+          ) : (
+            <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
+              <Tooltip variant="dark" title="Approvals" placement="top">
+                <ThumbsUp
+                  fontSize="large"
+                  htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
+                  style={{ transform: 'scaleX(-1)', height: '36px' }}
+                />
+              </Tooltip>
             </Link>
           )}
-
-          <p>Approvals</p>
         </div>
 
         <div
@@ -229,9 +304,10 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}?viewType=documents`}>
-            <Folder />
+            <CustomTooltip title="Documents">
+              <Folder />
+            </CustomTooltip>
           </Link>
-          <p>Documents</p>
         </div>
 
         <div
@@ -241,14 +317,15 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <div>
-            <p>
-              {daysRemain <= 0 || bidStopStatus ? (
-                <Minus value="medium" style={{ color: '#df216d' }} />
-              ) : (
-                daysRemain
-              )}
-            </p>
-            <p>Days until Bid Due</p>
+            <Tooltip variant="dark" title="Days until Bid Due" placement="top">
+              <p>
+                {daysRemain <= 0 || bidStopStatus ? (
+                  <Minus value="medium" style={{ color: '#df216d' }} />
+                ) : (
+                  daysRemain
+                )}
+              </p>
+            </Tooltip>
           </div>
         </div>
       </div>

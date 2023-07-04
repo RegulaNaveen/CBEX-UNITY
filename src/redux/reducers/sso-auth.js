@@ -15,7 +15,8 @@ const {
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
-  SET_USER_FAVOURITES
+  SET_USER_FAVOURITES,
+  SET_CUSTOM_NAME_MAP
 } = REDUX_TYPES.SSO_AUTH;
 
 const INITIAL_STATE: Map = fromJS({
@@ -27,7 +28,8 @@ const INITIAL_STATE: Map = fromJS({
   errorOnSetNewRole: undefined,
   lookupUsers: [],
   lookupUsersError: undefined,
-  favourites: []
+  favourites: [],
+  customNameMap: {}
 });
 
 const loginUser = (state: Map, action: Object) => {
@@ -108,6 +110,10 @@ const setUserFavourites = (state, action) => {
   return state.set('favourites', fromJS(action.payload));
 };
 
+const setCustomNameMap = (state, action) => {
+  return state.set('customNameMap', fromJS(action.payload));
+};
+
 const actionMap = {
   [ON_USER_LOGIN]: loginUser,
   [ON_USER_LOGOUT]: logoutUser,
@@ -117,7 +123,8 @@ const actionMap = {
   [ERROR_ON_CHANGE_ROLE]: errorOnSetNewUserRole,
   [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
   [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers,
-  [SET_USER_FAVOURITES]: setUserFavourites
+  [SET_USER_FAVOURITES]: setUserFavourites,
+  [SET_CUSTOM_NAME_MAP]: setCustomNameMap
 };
 
 export default function(
