@@ -21,12 +21,14 @@ const formatProposal = (proposal: Object) => {
     title: proposal['opportunity number'] || placeholder,
     opportunityName: proposal.opportunityName || placeholder,
     daysRemain,
-    dueDate: dueDate || placeholder,
     customer: proposal.customer || placeholder,
+    bidNo: proposal['bidNo'] || placeholder,
+    dueDate: dueDate || placeholder,
     protocolNumber: proposal['protocol number'] || placeholder,
     phase: proposal.phase || placeholder,
     therapeuticArea: proposal.therapeuticArea || placeholder,
     verbatimIndication: proposal['verbatim indication'] || placeholder,
+    opportunityStage: proposal['opportunity status'] || placeholder,
     proposalId: proposal.proposalId || placeholder,
     approvalsCount: proposal.approvalsCount || null,
     isApprovalCountPresent: proposal.isApprovalCountPresent || false,
@@ -62,12 +64,14 @@ class GridView extends Component<Props> {
               title={formatted.title}
               opportunityName={formatted.opportunityName}
               daysRemain={formatted.daysRemain}
-              dueDate={formatted.dueDate}
               customer={formatted.customer}
+              bidNo={formatted.bidNo}
+              dueDate={formatted.dueDate}
               protocolNumber={formatted.protocolNumber}
               phase={formatted.phase}
               therapeuticArea={formatted.therapeuticArea}
               verbatimIndication={formatted.verbatimIndication}
+              opportunityStage={formatted.opportunityStage}
               proposalId={formatted.proposalId}
               approvalsCount={formatted.approvalsCount}
               isApprovalCountPresent={formatted.isApprovalCountPresent}

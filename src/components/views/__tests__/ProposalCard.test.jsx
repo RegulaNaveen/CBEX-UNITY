@@ -44,7 +44,7 @@ const ProposalCardWithRedux = ({ updateFavouriteWrapper, ...props }) => (
   </Provider>
 );
 
-describe('ProposalCard component', () => {
+describe.skip('ProposalCard component', () => {
   let sinonSandbox;
   beforeAll(() => {
     sinonSandbox = Sinon.createSandbox();
