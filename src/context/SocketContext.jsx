@@ -20,7 +20,8 @@ import {
   editProposalQuestionfromSocket,
   deleteProposalQuestionFromSocket,
   setProposalQuestionFromSocket,
-  widgetUpdate
+  widgetUpdate,
+  updateNextMilestone
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -384,7 +385,8 @@ const SocketContextProvider = props => {
           onApprovalSectionDeleting,
           onApprovalSectionDeleted,
           widgetUpdate,
-          updateFavouriteAction
+          updateFavouriteAction,
+          updateNextMilestoneAction
         } = props;
 
         // On Message Recieve
@@ -505,8 +507,14 @@ const SocketContextProvider = props => {
 
             case 'FAVOURITE':
               const { oppNumber, favourite } = data.data;
-              updateFavouriteAction(oppNumber, favourite, {...data.data});
+              updateFavouriteAction(oppNumber, favourite, { ...data.data });
               addNewFavoriteProposal({...data.data});
+              break;
+
+            case 'NEXT_MILESTONE_UPDATE':
+              console.log('NEXT_MILESTONE_UPDATE data', data);
+              // const { oppNumber, nextMilestone } = data.data;
+              // updateNextMilestoneAction(oppNumber, nextMilestone);
               break;
             default:
               break;
@@ -821,7 +829,8 @@ const mapDispatchToProps = {
   onApprovalSectionDeleting: onApprovalSectionDeletingAction,
   onApprovalSectionDeleted: onApprovalSectionDeletedAction,
   widgetUpdate,
-  updateFavouriteAction: updateFavourite
+  updateFavouriteAction: updateFavourite,
+  updateNextMilestoneAction: updateNextMilestone
 };
 
 export default connect(

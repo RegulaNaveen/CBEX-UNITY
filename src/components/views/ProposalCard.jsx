@@ -17,6 +17,12 @@ import { saveRecentOppActivity } from '../../api/proposals';
 import Tooltip from 'apollo-react/components/Tooltip';
 import CustomTooltip from './customTooltip';
 import Minus from 'apollo-react-icons/Minus';
+import Typography from 'apollo-react/components/Typography';
+import Pencil from '../common/atoms/Pencil';
+import {
+  onEditCustomName,
+  toggleEditCustomNameModal
+} from '../../redux/actions/proposal-actions';
 
 type Props = {
   title: string,
@@ -58,7 +64,8 @@ const ProposalCard = ({
   allFlags,
   favourite,
   bidStopStatus,
-  tabIndex
+  tabIndex,
+  customName
 }: Props) => {
   const proposalDetails = { 
     opportunityName,
@@ -98,7 +105,7 @@ const ProposalCard = ({
     try {
       setFavInProgress(true);
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
-      updateFavouriteWrapper(title, favourite, {...proposalDetails});
+      updateFavouriteWrapper(title, favourite, { ...proposalDetails });
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,
@@ -119,12 +126,34 @@ const ProposalCard = ({
     }
   }
 
+  function handleEditCustomName() {
+    dispatch(onEditCustomName(title, customName));
+    dispatch(toggleEditCustomNameModal(true));
+  }
+
   return (
     <div className="card">
       <div className="header-section">
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
           <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto 1fr',
+              alignItems: 'center'
+            }}
+          >
+            <Typography
+              variant="caption"
+              className="greytext"
+              noWrap
+              title={customName || ''}
+            >
+              {customName || 'New Custom Name'}
+            </Typography>
+            <Pencil onClick={handleEditCustomName} size={10} />
+          </div>
         </div>
         {flags[featureFlags.FAVOURITE_FLAG] ? (
           <div className="favourite-container">
