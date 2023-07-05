@@ -15,6 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
+import Grid from 'apollo-react/components/Grid';
+import Paper from 'apollo-react/components/Paper';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 type Props = {
   data: Array<Object>,
@@ -92,6 +95,9 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
           if (column === 'opportunity status') {
             return <h3 key={uuidv4()}>Opportunity Stage</h3>; // Change the header text to "Opportunity Stage"
           }
+          if (column === 'opportunity number') {
+            return <h3 key={uuidv4()}>Opportunity Name</h3>; // Change the header text to "Opportunity Stage"
+          }
 
           if (column === 'isFavourite') {
             return ' ';
@@ -108,9 +114,13 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
   };
 
   const renderTableContent = (_data: Array<Object>) => (
-    <div key={uuidv4()} className="table-grid">
-      {_data.map((rowContent, i) => renderRow(rowContent, i))}
-    </div>
+    <Grid container spacing={2}>
+      {_data.map((rowContent, i) => (
+        <Grid item xs={12} key={uuidv4()}>
+          <Paper className="table-wrapper">{renderRow(rowContent, i)}</Paper>
+        </Grid>
+      ))}
+    </Grid>
   );
 
   const renderRow = (row, rowIndex) => {
@@ -182,7 +192,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
             case 'bidNo':
               return (
                 <div key={uuidv4()} className="cell">
-                  <p>{row[BIDNUM_COLUMN]}</p>
+                  <p>Bid {row[BIDNUM_COLUMN]}</p>
                 </div>
               );
             case 'bid due date':
@@ -205,9 +215,11 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                 .pop()
                 .trim();
               return (
-                <div key={uuidv4()} className="cell">
-                  <p>{statusText}</p>
-                </div>
+                <Tooltip title={statusText} placement="top">
+                  <div key={uuidv4()} className="cell">
+                    <p>{statusText}</p>
+                  </div>
+                </Tooltip>
               );
             case 'isFavourite':
               return (
