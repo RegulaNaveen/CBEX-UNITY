@@ -11,8 +11,9 @@ import {
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
-import { selectFavourites } from '../selectors/sso-auth';
+import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import { getProposals } from '../selectors';
+import { getfetchAllFlags } from '../selectors/proposal';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -27,7 +28,11 @@ const {
   NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
-const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
+const formatProposal = (
+  proposal: Object,
+  favoritesMap: Object,
+  customNameMap: Object = {}
+): Object => {
   const formattedProposal = {};
 
   const {
@@ -45,6 +50,7 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.proposalId = proposalId;
     formattedProposal.opportunityName = opportunityName;
     formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+    formattedProposal['bidNo'] = proposalDetails['bidNo'];
     formattedProposal.customer = proposalDetails.Customer;
     formattedProposal['protocol number'] = proposalDetails['Protocol number'];
     formattedProposal.phase = proposalDetails.Phase;
@@ -62,6 +68,8 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.isFavourite = !!favoritesMap[
       `${proposalDetails['CRM #']}`
     ];
+    formattedProposal.customName =
+      customNameMap[`${proposalDetails['CRM #']}`] || '';
     return formattedProposal;
   }
 
@@ -209,6 +217,7 @@ export const onFilteringProposals = (
             break;
         }
       });
+      const allFlags = getfetchAllFlags(getState());
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
@@ -227,7 +236,10 @@ export const onFilteringProposals = (
           );
           data = response.data;
         }
-      } else if (Number(tabIndex) === 1) {
+      } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
+        const response = await onGetAllProposals(filterPayload);
+        data = response.data;
+      } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
           const response = await getRecentOpportunity(
@@ -243,21 +255,22 @@ export const onFilteringProposals = (
             userEmail
           );
           data = response.data;
-        }
+        } 
       } else {
-        const response = await onGetAllProposals(filterPayload);
-        data = response.data;
+          const response = await onGetAllProposals(filterPayload);
+          data = response.data;
       }
 
       if (!isEmpty(data)) {
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
+        const customNameMap = selectCustomNameMap(getState()).toJS();
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
         }, {});
         const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
+          formatProposal(proposal, favouritesMap, customNameMap)
         );
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
@@ -329,7 +342,7 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
   }
 };
 
-export const updateProposal = (oppNumber, favourite) => async (
+export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   dispatch,
   getState
 ) => {
@@ -341,6 +354,10 @@ export const updateProposal = (oppNumber, favourite) => async (
     if (proposalIndex > -1) {
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+    const { tabIndex } = proposalDetails;
+    if(tabIndex === 1 && favourite) {
+      proposals.push(proposals.splice(proposalIndex, 1)[0]);
     }
   } catch (error) {
     console.log(error);

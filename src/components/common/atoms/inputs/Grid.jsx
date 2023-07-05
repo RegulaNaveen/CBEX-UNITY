@@ -8,6 +8,7 @@ import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
 import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import Favourite from '../Favourite';
+import Pencil from '../Pencil';
 import { toggleFavourite } from '../../../../api/sso-auth';
 import { updateFavourite } from '../../../../redux/actions/sso-auth-actions';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -24,7 +25,16 @@ const containerStyle = {
 };
 
 const loadSidebar = props => {
-  const { data, isOpen, windowSize, bidStatus, favourite } = props;
+  const {
+    data,
+    isOpen,
+    windowSize,
+    bidStatus,
+    favourite,
+    customName,
+    nextMilestone,
+    handleEditCustomName
+  } = props;
   const questions = useSelector(getProposalQuestions);
   const [
     detailsForBackendSectionData,
@@ -95,6 +105,7 @@ const loadSidebar = props => {
   if (windowSize <= 1200) {
     isBladeOpen = true;
   }
+
   useEffect(() => {
     if (product?.current?.clientWidth < product?.current?.scrollWidth)
       setisProductTooltip(true);
@@ -276,482 +287,279 @@ const loadSidebar = props => {
     ? smallHeaderClass
     : 'boldtext halfscreen-header-ellipses';
 
-  if (isBladeOpen) {
-    return (
-      <Grid container className="proposal-info-container">
-        <Grid item xs={12} style={containerStyle}>
-          <Paper
+  return (
+    <div className="proposal-info-container">
+      <Paper
+        style={{
+          ...styles
+        }}
+        className="duedatedsg"
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+            alignItems: 'center',
+            textAlign: 'left'
+          }}
+        >
+          <div>
+            <Typography variant="body2" className="greytext">
+              Opportunity Number
+            </Typography>
+            <Typography
+              variant="body2"
+              className="boldtext"
+              style={{ cursor: 'pointer', color: 'Blue' }}
+              onClick={redirect}
+            >
+              {crm || placeholder}
+            </Typography>
+          </div>
+          {flags[featureFlags.FAVOURITE_FLAG] ? (
+            <>
+              {favInProgress ? (
+                <span
+                  style={{
+                    display: 'flex',
+                    height: '2.5rem',
+                    width: '2.5rem',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <CircularProgress size={24} color="primary" />
+                </span>
+              ) : (
+                <Favourite
+                  value={favourite}
+                  onToggle={update => onFavouriteToggle(update)}
+                />
+              )}
+            </>
+          ) : null}
+        </div>
+      </Paper>
+      <div className="custom-opp-name-container">
+        <Paper style={styles} className="duedatedsg">
+          <div
             style={{
-              ...styles,
               display: 'flex',
-              justifyContent: 'center',
-              paddingLeft: '1.25rem'
+              justifyContent: 'space-between',
+              width: '100%',
+              alignItems: 'center',
+              textAlign: 'left'
             }}
-            className="sidebarduedatedsg open"
           >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div>
-                <Typography
-                  variant="body2"
-                  className="greytext sidebaropenfont"
-                >
-                  Opportunity Number
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className="boldtext sidebaropenfont"
-                  style={{ cursor: 'pointer', color: 'Blue' }}
-                  onClick={redirect}
-                >
-                  {crm || placeholder}
-                </Typography>
-              </div>
-              {flags[featureFlags.FAVOURITE_FLAG] ? (
-                <>
-                  {favInProgress ? (
-                    <span
-                      style={{
-                        display: 'flex',
-                        height: '2.5rem',
-                        width: '2.5rem',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <CircularProgress size={24} color="primary" />
-                    </span>
-                  ) : (
-                    <Favourite
-                      value={favourite}
-                      onToggle={update => onFavouriteToggle(update)}
-                    />
-                  )}
-                </>
-              ) : null}
+            <div style={{ maxWidth: 'calc(100% - 2rem)' }}>
+              <Typography variant="body2" className="greytext">
+                Custom Name
+              </Typography>
+              <Typography
+                variant="body2"
+                className={customName ? 'boldtext' : 'greytext'}
+                noWrap
+                title={customName || ''}
+              >
+                {customName || 'New Custom Name'}
+              </Typography>
             </div>
-          </Paper>
-          <Paper style={styles} className="sidebarduedatedsg open">
-            <Typography variant="body2" className="greytext sidebaropenfont">
-              Customer
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={
-                isCustomerTooltipHalfscreen
-                  ? detailsForBackendSectionData?.customer || Customer
-                  : null
-              }
-              placement="bottom"
+            <Pencil onClick={handleEditCustomName} />
+          </div>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Customer
+          </Typography>
+          <Tooltip
+            variant="dark"
+            body={
+              isCustomerTooltip
+                ? detailsForBackendSectionData?.customer || Customer
+                : null
+            }
+            placement="bottom"
+          >
+            <Typography
+              variant="body2"
+              className="boldtext header-ellipses"
+              ref={customer}
             >
-              <Typography
-                variant="body2"
-                className={headerClassName}
-                ref={customerhalfscreen}
-              >
-                {detailsForBackendSectionData?.customer ||
-                  Customer ||
-                  placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
-          <Paper style={styles} className="sidebarduedatedsg open">
-            <Typography variant="body2" className="greytext sidebaropenfont">
-              Line of Business
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={
-                isLinebusinessTooltipHalfscreen
-                  ? detailsForBackendSectionData?.lineOfBusiness ||
-                    lineOfBusiness
-                  : null
-              }
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className={headerClassName}
-                ref={linebusinesshalfscreen}
-              >
-                {detailsForBackendSectionData?.lineOfBusiness ||
-                  lineOfBusiness ||
-                  placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
-          <Paper style={styles} className="sidebarduedatedsg open">
-            <Typography variant="body2" className="greytext sidebaropenfont">
-              IQVIA Biotech
-            </Typography>
-            <Typography variant="body2" className="boldtext sidebaropenfont">
-              {detailsForBackendSectionData.IsIqviaBiotech ||
-                iqviaBiotech ||
+              {detailsForBackendSectionData?.customer ||
+                Customer ||
                 placeholder}
             </Typography>
-          </Paper>
-          <Paper style={styles} className="sidebarduedatedsg open">
-            <Typography variant="body2" className="greytext sidebaropenfont">
-              Phase
-            </Typography>
-            <Typography variant="body2" className="boldtext sidebaropenfont">
-              {phase
-                ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
-                  detailsForBackendSectionData?.phase ||
-                  phase?.split(' ')[1] ||
-                  phase
-                : placeholder}
-            </Typography>
-          </Paper>
-          <Paper style={styles} className="sidebarduedatedsg open">
-            <Typography variant="body2" className="greytext sidebaropenfont">
-              Therapeutic Area
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={
-                isTherapeuticTooltipHalfscreen
-                  ? detailsForBackendSectionData?.therapeuticArea ||
-                    therapeuticArea
-                  : null
-              }
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className={headerClassName}
-                ref={therapeutichalfscreen}
-              >
-                {detailsForBackendSectionData?.therapeuticArea ||
-                  therapeuticArea ||
-                  placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
-          <Paper className="sidebarduedatedsg open" style={styles}>
-            <Typography
-              variant="body2"
-              className="greytext lesslineheight sidebaropenfont"
-            >
-              Product Name
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={
-                isProductTooltipHalfscreen
-                  ? detailsForBackendSectionData?.productName || productName
-                  : null
-              }
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className={headerClassName}
-                ref={producthalfscreen}
-              >
-                {detailsForBackendSectionData?.productName ||
-                  productName ||
-                  placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
-          <Paper className="sidebarduedatedsg open" style={styles}>
-            <Typography
-              variant="body2"
-              className="greytext lesslineheight sidebaropenfont"
-            >
-              Protocol Number
-            </Typography>
-            <Tooltip
-              variant="dark"
-              body={
-                isProtocolTooltipHalfscreen
-                  ? detailsForBackendSectionData?.protocolNumber ||
-                    protocolNumber
-                  : null
-              }
-              placement="bottom"
-            >
-              <Typography
-                variant="body2"
-                className={headerClassName}
-                ref={protocolhalfscreen}
-              >
-                {detailsForBackendSectionData?.protocolNumber ||
-                  protocolNumber ||
-                  placeholder}
-              </Typography>
-            </Tooltip>
-          </Paper>
-          <Paper className="sidebarduedatedsg open" style={styles}>
-            <Typography
-              variant="body2"
-              className="greytext lesslineheight sidebaropenfont"
-            >
-              Bid #
-            </Typography>
-            <p className="boldtext sidebaropenfont">{bidNo || placeholder}</p>
-          </Paper>
-          <Paper className="sidebarduedatedsg open" style={styles}>
-            <Typography
-              variant="body2"
-              className="greytext lesslineheight sidebaropenfont"
-            >
-              Days Until Due
-            </Typography>
-            <p className="boldtext greencolorsidebaropenfont lesslineheight">
-              {bidStatus
-                ? renderProcessingTxt
-                : detailsForBackendSectionData?.bidDueDate || daysRemain}
-            </p>
-          </Paper>
-        </Grid>
-      </Grid>
-    );
-  }
-
-  return (
-    <Grid container className="proposal-info-container">
-      <Grid item xs={12} style={containerStyle}>
-        <Grid item xs style={{ flexBasis: '9rem', maxWidth: '9rem' }}>
-          <Paper
-            style={{
-              ...styles,
-              display: 'flex',
-              justifyContent: 'space-between'
-            }}
-            className="duedatedsg"
+          </Tooltip>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="phasedsg duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Line of Business
+          </Typography>
+          <Tooltip
+            variant="dark"
+            body={
+              isLinebusinessTooltip
+                ? detailsForBackendSectionData?.lineOfBusiness || lineOfBusiness
+                : null
+            }
+            placement="bottom"
           >
-            <div style={{ display: 'flex' }}>
-              <div>
-                <Typography variant="body2" className="greytext">
-                  Opportunity Number
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className="boldtext"
-                  style={{ cursor: 'pointer', color: 'Blue' }}
-                  onClick={redirect}
-                >
-                  {crm || placeholder}
-                </Typography>
-              </div>
-              {flags[featureFlags.FAVOURITE_FLAG] ? (
-                <>
-                  {favInProgress ? (
-                    <span
-                      style={{
-                        display: 'flex',
-                        height: '2.5rem',
-                        width: '2.5rem',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <CircularProgress size={24} color="primary" />
-                    </span>
-                  ) : (
-                    <Favourite
-                      value={favourite}
-                      onToggle={update => onFavouriteToggle(update)}
-                    />
-                  )}
-                </>
-              ) : null}
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3} style={containerStyle}>
-          <Grid item xs={5}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Customer
-              </Typography>
-              <Tooltip
-                variant="dark"
-                body={
-                  isCustomerTooltip
-                    ? detailsForBackendSectionData?.customer || Customer
-                    : null
-                }
-                placement="bottom"
-              >
-                <Typography
-                  variant="body2"
-                  className="boldtext header-ellipses"
-                  ref={customer}
-                >
-                  {detailsForBackendSectionData?.customer ||
-                    Customer ||
-                    placeholder}
-                </Typography>
-              </Tooltip>
-            </Paper>
-          </Grid>
-          <Grid item xs={7}>
-            <Paper style={styles} className="phasedsg duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Line of Business
-              </Typography>
-              <Tooltip
-                variant="dark"
-                body={
-                  isLinebusinessTooltip
-                    ? detailsForBackendSectionData?.lineOfBusiness ||
-                      lineOfBusiness
-                    : null
-                }
-                placement="bottom"
-              >
-                <Typography
-                  variant="body2"
-                  className="boldtext header-ellipses"
-                  ref={linebusiness}
-                >
-                  {detailsForBackendSectionData?.lineOfBusiness ||
-                    lineOfBusiness ||
-                    placeholder}
-                </Typography>
-              </Tooltip>
-            </Paper>
-          </Grid>
-        </Grid>
-        <Grid item xs style={containerStyle}>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                IQVIA Biotech
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {detailsForBackendSectionData.IsIqviaBiotech ||
-                  iqviaBiotech ||
-                  placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={3}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Phase
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {phase
-                  ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
-                    detailsForBackendSectionData?.phase ||
-                    phase?.split(' ')[1] ||
-                    phase
-                  : placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Therapeutic Area
-              </Typography>
-              <Tooltip
-                variant="dark"
-                body={
-                  isTherapeuticTooltip
-                    ? detailsForBackendSectionData?.therapeuticArea ||
-                      therapeuticArea
-                    : null
-                }
-                placement="bottom"
-              >
-                <Typography
-                  variant="body2"
-                  className="boldtext header-ellipses"
-                  ref={therapeutic}
-                >
-                  {detailsForBackendSectionData?.therapeuticArea ||
-                    therapeuticArea ||
-                    placeholder}
-                </Typography>
-              </Tooltip>
-            </Paper>
-          </Grid>
-        </Grid>
-        <Grid item xs={3} style={containerStyle}>
-          <Grid item xs={5}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Product Name
-              </Typography>
-              <Tooltip
-                variant="dark"
-                body={
-                  isProductTooltip
-                    ? detailsForBackendSectionData?.productName || productName
-                    : null
-                }
-                placement="bottom"
-              >
-                <Typography
-                  variant="body2"
-                  className="boldtext header-ellipses"
-                  ref={product}
-                >
-                  {detailsForBackendSectionData?.productName ||
-                    productName ||
-                    placeholder}
-                </Typography>
-              </Tooltip>
-            </Paper>
-          </Grid>
-          <Grid item xs={7}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Protocol Number
-              </Typography>
-              <Tooltip
-                variant="dark"
-                body={
-                  isProtocolTooltip
-                    ? detailsForBackendSectionData?.protocolNumber ||
-                      protocolNumber
-                    : null
-                }
-                placement="bottom"
-              >
-                <Typography
-                  variant="body2"
-                  className="boldtext header-ellipses"
-                  ref={protocol}
-                >
-                  {detailsForBackendSectionData?.protocolNumber ||
-                    protocolNumber ||
-                    placeholder}
-                </Typography>
-              </Tooltip>
-            </Paper>
-          </Grid>
-        </Grid>
-        <Grid item xs={2} style={containerStyle}>
-          <Grid item xs={4}>
-            <Paper style={styles} className="duedatedsg">
-              <Typography variant="body2" className="greytext">
-                Bid #
-              </Typography>
-              <Typography variant="body2" className="boldtext">
-                {bidNo || placeholder}
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={8}>
-            <Paper className="duedatedsg" style={styles}>
-              <Typography variant="body2" className="greytext lesslineheight">
-                Days Until Due
-              </Typography>
-              <p className="boldtext greencolor lesslineheight">
-                {bidStatus
-                  ? renderProcessingTxt
-                  : detailsForBackendSectionData?.bidDueDate || daysRemain}
-              </p>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+            <Typography
+              variant="body2"
+              className="boldtext header-ellipses"
+              ref={linebusiness}
+            >
+              {detailsForBackendSectionData?.lineOfBusiness ||
+                lineOfBusiness ||
+                placeholder}
+            </Typography>
+          </Tooltip>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            IQVIA Biotech
+          </Typography>
+          <Typography variant="body2" className="boldtext">
+            {detailsForBackendSectionData.IsIqviaBiotech ||
+              iqviaBiotech ||
+              placeholder}
+          </Typography>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Phase
+          </Typography>
+          <Typography variant="body2" className="boldtext">
+            {phase
+              ? detailsForBackendSectionData?.phase?.split(' ')[1] ||
+                detailsForBackendSectionData?.phase ||
+                phase?.split(' ')[1] ||
+                phase
+              : placeholder}
+          </Typography>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Next Milestone
+          </Typography>
+          <Typography variant="body2" className="boldtext">
+            {nextMilestone || '-'}
+          </Typography>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Therapeutic Area
+          </Typography>
+          <Tooltip
+            variant="dark"
+            body={
+              isTherapeuticTooltip
+                ? detailsForBackendSectionData?.therapeuticArea ||
+                  therapeuticArea
+                : null
+            }
+            placement="bottom"
+          >
+            <Typography
+              variant="body2"
+              className="boldtext header-ellipses"
+              ref={therapeutic}
+            >
+              {detailsForBackendSectionData?.therapeuticArea ||
+                therapeuticArea ||
+                placeholder}
+            </Typography>
+          </Tooltip>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Product Name
+          </Typography>
+          <Tooltip
+            variant="dark"
+            body={
+              isProductTooltip
+                ? detailsForBackendSectionData?.productName || productName
+                : null
+            }
+            placement="bottom"
+          >
+            <Typography
+              variant="body2"
+              className="boldtext header-ellipses"
+              ref={product}
+            >
+              {detailsForBackendSectionData?.productName ||
+                productName ||
+                placeholder}
+            </Typography>
+          </Tooltip>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Protocol Number
+          </Typography>
+          <Tooltip
+            variant="dark"
+            body={
+              isProtocolTooltip
+                ? detailsForBackendSectionData?.protocolNumber || protocolNumber
+                : null
+            }
+            placement="bottom"
+          >
+            <Typography
+              variant="body2"
+              className="boldtext header-ellipses"
+              ref={protocol}
+            >
+              {detailsForBackendSectionData?.protocolNumber ||
+                protocolNumber ||
+                placeholder}
+            </Typography>
+          </Tooltip>
+        </Paper>
+      </div>
+      <div>
+        <Paper style={styles} className="duedatedsg">
+          <Typography variant="body2" className="greytext">
+            Bid #
+          </Typography>
+          <Typography variant="body2" className="boldtext">
+            {bidNo || placeholder}
+          </Typography>
+        </Paper>
+      </div>
+      <div>
+        <Paper className="duedatedsg" style={styles}>
+          <Typography variant="body2" className="greytext lesslineheight">
+            Days Until Due
+          </Typography>
+          <p className="boldtext greencolor lesslineheight">
+            {bidStatus
+              ? renderProcessingTxt
+              : detailsForBackendSectionData?.bidDueDate || daysRemain}
+          </p>
+        </Paper>
+      </div>
+    </div>
   );
 };
 

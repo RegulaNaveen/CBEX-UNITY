@@ -20,7 +20,8 @@ import {
   editProposalQuestionfromSocket,
   deleteProposalQuestionFromSocket,
   setProposalQuestionFromSocket,
-  widgetUpdate
+  widgetUpdate,
+  updateNextMilestone
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -175,7 +176,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const updateFavourite = (oppNumber, favourite, ws) => {
+  const updateFavourite = (oppNumber, favourite, proposalDetails, ws) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -187,7 +188,8 @@ const SocketContextProvider = props => {
             event: 'FAVOURITE',
             data: {
               oppNumber,
-              favourite
+              favourite,
+              ...proposalDetails
             }
           }
         })
@@ -382,7 +384,8 @@ const SocketContextProvider = props => {
           onApprovalSectionDeleting,
           onApprovalSectionDeleted,
           widgetUpdate,
-          updateFavouriteAction
+          updateFavouriteAction,
+          updateNextMilestoneAction
         } = props;
 
         // On Message Recieve
@@ -503,7 +506,13 @@ const SocketContextProvider = props => {
 
             case 'FAVOURITE':
               const { oppNumber, favourite } = data.data;
-              updateFavouriteAction(oppNumber, favourite);
+              updateFavouriteAction(oppNumber, favourite, { ...data.data });
+              break;
+
+            case 'NEXT_MILESTONE_UPDATE':
+              console.log('NEXT_MILESTONE_UPDATE data', data);
+              // const { oppNumber, nextMilestone } = data.data;
+              // updateNextMilestoneAction(oppNumber, nextMilestone);
               break;
             default:
               break;
@@ -673,9 +682,9 @@ const SocketContextProvider = props => {
     );
   };
 
-  const updateFavouriteWrapper = (oppNo, favourite) => {
+  const updateFavouriteWrapper = (oppNo, favourite, proposalDetails) => {
     waitForSocketConnectionMinInterval(() =>
-      updateFavourite(oppNo, favourite, null)
+      updateFavourite(oppNo, favourite, proposalDetails, null)
     );
   };
 
@@ -818,7 +827,8 @@ const mapDispatchToProps = {
   onApprovalSectionDeleting: onApprovalSectionDeletingAction,
   onApprovalSectionDeleted: onApprovalSectionDeletedAction,
   widgetUpdate,
-  updateFavouriteAction: updateFavourite
+  updateFavouriteAction: updateFavourite,
+  updateNextMilestoneAction: updateNextMilestone
 };
 
 export default connect(
