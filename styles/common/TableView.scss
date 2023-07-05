@@ -56,22 +56,19 @@
         display: none;
       }
     }
-
-    // &:hover {
-    //   background: rgba($color: $neptune-primary, $alpha: 0.05);
-    // }
-  }
-
-  .no-info {
-    margin: 20px auto;
-    text-align: center;
-    font-size: 20;
-  }
-
-  .no-data-placeholder {
-    color: rgba($color: #848484, $alpha: 0.7) !important;
   }
 }
+
+.no-info {
+  margin: 20px auto;
+  text-align: center;
+  font-size: 20;
+}
+
+.no-data-placeholder {
+  color: rgba($color: #848484, $alpha: 0.7) !important;
+}
+
 .table-wrapper {
   height: 3rem;
   display: flex;

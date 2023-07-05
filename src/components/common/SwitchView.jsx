@@ -56,7 +56,7 @@ class SwitchView extends Component<Props> {
             </button>
           </span>
         </Tooltip>
-        <Tooltip title="Card View" placement="top">
+        <Tooltip title="Grid View" placement="top">
           <span>
             <button
               type="button"

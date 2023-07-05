@@ -1,20 +1,18 @@
 .card {
   display: grid;
-
+  width: 480px;
   grid-template-rows: 80px auto 81px auto;
   box-sizing: border-box;
   border: $border;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 16px 24px 0 rgba(0, 0, 0, 0.08);
-  width: 90%;
-  max-width: 480px;
-  min-width: 320px;
 
   .header-section {
     display: grid;
     grid-template-columns: auto 0.5fr;
     border-bottom: $border;
+    padding: 7px 0px;
 
     div:first-child {
       display: flex;
