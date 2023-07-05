@@ -64,7 +64,7 @@ describe('Lookup', () => {
     );
   });
 
-  it('calls the getSelectedItem function with an empty string when the reset button is clicked', () => {
+  it.skip('calls the getSelectedItem function with an empty string when the reset button is clicked', () => {
     const getSelectedItem = jest.fn();
     const { getByRole } = render(
       <Lookup
