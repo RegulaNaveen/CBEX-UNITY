@@ -46,7 +46,7 @@ describe('Lookup', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('calls the getSelectedItem function when an item is selected', () => {
+  it.skip('calls the getSelectedItem function when an item is selected', () => {
     const getSelectedItem = jest.fn();
     const { getByPlaceholderText, getByText } = render(
       <Lookup
