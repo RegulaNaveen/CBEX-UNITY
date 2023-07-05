@@ -283,7 +283,7 @@ class Tabbar extends Component<Props, State> {
               filters={filters}
             />
           )}
-          {children[selected]}
+          {latestChildren[selected]}
         </div>
       </div>
     );

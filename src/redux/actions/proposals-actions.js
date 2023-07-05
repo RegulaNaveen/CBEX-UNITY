@@ -218,8 +218,6 @@ export const onFilteringProposals = (
         }
       });
       const allFlags = getfetchAllFlags(getState());
-      console.log('allFlags', allFlags.favouriteFlag);
-      console.log('Number(tabIndex)', Number(tabIndex));
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
