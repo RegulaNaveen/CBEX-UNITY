@@ -138,12 +138,13 @@ const ProposalCard = ({
                   greytext: true,
                   'font-weight-very-light': !customName
                 })}
+                style={{ paddingRight: '.5rem' }}
                 noWrap
                 title={customName || ''}
               >
                 {customName || 'Add Custom Name'}
               </Typography>
-              <Pencil onClick={handleEditCustomName} size={10} />
+              <Pencil onClick={handleEditCustomName} />
             </div>
           ) : null}
         </div>

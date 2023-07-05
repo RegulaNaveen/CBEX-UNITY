@@ -204,6 +204,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                           greytext: true,
                           'font-weight-very-light': !row['customName']
                         })}
+                        style={{ paddingRight: '.5rem' }}
                         noWrap
                         title={row['customName'] || ''}
                       >

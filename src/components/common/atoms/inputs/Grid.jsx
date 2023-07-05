@@ -349,12 +349,16 @@ const loadSidebar = props => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 width: '100%',
-                alignItems: 'center',
+                alignItems: 'flex-end',
                 textAlign: 'left'
               }}
             >
               <div style={{ maxWidth: 'calc(100% - 2rem)' }}>
-                <Typography variant="body2" className="greytext">
+                <Typography
+                  variant="body2"
+                  className="greytext"
+                  style={{ paddingRight: '.5rem' }}
+                >
                   Custom Name
                 </Typography>
                 <Typography
