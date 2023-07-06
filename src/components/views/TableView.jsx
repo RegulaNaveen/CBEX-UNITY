@@ -218,18 +218,23 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                         alignItems: 'center'
                       }}
                     >
-                      <Typography
-                        variant="caption"
-                        className={classNames({
-                          greytext: true,
-                          'font-weight-very-light': !row['customName']
-                        })}
-                        style={{ paddingRight: '.5rem' }}
-                        noWrap
-                        title={row['customName'] || ''}
+                      <Tooltip
+                        title={row['customName'] || 'Add Custom Name'}
+                        placement="top"
                       >
-                        {row['customName'] || 'Add Custom Name'}
-                      </Typography>
+                        <Typography
+                          variant="caption"
+                          className={classNames({
+                            greytext: true,
+                            'font-weight-very-light': !row['customName']
+                          })}
+                          style={{ paddingRight: '.5rem' }}
+                          noWrap
+                          title={row['customName'] || ''}
+                        >
+                          {row['customName'] || 'Add Custom Name'}
+                        </Typography>
+                      </Tooltip>
                       <Pencil
                         onClick={() =>
                           handleEditCustomName(
@@ -243,23 +248,69 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                   ) : null}
                 </div>
               );
+
+            case 'customer':
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={row[col]} placement="top">
+                    <p>{row[col]}</p>
+                  </Tooltip>
+                </div>
+              );
             case 'bidNo':
               return (
                 <div key={uuidv4()} className="cell">
-                  <p>Bid {row[BIDNUM_COLUMN]}</p>
+                  <Tooltip title={`Bid ${row[BIDNUM_COLUMN]}`} placement="top">
+                    <p>Bid {row[BIDNUM_COLUMN]}</p>
+                  </Tooltip>
                 </div>
               );
             case 'bid due date':
+              const bidDueDate = row[col];
+              const tooltipData = bidDueDate
+                ? parseMomentDate(bidDueDate)
+                : 'No data';
+
               return (
                 <div key={uuidv4()} className="cell">
-                  <p
-                    className={classNames({
-                      'no-data-placeholder':
-                        objectToString(row[DATE_COLUMN]) === 'No data'
-                    })}
-                  >
-                    {row[DATE_COLUMN] && parseMomentDate(row[DATE_COLUMN])}
-                  </p>
+                  <Tooltip title={tooltipData} placement="top">
+                    <p
+                      className={classNames({
+                        'no-data-placeholder': !bidDueDate
+                      })}
+                    >
+                      {bidDueDate ? parseMomentDate(bidDueDate) : 'No data'}
+                    </p>
+                  </Tooltip>
+                </div>
+              );
+
+            case 'protocol number':
+              const protocolNumber = row[col];
+              const tooltipContent = protocolNumber
+                ? protocolNumber
+                : 'No data';
+
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={tooltipContent} placement="top">
+                    <p
+                      className={classNames({
+                        'no-data-placeholder': !protocolNumber
+                      })}
+                    >
+                      {protocolNumber || 'No data'}
+                    </p>
+                  </Tooltip>
+                </div>
+              );
+
+            case 'verbatim indication':
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={row[col]} placement="top">
+                    <p>{row[col]}</p>
+                  </Tooltip>
                 </div>
               );
 
