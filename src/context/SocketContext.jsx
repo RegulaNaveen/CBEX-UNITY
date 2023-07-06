@@ -20,7 +20,9 @@ import {
   editProposalQuestionfromSocket,
   deleteProposalQuestionFromSocket,
   setProposalQuestionFromSocket,
-  widgetUpdate
+  widgetUpdate,
+  updateNextMilestone,
+  updateCustomNameAction
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -33,6 +35,7 @@ import {
   onApprovalSectionDeletedAction,
   onApprovalSectionDeletingAction
 } from '../redux/actions/approval-actions';
+import { updateFavourite } from '../redux/actions/sso-auth-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -165,6 +168,51 @@ const SocketContextProvider = props => {
             data: {
               latestAnswer: answer,
               questionId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateFavourite = (oppNumber, favourite, proposalDetails, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'FAVOURITE',
+          body: {
+            event: 'FAVOURITE',
+            data: {
+              oppNumber,
+              favourite,
+              ...proposalDetails
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateCustomName = (oppNumber, customName, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'CUSTOM_NAME_UPDATE',
+          body: {
+            event: 'CUSTOM_NAME_UPDATE',
+            data: {
+              oppNumber,
+              customName
             }
           }
         })
@@ -358,7 +406,10 @@ const SocketContextProvider = props => {
           onApprovalSectionDuplicated,
           onApprovalSectionDeleting,
           onApprovalSectionDeleted,
-          widgetUpdate
+          widgetUpdate,
+          updateFavouriteAction,
+          updateNextMilestoneAction,
+          updateCustomNameAction
         } = props;
 
         // On Message Recieve
@@ -477,6 +528,19 @@ const SocketContextProvider = props => {
               const { proposalId, typeOfWidget } = data.data;
               widgetUpdate(proposalId, typeOfWidget);
 
+            case 'FAVOURITE':
+              const { oppNumber, favourite } = data.data;
+              updateFavouriteAction(oppNumber, favourite, { ...data.data });
+              break;
+
+            case 'NEXT_MILESTONE_UPDATE':
+              const { nextMilestone } = data.data;
+              updateNextMilestoneAction(data.oppId, nextMilestone);
+              break;
+
+            case 'CUSTOM_NAME_UPDATE':
+              const { customName } = data.data;
+              updateCustomNameAction(data.data.oppNumber, customName);
               break;
             default:
               break;
@@ -646,6 +710,18 @@ const SocketContextProvider = props => {
     );
   };
 
+  const updateFavouriteWrapper = (oppNo, favourite, proposalDetails) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateFavourite(oppNo, favourite, proposalDetails, null)
+    );
+  };
+
+  const updateCustomNameWrapper = (oppNo, customName) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateCustomName(oppNo, customName, null)
+    );
+  };
+
   const addQuestionWrapper = questionData => {
     waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
   };
@@ -750,7 +826,9 @@ const SocketContextProvider = props => {
         approvalSectionDuplicatingWrapper,
         approvalSectionDuplicatedWrapper,
         approvalSectionDeletingWrapper,
-        approvalSectionDeletedWrapper
+        approvalSectionDeletedWrapper,
+        updateFavouriteWrapper,
+        updateCustomNameWrapper
       }}
     >
       {props.children}
@@ -783,7 +861,10 @@ const mapDispatchToProps = {
   onApprovalSectionDuplicated: onApprovalSectionDuplicatedAction,
   onApprovalSectionDeleting: onApprovalSectionDeletingAction,
   onApprovalSectionDeleted: onApprovalSectionDeletedAction,
-  widgetUpdate
+  widgetUpdate,
+  updateFavouriteAction: updateFavourite,
+  updateNextMilestoneAction: updateNextMilestone,
+  updateCustomNameAction
 };
 
 export default connect(

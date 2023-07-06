@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Children, Component } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { debounce } from 'lodash';
@@ -20,7 +20,8 @@ type Props = {
   filterProposals: Function,
   eventCategories: any,
   userActions: any,
-  trackEvent: any
+  trackEvent: any,
+  allFlags: Object
 };
 
 type State = {
@@ -76,13 +77,16 @@ class Tabbar extends Component<Props, State> {
   fileterCount = () => {
     const filtersArr = [];
     const { filters } = this.state;
+    const { getFilterStatus } = this.props;
     for (const key in filters) {
       if (filters[key])
         filtersArr.push(
           `${key.toUpperCase()} = ${JSON.stringify(filters[key])}`
         );
     }
-    this.setState({ filterCount: filtersArr.length });
+    this.setState({ filterCount: filtersArr.length }, () => {
+      getFilterStatus(this.state.filterCount);
+    });
   };
 
   handleChange = (index: number) => {
@@ -126,19 +130,9 @@ class Tabbar extends Component<Props, State> {
     this.trackMatomoEventFilterChange({ ...filters, [id]: range });
   };
 
-  onDateRangeChange(id, range) {
-    const { filters } = this.state;
-    const { filterProposals } = this.props;
-
-    this.setState({ filters: { ...filters, [id]: range } }, () => {
-      const { filters: newFilters, selected } = this.state;
-      filterProposals(newFilters, selected);
-    });
-    this.trackMatomoEventFilterChange({ ...filters, [id]: range });
-  }
-
   toggleFilters = () => {
-    const { showFilters } = this.state;
+    const { showFilters, filterCount } = this.state;
+    const { getFilterStatus } = this.props;
     this.setState({ showFilters: !showFilters });
     this.trackMatomoEventFilterToggle(!showFilters);
   };
@@ -244,16 +238,21 @@ class Tabbar extends Component<Props, State> {
   };
 
   render() {
-    const { children } = this.props;
+    const { children, allFlags } = this.props;
     const { selected, showFilters, filterCount, filters } = this.state;
+
+    // Filter out favorite tab if flag is off
+    const latestChildren = allFlags.favouriteFlag
+      ? children
+      : children.filter(item => item.props.label !== 'Favorites');
 
     return (
       <div className="tab-wrapper">
         <div className="tabs-items">
           <ul className="tabs">
-            {children &&
-              children?.length &&
-              children.map((item, index) => (
+            {latestChildren &&
+              latestChildren?.length &&
+              latestChildren.map((item, index) => (
                 <TabItem
                   key={uuidv4()}
                   index={index}
@@ -286,7 +285,7 @@ class Tabbar extends Component<Props, State> {
               filters={filters}
             />
           )}
-          {children[selected]}
+          {latestChildren[selected]}
         </div>
       </div>
     );

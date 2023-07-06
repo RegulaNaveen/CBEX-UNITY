@@ -87,71 +87,85 @@ class Toolbar extends Component<{}, State> {
 
   render() {
     const { isCollapsed, roleName } = this.state;
-    const { rolesList, location } = this.props;
+    const { rolesList, location, withinErrorBoundary } = this.props;
+
     const results = isUserUbuildAdmin();
     const name = getUserName();
     return (
       <div className="toolbar-wrapper">
-        <Link to={DASHBOARD}>
-          <p className="toolbar-title">IQVIA™</p>
-          <p className="toolbar-title">Unity</p>
-        </Link>
-        {results && (
+        {withinErrorBoundary ? (
           <div
-            onClick={() => window.location.replace('/ubuild')}
-            aria-hidden="true"
-            style={{ cursor: 'pointer' }}
-            className={
-              (this.props && location && location?.pathname) === UBUILD
-                ? 'ubuild-linkactive'
-                : 'ubuild-link'
-            }
+            onClick={() => window.location.replace('/dashboard')}
+            style={{ cursor: 'pointer', display: 'flex' }}
           >
-            <div className="toolbar-space">
-              <p className="ubuild-title">U-Build</p>
-            </div>
-            {/* <Link to={UBUILD} replace  className='toolbar-space'>
-              <p className='ubuild-title'>U-Build</p>
-            </Link> */}
+            <p className="toolbar-title">IQVIA™</p>
+            <p className="toolbar-title">Unity</p>
           </div>
+        ) : (
+          <>
+            <Link to={DASHBOARD}>
+              <p className="toolbar-title">IQVIA™</p>
+              <p className="toolbar-title">Unity</p>
+            </Link>
+            {results && (
+              <div
+                onClick={() => window.location.replace('/ubuild')}
+                aria-hidden="true"
+                style={{ cursor: 'pointer' }}
+                className={
+                  (this.props && location && location?.pathname) === UBUILD
+                    ? 'ubuild-linkactive'
+                    : 'ubuild-link'
+                }
+              >
+                <div className="toolbar-space">
+                  <p className="ubuild-title">U-Build</p>
+                </div>
+                {/* <Link to={UBUILD} replace  className='toolbar-space'>
+                  <p className='ubuild-title'>U-Build</p>
+                </Link> */}
+              </div>
+            )}
+            <div style={{ flexGrow: 1 }}>
+              <PrivateRoute path={OPPORTUNITYS} component={Search} />
+            </div>
+            <div className="toolbar-account-spacer" style={{ flex: 0 }}>
+              <Notification />
+              <div ref={this.wrapperRef} className="toolbar-account-wrapper">
+                <div
+                  className={classnames(
+                    'toolbar-account-info',
+                    isCollapsed && 'expanded'
+                  )}
+                  id="menu-title"
+                  role="button"
+                  onClick={this.handleCollapse}
+                  onKeyPress={this.handleKeyPress}
+                  type="button"
+                  tabIndex={-1}
+                >
+                  <Avatar src="" className="tb-profile-avatar">
+                    {name &&
+                      name.split(' ')[0].charAt(0) +
+                        name.split(' ')[1].charAt(0)}
+                  </Avatar>
+                  {isCollapsed ? (
+                    <ArrowUp style={{ color: '#fff', fontSize: 20 }} />
+                  ) : (
+                    <ArrowDown style={{ color: '#fff', fontSize: 20 }} />
+                  )}
+                  {/* <DropMenu className="toolbar-account-info-icon" /> */}
+                </div>
+                {isCollapsed ? (
+                  <ToolbarMenu
+                    name="Profile"
+                    handleCollapse={this.handleCollapse}
+                  />
+                ) : null}
+              </div>
+            </div>
+          </>
         )}
-        <div style={{ flexGrow: 1 }}>
-          <PrivateRoute path={OPPORTUNITYS} component={Search} />
-        </div>
-        <div className="toolbar-account-spacer" style={{ flex: 0 }}>
-          <Notification />
-          <div ref={this.wrapperRef} className="toolbar-account-wrapper">
-            <div
-              className={classnames(
-                'toolbar-account-info',
-                isCollapsed && 'expanded'
-              )}
-              id="menu-title"
-              role="button"
-              onClick={this.handleCollapse}
-              onKeyPress={this.handleKeyPress}
-              type="button"
-              tabIndex={-1}
-            >
-              <Avatar src="" className="tb-profile-avatar">
-                {name &&
-                  name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
-              </Avatar>
-              {isCollapsed ? (
-                <ArrowUp style={{ color: '#fff', fontSize: 20 }} />
-              ) : (
-                <ArrowDown style={{ color: '#fff', fontSize: 20 }} />
-              )}
-              {/* <DropMenu className="toolbar-account-info-icon" /> */}
-            </div>
-            {isCollapsed ? (
-              <ToolbarMenu
-                name="Profile"
-                handleCollapse={this.handleCollapse}
-              />
-            ) : null}
-          </div>
-        </div>
         {(!roleName ||
           roleName === 'undefined' ||
           !this.isRoleInUbuild(rolesList || [], roleName)) && (

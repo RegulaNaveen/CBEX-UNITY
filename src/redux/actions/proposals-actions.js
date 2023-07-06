@@ -6,9 +6,14 @@ import { REDUX_TYPES } from '../../constants';
 import {
   onGetAllProposals,
   onGetByStatus,
+  getRecentOpportunity,
+  getAssignedOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
+import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
+import { getProposals } from '../selectors';
+import { getfetchAllFlags } from '../selectors/proposal';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -19,10 +24,15 @@ const {
   SET_PROPOSAL_FILTERING,
   SET_PAGE,
   SET_NUM_OF_ROWS,
+  SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD
 } = REDUX_TYPES.PROPOSALS;
 
-const formatProposal = (proposal: Object): Object => {
+const formatProposal = (
+  proposal: Object,
+  favoritesMap: Object,
+  customNameMap: Object = {}
+): Object => {
   const formattedProposal = {};
 
   const {
@@ -32,13 +42,15 @@ const formatProposal = (proposal: Object): Object => {
     opportunityOverview,
     usersList,
     approvalsCount,
-    isApprovalCountPresent
+    isApprovalCountPresent,
+    bidStopStatus
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
     formattedProposal.proposalId = proposalId;
     formattedProposal.opportunityName = opportunityName;
     formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+    formattedProposal['bidNo'] = proposalDetails['bidNo'];
     formattedProposal.customer = proposalDetails.Customer;
     formattedProposal['protocol number'] = proposalDetails['Protocol number'];
     formattedProposal.phase = proposalDetails.Phase;
@@ -52,6 +64,12 @@ const formatProposal = (proposal: Object): Object => {
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
     formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+    formattedProposal.bidStopStatus = bidStopStatus || false;
+    formattedProposal.isFavourite = !!favoritesMap[
+      `${proposalDetails['CRM #']}`
+    ];
+    formattedProposal.customName =
+      customNameMap[`${proposalDetails['CRM #']}`] || '';
     return formattedProposal;
   }
 
@@ -139,7 +157,7 @@ export const onFilteringProposals = (
   filters: FilteredData,
   tabIndex: Number
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
       const filterPayload = { source: 'es' };
       dispatch({
@@ -195,36 +213,73 @@ export const onFilteringProposals = (
             }
             break;
           }
+          case 'Customized opportunity name': {
+            filterPayload.opportunityCustomname = value;
+            break;
+          }
           default:
             break;
         }
       });
-
+      const allFlags = getfetchAllFlags(getState());
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await onGetByStatus(
-          filterPayload,
-          'active',
-          userEmail
-        );
-        data = response.data;
-      } else if (Number(tabIndex) === 1) {
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await getAssignedOpportunity(
+            filterPayload,
+            true,
+            userEmail
+          );
+          data = response.data;
+        } else {
+          const response = await getAssignedOpportunity(
+            filterPayload,
+            false,
+            userEmail
+          );
+          data = response.data;
+        }
+      } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await onGetByStatus(
-          filterPayload,
-          'non-active',
-          userEmail
-        );
+        const response = await onGetAllProposals(filterPayload, userEmail);
         data = response.data;
+      } else if (
+        allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1
+      ) {
+        const userEmail = localStorage.getItem('userEmail') || '';
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await getRecentOpportunity(
+            filterPayload,
+            true,
+            userEmail
+          );
+          data = response.data;
+        } else {
+          const response = await getRecentOpportunity(
+            filterPayload,
+            false,
+            userEmail
+          );
+          data = response.data;
+        }
       } else {
-        const response = await onGetAllProposals(filterPayload);
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const response = await onGetAllProposals(filterPayload, userEmail);
         data = response.data;
       }
 
       if (!isEmpty(data)) {
         const { proposals } = data;
-        const formatted = proposals.map(proposal => formatProposal(proposal));
+        const favourites = selectFavourites(getState()).toJS();
+        const customNameMap = selectCustomNameMap(getState()).toJS();
+        const favouritesMap = favourites.reduce((favMap, fav) => {
+          favMap[fav] = true;
+          return favMap;
+        }, {});
+        const formatted = proposals.map(proposal =>
+          formatProposal(proposal, favouritesMap, customNameMap)
+        );
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
@@ -270,6 +325,14 @@ export const setNumberOfRowsAction = (rowsCount: Number) => {
     });
   };
 };
+export const setAssignedTabNumberOfRowsAction = (rowsCount: Number) => {
+  return dispatch => {
+    dispatch({
+      type: SET_ASSIGNED_TAB_NUM_OF_ROWS,
+      payload: rowsCount
+    });
+  };
+};
 
 export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
   dispatch: Dispatch<Object, Object>
@@ -281,6 +344,28 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
         type: NON_EDITABLE_SF_FIELD,
         payload: data
       });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    let proposals = getProposals(getState());
+    const proposalIndex = proposals.findIndex(
+      proposal => proposal['opportunity number'] === oppNumber
+    );
+    if (proposalIndex > -1) {
+      proposals[proposalIndex]['isFavourite'] = favourite;
+      dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+    const { tabIndex } = proposalDetails;
+    if (tabIndex === 1 && favourite) {
+      proposals.push(proposals.splice(proposalIndex, 1)[0]);
     }
   } catch (error) {
     console.log(error);

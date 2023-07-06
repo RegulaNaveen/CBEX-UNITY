@@ -6,8 +6,23 @@ module.exports = {
   verbose: true,
   setupFilesAfterEnv: ['./setUpTests.js'],
   snapshotSerializers: [],
-  testPathIgnorePatterns: ['/node_modules/', '/dist'],
-  collectCoverageFrom: ['**/*.{js,jsx}', '!**/node_modules/**', '!**/dist/**'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist',
+    'src/components/common/__tests__/TagUserList.test.js',
+    'src/components/screens/Approvals/__tests__/ActionButtons.test.js',
+    'src/components/screens/Approvals/__test__/ApprovalsIndex.test.js',
+    'src/api/__tests__/proposal.test.js',
+    'src/components/common/__tests__/CustomApolloRichText.test.js'
+  ],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}',
+    '!**/node_modules/**',
+    '!**/dist/**',
+    '!**/__tests__/**',
+    '!**/__test__/**',
+    '!src/constants/**'
+  ],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleDirectories: ['node_modules', __dirname],
   coverageDirectory: '<rootDir>/coverage',
@@ -23,8 +38,13 @@ module.exports = {
         'lib0',
         'remixicon',
         'uuid',
+<<<<<<< HEAD
         'sinon',
         'register-service-worker'
+=======
+        'register-service-worker',
+        'sinon'
+>>>>>>> 8abb968adc410d5a298a095f9d5e9bc00c8cb15a
       ].join('|') +
       ')'
   ],

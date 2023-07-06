@@ -19,3 +19,54 @@
 .ubuild-wrapper {
   padding-top: $toolbarHight;
 }
+
+#dashboard .tab-content-wrapper .current-tab {
+  border-width: 1px 1px 1px 1px;
+}
+
+#dashboard .tab-content-wrapper .past-tab {
+  border-width: 1px 1px 1px 1px;
+}
+
+#dashboard .tab-content-wrapper .Mui-expanded.current-tab {
+  border-width: 0px 0px 0px 0px;
+}
+
+#dashboard .tab-content-wrapper .Mui-expanded.past-tab {
+  border-width: 0px 0px 0px 0px;
+}
+
+// --------------
+
+#dashboard .tab-content-wrapper .current-tab .MuiAccordionSummary-content > p {
+  font-weight: 600 !important;
+}
+
+#dashboard .tab-content-wrapper .past-tab .MuiAccordionSummary-content > p {
+  font-weight: 600 !important;
+}
+
+#dashboard
+  .tab-content-wrapper
+  .Mui-expanded.current-tab
+  .MuiAccordionSummary-content
+  > p {
+  font-weight: 600 !important;
+}
+
+#dashboard
+  .tab-content-wrapper
+  .Mui-expanded.past-tab
+  .MuiAccordionSummary-content
+  > p {
+  font-weight: 600 !important;
+}
+.no-info-card {
+  text-align: center;
+  padding: 20px;
+  color: #595959;
+}
+
+.assigned-tab.MuiTabs-root::before {
+  border-bottom: none;
+}

@@ -29,3 +29,11 @@ const selectSSOAuth = state => state.ssoAuth;
 export const selectUserRole = createSelector(selectSSOAuth, auth =>
   auth.get('role')
 );
+
+export const selectFavourites = createSelector(selectSSOAuth, auth =>
+  auth.get('favourites', [])
+);
+
+export const selectCustomNameMap = createSelector(selectSSOAuth, auth =>
+  auth.get('customNameMap', {})
+);

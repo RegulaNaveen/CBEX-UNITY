@@ -4,6 +4,7 @@ import { chunk } from 'lodash';
 import Dropwdown from './atoms/inputs/Dropdown';
 import Pagination from './atoms/Pagination';
 import MatomoHoc from '../HOC/MatomoHOC';
+import moment from 'moment';
 
 type Props = {
   totalItems: number,
@@ -19,13 +20,12 @@ type State = {
   maxRows: number
 };
 
-class ComplexPagination extends Component<Props, State> {
+class AssignTabPagination extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
-
     this.state = {
       currentPage: 1,
-      maxRows: 15
+      maxRows: 10
     };
   }
 
@@ -44,13 +44,14 @@ class ComplexPagination extends Component<Props, State> {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pg,
-      action: `Pagination: ${userActions.changed} Page Size To ${size}`
+      action: `AssignTab Pagination: ${userActions.changed} Page Size To ${size}`
     });
   };
 
   render() {
     const { currentPage, maxRows } = this.state;
     const { totalItems } = this.props;
+    let leftPaginateCount = [10, 15, 20];
 
     const chunks = chunk(
       [...Array.from(Array(totalItems), (_, i) => i + 1)],
@@ -60,26 +61,23 @@ class ComplexPagination extends Component<Props, State> {
     const handleCountItems = () => {
       if (!chunks[currentPage - 1])
         return `Showing 1-${maxRows} of ${totalItems}`;
-
       const firstOfList = chunks[currentPage - 1][0];
       const lastOfList =
         maxRows * (currentPage - 1) + chunks[currentPage - 1].length;
-
-      return `Showing ${firstOfList}-${lastOfList} of ${totalItems}`;
+      // of ${totalItems}
+      return `Showing ${firstOfList}-${lastOfList} `;
     };
-
     return (
       <div className="cmplx" data-testid="complex-pagination">
         <div className="cmplx__rows">
-          <p>Show</p>
+          <p>Rows</p>
           <div className="cmplx__dd__container">
             <Dropwdown
               value={maxRows.toString()}
               onClick={this.setMaxRows}
-              items={[15, 30, 45]}
+              items={leftPaginateCount}
             />
           </div>
-          <span style={{ paddingLeft: 5 }}>Opportunities per page</span>
         </div>
         <p className="cmplx__items">{handleCountItems()}</p>
         <Pagination
@@ -92,4 +90,4 @@ class ComplexPagination extends Component<Props, State> {
   }
 }
 
-export default MatomoHoc(ComplexPagination);
+export default MatomoHoc(AssignTabPagination);

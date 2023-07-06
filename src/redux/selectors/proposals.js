@@ -35,5 +35,7 @@ export const getPage = (proposals: Map): Object => proposals.get('page');
 export const getNumOfRows = (proposals: Map): Object =>
   proposals.get('numRows');
 
+export const getAssignedTabNumOfRows = (proposals: Map): Object =>
+  proposals.get('assignTabRows');
 export const getnoneditableField = (proposals: Map): Object =>
   proposals.get('nonEditableSF');

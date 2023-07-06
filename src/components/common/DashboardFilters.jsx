@@ -151,7 +151,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title="Opportunity status"
+          title="Opportunity stage"
           id="opportunity status"
           placeholder="Select value..."
           onChange={onDropDownFilterChange}
@@ -168,6 +168,17 @@ const DashboardFilters = ({
           onChange={changeUser}
           withReset
           defaultValue={filters.teamMember}
+        />
+      </div>
+      <div className="filter-wrapper">
+        <InputField
+          type="text"
+          id="Customized opportunity name"
+          label="Customized opportunity name"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters['customized opportunity name']}
+          onChange={onTextFilterChange}
         />
       </div>
     </div>

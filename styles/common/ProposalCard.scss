@@ -10,13 +10,14 @@
 
   .header-section {
     display: grid;
-    grid-template-columns: 1fr 0.5fr;
+    grid-template-columns: auto 0.5fr;
     border-bottom: $border;
 
     div:first-child {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      flex-grow: 1;
       padding: 0 25px;
 
       p {
@@ -34,6 +35,13 @@
           font-weight: 500;
         }
       }
+    }
+
+    .favourite-container {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 1rem;
+      align-items: center;
     }
   }
 

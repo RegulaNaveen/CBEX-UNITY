@@ -1,8 +1,10 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { chunk, isEmpty } from 'lodash';
+import { chunk } from 'lodash';
 import Loader from 'react-loader-spinner';
+import Typography from 'apollo-react/components/Typography';
+import Card from 'apollo-react/components/Card';
 import {
   getProposalTypeView,
   getProposals,
@@ -15,8 +17,8 @@ import {
   setPageAction,
   setNumberOfRowsAction
 } from '../../../redux/actions/proposals-actions';
-import GridView from '../../views/GridView';
 import TableView from '../../views/TableView';
+import GridView from '../../views/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
 
 type Props = {
@@ -29,7 +31,7 @@ type Props = {
   numRows: Number,
   setPage: Function,
   setRows: Function,
-  allFlags: object
+  allFlags: Object
 };
 
 type State = {
@@ -38,7 +40,7 @@ type State = {
   pageContent: Array<Object>
 };
 
-class AllTab extends Component<Props, State> {
+class FavoritesTab extends Component<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
@@ -60,6 +62,9 @@ class AllTab extends Component<Props, State> {
       isFilteringProposals
     } = this.props;
 
+    const favouriteProposals = this.favoriteProposals(proposals);
+    const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
+
     const contentChanged =
       prevProps.page !== page ||
       prevProps.numRows !== numRows ||
@@ -68,7 +73,7 @@ class AllTab extends Component<Props, State> {
 
     if (contentChanged) {
       const pages = chunk(
-        isFilteringProposals ? filteredProposals : proposals,
+        isFilteringProposals ? favouriteFilteredProposals : favouriteProposals,
         numRows
       );
       this.setPageContent(pages[page - 1]);
@@ -79,12 +84,28 @@ class AllTab extends Component<Props, State> {
     const { selectedViewType, allFlags } = this.props;
     const { pageContent } = this.state;
 
-    if (selectedViewType === 0) return <TableView data={pageContent} />;
-    return <GridView data={pageContent} allFlags={allFlags} />;
+    if (pageContent && pageContent.length) {
+      if (selectedViewType === 0) {
+        return <TableView data={pageContent} tabIndex={1} hideStatus/>;
+      } else {
+        return <GridView data={pageContent} allFlags={allFlags} tabIndex={1}/>;
+      }
+    } else {
+      return (
+        <Card className="no-info-card">
+          <Typography>
+            No favorites defined
+          </Typography>
+        </Card>
+      );
+    }
   };
 
   setPageContent = (pageContent: Array<Object>) =>
     this.setState({ pageContent });
+
+  favoriteProposals = (proposals: Array<Object>) =>
+    proposals.filter(item => item.isFavourite === true).reverse();
 
   render() {
     const {
@@ -93,14 +114,20 @@ class AllTab extends Component<Props, State> {
       isFilteringProposals,
       filteredProposals,
       setPage,
-      setRows
+      setRows,
+      allFlags
     } = this.props;
-    const proposalCount = isFilteringProposals
-      ? filteredProposals.length
-      : proposals.length;
+
+    const favouriteProposals = this.favoriteProposals(proposals);
+    const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
+
     const showPagination = isFilteringProposals
-      ? !isEmpty(filteredProposals)
-      : !isEmpty(proposals);
+      ? favouriteFilteredProposals.length > 15
+      : favouriteProposals.length > 15;
+
+    // If favourite flag is off return null
+    if(!allFlags?.favouriteFlag) return null;
+    
     return loading ? (
       <Loader
         type="TailSpin"
@@ -114,10 +141,10 @@ class AllTab extends Component<Props, State> {
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {showPagination && proposalCount > 15 && (
+        {showPagination && (
           <ComplexPagination
             totalItems={
-              isFilteringProposals ? filteredProposals.length : proposals.length
+              isFilteringProposals ? favouriteFilteredProposals.length : favouriteProposals.length
             }
             getCurrentPosition={setPage}
             getMaxRows={setRows}
@@ -134,7 +161,6 @@ const mapStateToProps = state => ({
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
   isFilteringProposals: getIsFilteringProposals(state),
-
   page: getPage(state.proposals),
   numRows: getNumOfRows(state.proposals)
 });
@@ -144,4 +170,4 @@ const mapDispatchToProps = {
   setRows: setNumberOfRowsAction
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritesTab);
