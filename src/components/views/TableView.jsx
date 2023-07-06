@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head } from 'lodash';
 import classNames from 'classnames';
+import moment from 'moment';
 import { objectToString } from '../../utils/helpers';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { OPPORTUNITY } from '../../routes';
@@ -22,8 +23,7 @@ type Props = {
   tabIndex: number
 };
 
-const TableView = ({ data, hideStatus, tabIndex }: Props) => {
-  console.log('tabIndex', tabIndex);
+const TableView = ({ data, hideStatus }: Props) => {
   const SKIP_COLUMNS = [
     'proposalId',
     'opportunityName',
@@ -129,11 +129,13 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
     async function onFavouriteToggle(favourite) {
       try {
         updateFavInProgress(true, rowIndex);
+        const favouriteUpdatedDate = moment().format();
         const toggleFavouriteRes = await toggleFavourite(
           row[LINK_COLUMN],
-          favourite
+          favourite,
+          favouriteUpdatedDate
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite, tabIndex);
+        updateFavouriteWrapper(row[LINK_COLUMN], favourite, proposalDetails);
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import Grid from 'apollo-react/components/Grid';
+import moment from 'moment';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -250,7 +251,8 @@ const loadSidebar = props => {
   async function onFavouriteToggle(favourite) {
     try {
       setFavInProgress(true);
-      const toggleFavouriteRes = await toggleFavourite(crm, favourite);
+      const favouriteUpdatedDate = moment().format();
+      const toggleFavouriteRes = await toggleFavourite(crm, favourite, favouriteUpdatedDate);
       updateFavouriteWrapper(crm, favourite);
       if (window && window.location && window.location.href) {
         const obj = {

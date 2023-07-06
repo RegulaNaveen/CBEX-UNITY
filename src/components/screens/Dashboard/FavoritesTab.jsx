@@ -8,10 +8,12 @@ import Card from 'apollo-react/components/Card';
 import {
   getProposalTypeView,
   getProposals,
+  getFavouriteProposals,
   getProposalsLoading,
   getFilteredProposals,
-  getIsFilteringProposals
+  getIsFilteringProposals,
 } from '../../../redux/selectors';
+import { selectFavourites } from '../../../redux/selectors/sso-auth';
 import { getPage, getNumOfRows } from '../../../redux/selectors/proposals';
 import {
   setPageAction,
@@ -21,14 +23,12 @@ import TableView from '../../views/TableView';
 import GridView from '../../views/GridView';
 import ComplexPagination from '../../common/ComplexPagination';
 
-export const addNewFavoriteProposal = (props) => {
-  return props
-};
-
 type Props = {
   selectedViewType: 0 | 1,
   proposals: [Object],
+  favoriteProposals: [Object],
   filteredProposals: [Object],
+  favourites: [string];
   isFilteringProposals: boolean,
   loading: boolean,
   page: Number,
@@ -63,22 +63,19 @@ class FavoritesTab extends Component<Props, State> {
       numRows,
       proposals,
       filteredProposals,
+      favoriteProposals,
       isFilteringProposals
     } = this.props;
-
-    proposals.push(addNewFavoriteProposal);
-    const favouriteProposals = this.favoriteProposals(proposals);
-    const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
 
     const contentChanged =
       prevProps.page !== page ||
       prevProps.numRows !== numRows ||
-      prevProps.proposals !== proposals ||
+      prevProps.favoriteProposals !== favoriteProposals ||
       prevProps.filteredProposals !== filteredProposals;
 
     if (contentChanged) {
       const pages = chunk(
-        isFilteringProposals ? favouriteFilteredProposals : favouriteProposals,
+        isFilteringProposals ? filteredProposals : favoriteProposals,
         numRows
       );
       this.setPageContent(pages[page - 1]);
@@ -109,29 +106,23 @@ class FavoritesTab extends Component<Props, State> {
   setPageContent = (pageContent: Array<Object>) =>
     this.setState({ pageContent });
 
-  favoriteProposals = (proposals: Array<Object>) =>
-    proposals.filter(item => item.isFavourite === true).reverse();
-
   render() {
     const {
       proposals,
       loading,
       isFilteringProposals,
       filteredProposals,
+      favoriteProposals,
       setPage,
       setRows,
-      allFlags
     } = this.props;
 
-    const favouriteProposals = this.favoriteProposals(proposals);
-    const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
-
+    // const favouriteProposals = this.favoriteProposals(proposals);
+    // const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
+    
     const showPagination = isFilteringProposals
-      ? favouriteFilteredProposals.length > 15
-      : favouriteProposals.length > 15;
-
-    // If favourite flag is off return null
-    if(!allFlags?.favouriteFlag) return null;
+      ? filteredProposals.length > 15
+      : favoriteProposals.length > 15;
     
     return loading ? (
       <Loader
@@ -149,7 +140,7 @@ class FavoritesTab extends Component<Props, State> {
         {showPagination && (
           <ComplexPagination
             totalItems={
-              isFilteringProposals ? favouriteFilteredProposals.length : favouriteProposals.length
+              isFilteringProposals ? filteredProposals.length : favoriteProposals.length
             }
             getCurrentPosition={setPage}
             getMaxRows={setRows}
@@ -163,6 +154,8 @@ class FavoritesTab extends Component<Props, State> {
 const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state),
   proposals: getProposals(state),
+  favoriteProposals: getFavouriteProposals(state),
+  favourites: selectFavourites(state),
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
   isFilteringProposals: getIsFilteringProposals(state),

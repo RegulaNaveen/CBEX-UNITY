@@ -12,8 +12,8 @@ import {
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
-import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
-import { getProposals } from '../selectors';
+import { selectFavourites, selectCustomNameMap, selectFavouritesUpdatedDateMap } from '../selectors/sso-auth';
+import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
 
 const {
@@ -26,8 +26,14 @@ const {
   SET_PAGE,
   SET_NUM_OF_ROWS,
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
-  NON_EDITABLE_SF_FIELD
+  NON_EDITABLE_SF_FIELD,
+  ON_GET_FAVOURITE
 } = REDUX_TYPES.PROPOSALS;
+
+function removeDuplicates(arr) {
+  return arr.filter((item,
+      index) => arr.indexOf(item) === index);
+}
 
 const formatProposal = (
   proposal: Object,
@@ -271,6 +277,9 @@ export const onFilteringProposals = (
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
+        const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(getState()).toJS();
+        favouritesUpdatedDateMap.sort((a,b) => (a["updated date"] > b["updated date"]) ? 1 
+                                              : ((b["updated date"] > a["updated date"]) ? -1 : 0)).reverse();
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
@@ -278,7 +287,20 @@ export const onFilteringProposals = (
         const formatted = proposals.map(proposal =>
           formatProposal(proposal, favouritesMap, customNameMap)
         );
-        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+        
+        if(allFlags.favouriteFlag && Number(tabIndex) === 1) {
+          const uniqueFavourites = removeDuplicates(favourites);
+          let orderedProposal = [];
+          for( const favorite of uniqueFavourites) {
+            for(const proposal of formatted) {
+              if(proposal['opportunity number'] === favorite)
+                orderedProposal.push(proposal);
+            }
+          }
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite: orderedProposal } });
+        } else {
+          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -353,6 +375,7 @@ export const updateProposal = (oppNumber, favourite) => async (
   getState
 ) => {
   try {
+    let proposalsFavourite = getFavouriteProposals(getState());
     let proposals = getProposals(getState());
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNumber
@@ -361,6 +384,17 @@ export const updateProposal = (oppNumber, favourite) => async (
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
+
+    let proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
+    if(!proposalCheck && favourite) {
+      proposalsFavourite.unshift(proposals[proposalIndex]);
+      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+    }
+    if(proposalCheck && !favourite) {
+      let index = proposalsFavourite.findIndex(proposal => proposal['opportunity number'] === oppNumber);
+      proposalsFavourite.splice(index, 1);
+      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+    }  
   } catch (error) {
     console.log(error);
   }

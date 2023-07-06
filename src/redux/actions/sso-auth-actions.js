@@ -22,7 +22,8 @@ const {
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
   SET_USER_FAVOURITES,
-  SET_CUSTOM_NAME_MAP
+  SET_CUSTOM_NAME_MAP,
+  SET_FAVOURITES_UPDATED_DATE
 } = REDUX_TYPES.SSO_AUTH;
 
 const { TOGGLE_FAVOURITE } = REDUX_TYPES.PROPOSAL;
@@ -98,6 +99,7 @@ export const fetchUserOpportunityPrefs = () => {
         Array.isArray(opportuntityPrefsRes.preferences)
       ) {
         let userFavourites = new Set(),
+        userFavouritesUpdatedDateMap = [],
           userCustomOppNameMap = {},
           userFavouritesArr = [];
         opportuntityPrefsRes.preferences.forEach(pref => {
@@ -107,9 +109,17 @@ export const fetchUserOpportunityPrefs = () => {
           if (pref.custom_header_tab) {
             userCustomOppNameMap[pref.opp_number] = pref.custom_header_tab;
           }
+          if (pref.favourite_updated_date) {
+            userFavouritesUpdatedDateMap.push(
+              {
+                'opportunity number': pref.opp_number, 
+                'updated date': pref.favourite_updated_date
+              }
+            );
+          }
         });
         userFavouritesArr = new Array(userFavourites);
-        console.log('userFavArr', userFavouritesArr, userCustomOppNameMap);
+        console.log('userFavArr', userFavouritesArr, userCustomOppNameMap, userFavouritesUpdatedDateMap);
         dispatch({
           type: SET_USER_FAVOURITES,
           payload: new Array(...userFavourites)
@@ -117,6 +127,10 @@ export const fetchUserOpportunityPrefs = () => {
         dispatch({
           type: SET_CUSTOM_NAME_MAP,
           payload: cloneDeep(userCustomOppNameMap)
+        });
+        dispatch({
+          type: SET_FAVOURITES_UPDATED_DATE,
+          payload: cloneDeep(userFavouritesUpdatedDateMap)
         });
         let proposals = getProposals(getState());
         if (proposals.length > 0) {

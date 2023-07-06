@@ -124,7 +124,7 @@ export const getOppPrefs = async () => {
   });
 };
 
-export const toggleFavourite = async (oppNo, favourite) => {
+export const toggleFavourite = async (oppNo, favourite, favourite_updated_date) => {
   return new Promise((resolve, reject) => {
     axiosInstance
       .put(

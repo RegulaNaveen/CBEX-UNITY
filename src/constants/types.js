@@ -34,7 +34,8 @@ const SSO_AUTH = {
   ERROR_ON_GET_LOOKUP_USERS: 'error_on_get_lookup_users',
   DEFAULT_ROLE: 'All',
   SET_USER_FAVOURITES: 'set_user_favourties',
-  SET_CUSTOM_NAME_MAP: 'set_custom_name_map'
+  SET_CUSTOM_NAME_MAP: 'set_custom_name_map',
+  SET_FAVOURITES_UPDATED_DATE: 'set_favourites_updated_date'
 };
 
 const PROPOSAL = {
@@ -122,6 +123,7 @@ const PROPOSALS = {
   GET_PRICEMODELER: 'get_pricemodeler',
   SET_PROPOSAL_VIEW_TYPE: 'set_proposal_view_type',
   ON_GET_PROPOSALS: 'on_get_proposals',
+  ON_GET_FAVOURITE: 'on_get_favourite',
   ERROR_ON_GET_PROPOSALS: 'error_on_get_proposals',
   ON_PROPOSALS_LOADING: 'on_proposals_loading',
   ON_FILTER_PROPOSALS: 'on_filter_proposals',

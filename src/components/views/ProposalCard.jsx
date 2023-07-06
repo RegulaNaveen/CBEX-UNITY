@@ -1,6 +1,7 @@
 // @flow
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import ThumbsUp from 'apollo-react-icons/ThumbsUp';
 import CalenderWithNumber from '../svg/CalenderWithNumber';
@@ -80,7 +81,8 @@ const ProposalCard = ({
     verbatimIndication,
     bidStopStatus,
     tabIndex,
-    isApprovalCountPresent, 
+    isApprovalCountPresent,
+    customName
   };
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
@@ -104,7 +106,8 @@ const ProposalCard = ({
   async function onFavouriteToggle(favourite) {
     try {
       setFavInProgress(true);
-      const toggleFavouriteRes = await toggleFavourite(title, favourite);
+      const favouriteUpdatedDate = moment().format();
+      const toggleFavouriteRes = await toggleFavourite(title, favourite, favouriteUpdatedDate);
       updateFavouriteWrapper(title, favourite, { ...proposalDetails });
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,

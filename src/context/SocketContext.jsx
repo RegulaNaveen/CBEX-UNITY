@@ -35,7 +35,6 @@ import {
   onApprovalSectionDeletingAction
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
-import { addNewFavoriteProposal } from '../components/screens/Dashboard/FavoritesTab';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -508,7 +507,6 @@ const SocketContextProvider = props => {
             case 'FAVOURITE':
               const { oppNumber, favourite } = data.data;
               updateFavouriteAction(oppNumber, favourite, { ...data.data });
-              addNewFavoriteProposal({...data.data});
               break;
 
             case 'NEXT_MILESTONE_UPDATE':
