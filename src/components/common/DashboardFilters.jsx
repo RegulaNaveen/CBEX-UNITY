@@ -170,6 +170,17 @@ const DashboardFilters = ({
           defaultValue={filters.teamMember}
         />
       </div>
+      <div className="filter-wrapper">
+        <InputField
+          type="text"
+          id="Customized opportunity name"
+          label="Customized opportunity name"
+          placeholder="Type text..."
+          className="inputsize"
+          defaultValue={filters['customized opportunity name']}
+          onChange={onTextFilterChange}
+        />
+      </div>
     </div>
   );
 };
