@@ -95,11 +95,12 @@ class AllTab extends Component<Props, State> {
       setPage,
       setRows
     } = this.props;
-
+    const proposalCount = isFilteringProposals
+      ? filteredProposals.length
+      : proposals.length;
     const showPagination = isFilteringProposals
       ? !isEmpty(filteredProposals)
       : !isEmpty(proposals);
-
     return loading ? (
       <Loader
         type="TailSpin"
@@ -113,7 +114,7 @@ class AllTab extends Component<Props, State> {
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {showPagination && (
+        {showPagination && proposalCount > 15 && (
           <ComplexPagination
             totalItems={
               isFilteringProposals ? filteredProposals.length : proposals.length
