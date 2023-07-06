@@ -146,7 +146,7 @@ class Lookup extends Component<Props, State> {
         style={className ? { paddingTop: 3 } : {}}
         className={classNames({ 'is-searching': !isEmpty(filteredData) })}
       >
-        {title && <p>{title}</p>}
+        {title && <p className="input-title">{title}</p>}
         <div className="lookup-wrapper">
           <TextField
             ref={e => (this.textInput = e)}

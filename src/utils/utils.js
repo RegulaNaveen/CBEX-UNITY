@@ -8,7 +8,7 @@ import { DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
 import { formatTheDate } from './DateUtils';
-
+import moment from 'moment';
 /**
  *
  * @param {string[]} countryCodes
@@ -64,12 +64,10 @@ const getAnswer = ans => {
 const getFullProposalTeamString = (updateField, questions) => {
   const relevantQuestions = questions?.filter(
     q =>
-      q.visible &&
       (q.active || q.isCustomQuestion) &&
       q.section.sectionName === 'Proposal Team'
   );
   const isSubjectUpdate = updateField === 'subject';
-
   const uniqueNames = new Set(); // to keep track of unique names
 
   const result = relevantQuestions
@@ -113,8 +111,8 @@ const replaceAnswerToQuestionsPlaceholders = (
   updateField
 ) => {
   let updatedEventBodyStr = eventBodyStr;
-
-  const relevantQuestions = questions?.filter(q => q.visible && q.active);
+  let answer;
+  const relevantQuestions = questions?.filter(q => q.active);
 
   relevantQuestions.forEach(
     ({ questionText, questionId, answers, answerConfiguration }) => {
@@ -127,11 +125,7 @@ const replaceAnswerToQuestionsPlaceholders = (
       );
 
       if (answers?.length) {
-        const answer = handleAnswerTypes(
-          answerConfiguration,
-          answers,
-          updateField
-        );
+        answer = handleAnswerTypes(answerConfiguration, answers, updateField);
 
         updatedEventBodyStr = updatedEventBodyStr.replace(
           regexPlaceholders,
@@ -141,13 +135,52 @@ const replaceAnswerToQuestionsPlaceholders = (
     }
   );
 
-  if (updateField === 'body') {
-    const regexPlaceholdersNotResolved = /\[(.*?)]/gi;
-    updatedEventBodyStr = updatedEventBodyStr.replace(
-      regexPlaceholdersNotResolved,
-      match => `<span style="color:#f00">${match}</span>`
-    );
+  if (updateField === 'subject') {
+    const regexDate = /\b\d{4}-\d{2}-\d{2}\b/g;
+    updatedEventBodyStr = updatedEventBodyStr.replace(regexDate, match => {
+      const formattedDate = moment(match).format('DD-MMM-YYYY');
+      return formattedDate;
+    });
   }
+
+  const placeholders = [
+    'opportunity_number',
+    'line_of_business',
+    'customer',
+    'product_name',
+    'therapeutic_area',
+    'protocol_number',
+    'bid_no',
+    'unity_link',
+    'todays_date',
+    'full_proposal_team',
+    'questions_for_the_customers'
+  ];
+
+  if (updateField === 'body') {
+    for (const placeholder of placeholders) {
+      const regexPlaceholder = new RegExp(
+        `\\[${placeholder}:([\\w\\s-]+)]`,
+        'gi'
+      );
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexPlaceholder,
+        `<span style="color: #000">[${placeholder}:$1]</span>`
+      );
+    }
+
+    const regexUnresolvedPlaceholders = /\[([\w\s-]+:[\w\s-]+)]/gi;
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      regexUnresolvedPlaceholders,
+      `<span style="color: #f00">$&</span>`
+    );
+    const regexDate = /\b\d{4}-\d{2}-\d{2}\b/g;
+    updatedEventBodyStr = updatedEventBodyStr.replace(regexDate, match => {
+      const formattedDate = moment(match).format('DD-MMM-YYYY');
+      return formattedDate;
+    });
+  }
+
   return updatedEventBodyStr;
 };
 

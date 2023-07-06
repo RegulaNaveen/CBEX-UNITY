@@ -213,6 +213,10 @@ export const onFilteringProposals = (
             }
             break;
           }
+          case 'Customized opportunity name': {
+            filterPayload.opportunityCustomname = value;
+            break;
+          }
           default:
             break;
         }
@@ -237,9 +241,12 @@ export const onFilteringProposals = (
           data = response.data;
         }
       } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
-        const response = await onGetAllProposals(filterPayload);
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const response = await onGetAllProposals(filterPayload, userEmail);
         data = response.data;
-      } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
+      } else if (
+        allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1
+      ) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
           const response = await getRecentOpportunity(
@@ -255,10 +262,11 @@ export const onFilteringProposals = (
             userEmail
           );
           data = response.data;
-        } 
+        }
       } else {
-          const response = await onGetAllProposals(filterPayload);
-          data = response.data;
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const response = await onGetAllProposals(filterPayload, userEmail);
+        data = response.data;
       }
 
       if (!isEmpty(data)) {
@@ -356,7 +364,7 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
     const { tabIndex } = proposalDetails;
-    if(tabIndex === 1 && favourite) {
+    if (tabIndex === 1 && favourite) {
       proposals.push(proposals.splice(proposalIndex, 1)[0]);
     }
   } catch (error) {

@@ -1,9 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import * as ReactDOM from 'react-dom';
-import {
-  render as reactTestingRender
-} from '@testing-library/react';
+import { render as reactTestingRender } from '@testing-library/react';
 import { Map, fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import Sinon from 'sinon';
@@ -123,7 +121,6 @@ describe('Testing approvals', () => {
       getSelectedBid: jest.fn(),
       getOpportunityData: jest.fn()
     };
-
 
     sinonSandbox
       .stub(ApprovalActions, 'fetchAllApprovals')

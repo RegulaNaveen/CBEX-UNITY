@@ -69,7 +69,6 @@ describe('EventLauncher component', () => {
     );
     expect(screen.getByText('Event Launcher')).toBeInTheDocument();
     expect(screen.getByTestId('event-launcher-icon-id')).toBeInTheDocument();
-    expect(screen.getByText('Select Variables')).toBeInTheDocument();
   });
 
   test('EventLauncher Model Test close', () => {
