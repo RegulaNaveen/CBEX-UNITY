@@ -183,7 +183,7 @@ const ProposalCard = ({
           <span>
             <b>Current Bid:</b>
           </span>
-          <span className={checkNoDataClass(bidNo)}>{bidNo}</span>
+          <span className={checkNoDataClass(bidNo)}>Bid {bidNo}</span>
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
@@ -254,7 +254,7 @@ const ProposalCard = ({
               title="Strategy Development"
               placement="top"
             >
-              <House fontSize="large" background-color="#9E54B0" />
+              <House fontSize="large" htmlColor="#9E54B0" />
             </Tooltip>
           </Link>
         </div>
@@ -288,7 +288,7 @@ const ProposalCard = ({
               <ThumbsUp
                 fontSize="large"
                 htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-                style={{ transform: 'scaleX(-1)', height: '41px' }}
+                style={{ height: '41px' }}
               />
             </Tooltip>
           ) : (
@@ -297,7 +297,7 @@ const ProposalCard = ({
                 <ThumbsUp
                   fontSize="large"
                   htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-                  style={{ transform: 'scaleX(-1)', height: '36px' }}
+                  style={{ height: '36px' }}
                 />
               </Tooltip>
             </Link>
