@@ -108,11 +108,10 @@ export const fetchUserOpportunityPrefs = () => {
             userCustomOppNameMap[pref.opp_number] = pref.custom_header_tab;
           }
         });
-        userFavouritesArr = new Array(userFavourites);
-        console.log('userFavArr', userFavouritesArr, userCustomOppNameMap);
+        userFavouritesArr = new Array(...userFavourites);
         dispatch({
           type: SET_USER_FAVOURITES,
-          payload: new Array(...userFavourites)
+          payload: userFavouritesArr
         });
         dispatch({
           type: SET_CUSTOM_NAME_MAP,

@@ -15,6 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import featureFlags from '../../constants/featureFlags';
 import { SocketContext } from '../../context/SocketContext';
 import { saveRecentOppActivity } from '../../api/proposals';
+import Typography from 'apollo-react/components/Typography';
+import Pencil from '../common/atoms/Pencil';
+import {
+  onEditCustomName,
+  toggleEditCustomNameModal
+} from '../../redux/actions/proposal-actions';
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -83,8 +89,9 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
         key={uuidv4()}
         className="headers"
         style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${filteredColumns.length}, 1fr)`
+          gridTemplateColumns: flags['customOpportunityNameFlag']
+            ? `minmax(240px, 1fr) repeat(${filteredColumns.length - 1}, 1fr)`
+            : `repeat(${filteredColumns.length}, 1fr)`
         }}
       >
         {filteredColumns.map(column => {
@@ -164,6 +171,11 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
       }
     }
 
+    function handleEditCustomName(oppNo, customName) {
+      dispatch(onEditCustomName(oppNo, customName));
+      dispatch(toggleEditCustomNameModal(true));
+    }
+
     let renderCols = columns.filter(col =>
       hideStatus
         ? col !== STATUS_COLUMN && !SKIP_COLUMNS.includes(col)
@@ -178,15 +190,57 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
         key={uuidv4()}
         className="row"
         style={{
-          gridTemplateColumns: `repeat(${filteredColumns.length}, 1fr)`
+          gridTemplateColumns: flags['customOpportunityNameFlag']
+            ? `minmax(240px, 1fr) repeat(${filteredColumns.length - 1}, 1fr)`
+            : `repeat(${filteredColumns.length}, 1fr)`
         }}
       >
         {orderedColumns.map(col => {
           switch (col) {
             case 'opportunity number':
               return (
-                <div key={uuidv4()} className="cell">
+                <div
+                  key={uuidv4()}
+                  className="cell"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto 1fr',
+                    columnGap: '0.25rem',
+                    alignItems: 'center'
+                  }}
+                >
                   <Link to={`${OPPORTUNITY}${row[col]}`}>{row[col]}</Link>
+                  {flags['customOpportunityNameFlag'] ? (
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'auto 1fr',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Typography
+                        variant="caption"
+                        className={classNames({
+                          greytext: true,
+                          'font-weight-very-light': !row['customName']
+                        })}
+                        style={{ paddingRight: '.5rem' }}
+                        noWrap
+                        title={row['customName'] || ''}
+                      >
+                        {row['customName'] || 'Add Custom Name'}
+                      </Typography>
+                      <Pencil
+                        onClick={() =>
+                          handleEditCustomName(
+                            row['opportunity number'],
+                            row['customName']
+                          )
+                        }
+                        size={10}
+                      />
+                    </div>
+                  ) : null}
                 </div>
               );
             case 'bidNo':
