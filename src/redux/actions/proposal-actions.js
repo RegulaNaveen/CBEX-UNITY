@@ -126,6 +126,7 @@ const {
 } = REDUX_TYPES.PROPOSAL;
 
 const { ON_GET_PROPOSALS } = REDUX_TYPES.PROPOSALS;
+const { SET_CUSTOM_NAME_MAP } = REDUX_TYPES.SSO_AUTH;
 
 /**
  * Updates bidNo Query param without page reload
@@ -1805,6 +1806,29 @@ export const updateNextMilestone = (oppNumber, nextMilestone) => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+};
+
+export const updateCustomNameAction = (oppNo, customName) => {
+  return async (dispatch, getState) => {
+    let proposals = getProposals(getState());
+    let proposalInfo = getProposalDetails(getState());
+    let customNameMap = selectCustomNameMap(getState()).toJS();
+    customNameMap[oppNo] = customName;
+    dispatch({ type: SET_CUSTOM_NAME_MAP, payload: cloneDeep(customNameMap) });
+    const proposalIndex = proposals.findIndex(
+      proposal => proposal['opportunity number'] === oppNo
+    );
+    if (proposalIndex > -1) {
+      proposals[proposalIndex]['customName'] = customName;
+      dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+    if (proposalInfo['CRM #'] == oppNo) {
+      dispatch({
+        type: SET_CUSTOM_NAME,
+        payload: customName
+      });
     }
   };
 };
