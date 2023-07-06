@@ -18,7 +18,7 @@ serviceWorker.unregister();
 
 const Dashboard = () => {
   const { trackPageView } = useMatomo();
-  const [filterApply, setFilterApply] = useState(false);
+  const [filterApply, setFilterApply] = useState(0);
   const dispatch = useDispatch();
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
 

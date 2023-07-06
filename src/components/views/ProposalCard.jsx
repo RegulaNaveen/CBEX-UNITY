@@ -326,7 +326,7 @@ const ProposalCard = ({
           <div>
             <Tooltip variant="dark" title="Days until Bid Due" placement="top">
               <p>
-                {daysRemain <= 0 || bidStopStatus ? (
+                {daysRemain < 0 || bidStopStatus ? (
                   <Minus value="medium" style={{ color: '#df216d' }} />
                 ) : (
                   daysRemain

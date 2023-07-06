@@ -77,13 +77,16 @@ class Tabbar extends Component<Props, State> {
   fileterCount = () => {
     const filtersArr = [];
     const { filters } = this.state;
+    const { getFilterStatus } = this.props;
     for (const key in filters) {
       if (filters[key])
         filtersArr.push(
           `${key.toUpperCase()} = ${JSON.stringify(filters[key])}`
         );
     }
-    this.setState({ filterCount: filtersArr.length });
+    this.setState({ filterCount: filtersArr.length }, () => {
+      getFilterStatus(this.state.filterCount);
+    });
   };
 
   handleChange = (index: number) => {
@@ -128,10 +131,9 @@ class Tabbar extends Component<Props, State> {
   };
 
   toggleFilters = () => {
-    const { showFilters } = this.state;
+    const { showFilters, filterCount } = this.state;
     const { getFilterStatus } = this.props;
     this.setState({ showFilters: !showFilters });
-    getFilterStatus(!showFilters);
     this.trackMatomoEventFilterToggle(!showFilters);
   };
 
@@ -240,10 +242,10 @@ class Tabbar extends Component<Props, State> {
     const { selected, showFilters, filterCount, filters } = this.state;
 
     // Filter out favorite tab if flag is off
-    const latestChildren = allFlags.favouriteFlag ? 
-                            children : 
-                            children.filter(item => item.props.label !== 'Favorites');
-    
+    const latestChildren = allFlags.favouriteFlag
+      ? children
+      : children.filter(item => item.props.label !== 'Favorites');
+
     return (
       <div className="tab-wrapper">
         <div className="tabs-items">
@@ -283,7 +285,7 @@ class Tabbar extends Component<Props, State> {
               filters={filters}
             />
           )}
-          {children[selected]}
+          {latestChildren[selected]}
         </div>
       </div>
     );

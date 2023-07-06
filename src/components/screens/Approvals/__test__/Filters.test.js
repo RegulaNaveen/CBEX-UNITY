@@ -28,7 +28,7 @@ describe.skip('Approval Section Component', () => {
     );
   });
 
-  it('should component render', async () => {
+  it.skip('should component render', async () => {
     expect(wrapper).toBeDefined();
     await expect(screen.findByText(/ Filters/i)).toBeTruthy();
   });
