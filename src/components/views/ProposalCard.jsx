@@ -123,7 +123,26 @@ const ProposalCard = ({
       <div className="header-section">
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
-          <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto 1fr',
+              alignItems: 'center'
+            }}
+          >
+            <Typography
+              variant="body1"
+              className={classNames({
+                greytext: true,
+                NO_DATA_PLACEHOLDER: opportunityName === NO_DATA
+              })}
+              style={{ paddingRight: '.5rem' }}
+              noWrap
+              title={(opportunityName !== NO_DATA && opportunityName) || ''}
+            >
+              {opportunityName}
+            </Typography>
+          </div>
           {flags['customOpportunityNameFlag'] ? (
             <div
               style={{

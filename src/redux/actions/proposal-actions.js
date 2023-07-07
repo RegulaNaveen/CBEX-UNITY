@@ -1430,7 +1430,7 @@ export const getOpportunity = (
       });
       dispatch({
         type: SET_NEXT_MILESTONE,
-        payload: data[0].proposal.nextMilestone
+        payload: data[0].proposal.nextMilestone || []
       });
     } catch (err) {
       console.log('error occurred ', err);
