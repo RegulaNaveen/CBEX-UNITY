@@ -17,14 +17,17 @@ const { PROFILE_API_URL } = API.PROFILE;
 let onGoingDashboardCall;
 const { CancelToken } = newAxios;
 
-export const onGetAllProposals = (payload): Promise<Object> => {
+export const onGetAllProposals = (payload, userEmail = ''): Promise<Object> => {
   if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
-
-  return axiosInstance.post(PROPOSAL_API_ALL, payload, {
+  const obj = {
+    payload
+  };
+  return axiosInstance.post(PROPOSAL_API_ALL, obj, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
     cancelToken: new CancelToken(function executor(c) {
       onGoingDashboardCall = c;
-    })
+    }),
+    params: { userEmail }
   });
 };
 export const onGetByStatus = (

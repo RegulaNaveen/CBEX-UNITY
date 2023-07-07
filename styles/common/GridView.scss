@@ -2,11 +2,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   align-items: center;
-  grid-gap: 150px;
+  grid-gap: 100px;
   grid-row-gap: 40px;
   padding: 20px 0 40px 0;
   max-width: 1400px;
   margin: 0 auto;
+  justify-content: center;
 
   &.is-centered {
     justify-items: center;
@@ -14,7 +15,13 @@
 }
 @media (max-width: 1400px) and (max-height: 175vh) {
   .grid-view {
-    grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(338px, 1fr));
+  }
+}
+
+@media (min-width: 1400px) {
+  .grid-view {
+    grid-template-columns: repeat(auto-fit, minmax(373px, 1fr));
   }
 }
 

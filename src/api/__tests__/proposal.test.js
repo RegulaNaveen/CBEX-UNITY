@@ -22,6 +22,8 @@ describe('proposal api functions', () => {
 
   test('getUsersListApiCall should throw error on failure', () => {
     sandbox.stub(axiosInstance, 'get').rejects(['Unauthorized access']);
-    expect(() => getUsersListApiCall()).rejects.toStrictEqual(['Unauthorized access']);
+    expect(() => getUsersListApiCall()).rejects.toStrictEqual([
+      'Unauthorized access'
+    ]);
   });
 });

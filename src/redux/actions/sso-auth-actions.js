@@ -118,11 +118,11 @@ export const fetchUserOpportunityPrefs = () => {
             );
           }
         });
-        userFavouritesArr = new Array(userFavourites);
+        userFavouritesArr = new Array(...userFavourites);
         console.log('userFavArr', userFavouritesArr, userCustomOppNameMap, userFavouritesUpdatedDateMap);
         dispatch({
           type: SET_USER_FAVOURITES,
-          payload: new Array(...userFavourites)
+          payload: userFavouritesArr
         });
         dispatch({
           type: SET_CUSTOM_NAME_MAP,

@@ -24,6 +24,7 @@ import {
   onEditCustomName,
   toggleEditCustomNameModal
 } from '../../redux/actions/proposal-actions';
+import classNames from 'classnames';
 
 type Props = {
   title: string,
@@ -125,23 +126,29 @@ const ProposalCard = ({
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
           <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'auto 1fr',
-              alignItems: 'center'
-            }}
-          >
-            <Typography
-              variant="caption"
-              className="greytext"
-              noWrap
-              title={customName || ''}
+          {flags['customOpportunityNameFlag'] ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                alignItems: 'center'
+              }}
             >
-              {customName || 'New Custom Name'}
-            </Typography>
-            <Pencil onClick={handleEditCustomName} size={10} />
-          </div>
+              <Typography
+                variant="caption"
+                className={classNames({
+                  greytext: true,
+                  'font-weight-very-light': !customName
+                })}
+                style={{ paddingRight: '.5rem' }}
+                noWrap
+                title={customName || ''}
+              >
+                {customName || 'Add Custom Name'}
+              </Typography>
+              <Pencil onClick={handleEditCustomName} />
+            </div>
+          ) : null}
         </div>
         {flags[featureFlags.FAVOURITE_FLAG] ? (
           <div className="favourite-container">
@@ -178,7 +185,7 @@ const ProposalCard = ({
           <span>
             <b>Current Bid:</b>
           </span>
-          <span className={checkNoDataClass(bidNo)}>{bidNo}</span>
+          <span className={checkNoDataClass(bidNo)}>Bid {bidNo}</span>
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
@@ -249,7 +256,7 @@ const ProposalCard = ({
               title="Strategy Development"
               placement="top"
             >
-              <House fontSize="large" background-color="#9E54B0" />
+              <House fontSize="large" htmlColor="#9E54B0" />
             </Tooltip>
           </Link>
         </div>
@@ -283,7 +290,7 @@ const ProposalCard = ({
               <ThumbsUp
                 fontSize="large"
                 htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-                style={{ transform: 'scaleX(-1)', height: '41px' }}
+                style={{ height: '41px' }}
               />
             </Tooltip>
           ) : (
@@ -292,7 +299,7 @@ const ProposalCard = ({
                 <ThumbsUp
                   fontSize="large"
                   htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
-                  style={{ transform: 'scaleX(-1)', height: '36px' }}
+                  style={{ height: '36px' }}
                 />
               </Tooltip>
             </Link>
@@ -321,7 +328,7 @@ const ProposalCard = ({
           <div>
             <Tooltip variant="dark" title="Days until Bid Due" placement="top">
               <p>
-                {daysRemain <= 0 || bidStopStatus ? (
+                {daysRemain < 0 || bidStopStatus ? (
                   <Minus value="medium" style={{ color: '#df216d' }} />
                 ) : (
                   daysRemain
