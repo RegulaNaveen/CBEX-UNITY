@@ -5,7 +5,7 @@ import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getQuestionsFilterApplied } from '../actions/proposal-actions';
-
+import { OpportunitySFUpDATE } from '../../constants/app';
 const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
@@ -80,7 +80,8 @@ const {
   SET_NEXT_MILESTONE,
   TOGGLE_EDIT_CUSTOM_NAME_MODAL,
   SET_EDIT_OPP_INFO,
-  CLEAR_EDIT_OPP_INFO
+  CLEAR_EDIT_OPP_INFO,
+  DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -378,6 +379,7 @@ const setOpportunityInfo = (state, action) => {
     });
     milestoneGroup = milestoneGroup.set('logic', 'OR');
     questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
+    console.log('11111111111111', proposalDetails);
     return state
       .set('proposalDetails', proposalDetails)
       .set('proposalQuestions', proposalQuestions)
@@ -1317,6 +1319,22 @@ const clearEditOppInfo = state => {
   return state.set('oppNoEditing', '').set('customNameEditing', '');
 };
 
+const updateOportunityDetailData = (state, action) => {
+  const { data } = action.payload;
+  const proposalDetail = state.get('proposalDetails');
+  if (
+    data &&
+    proposalDetail &&
+    proposalDetail &&
+    proposalDetail['CRM #'] == data.oppNo
+  ) {
+    const mapper = OpportunitySFUpDATE;
+    proposalDetail[mapper[data.sfField]] = data.answer;
+    return state.set('proposalDetails', { ...proposalDetail });
+  }
+  return state;
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1399,7 +1417,8 @@ const actionMap = {
   [SET_NEXT_MILESTONE]: onSetNextMilestone,
   [TOGGLE_EDIT_CUSTOM_NAME_MODAL]: toggleEditCustomNameModal,
   [SET_EDIT_OPP_INFO]: setEditOppInfo,
-  [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo
+  [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo,
+  [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData
 };
 
 export default function(

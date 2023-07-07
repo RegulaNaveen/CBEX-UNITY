@@ -1,6 +1,7 @@
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
+import { DashboardSFUpDATE } from '../../constants/app';
 import type { ApiAction } from '../actions/action-types';
 
 const {
@@ -14,7 +15,8 @@ const {
   SET_PAGE,
   SET_NUM_OF_ROWS,
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
-  NON_EDITABLE_SF_FIELD
+  NON_EDITABLE_SF_FIELD,
+  DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -70,6 +72,22 @@ const setPage = (state, action) => state.set('page', action.payload);
 
 const setNumOfRows = (state, action) => state.set('numRows', action.payload);
 
+const setProposalDetails = (state, action) => {
+  const data = action.payload;
+  const mapper = DashboardSFUpDATE;
+  const proposals = state.get('proposals');
+  if (proposals) {
+    const updateProposals = proposals.map(value => {
+      if (data.data.oppNo === value['opportunity number']) {
+        value[mapper[data.data.sfField]] = data.data.answer;
+      }
+      return value;
+    });
+    return state.set('proposals', updateProposals);
+  }
+  return state;
+};
+
 const setAssignedTabNumOfRows = (state, action) =>
   state.set('assignTabRows', action.payload);
 
@@ -87,7 +105,8 @@ const actionMap = {
   [SET_PAGE]: setPage,
   [SET_NUM_OF_ROWS]: setNumOfRows,
   [SET_ASSIGNED_TAB_NUM_OF_ROWS]: setAssignedTabNumOfRows,
-  [NON_EDITABLE_SF_FIELD]: setNonEditableField
+  [NON_EDITABLE_SF_FIELD]: setNonEditableField,
+  [DASHBOARD_PROPOSAL_DETAIL]: setProposalDetails
 };
 
 export default function(

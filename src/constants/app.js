@@ -35,6 +35,34 @@ const PROPOSAL = {
   ATTENDEES: 'Attendees'
 };
 
+export const DashboardSFUpDATE = {
+  Phase_P__c: 'phase',
+  Name: 'customer',
+  Legacy_Quintiles_Opportunity_Number__c: 'CRM #',
+  Bid_Due_Date__c: 'bid due date',
+  Line_of_Business__c: 'Line of business',
+  Is_this_IQVIA_Biotech__c: 'Is this IQVIA Biotech',
+  Therapy_Area__c: 'Therapeutic area',
+  Protocol_Number__c: 'protocol number',
+  Drug_Product_Name__c: 'Product name',
+  Verbatim_Indication_Term__c: 'verbatim indication',
+  StageName: 'stage'
+};
+
+export const OpportunitySFUpDATE = {
+  Phase_P__c: 'Phase',
+  Name: 'Customer',
+  Legacy_Quintiles_Opportunity_Number__c: 'CRM #',
+  Bid_Due_Date__c: 'Bid due date',
+  Line_of_Business__c: 'Line of business',
+  Is_this_IQVIA_Biotech__c: 'Is this IQVIA Biotech',
+  Therapy_Area__c: 'Therapeutic area',
+  Protocol_Number__c: 'Protocol number',
+  Drug_Product_Name__c: 'Product name',
+  Verbatim_Indication_Term__c: 'Verbatim indication',
+  StageName: 'stage'
+};
+
 const PROFILE = {
   ACCOUNT_PREFERENCES: 'Account Preferences',
   RECENT_ACTIVITY: 'Recent Activity',

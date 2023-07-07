@@ -21,7 +21,8 @@ import {
   deleteProposalQuestionFromSocket,
   setProposalQuestionFromSocket,
   widgetUpdate,
-  updateNextMilestone
+  updateNextMilestone,
+  updateDashboardProposal
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -190,6 +191,29 @@ const SocketContextProvider = props => {
               oppNumber,
               favourite,
               ...proposalDetails
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateDashboardProposalCard = (oppNumber, sfField, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'SF_PROPOSAL_DETAIL_UPDATE',
+          body: {
+            event: 'SF_PROPOSAL_DETAIL_UPDATE',
+            data: {
+              oppNumber,
+              sfField,
+              answer
             }
           }
         })
@@ -372,6 +396,7 @@ const SocketContextProvider = props => {
           updateQuestionLock,
           updateQuestionUnlock,
           getQuestionLockDetails,
+          updateDashboardData,
           setProposalAnswerDatafromSocket,
           setNotApplicableQuestionFromSocket,
           setPriceModelerRecalculationStatus,
@@ -507,6 +532,9 @@ const SocketContextProvider = props => {
             case 'FAVOURITE':
               const { oppNumber, favourite } = data.data;
               updateFavouriteAction(oppNumber, favourite, { ...data.data });
+              break;
+            case 'SF_PROPOSAL_DETAIL_UPDATE':
+              updateDashboardData(data);
               break;
 
             case 'NEXT_MILESTONE_UPDATE':
@@ -688,6 +716,12 @@ const SocketContextProvider = props => {
     );
   };
 
+  const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateDashboardProposalCard(oppNo, sfField, answer, null)
+    );
+  };
+
   const addQuestionWrapper = questionData => {
     waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
   };
@@ -793,7 +827,8 @@ const SocketContextProvider = props => {
         approvalSectionDuplicatedWrapper,
         approvalSectionDeletingWrapper,
         approvalSectionDeletedWrapper,
-        updateFavouriteWrapper
+        updateFavouriteWrapper,
+        updateDashboardSFValueWrapper
       }}
     >
       {props.children}
@@ -815,6 +850,7 @@ const mapDispatchToProps = {
   updateQuestionLock: updateQuestionLockByUser,
   updateQuestionUnlock: updateQuestionUnlockByUser,
   getQuestionLockDetails: getQuestionLockDetailsAll,
+  updateDashboardData: updateDashboardProposal,
   setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket,
   setNotApplicableQuestionFromSocket: setNotApplicableQuestionFromSocket,
   setPriceModelerRecalculationStatus: setPriceModelerRecalculationStatusAction,
