@@ -218,23 +218,19 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                         alignItems: 'center'
                       }}
                     >
-                      <Tooltip
-                        title={row['customName'] || 'Add Custom Name'}
-                        placement="top"
+                      <Typography
+                        variant="caption"
+                        className={classNames({
+                          greytext: true,
+                          'font-weight-very-light': !row['customName']
+                        })}
+                        style={{ paddingRight: '.5rem' }}
+                        noWrap
+                        title={row['customName'] || ''}
                       >
-                        <Typography
-                          variant="caption"
-                          className={classNames({
-                            greytext: true,
-                            'font-weight-very-light': !row['customName']
-                          })}
-                          style={{ paddingRight: '.5rem' }}
-                          noWrap
-                          title={row['customName'] || ''}
-                        >
-                          {row['customName'] || 'Add Custom Name'}
-                        </Typography>
-                      </Tooltip>
+                        {row['customName'] || 'Add Custom Name'}
+                      </Typography>
+
                       <Pencil
                         onClick={() =>
                           handleEditCustomName(
