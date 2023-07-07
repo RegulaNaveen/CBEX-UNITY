@@ -34,7 +34,10 @@ const loadSidebar = props => {
     favourite,
     customName,
     nextMilestone,
-    handleEditCustomName
+    opportunityName,
+    opportunityStatus,
+    handleEditCustomName,
+    isApprovalCountPresent
   } = props;
   const questions = useSelector(getProposalQuestions);
   const [
@@ -253,7 +256,18 @@ const loadSidebar = props => {
       setFavInProgress(true);
       const favouriteUpdatedDate = moment().format();
       const toggleFavouriteRes = await toggleFavourite(crm, favourite, favouriteUpdatedDate);
-      updateFavouriteWrapper(crm, favourite);
+      const proposalDetails = {
+        dataFromGrid: "data from grid",
+        bidStatus,
+        favourite,
+        customName,
+        nextMilestone,
+        opportunityName,
+        opportunityStatus,
+        isApprovalCountPresent,
+        ...data
+      };
+      updateFavouriteWrapper(crm, favourite, proposalDetails);
       if (window && window.location && window.location.href) {
         const obj = {
           url: window.location.href,

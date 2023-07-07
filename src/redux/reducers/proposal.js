@@ -331,6 +331,8 @@ const setOpportunityInfo = (state, action) => {
           proposal.proposal['isApprovalCountPresent'] || false
         )
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
+        .set('opportunityName', proposal.proposal['opportunityName'] || '')
+        .set('opportunityStatus', proposal.proposal.opportunityOverview['OpportunityStatus'] || '')
         .set('isCurrent', true)
         .set('bidStatus', proposal.proposal['inProgress'] || false)
         .set('agreementId', proposal.proposal['agreementId'] || '')
@@ -402,6 +404,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     accountId,
     proposalDetails,
     opportunityType,
+    opportunityName,
+    opportunityOverview,
     questionTemplateVersionNumber: templateversion,
     isApprovalCountPresent,
     proposalDate
@@ -414,6 +418,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     questionTemplateVersionNumber: templateversion || '',
     isApprovalCountPresent: isApprovalCountPresent || false,
     opportunityType: opportunityType || '',
+    opportunityName: opportunityName || '',
+    opportunityStatus: opportunityOverview.OpportunityStatus || '',
     agreementId: agreementId || '',
     accountId: accountId || '',
     opportunityId: proposalDetails['opportunityId'],
@@ -511,6 +517,8 @@ const addNewBid = (state: Map, action: Object): Map => {
       data.proposal['isApprovalCountPresent'] || false
     )
     .set('opportunityType', data.proposal['opportunityType'] || '')
+    .set('opportunityName', data.proposal['opportunityName'] || '')
+    .set('opportunityStatus', data.proposal.opportunityOverview['OpportunityStatus'] || '')
     .set('isCurrent', true)
     .set('bidStatus', data.proposal['inProgress'] || false)
     .set('pertinentDetails', data.proposal.proposalDetails.pertinentDetails)

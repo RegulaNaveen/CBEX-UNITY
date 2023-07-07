@@ -135,7 +135,7 @@ const TableView = ({ data, hideStatus }: Props) => {
           favourite,
           favouriteUpdatedDate
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite, proposalDetails);
+        updateFavouriteWrapper(row[LINK_COLUMN], favourite, row);
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],

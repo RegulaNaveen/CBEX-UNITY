@@ -40,11 +40,12 @@ type Props = {
   proposalId: string,
   approvalsCount: any,
   isApprovalCountPresent: Boolean,
-  allFlags: object,
+  allFlags: Object,
   bidStatus: boolean,
   favourite: boolean,
   bidStopStatus: boolean,
-  tabIndex: number
+  customName: string,
+  proposalDetails: Object
 };
 
 const ProposalCard = ({
@@ -65,25 +66,9 @@ const ProposalCard = ({
   allFlags,
   favourite,
   bidStopStatus,
-  tabIndex,
-  customName
+  customName,
+  proposalDetails
 }: Props) => {
-  const proposalDetails = { 
-    opportunityName,
-    daysRemain,
-    dueDate,
-    customer,
-    protocolNumber,
-    opportunityStage,
-    bidNo,
-    phase,
-    therapeuticArea,
-    verbatimIndication,
-    bidStopStatus,
-    tabIndex,
-    isApprovalCountPresent,
-    customName
-  };
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
 

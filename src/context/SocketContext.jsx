@@ -506,7 +506,7 @@ const SocketContextProvider = props => {
 
             case 'FAVOURITE':
               const { oppNumber, favourite } = data.data;
-              updateFavouriteAction(oppNumber, favourite, { ...data.data });
+              updateFavouriteAction(oppNumber, favourite, data.data);
               break;
 
             case 'NEXT_MILESTONE_UPDATE':

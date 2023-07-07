@@ -35,6 +35,27 @@ function removeDuplicates(arr) {
       index) => arr.indexOf(item) === index);
 }
 
+const formatProposalGrid = (proposal) => {
+
+  const formatted = {
+    'bid due date': proposal['Bid due date'],
+    'opportunity number': proposal['CRM #'],
+    'protocol number': proposal['Protocol number'],
+    'opportunity status': proposal['opportunityStatus'],
+    'verbatim indication': proposal['Verbatim indication'],
+    bidNo: proposal['bidNo'],
+    isFavourite: proposal.isFavourite,
+    customer: proposal.Customer,
+    customName: proposal.customName,
+    bidStopStatus: proposal.bidStatus,
+    nextMilestone: proposal.nextMilestone,
+    opportunityName: proposal.opportunityName,
+    isApprovalCountPresent: proposal.isApprovalCountPresent,
+  };
+
+  return formatted;
+};
+
 const formatProposal = (
   proposal: Object,
   favoritesMap: Object,
@@ -370,7 +391,7 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
   }
 };
 
-export const updateProposal = (oppNumber, favourite) => async (
+export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   dispatch,
   getState
 ) => {
@@ -385,9 +406,15 @@ export const updateProposal = (oppNumber, favourite) => async (
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
 
-    let proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
+    const proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
     if(!proposalCheck && favourite) {
-      proposalsFavourite.unshift(proposals[proposalIndex]);
+      const { dataFromGrid } = proposalDetails;
+      proposalDetails['isFavourite'] = favourite;
+      proposals[proposalIndex] ? 
+        proposalsFavourite.unshift(proposals[proposalIndex]) 
+        : dataFromGrid 
+        ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails)) 
+        : proposalsFavourite.unshift(proposalDetails);
       dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
     }
     if(proposalCheck && !favourite) {
