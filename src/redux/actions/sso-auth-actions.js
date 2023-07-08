@@ -179,6 +179,7 @@ export const updateFavourite = (oppNumber, favourite, proposalDetails) => {
       } else {
         favourites = favourites.filter(fav => fav !== oppNumber);
       }
+      favourites = favourites.filter((item, index) => favourites.indexOf(item) === index);
       dispatch({
         type: SET_USER_FAVOURITES,
         payload: favourites

@@ -413,6 +413,7 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
 
     const proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
     if(!proposalCheck && favourite) {
+      delete proposalDetails.favourite;
       const { dataFromGrid } = proposalDetails;
       proposalDetails['isFavourite'] = favourite;
       proposals[proposalIndex] ? 

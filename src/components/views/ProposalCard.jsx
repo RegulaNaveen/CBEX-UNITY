@@ -94,7 +94,7 @@ const ProposalCard = ({
       setFavInProgress(true);
       const favouriteUpdatedDate = moment().format();
       const toggleFavouriteRes = await toggleFavourite(title, favourite, favouriteUpdatedDate);
-      updateFavouriteWrapper(title, favourite, { ...proposalDetails });
+      updateFavouriteWrapper(title, favourite, proposalDetails);
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,
