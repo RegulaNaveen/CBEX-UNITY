@@ -103,9 +103,9 @@ const ProposalCard = ({
       saveRecentOppActivity(obj);
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(title, favourite));
+          await dispatch(updateFavourite(title, favourite, proposalDetails));
         } else {
-          await dispatch(updateFavourite(title, favourite));
+          await dispatch(updateFavourite(title, favourite, proposalDetails));
         }
       }
     } catch (e) {

@@ -7,7 +7,6 @@ import Typography from 'apollo-react/components/Typography';
 import Card from 'apollo-react/components/Card';
 import {
   getProposalTypeView,
-  getProposals,
   getFavouriteProposals,
   getProposalsLoading,
   getFilteredProposals,
@@ -25,7 +24,6 @@ import ComplexPagination from '../../common/ComplexPagination';
 
 type Props = {
   selectedViewType: 0 | 1,
-  proposals: [Object],
   favoriteProposals: [Object],
   filteredProposals: [Object],
   favourites: [string];
@@ -61,7 +59,6 @@ class FavoritesTab extends Component<Props, State> {
     const {
       page,
       numRows,
-      proposals,
       filteredProposals,
       favoriteProposals,
       isFilteringProposals
@@ -88,9 +85,9 @@ class FavoritesTab extends Component<Props, State> {
 
     if (pageContent && pageContent.length) {
       if (selectedViewType === 0) {
-        return <TableView data={pageContent} tabIndex={1} hideStatus/>;
+        return <TableView data={pageContent} hideStatus />;
       } else {
-        return <GridView data={pageContent} allFlags={allFlags} tabIndex={1}/>;
+        return <GridView data={pageContent} allFlags={allFlags} />;
       }
     } else {
       return (
@@ -108,7 +105,6 @@ class FavoritesTab extends Component<Props, State> {
 
   render() {
     const {
-      proposals,
       loading,
       isFilteringProposals,
       filteredProposals,
@@ -116,9 +112,6 @@ class FavoritesTab extends Component<Props, State> {
       setPage,
       setRows,
     } = this.props;
-
-    // const favouriteProposals = this.favoriteProposals(proposals);
-    // const favouriteFilteredProposals = this.favoriteProposals(filteredProposals);
     
     const showPagination = isFilteringProposals
       ? filteredProposals.length > 15
@@ -153,7 +146,6 @@ class FavoritesTab extends Component<Props, State> {
 
 const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state),
-  proposals: getProposals(state),
   favoriteProposals: getFavouriteProposals(state),
   favourites: selectFavourites(state),
   loading: getProposalsLoading(state),

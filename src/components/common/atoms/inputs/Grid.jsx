@@ -278,9 +278,9 @@ const loadSidebar = props => {
       }
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(crm, favourite));
+          await dispatch(updateFavourite(crm, favourite, proposalDetails));
         } else {
-          await dispatch(updateFavourite(crm, favourite));
+          await dispatch(updateFavourite(crm, favourite, proposalDetails));
         }
       }
     } catch (e) {

@@ -161,9 +161,9 @@ const TableView = ({ data, hideStatus }: Props) => {
         saveRecentOppActivity(obj);
         if (toggleFavouriteRes && toggleFavouriteRes.data) {
           if (toggleFavouriteRes.data.favourite) {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite));
+            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, row));
           } else {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite));
+            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, row));
           }
         }
       } catch (e) {
