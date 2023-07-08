@@ -327,6 +327,7 @@ const setOpportunityInfo = (state, action) => {
           'questionTemplateVersionNumber',
           proposal.proposal['questionTemplateVersionNumber'] || ''
         )
+        .set('bidStopStatus', proposal.proposal['bidStopStatus'] || false)
         .set(
           'isApprovalCountPresent',
           proposal.proposal['isApprovalCountPresent'] || false
@@ -379,7 +380,6 @@ const setOpportunityInfo = (state, action) => {
     });
     milestoneGroup = milestoneGroup.set('logic', 'OR');
     questionsFilter = questionsFilter.set('milestoneGroup', milestoneGroup);
-    console.log('11111111111111', proposalDetails);
     return state
       .set('proposalDetails', proposalDetails)
       .set('proposalQuestions', proposalQuestions)
@@ -405,6 +405,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     proposalDetails,
     opportunityType,
     questionTemplateVersionNumber: templateversion,
+    bidStopStatus,
     isApprovalCountPresent,
     proposalDate
   } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
@@ -414,6 +415,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     pertinentDetails: payload.bid.pertinentDetails,
     bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
+    bidStopStatus: bidStopStatus,
     isApprovalCountPresent: isApprovalCountPresent || false,
     opportunityType: opportunityType || '',
     agreementId: agreementId || '',
@@ -508,6 +510,7 @@ const addNewBid = (state: Map, action: Object): Map => {
       'questionTemplateVersionNumber',
       data.proposal['questionTemplateVersionNumber'] || ''
     )
+    .set('bidStopStatus', proposal.proposal['bidStopStatus'] || false)
     .set(
       'isApprovalCountPresent',
       data.proposal['isApprovalCountPresent'] || false

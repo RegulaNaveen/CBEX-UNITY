@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import Grid from 'apollo-react/components/Grid';
+import Minus from 'apollo-react-icons/Minus';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
+import { parseMomentDate, getRemainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
 import Favourite from '../Favourite';
 import Pencil from '../Pencil';
@@ -32,7 +32,8 @@ const loadSidebar = props => {
     favourite,
     customName,
     nextMilestone,
-    handleEditCustomName
+    handleEditCustomName,
+    bidStopStatus
   } = props;
   const [
     detailsForBackendSectionData,
@@ -96,7 +97,7 @@ const loadSidebar = props => {
   } = data;
   const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
-  const daysRemain = remainingDays(date);
+  const daysRemain = getRemainingDays(date);
   const redirect = () => {
     window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
   };
@@ -104,7 +105,6 @@ const loadSidebar = props => {
   if (windowSize <= 1200) {
     isBladeOpen = true;
   }
-
   useEffect(() => {
     if (product?.current?.clientWidth < product?.current?.scrollWidth)
       setisProductTooltip(true);
@@ -472,9 +472,15 @@ const loadSidebar = props => {
             Days Until Due
           </Typography>
           <p className="boldtext greencolor lesslineheight">
-            {bidStatus
-              ? renderProcessingTxt
-              : detailsForBackendSectionData?.bidDueDate || daysRemain}
+            {bidStatus ? (
+              renderProcessingTxt
+            ) : detailsForBackendSectionData?.bidDueDate ||
+              daysRemain < 0 ||
+              bidStopStatus ? (
+              <Minus value="medium" style={{ color: '#df216d' }} />
+            ) : (
+              daysRemain
+            )}
           </p>
         </Paper>
       </div>
