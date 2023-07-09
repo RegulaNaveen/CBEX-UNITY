@@ -152,7 +152,7 @@ const TableView = ({ data, hideStatus }: Props) => {
           favourite,
           favouriteUpdatedDate
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite, row);
+        updateFavouriteWrapper(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row);
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],
@@ -161,9 +161,9 @@ const TableView = ({ data, hideStatus }: Props) => {
         saveRecentOppActivity(obj);
         if (toggleFavouriteRes && toggleFavouriteRes.data) {
           if (toggleFavouriteRes.data.favourite) {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, row));
+            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row));
           } else {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, row));
+            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row));
           }
         }
       } catch (e) {
@@ -273,7 +273,14 @@ const TableView = ({ data, hideStatus }: Props) => {
               return (
                 <Tooltip title={statusText} placement="top">
                   <div key={uuidv4()} className="cell">
-                    <p>{statusText}</p>
+                    <p
+                      className={classNames({
+                        'no-data-placeholder':
+                          objectToString(row[STATUS_COLUMN]) === 'No data'
+                      })}
+                    >
+                      {statusText || objectToString(row[STATUS_COLUMN])}
+                    </p>
                   </div>
                 </Tooltip>
               );

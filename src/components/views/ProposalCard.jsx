@@ -94,7 +94,7 @@ const ProposalCard = ({
       setFavInProgress(true);
       const favouriteUpdatedDate = moment().format();
       const toggleFavouriteRes = await toggleFavourite(title, favourite, favouriteUpdatedDate);
-      updateFavouriteWrapper(title, favourite, proposalDetails);
+      updateFavouriteWrapper(title, favourite, favouriteUpdatedDate, proposalDetails);
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,
@@ -103,9 +103,9 @@ const ProposalCard = ({
       saveRecentOppActivity(obj);
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(title, favourite, proposalDetails));
+          await dispatch(updateFavourite(title, favourite, favouriteUpdatedDate, proposalDetails));
         } else {
-          await dispatch(updateFavourite(title, favourite, proposalDetails));
+          await dispatch(updateFavourite(title, favourite, favouriteUpdatedDate, proposalDetails));
         }
       }
     } catch (e) {

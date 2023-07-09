@@ -267,7 +267,7 @@ const loadSidebar = props => {
         isApprovalCountPresent,
         ...data
       };
-      updateFavouriteWrapper(crm, favourite, proposalDetails);
+      updateFavouriteWrapper(crm, favourite, favouriteUpdatedDate, proposalDetails);
       if (window && window.location && window.location.href) {
         const obj = {
           url: window.location.href,
@@ -278,9 +278,9 @@ const loadSidebar = props => {
       }
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(crm, favourite, proposalDetails));
+          await dispatch(updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails));
         } else {
-          await dispatch(updateFavourite(crm, favourite, proposalDetails));
+          await dispatch(updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails));
         }
       }
     } catch (e) {

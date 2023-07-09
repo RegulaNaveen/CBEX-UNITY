@@ -303,9 +303,7 @@ export const onFilteringProposals = (
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
-        const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(getState()).toJS();
-        favouritesUpdatedDateMap.sort((a,b) => (a["updated date"] > b["updated date"]) ? 1 
-                                              : ((b["updated date"] > a["updated date"]) ? -1 : 0)).reverse();
+        
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
@@ -315,11 +313,14 @@ export const onFilteringProposals = (
         );
         
         if(allFlags.favouriteFlag && Number(tabIndex) === 1) {
-          const uniqueFavourites = removeDuplicates(favourites);
+          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(getState()).toJS();
+          favouritesUpdatedDateMap.sort((a,b) => (a["updated date"] > b["updated date"]) ? 1 
+                                              : ((b["updated date"] > a["updated date"]) ? -1 : 0)).reverse();
+          const uniqueFavourites = removeDuplicates(favouritesUpdatedDateMap);
           let orderedProposal = [];
           for( const favorite of uniqueFavourites) {
             for(const proposal of formatted) {
-              if(proposal['opportunity number'] === favorite)
+              if(proposal['opportunity number'] === favorite['opportunity number'])
                 orderedProposal.push(proposal);
             }
           }

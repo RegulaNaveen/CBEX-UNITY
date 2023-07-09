@@ -124,12 +124,12 @@ export const getOppPrefs = async () => {
   });
 };
 
-export const toggleFavourite = async (oppNo, favourite, favourite_updated_date) => {
+export const toggleFavourite = async (oppNo, favourite, favouriteUpdatedDate) => {
   return new Promise((resolve, reject) => {
     axiosInstance
       .put(
         `${INTEGRATIONS_API_URL}/user/favourite/${oppNo}?toggle=${favourite}`,
-        {},
+        {favouriteUpdatedDate},
         {
           headers: {
             'x-api-key': API_KEY,
