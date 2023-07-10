@@ -1800,7 +1800,7 @@ export const updateNextMilestone = (oppNumber, nextMilestone) => {
       let proposals = getProposals(getState());
       let proposalInfo = getProposalDetails(getState());
       const proposalIndex = proposals.findIndex(
-        proposal => proposal['opportunity number'] === oppNo
+        proposal => proposal['opportunity number'] === oppNumber
       );
       if (proposalIndex > -1) {
         proposals[proposalIndex]['nextMilestone'] = nextMilestone;
