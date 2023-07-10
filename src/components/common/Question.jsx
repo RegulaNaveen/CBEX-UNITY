@@ -319,7 +319,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   handleTextChange = (textValue, lastAnswer, editorData) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      sfField,
+      oppNo
+    } = this.props;
     const s1 = textValue
       .trim()
       .split(' ')
@@ -345,6 +352,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
           userData,
           editorData
         );
+        if (sfField && this.context) {
+          this.context.updateDashboardSFValueWrapper(
+            oppNo,
+            sfField,
+            String(textValue).trim()
+          );
+        }
       }
     } else if (!textValue.trim() && lastAnswer.trim()) {
       setProposalAnswer(
@@ -355,6 +369,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
         userData,
         editorData
       );
+      if (sfField && this.context) {
+        this.context.updateDashboardSFValueWrapper(oppNo, sfField, ' ');
+      }
     }
     this.context.questionUnlockWrapper(questionId);
 
@@ -372,7 +389,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionId,
       userData,
       sfField,
-      widgetUpdates
+      widgetUpdates,
+      oppNo
     } = this.props;
     const { value, html, text, htmlExport } = editorData;
 
@@ -393,6 +411,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
         htmlExport
       }
     );
+    if (sfField && this.context) {
+      this.context.updateDashboardSFValueWrapper(
+        oppNo,
+        sfField,
+        String(editorText)
+      );
+    }
     if (sfField === 'Total_Bid_Value_Labor_Direct_Discount__c') {
       if (editorText && editorText?.length > 0)
         widgetUpdates(proposalId, 'Bid_Cost');
@@ -443,7 +468,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
       questionId,
       userData,
       sfField,
-      widgetUpdates
+      widgetUpdates,
+      oppNo
     } = this.props;
     if (lastAnswer !== selectedValue) {
       const dataResponse = await setProposalAnswer(
@@ -453,6 +479,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
         selectedValue,
         userData
       );
+      if (sfField && this.context) {
+        this.context.updateDashboardSFValueWrapper(
+          oppNo,
+          sfField,
+          selectedValue
+        );
+      }
       if (sfField === 'StageName' && selectedValue) {
         const stage = parseInt(selectedValue.match(/\d+/)[0]) >= 4;
         if (stage) widgetUpdates(proposalId, 'Bid_Cost');
@@ -468,7 +501,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   handleDayChange = (selectedDay: string, lastAnswer: Date) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      sfField,
+      oppNo
+    } = this.props;
 
     this.setState({ selectedDay }, () => {
       if (
@@ -483,6 +523,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
           formatTheDate(selectedDay),
           userData
         );
+      if (sfField && this.context) {
+        this.context.updateDashboardSFValueWrapper(
+          oppNo,
+          sfField,
+          formatTheDate(selectedDay)
+        );
+      }
     });
     this.trackMatomoEventSubmitAnswer(selectedDay);
   };
@@ -543,7 +590,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
     selectedValues: Array<string>,
     lastAnswer: Array<string>
   ) => {
-    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    const {
+      setProposalAnswer,
+      proposalId,
+      questionId,
+      userData,
+      sfField,
+      oppNo
+    } = this.props;
     if (!isEqual(lastAnswer, selectedValues) && selectedValues !== undefined) {
       await setProposalAnswer(
         this.context,
@@ -552,6 +606,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
         selectedValues,
         userData
       );
+      if (sfField && this.context) {
+        this.context.updateDashboardSFValueWrapper(
+          oppNo,
+          sfField,
+          selectedValues
+        );
+      }
     }
     this.trackMatomoEventSubmitAnswer(selectedValues);
   };
@@ -694,7 +755,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
             onClick={async () => {
               if (checkDisableFlag()) return;
               setNotApplicableLoading(questionId);
-
               if (!isNotApplicable) {
                 await setProposalAnswer(
                   this.context,
@@ -1496,7 +1556,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     } = this.props;
     let { answers } = this.props;
     let conditionBlankPredicted = false;
-
     answers = answers.reverse();
     answers.forEach((_answer, index) => {
       const currentAnswer =

@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import Grid from 'apollo-react/components/Grid';
+import Minus from 'apollo-react-icons/Minus';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { parseMomentDate, remainingDays } from '../../../../utils/DateUtils';
+import { parseMomentDate, getRemainingDays } from '../../../../utils/DateUtils';
 import { SF_HOST_URL } from '../../../../constants/api';
-import { getProposalQuestions } from '../../../../redux/selectors/proposal';
 import Favourite from '../Favourite';
 import Pencil from '../Pencil';
 import { toggleFavourite } from '../../../../api/sso-auth';
@@ -33,9 +32,9 @@ const loadSidebar = props => {
     favourite,
     customName,
     nextMilestone,
-    handleEditCustomName
+    handleEditCustomName,
+    bidStopStatus
   } = props;
-  const questions = useSelector(getProposalQuestions);
   const [
     detailsForBackendSectionData,
     setDetailsForBackendSectionData
@@ -81,6 +80,7 @@ const loadSidebar = props => {
   const flags = useSelector(state => state.proposal.get('eventflag'));
   const dispatch = useDispatch();
   const { updateFavouriteWrapper } = useContext(SocketContext);
+  const updatedProposalDetail = useSelector(state => state?.proposal);
 
   const {
     'Bid due date': bidDueDate,
@@ -97,7 +97,7 @@ const loadSidebar = props => {
   } = data;
   const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
-  const daysRemain = remainingDays(date);
+  const daysRemain = getRemainingDays(date);
   const redirect = () => {
     window.open(`${SF_HOST_URL}lightning/r/Opportunity/${opportunityId}/view`);
   };
@@ -105,7 +105,6 @@ const loadSidebar = props => {
   if (windowSize <= 1200) {
     isBladeOpen = true;
   }
-
   useEffect(() => {
     if (product?.current?.clientWidth < product?.current?.scrollWidth)
       setisProductTooltip(true);
@@ -166,86 +165,6 @@ const loadSidebar = props => {
     windowSize,
     isOpen
   ]);
-
-  const setDetailsForBackendAnswers = proposalQuestions => {
-    try {
-      const detailsForBackendData = {};
-      proposalQuestions.forEach(question => {
-        if (
-          question.sfField === 'Therapy_Area__c' &&
-          question.sfObject === 'Opportunity'
-        ) {
-          detailsForBackendData.therapeuticArea = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-        if (
-          question.sfField === 'Phase_P__c' &&
-          question.sfObject === 'Opportunity'
-        ) {
-          detailsForBackendData.phase = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-        if (
-          question.sfField === 'Drug_Product_Name__c' &&
-          question.sfObject === 'Opportunity'
-        ) {
-          detailsForBackendData.productName = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-        if (
-          question.sfField === 'Protocol_Number__c' &&
-          question.sfObject === 'Opportunity'
-        ) {
-          detailsForBackendData.protocolNumber = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-        if (
-          question.sfField === 'Line_of_Business__c' &&
-          question.sfObject === 'Opportunity'
-        ) {
-          detailsForBackendData.lineOfBusiness = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-        if (
-          question.sfField === 'Is_this_IQVIA_Biotech__c' &&
-          question.sfObject === 'Opportunity'
-        ) {
-          detailsForBackendData.IsIqviaBiotech = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-        if (
-          question.sfField === 'Bid_Due_Date__c' &&
-          question.sfObject === 'Bid_History__c'
-        ) {
-          detailsForBackendData.bidDueDate = remainingDays(
-            new Date(
-              question?.answers[
-                question?.answers?.length - 1
-              ]?.answer?.toString()
-            )
-          );
-        }
-        if (question.sfField === 'Name' && question.sfObject === 'Account') {
-          detailsForBackendData.customer = question?.answers[
-            question?.answers?.length - 1
-          ]?.answer?.toString();
-        }
-      });
-      setDetailsForBackendSectionData(detailsForBackendData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    setDetailsForBackendAnswers(questions);
-  }, [questions]);
 
   async function onFavouriteToggle(favourite) {
     try {
@@ -559,9 +478,15 @@ const loadSidebar = props => {
             Days Until Due
           </Typography>
           <p className="boldtext greencolor lesslineheight">
-            {bidStatus
-              ? renderProcessingTxt
-              : detailsForBackendSectionData?.bidDueDate || daysRemain}
+            {bidStatus ? (
+              renderProcessingTxt
+            ) : detailsForBackendSectionData?.bidDueDate ||
+              daysRemain < 0 ||
+              bidStopStatus ? (
+              <Minus value="medium" style={{ color: '#df216d' }} />
+            ) : (
+              daysRemain
+            )}
           </p>
         </Paper>
       </div>

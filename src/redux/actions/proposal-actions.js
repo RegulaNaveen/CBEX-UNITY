@@ -122,7 +122,8 @@ const {
   SET_NEXT_MILESTONE,
   SET_EDIT_OPP_INFO,
   CLEAR_EDIT_OPP_INFO,
-  TOGGLE_EDIT_CUSTOM_NAME_MODAL
+  TOGGLE_EDIT_CUSTOM_NAME_MODAL,
+  DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSAL;
 
 const { ON_GET_PROPOSALS } = REDUX_TYPES.PROPOSALS;
@@ -1540,6 +1541,15 @@ export const updateSwitchTempStatusFromWebSocket = data => {
   return async dispatch => {
     dispatch({
       type: SWITCH_TEMP_STATUS,
+      payload: data
+    });
+  };
+};
+
+export const updateDashboardProposal = (data): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: DASHBOARD_PROPOSAL_DETAIL,
       payload: data
     });
   };
