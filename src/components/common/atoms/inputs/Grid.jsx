@@ -255,7 +255,7 @@ const loadSidebar = props => {
     try {
       setFavInProgress(true);
       const favouriteUpdatedDate = moment().format();
-      const toggleFavouriteRes = await toggleFavourite(crm, favourite, favouriteUpdatedDate);
+      const toggleFavouriteRes = await toggleFavourite(crm, favourite);
       const proposalDetails = {
         dataFromGrid: "data from grid",
         bidStatus,

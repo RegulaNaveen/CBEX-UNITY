@@ -149,8 +149,7 @@ const TableView = ({ data, hideStatus }: Props) => {
         const favouriteUpdatedDate = moment().format();
         const toggleFavouriteRes = await toggleFavourite(
           row[LINK_COLUMN],
-          favourite,
-          favouriteUpdatedDate
+          favourite
         );
         updateFavouriteWrapper(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row);
         const obj = {
