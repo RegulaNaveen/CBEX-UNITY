@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import * as serviceWorker from 'register-service-worker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,6 @@ const Dashboard = () => {
   const [filterApply, setFilterApply] = useState(0);
   const dispatch = useDispatch();
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
-
   const getLaunchdarklyFlags = async () => {
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) dispatch(setFlag(flagValue));

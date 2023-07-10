@@ -44,7 +44,8 @@ type Props = {
   bidStatus: boolean,
   favourite: boolean,
   bidStopStatus: boolean,
-  tabIndex: number
+  tabIndex: number,
+  nextMilestone: string
 };
 
 const ProposalCard = ({
@@ -66,7 +67,8 @@ const ProposalCard = ({
   favourite,
   bidStopStatus,
   tabIndex,
-  customName
+  customName,
+  nextMilestone
 }: Props) => {
   const proposalDetails = { tabIndex };
   const [favInProgress, setFavInProgress] = useState(false);
@@ -123,7 +125,26 @@ const ProposalCard = ({
       <div className="header-section">
         <div>
           <p className={checkNoDataClass(title)}>{title}</p>
-          <p className={checkNoDataClass(opportunityName)}>{opportunityName}</p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto 1fr',
+              alignItems: 'center'
+            }}
+          >
+            <Typography
+              variant="body1"
+              className={classNames({
+                greytext: true,
+                NO_DATA_PLACEHOLDER: opportunityName === NO_DATA
+              })}
+              style={{ paddingRight: '.5rem' }}
+              noWrap
+              title={(opportunityName !== NO_DATA && opportunityName) || ''}
+            >
+              {opportunityName}
+            </Typography>
+          </div>
           {flags['customOpportunityNameFlag'] ? (
             <div
               style={{
@@ -142,7 +163,7 @@ const ProposalCard = ({
                 noWrap
                 title={customName || ''}
               >
-                {customName || 'Add Custom Name'}
+                {customName || 'New Custom Name'}
               </Typography>
               <Pencil onClick={handleEditCustomName} />
             </div>
@@ -195,7 +216,9 @@ const ProposalCard = ({
           <span>
             <b>Next Milestone:</b>
           </span>
-          {/* <span className={checkNoDataClass(dueDate)}>{dueDate}</span> */}
+          <span className={checkNoDataClass(nextMilestone)}>
+            {nextMilestone}
+          </span>
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
