@@ -113,6 +113,10 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
             return <h3 key={uuidv4()}>Next Milestone</h3>;
           }
 
+          if (column === 'nextMilestone') {
+            return <h3 key={uuidv4()}>Next Milestone</h3>;
+          }
+
           if (column === 'isFavourite') {
             return ' ';
           }
