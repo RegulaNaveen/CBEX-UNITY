@@ -236,7 +236,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                         noWrap
                         title={row['customName'] || ''}
                       >
-                        {row['customName'] || 'Add Custom Name'}
+                        {row['customName'] || 'New Custom Name'}
                       </Typography>
                       <Pencil
                         onClick={() =>

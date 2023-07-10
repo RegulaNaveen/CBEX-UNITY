@@ -163,7 +163,7 @@ const ProposalCard = ({
                 noWrap
                 title={customName || ''}
               >
-                {customName || 'Add Custom Name'}
+                {customName || 'New Custom Name'}
               </Typography>
               <Pencil onClick={handleEditCustomName} />
             </div>
