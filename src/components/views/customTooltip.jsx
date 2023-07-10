@@ -1,4 +1,3 @@
-import { fontSize, fontWeight } from '@mui/system';
 import React, { useState } from 'react';
 
 // Example custom tooltip component

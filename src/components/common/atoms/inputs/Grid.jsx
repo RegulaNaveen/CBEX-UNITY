@@ -260,34 +260,40 @@ const loadSidebar = props => {
           ) : null}
         </div>
       </Paper>
-      <div className="custom-opp-name-container">
-        <Paper style={styles} className="duedatedsg">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '100%',
-              alignItems: 'center',
-              textAlign: 'left'
-            }}
-          >
-            <div style={{ maxWidth: 'calc(100% - 2rem)' }}>
-              <Typography variant="body2" className="greytext">
-                Custom Name
-              </Typography>
-              <Typography
-                variant="body2"
-                className={customName ? 'boldtext' : 'greytext'}
-                noWrap
-                title={customName || ''}
-              >
-                {customName || 'New Custom Name'}
-              </Typography>
+      {flags['customOpportunityNameFlag'] ? (
+        <div className="custom-opp-name-container">
+          <Paper style={styles} className="duedatedsg">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'flex-end',
+                textAlign: 'left'
+              }}
+            >
+              <div style={{ maxWidth: 'calc(100% - 2rem)' }}>
+                <Typography
+                  variant="body2"
+                  className="greytext"
+                  style={{ paddingRight: '.5rem' }}
+                >
+                  Custom Name
+                </Typography>
+                <Typography
+                  variant="body2"
+                  className={customName ? 'boldtext' : 'greytext'}
+                  noWrap
+                  title={customName || ''}
+                >
+                  {customName || 'Add Custom Name'}
+                </Typography>
+              </div>
+              <Pencil onClick={handleEditCustomName} />
             </div>
-            <Pencil onClick={handleEditCustomName} />
-          </div>
-        </Paper>
-      </div>
+          </Paper>
+        </div>
+      ) : null}
       <div>
         <Paper style={styles} className="duedatedsg">
           <Typography variant="body2" className="greytext">

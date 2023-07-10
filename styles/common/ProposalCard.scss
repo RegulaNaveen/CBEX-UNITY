@@ -12,6 +12,7 @@
     display: grid;
     grid-template-columns: auto 0.5fr;
     border-bottom: $border;
+    padding: 7px 0px;
 
     div:first-child {
       display: flex;

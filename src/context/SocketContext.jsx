@@ -22,7 +22,8 @@ import {
   setProposalQuestionFromSocket,
   widgetUpdate,
   updateNextMilestone,
-  updateDashboardProposal
+  updateDashboardProposal,
+  updateCustomNameAction
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -191,6 +192,28 @@ const SocketContextProvider = props => {
               oppNumber,
               favourite,
               ...proposalDetails
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateCustomName = (oppNumber, customName, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'CUSTOM_NAME_UPDATE',
+          body: {
+            event: 'CUSTOM_NAME_UPDATE',
+            data: {
+              oppNumber,
+              customName
             }
           }
         })
@@ -410,7 +433,8 @@ const SocketContextProvider = props => {
           onApprovalSectionDeleted,
           widgetUpdate,
           updateFavouriteAction,
-          updateNextMilestoneAction
+          updateNextMilestoneAction,
+          updateCustomNameAction
         } = props;
 
         // On Message Recieve
@@ -538,9 +562,13 @@ const SocketContextProvider = props => {
               break;
 
             case 'NEXT_MILESTONE_UPDATE':
-              console.log('NEXT_MILESTONE_UPDATE data', data);
-              // const { oppNumber, nextMilestone } = data.data;
-              // updateNextMilestoneAction(oppNumber, nextMilestone);
+              const { nextMilestone } = data.data;
+              updateNextMilestoneAction(data.oppId, nextMilestone);
+              break;
+
+            case 'CUSTOM_NAME_UPDATE':
+              const { customName } = data.data;
+              updateCustomNameAction(data.data.oppNumber, customName);
               break;
             default:
               break;
@@ -716,6 +744,12 @@ const SocketContextProvider = props => {
     );
   };
 
+  const updateCustomNameWrapper = (oppNo, customName) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateCustomName(oppNo, customName, null)
+    );
+  };
+
   const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {
     waitForSocketConnectionMinInterval(() =>
       updateDashboardProposalCard(oppNo, sfField, answer, null)
@@ -828,6 +862,7 @@ const SocketContextProvider = props => {
         approvalSectionDeletingWrapper,
         approvalSectionDeletedWrapper,
         updateFavouriteWrapper,
+        updateCustomNameWrapper,
         updateDashboardSFValueWrapper
       }}
     >
@@ -864,7 +899,8 @@ const mapDispatchToProps = {
   onApprovalSectionDeleted: onApprovalSectionDeletedAction,
   widgetUpdate,
   updateFavouriteAction: updateFavourite,
-  updateNextMilestoneAction: updateNextMilestone
+  updateNextMilestoneAction: updateNextMilestone,
+  updateCustomNameAction
 };
 
 export default connect(
