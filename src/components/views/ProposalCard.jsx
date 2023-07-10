@@ -44,7 +44,8 @@ type Props = {
   bidStatus: boolean,
   favourite: boolean,
   bidStopStatus: boolean,
-  tabIndex: number
+  tabIndex: number,
+  nextMilestone: string
 };
 
 const ProposalCard = ({
@@ -66,7 +67,8 @@ const ProposalCard = ({
   favourite,
   bidStopStatus,
   tabIndex,
-  customName
+  customName,
+  nextMilestone
 }: Props) => {
   const proposalDetails = { tabIndex };
   const [favInProgress, setFavInProgress] = useState(false);
@@ -214,7 +216,9 @@ const ProposalCard = ({
           <span>
             <b>Next Milestone:</b>
           </span>
-          {/* <span className={checkNoDataClass(dueDate)}>{dueDate}</span> */}
+          <span className={checkNoDataClass(nextMilestone)}>
+            {nextMilestone}
+          </span>
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>

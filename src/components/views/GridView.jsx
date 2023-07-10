@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
 import { parseMomentDate, getRemainingDays } from '../../utils/DateUtils';
+import { getNextMilestone } from '../../utils/utils';
 
 type Props = {
   data: Array<Object>,
@@ -34,7 +35,8 @@ const formatProposal = (proposal: Object) => {
     isApprovalCountPresent: proposal.isApprovalCountPresent || false,
     isFavourite: proposal.isFavourite || false,
     bidStopStatus: proposal.bidStopStatus || false,
-    customName: proposal.customName || ''
+    customName: proposal.customName || '',
+    nextMilestone: getNextMilestone(proposal.nextMilestone)
   };
 
   return formatted;
@@ -80,6 +82,7 @@ class GridView extends Component<Props> {
               favourite={formatted.isFavourite}
               bidStopStatus={formatted.bidStopStatus}
               customName={formatted.customName}
+              nextMilestone={formatted.nextMilestone}
             />
           );
         })}

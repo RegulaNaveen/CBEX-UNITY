@@ -1801,7 +1801,15 @@ export const onSaveCustomName = (oppNo, customName) => {
 export const updateNextMilestone = (oppNumber, nextMilestone) => {
   return async (dispatch, getState) => {
     try {
+      let proposals = getProposals(getState());
       let proposalInfo = getProposalDetails(getState());
+      const proposalIndex = proposals.findIndex(
+        proposal => proposal['opportunity number'] === oppNo
+      );
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
       if (proposalInfo['CRM #'] === oppNumber) {
         dispatch({
           type: SET_NEXT_MILESTONE,
