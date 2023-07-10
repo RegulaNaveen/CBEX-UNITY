@@ -516,6 +516,24 @@ const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
   return matamoObj;
 };
 
+const getNextMilestone = milestones => {
+  if (Array.isArray(milestones) && milestones.length > 0) {
+    let sortedMilestones = milestones.sort((milestoneA, milestoneB) => {
+      let diff = 0;
+      try {
+        diff =
+          moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
+          moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
+      } catch (e) {
+        console.error('[Utils.getNextMilestone] Error in parsing date', e);
+      }
+      return diff;
+    });
+    return sortedMilestones[0].name;
+  }
+  return '';
+};
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -530,5 +548,6 @@ export {
   saveDataInMatomo,
   throttle,
   createMatomoObj,
-  getApprovalCount
+  getApprovalCount,
+  getNextMilestone
 };

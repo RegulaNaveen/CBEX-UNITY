@@ -8,7 +8,8 @@ const CollapsibleQuestionMapping = ({
   milestone,
   title,
   setQuestionToDisplayHistory,
-  isNotepadOpen
+  isNotepadOpen,
+  oppNo
 }) => {
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   return questions.valueSeq().map(questionConfig => {
@@ -55,6 +56,7 @@ const CollapsibleQuestionMapping = ({
           isNotApplicable={questionConfig.get('notApplicable')}
           bidAnswerCopy={questionConfig.get('bidAnswerCopy', false)}
           latestAnsweredBidNo={questionConfig.get('latestAnsweredBidNo', null)}
+          oppNo={oppNo || ''}
           questionDataDestinations={questionConfig.get(
             'questionDataDestinations'
           )}

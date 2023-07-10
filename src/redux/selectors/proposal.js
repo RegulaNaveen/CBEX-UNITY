@@ -2,6 +2,7 @@
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { last, uniq, orderBy, isEmpty } from 'lodash';
 import { createSelector } from 'reselect';
+import moment from 'moment';
 import { shouldInclude } from '../../components/views/export-component/word-template';
 import { extractEmails } from '../../utils/helpers';
 
@@ -448,8 +449,33 @@ export const selectCustomName = createSelector(selectProposal, proposal =>
   proposal?.get('customName', '')
 );
 
-export const selectNextMilestone = createSelector(selectProposal, proposal =>
-  proposal?.get('nextMilestone', '')
+export const selectNextMilestones = createSelector(selectProposal, proposal =>
+  proposal?.get('nextMilestone', [])
+);
+
+export const selectNextMilestone = createSelector(
+  selectNextMilestones,
+  milestones => {
+    if (milestones.length > 0) {
+      let sortedMilestones = milestones.sort((milestoneA, milestoneB) => {
+        let diff = 0;
+        try {
+          diff =
+            moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
+            moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
+        } catch (e) {
+          console.error(
+            '[proposalUtils.getNextMilestone] Error in parsing date',
+            e
+          );
+        }
+        return diff;
+      });
+      console.log('sorted', sortedMilestones);
+      return sortedMilestones[0].name;
+    }
+    return '';
+  }
 );
 
 export const selectOppNoEditing = createSelector(selectProposal, proposal =>

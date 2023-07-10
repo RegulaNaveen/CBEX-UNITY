@@ -337,7 +337,14 @@ export class Opportunity extends Component<Props, State> {
       customName,
       nextMilestone
     } = this.props;
-    const { bidStatus, opportunityName, opportunityStatus, isApprovalCountPresent } = selectedBid.toJS();
+    const { 
+      bidStatus, 
+      bidStopStatus, 
+      opportunityName, 
+      opportunityStatus, 
+      isApprovalCountPresent 
+    } = selectedBid.toJS();
+
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -352,6 +359,7 @@ export class Opportunity extends Component<Props, State> {
           isOpen={isOpen}
           windowSize={windowSize}
           bidStatus={bidStatus}
+          bidStopStatus={bidStopStatus}
           favourite={favourite}
           customName={customName}
           nextMilestone={nextMilestone}

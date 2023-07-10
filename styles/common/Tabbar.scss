@@ -47,6 +47,24 @@
     padding: 10px 0;
   }
 
+  @media (max-width: 1400px) and (max-height: 175vh) {
+    .grid-view {
+      grid-template-columns: repeat(auto-fit, minmax(355px, 1fr));
+    }
+  }
+
+  @media (min-width: 1022px) {
+    .grid-view {
+      grid-template-columns: repeat(auto-fit, minmax(438px, 1fr));
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .grid-view {
+      grid-template-columns: repeat(auto-fit, minmax(396px, 1fr));
+    }
+  }
+
   .filter-toggle {
     margin-left: 10px;
   }

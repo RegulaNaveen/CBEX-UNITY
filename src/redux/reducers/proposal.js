@@ -5,7 +5,7 @@ import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getQuestionsFilterApplied } from '../actions/proposal-actions';
-
+import { OpportunitySFUpDATE } from '../../constants/app';
 const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
@@ -80,7 +80,8 @@ const {
   SET_NEXT_MILESTONE,
   TOGGLE_EDIT_CUSTOM_NAME_MODAL,
   SET_EDIT_OPP_INFO,
-  CLEAR_EDIT_OPP_INFO
+  CLEAR_EDIT_OPP_INFO,
+  DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -326,6 +327,7 @@ const setOpportunityInfo = (state, action) => {
           'questionTemplateVersionNumber',
           proposal.proposal['questionTemplateVersionNumber'] || ''
         )
+        .set('bidStopStatus', proposal.proposal['bidStopStatus'] || false)
         .set(
           'isApprovalCountPresent',
           proposal.proposal['isApprovalCountPresent'] || false
@@ -407,6 +409,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityName,
     opportunityOverview,
     questionTemplateVersionNumber: templateversion,
+    bidStopStatus,
     isApprovalCountPresent,
     proposalDate
   } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
@@ -416,6 +419,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     pertinentDetails: payload.bid.pertinentDetails,
     bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
+    bidStopStatus: bidStopStatus,
     isApprovalCountPresent: isApprovalCountPresent || false,
     opportunityType: opportunityType || '',
     opportunityName: opportunityName || '',
@@ -512,6 +516,7 @@ const addNewBid = (state: Map, action: Object): Map => {
       'questionTemplateVersionNumber',
       data.proposal['questionTemplateVersionNumber'] || ''
     )
+    .set('bidStopStatus', proposal.proposal['bidStopStatus'] || false)
     .set(
       'isApprovalCountPresent',
       data.proposal['isApprovalCountPresent'] || false
@@ -1325,6 +1330,22 @@ const clearEditOppInfo = state => {
   return state.set('oppNoEditing', '').set('customNameEditing', '');
 };
 
+const updateOportunityDetailData = (state, action) => {
+  const { data } = action.payload;
+  const proposalDetail = state.get('proposalDetails');
+  if (
+    data &&
+    proposalDetail &&
+    proposalDetail &&
+    proposalDetail['CRM #'] == data.oppNo
+  ) {
+    const mapper = OpportunitySFUpDATE;
+    proposalDetail[mapper[data.sfField]] = data.answer;
+    return state.set('proposalDetails', { ...proposalDetail });
+  }
+  return state;
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1407,7 +1428,8 @@ const actionMap = {
   [SET_NEXT_MILESTONE]: onSetNextMilestone,
   [TOGGLE_EDIT_CUSTOM_NAME_MODAL]: toggleEditCustomNameModal,
   [SET_EDIT_OPP_INFO]: setEditOppInfo,
-  [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo
+  [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo,
+  [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData
 };
 
 export default function(
