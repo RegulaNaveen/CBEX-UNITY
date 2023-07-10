@@ -286,7 +286,7 @@ const loadSidebar = props => {
                   noWrap
                   title={customName || ''}
                 >
-                  {customName || 'Add Custom Name'}
+                  {customName || 'New Custom Name'}
                 </Typography>
               </div>
               <Pencil onClick={handleEditCustomName} />

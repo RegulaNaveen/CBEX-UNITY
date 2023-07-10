@@ -97,7 +97,7 @@ const EditCustomNameModal = ({ show }) => {
     >
       <TextField
         label="Custom Name"
-        placeholder="Add Custom Name"
+        placeholder="New Custom Name"
         defaultValue={customNameEditing}
         value={editName}
         error={error.length > 0}

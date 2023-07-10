@@ -24,6 +24,7 @@ import {
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { getNextMilestone } from '../../utils/utils';
 
 type Props = {
   data: Array<Object>,
@@ -46,7 +47,8 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
   const STATUS_COLUMN = 'opportunity status';
   const FAV_COLUMN = 'isFavourite';
   const BIDNUM_COLUMN = 'bidNo';
-  const columns = keysIn(head(data));
+  const NEXT_MILESTONE_COLUMN = 'nextMilestone';
+  const columns = [...keysIn(head(data)), NEXT_MILESTONE_COLUMN]; // nextMilestone is optional value
   const columnsLength =
     columns.length - SKIP_COLUMNS.length - (hideStatus ? 1 : 0);
 
@@ -70,6 +72,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
       'customer',
       'bidNo',
       'bid due date',
+      'nextMilestone',
       'protocol number',
       'verbatim indication',
       'opportunity status',
@@ -106,6 +109,14 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
             return <h3 key={uuidv4()}>Opportunity Name</h3>; // Change the header text to "Opportunity Stage"
           }
 
+          if (column === 'nextMilestone') {
+            return <h3 key={uuidv4()}>Next Milestone</h3>;
+          }
+
+          if (column === 'nextMilestone') {
+            return <h3 key={uuidv4()}>Next Milestone</h3>;
+          }
+
           if (column === 'isFavourite') {
             return ' ';
           }
@@ -137,6 +148,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
       'customer',
       'bidNo',
       'bid due date',
+      'nextMilestone',
       'protocol number',
       'verbatim indication',
       'opportunity status',
@@ -228,7 +240,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                         noWrap
                         title={row['customName'] || ''}
                       >
-                        {row['customName'] || 'Add Custom Name'}
+                        {row['customName'] || 'New Custom Name'}
                       </Typography>
 
                       <Pencil
@@ -307,6 +319,20 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                   <Tooltip title={row[col]} placement="top">
                     <p>{row[col]}</p>
                   </Tooltip>
+                </div>
+              );
+            case 'nextMilestone':
+              return (
+                <div key={uuidv4()} className="cell">
+                  <p
+                    className={classNames({
+                      'no-data-placeholder':
+                        objectToString(row[NEXT_MILESTONE_COLUMN]) === 'No data'
+                    })}
+                  >
+                    {row[NEXT_MILESTONE_COLUMN] &&
+                      getNextMilestone(row[NEXT_MILESTONE_COLUMN])}
+                  </p>
                 </div>
               );
 
