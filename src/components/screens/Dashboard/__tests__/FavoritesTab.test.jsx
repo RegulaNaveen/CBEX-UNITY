@@ -11,7 +11,7 @@ import FavoritesTab from '../FavoritesTab';
 const { 
     SET_PROPOSAL_VIEW_TYPE, 
     SET_PROPOSAL_FILTERING, 
-    ON_GET_PROPOSALS,
+    ON_GET_FAVOURITE,
     ON_FILTER_PROPOSALS 
 } = REDUX_TYPES.PROPOSALS
 
@@ -68,10 +68,10 @@ describe('testing favorites tab', () => {
     expect(container).toBeInTheDocument();
   });
 
-  test('render the component with proposals', () => {
+  test('render the component with favourite proposals', () => {
     store.dispatch({
-      type: ON_GET_PROPOSALS, 
-      payload: { proposals: proposals }
+      type: ON_GET_FAVOURITE, 
+      payload: { proposalsFavourite: proposals }
     });
     
     const { container } = render(

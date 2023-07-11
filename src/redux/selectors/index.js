@@ -200,6 +200,9 @@ export const getProposalsLoading = (state: Object): boolean =>
 export const getFilteredProposals = (state: Map): Map =>
   proposalsSelectors.getFilteredProposals(state.proposals);
 
+export const getFavouriteProposals = (state: Map): Map =>
+  proposalsSelectors.getFavouriteProposals(state.proposals);
+
 export const getIsFilteringProposals = (state: Map): boolean =>
   proposalsSelectors.getIsFilteringProposals(state.proposals);
 

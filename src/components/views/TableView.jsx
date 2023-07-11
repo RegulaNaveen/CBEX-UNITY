@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { isEmpty, keysIn, head } from 'lodash';
 import classNames from 'classnames';
+import moment from 'moment';
 import { objectToString } from '../../utils/helpers';
 import { parseMomentDate } from '../../utils/DateUtils';
 import { OPPORTUNITY } from '../../routes';
@@ -24,6 +25,7 @@ import {
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { getNextMilestone } from '../../utils/utils';
 
 type Props = {
   data: Array<Object>,
@@ -31,8 +33,7 @@ type Props = {
   tabIndex: number
 };
 
-const TableView = ({ data, hideStatus, tabIndex }: Props) => {
-  console.log('tabIndex', tabIndex);
+const TableView = ({ data, hideStatus }: Props) => {
   const SKIP_COLUMNS = [
     'proposalId',
     'opportunityName',
@@ -46,7 +47,8 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
   const STATUS_COLUMN = 'opportunity status';
   const FAV_COLUMN = 'isFavourite';
   const BIDNUM_COLUMN = 'bidNo';
-  const columns = keysIn(head(data));
+  const NEXT_MILESTONE_COLUMN = 'nextMilestone';
+  const columns = [...keysIn(head(data)), NEXT_MILESTONE_COLUMN]; // nextMilestone is optional value
   const columnsLength =
     columns.length - SKIP_COLUMNS.length - (hideStatus ? 1 : 0);
 
@@ -70,6 +72,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
       'customer',
       'bidNo',
       'bid due date',
+      'nextMilestone',
       'protocol number',
       'verbatim indication',
       'opportunity status',
@@ -106,6 +109,14 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
             return <h3 key={uuidv4()}>Opportunity Name</h3>; // Change the header text to "Opportunity Stage"
           }
 
+          if (column === 'nextMilestone') {
+            return <h3 key={uuidv4()}>Next Milestone</h3>;
+          }
+
+          if (column === 'nextMilestone') {
+            return <h3 key={uuidv4()}>Next Milestone</h3>;
+          }
+
           if (column === 'isFavourite') {
             return ' ';
           }
@@ -137,6 +148,7 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
       'customer',
       'bidNo',
       'bid due date',
+      'nextMilestone',
       'protocol number',
       'verbatim indication',
       'opportunity status',
@@ -146,11 +158,12 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
     async function onFavouriteToggle(favourite) {
       try {
         updateFavInProgress(true, rowIndex);
+        const favouriteUpdatedDate = moment().format();
         const toggleFavouriteRes = await toggleFavourite(
           row[LINK_COLUMN],
           favourite
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite, tabIndex);
+        updateFavouriteWrapper(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row);
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],
@@ -159,9 +172,9 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
         saveRecentOppActivity(obj);
         if (toggleFavouriteRes && toggleFavouriteRes.data) {
           if (toggleFavouriteRes.data.favourite) {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite));
+            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row));
           } else {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite));
+            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row));
           }
         }
       } catch (e) {
@@ -228,8 +241,9 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                         noWrap
                         title={row['customName'] || ''}
                       >
-                        {row['customName'] || 'Add Custom Name'}
+                        {row['customName'] || 'New Custom Name'}
                       </Typography>
+
                       <Pencil
                         onClick={() =>
                           handleEditCustomName(
@@ -243,22 +257,82 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
                   ) : null}
                 </div>
               );
+
+            case 'customer':
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={row[col]} placement="top">
+                    <p>{row[col]}</p>
+                  </Tooltip>
+                </div>
+              );
             case 'bidNo':
               return (
                 <div key={uuidv4()} className="cell">
-                  <p>Bid {row[BIDNUM_COLUMN]}</p>
+                  <Tooltip title={`Bid ${row[BIDNUM_COLUMN]}`} placement="top">
+                    <p>Bid {row[BIDNUM_COLUMN]}</p>
+                  </Tooltip>
                 </div>
               );
             case 'bid due date':
+              const bidDueDate = row[col];
+              const tooltipData = bidDueDate
+                ? parseMomentDate(bidDueDate)
+                : 'No data';
+
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={tooltipData} placement="top">
+                    <p
+                      className={classNames({
+                        'no-data-placeholder': !bidDueDate
+                      })}
+                    >
+                      {bidDueDate ? parseMomentDate(bidDueDate) : 'No data'}
+                    </p>
+                  </Tooltip>
+                </div>
+              );
+
+            case 'protocol number':
+              const protocolNumber = row[col];
+              const tooltipContent = protocolNumber
+                ? protocolNumber
+                : 'No data';
+
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={tooltipContent} placement="top">
+                    <p
+                      className={classNames({
+                        'no-data-placeholder': !protocolNumber
+                      })}
+                    >
+                      {protocolNumber || 'No data'}
+                    </p>
+                  </Tooltip>
+                </div>
+              );
+
+            case 'verbatim indication':
+              return (
+                <div key={uuidv4()} className="cell">
+                  <Tooltip title={row[col]} placement="top">
+                    <p>{row[col]}</p>
+                  </Tooltip>
+                </div>
+              );
+            case 'nextMilestone':
               return (
                 <div key={uuidv4()} className="cell">
                   <p
                     className={classNames({
                       'no-data-placeholder':
-                        objectToString(row[DATE_COLUMN]) === 'No data'
+                        objectToString(row[NEXT_MILESTONE_COLUMN]) === 'No data'
                     })}
                   >
-                    {row[DATE_COLUMN] && parseMomentDate(row[DATE_COLUMN])}
+                    {row[NEXT_MILESTONE_COLUMN] &&
+                      getNextMilestone(row[NEXT_MILESTONE_COLUMN])}
                   </p>
                 </div>
               );
@@ -271,7 +345,14 @@ const TableView = ({ data, hideStatus, tabIndex }: Props) => {
               return (
                 <Tooltip title={statusText} placement="top">
                   <div key={uuidv4()} className="cell">
-                    <p>{statusText}</p>
+                    <p
+                      className={classNames({
+                        'no-data-placeholder':
+                          objectToString(row[STATUS_COLUMN]) === 'No data'
+                      })}
+                    >
+                      {statusText || objectToString(row[STATUS_COLUMN])}
+                    </p>
                   </div>
                 </Tooltip>
               );

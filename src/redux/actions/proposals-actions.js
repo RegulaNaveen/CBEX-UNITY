@@ -8,11 +8,12 @@ import {
   onGetByStatus,
   getRecentOpportunity,
   getAssignedOpportunity,
+  getFavoritesOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
-import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
-import { getProposals } from '../selectors';
+import { selectFavourites, selectCustomNameMap, selectFavouritesUpdatedDateMap } from '../selectors/sso-auth';
+import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
 
 const {
@@ -26,8 +27,35 @@ const {
   SET_NUM_OF_ROWS,
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD,
+  ON_GET_FAVOURITE,
   DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSALS;
+
+function removeDuplicates(arr) {
+  return arr.filter((item,
+      index) => arr.indexOf(item) === index);
+}
+
+const formatProposalGrid = (proposal) => {
+
+  const formatted = {
+    'bid due date': proposal['Bid due date'],
+    'opportunity number': proposal['CRM #'],
+    'protocol number': proposal['Protocol number'],
+    'opportunity status': proposal['opportunityStatus'],
+    'verbatim indication': proposal['Verbatim indication'],
+    bidNo: proposal['bidNo'],
+    isFavourite: proposal.isFavourite,
+    customer: proposal.Customer,
+    customName: proposal.customName,
+    bidStopStatus: proposal.bidStatus,
+    nextMilestone: proposal.nextMilestone,
+    opportunityName: proposal.opportunityName,
+    isApprovalCountPresent: proposal.isApprovalCountPresent,
+  };
+
+  return formatted;
+};
 
 const formatProposal = (
   proposal: Object,
@@ -71,6 +99,7 @@ const formatProposal = (
     ];
     formattedProposal.customName =
       customNameMap[`${proposalDetails['CRM #']}`] || '';
+    formattedProposal.nextMilestone = proposal.nextMilestone || [];
     return formattedProposal;
   }
 
@@ -242,12 +271,14 @@ export const onFilteringProposals = (
           data = response.data;
         }
       } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
-        const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await onGetAllProposals(filterPayload, userEmail);
-        data = response.data;
-      } else if (
-        allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1
-      ) {
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await onGetAllProposals(filterPayload);
+          data = response.data;
+        } else {
+          const response = await getFavoritesOpportunity();
+          data = response.data;
+        }
+      } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
           const response = await getRecentOpportunity(
@@ -274,6 +305,7 @@ export const onFilteringProposals = (
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
+        
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
@@ -281,7 +313,23 @@ export const onFilteringProposals = (
         const formatted = proposals.map(proposal =>
           formatProposal(proposal, favouritesMap, customNameMap)
         );
-        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+        
+        if(allFlags.favouriteFlag && Number(tabIndex) === 1) {
+          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(getState()).toJS();
+          favouritesUpdatedDateMap.sort((a,b) => (a["updated date"] > b["updated date"]) ? 1 
+                                              : ((b["updated date"] > a["updated date"]) ? -1 : 0)).reverse();
+          const uniqueFavourites = removeDuplicates(favouritesUpdatedDateMap);
+          let orderedProposal = [];
+          for( const favorite of uniqueFavourites) {
+            for(const proposal of formatted) {
+              if(proposal['opportunity number'] === favorite['opportunity number'])
+                orderedProposal.push(proposal);
+            }
+          }
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite: orderedProposal } });
+        } else {
+          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -356,6 +404,7 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   getState
 ) => {
   try {
+    let proposalsFavourite = getFavouriteProposals(getState());
     let proposals = getProposals(getState());
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNumber
@@ -364,10 +413,24 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
-    const { tabIndex } = proposalDetails;
-    if (tabIndex === 1 && favourite) {
-      proposals.push(proposals.splice(proposalIndex, 1)[0]);
+
+    const proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
+    if(!proposalCheck && favourite) {
+      delete proposalDetails.favourite;
+      const { dataFromGrid } = proposalDetails;
+      proposalDetails['isFavourite'] = favourite;
+      proposals[proposalIndex] ? 
+        proposalsFavourite.unshift(proposals[proposalIndex]) 
+        : dataFromGrid 
+        ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails)) 
+        : proposalsFavourite.unshift(proposalDetails);
+      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
     }
+    if(proposalCheck && !favourite) {
+      let index = proposalsFavourite.findIndex(proposal => proposal['opportunity number'] === oppNumber);
+      proposalsFavourite.splice(index, 1);
+      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+    }  
   } catch (error) {
     console.log(error);
   }

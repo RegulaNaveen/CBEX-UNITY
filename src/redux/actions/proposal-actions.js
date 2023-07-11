@@ -1443,7 +1443,7 @@ export const getOpportunity = (
       });
       dispatch({
         type: SET_NEXT_MILESTONE,
-        payload: data[0].proposal.nextMilestone
+        payload: data[0].proposal.nextMilestone || []
       });
     } catch (err) {
       console.log('error occurred ', err);
@@ -1823,7 +1823,15 @@ export const onSaveCustomName = (oppNo, customName) => {
 export const updateNextMilestone = (oppNumber, nextMilestone) => {
   return async (dispatch, getState) => {
     try {
+      let proposals = getProposals(getState());
       let proposalInfo = getProposalDetails(getState());
+      const proposalIndex = proposals.findIndex(
+        proposal => proposal['opportunity number'] === oppNumber
+      );
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
       if (proposalInfo['CRM #'] === oppNumber) {
         dispatch({
           type: SET_NEXT_MILESTONE,

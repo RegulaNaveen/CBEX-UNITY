@@ -337,7 +337,14 @@ export class Opportunity extends Component<Props, State> {
       customName,
       nextMilestone
     } = this.props;
-    const { bidStatus, bidStopStatus } = selectedBid.toJS();
+    const { 
+      bidStatus, 
+      bidStopStatus, 
+      opportunityName, 
+      opportunityStatus, 
+      isApprovalCountPresent 
+    } = selectedBid.toJS();
+
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -356,7 +363,10 @@ export class Opportunity extends Component<Props, State> {
           favourite={favourite}
           customName={customName}
           nextMilestone={nextMilestone}
+          opportunityName={opportunityName}
+          opportunityStatus={opportunityStatus}
           handleEditCustomName={this.handleEditCustomName}
+          isApprovalCountPresent={isApprovalCountPresent}
         />
         <span className="unity-tabs-container-wrapper">
           <UnityTab
