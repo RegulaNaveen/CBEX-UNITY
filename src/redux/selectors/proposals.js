@@ -23,6 +23,13 @@ export const getFilteredProposals = (proposals: Map): Map => {
 
   return notEmptyProposals;
 };
+export const getFavouriteProposals = (proposals: Map): Map => {
+  const notEmptyProposals = !isEmpty(proposals.get('favouriteProposals'))
+    ? proposals.get('favouriteProposals').filter(proposal => !isEmpty(proposal))
+    : [];
+
+  return notEmptyProposals;
+};
 
 export const getIsFilteringProposals = (proposals: Map): boolean =>
   proposals.get('isFiltering');

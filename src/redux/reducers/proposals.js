@@ -16,6 +16,7 @@ const {
   SET_NUM_OF_ROWS,
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD,
+  ON_GET_FAVOURITE,
   DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSALS;
 
@@ -23,6 +24,7 @@ const INITIAL_STATE: Map = fromJS({
   filteredProposals: undefined,
   isFiltering: false,
   proposals: undefined,
+  favouriteProposals: undefined,
   proposalsError: undefined,
   proposalsFilters: undefined,
   proposalsLoading: false,
@@ -55,6 +57,11 @@ const onSetFilteringProposals = (state: Map, action: Object): Map => {
 const onSetProposalsFilters = (state: Map, action: Object): Map => {
   const { proposalsFilters } = action.payload;
   return state.set('proposalsFilters', proposalsFilters);
+};
+
+const onSetProposalsFavourite = (state: Map, action: Object): Map => {
+  const { proposalsFavourite } = action.payload;
+  return state.set('favouriteProposals', proposalsFavourite).set('proposalsLoading', false);
 };
 
 const setProposalViewType = (state: Map, action: Object): Map => {
@@ -106,6 +113,7 @@ const actionMap = {
   [SET_NUM_OF_ROWS]: setNumOfRows,
   [SET_ASSIGNED_TAB_NUM_OF_ROWS]: setAssignedTabNumOfRows,
   [NON_EDITABLE_SF_FIELD]: setNonEditableField,
+  [ON_GET_FAVOURITE]: onSetProposalsFavourite,
   [DASHBOARD_PROPOSAL_DETAIL]: setProposalDetails
 };
 
