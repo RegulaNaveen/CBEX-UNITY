@@ -1573,7 +1573,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       }
     });
     answers = answers.reverse();
-    console.log('reached in questions', questionDataDestinations);
     const questionID = answers.get('questionId');
     const quesData = questionData?.toJS();
     const hasEvent = quesData?.events && !isEmpty(quesData?.events);
