@@ -98,7 +98,12 @@ const ProposalCard = ({
       setFavInProgress(true);
       const favouriteUpdatedDate = moment().format();
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
-      updateFavouriteWrapper(title, favourite, favouriteUpdatedDate, proposalDetails);
+      updateFavouriteWrapper(
+        title,
+        favourite,
+        favouriteUpdatedDate,
+        proposalDetails
+      );
       const obj = {
         url: `${window.location.origin}/opportunities/${title}`,
         oppNo: title,
@@ -106,11 +111,14 @@ const ProposalCard = ({
       };
       saveRecentOppActivity(obj);
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
-        if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(title, favourite, favouriteUpdatedDate, proposalDetails));
-        } else {
-          await dispatch(updateFavourite(title, favourite, favouriteUpdatedDate, proposalDetails));
-        }
+        await dispatch(
+          updateFavourite(
+            title,
+            favourite,
+            favouriteUpdatedDate,
+            proposalDetails
+          )
+        );
       }
     } catch (e) {
       console.error(`Error in updating favourite for ${title}`, e);
@@ -149,7 +157,7 @@ const ProposalCard = ({
               {opportunityName}
             </Typography>
           </div>
-          {flags['customOpportunityNameFlag'] ? (
+          {flags[featureFlags.CUSTOM_NAME_FLAG] ? (
             <div
               style={{
                 display: 'grid',
