@@ -1615,12 +1615,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const integrationsArray =
       questionDataDestinations && questionDataDestinations.split(',');
 
-    // integrationsData?.data.map(item => {
-    //   return item.questionId;
-    // });
-    // integrationsData?.data.map(item => {
-    //   if (item.questionId.includes(qvicon)) destinationArray = item.destination;
-    // });
     integrationvalidation = integrationsArray?.includes(qvicon);
 
     if (qvidianIntegration) {

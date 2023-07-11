@@ -531,13 +531,7 @@ const QuestionItem = ({
     if (dateIsAfter) {
       integrationvalidation = true;
     }
-    // const integrationsArray = integrationsData?.data.map(item => {
-    //   return item.questionId;
-    // });
 
-    // integrationsData?.data.map(item => {
-    //   if (item.questionId.includes(qvicon)) destinationArray = item.destination;
-    // });
     const integrationsArray =
       questionDataDestinations && questionDataDestinations.split(',');
 
