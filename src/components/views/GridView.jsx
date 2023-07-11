@@ -82,6 +82,7 @@ class GridView extends Component<Props> {
               favourite={formatted.isFavourite}
               bidStopStatus={formatted.bidStopStatus}
               customName={formatted.customName}
+              proposalDetails={proposal}
               nextMilestone={formatted.nextMilestone}
             />
           );

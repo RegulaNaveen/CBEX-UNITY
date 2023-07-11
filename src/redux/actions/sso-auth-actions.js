@@ -7,7 +7,7 @@ import {
   getOppPrefs
 } from '../../api/sso-auth';
 import { REDUX_TYPES } from '../../constants';
-import { selectFavourites } from '../selectors/sso-auth';
+import { selectFavourites, selectFavouritesUpdatedDateMap } from '../selectors/sso-auth';
 import { updateProposal } from './proposals-actions';
 import { getProposalDetails, getProposals } from '../selectors';
 import { cloneDeep } from 'lodash';
@@ -22,7 +22,8 @@ const {
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
   SET_USER_FAVOURITES,
-  SET_CUSTOM_NAME_MAP
+  SET_CUSTOM_NAME_MAP,
+  SET_FAVOURITES_UPDATED_DATE
 } = REDUX_TYPES.SSO_AUTH;
 
 const { TOGGLE_FAVOURITE } = REDUX_TYPES.PROPOSAL;
@@ -98,11 +99,21 @@ export const fetchUserOpportunityPrefs = () => {
         Array.isArray(opportuntityPrefsRes.preferences)
       ) {
         let userFavourites = new Set(),
+          userFavouritesUpdatedDateMap = [],
           userCustomOppNameMap = {},
           userFavouritesArr = [];
         opportuntityPrefsRes.preferences.forEach(pref => {
           if (pref.favourite) {
             userFavourites.add(pref.opp_number);
+
+            if (pref.favourite_updated_date) {
+              userFavouritesUpdatedDateMap.push(
+                {
+                  'opportunity number': pref.opp_number, 
+                  'updated date': pref.favourite_updated_date
+                }
+              );
+            }
           }
           if (pref.custom_header_tab) {
             userCustomOppNameMap[pref.opp_number] = pref.custom_header_tab;
@@ -116,6 +127,10 @@ export const fetchUserOpportunityPrefs = () => {
         dispatch({
           type: SET_CUSTOM_NAME_MAP,
           payload: cloneDeep(userCustomOppNameMap)
+        });
+        dispatch({
+          type: SET_FAVOURITES_UPDATED_DATE,
+          payload: cloneDeep(userFavouritesUpdatedDateMap)
         });
         let proposals = getProposals(getState());
         if (proposals.length > 0) {
@@ -154,19 +169,37 @@ export const fetchUserOpportunityPrefs = () => {
   };
 };
 
-export const updateFavourite = (oppNumber, favourite, proposalDetails) => {
+export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, proposalDetails) => {
   return async (dispatch, getState) => {
     try {
       let favourites = selectFavourites(getState()).toJS();
       let proposalInfo = getProposalDetails(getState());
+      let favouritesUpdatedDate = selectFavouritesUpdatedDateMap(getState()).toJS();
       if (favourite) {
         favourites.push(oppNumber);
+        favouritesUpdatedDate.unshift({
+          'opportunity number': oppNumber, 
+          'updated date': favouriteUpdatedDate
+        });
       } else {
         favourites = favourites.filter(fav => fav !== oppNumber);
+        favouritesUpdatedDate = favouritesUpdatedDate.filter(fav => 
+                                  fav['opportunity number'] !== oppNumber);
       }
+
+      favourites = favourites.filter((item, index) => favourites.indexOf(item) === index);
+      favouritesUpdatedDate = favouritesUpdatedDate.filter((value, index, self) =>
+                                index === self.findIndex((t) => (
+                                  t["opportunity number"] === value["opportunity number"] 
+                                  && t["updated date"] === value["updated date"]
+                                )));
       dispatch({
         type: SET_USER_FAVOURITES,
         payload: favourites
+      });
+      dispatch({
+        type: SET_FAVOURITES_UPDATED_DATE,
+        payload: favouritesUpdatedDate
       });
       await dispatch(updateProposal(oppNumber, favourite, proposalDetails));
       if (proposalInfo['CRM #']) {

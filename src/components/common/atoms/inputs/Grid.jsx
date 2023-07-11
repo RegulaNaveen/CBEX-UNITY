@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
+import Grid from 'apollo-react/components/Grid';
+import moment from 'moment';
 import Minus from 'apollo-react-icons/Minus';
 import Paper from 'apollo-react/components/Paper';
 import Typography from 'apollo-react/components/Typography';
@@ -32,6 +34,9 @@ const loadSidebar = props => {
     favourite,
     customName,
     nextMilestone,
+    opportunityName,
+    opportunityStatus,
+    isApprovalCountPresent,
     handleEditCustomName,
     bidStopStatus
   } = props;
@@ -169,8 +174,20 @@ const loadSidebar = props => {
   async function onFavouriteToggle(favourite) {
     try {
       setFavInProgress(true);
+      const favouriteUpdatedDate = moment().format();
       const toggleFavouriteRes = await toggleFavourite(crm, favourite);
-      updateFavouriteWrapper(crm, favourite);
+      const proposalDetails = {
+        dataFromGrid: "data from grid",
+        bidStatus,
+        favourite,
+        customName,
+        nextMilestone,
+        opportunityName,
+        opportunityStatus,
+        isApprovalCountPresent,
+        ...data
+      };
+      updateFavouriteWrapper(crm, favourite, favouriteUpdatedDate, proposalDetails);
       if (window && window.location && window.location.href) {
         const obj = {
           url: window.location.href,
@@ -181,9 +198,9 @@ const loadSidebar = props => {
       }
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
         if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(crm, favourite));
+          await dispatch(updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails));
         } else {
-          await dispatch(updateFavourite(crm, favourite));
+          await dispatch(updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails));
         }
       }
     } catch (e) {
