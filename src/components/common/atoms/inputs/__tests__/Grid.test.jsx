@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
+  cleanup,
   fireEvent,
   render,
   waitFor,
@@ -27,7 +28,10 @@ describe('<Grid /> unit tests', () => {
     sinonSandbox = Sinon.createSandbox();
   });
 
-  beforeEach(() => sinonSandbox.restore());
+  beforeEach(() => {
+    sinonSandbox.restore();
+    cleanup();
+  });
 
   afterAll(() => {
     sinonSandbox.restore();
@@ -47,7 +51,7 @@ describe('<Grid /> unit tests', () => {
         favouriteFlag: true
       }
     });
-    const { container, debug } = render(
+    const { container } = render(
       <GridWithRedux
         updateFavouriteWrapper={jest.fn()}
         data={{}}
@@ -68,5 +72,74 @@ describe('<Grid /> unit tests', () => {
       container.querySelector('.MuiCircularProgress-root')
     );
     expect(toggleFavStub.callCount).toBe(1);
+  });
+
+  it('should stop loader if error on updating', async () => {
+    const toggleFavStub = sinonSandbox
+      .stub(SSOApis, 'toggleFavourite')
+      .rejects();
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: {
+        favouriteFlag: true
+      }
+    });
+    const { container } = render(
+      <GridWithRedux
+        updateFavouriteWrapper={jest.fn()}
+        data={{}}
+        favourite={false}
+      />
+    );
+    expect(
+      container.querySelector('.fav-icon-button .MuiSvgIcon-root')
+    ).toHaveStyle({ color: '#999999' });
+    fireEvent.click(container.querySelector('.fav-icon-button'));
+    await waitFor(() => {
+      expect(
+        container.querySelector('.MuiCircularProgress-root')
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(() =>
+      expect(
+        container.querySelector('.MuiCircularProgress-root')
+      ).not.toBeInTheDocument()
+    );
+    expect(toggleFavStub.callCount).toBe(1);
+  });
+
+  it('should show custom name when flag is on', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: {
+        customOpportunityNameFlag: true
+      }
+    });
+    const { getByText } = render(
+      <GridWithRedux
+        updateFavouriteWrapper={jest.fn()}
+        data={{}}
+        favourite={false}
+      />
+    );
+    expect(getByText('New Custom Name')).toBeInTheDocument();
+  });
+
+  it('should not show custom name when flag is off', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: {
+        customOpportunityNameFlag: false
+      }
+    });
+    const { container, queryByText } = render(
+      <GridWithRedux
+        updateFavouriteWrapper={jest.fn()}
+        data={{}}
+        favourite={false}
+      />
+    );
+    expect(queryByText('New Custom Name')).toBeNull();
   });
 });
