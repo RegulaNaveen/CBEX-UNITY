@@ -201,6 +201,29 @@ const SocketContextProvider = props => {
     }
   };
 
+  const updateDashboardFromSF = (proposalObj, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'SF_PROPOSAL_DETAIL_UPDATE',
+          body: {
+            event: 'SF_PROPOSAL_DETAIL_UPDATE',
+            fromSF: true,
+            data: {
+              proposalId: proposalObj.proposalId,
+              proposalDetails: proposalObj.proposalDetails
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateCustomName = (oppNumber, customName, ws) => {
     try {
       if (!ws) {
@@ -455,7 +478,10 @@ const SocketContextProvider = props => {
               if (updateAnswerAction) updateAnswerAction(data.data);
               break;
             case 'PROPOSAL_DETAIL_UPDATE':
-              if (updateProposalDetail) updateProposalDetail(data.data);
+              if (updateProposalDetail) {
+                updateProposalDetail(data);
+                updateDashboardFromSF(data.data);
+              }
               break;
             case 'SWITCH_TEMPLATE_IN_PROGRESS':
               if (setSwitchInProgress) setSwitchInProgress(true);
