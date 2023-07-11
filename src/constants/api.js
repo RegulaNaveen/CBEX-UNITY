@@ -179,11 +179,6 @@ switch (environment) {
     PROPOSAL_API_ENDPOINT_2 =
       'https://542gm4mu97.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
-    PROPOSAL_API_ENDPOINT =
-      'https://r1g9pjnmbb.execute-api.us-east-1.amazonaws.com/qa';
-    PROPOSAL_API_ENDPOINT_2 =
-      'https://gx2ay0yf3g.execute-api.us-east-1.amazonaws.com/qa';
-    PROPOSAL_API_KEY = 'YXrOu45imb6d03erOkZB2PuBOsYQYZ93pnmQK6C0';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
