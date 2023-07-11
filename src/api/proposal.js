@@ -17,7 +17,8 @@ const {
   PROPOSAL_OT_LIST,
   PROPOSAL_SWITCH_OT,
   USER_API_URL,
-  INTEGRATIONS_API_URL
+  INTEGRATIONS_API_URL,
+  PDF_DOWNLOAD_ENDPOINT
 } = API.PROPOSAL;
 
 let onGoingAnswer = {};
@@ -49,7 +50,7 @@ const getPDF = (pdfHtml, url, userName, time, oppId) => {
     oppId
   };
   // ${PROPOSAL_API_URL}
-  return axiosInstance.post(`${PROPOSAL_API_URL}/downloadpdf`, obj, {
+  return axiosInstance.post(PDF_DOWNLOAD_ENDPOINT, obj, {
     responseType: 'arraybuffer',
     headers: {
       'Content-Type': 'application/json',

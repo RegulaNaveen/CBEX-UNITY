@@ -78,7 +78,7 @@ describe('Dashboard', () => {
     expect(wrapper.find('Toolbar')).toHaveLength(1);
   });
 
-  it('renders a Tabbar component with three tabs', () => {
+  it('renders a Tabbar component with four tabs', () => {
     expect(wrapper.find('Tabbar')).toHaveLength(1);
     expect(wrapper.find('TabItem')).toHaveLength(3);
   });

@@ -21,6 +21,7 @@ export const setAllApprovals = data => ({
 
 export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
   try {
+    dispatch(setAllApprovals([]));
     dispatch({ type: APPROVALS.FETCH_APPROVALS });
     // Api Response
     const response = await getApprovalsApi(proposalId, questions);

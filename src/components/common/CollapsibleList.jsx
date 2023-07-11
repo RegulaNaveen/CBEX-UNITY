@@ -281,7 +281,8 @@ class CollapsibleList extends Component<Props, State> {
       isNotepadOpen,
       onAddQuestion,
       query,
-      currentSearchResult
+      currentSearchResult,
+      proposalDetail
     } = this.props;
     return (
       <div
@@ -371,6 +372,7 @@ class CollapsibleList extends Component<Props, State> {
                 title={title}
                 setQuestionToDisplayHistory={setQuestionToDisplayHistory}
                 isNotepadOpen={isNotepadOpen}
+                oppNo={proposalDetail?.['CRM #']}
               />
             </Suspense>
 
@@ -382,7 +384,10 @@ class CollapsibleList extends Component<Props, State> {
                   onClick={() => onAddQuestion(title)}
                   size="small"
                 >
-                  <Plus className="plus-icon-add-new-question" fontSize="extraSmall" />
+                  <Plus
+                    className="plus-icon-add-new-question"
+                    fontSize="extraSmall"
+                  />
                   <span style={{ verticalAlign: 'top' }}>
                     {' '}
                     Add New Question

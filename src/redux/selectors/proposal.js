@@ -1,8 +1,10 @@
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
-import { last, uniq, orderBy } from 'lodash';
+import { last, uniq, orderBy, isEmpty } from 'lodash';
 import { createSelector } from 'reselect';
+import moment from 'moment';
 import { shouldInclude } from '../../components/views/export-component/word-template';
+import { extractEmails } from '../../utils/helpers';
 
 const generateMilestone = (proposalQuestions: Object) => {
   const flag = proposalQuestions.filter(question => question?.milestone);
@@ -213,6 +215,40 @@ export const selectProposalQuestions = createSelector(
   proposal => proposal.get('proposalQuestions', Map({}))
 );
 
+export const selectActiveTeamQuestions = createSelector(
+  selectProposalQuestions,
+  proposalQuestions =>
+    proposalQuestions
+      .filter(
+        question =>
+          question.section.sectionName === 'Proposal Team' &&
+          question.visible === true &&
+          (question.active === true || question.isCustomQuestion === true)
+      )
+      .map(question => {
+        let email = [];
+        if (!isEmpty(question.answers)) {
+          const { answer } = [...question.answers].pop();
+          if (!isEmpty(answer.trim())) {
+            email = [
+              ...new Set(
+                answer
+                  .trim()
+                  .split(',')
+                  .map(i => extractEmails(i))
+                  .filter(i => i !== null)
+              )
+            ];
+          }
+        }
+
+        return {
+          ...question,
+          email
+        };
+      })
+);
+
 export const selectFilteredProposalQuestions = createSelector(
   selectProposal,
   proposal => proposal.get('filteredProposalQuestions', Map({}))
@@ -407,4 +443,51 @@ export const selectCurrentWidget = createSelector(selectProposal, proposal =>
 
 export const selectFavourite = createSelector(selectProposal, proposal =>
   proposal?.get('favourite')
+);
+
+export const selectCustomName = createSelector(selectProposal, proposal =>
+  proposal?.get('customName', '')
+);
+
+export const selectNextMilestones = createSelector(selectProposal, proposal =>
+  proposal?.get('nextMilestone', [])
+);
+
+export const selectNextMilestone = createSelector(
+  selectNextMilestones,
+  milestones => {
+    if (milestones.length > 0) {
+      let sortedMilestones = milestones.sort((milestoneA, milestoneB) => {
+        let diff = 0;
+        try {
+          diff =
+            moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
+            moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
+        } catch (e) {
+          console.error(
+            '[proposalUtils.getNextMilestone] Error in parsing date',
+            e
+          );
+        }
+        return diff;
+      });
+      console.log('sorted', sortedMilestones);
+      return sortedMilestones[0].name;
+    }
+    return '';
+  }
+);
+
+export const selectOppNoEditing = createSelector(selectProposal, proposal =>
+  proposal?.get('oppNoEditing', '')
+);
+
+export const selectCustomNameEditing = createSelector(
+  selectProposal,
+  proposal => proposal?.get('customNameEditing', '')
+);
+
+export const selectShowEditCustomNameModal = createSelector(
+  selectProposal,
+  proposal => proposal?.get('showEditCustomNameModal', false)
 );

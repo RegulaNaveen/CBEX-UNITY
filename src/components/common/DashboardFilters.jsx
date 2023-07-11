@@ -1,6 +1,6 @@
 // @flow
 import React, { useEffect, useCallback } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Link from 'apollo-react/components/Link';
 import { getFilteringValues } from '../../redux/actions/proposals-actions';
 import { getProposalsFilters } from '../../redux/selectors';
@@ -35,6 +35,8 @@ const DashboardFilters = ({
     fetchFilterValues();
     fetchUsers();
   }, []);
+
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
   const changeDate = useCallback(range => {
     onDateRangeChange('bid due date', range);
@@ -151,7 +153,7 @@ const DashboardFilters = ({
       </div>
       <div className="filter-wrapper">
         <FilterDropDown
-          title="Opportunity status"
+          title="Opportunity stage"
           id="opportunity status"
           placeholder="Select value..."
           onChange={onDropDownFilterChange}
@@ -170,6 +172,19 @@ const DashboardFilters = ({
           defaultValue={filters.teamMember}
         />
       </div>
+      {allFlags['customOpportunityNameFlag'] ? (
+        <div className="filter-wrapper">
+          <InputField
+            type="text"
+            id="Customized opportunity name"
+            label="Customized opportunity name"
+            placeholder="Type text..."
+            className="inputsize"
+            defaultValue={filters['customized opportunity name']}
+            onChange={onTextFilterChange}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -20,7 +20,10 @@ import {
   editProposalQuestionfromSocket,
   deleteProposalQuestionFromSocket,
   setProposalQuestionFromSocket,
-  widgetUpdate
+  widgetUpdate,
+  updateNextMilestone,
+  updateDashboardProposal,
+  updateCustomNameAction
 } from '../redux/actions/proposal-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -175,7 +178,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const updateFavourite = (oppNumber, favourite, ws) => {
+  const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, proposalDetails, ws) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -187,7 +190,77 @@ const SocketContextProvider = props => {
             event: 'FAVOURITE',
             data: {
               oppNumber,
-              favourite
+              favourite,
+              favouriteUpdatedDate,
+              ...proposalDetails
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateDashboardFromSF = (proposalObj, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'SF_PROPOSAL_DETAIL_UPDATE',
+          body: {
+            event: 'SF_PROPOSAL_DETAIL_UPDATE',
+            fromSF: true,
+            data: {
+              proposalId: proposalObj.proposalId,
+              proposalDetails: proposalObj.proposalDetails
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateCustomName = (oppNumber, customName, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'CUSTOM_NAME_UPDATE',
+          body: {
+            event: 'CUSTOM_NAME_UPDATE',
+            data: {
+              oppNumber,
+              customName
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateDashboardProposalCard = (oppNumber, sfField, answer, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'SF_PROPOSAL_DETAIL_UPDATE',
+          body: {
+            event: 'SF_PROPOSAL_DETAIL_UPDATE',
+            data: {
+              oppNumber,
+              sfField,
+              answer
             }
           }
         })
@@ -370,6 +443,7 @@ const SocketContextProvider = props => {
           updateQuestionLock,
           updateQuestionUnlock,
           getQuestionLockDetails,
+          updateDashboardData,
           setProposalAnswerDatafromSocket,
           setNotApplicableQuestionFromSocket,
           setPriceModelerRecalculationStatus,
@@ -382,7 +456,9 @@ const SocketContextProvider = props => {
           onApprovalSectionDeleting,
           onApprovalSectionDeleted,
           widgetUpdate,
-          updateFavouriteAction
+          updateFavouriteAction,
+          updateNextMilestoneAction,
+          updateCustomNameAction
         } = props;
 
         // On Message Recieve
@@ -403,7 +479,10 @@ const SocketContextProvider = props => {
               if (updateAnswerAction) updateAnswerAction(data.data);
               break;
             case 'PROPOSAL_DETAIL_UPDATE':
-              if (updateProposalDetail) updateProposalDetail(data.data);
+              if (updateProposalDetail) {
+                updateProposalDetail(data);
+                updateDashboardFromSF(data.data);
+              }
               break;
             case 'SWITCH_TEMPLATE_IN_PROGRESS':
               if (setSwitchInProgress) setSwitchInProgress(true);
@@ -502,8 +581,21 @@ const SocketContextProvider = props => {
               widgetUpdate(proposalId, typeOfWidget);
 
             case 'FAVOURITE':
-              const { oppNumber, favourite } = data.data;
-              updateFavouriteAction(oppNumber, favourite);
+              const { oppNumber, favourite, favouriteUpdatedDate } = data.data;
+              updateFavouriteAction(oppNumber, favourite, favouriteUpdatedDate, data.data);
+              break;
+            case 'SF_PROPOSAL_DETAIL_UPDATE':
+              updateDashboardData(data);
+              break;
+
+            case 'NEXT_MILESTONE_UPDATE':
+              const { nextMilestone } = data.data;
+              updateNextMilestoneAction(data.oppId, nextMilestone);
+              break;
+
+            case 'CUSTOM_NAME_UPDATE':
+              const { customName } = data.data;
+              updateCustomNameAction(data.data.oppNumber, customName);
               break;
             default:
               break;
@@ -673,9 +765,21 @@ const SocketContextProvider = props => {
     );
   };
 
-  const updateFavouriteWrapper = (oppNo, favourite) => {
+  const updateFavouriteWrapper = (oppNo, favourite, favouriteUpdatedDate, proposalDetails) => {
     waitForSocketConnectionMinInterval(() =>
-      updateFavourite(oppNo, favourite, null)
+      updateFavourite(oppNo, favourite, favouriteUpdatedDate, proposalDetails, null)
+    );
+  };
+
+  const updateCustomNameWrapper = (oppNo, customName) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateCustomName(oppNo, customName, null)
+    );
+  };
+
+  const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {
+    waitForSocketConnectionMinInterval(() =>
+      updateDashboardProposalCard(oppNo, sfField, answer, null)
     );
   };
 
@@ -784,7 +888,9 @@ const SocketContextProvider = props => {
         approvalSectionDuplicatedWrapper,
         approvalSectionDeletingWrapper,
         approvalSectionDeletedWrapper,
-        updateFavouriteWrapper
+        updateFavouriteWrapper,
+        updateCustomNameWrapper,
+        updateDashboardSFValueWrapper
       }}
     >
       {props.children}
@@ -806,6 +912,7 @@ const mapDispatchToProps = {
   updateQuestionLock: updateQuestionLockByUser,
   updateQuestionUnlock: updateQuestionUnlockByUser,
   getQuestionLockDetails: getQuestionLockDetailsAll,
+  updateDashboardData: updateDashboardProposal,
   setProposalAnswerDatafromSocket: setProposalAnswerDatafromSocket,
   setNotApplicableQuestionFromSocket: setNotApplicableQuestionFromSocket,
   setPriceModelerRecalculationStatus: setPriceModelerRecalculationStatusAction,
@@ -818,7 +925,9 @@ const mapDispatchToProps = {
   onApprovalSectionDeleting: onApprovalSectionDeletingAction,
   onApprovalSectionDeleted: onApprovalSectionDeletedAction,
   widgetUpdate,
-  updateFavouriteAction: updateFavourite
+  updateFavouriteAction: updateFavourite,
+  updateNextMilestoneAction: updateNextMilestone,
+  updateCustomNameAction
 };
 
 export default connect(

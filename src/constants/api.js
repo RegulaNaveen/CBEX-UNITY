@@ -7,6 +7,7 @@ let environment = process.env.API_ENV;
 
 //* PROPOSAL
 let PROPOSAL_API_ENDPOINT = '';
+let PROPOSAL_API_ENDPOINT_2 = '';
 let PROPOSAL_API_KEY = '';
 //* NORMAL AUTH
 let NORMAL_AUTH_API_ENDPOINT = '';
@@ -27,6 +28,8 @@ switch (environment) {
   case 'UAT':
     PROPOSAL_API_ENDPOINT =
       'https://d0mb8f9mx0.execute-api.us-east-1.amazonaws.com/uat';
+    PROPOSAL_API_ENDPOINT_2 =
+      'https://umbpe2tva5.execute-api.us-east-1.amazonaws.com/uat';
     PROPOSAL_API_KEY = 'e4e3BACQBxaTdmYdIGKG58BDF7RHXoloCGNlqcIe';
     NORMAL_AUTH_API_ENDPOINT =
       'https://9l688o9r93.execute-api.us-east-1.amazonaws.com/uat';
@@ -44,6 +47,7 @@ switch (environment) {
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
       'https://new4hoe11j.execute-api.us-east-1.amazonaws.com/dev2';
+    PROPOSAL_API_ENDPOINT_2 = '';
     PROPOSAL_API_KEY = 'L8In0zYYjBuWm2Fae4KU4FOacxstdku293lJ30S3';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
@@ -62,6 +66,7 @@ switch (environment) {
   case 'DEV3':
     PROPOSAL_API_ENDPOINT =
       'https://q4i0wr1pi7.execute-api.us-east-1.amazonaws.com/dev3';
+    PROPOSAL_API_ENDPOINT_2 = '';
     PROPOSAL_API_KEY = 'tjQqMFxlmK5se4Tiivan77PUkV03qWjV9MHwzOMK';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
@@ -80,6 +85,7 @@ switch (environment) {
   case 'DEV3':
     PROPOSAL_API_ENDPOINT =
       'https://q4i0wr1pi7.execute-api.us-east-1.amazonaws.com/dev3';
+    PROPOSAL_API_ENDPOINT_2 = '';
     PROPOSAL_API_KEY = 'tjQqMFxlmK5se4Tiivan77PUkV03qWjV9MHwzOMK';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
@@ -95,6 +101,7 @@ switch (environment) {
   case 'DEMO':
     PROPOSAL_API_ENDPOINT =
       'https://yfpduar618.execute-api.us-east-1.amazonaws.com/demo';
+    PROPOSAL_API_ENDPOINT_2 = '';
     PROPOSAL_API_KEY = 'Q2HUSjNGhX3V5wZ78Ggh1536NtsIeJ7W3Vbfx2mv';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
@@ -111,6 +118,7 @@ switch (environment) {
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
       'https://m7ci1wtmgf.execute-api.us-east-1.amazonaws.com/prod';
+    PROPOSAL_API_ENDPOINT_2 = '';
     PROPOSAL_API_KEY = 'EWK61xXYCM9ofFmBOcOPR4xxxObhZxtwanqD3RHV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://sljfl1jmnc.execute-api.us-east-1.amazonaws.com/prod';
@@ -130,6 +138,8 @@ switch (environment) {
     // UDEV Data
     PROPOSAL_API_ENDPOINT =
       'https://r1g9pjnmbb.execute-api.us-east-1.amazonaws.com/qa';
+    PROPOSAL_API_ENDPOINT_2 =
+      'https://gx2ay0yf3g.execute-api.us-east-1.amazonaws.com/qa';
     PROPOSAL_API_KEY = 'YXrOu45imb6d03erOkZB2PuBOsYQYZ93pnmQK6C0';
     NORMAL_AUTH_API_ENDPOINT =
       'https://cokteh9f4e.execute-api.us-east-1.amazonaws.com/qa';
@@ -147,6 +157,7 @@ switch (environment) {
     // L4 Data
     PROPOSAL_API_ENDPOINT =
       'https://v51h8rf355.execute-api.us-east-1.amazonaws.com/l4';
+    PROPOSAL_API_ENDPOINT_2 = '';
     PROPOSAL_API_KEY = 'PZdKkDgB2p3BZXbm9QnTX2aJtdxJkkz37hgYksJ7';
     NORMAL_AUTH_API_ENDPOINT =
       'https://2gydoa5dw6.execute-api.us-east-1.amazonaws.com/l4';
@@ -163,7 +174,10 @@ switch (environment) {
   case 'DEV':
     // DEV Data
     PROPOSAL_API_ENDPOINT =
+      // 'http://localhost:5000';
       'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_ENDPOINT_2 =
+      'https://542gm4mu97.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
@@ -183,6 +197,8 @@ switch (environment) {
     // DEV Data
     PROPOSAL_API_ENDPOINT =
       'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
+    PROPOSAL_API_ENDPOINT_2 =
+      'https://542gm4mu97.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
@@ -232,6 +248,8 @@ const PROPOSAL_SWITCH_OT = `${PROPOSAL_API_URL}/switch/opportunityType`;
 const USER_API_URL = `${PROPOSAL_API_URL}/users`;
 const INTEGRATIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api`;
 
+const PDF_DOWNLOAD_ENDPOINT = `${PROPOSAL_API_ENDPOINT_2}/api/pdf/download`;
+
 const MAMOTO_IQVIA = 'https://useranalytics.solutions.iqvia.com/';
 
 const PROPOSAL = {
@@ -249,7 +267,8 @@ const PROPOSAL = {
   PROPOSAL_OT_LIST,
   PROPOSAL_SWITCH_OT,
   USER_API_URL,
-  INTEGRATIONS_API_URL
+  INTEGRATIONS_API_URL,
+  PDF_DOWNLOAD_ENDPOINT
 };
 
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;

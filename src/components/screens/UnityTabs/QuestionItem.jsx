@@ -485,6 +485,7 @@ const QuestionItem = ({
       latestAnsweredBidNo = null,
       questionDataDestinations
     } = question;
+
     const loading =
       unityQuestionStatus?.questionId === questionId &&
       unityQuestionStatus?.value;
@@ -605,6 +606,7 @@ const QuestionItem = ({
         disabled={integrationLocked}
         bidAnswerCopy={bidAnswerCopy}
         latestAnsweredBidNo={latestAnsweredBidNo}
+        questionDataDestinations={questionDataDestinations}
       />
     );
   };

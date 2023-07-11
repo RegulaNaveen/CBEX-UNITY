@@ -25,7 +25,9 @@ import {
   changeBid,
   activateProposalLoading,
   getIntegrationsData,
-  resetQuestionsFilterAction
+  resetQuestionsFilterAction,
+  toggleEditCustomNameModal,
+  onEditCustomName
 } from '../../../redux/actions/proposal-actions';
 import { resetFiltersAction } from '../../../redux/actions/approval-actions';
 import { updateProposalNotesFromWebSocket } from '../../../redux/actions/notepad-actions';
@@ -53,7 +55,12 @@ import * as notificationActions from '../../../redux/actions/notification-action
 import { UBUILD, DASHBOARD } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
-import { getBidList, selectFavourite } from '../../../redux/selectors/proposal';
+import {
+  getBidList,
+  selectFavourite,
+  selectCustomName,
+  selectNextMilestone
+} from '../../../redux/selectors/proposal';
 import {
   clearSearchAction,
   closeSearchAction
@@ -307,6 +314,17 @@ export class Opportunity extends Component<Props, State> {
     this.trackMatomoEventTabs(selectedView);
   };
 
+  handleEditCustomName = () => {
+    const {
+      toggleEditCustomNameModal,
+      onEditCustomName,
+      customName,
+      details
+    } = this.props;
+    onEditCustomName(details['CRM #'], customName);
+    toggleEditCustomNameModal(true);
+  };
+
   renderContent = () => {
     const { enableValidateTab, selectedView, windowSize } = this.state;
     const {
@@ -315,9 +333,18 @@ export class Opportunity extends Component<Props, State> {
       isOpen,
       selectedBid,
       match: { params },
-      favourite
+      favourite,
+      customName,
+      nextMilestone
     } = this.props;
-    const { bidStatus } = selectedBid.toJS();
+    const { 
+      bidStatus, 
+      bidStopStatus, 
+      opportunityName, 
+      opportunityStatus, 
+      isApprovalCountPresent 
+    } = selectedBid.toJS();
+
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -332,7 +359,14 @@ export class Opportunity extends Component<Props, State> {
           isOpen={isOpen}
           windowSize={windowSize}
           bidStatus={bidStatus}
+          bidStopStatus={bidStopStatus}
           favourite={favourite}
+          customName={customName}
+          nextMilestone={nextMilestone}
+          opportunityName={opportunityName}
+          opportunityStatus={opportunityStatus}
+          handleEditCustomName={this.handleEditCustomName}
+          isApprovalCountPresent={isApprovalCountPresent}
         />
         <span className="unity-tabs-container-wrapper">
           <UnityTab
@@ -399,7 +433,9 @@ const mapStateToProps = (state: Map) => ({
   selectedBid: getSelectedBid(state),
   newbidflag: getStatusOfNewBid(state),
   bidList: getBidList(state),
-  favourite: selectFavourite(state)
+  favourite: selectFavourite(state),
+  customName: selectCustomName(state),
+  nextMilestone: selectNextMilestone(state)
 });
 
 export default compose(
@@ -428,6 +464,8 @@ export default compose(
     resetApprovalsFilter: resetFiltersAction,
     closeSearch: closeSearchAction,
     clearSearch: clearSearchAction,
-    saverecentoppactivity: saveRecentOppActivity
+    saverecentoppactivity: saveRecentOppActivity,
+    toggleEditCustomNameModal,
+    onEditCustomName
   })
 )(MatomoHOC(Opportunity));

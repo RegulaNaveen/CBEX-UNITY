@@ -8,11 +8,13 @@ import {
   onGetByStatus,
   getRecentOpportunity,
   getAssignedOpportunity,
+  getFavoritesOpportunity,
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
-import { selectFavourites } from '../selectors/sso-auth';
-import { getProposals } from '../selectors';
+import { selectFavourites, selectCustomNameMap, selectFavouritesUpdatedDateMap } from '../selectors/sso-auth';
+import { getProposals, getFavouriteProposals } from '../selectors';
+import { getfetchAllFlags } from '../selectors/proposal';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -24,10 +26,42 @@ const {
   SET_PAGE,
   SET_NUM_OF_ROWS,
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
-  NON_EDITABLE_SF_FIELD
+  NON_EDITABLE_SF_FIELD,
+  ON_GET_FAVOURITE,
+  DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSALS;
 
-const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
+function removeDuplicates(arr) {
+  return arr.filter((item,
+      index) => arr.indexOf(item) === index);
+}
+
+const formatProposalGrid = (proposal) => {
+
+  const formatted = {
+    'bid due date': proposal['Bid due date'],
+    'opportunity number': proposal['CRM #'],
+    'protocol number': proposal['Protocol number'],
+    'opportunity status': proposal['opportunityStatus'],
+    'verbatim indication': proposal['Verbatim indication'],
+    bidNo: proposal['bidNo'],
+    isFavourite: proposal.isFavourite,
+    customer: proposal.Customer,
+    customName: proposal.customName,
+    bidStopStatus: proposal.bidStatus,
+    nextMilestone: proposal.nextMilestone,
+    opportunityName: proposal.opportunityName,
+    isApprovalCountPresent: proposal.isApprovalCountPresent,
+  };
+
+  return formatted;
+};
+
+const formatProposal = (
+  proposal: Object,
+  favoritesMap: Object,
+  customNameMap: Object = {}
+): Object => {
   const formattedProposal = {};
 
   const {
@@ -37,13 +71,15 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     opportunityOverview,
     usersList,
     approvalsCount,
-    isApprovalCountPresent
+    isApprovalCountPresent,
+    bidStopStatus
   } = proposal;
 
   if (!isEmpty(opportunityOverview)) {
     formattedProposal.proposalId = proposalId;
     formattedProposal.opportunityName = opportunityName;
     formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+    formattedProposal['bidNo'] = proposalDetails['bidNo'];
     formattedProposal.customer = proposalDetails.Customer;
     formattedProposal['protocol number'] = proposalDetails['Protocol number'];
     formattedProposal.phase = proposalDetails.Phase;
@@ -57,9 +93,13 @@ const formatProposal = (proposal: Object, favoritesMap: Object): Object => {
     formattedProposal.usersList = usersList;
     formattedProposal.approvalsCount = approvalsCount;
     formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+    formattedProposal.bidStopStatus = bidStopStatus || false;
     formattedProposal.isFavourite = !!favoritesMap[
       `${proposalDetails['CRM #']}`
     ];
+    formattedProposal.customName =
+      customNameMap[`${proposalDetails['CRM #']}`] || '';
+    formattedProposal.nextMilestone = proposal.nextMilestone || [];
     return formattedProposal;
   }
 
@@ -203,61 +243,93 @@ export const onFilteringProposals = (
             }
             break;
           }
+          case 'Customized opportunity name': {
+            filterPayload.opportunityCustomname = value;
+            break;
+          }
           default:
             break;
         }
       });
+      const allFlags = getfetchAllFlags(getState());
       let data = { proposals: [] };
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getAssignedOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getAssignedOpportunity(
             filterPayload,
-            'active',
+            false,
             userEmail
           );
           data = response.data;
         }
-      } else if (Number(tabIndex) === 1) {
+      } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
+        if (Object.keys(filterPayload).length > 1) {
+          const response = await onGetAllProposals(filterPayload);
+          data = response.data;
+        } else {
+          const response = await getFavoritesOpportunity();
+          data = response.data;
+        }
+      } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetByStatus(
+          const response = await getRecentOpportunity(
             filterPayload,
-            'current',
+            true,
             userEmail
           );
           data = response.data;
         } else {
           const response = await getRecentOpportunity(
             filterPayload,
-            'non-active',
+            false,
             userEmail
           );
           data = response.data;
         }
       } else {
-        const response = await onGetAllProposals(filterPayload);
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const response = await onGetAllProposals(filterPayload, userEmail);
         data = response.data;
       }
 
       if (!isEmpty(data)) {
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
+        const customNameMap = selectCustomNameMap(getState()).toJS();
+        
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
         }, {});
         const formatted = proposals.map(proposal =>
-          formatProposal(proposal, favouritesMap)
+          formatProposal(proposal, favouritesMap, customNameMap)
         );
-        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+        
+        if(allFlags.favouriteFlag && Number(tabIndex) === 1) {
+          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(getState()).toJS();
+          favouritesUpdatedDateMap.sort((a,b) => (a["updated date"] > b["updated date"]) ? 1 
+                                              : ((b["updated date"] > a["updated date"]) ? -1 : 0)).reverse();
+          const uniqueFavourites = removeDuplicates(favouritesUpdatedDateMap);
+          let orderedProposal = [];
+          for( const favorite of uniqueFavourites) {
+            for(const proposal of formatted) {
+              if(proposal['opportunity number'] === favorite['opportunity number'])
+                orderedProposal.push(proposal);
+            }
+          }
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite: orderedProposal } });
+        } else {
+          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -327,11 +399,12 @@ export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
   }
 };
 
-export const updateProposal = (oppNumber, favourite) => async (
+export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   dispatch,
   getState
 ) => {
   try {
+    let proposalsFavourite = getFavouriteProposals(getState());
     let proposals = getProposals(getState());
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNumber
@@ -340,6 +413,24 @@ export const updateProposal = (oppNumber, favourite) => async (
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
+
+    const proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
+    if(!proposalCheck && favourite) {
+      delete proposalDetails.favourite;
+      const { dataFromGrid } = proposalDetails;
+      proposalDetails['isFavourite'] = favourite;
+      proposals[proposalIndex] ? 
+        proposalsFavourite.unshift(proposals[proposalIndex]) 
+        : dataFromGrid 
+        ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails)) 
+        : proposalsFavourite.unshift(proposalDetails);
+      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+    }
+    if(proposalCheck && !favourite) {
+      let index = proposalsFavourite.findIndex(proposal => proposal['opportunity number'] === oppNumber);
+      proposalsFavourite.splice(index, 1);
+      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+    }  
   } catch (error) {
     console.log(error);
   }

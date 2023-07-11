@@ -13,6 +13,29 @@
 }
 
 .event-launcher__modal {
-  max-width: 545px;
+  width: 545px;
   width: '100%';
+}
+
+.unassigned-roles-list-container {
+  .desc {
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+    font-weight: 400;
+    font-family: 'Proxima Nova';
+  }
+
+  .unassigned-roles-list-scrollable {
+    max-height: 8.75rem;
+    overflow: auto;
+    padding: 0.5rem;
+    border: 1px solid #dddddd;
+    border-radius: 0.25rem;
+    p {
+      font-size: 0.8777rem;
+      line-height: 1.5rem;
+      font-weight: 400;
+      font-family: 'Proxima Nova';
+    }
+  }
 }

@@ -1,11 +1,12 @@
 // @flow
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useMatomo } from '@datapunt/matomo-tracker-react';
 import * as serviceWorker from 'register-service-worker';
 import { useDispatch, useSelector } from 'react-redux';
 import Toolbar from '../../views/toolbar';
 import Tabbar from '../../views/Tabbar';
 import MyDocketTab from './MyDocketTab';
+import FavoritesTab from './FavoritesTab';
 import RecentTab from './RecentTab';
 import AllTab from './AllTab';
 import * as packageJson from '../../../../package.json';
@@ -17,9 +18,9 @@ serviceWorker.unregister();
 
 const Dashboard = () => {
   const { trackPageView } = useMatomo();
+  const [filterApply, setFilterApply] = useState(0);
   const dispatch = useDispatch();
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
-
   const getLaunchdarklyFlags = async () => {
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) dispatch(setFlag(flagValue));
@@ -44,14 +45,21 @@ const Dashboard = () => {
     }
     getLaunchdarklyFlags();
   }, []);
-
   return (
     <div id="dashboard">
       <Toolbar selected="dashboard" />
       <div className="tab-wrapper">
-        <Tabbar>
+        <Tabbar
+          allFlags={allFlags}
+          getFilterStatus={e => {
+            setFilterApply(e);
+          }}
+        >
           <div label="Assigned">
-            <MyDocketTab allFlags={allFlags} />
+            <MyDocketTab allFlags={allFlags} filterApply={filterApply} />
+          </div>
+          <div label="Favorites">
+            <FavoritesTab allFlags={allFlags} />
           </div>
           <div label="Recent">
             <RecentTab allFlags={allFlags} />

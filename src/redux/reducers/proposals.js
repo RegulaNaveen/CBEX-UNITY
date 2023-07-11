@@ -1,6 +1,8 @@
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
+import { DashboardSFUpDATE } from '../../constants/app';
+import { cloneDeep } from 'lodash';
 import type { ApiAction } from '../actions/action-types';
 
 const {
@@ -14,13 +16,16 @@ const {
   SET_PAGE,
   SET_NUM_OF_ROWS,
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
-  NON_EDITABLE_SF_FIELD
+  NON_EDITABLE_SF_FIELD,
+  ON_GET_FAVOURITE,
+  DASHBOARD_PROPOSAL_DETAIL
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
   filteredProposals: undefined,
   isFiltering: false,
   proposals: undefined,
+  favouriteProposals: undefined,
   proposalsError: undefined,
   proposalsFilters: undefined,
   proposalsLoading: false,
@@ -55,6 +60,11 @@ const onSetProposalsFilters = (state: Map, action: Object): Map => {
   return state.set('proposalsFilters', proposalsFilters);
 };
 
+const onSetProposalsFavourite = (state: Map, action: Object): Map => {
+  const { proposalsFavourite } = action.payload;
+  return state.set('favouriteProposals', proposalsFavourite).set('proposalsLoading', false);
+};
+
 const setProposalViewType = (state: Map, action: Object): Map => {
   const { payload } = action;
   return state.set('selectedViewType', payload.typeView);
@@ -69,6 +79,44 @@ const setProposalFiltering = (state, action) =>
 const setPage = (state, action) => state.set('page', action.payload);
 
 const setNumOfRows = (state, action) => state.set('numRows', action.payload);
+
+const setProposalDetails = (state, action) => {
+  const data = action.payload;
+  const mapper = DashboardSFUpDATE;
+  let proposals = state.get('proposals');
+  if (proposals) {
+    if (data && data.fromSF) {
+      const updateProposals = proposals.map(value => {
+        if (data.data.oppNo === value['opportunity number']) {
+          value['bid due date'] =
+            data.data.proposalDetails?.['Bid due date'] || '';
+          value['verbatim indication'] =
+            data.data.proposalDetails['Verbatim indication'] || '';
+          value['therapeuticArea'] =
+            data.data.proposalDetails?.['Therapeutic area'] || '';
+          value['phase'] = data.data.proposalDetails['Phase'] || '';
+          value['protocol number'] =
+            data.data.proposalDetails?.['Protocol number'] || '';
+          value['product'] = data.data.proposalDetails?.['Product name'] || '';
+          value['customer'] = data.data.proposalDetails?.Customer || '';
+        }
+        return value;
+      });
+      proposals = updateProposals;
+    }
+    if (!data.fromSF) {
+      const updateProposals = proposals.map(value => {
+        if (data.data.oppNo === value['opportunity number']) {
+          value[mapper[data.data.sfField]] = data.data.answer;
+        }
+        return value;
+      });
+      proposals = updateProposals;
+    }
+  }
+  const results = cloneDeep(proposals);
+  return state.set('proposals', [...[...results]]);
+};
 
 const setAssignedTabNumOfRows = (state, action) =>
   state.set('assignTabRows', action.payload);
@@ -87,7 +135,9 @@ const actionMap = {
   [SET_PAGE]: setPage,
   [SET_NUM_OF_ROWS]: setNumOfRows,
   [SET_ASSIGNED_TAB_NUM_OF_ROWS]: setAssignedTabNumOfRows,
-  [NON_EDITABLE_SF_FIELD]: setNonEditableField
+  [NON_EDITABLE_SF_FIELD]: setNonEditableField,
+  [ON_GET_FAVOURITE]: onSetProposalsFavourite,
+  [DASHBOARD_PROPOSAL_DETAIL]: setProposalDetails
 };
 
 export default function(

@@ -33,3 +33,11 @@ export const selectUserRole = createSelector(selectSSOAuth, auth =>
 export const selectFavourites = createSelector(selectSSOAuth, auth =>
   auth.get('favourites', [])
 );
+
+export const selectCustomNameMap = createSelector(selectSSOAuth, auth =>
+  auth.get('customNameMap', {})
+);
+
+export const selectFavouritesUpdatedDateMap = createSelector(selectSSOAuth, auth =>
+  auth.get('favouritesUpdatedDate', {})
+);

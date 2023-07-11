@@ -1,10 +1,9 @@
 // @flow
 import React, { Component } from 'react';
-import Accordion from 'apollo-react/components/Accordion';
-import AccordionDetails from 'apollo-react/components/AccordionDetails';
-import AccordionSummary from 'apollo-react/components/AccordionSummary';
-import Typography from 'apollo-react/components/Typography';
+import Tab from 'apollo-react/components/Tab';
+import Tabs from 'apollo-react/components/Tabs';
 import Card from 'apollo-react/components/Card';
+import Typography from 'apollo-react/components/Typography';
 import { connect } from 'react-redux';
 import { chunk, isEmpty } from 'lodash';
 import Loader from 'react-loader-spinner';
@@ -26,7 +25,7 @@ import {
 } from '../../../redux/actions/proposals-actions';
 import TableView from '../../views/TableView';
 import GridView from '../../views/GridView';
-import AssignTabPagination from '../../common/AssignTabPagination';
+import ComplexPagination from '../../common/ComplexPagination';
 
 type Props = {
   selectedViewType: 0 | 1,
@@ -56,7 +55,8 @@ class RecentTab extends Component<Props, State> {
       newpageContent: [],
       pageContent: [],
       currentCount: 0,
-      pastCount: 0
+      pastCount: 0,
+      tabValue: 0
     };
   }
 
@@ -64,6 +64,10 @@ class RecentTab extends Component<Props, State> {
     const { setRows, allFlags } = this.props;
     setRows(10);
   }
+
+  handleChangeTab = (event, value) => {
+    this.setState({ tabValue: value });
+  };
 
   componentDidUpdate(prevProps) {
     const {
@@ -90,7 +94,10 @@ class RecentTab extends Component<Props, State> {
         let currentProposal = [];
         let oldProposal = [];
         proposals.filter(value => {
-          if (moment(value['bid due date']).diff(moment(), 'days') + 1 > 0) {
+          if (
+            moment(value['bid due date']).diff(moment(), 'days') + 1 > 0 &&
+            !value['bidStopStatus']
+          ) {
             currentProposal.push(value);
           } else {
             oldProposal.push(value);
@@ -115,7 +122,10 @@ class RecentTab extends Component<Props, State> {
     const oldProposal = [];
     if (proposals && proposals?.length) {
       proposals.filter(value => {
-        if (moment(value['bid due date']).diff(moment(), 'days') + 1 > 0) {
+        if (
+          moment(value['bid due date']).diff(moment(), 'days') + 1 > 0 &&
+          !value['bidStopStatus']
+        ) {
           currentProposal.push(value);
         } else {
           oldProposal.push(value);
@@ -130,7 +140,13 @@ class RecentTab extends Component<Props, State> {
   }
 
   renderSelectedView = key => {
-    const { selectedViewType, allFlags } = this.props;
+    const {
+      selectedViewType,
+      allFlags,
+      isFilteringProposals,
+      loading,
+      filterApply
+    } = this.props;
     let { newpageContent, oldpageContent, pageContent } = this.state;
     if (key == 'current') {
       if (newpageContent && newpageContent.length) {
@@ -143,7 +159,9 @@ class RecentTab extends Component<Props, State> {
         return (
           <Card className="no-info-card">
             <Typography>
-              No current opportunities are assigned to you
+              {filterApply
+                ? 'No results found'
+                : 'No current opportunities are assigned to you'}
             </Typography>
           </Card>
         );
@@ -159,7 +177,10 @@ class RecentTab extends Component<Props, State> {
         return (
           <Card className="no-info-card">
             <Typography>
-              No current opportunities are assigned to you
+              {' '}
+              {filterApply
+                ? 'No results found'
+                : 'No Past opportunities were assigned to you'}
             </Typography>
           </Card>
         );
@@ -184,12 +205,17 @@ class RecentTab extends Component<Props, State> {
       setPage,
       setRows
     } = this.props;
-    const { pageContent } = this.state;
+    const { pageContent, tabValue } = this.state;
     const showPagination = isFilteringProposals
       ? !isEmpty(filteredProposals)
       : !isEmpty(proposals);
-    const { oppCount, oldoppCount } = this.getPageCount() || 0;
-    const maxItem = Math.max(...[oppCount, oldoppCount]) || 0;
+    const { oppCount, oldoppCount } = this.getPageCount();
+    const showCurrentPaginationCount = isFilteringProposals
+      ? filteredProposals.length
+      : oppCount;
+    const showPastPaginationCount = isFilteringProposals
+      ? filteredProposals.length
+      : oldoppCount;
     return loading ? (
       <Loader
         type="TailSpin"
@@ -200,42 +226,53 @@ class RecentTab extends Component<Props, State> {
       />
     ) : (
       <>
-        <Accordion defaultExpanded className="current-tab">
-          <AccordionSummary>
-            <Typography>
-              Current{oppCount > 0 ? `(${oppCount})` : '(No data to show)'}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <section id="all-tab" className="tab-content">
-              {this.renderSelectedView('current')}
-            </section>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion className="past-tab">
-          <AccordionSummary>
-            <Typography>
-              Past{oldoppCount > 0 ? `(${oldoppCount})` : '(No data to show)'}
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <section id="all-tab" className="tab-content">
-              {this.renderSelectedView('past')}
-            </section>
-          </AccordionDetails>
-        </Accordion>
-
-        {showPagination && (
-          <AssignTabPagination
-            currentTab="Assigned Tab"
-            totalItems={
-              isFilteringProposals ? filteredProposals.length : maxItem
-            }
-            getCurrentPosition={setPage}
-            getMaxRows={setRows}
-          />
-        )}
+        <div>
+          <Card style={{ paddingLeft: 10, paddingBottom: 0 }}>
+            <Tabs
+              className="assigned-tab"
+              value={tabValue}
+              onChange={this.handleChangeTab}
+              truncate
+            >
+              <Tab label={`Current (${oppCount})`} />
+              <Tab label={`Past (${oldoppCount})`} />
+            </Tabs>
+          </Card>
+          <div style={{ padding: 24 }}>
+            {tabValue === 0 && (
+              <section id="all-tab" className="tab-content">
+                {this.renderSelectedView('current')}
+                {showPagination && showCurrentPaginationCount > 15 && (
+                  <ComplexPagination
+                    currentTab="Assigned Tab"
+                    totalItems={
+                      isFilteringProposals ? filteredProposals.length : oppCount
+                    }
+                    getCurrentPosition={setPage}
+                    getMaxRows={setRows}
+                  />
+                )}
+              </section>
+            )}
+            {tabValue === 1 && (
+              <section id="all-tab" className="tab-content">
+                {this.renderSelectedView('past')}
+                {showPagination && showPastPaginationCount > 15 && (
+                  <ComplexPagination
+                    currentTab="Assigned Tab"
+                    totalItems={
+                      isFilteringProposals
+                        ? filteredProposals.length
+                        : oldoppCount
+                    }
+                    getCurrentPosition={setPage}
+                    getMaxRows={setRows}
+                  />
+                )}
+              </section>
+            )}
+          </div>
+        </div>
       </>
     );
   }
