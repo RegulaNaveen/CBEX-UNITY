@@ -202,25 +202,9 @@ const loadSidebar = props => {
         saveRecentOppActivity(obj);
       }
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
-        if (toggleFavouriteRes.data.favourite) {
-          await dispatch(
-            updateFavourite(
-              crm,
-              favourite,
-              favouriteUpdatedDate,
-              proposalDetails
-            )
-          );
-        } else {
-          await dispatch(
-            updateFavourite(
-              crm,
-              favourite,
-              favouriteUpdatedDate,
-              proposalDetails
-            )
-          );
-        }
+        await dispatch(
+          updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails)
+        );
       }
     } catch (e) {
       console.error(`Error in updating favourite for ${crm}`, e);
