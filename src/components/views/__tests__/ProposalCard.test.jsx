@@ -46,7 +46,8 @@ const props = {
   verbatimIndication: 'Cancer treatment',
   proposalId: '12345',
   approvalsCount: 3,
-  isApprovalCountPresent: true
+  isApprovalCountPresent: true,
+  proposalDetails: {}
 };
 
 const ProposalCardWithRedux = ({ updateFavouriteWrapper, ...props }) => (
@@ -142,7 +143,7 @@ describe('ProposalCard component', () => {
     expect(container.querySelector('.fav-icon-button')).toBe(null);
   });
 
-  it.skip('on click fav icon should change state', async () => {
+  it('on click fav icon should change state', async () => {
     const updateFavWrapperStub = sinonSandbox.stub();
     const toggleFavStub = sinonSandbox
       .stub(SSOApis, 'toggleFavourite')
