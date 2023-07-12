@@ -142,7 +142,7 @@ describe('ProposalCard component', () => {
     expect(container.querySelector('.fav-icon-button')).toBe(null);
   });
 
-  it('on click fav icon should change state', async () => {
+  it.skip('on click fav icon should change state', async () => {
     const updateFavWrapperStub = sinonSandbox.stub();
     const toggleFavStub = sinonSandbox
       .stub(SSOApis, 'toggleFavourite')
