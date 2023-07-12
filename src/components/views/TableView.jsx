@@ -114,10 +114,6 @@ const TableView = ({ data, hideStatus }: Props) => {
             return <h3 key={uuidv4()}>Next Milestone</h3>;
           }
 
-          if (column === 'nextMilestone') {
-            return <h3 key={uuidv4()}>Next Milestone</h3>;
-          }
-
           if (column === 'isFavourite') {
             return ' ';
           }
@@ -177,25 +173,14 @@ const TableView = ({ data, hideStatus }: Props) => {
         };
         saveRecentOppActivity(obj);
         if (toggleFavouriteRes && toggleFavouriteRes.data) {
-          if (toggleFavouriteRes.data.favourite) {
-            await dispatch(
-              updateFavourite(
-                row[LINK_COLUMN],
-                favourite,
-                favouriteUpdatedDate,
-                row
-              )
-            );
-          } else {
-            await dispatch(
-              updateFavourite(
-                row[LINK_COLUMN],
-                favourite,
-                favouriteUpdatedDate,
-                row
-              )
-            );
-          }
+          await dispatch(
+            updateFavourite(
+              row[LINK_COLUMN],
+              favourite,
+              favouriteUpdatedDate,
+              row
+            )
+          );
         }
       } catch (e) {
         console.error(`Error in updating favourite for ${row[LINK_COLUMN]}`, e);

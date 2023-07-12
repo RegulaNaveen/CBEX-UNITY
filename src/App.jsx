@@ -89,7 +89,7 @@ const EditCustomNameModal = ({ show }) => {
       subtitle={`Opportunity Number: ${oppNoEditing}`}
       className="edit-custom-name-modal"
       onClose={() => handleEditModalClose()}
-      title={<Typography variant="h3">Edit Custom Name</Typography>}
+      title={<Typography>Edit Custom Name</Typography>}
       buttonProps={[
         { label: 'Cancel', onClick: () => handleEditModalClose() },
         { label: 'Save', onClick: () => onSaveCustomName() }
@@ -98,7 +98,6 @@ const EditCustomNameModal = ({ show }) => {
       <TextField
         label="Custom Name"
         placeholder="New Custom Name"
-        defaultValue={customNameEditing}
         value={editName}
         error={error.length > 0}
         helperText={error}
@@ -139,7 +138,7 @@ const Home = () => {
         />
         <PrivateRoute path={OPPORTUNITYS} component={OpportunityComponent} />
       </Switch>
-      <EditCustomNameModal show={showEditModal} />
+      {showEditModal ? <EditCustomNameModal show={showEditModal} /> : null}
     </>
   );
 };
