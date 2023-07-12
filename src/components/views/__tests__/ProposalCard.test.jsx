@@ -46,7 +46,8 @@ const props = {
   verbatimIndication: 'Cancer treatment',
   proposalId: '12345',
   approvalsCount: 3,
-  isApprovalCountPresent: true
+  isApprovalCountPresent: true,
+  proposalDetails: {}
 };
 
 const ProposalCardWithRedux = ({ updateFavouriteWrapper, ...props }) => (
