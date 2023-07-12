@@ -408,9 +408,9 @@ const QuestionItem = ({
             color="primary"
             size="small"
             className="question-tooltip-icon"
-            onClick={(e) => setAnchorEl(e.currentTarget)}
-          >      
-            <InfoIcon className="info-icon" style={{ fontSize: '16px' }}/>
+            onClick={e => setAnchorEl(e.currentTarget)}
+          >
+            <InfoIcon className="info-icon" style={{ fontSize: '16px' }} />
           </IconButton>
           <Popover
             className="popover-custom-tab"
@@ -419,24 +419,24 @@ const QuestionItem = ({
             onClose={() => setAnchorEl(null)}
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'center',
+              horizontal: 'center'
             }}
             transformOrigin={{
               vertical: 'top',
-              horizontal: 'center',
+              horizontal: 'center'
             }}
             PaperProps={{
-              style: { 
-                borderColor: '#e9e9e9', 
-                boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                padding: 10, 
-                maxInlineSize: '300px', 
-                overflowWrap: 'break-word' 
-              },
+              style: {
+                borderColor: '#e9e9e9',
+                boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                padding: 10,
+                maxInlineSize: '300px',
+                overflowWrap: 'break-word'
+              }
             }}
           >
-            <Typography>{
-              questionHintJSON ? (
+            <Typography>
+              {questionHintJSON ? (
                 <RichTextEditor
                   variant="view"
                   defaultValue={JSON.parse(questionHintJSON)}
@@ -444,8 +444,7 @@ const QuestionItem = ({
                 />
               ) : (
                 <div>{questionHint}</div>
-              )
-            }
+              )}
             </Typography>
           </Popover>
         </div>
@@ -483,8 +482,10 @@ const QuestionItem = ({
       sfObject,
       hasDifferentSFanswer,
       bidAnswerCopy = false,
-      latestAnsweredBidNo = null
+      latestAnsweredBidNo = null,
+      questionDataDestinations
     } = question;
+
     const loading =
       unityQuestionStatus?.questionId === questionId &&
       unityQuestionStatus?.value;
@@ -530,12 +531,10 @@ const QuestionItem = ({
     if (dateIsAfter) {
       integrationvalidation = true;
     }
-    const integrationsArray = integrationsData?.data.map(item => {
-      return item.questionId;
-    });
-    integrationsData?.data.map(item => {
-      if (item.questionId.includes(qvicon)) destinationArray = item.destination;
-    });
+
+    const integrationsArray =
+      questionDataDestinations && questionDataDestinations.split(',');
+
     integrationvalidation = integrationsArray?.includes(qvicon);
 
     if (integration) {
@@ -601,6 +600,7 @@ const QuestionItem = ({
         disabled={integrationLocked}
         bidAnswerCopy={bidAnswerCopy}
         latestAnsweredBidNo={latestAnsweredBidNo}
+        questionDataDestinations={questionDataDestinations}
       />
     );
   };

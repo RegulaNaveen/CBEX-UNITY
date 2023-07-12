@@ -97,6 +97,7 @@ const ProposalCard = ({
     try {
       setFavInProgress(true);
       const favouriteUpdatedDate = moment().format();
+      proposalDetails['nextMilestone'] = nextMilestone;
       const toggleFavouriteRes = await toggleFavourite(title, favourite);
       updateFavouriteWrapper(
         title,
