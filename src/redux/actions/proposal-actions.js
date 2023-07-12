@@ -149,29 +149,18 @@ const updateBidNoQueryparam = bidNo => {
 export type ProposalInfo = {};
 
 export const getProposal = (id: string): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>, getState) => {
+  return async (dispatch: Dispatch<string, Object>) => {
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
 
     try {
       const data = await getProposalInfo(id);
-      const favourites = selectFavourites(getState()).toJS();
-      const customNameMap = selectCustomNameMap(getState()).toJS();
-      const favouritesMap = favourites.reduce((favMap, fav) => {
-        favMap[fav] = true;
-        return favMap;
-      }, {});
-      const isFavourite =
-        favouritesMap[`${data.proposal.proposalDetails['CRM #']}`];
       // Extracting unique milestone values from Proposal Questions
       const milestones = getUniqueMilestones(data.proposalQuestions);
       dispatch({
         type: PROPOSAL_INFO,
         payload: {
           ...data,
-          milestones,
-          isFavourite,
-          customName:
-            customNameMap[`${data.proposal.proposalDetails['CRM #']}`] || ''
+          milestones
         }
       });
 
@@ -1773,14 +1762,6 @@ export const onEditCustomName = (oppNo, customName) => {
   };
 };
 
-export const onCancelEditCustomName = (oppNo, customName) => {
-  return dispatch => {
-    dispatch({
-      type: CLEAR_EDIT_OPP_INFO
-    });
-  };
-};
-
 export const toggleEditCustomNameModal = (show = false) => {
   return dispatch => {
     dispatch({ type: TOGGLE_EDIT_CUSTOM_NAME_MODAL, payload: show });
@@ -1832,6 +1813,7 @@ export const updateNextMilestone = (oppNumber, nextMilestone) => {
         proposals[proposalIndex]['nextMilestone'] = nextMilestone;
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
       }
+      console.log('proposalInfo', proposalInfo, oppNumber);
       if (proposalInfo['CRM #'] === oppNumber) {
         dispatch({
           type: SET_NEXT_MILESTONE,

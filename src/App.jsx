@@ -37,7 +37,6 @@ import launchDarkly from './utils/launchDarkly';
 import {
   setFlag,
   onSaveCustomName as saveCustomNameAction,
-  onCancelEditCustomName,
   toggleEditCustomNameModal
 } from './redux/actions/proposal-actions';
 import {
@@ -67,7 +66,7 @@ const EditCustomNameModal = ({ show }) => {
   }
 
   function handleEditModalClose() {
-    dispatch(toggleEditCustomNameModal(false));
+    dispatch(toggleEditCustomNameModal());
   }
 
   function onSaveCustomName() {
