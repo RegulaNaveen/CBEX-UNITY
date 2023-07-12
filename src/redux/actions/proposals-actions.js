@@ -99,6 +99,7 @@ const formatProposal = (
     ];
     formattedProposal.customName =
       customNameMap[`${proposalDetails['CRM #']}`] || '';
+    formattedProposal.nextMilestone = proposal.nextMilestone || [];
     return formattedProposal;
   }
 

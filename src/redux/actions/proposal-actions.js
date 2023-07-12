@@ -100,6 +100,7 @@ const {
   QUESTION_LOCK_BY_USER,
   QUESTION_UNLOCK_BY_USER,
   QUESTION_LOCK_DETAILS_ALL,
+  UPDATE_PROPOSAL_DETAIL_SF,
   SET_FLAG,
   SHOW_NA_CHECKBOX,
   UPDATE_NOT_APPLICABLE_PROGRESS,
@@ -693,6 +694,17 @@ export const getQuestionLockDetailsAll = (
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: QUESTION_LOCK_DETAILS_ALL,
+      payload: data
+    });
+  };
+};
+
+export const updateProposalDetailFromWebSocket = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: UPDATE_PROPOSAL_DETAIL_SF,
       payload: data
     });
   };
