@@ -10,9 +10,12 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { configure } from 'enzyme';
 import thunk from 'redux-thunk';
 import { Map, fromJS } from 'immutable';
+import Sinon from 'sinon';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import * as data from '../../screens/Proposal/__tests__/data.json';
 import UnityFooter from '../Footer';
+import { REDUX_TYPES } from '../../../constants';
+import * as ProposalApi from '../../../api/proposal';
 
 configure({ adapter: new Adapter() });
 const middlewares = [thunk];
@@ -84,9 +87,15 @@ const props = {
 
 describe('Test Footer Component', () => {
   let store;
+  let sinonSandbox;
+
+  beforeAll(() => {
+    sinonSandbox = Sinon.createSandbox();
+  });
 
   beforeEach(() => {
     store = mockStore(initialState);
+    sinonSandbox.restore();
   });
 
   test('Load footer component', async () => {
@@ -117,5 +126,26 @@ describe('Test Footer Component', () => {
 
     fireEvent.click(await queryByTestId('sync-icon'));
     expect(queryByTestId('switch-template')).toBeInTheDocument();
+  });
+
+  it('should call getOpportunity on switch template success', async () => {
+    const getAllProposalsStub = sinonSandbox
+      .stub(ProposalApi, 'getAllProposals')
+      .resolves([
+        {
+          isCurrent: true
+        }
+      ]);
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
+      payload: 'success'
+    });
+    const { container } = render(
+      <Provider store={store}>
+        <Router>
+          <UnityFooter {...props} />
+        </Router>
+      </Provider>
+    );
   });
 });
