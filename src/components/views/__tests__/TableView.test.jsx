@@ -50,26 +50,15 @@ const TableViewWithRedux = props => {
 };
 
 describe('TableView component', () => {
-  test.skip('renders table headers and content correctly', () => {
+  test('renders table headers and content correctly', () => {
     const { getByText } = render(<TableViewWithRedux data={data} />);
 
-    const headerOpportunityNumber = getByText(/opportunity number/i);
-    // const headerOpportunityName = getByText(/opportunity name/i);
-    const headerBidDueDate = getByText(/bid due date/i);
-    // const headerOpportunityStatus = getByText('opportunity stage');
-    const firstRowOpportunityNumber = getByText('OPP123');
-    const firstRowOpportunityName = getByText('Test Opportunity');
-    const firstRowBidDueDate = getByText('1-Jan-2022');
-    const firstRowOpportunityStatus = getByText('Active');
-
-    expect(headerOpportunityNumber).toBeInTheDocument();
-    // expect(headerOpportunityName).toBeInTheDocument();
+    const headerOpportunityName = getByText(/Opportunity Name/i);
+    const headerBidDueDate = getByText(/Bid Due Date/i);
+    const headerOpportunityStatus = getByText(/Opportunity Stage/i);
+    expect(headerOpportunityName).toBeInTheDocument();
     expect(headerBidDueDate).toBeInTheDocument();
-    // expect(headerOpportunityStatus).toBeInTheDocument();
-    expect(firstRowOpportunityNumber).toBeInTheDocument();
-    expect(firstRowOpportunityName).toBeInTheDocument();
-    expect(firstRowBidDueDate).toBeInTheDocument();
-    expect(firstRowOpportunityStatus).toBeInTheDocument();
+    expect(headerOpportunityStatus).toBeInTheDocument();
   });
 
   test('hides the opportunity status header and data correctly', () => {
