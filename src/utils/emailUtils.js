@@ -40,8 +40,14 @@ function handleHyperlinks(answer, config) {
   try {
     if (answer === 'N/A' && config && config.type === 'date') return 'N/A';
 
-    if (answer && config && config.type === 'date')
-      return moment(answer).format('DD-MMM-YYYY');
+    if (answer && config && config.type === 'date') {
+      const parsedDate = moment(answer);
+      if (parsedDate.isValid()) {
+        return parsedDate.format('DD-MMM-YYYY');
+      } else {
+        return '';
+      }
+    }
   } catch (error) {
     console.log('Error in formatDate');
   }
