@@ -62,7 +62,9 @@ const onSetProposalsFilters = (state: Map, action: Object): Map => {
 
 const onSetProposalsFavourite = (state: Map, action: Object): Map => {
   const { proposalsFavourite } = action.payload;
-  return state.set('favouriteProposals', proposalsFavourite).set('proposalsLoading', false);
+  return state
+    .set('favouriteProposals', proposalsFavourite)
+    .set('proposalsLoading', false);
 };
 
 const setProposalViewType = (state: Map, action: Object): Map => {
@@ -99,6 +101,10 @@ const setProposalDetails = (state, action) => {
             data.data.proposalDetails?.['Protocol number'] || '';
           value['product'] = data.data.proposalDetails?.['Product name'] || '';
           value['customer'] = data.data.proposalDetails?.Customer || '';
+          value['opportunity status'] =
+            data.data.proposalDetails?.['opportunity status'] || '';
+          value['opportunityName'] =
+            data.data.proposalDetails?.['opportunityName'] || '';
         }
         return value;
       });
@@ -106,16 +112,20 @@ const setProposalDetails = (state, action) => {
     }
     if (!data.fromSF) {
       const updateProposals = proposals.map(value => {
-        if (data.data.oppNo === value['opportunity number']) {
+        if (
+          data?.data?.oppNo &&
+          data?.data?.oppNo === value['opportunity number']
+        ) {
           value[mapper[data.data.sfField]] = data.data.answer;
         }
         return value;
       });
       proposals = updateProposals;
     }
+    const results = cloneDeep(proposals);
+    return state.set('proposals', [...[...results]]);
   }
-  const results = cloneDeep(proposals);
-  return state.set('proposals', [...[...results]]);
+  return state;
 };
 
 const setAssignedTabNumOfRows = (state, action) =>
