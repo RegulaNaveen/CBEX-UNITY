@@ -13,6 +13,8 @@ import Sinon from 'sinon';
 import App from '../App';
 import { store } from '../store';
 import { PROPOSAL } from '../constants/types';
+import { REDUX_TYPES } from '../constants';
+import * as proposalData from '../components/views/__tests__/Search/data.json';
 
 jest.mock('../components/screens/Dashboard', () => () => <p>Dashboard</p>);
 jest.mock('../components/screens/Opportunity', () => () => <p>Opportunity</p>);
@@ -123,9 +125,23 @@ describe('App Component', () => {
     store.dispatch({
       type: PROPOSAL.SET_EDIT_OPP_INFO,
       payload: {
-        oppNo: 'TEST123',
+        oppNo: '12345',
         customName: ''
       }
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
+      payload: {
+        proposals: [
+          {
+            'opportunity number': '12345'
+          }
+        ]
+      }
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [{ ...proposalData }]
     });
     localStorage.setItem('access_token', 'token');
     window.history.pushState({}, '', '/dashboard');
