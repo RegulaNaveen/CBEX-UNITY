@@ -80,7 +80,7 @@ class FavoritesTab extends Component<Props, State> {
   }
 
   renderSelectedView = () => {
-    const { selectedViewType, allFlags } = this.props;
+    const { selectedViewType, allFlags, filterApply } = this.props;
     const { pageContent } = this.state;
 
     if (pageContent && pageContent.length) {
@@ -93,7 +93,10 @@ class FavoritesTab extends Component<Props, State> {
       return (
         <Card className="no-info-card">
           <Typography>
-            No favorites defined
+            {filterApply 
+              ? 'No results found'
+              : 'No favorites defined'
+            }
           </Typography>
         </Card>
       );

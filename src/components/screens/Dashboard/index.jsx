@@ -59,7 +59,7 @@ const Dashboard = () => {
             <MyDocketTab allFlags={allFlags} filterApply={filterApply} />
           </div>
           <div label="Favorites">
-            <FavoritesTab allFlags={allFlags} />
+            <FavoritesTab allFlags={allFlags} filterApply={filterApply} />
           </div>
           <div label="Recent">
             <RecentTab allFlags={allFlags} />
