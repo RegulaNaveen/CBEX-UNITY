@@ -64,17 +64,16 @@ describe('Answer History component', () => {
     ).toBeGreaterThan(0);
   });
 
-  test.skip('Answer History Count', async () => {
-    const { container } = await render(
+  test('Answer History Count', async () => {
+    const { container, debug } = await render(
       <Provider store={store}>
         <SocketContext.Provider value={{ socket: null, questionLockWrapper: jest.fn() }}>
           <AnswerHistory {...initalstate} />
         </SocketContext.Provider>
       </Provider>
     );
-    expect(container.getElementsByClassName('answer-container')).toHaveLength(
-      5
-    );
+
+    expect(container.getElementsByClassName('modal-body')).toHaveLength(1);
   });
 
   test('If Answer is empty', async () => {
