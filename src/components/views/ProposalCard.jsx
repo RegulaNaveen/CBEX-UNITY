@@ -268,11 +268,7 @@ const ProposalCard = ({
             <b>Opportunity Stage:</b>
           </span>
           <span className={checkNoDataClass(opportunityStage)}>
-            {opportunityStage &&
-              opportunityStage
-                .split('.')
-                .pop()
-                .trim()}
+            {opportunityStage}
           </span>
         </div>
       </div>
