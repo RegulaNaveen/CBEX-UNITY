@@ -49,7 +49,8 @@ class Tabbar extends Component<Props, State> {
         indication: '',
         bidDueDate: '',
         opportunityStatus: '',
-        teamMember: ''
+        teamMember: '',
+        opportunityCustomname: ''
       }
     };
 
@@ -153,7 +154,8 @@ class Tabbar extends Component<Props, State> {
             indication: '',
             bidDueDate: '',
             opportunityStatus: '',
-            teamMember: ''
+            teamMember: '',
+            opportunityCustomname: ''
           }
         }
       },
@@ -176,6 +178,9 @@ class Tabbar extends Component<Props, State> {
         }
         if (document.getElementById('verbatim indication')) {
           document.getElementById('verbatim indication').value = '';
+        }
+        if (document.getElementById('Customized opportunity name')) {
+          document.getElementById('Customized opportunity name').value = '';
         }
         if (
           document.getElementsByClassName('teammember') &&
