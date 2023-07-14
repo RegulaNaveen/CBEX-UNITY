@@ -46,7 +46,7 @@ export const DashboardSFUpDATE = {
   Protocol_Number__c: 'protocol number',
   Drug_Product_Name__c: 'Product name',
   Verbatim_Indication_Term__c: 'verbatim indication',
-  StageName: 'stage'
+  StageName: 'opportunity status'
 };
 
 export const OpportunitySFUpDATE = {
@@ -60,7 +60,7 @@ export const OpportunitySFUpDATE = {
   Protocol_Number__c: 'Protocol number',
   Drug_Product_Name__c: 'Product name',
   Verbatim_Indication_Term__c: 'Verbatim indication',
-  StageName: 'stage'
+  StageName: 'Opportunity status'
 };
 
 const PROFILE = {

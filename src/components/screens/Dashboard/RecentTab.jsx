@@ -100,6 +100,10 @@ class RecentTab extends Component<Props, State> {
       ? !isEmpty(filteredProposals)
       : !isEmpty(proposals);
 
+    const showCurrentPaginationCount = isFilteringProposals
+      ? filteredProposals.length
+      : proposals.length;
+
     return loading ? (
       <Loader
         type="TailSpin"
@@ -113,7 +117,7 @@ class RecentTab extends Component<Props, State> {
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {showPagination && (
+        {showPagination && showCurrentPaginationCount > 15 && (
           <ComplexPagination
             totalItems={
               isFilteringProposals ? filteredProposals.length : proposals.length
