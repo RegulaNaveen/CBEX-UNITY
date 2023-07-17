@@ -9,15 +9,16 @@
     margin-bottom: 8px;
     font-size: 14;
   }
-  .number-error-text{
+  .number-error-text {
     color: #d8000c;
     font-size: 12px;
   }
   .lookup-wrapper {
     display: flex;
-    input,textarea {
+    input,
+    textarea {
       resize: none !important;
-      font-size: 16px;
+      font-size: 14px;
       font-family: $proximaNova;
       position: relative;
       padding: 10px;
@@ -30,20 +31,19 @@
       &:focus {
         border: 1px solid $blue;
       }
-
-      
     }
-    .resetButton{
+    .resetButton {
       position: absolute;
-      top:12px;
-      right:15px;
+      top: 12px;
+      right: 15px;
       margin-top: 0 !important;
     }
   }
-  
+
   .lookup-border {
     display: flex;
-    input,textarea {
+    input,
+    textarea {
       font-size: 16px;
       font-family: $proximaNova;
       position: relative;
@@ -56,8 +56,6 @@
       &:focus {
         border: 1px solid $blue;
       }
-
-      
     }
   }
   .search-data-wrapper {
@@ -92,13 +90,12 @@
     .lookup-wrapper {
       position: relative;
 
-      input,textarea {
+      input,
+      textarea {
         border: 1px solid $blue;
         border-bottom-color: transparent;
         border-radius: 4px 4px 0 0;
       }
-
-      
     }
 
     .search-data-wrapper {
