@@ -28,7 +28,7 @@ describe('Send Email Button tests', () => {
   });
 
   it('should display email button when approvalsSendEmailFlag enabled', async () => {
-    const props = { sectionId: 'test-id' };
+    const props = { sectionId: 'test-id', proposalId: '', selectedBidIsCurrent: true };
     store.dispatch(
       setAllApprovals([
         {
@@ -81,7 +81,7 @@ describe('Send Email Button tests', () => {
   });
 
   it('should not display email button when approvalsSendEmailFlag disabled', async () => {
-    const props = { sectionId: 'test-id' };
+    const props = { sectionId: 'test-id', proposalId: '', selectedBidIsCurrent: true };
     store.dispatch(
       setAllApprovals([
         {
@@ -138,7 +138,7 @@ describe('Send Email Button tests', () => {
   });
 
   it('should call click handler on clicking email button', async () => {
-    const props = { sectionId: 'test-id' };
+    const props = { sectionId: 'test-id', proposalId: '', selectedBidIsCurrent: true };
     store.dispatch(
       setAllApprovals([
         {
