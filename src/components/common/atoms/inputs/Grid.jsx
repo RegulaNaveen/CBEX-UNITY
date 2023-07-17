@@ -398,7 +398,12 @@ const loadSidebar = props => {
           <Typography variant="body2" className="greytext">
             Next Milestone
           </Typography>
-          <Typography variant="body2" className="boldtext">
+          <Typography
+            variant="body2"
+            className="boldtext"
+            noWrap
+            title={nextMilestone || ''}
+          >
             {nextMilestone || '-'}
           </Typography>
         </Paper>

@@ -13,12 +13,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import SocketContextProvider from '../../../context/SocketContext';
 import ProposalCard from '../ProposalCard';
 import { Provider } from 'react-redux';
+import WS from 'jest-websocket-mock';
 import { store } from '../../../store';
 import { REDUX_TYPES } from '../../../constants';
 import { act } from 'react-dom/test-utils';
 import * as SSOApis from '../../../api/sso-auth';
 import App from '../../../App';
 import { PROPOSAL } from '../../../constants/app';
+import * as constants from '../../../constants/api';
+import { setSession } from '../../../SessionHandler';
 
 jest.mock('../../../components/screens/Dashboard', () => () => (
   <p>Dashboard</p>
@@ -53,7 +56,7 @@ const props = {
 const ProposalCardWithRedux = ({ updateFavouriteWrapper, ...props }) => (
   <Provider store={store}>
     <Router>
-      <SocketContextProvider value={{ updateFavouriteWrapper }}>
+      <SocketContextProvider>
         <App />
         <ProposalCard {...props} />
       </SocketContextProvider>
@@ -63,8 +66,20 @@ const ProposalCardWithRedux = ({ updateFavouriteWrapper, ...props }) => (
 
 describe('ProposalCard component', () => {
   let sinonSandbox;
+  let ws;
+
   beforeAll(() => {
+    ws = new WS('ws://localhost:8081');
     sinonSandbox = Sinon.createSandbox();
+    constants.SOCKET_URL = 'ws://localhost:8081';
+    setSession(
+      'test',
+      'NOT_EMPTY',
+      'NOT_EMPTY',
+      'NOT_EMPTY',
+      'NOT_EMPTY',
+      'NOT_EMPTY'
+    );
   });
 
   beforeEach(() => {
@@ -73,6 +88,7 @@ describe('ProposalCard component', () => {
 
   afterAll(() => {
     sinonSandbox.restore();
+    WS.clean();
   });
 
   it('renders with correct content', async () => {
