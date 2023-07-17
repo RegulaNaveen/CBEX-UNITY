@@ -351,10 +351,8 @@ const TableView = ({ data, hideStatus }: Props) => {
               );
 
             case 'opportunity status':
-              const statusText = row[col]
-                ?.split('.')
-                .pop()
-                .trim();
+              const statusText = row[col];
+
               return (
                 <Tooltip title={statusText} placement="top">
                   <div key={uuidv4()} className="cell">
