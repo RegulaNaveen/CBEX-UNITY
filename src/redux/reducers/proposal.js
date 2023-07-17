@@ -81,7 +81,8 @@ const {
   TOGGLE_EDIT_CUSTOM_NAME_MODAL,
   SET_EDIT_OPP_INFO,
   CLEAR_EDIT_OPP_INFO,
-  DASHBOARD_PROPOSAL_DETAIL
+  DASHBOARD_PROPOSAL_DETAIL,
+  UPDATE_PROPOSAL_DETAIL_SF
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -334,7 +335,10 @@ const setOpportunityInfo = (state, action) => {
         )
         .set('opportunityType', proposal.proposal['opportunityType'] || '')
         .set('opportunityName', proposal.proposal['opportunityName'] || '')
-        .set('opportunityStatus', proposal.proposal.opportunityOverview['OpportunityStatus'] || '')
+        .set(
+          'opportunityStatus',
+          proposal.proposal.opportunityOverview['OpportunityStatus'] || ''
+        )
         .set('isCurrent', true)
         .set('bidStatus', proposal.proposal['inProgress'] || false)
         .set('agreementId', proposal.proposal['agreementId'] || '')
@@ -523,7 +527,10 @@ const addNewBid = (state: Map, action: Object): Map => {
     )
     .set('opportunityType', data.proposal['opportunityType'] || '')
     .set('opportunityName', data.proposal['opportunityName'] || '')
-    .set('opportunityStatus', data.proposal.opportunityOverview['OpportunityStatus'] || '')
+    .set(
+      'opportunityStatus',
+      data.proposal.opportunityOverview['OpportunityStatus'] || ''
+    )
     .set('isCurrent', true)
     .set('bidStatus', data.proposal['inProgress'] || false)
     .set('pertinentDetails', data.proposal.proposalDetails.pertinentDetails)
@@ -1346,6 +1353,13 @@ const updateOportunityDetailData = (state, action) => {
   return state;
 };
 
+const updateProposalDetailSF = (state, action) => {
+  const { data } = action.payload;
+  let proposalDetail = state.get('proposalDetails');
+  proposalDetail = data.proposalDetails;
+  return state.set('proposalDetails', { ...proposalDetail });
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1429,7 +1443,8 @@ const actionMap = {
   [TOGGLE_EDIT_CUSTOM_NAME_MODAL]: toggleEditCustomNameModal,
   [SET_EDIT_OPP_INFO]: setEditOppInfo,
   [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo,
-  [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData
+  [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData,
+  [UPDATE_PROPOSAL_DETAIL_SF]: updateProposalDetailSF
 };
 
 export default function(

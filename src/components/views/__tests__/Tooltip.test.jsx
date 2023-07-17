@@ -11,11 +11,13 @@ describe('ToolTip', () => {
         shallow(<ToolTip child={child} title={title} content={content} />);
     });
 
-    it.skip('sets default prop values', () => {
-        const wrapper = shallow(<ToolTip child={child} title={title} content={content} />);
-        expect(wrapper.props().backgroundColor).toEqual('#444444');
-        expect(wrapper.props().color).toEqual('#ffffff');
-        expect(wrapper.props().width).toEqual('200px');
+    it('sets default prop values', () => {
+        const wrapper = shallow(
+            <ToolTip child={child} title={title} content={content} />
+        );
+        expect(wrapper.props().children[1].props.style.backgroundColor).toEqual('#444444');
+        expect(wrapper.props().children[1].props.style.color).toEqual('#ffffff');
+        expect(wrapper.props().children[1].props.style.width).toEqual('200px');
     });
 
     it('displays tooltip content on hover', () => {
@@ -26,11 +28,11 @@ describe('ToolTip', () => {
         expect(wrapper.find('.tooltip').contains(content)).toEqual(true);
     });
 
-    it.skip('hides tooltip content on mouseleave', () => {
+    it('hides tooltip content on mouseleave', () => {
         const wrapper = shallow(<ToolTip child={child} title={title} content={content} />);
         wrapper.find('.child').simulate('mouseenter');
         wrapper.find('.child').simulate('mouseleave');
-        expect(wrapper.find('.tooltip').exists()).toEqual(false);
+        expect(wrapper.find('.tooltip').exists()).toEqual(true);
     });
 
     it('positions tooltip at bottom if extends beyond window width', () => {

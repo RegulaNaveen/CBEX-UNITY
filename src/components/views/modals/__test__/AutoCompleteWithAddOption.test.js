@@ -93,7 +93,6 @@ describe('AutoCompleteWithAddOption component', () => {
     );
     expect(container).toBeDefined();
   });
-
   test('render autocomplete component', () => {
     const props = {
       multiple: true,
@@ -110,7 +109,6 @@ describe('AutoCompleteWithAddOption component', () => {
     expect(getByTestId('autocomplete-test')).toBeTruthy();
     expect(chip).toBeInTheDocument();
   });
-
   test('test for single select lookup answer', () => {
     const props = {
       multiple: false,
@@ -125,7 +123,6 @@ describe('AutoCompleteWithAddOption component', () => {
     );
     expect(screen.findByTestId('autocomplete-test')).toBeTruthy();
   });
-
   test('check for forceblur true', () => {
     const props = {
       multiple: true,
@@ -140,8 +137,7 @@ describe('AutoCompleteWithAddOption component', () => {
     );
     expect(screen.findByTestId('autocomplete-test')).toBeTruthy();
   });
-
-  test.skip('filters the options based on the input value', () => {
+  test('filters the options based on the input value', () => {
     const props = {
       multiple: false,
       answer: 'Central ECG - ECG',
@@ -149,54 +145,32 @@ describe('AutoCompleteWithAddOption component', () => {
       ...defaultProps
     };
 
-    const { getByTestId, getByPlaceholderText } = render(
+    const { getByRole } = render(
       <Provider store={store}>
         <AutoCompleteWithAddOption {...props} />
       </Provider>
     );
-    const autocomplete = getByTestId('autocomplete-test');
-    const input = getByPlaceholderText('');
+
+    const input = getByRole('combobox');
     fireEvent.change(input, { target: { value: 'Glucose monitoring - CGM' } });
-    expect(autocomplete).toHaveValue('Glucose monitoring - CGM');
+    expect(input).toHaveValue('Glucose monitoring - CGM');
   });
-
-  test.skip('adds a new option when the input value is not in the list of options', () => {
-    const props = {
-      multiple: true,
-      answer: ['Central ECG - ECG'],
-      forceBlur: true,
-      ...defaultProps
-    };
-    const onChange = jest.fn();
-    const { getByTestId, getByPlaceholderText } = render(
-      <Provider store={store}>
-        <AutoCompleteWithAddOption {...props} />
-      </Provider>
-    );
-    const autocomplete = getByTestId('autocomplete-test');
-    const input = getByPlaceholderText('');
-    fireEvent.change(input, { target: { value: 'date' } });
-    fireEvent.click(autocomplete);
-    expect(onChange).toHaveBeenCalledWith(['add "date"']);
-  });
-
-  test.skip('clears the input when the clearable prop is set to true', () => {
+  test('clears the input when the clearable prop is set to true', () => {
     const props = {
       multiple: true,
       answer: ['Central ECG - ECG', 'Central ECG - Holter'],
       forceBlur: true,
       ...defaultProps
     };
-    const { getByTestId, getByPlaceholderText } = render(
+    const { debug, getByTitle, getByText } = render(
       <Provider store={store}>
         <AutoCompleteWithAddOption {...props} />
       </Provider>
     );
-    const autocomplete = getByTestId('autocomplete-test');
-    console.log(autocomplete);
-    const input = getByPlaceholderText('');
-    fireEvent.change(input, { target: { value: 'a' } });
-    fireEvent.click(autocomplete);
-    expect(autocomplete).toHaveValue([]);
+    const text = getByText('Central ECG - ECG');
+    expect(text).toBeInTheDocument();
+    const clearButton = getByTitle('Clear');
+    fireEvent.click(clearButton);
+    expect(text).not.toBeInTheDocument();
   });
 });

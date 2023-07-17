@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import WS from 'jest-websocket-mock';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import SocketContext from '../SocketContext';
@@ -9,6 +9,8 @@ import { store } from '../../store';
 import * as constants from '../../constants/api';
 import PriceModeler from '../../components/common/PriceModeler';
 import { setSession } from '../../SessionHandler';
+import { REDUX_TYPES } from '../../constants';
+import proposalData from '../../components/views/__tests__/Search/data.json';
 
 const PriceModelerWithSocketContext = () => (
   <Provider store={store}>
@@ -28,6 +30,8 @@ describe('Price Modeler concurrency', () => {
     WS.clean();
   });
 
+  afterEach(cleanup);
+
   beforeEach(() => {
     constants.SOCKET_URL = 'ws://localhost:8081';
     setSession(
@@ -40,7 +44,7 @@ describe('Price Modeler concurrency', () => {
     );
   });
 
-  test.skip('shows loading indicator and tooltip on event "COST_ESTIMATE_CALCULATING"', async () => {
+  test('shows loading indicator and tooltip on event "COST_ESTIMATE_CALCULATING"', async () => {
     const { getByText, findByTestId } = render(
       <PriceModelerWithSocketContext />
     );
@@ -101,5 +105,142 @@ describe('Price Modeler concurrency', () => {
       expect(await findByText(data.TherapyArea__c)).toBeInTheDocument();
       expect(await findByText(data.Potential_Regions__c)).toBeInTheDocument();
     });
+  });
+
+  it('should update proposal detail on WS event "PROPOSAL_DETAIL_UPDATE"', async () => {
+    render(
+      <Provider store={store}>
+        <SocketContext>
+          <p>Socket test component</p>
+        </SocketContext>
+      </Provider>
+    );
+    const data = {
+      proposalDetails: {
+        testKey: 'testValue'
+      }
+    };
+    await ws.connected;
+    await ws.send(JSON.stringify({ data, event: 'PROPOSAL_DETAIL_UPDATE' }));
+
+    await waitFor(() =>
+      expect(
+        store.getState().proposal.getIn(['proposalDetails', 'testKey'])
+      ).toBe('testValue')
+    );
+  });
+
+  it('should update next milestone on WS event "NEXT_MILESTONE_UPDATE"', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
+      payload: {
+        proposals: [
+          {
+            'opportunity number': '12345'
+          }
+        ]
+      }
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [{ ...proposalData }]
+    });
+    render(
+      <Provider store={store}>
+        <SocketContext>
+          <p>Socket test component</p>
+        </SocketContext>
+      </Provider>
+    );
+    const data = {
+      nextMilestone: [{ name: 'Test milestone', date: '01-Jan-2023' }]
+    };
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({ data, event: 'NEXT_MILESTONE_UPDATE', oppId: '12345' })
+    );
+
+    console.log(
+      'proposalDetails',
+      store.getState().proposal.get('proposalDetails')
+    );
+
+    await waitFor(() =>
+      expect(
+        store.getState().proposals.getIn(['proposals', 0, 'nextMilestone'])
+      ).toEqual(data.nextMilestone)
+    );
+  });
+
+  it('should update custom name on WS event "CUSTOM_NAME_UPDATE"', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
+      payload: {
+        proposals: [
+          {
+            'opportunity number': '12345'
+          }
+        ]
+      }
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [{ ...proposalData }]
+    });
+    render(
+      <Provider store={store}>
+        <SocketContext>
+          <p>Socket test component</p>
+        </SocketContext>
+      </Provider>
+    );
+    const data = {
+      customName: 'Test custom name',
+      oppNumber: '12345'
+    };
+    await ws.connected;
+    await ws.send(JSON.stringify({ data, event: 'CUSTOM_NAME_UPDATE' }));
+
+    await waitFor(() =>
+      expect(
+        store.getState().proposals.getIn(['proposals', 0, 'customName'])
+      ).toBe('Test custom name')
+    );
+  });
+
+  it('should update favourite on WS event "FAVOURITE"', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
+      payload: {
+        proposals: [
+          {
+            'opportunity number': '12345'
+          }
+        ]
+      }
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [{ ...proposalData }]
+    });
+    render(
+      <Provider store={store}>
+        <SocketContext>
+          <p>Socket test component</p>
+        </SocketContext>
+      </Provider>
+    );
+    const data = {
+      favourite: true,
+      oppNumber: '12345',
+      favouriteUpdatedDate: new Date()
+    };
+    await ws.connected;
+    await ws.send(JSON.stringify({ data, event: 'FAVOURITE' }));
+    await waitFor(() =>
+      expect(
+        store.getState().proposals.getIn(['proposals', 0, 'isFavourite'])
+      ).toBe(true)
+    );
   });
 });

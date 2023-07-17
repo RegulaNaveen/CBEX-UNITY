@@ -100,6 +100,8 @@ function ProposalTeam() {
           (proposalTeamData?.active || proposalTeamData?.isCustomQuestion) &&
           (!proposalTeamData?.notApplicable || isQuestionsFiltersEnabled) &&
           !proposalTeamData?.questionApproval;
+        const questionDataDestinations =
+          proposalTeamData?.questionDataDestinations;
         wholeData.push({
           questionId: questionId,
           proposalId: proposalId,
@@ -136,7 +138,8 @@ function ProposalTeam() {
           visible: visible,
           hasDifferentSFanswer: hasDifferentSFanswer,
           bidAnswerCopy: proposalTeamData.bidAnswerCopy,
-          latestAnsweredBidNo: proposalTeamData.latestAnsweredBidNo
+          latestAnsweredBidNo: proposalTeamData.latestAnsweredBidNo,
+          questionDataDestinations: questionDataDestinations
         });
       }
     });
@@ -243,6 +246,7 @@ function ProposalTeam() {
                   qvidianIntegration={items.qvidianIntegration}
                   bidAnswerCopy={items.bidAnswerCopy}
                   latestAnsweredBidNo={items.latestAnsweredBidNo}
+                  questionDataDestinations={items.questionDataDestinations}
                 />
               )
             );
@@ -256,7 +260,10 @@ function ProposalTeam() {
             size="small"
             disabled={!isCurrentBid}
           >
-            <Plus className="plus-icon-add-new-question" fontSize="extraSmall" />
+            <Plus
+              className="plus-icon-add-new-question"
+              fontSize="extraSmall"
+            />
             <span style={{ verticalAlign: 'top' }}> Add New Question</span>
           </Link>
         </div>

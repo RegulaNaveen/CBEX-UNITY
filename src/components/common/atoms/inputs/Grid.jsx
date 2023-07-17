@@ -177,7 +177,7 @@ const loadSidebar = props => {
       const favouriteUpdatedDate = moment().format();
       const toggleFavouriteRes = await toggleFavourite(crm, favourite);
       const proposalDetails = {
-        dataFromGrid: "data from grid",
+        dataFromGrid: 'data from grid',
         bidStatus,
         favourite,
         customName,
@@ -187,7 +187,12 @@ const loadSidebar = props => {
         isApprovalCountPresent,
         ...data
       };
-      updateFavouriteWrapper(crm, favourite, favouriteUpdatedDate, proposalDetails);
+      updateFavouriteWrapper(
+        crm,
+        favourite,
+        favouriteUpdatedDate,
+        proposalDetails
+      );
       if (window && window.location && window.location.href) {
         const obj = {
           url: window.location.href,
@@ -197,11 +202,9 @@ const loadSidebar = props => {
         saveRecentOppActivity(obj);
       }
       if (toggleFavouriteRes && toggleFavouriteRes.data) {
-        if (toggleFavouriteRes.data.favourite) {
-          await dispatch(updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails));
-        } else {
-          await dispatch(updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails));
-        }
+        await dispatch(
+          updateFavourite(crm, favourite, favouriteUpdatedDate, proposalDetails)
+        );
       }
     } catch (e) {
       console.error(`Error in updating favourite for ${crm}`, e);
@@ -395,7 +398,12 @@ const loadSidebar = props => {
           <Typography variant="body2" className="greytext">
             Next Milestone
           </Typography>
-          <Typography variant="body2" className="boldtext">
+          <Typography
+            variant="body2"
+            className="boldtext"
+            noWrap
+            title={nextMilestone || ''}
+          >
             {nextMilestone || '-'}
           </Typography>
         </Paper>

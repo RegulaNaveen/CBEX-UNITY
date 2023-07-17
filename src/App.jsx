@@ -37,7 +37,6 @@ import launchDarkly from './utils/launchDarkly';
 import {
   setFlag,
   onSaveCustomName as saveCustomNameAction,
-  onCancelEditCustomName,
   toggleEditCustomNameModal
 } from './redux/actions/proposal-actions';
 import {
@@ -67,7 +66,7 @@ const EditCustomNameModal = ({ show }) => {
   }
 
   function handleEditModalClose() {
-    dispatch(toggleEditCustomNameModal(false));
+    dispatch(toggleEditCustomNameModal());
   }
 
   function onSaveCustomName() {
@@ -89,7 +88,7 @@ const EditCustomNameModal = ({ show }) => {
       subtitle={`Opportunity Number: ${oppNoEditing}`}
       className="edit-custom-name-modal"
       onClose={() => handleEditModalClose()}
-      title={<Typography variant="h3">Edit Custom Name</Typography>}
+      title={<Typography>Edit Custom Name</Typography>}
       buttonProps={[
         { label: 'Cancel', onClick: () => handleEditModalClose() },
         { label: 'Save', onClick: () => onSaveCustomName() }

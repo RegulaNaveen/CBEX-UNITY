@@ -74,7 +74,7 @@ describe('GridView component', () => {
     };
     render(<GridViewWithRedux data={data} allFlags={allFlags} />);
 
-    const timelineButton = screen.getByRole('link', { name: 'Artboard' });
+    const timelineButton = screen.getByTestId('Artboard');
     fireEvent.click(timelineButton);
   });
 });

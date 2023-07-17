@@ -10,5 +10,6 @@ export default {
   PROPOSAL_TEAM_TAB: 'proposalTeamTab',
   SEARCH_FLAG: 'searchFlag',
   BID_COST_DETAILS: 'bidCostDetail',
-  FAVOURITE_FLAG: 'favouriteFlag'
+  FAVOURITE_FLAG: 'favouriteFlag',
+  CUSTOM_NAME_FLAG: 'customOpportunityNameFlag'
 };

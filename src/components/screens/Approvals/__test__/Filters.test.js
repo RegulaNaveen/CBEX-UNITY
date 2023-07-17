@@ -17,7 +17,7 @@ const initialState = {
 };
 const store = mockStore({ approvals, initialState });
 
-describe.skip('Approval Section Component', () => {
+describe('Approval Section Component', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe.skip('Approval Section Component', () => {
     );
   });
 
-  it.skip('should component render', async () => {
+  it('should component render', async () => {
     expect(wrapper).toBeDefined();
     await expect(screen.findByText(/ Filters/i)).toBeTruthy();
   });

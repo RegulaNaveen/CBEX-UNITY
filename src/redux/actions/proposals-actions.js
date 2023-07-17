@@ -12,7 +12,11 @@ import {
   onGetFilterValues,
   onGetSFNonEditabelField
 } from '../../api/proposals';
-import { selectFavourites, selectCustomNameMap, selectFavouritesUpdatedDateMap } from '../selectors/sso-auth';
+import {
+  selectFavourites,
+  selectCustomNameMap,
+  selectFavouritesUpdatedDateMap
+} from '../selectors/sso-auth';
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
 
@@ -32,12 +36,10 @@ const {
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
-  return arr.filter((item,
-      index) => arr.indexOf(item) === index);
+  return arr.filter((item, index) => arr.indexOf(item) === index);
 }
 
-const formatProposalGrid = (proposal) => {
-
+const formatProposalGrid = proposal => {
   const formatted = {
     'bid due date': proposal['Bid due date'],
     'opportunity number': proposal['CRM #'],
@@ -51,7 +53,7 @@ const formatProposalGrid = (proposal) => {
     bidStopStatus: proposal.bidStatus,
     nextMilestone: proposal.nextMilestone,
     opportunityName: proposal.opportunityName,
-    isApprovalCountPresent: proposal.isApprovalCountPresent,
+    isApprovalCountPresent: proposal.isApprovalCountPresent
   };
 
   return formatted;
@@ -75,35 +77,33 @@ const formatProposal = (
     bidStopStatus
   } = proposal;
 
-  if (!isEmpty(opportunityOverview)) {
-    formattedProposal.proposalId = proposalId;
-    formattedProposal.opportunityName = opportunityName;
-    formattedProposal['opportunity number'] = proposalDetails['CRM #'];
-    formattedProposal['bidNo'] = proposalDetails['bidNo'];
-    formattedProposal.customer = proposalDetails.Customer;
-    formattedProposal['protocol number'] = proposalDetails['Protocol number'];
-    formattedProposal.phase = proposalDetails.Phase;
-    formattedProposal.product = proposalDetails['Product name'];
-    formattedProposal['verbatim indication'] =
-      proposalDetails['Verbatim indication'];
-    formattedProposal.therapeuticArea = proposalDetails['Therapeutic area'];
-    formattedProposal['bid due date'] = proposalDetails['Bid due date'];
-    formattedProposal['opportunity status'] =
-      opportunityOverview.OpportunityStatus || '';
-    formattedProposal.usersList = usersList;
-    formattedProposal.approvalsCount = approvalsCount;
-    formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
-    formattedProposal.bidStopStatus = bidStopStatus || false;
-    formattedProposal.isFavourite = !!favoritesMap[
-      `${proposalDetails['CRM #']}`
-    ];
-    formattedProposal.customName =
-      customNameMap[`${proposalDetails['CRM #']}`] || '';
-    formattedProposal.nextMilestone = proposal.nextMilestone || [];
-    return formattedProposal;
-  }
+  // if (!isEmpty(opportunityOverview)) {
+  formattedProposal.proposalId = proposalId;
+  formattedProposal.opportunityName = opportunityName;
+  formattedProposal['opportunity number'] = proposalDetails['CRM #'];
+  formattedProposal['bidNo'] = proposalDetails['bidNo'];
+  formattedProposal.customer = proposalDetails.Customer;
+  formattedProposal['protocol number'] = proposalDetails['Protocol number'];
+  formattedProposal.phase = proposalDetails.Phase;
+  formattedProposal.product = proposalDetails['Product name'];
+  formattedProposal['verbatim indication'] =
+    proposalDetails['Verbatim indication'];
+  formattedProposal.therapeuticArea = proposalDetails['Therapeutic area'];
+  formattedProposal['bid due date'] = proposalDetails['Bid due date'];
+  formattedProposal['opportunity status'] =
+    opportunityOverview.OpportunityStatus || '';
+  formattedProposal.usersList = usersList;
+  formattedProposal.approvalsCount = approvalsCount;
+  formattedProposal.isApprovalCountPresent = isApprovalCountPresent;
+  formattedProposal.bidStopStatus = bidStopStatus || false;
+  formattedProposal.isFavourite = !!favoritesMap[`${proposalDetails['CRM #']}`];
+  formattedProposal.customName =
+    customNameMap[`${proposalDetails['CRM #']}`] || '';
+  formattedProposal.nextMilestone = proposal.nextMilestone || [];
+  return formattedProposal;
+  // }
 
-  return {};
+  // return {};
 };
 
 export const getAllProposals = (): ThunkAction<string, Object> => {
@@ -278,7 +278,9 @@ export const onFilteringProposals = (
           const response = await getFavoritesOpportunity();
           data = response.data;
         }
-      } else if (allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1) {
+      } else if (
+        allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1
+      ) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
           const response = await getRecentOpportunity(
@@ -305,7 +307,7 @@ export const onFilteringProposals = (
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
-        
+
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
@@ -313,22 +315,40 @@ export const onFilteringProposals = (
         const formatted = proposals.map(proposal =>
           formatProposal(proposal, favouritesMap, customNameMap)
         );
-        
-        if(allFlags.favouriteFlag && Number(tabIndex) === 1) {
-          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(getState()).toJS();
-          favouritesUpdatedDateMap.sort((a,b) => (a["updated date"] > b["updated date"]) ? 1 
-                                              : ((b["updated date"] > a["updated date"]) ? -1 : 0)).reverse();
+
+        if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
+          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(
+            getState()
+          ).toJS();
+          favouritesUpdatedDateMap
+            .sort((a, b) =>
+              a['updated date'] > b['updated date']
+                ? 1
+                : b['updated date'] > a['updated date']
+                ? -1
+                : 0
+            )
+            .reverse();
           const uniqueFavourites = removeDuplicates(favouritesUpdatedDateMap);
           let orderedProposal = [];
-          for( const favorite of uniqueFavourites) {
-            for(const proposal of formatted) {
-              if(proposal['opportunity number'] === favorite['opportunity number'])
+          for (const favorite of uniqueFavourites) {
+            for (const proposal of formatted) {
+              if (
+                proposal['opportunity number'] ===
+                favorite['opportunity number']
+              )
                 orderedProposal.push(proposal);
             }
           }
-          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite: orderedProposal } });
+          dispatch({
+            type: ON_GET_FAVOURITE,
+            payload: { proposalsFavourite: orderedProposal }
+          });
         } else {
-          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
+          dispatch({
+            type: ON_GET_PROPOSALS,
+            payload: { proposals: formatted }
+          });
         }
       }
     } catch (error) {
@@ -414,23 +434,27 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
 
-    const proposalCheck = proposalsFavourite.some(proposal => proposal['opportunity number'] === oppNumber);
-    if(!proposalCheck && favourite) {
+    const proposalCheck = proposalsFavourite.some(
+      proposal => proposal['opportunity number'] === oppNumber
+    );
+    if (!proposalCheck && favourite) {
       delete proposalDetails.favourite;
       const { dataFromGrid } = proposalDetails;
       proposalDetails['isFavourite'] = favourite;
-      proposals[proposalIndex] ? 
-        proposalsFavourite.unshift(proposals[proposalIndex]) 
-        : dataFromGrid 
-        ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails)) 
+      proposals[proposalIndex]
+        ? proposalsFavourite.unshift(proposals[proposalIndex])
+        : dataFromGrid
+        ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails))
         : proposalsFavourite.unshift(proposalDetails);
       dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
     }
-    if(proposalCheck && !favourite) {
-      let index = proposalsFavourite.findIndex(proposal => proposal['opportunity number'] === oppNumber);
+    if (proposalCheck && !favourite) {
+      let index = proposalsFavourite.findIndex(
+        proposal => proposal['opportunity number'] === oppNumber
+      );
       proposalsFavourite.splice(index, 1);
       dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
-    }  
+    }
   } catch (error) {
     console.log(error);
   }

@@ -2,6 +2,7 @@
 import { Map, fromJS } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import { DashboardSFUpDATE } from '../../constants/app';
+import { cloneDeep } from 'lodash';
 import type { ApiAction } from '../actions/action-types';
 
 const {
@@ -61,7 +62,9 @@ const onSetProposalsFilters = (state: Map, action: Object): Map => {
 
 const onSetProposalsFavourite = (state: Map, action: Object): Map => {
   const { proposalsFavourite } = action.payload;
-  return state.set('favouriteProposals', proposalsFavourite).set('proposalsLoading', false);
+  return state
+    .set('favouriteProposals', proposalsFavourite)
+    .set('proposalsLoading', false);
 };
 
 const setProposalViewType = (state: Map, action: Object): Map => {
@@ -82,15 +85,45 @@ const setNumOfRows = (state, action) => state.set('numRows', action.payload);
 const setProposalDetails = (state, action) => {
   const data = action.payload;
   const mapper = DashboardSFUpDATE;
-  const proposals = state.get('proposals');
+  let proposals = state.get('proposals');
   if (proposals) {
-    const updateProposals = proposals.map(value => {
-      if (data.data.oppNo === value['opportunity number']) {
-        value[mapper[data.data.sfField]] = data.data.answer;
-      }
-      return value;
-    });
-    return state.set('proposals', updateProposals);
+    if (data && data.fromSF) {
+      const updateProposals = proposals.map(value => {
+        if (data.data.oppNo === value['opportunity number']) {
+          value['bid due date'] =
+            data.data.proposalDetails?.['Bid due date'] || '';
+          value['verbatim indication'] =
+            data.data.proposalDetails['Verbatim indication'] || '';
+          value['therapeuticArea'] =
+            data.data.proposalDetails?.['Therapeutic area'] || '';
+          value['phase'] = data.data.proposalDetails['Phase'] || '';
+          value['protocol number'] =
+            data.data.proposalDetails?.['Protocol number'] || '';
+          value['product'] = data.data.proposalDetails?.['Product name'] || '';
+          value['customer'] = data.data.proposalDetails?.Customer || '';
+          value['opportunity status'] =
+            data.data.proposalDetails?.['opportunity status'] || '';
+          value['opportunityName'] =
+            data.data.proposalDetails?.['opportunityName'] || '';
+        }
+        return value;
+      });
+      proposals = updateProposals;
+    }
+    if (!data.fromSF) {
+      const updateProposals = proposals.map(value => {
+        if (
+          data?.data?.oppNo &&
+          data?.data?.oppNo === value['opportunity number']
+        ) {
+          value[mapper[data.data.sfField]] = data.data.answer;
+        }
+        return value;
+      });
+      proposals = updateProposals;
+    }
+    const results = cloneDeep(proposals);
+    return state.set('proposals', [...[...results]]);
   }
   return state;
 };
