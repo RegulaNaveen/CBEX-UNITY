@@ -4,6 +4,7 @@ const CalendarWithNumber = () => {
   return (
     <>
       <svg
+        data-testid="Artboard"
         width="36px"
         height="36px"
         viewBox="0 0 32 32"
