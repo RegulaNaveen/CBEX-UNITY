@@ -173,11 +173,8 @@ const updateDashboradBid = (state, action) => {
   return state;
 };
 const updateDasboardSF = (state, action) => {
-  console.log(action.payload);
   const { data, oppId } = action.payload;
   let proposals = state.get('proposals');
-  console.log(`proposals`, proposals);
-  console.log(`data`, data);
   if (proposals && Array.isArray(proposals) && proposals.length) {
     const updateProposals = proposals.map(value => {
       if (oppId === value['opportunity number']) {

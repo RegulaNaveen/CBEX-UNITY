@@ -83,7 +83,7 @@ const {
   CLEAR_EDIT_OPP_INFO,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_PROPOSAL_DETAIL_SF,
-  UPDATE_DASHBOARD_OPPORTUNITY 
+  UPDATE_DASHBOARD_OPPORTUNITY
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -1372,19 +1372,15 @@ const updateProposalDetailSF = (state, action) => {
 
 const updateDashboardDetail = (state, action) => {
   const data = action.payload;
-  console.log(`data`, data);
-  // let proposalDetail = state.get('proposalDetails');
-  // let selectedbid = state.get('selectedBid');
-  // if (data && data.bidStatusKey && selectedbid) {
-  //   const updatedSelectedbid = selectedbid?.toJS();
-  //   if (data.proposalId === updatedSelectedbid.id) {
-  //     updatedSelectedbid.bidStopStatus = data.bidStopStatus;
-  //   }
-  //   return state.set('selectedBid', Map(updatedSelectedbid));
-  // } else if(proposalDetail) {
-  //   proposalDetail = data.proposalDetails;
-  //   return state.set('proposalDetails', { ...proposalDetail });
-  // }
+  let proposalDetail = state.get('proposalDetails');
+  if (
+    proposalDetail &&
+    proposalDetail?.Customer !== data?.data?.proposalDetails.Customer
+  ) {
+    proposalDetail.Customer = data?.data?.proposalDetails.Customer;
+    return state.set('proposalDetails', { ...proposalDetail });
+  }
+
   return state;
 };
 

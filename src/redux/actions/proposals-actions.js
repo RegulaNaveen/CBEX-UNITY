@@ -292,7 +292,8 @@ export const onFilteringProposals = (
         }
       } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
         if (Object.keys(filterPayload).length > 1) {
-          const response = await onGetAllProposals(filterPayload);
+          const userEmail = localStorage.getItem('userEmail') || '';
+          const response = await onGetAllProposals(filterPayload, userEmail);
           data = response.data;
         } else {
           const response = await getFavoritesOpportunity();
