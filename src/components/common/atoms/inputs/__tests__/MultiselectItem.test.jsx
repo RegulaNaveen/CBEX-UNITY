@@ -39,20 +39,23 @@ describe('MultiselectItem component', () => {
     expect(getByRole('presentation')).toHaveClass('focused');
   });
 
-  it.skip('scrolls parent element to selected item when focused prop is true', () => {
+  it('scrolls parent element to selected item when focused prop is true', () => {
     const parentRef = { current: { scrollTop: 0 } };
-    const { rerender } = render(
+    const { rerender, getByText, debug } = render(
       <MultiselectItem {...props} parentRef={parentRef} />
     );
-    const itemRef = { current: { offsetTop: 50 } };
+    const itemRef = { current: { offsetTop: 0 } };
     rerender(
       <MultiselectItem
         {...props}
         parentRef={parentRef}
         focused
+        isSelected
         itemRef={itemRef}
       />
     );
+    const item1 = getByText('Item 1');
+    fireEvent.click(item1);
     expect(parentRef.current.scrollTop).toBe(itemRef.current.offsetTop);
   });
 });

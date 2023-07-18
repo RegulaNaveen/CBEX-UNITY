@@ -48,6 +48,7 @@ const TableView = ({ data, hideStatus }: Props) => {
   const FAV_COLUMN = 'isFavourite';
   const BIDNUM_COLUMN = 'bidNo';
   const NEXT_MILESTONE_COLUMN = 'nextMilestone';
+
   const columns = [...keysIn(head(data)), NEXT_MILESTONE_COLUMN]; // nextMilestone is optional value
   const columnsLength =
     columns.length - SKIP_COLUMNS.length - (hideStatus ? 1 : 0);
@@ -113,10 +114,6 @@ const TableView = ({ data, hideStatus }: Props) => {
             return <h3 key={uuidv4()}>Next Milestone</h3>;
           }
 
-          if (column === 'nextMilestone') {
-            return <h3 key={uuidv4()}>Next Milestone</h3>;
-          }
-
           if (column === 'isFavourite') {
             return ' ';
           }
@@ -163,7 +160,12 @@ const TableView = ({ data, hideStatus }: Props) => {
           row[LINK_COLUMN],
           favourite
         );
-        updateFavouriteWrapper(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row);
+        updateFavouriteWrapper(
+          row[LINK_COLUMN],
+          favourite,
+          favouriteUpdatedDate,
+          row
+        );
         const obj = {
           url: `${window.location.origin}/opportunities/${row[LINK_COLUMN]}`,
           oppNo: row[LINK_COLUMN],
@@ -171,11 +173,14 @@ const TableView = ({ data, hideStatus }: Props) => {
         };
         saveRecentOppActivity(obj);
         if (toggleFavouriteRes && toggleFavouriteRes.data) {
-          if (toggleFavouriteRes.data.favourite) {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row));
-          } else {
-            await dispatch(updateFavourite(row[LINK_COLUMN], favourite, favouriteUpdatedDate, row));
-          }
+          await dispatch(
+            updateFavourite(
+              row[LINK_COLUMN],
+              favourite,
+              favouriteUpdatedDate,
+              row
+            )
+          );
         }
       } catch (e) {
         console.error(`Error in updating favourite for ${row[LINK_COLUMN]}`, e);
@@ -325,23 +330,29 @@ const TableView = ({ data, hideStatus }: Props) => {
             case 'nextMilestone':
               return (
                 <div key={uuidv4()} className="cell">
-                  <p
-                    className={classNames({
-                      'no-data-placeholder':
-                        objectToString(row[NEXT_MILESTONE_COLUMN]) === 'No data'
-                    })}
-                  >
-                    {row[NEXT_MILESTONE_COLUMN] &&
-                      getNextMilestone(row[NEXT_MILESTONE_COLUMN])}
-                  </p>
+                  {row[NEXT_MILESTONE_COLUMN] &&
+                    row[NEXT_MILESTONE_COLUMN].length > 0 && (
+                      <Tooltip
+                        title={row[NEXT_MILESTONE_COLUMN][0].name} // Accessing the name property
+                        placement="top"
+                      >
+                        <p
+                          className={classNames({
+                            'no-data-placeholder':
+                              objectToString(row[NEXT_MILESTONE_COLUMN]) ===
+                              'No data'
+                          })}
+                        >
+                          {getNextMilestone(row[NEXT_MILESTONE_COLUMN])}
+                        </p>
+                      </Tooltip>
+                    )}
                 </div>
               );
 
             case 'opportunity status':
-              const statusText = row[col]
-                ?.split('.')
-                .pop()
-                .trim();
+              const statusText = row[col];
+
               return (
                 <Tooltip title={statusText} placement="top">
                   <div key={uuidv4()} className="cell">

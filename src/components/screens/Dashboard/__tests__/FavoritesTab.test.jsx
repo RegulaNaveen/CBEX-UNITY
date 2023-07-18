@@ -25,9 +25,93 @@ const proposals = [
   {
     'opportunity number': 'OPP456',
     'opportunity name': 'Test Opportunity 2',
+    'bid due date': '2022-03-01',
+    'opportunity status': 'Inactive'
+  },
+  {
+    'opportunity number': 'OPP4563',
+    'opportunity name': 'Test Opportunity 3',
+    'bid due date': '2022-02-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4564',
+    'opportunity name': 'Test Opportunity 4',
+    'bid due date': '2022-04-01',
+    'opportunity status': 'Inactive'
+  },
+  {
+    'opportunity number': 'OPP4565',
+    'opportunity name': 'Test Opportunity 5',
+    'bid due date': '2022-05-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4567',
+    'opportunity name': 'Test Opportunity 7',
+    'bid due date': '2022-07-01',
+    'opportunity status': 'Inactive'
+  },
+  {
+    'opportunity number': 'OPP4568',
+    'opportunity name': 'Test Opportunity 8',
+    'bid due date': '2022-08-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4569',
+    'opportunity name': 'Test Opportunity 9',
+    'bid due date': '2022-09-01',
+    'opportunity status': 'Inactive'
+  },
+  {
+    'opportunity number': 'OPP4561',
+    'opportunity name': 'Test Opportunity 10',
+    'bid due date': '2022-10-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4562',
+    'opportunity name': 'Test Opportunity 12',
+    'bid due date': '2022-12-01',
+    'opportunity status': 'Inactive'
+  },
+  {
+    'opportunity number': 'OPP4563',
+    'opportunity name': 'Test Opportunity 13',
+    'bid due date': '2022-01-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4564',
+    'opportunity name': 'Test Opportunity 14',
     'bid due date': '2022-02-01',
     'opportunity status': 'Inactive'
-  }
+  },
+  {
+    'opportunity number': 'OPP4565',
+    'opportunity name': 'Test Opportunity 15',
+    'bid due date': '2022-03-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4566',
+    'opportunity name': 'Test Opportunity 16',
+    'bid due date': '2022-06-01',
+    'opportunity status': 'Inactive'
+  },
+  {
+    'opportunity number': 'OPP4567',
+    'opportunity name': 'Test Opportunity 17',
+    'bid due date': '2022-07-01',
+    'opportunity status': 'Active'
+  },
+  {
+    'opportunity number': 'OPP4568',
+    'opportunity name': 'Test Opportunity 18',
+    'bid due date': '2022-08-01',
+    'opportunity status': 'Inactive'
+  },
 ];
 
 const FavoritesTabWithRedux = () => (

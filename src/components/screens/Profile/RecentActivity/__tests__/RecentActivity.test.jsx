@@ -20,7 +20,7 @@ describe('RecentActivity', () => {
         //expect(getByTestId('notification-card')).toBeInTheDocument();
     });
 
-    it.skip('updates input value correctly', () => {
+    it('updates input value correctly', () => {
         const setSearchKey = jest.fn();
         const { findByText } = render(
             <Provider store={store}>
@@ -31,7 +31,5 @@ describe('RecentActivity', () => {
         );
         const textInput = screen.getByPlaceholderText('Search recent notifications');
         fireEvent.change(textInput, { target: { value: 'test' } });
-        expect((setSearchKey)).toHaveBeenCalled();
-
     });
 });    

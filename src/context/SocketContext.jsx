@@ -626,6 +626,7 @@ const SocketContextProvider = props => {
               syncdashboard(data);
               break;
             case 'NEXT_MILESTONE_UPDATE':
+              console.log('socket data', data);
               const { nextMilestone } = data.data;
               updateNextMilestoneAction(data.oppId, nextMilestone);
               break;
