@@ -158,7 +158,7 @@ describe('App Component', () => {
     await waitForElementToBeRemoved(() => getByTestId('edit-name-modal'));
   });
 
-  it('edit modal should show error when trying to save more than 200 characters', async () => {
+  it('edit modal should show error when trying to save more than 250 characters', async () => {
     store.dispatch({
       type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
       payload: true
@@ -194,7 +194,7 @@ describe('App Component', () => {
     );
     userEvent.click(getByText(/save/i));
     expect(
-      await findByText(/Custom Name cannot have more than 200 characters/i)
+      await findByText(/Custom Name cannot have more than 250 characters/i)
     ).toBeInTheDocument();
   });
 });
