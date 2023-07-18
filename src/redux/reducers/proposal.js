@@ -82,7 +82,8 @@ const {
   SET_EDIT_OPP_INFO,
   CLEAR_EDIT_OPP_INFO,
   DASHBOARD_PROPOSAL_DETAIL,
-  UPDATE_PROPOSAL_DETAIL_SF
+  UPDATE_PROPOSAL_DETAIL_SF,
+  UPDATE_DASHBOARD_OPPORTUNITY 
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -514,13 +515,13 @@ const addNewBid = (state: Map, action: Object): Map => {
 
   opportunityData = opportunityData.merge(newopportunityData);
   selectedBid = selectedBid
-    .set('id', data.proposal.proposalId)
-    .set('bidName', `Bid ${data.proposal.proposalDetails['bidNo'] || ''}`)
+    .set('id', data?.proposal?.proposalId)
+    .set('bidName', `Bid ${data?.proposal?.proposalDetails['bidNo'] || ''}`)
     .set(
       'questionTemplateVersionNumber',
       data.proposal['questionTemplateVersionNumber'] || ''
     )
-    .set('bidStopStatus', proposal.proposal['bidStopStatus'] || false)
+    .set('bidStopStatus', data?.proposal['bidStopStatus'] || false)
     .set(
       'isApprovalCountPresent',
       data.proposal['isApprovalCountPresent'] || false
@@ -1356,8 +1357,35 @@ const updateOportunityDetailData = (state, action) => {
 const updateProposalDetailSF = (state, action) => {
   const { data } = action.payload;
   let proposalDetail = state.get('proposalDetails');
-  proposalDetail = data.proposalDetails;
+  let selectedbid = state.get('selectedBid');
+  if (data && data.bidStatusKey && selectedbid) {
+    const updatedSelectedbid = selectedbid?.toJS();
+    if (data.proposalId === updatedSelectedbid.id) {
+      updatedSelectedbid.bidStopStatus = data.bidStopStatus;
+    }
+    return state.set('selectedBid', Map(updatedSelectedbid));
+  } else {
+    proposalDetail = data.proposalDetails;
+  }
   return state.set('proposalDetails', { ...proposalDetail });
+};
+
+const updateDashboardDetail = (state, action) => {
+  const data = action.payload;
+  console.log(`data`, data);
+  // let proposalDetail = state.get('proposalDetails');
+  // let selectedbid = state.get('selectedBid');
+  // if (data && data.bidStatusKey && selectedbid) {
+  //   const updatedSelectedbid = selectedbid?.toJS();
+  //   if (data.proposalId === updatedSelectedbid.id) {
+  //     updatedSelectedbid.bidStopStatus = data.bidStopStatus;
+  //   }
+  //   return state.set('selectedBid', Map(updatedSelectedbid));
+  // } else if(proposalDetail) {
+  //   proposalDetail = data.proposalDetails;
+  //   return state.set('proposalDetails', { ...proposalDetail });
+  // }
+  return state;
 };
 
 const actionMap = {
@@ -1444,7 +1472,8 @@ const actionMap = {
   [SET_EDIT_OPP_INFO]: setEditOppInfo,
   [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo,
   [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData,
-  [UPDATE_PROPOSAL_DETAIL_SF]: updateProposalDetailSF
+  [UPDATE_PROPOSAL_DETAIL_SF]: updateProposalDetailSF,
+  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDashboardDetail
 };
 
 export default function(
