@@ -163,7 +163,7 @@ const updateDashboradBid = (state, action) => {
   let proposals = state.get('proposals');
   if (data && data?.newBid && proposals && Array.isArray(proposals)) {
     const updateProposals = proposals?.map(value => {
-      if (oppId === value['opportunity number']) {
+      if (oppId && oppId === value['opportunity number']) {
         value['bidNo'] = parseInt(value['bidNo']) + 1 || '';
       }
       return value;
