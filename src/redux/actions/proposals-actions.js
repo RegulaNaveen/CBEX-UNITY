@@ -32,7 +32,9 @@ const {
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD,
   ON_GET_FAVOURITE,
-  DASHBOARD_PROPOSAL_DETAIL
+  DASHBOARD_PROPOSAL_DETAIL,
+  UPDATE_DASHBOARD_BID,
+  UPDATE_DASHBOARD_OPPORTUNITY
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
@@ -121,6 +123,24 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
     } catch (error) {
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     }
+  };
+};
+
+export const updateDashboardBid = (data): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: UPDATE_DASHBOARD_BID,
+      payload: data
+    });
+  };
+};
+
+export const syncDashboardOpportunity = (data): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: UPDATE_DASHBOARD_OPPORTUNITY,
+      payload: data
+    });
   };
 };
 

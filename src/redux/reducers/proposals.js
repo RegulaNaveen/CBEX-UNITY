@@ -18,7 +18,9 @@ const {
   SET_ASSIGNED_TAB_NUM_OF_ROWS,
   NON_EDITABLE_SF_FIELD,
   ON_GET_FAVOURITE,
-  DASHBOARD_PROPOSAL_DETAIL
+  DASHBOARD_PROPOSAL_DETAIL,
+  UPDATE_DASHBOARD_BID,
+  UPDATE_DASHBOARD_OPPORTUNITY
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -87,7 +89,13 @@ const setProposalDetails = (state, action) => {
   const mapper = DashboardSFUpDATE;
   let proposals = state.get('proposals');
   if (proposals) {
-    if (data && data.fromSF) {
+    if (
+      data &&
+      data.data &&
+      data.data.proposalDetails &&
+      data.fromSF &&
+      !data?.data?.bidStatusKey
+    ) {
       const updateProposals = proposals.map(value => {
         if (data.data.oppNo === value['opportunity number']) {
           value['bid due date'] =
@@ -101,16 +109,21 @@ const setProposalDetails = (state, action) => {
             data.data.proposalDetails?.['Protocol number'] || '';
           value['product'] = data.data.proposalDetails?.['Product name'] || '';
           value['customer'] = data.data.proposalDetails?.Customer || '';
-          value['opportunity status'] =
-            data.data.proposalDetails?.['opportunity status'] || '';
-          value['opportunityName'] =
-            data.data.proposalDetails?.['opportunityName'] || '';
+          value['bidNo'] = data.data.proposalDetails?.bidNo || '';
+          if (data?.data?.proposalDetails?.['opportunity status']) {
+            value['opportunity status'] =
+              data.data.proposalDetails?.['opportunity status'] || '';
+          }
+          if (data?.data?.proposalDetails?.['opportunityName']) {
+            value['opportunityName'] =
+              data.data.proposalDetails?.['opportunityName'] || '';
+          }
         }
         return value;
       });
       proposals = updateProposals;
     }
-    if (!data.fromSF) {
+    if (!data.fromSF && !data?.data?.bidStatusKey) {
       const updateProposals = proposals.map(value => {
         if (
           data?.data?.oppNo &&
@@ -122,8 +135,75 @@ const setProposalDetails = (state, action) => {
       });
       proposals = updateProposals;
     }
+
+    if (
+      data &&
+      data?.data &&
+      data?.data?.bidStatusKey &&
+      data?.data?.proposalDetails
+    ) {
+      const updateProposals = proposals.map(value => {
+        if (
+          data.data.proposalDetails['CRM #'] === value['opportunity number']
+        ) {
+          value['bidStopStatus'] = data.data.bidStopStatus || '';
+        }
+        return value;
+      });
+      proposals = updateProposals;
+    }
     const results = cloneDeep(proposals);
     return state.set('proposals', [...[...results]]);
+  }
+  return state;
+};
+
+const updateDashboradBid = (state, action) => {
+  const { data, oppId } = action.payload;
+  let proposals = state.get('proposals');
+  if (data && data?.newBid) {
+    const updateProposals = proposals.map(value => {
+      if (oppId === value['opportunity number']) {
+        value['bidNo'] = parseInt(value['bidNo']) + 1 || '';
+      }
+      return value;
+    });
+    return state.set('proposals', [...[...updateProposals]]);
+  }
+  return state;
+};
+const updateDasboardSF = (state, action) => {
+  console.log(action.payload);
+  const { data, oppId } = action.payload;
+  let proposals = state.get('proposals');
+  console.log(`proposals`, proposals);
+  console.log(`data`, data);
+  if (proposals && Array.isArray(proposals) && proposals.length) {
+    const updateProposals = proposals.map(value => {
+      if (oppId === value['opportunity number']) {
+        value['bid due date'] = data.proposalDetails?.['Bid due date'] || '';
+        value['verbatim indication'] =
+          data.proposalDetails['Verbatim indication'] || '';
+        value['therapeuticArea'] =
+          data.proposalDetails?.['Therapeutic area'] || '';
+        value['phase'] = data.proposalDetails['Phase'] || '';
+        value['protocol number'] =
+          data.proposalDetails?.['Protocol number'] || '';
+        value['product'] = data.proposalDetails?.['Product name'] || '';
+        value['customer'] = data.proposalDetails?.Customer || '';
+        value['bidNo'] = data.proposalDetails?.bidNo || '';
+        if (data.proposalDetails?.['opportunity status']) {
+          value['opportunity status'] =
+            data.proposalDetails?.['opportunity status'] || '';
+        }
+        if (data.proposalDetails?.['opportunityName']) {
+          value['opportunityName'] =
+            data.proposalDetails?.['opportunityName'] || '';
+        }
+      }
+      return value;
+    });
+    return state.set('proposals', [...[...updateProposals]]);
   }
   return state;
 };
@@ -147,7 +227,9 @@ const actionMap = {
   [SET_ASSIGNED_TAB_NUM_OF_ROWS]: setAssignedTabNumOfRows,
   [NON_EDITABLE_SF_FIELD]: setNonEditableField,
   [ON_GET_FAVOURITE]: onSetProposalsFavourite,
-  [DASHBOARD_PROPOSAL_DETAIL]: setProposalDetails
+  [DASHBOARD_PROPOSAL_DETAIL]: setProposalDetails,
+  [UPDATE_DASHBOARD_BID]: updateDashboradBid,
+  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDasboardSF
 };
 
 export default function(

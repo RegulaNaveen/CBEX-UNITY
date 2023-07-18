@@ -134,7 +134,8 @@ export class Opportunity extends Component<Props, State> {
       getSFNonEditabelInfoField,
       location,
       ProposalLoading,
-      getIntegrationsData
+      getIntegrationsData,
+      updateProposalDetail
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
@@ -337,12 +338,12 @@ export class Opportunity extends Component<Props, State> {
       customName,
       nextMilestone
     } = this.props;
-    const { 
-      bidStatus, 
-      bidStopStatus, 
-      opportunityName, 
-      opportunityStatus, 
-      isApprovalCountPresent 
+    const {
+      bidStatus,
+      bidStopStatus,
+      opportunityName,
+      opportunityStatus,
+      isApprovalCountPresent
     } = selectedBid.toJS();
 
     if (isLoading)
@@ -466,6 +467,7 @@ export default compose(
     clearSearch: clearSearchAction,
     saverecentoppactivity: saveRecentOppActivity,
     toggleEditCustomNameModal,
-    onEditCustomName
+    onEditCustomName,
+    updateProposalDetailFromWebSocket
   })
 )(MatomoHOC(Opportunity));

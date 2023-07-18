@@ -6,7 +6,12 @@ import { store } from "../../../store";
 import { act } from "@testing-library/react";
 import { REDUX_TYPES } from "../../../constants";
 import * as ProposalsAPIs from "../../../api/proposals";
-import { onFilteringProposals, updateProposal } from "../../../redux/actions/proposals-actions";
+import { 
+  updateProposal, 
+  getAllProposals, 
+  getProposalsByStatus,
+  onFilteringProposals, 
+} from "../../../redux/actions/proposals-actions";
 
 export const proposals = {
   proposals: [
@@ -166,7 +171,7 @@ const filters = {
     from: '2024-03-20',
     to: '2024-03-25'
   },
-  'teamMember': 'Aadish',
+  'teamMember': 'Aadish1234@iqvia.com',
   'Customized opportunity name': 'Test Opportunity',
 };
 
@@ -188,6 +193,11 @@ export const proposalDetails = {
   "bidNo": 1
 };
 
+const userCustomOppNameMap = {
+  UZA89257: 'custom name 89257',
+  UZA88708: 'custom name 89257'
+};
+
 describe('testing onFilteringProposals function', () => {
   beforeEach(() => {
     act(() => {
@@ -206,11 +216,33 @@ describe('testing onFilteringProposals function', () => {
         type: REDUX_TYPES.SSO_AUTH.SET_FAVOURITES_UPDATED_DATE,
         payload: favouritesUpdatedDateMap
     });
+    store.dispatch({
+      type: REDUX_TYPES.SSO_AUTH.SET_CUSTOM_NAME_MAP,
+      payload: userCustomOppNameMap
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   })
+
+  test('testing for tabIndex 0| Assigned tab', () => {
+    const tabIndex = 0;
+    const filters = {};
+
+    const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'getAssignedOpportunity')
+                                        .mockResolvedValue({ data: proposals });
+    store.dispatch(onFilteringProposals(filters, tabIndex));
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(1);
+  });
+
+  test('testing for tabIndex 0| Assigned tab', () => {
+    const tabIndex = 0;
+    const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'getAssignedOpportunity')
+                                        .mockResolvedValue({ data: proposals });
+    store.dispatch(onFilteringProposals(filters, tabIndex));
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(1);
+  });
 
   test('testing for tabIndex 1| Favourite tab', () => {
     const tabIndex = 1;
@@ -222,9 +254,33 @@ describe('testing onFilteringProposals function', () => {
     expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(1);
   });
 
-  test('testing for tabIndex 1| Favourite tab with filter applied', () => {
+  test('testing for tabIndex 1| Favorite tab with filter applied', () => {
     const tabIndex = 1;
     const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'onGetAllProposals')
+                                        .mockResolvedValue({ data: proposals });
+    store.dispatch(onFilteringProposals(filters, tabIndex));
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalled();
+  });
+
+  test('testing for tabIndex 2| Recent tab without filter applied', () => {
+    const tabIndex = 2;
+    const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'getRecentOpportunity')
+                                        .mockResolvedValue({ data: proposals });
+    store.dispatch(onFilteringProposals({}, tabIndex));
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalled();
+  });
+
+  test('testing for tabIndex 2| Recent tab with filter applied', () => {
+    const tabIndex = 1;
+    act(() => {
+      store.dispatch({
+        type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+        payload: {
+          favouriteFlag: false
+        }
+      });
+    });
+    const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'getRecentOpportunity')
                                         .mockResolvedValue({ data: proposals });
     store.dispatch(onFilteringProposals(filters, tabIndex));
     expect(mockGetFavoritesOpportunity).toHaveBeenCalled();
@@ -262,4 +318,20 @@ describe('testing update proposal action', () => {
     const favouriteProposals = store.getState().proposals.toJS().favouriteProposals;
     expect(favouriteProposals.length).toBe(1);
   });
+});
+
+describe('testing getAllProposals action', () => {
+  test('render the function without crashing', () => {
+    const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'onGetAllProposals').mockResolvedValue({ data: proposals });
+    store.dispatch(getAllProposals());
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(1);
+  })
+})
+
+describe('testing getProposalsByStatus action', () => {
+  test('render the function without crashing', () => {
+    const mockGetFavoritesOpportunity = jest.spyOn(ProposalsAPIs, 'onGetByStatus').mockResolvedValue({ data: proposals });
+    store.dispatch(getProposalsByStatus());
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(1);
+  })
 })

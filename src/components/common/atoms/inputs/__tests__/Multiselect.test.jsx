@@ -12,8 +12,12 @@ describe('Multiselect', () => {
   const defaultProps = {
     placeholder: 'Select',
     items: [
-      { label: 'Item 1', value: 'item1' },
-      { label: 'Item 2', value: 'item2' }
+      "Cost",
+      "Other",
+      "Patient Centricity",
+      "Quality",
+      "Technology and Innovation",
+      "Timelines"
     ],
     onClick: mockOnClick,
     disabled: false,
@@ -51,15 +55,16 @@ describe('Multiselect', () => {
     expect(item1).toBeInTheDocument();
   });
 
-  it.skip('should call onClick with selected values when dropdown is closed', () => {
-    const { getByTestId, getByText } = render(
+  it('should call onClick with selected values when dropdown is closed', () => {
+    const { getByText, getByRole } = render(
       <Multiselect {...defaultProps} />
     );
-    const multiselect = getByTestId('multiselect-testId');
-    fireEvent.click(multiselect);
-    const item1 = getByText('item1');
+    const dropDown = getByRole('presentation');
+    fireEvent.click(dropDown);
+    const costItem = getByText('Cost');
+    fireEvent.click(costItem);
+    const item1 = getByText('item1,');
     fireEvent.click(item1);
-    fireEvent.click(multiselect);
     expect(mockOnClick).toHaveBeenCalled();
   });
 
@@ -71,21 +76,23 @@ describe('Multiselect', () => {
     expect(mockOnClick).not.toHaveBeenCalled();
   });
 
-  it.skip('should call onCascadeChange when an item is selected', () => {
-    const { getByTestId, getByText } = render(
+  it('should call onCascadeChange when an item is selected', () => {
+    const { getByRole, getByText } = render(
       <Multiselect {...defaultProps} />
     );
-    const multiselect = getByTestId('multiselect-testId');
-    fireEvent.click(multiselect);
-    const item1 = getByText('item1');
+    const dropDown = getByRole('presentation');
+    fireEvent.click(dropDown);
+    const costItem = getByText('Technology and Innovation');
+    fireEvent.click(costItem);
+    const item1 = getByText('item1,');
     fireEvent.click(item1);
     expect(mockOnCascadeChange).toHaveBeenCalled();
   });
 
-  it.skip('should call setSelectRow with true when multiselect is focused', () => {
-    const { getByTestId } = render(<Multiselect {...defaultProps} />);
-    const multiselect = getByTestId('multiselect-testId');
-    fireEvent.focusIn(multiselect);
+  it('should call setSelectRow with true when multiselect is focused', () => {
+    const { getByRole } = render(<Multiselect {...defaultProps} />);
+    const dropDown = getByRole('presentation');
+    fireEvent.click(dropDown);
     expect(mockSetSelectRow).toHaveBeenCalled();
   });
 });
