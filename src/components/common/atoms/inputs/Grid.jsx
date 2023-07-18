@@ -300,14 +300,20 @@ const loadSidebar = props => {
                 >
                   Custom Name
                 </Typography>
-                <Typography
-                  variant="body2"
-                  className={customName ? 'boldtext' : 'greytext'}
-                  noWrap
+                <Tooltip
                   title={customName || ''}
+                  placement="top"
+                  style={{ marginLeft: 48 }}
                 >
-                  {customName || 'New Custom Name'}
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    className={customName ? 'boldtext' : 'greytext'}
+                    noWrap
+                    style={{ marginLeft: 0 }}
+                  >
+                    {customName || 'New Custom Name'}
+                  </Typography>
+                </Tooltip>
               </div>
               <Pencil onClick={handleEditCustomName} />
             </div>

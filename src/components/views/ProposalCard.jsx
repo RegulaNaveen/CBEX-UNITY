@@ -166,18 +166,24 @@ const ProposalCard = ({
                 alignItems: 'center'
               }}
             >
-              <Typography
-                variant="caption"
-                className={classNames({
-                  greytext: true,
-                  'font-weight-very-light': !customName
-                })}
-                style={{ paddingRight: '.5rem' }}
-                noWrap
+              <Tooltip
                 title={customName || ''}
+                placement="top"
+                style={{ marginLeft: 48 }}
               >
-                {customName || 'New Custom Name'}
-              </Typography>
+                <Typography
+                  variant="caption"
+                  className={classNames({
+                    greytext: true,
+                    'font-weight-very-light': !customName
+                  })}
+                  style={{ paddingRight: '.5rem' }}
+                  noWrap
+                  title={customName || ''}
+                >
+                  {customName || 'New Custom Name'}
+                </Typography>
+              </Tooltip>
               <Pencil onClick={handleEditCustomName} />
             </div>
           ) : null}
