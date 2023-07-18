@@ -235,9 +235,15 @@ const ProposalCard = ({
           <span>
             <b>Next Milestone:</b>
           </span>
-          <span className={checkNoDataClass(nextMilestone)}>
-            {nextMilestone}
-          </span>
+          <Tooltip
+            title={nextMilestone || ''}
+            placement="top"
+            style={{ marginLeft: 48 }}
+          >
+            <span className={checkNoDataClass(nextMilestone)}>
+              {nextMilestone}
+            </span>
+          </Tooltip>
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
