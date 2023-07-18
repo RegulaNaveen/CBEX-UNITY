@@ -25,6 +25,10 @@ import {
   updateDashboardProposal,
   updateCustomNameAction
 } from '../redux/actions/proposal-actions';
+import {
+  updateDashboardBid,
+  syncDashboardOpportunity
+} from '../redux/actions/proposals-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
@@ -213,16 +217,32 @@ const SocketContextProvider = props => {
       if (!ws) {
         ws = socket.current;
       }
+      let data = {
+        proposalId: proposalObj.proposalId,
+        proposalDetails: proposalObj.proposalDetails
+      };
+      if (proposalObj?.newBid) {
+        data = {
+          proposalId: proposalObj.proposalId,
+          proposalDetails: proposalObj.proposalDetails,
+          newBid: true
+        };
+      }
+      if (proposalObj?.bidStatusKey) {
+        data = {
+          bidStatusKey: proposalObj.bidStatusKey,
+          bidStopStatus: proposalObj.bidStopStatus,
+          proposalId: proposalObj.proposalId,
+          proposalDetails: proposalObj.proposalDetails
+        };
+      }
       ws.send(
         JSON.stringify({
           action: 'SF_PROPOSAL_DETAIL_UPDATE',
           body: {
             event: 'SF_PROPOSAL_DETAIL_UPDATE',
             fromSF: true,
-            data: {
-              proposalId: proposalObj.proposalId,
-              proposalDetails: proposalObj.proposalDetails
-            }
+            data: data
           }
         })
       );
@@ -464,7 +484,8 @@ const SocketContextProvider = props => {
           widgetUpdate,
           updateFavouriteAction,
           updateNextMilestoneAction,
-          updateCustomNameAction
+          updateCustomNameAction,
+          syncdashboard
         } = props;
 
         // On Message Recieve
@@ -595,10 +616,15 @@ const SocketContextProvider = props => {
                 data.data
               );
               break;
+            case 'BID_UPDATE_DASHBOARD':
+              updateDashboardBid(data);
+              break;
             case 'SF_PROPOSAL_DETAIL_UPDATE':
               updateDashboardData(data);
               break;
-
+            case 'OPPORTUNITY_UPDATE_DASHBOARD':
+              syncdashboard(data);
+              break;
             case 'NEXT_MILESTONE_UPDATE':
               const { nextMilestone } = data.data;
               updateNextMilestoneAction(data.oppId, nextMilestone);
@@ -949,7 +975,9 @@ const mapDispatchToProps = {
   widgetUpdate,
   updateFavouriteAction: updateFavourite,
   updateNextMilestoneAction: updateNextMilestone,
-  updateCustomNameAction
+  updateCustomNameAction,
+  updateDashboardBid,
+  syncdashboard: syncDashboardOpportunity
 };
 
 export default connect(
