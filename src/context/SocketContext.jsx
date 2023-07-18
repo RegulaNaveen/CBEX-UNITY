@@ -485,7 +485,8 @@ const SocketContextProvider = props => {
           updateFavouriteAction,
           updateNextMilestoneAction,
           updateCustomNameAction,
-          syncdashboard
+          syncdashboard,
+          syncBidDashboard
         } = props;
 
         // On Message Recieve
@@ -617,7 +618,7 @@ const SocketContextProvider = props => {
               );
               break;
             case 'BID_UPDATE_DASHBOARD':
-              updateDashboardBid(data);
+              syncBidDashboard(data);
               break;
             case 'SF_PROPOSAL_DETAIL_UPDATE':
               updateDashboardData(data);
@@ -977,7 +978,7 @@ const mapDispatchToProps = {
   updateFavouriteAction: updateFavourite,
   updateNextMilestoneAction: updateNextMilestone,
   updateCustomNameAction,
-  updateDashboardBid,
+  syncBidDashboard: updateDashboardBid,
   syncdashboard: syncDashboardOpportunity
 };
 
