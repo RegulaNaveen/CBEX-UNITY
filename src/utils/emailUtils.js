@@ -162,9 +162,8 @@ export function generateApprovalEmailInfo(
         <![endif]-->
  </style>
     </head><body>`;
-  const emailFoot = `
-    </body>
-    </html>`;
+  const emailFoot = `</body></html>`;
+
   let emailBody = '';
   let questionsForThisApproval = [];
   let toUsers = [];
@@ -254,7 +253,9 @@ export function generateApprovalEmailInfo(
 
     questionsForThisApproval.forEach((question, qIndex) => {
       let answerHTML = '';
+
       if (question.section.sectionName === 'Proposal Team') {
+        // Format Proposal Team answers
         answerHTML = formatProposalTeamAnswers(
           question.answers.length > 0
             ? question.answers[question.answers.length - 1].answer
@@ -263,40 +264,53 @@ export function generateApprovalEmailInfo(
       } else {
         answerHTML = '';
         if (question?.answers[question?.answers?.length - 1]?.formattedAnswer) {
-          let formatedAnswerObject =
-            isString(
-              question.answers[question.answers.length - 1].formattedAnswer
-            ) &&
-            !isEmpty(
-              question.answers[
-                question.answers.length - 1
-              ].formattedAnswer.trim()
-            )
-              ? JSON.parse(
-                  question.answers[question.answers.length - 1].formattedAnswer
-                )
-              : question.answers[question.answers.length - 1].formattedAnswer;
-          answerHTML = formatedAnswerObject?.html
-            ? handleHyperlinks(
-                formatedAnswerObject.html,
-                question.answerConfiguration
-              )
-            : `<p>${handleHyperlinks(
+          const formattedAnswer =
+            question.answers[question.answers.length - 1].formattedAnswer;
+
+          if (isString(formattedAnswer) && !isEmpty(formattedAnswer.trim())) {
+            try {
+              // Try parsing formattedAnswer as JSON
+              const parsedAnswer = JSON.parse(formattedAnswer);
+
+              // If parsing is successful, extract the html property
+              if (parsedAnswer && parsedAnswer.html) {
+                answerHTML = handleHyperlinks(
+                  parsedAnswer.html,
+                  question.answerConfiguration
+                );
+              }
+            } catch (error) {
+              console.error('formattedAnswer is not valid JSON:', error);
+
+              // Use the answer property as a regular string
+              answerHTML = `<p>${handleHyperlinks(
                 question.answers[question.answers.length - 1].answer,
                 question.answerConfiguration
               )}</p>`;
+            }
+          } else {
+            // formattedAnswer is not a valid JSON string or is an empty string
+            // Use the answer property as a regular string
+            answerHTML = `<p>${handleHyperlinks(
+              question.answers[question.answers.length - 1].answer,
+              question.answerConfiguration
+            )}</p>`;
+          }
         } else if (question?.answers[question?.answers?.length - 1]?.answer) {
+          // Use the answer property as a regular string
           answerHTML = `<p>${handleHyperlinks(
             question.answers[question.answers.length - 1].answer,
             question.answerConfiguration
           )}</p>`;
         }
+
         answerHTML = answerHTML.replace(RTE_DATA_ATTR_REGEXP, '');
       }
+
       emailBody += `<tr>
-        <td>${question.questionText}</td>
-        <td>${answerHTML}</td>
-        </tr>`;
+    <td>${question.questionText}</td>
+    <td>${answerHTML}</td>
+    </tr>`;
     });
 
     emailBody += `</tbody></table>`;
