@@ -300,14 +300,20 @@ const loadSidebar = props => {
                 >
                   Custom Name
                 </Typography>
-                <Typography
-                  variant="body2"
-                  className={customName ? 'boldtext' : 'greytext'}
-                  noWrap
+                <Tooltip
                   title={customName || ''}
+                  placement="top"
+                  style={{ marginLeft: 48 }}
                 >
-                  {customName || 'New Custom Name'}
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    className={customName ? 'boldtext' : 'greytext'}
+                    noWrap
+                    style={{ marginLeft: 0 }}
+                  >
+                    {customName || 'New Custom Name'}
+                  </Typography>
+                </Tooltip>
               </div>
               <Pencil onClick={handleEditCustomName} />
             </div>
@@ -398,14 +404,11 @@ const loadSidebar = props => {
           <Typography variant="body2" className="greytext">
             Next Milestone
           </Typography>
-          <Typography
-            variant="body2"
-            className="boldtext"
-            noWrap
-            title={nextMilestone || ''}
-          >
-            {nextMilestone || '-'}
-          </Typography>
+          <Tooltip title={nextMilestone || ''} placement="top">
+            <Typography variant="body2" className="boldtext" noWrap>
+              {nextMilestone || '-'}
+            </Typography>
+          </Tooltip>
         </Paper>
       </div>
       <div>
