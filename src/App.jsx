@@ -71,8 +71,8 @@ const EditCustomNameModal = ({ show }) => {
 
   function onSaveCustomName() {
     // do validate and save
-    if (editName.length > 200) {
-      setError('Custom Name cannot have more than 200 characters');
+    if (editName.length > 250) {
+      setError('Custom Name cannot have more than 250 characters');
       return;
     }
     dispatch(saveCustomNameAction(oppNoEditing, editName));

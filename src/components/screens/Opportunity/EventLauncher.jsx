@@ -275,7 +275,8 @@ const EventLauncher = ({
           <Radio value={item} key={item} label={item} />
         ))}
       </RadioGroup>
-      <UnassignedRolesList unassignedRoles={unassignedRoles} />
+      {/* Hidden for 4.9 release */}
+      {/* <UnassignedRolesList unassignedRoles={unassignedRoles} /> */}
     </CustomModal>
   );
   const eventIcon = (

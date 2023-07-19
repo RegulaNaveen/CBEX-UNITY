@@ -236,18 +236,24 @@ const TableView = ({ data, hideStatus }: Props) => {
                         alignItems: 'center'
                       }}
                     >
-                      <Typography
-                        variant="caption"
-                        className={classNames({
-                          greytext: true,
-                          'font-weight-very-light': !row['customName']
-                        })}
-                        style={{ paddingRight: '.5rem' }}
-                        noWrap
+                      <Tooltip
                         title={row['customName'] || ''}
+                        placement="top"
+                        style={{ marginLeft: 48 }}
                       >
-                        {row['customName'] || 'New Custom Name'}
-                      </Typography>
+                        <Typography
+                          variant="caption"
+                          className={classNames({
+                            greytext: true,
+                            'font-weight-very-light': !row['customName']
+                          })}
+                          style={{ paddingRight: '.5rem' }}
+                          noWrap
+                          title={row['customName'] || ''}
+                        >
+                          {row['customName'] || 'New Custom Name'}
+                        </Typography>
+                      </Tooltip>
 
                       <Pencil
                         onClick={() =>
@@ -351,10 +357,8 @@ const TableView = ({ data, hideStatus }: Props) => {
               );
 
             case 'opportunity status':
-              const statusText = row[col]
-                ?.split('.')
-                .pop()
-                .trim();
+              const statusText = row[col];
+
               return (
                 <Tooltip title={statusText} placement="top">
                   <div key={uuidv4()} className="cell">

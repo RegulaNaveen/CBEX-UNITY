@@ -457,20 +457,24 @@ export const selectNextMilestone = createSelector(
   selectNextMilestones,
   milestones => {
     if (milestones.length > 0) {
-      let sortedMilestones = milestones.sort((milestoneA, milestoneB) => {
-        let diff = 0;
-        try {
-          diff =
-            moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
-            moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
-        } catch (e) {
-          console.error(
-            '[proposalUtils.getNextMilestone] Error in parsing date',
-            e
-          );
-        }
-        return diff;
-      });
+      let sortedMilestones = milestones
+        .filter(milestone =>
+          moment(milestone.date, 'DD-MMM-YYYY').isSameOrAfter(moment(), 'd')
+        )
+        .sort((milestoneA, milestoneB) => {
+          let diff = 0;
+          try {
+            diff =
+              moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
+              moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
+          } catch (e) {
+            console.error(
+              '[proposalUtils.getNextMilestone] Error in parsing date',
+              e
+            );
+          }
+          return diff;
+        });
       console.log('sorted', sortedMilestones);
       return sortedMilestones[0].name;
     }
