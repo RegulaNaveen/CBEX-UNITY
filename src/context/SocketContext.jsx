@@ -23,7 +23,8 @@ import {
   widgetUpdate,
   updateNextMilestone,
   updateDashboardProposal,
-  updateCustomNameAction
+  updateCustomNameAction,
+  updateOpportunityDashboardProposal
 } from '../redux/actions/proposal-actions';
 import {
   updateDashboardBid,
@@ -486,7 +487,8 @@ const SocketContextProvider = props => {
           updateNextMilestoneAction,
           updateCustomNameAction,
           syncdashboard,
-          syncBidDashboard
+          syncBidDashboard,
+          updateDetailPage
         } = props;
 
         // On Message Recieve
@@ -625,6 +627,7 @@ const SocketContextProvider = props => {
               break;
             case 'OPPORTUNITY_UPDATE_DASHBOARD':
               syncdashboard(data);
+              updateDetailPage(data);
               break;
             case 'NEXT_MILESTONE_UPDATE':
               console.log('socket data', data);
@@ -979,7 +982,8 @@ const mapDispatchToProps = {
   updateNextMilestoneAction: updateNextMilestone,
   updateCustomNameAction,
   syncBidDashboard: updateDashboardBid,
-  syncdashboard: syncDashboardOpportunity
+  syncdashboard: syncDashboardOpportunity,
+  updateDetailPage: updateOpportunityDashboardProposal
 };
 
 export default connect(

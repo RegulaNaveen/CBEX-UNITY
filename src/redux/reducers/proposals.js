@@ -161,9 +161,9 @@ const setProposalDetails = (state, action) => {
 const updateDashboradBid = (state, action) => {
   const { data, oppId } = action.payload;
   let proposals = state.get('proposals');
-  if (data && data?.newBid) {
-    const updateProposals = proposals.map(value => {
-      if (oppId === value['opportunity number']) {
+  if (data && data?.newBid && proposals && Array.isArray(proposals)) {
+    const updateProposals = proposals?.map(value => {
+      if (oppId && oppId === value['opportunity number']) {
         value['bidNo'] = parseInt(value['bidNo']) + 1 || '';
       }
       return value;
@@ -173,11 +173,8 @@ const updateDashboradBid = (state, action) => {
   return state;
 };
 const updateDasboardSF = (state, action) => {
-  console.log(action.payload);
   const { data, oppId } = action.payload;
   let proposals = state.get('proposals');
-  console.log(`proposals`, proposals);
-  console.log(`data`, data);
   if (proposals && Array.isArray(proposals) && proposals.length) {
     const updateProposals = proposals.map(value => {
       if (oppId === value['opportunity number']) {
