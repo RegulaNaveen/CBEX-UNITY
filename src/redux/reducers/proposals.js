@@ -3,6 +3,7 @@ import { Map, fromJS } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import { DashboardSFUpDATE } from '../../constants/app';
 import { cloneDeep } from 'lodash';
+import moment from 'moment';
 import type { ApiAction } from '../actions/action-types';
 
 const {
@@ -165,6 +166,9 @@ const updateDashboradBid = (state, action) => {
     const updateProposals = proposals?.map(value => {
       if (oppId && oppId === value['opportunity number']) {
         value['bidNo'] = parseInt(value['bidNo']) + 1 || '';
+        value['bid due date'] = moment(
+          data?.proposalDetails['Bid due date']
+        ).format('YYYY-MM-DD');
       }
       return value;
     });
