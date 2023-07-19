@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Provider } from "react-redux";
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { render, screen, act, fireEvent, getByText } from "@testing-library/react";
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { store } from "../../../../../store";
@@ -324,6 +324,15 @@ const TabWithRedux = ({ props }) => (
 );
 
 describe('testing for tab component', () => {
+
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+    
     window.scrollTo = jest.fn();
     global.ResizeObserver = jest.fn().mockImplementation(() => ({
         observe: jest.fn(),
@@ -336,20 +345,17 @@ describe('testing for tab component', () => {
     });
 
     test('render with questions tab', () => {
-        jest.useFakeTimers();
-        act(() => {
-            store.dispatch({
-                type: UNITY_TABS.SET_UNITY_TABS,
-                payload: customTab
-            });
-            store.dispatch({
-                type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
-                payload: 0
-            });
-            store.dispatch({
-                type:REDUX_TYPES.PROPOSAL.SET_FLAG,
-                payload: allFlags
-            })
+        store.dispatch({
+            type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
+            payload: 0
+        });
+        store.dispatch({
+            type:REDUX_TYPES.PROPOSAL.SET_FLAG,
+            payload: allFlags
+        })
+        store.dispatch({
+            type: UNITY_TABS.SET_UNITY_TABS,
+            payload: customTab
         });
         const { container } = render(
             <Provider store={store}>
@@ -385,7 +391,6 @@ describe('testing for tab component', () => {
         const teamBlade = container.querySelector('#panel-notepad > div > button > svg > path');
         fireEvent.click(teamBlade);
         fireEvent.click(teamBlade);
-        jest.useRealTimers();
     });
 
     test('check for timelines tab', () => {
@@ -405,6 +410,7 @@ describe('testing for tab component', () => {
               }
             ]
         });
+        window.history.pushState({}, '', '/opportunities/UZA89257?viewType=timelines&bidNo=3');
         const { container } = render(
             <Provider store={store}>
                 <Router history={history}>
@@ -494,18 +500,18 @@ describe('testing for tab component', () => {
         expect(container).toBeInTheDocument();
     });
 
-    test('check for custon tab rendering', () => {
+    test('check for custom tab rendering', () => {
         store.dispatch({
             type: UNITY_TABS.SET_UNITY_TABS,
             payload: customTab
         });
         store.dispatch({
-            type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
-            payload: 'success'
-        });
-        store.dispatch({
             type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
             payload: 4
+        });
+        store.dispatch({
+            type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
+            payload: 'success'
         });
         store.dispatch({
             type: REDUX_TYPES.PROPOSAL.CHANGE_BID_STATUS_OPERATION,
@@ -517,11 +523,12 @@ describe('testing for tab component', () => {
         const history = createMemoryHistory({
             initialEntries: [
               {
-                pathname: '/opportunities/UZA89257',
+                pathname: '/opportunities/UZA89257?bidNo=3&viewType=tab_1',
                 search: '?bidNo=3&viewType=tab_1'
               }
             ]
         });
+        window.history.pushState({}, '', '/opportunities/UZA89257?viewType=testing&bidNo=3');
         const { container } = render(
             <Provider store={store}>
                 <SocketContext.Provider value={{
@@ -539,6 +546,11 @@ describe('testing for tab component', () => {
                 </SocketContext.Provider>    
             </Provider>
         );
+        const moreButton = screen.getByText('More');
+        fireEvent.click(moreButton);
+        const timelineTab = screen.getByText('Timeline');
+        fireEvent.click(timelineTab);
         expect(container).toBeInTheDocument();
+        expect(getByText('Available Dates')).toBeInTheDocument();
     });
 });
