@@ -86,16 +86,24 @@ const TableView = ({ data, hideStatus }: Props) => {
 
     const skip = [...SKIP_COLUMNS];
     if (hideStatus) skip.push(STATUS_COLUMN);
-    if (!flags[featureFlags.FAVOURITE_FLAG]) skip.push(FAV_COLUMN);
 
     return (
       <div
         key={uuidv4()}
         className="headers"
         style={{
+          display: 'grid',
+          gap: '1rem',
+          gridTemplateRows: 'auto',
+          gridAutoRows: 'auto',
           gridTemplateColumns: flags['customOpportunityNameFlag']
-            ? `minmax(240px, 1fr) repeat(${filteredColumns.length - 1}, 1fr)`
-            : `repeat(${filteredColumns.length}, 1fr)`
+            ? `minmax(150px, 1fr) repeat(${filteredColumns.length -
+                2}, minmax(100px, 1fr)) ${
+                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+              }`
+            : `repeat(${filteredColumns.length - 1}, minmax(100px, 1fr)) ${
+                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+              }`
         }}
       >
         {filteredColumns.map(column => {
@@ -115,7 +123,7 @@ const TableView = ({ data, hideStatus }: Props) => {
           }
 
           if (column === 'isFavourite') {
-            return ' ';
+            return <h3></h3>;
           }
 
           if (!skip.includes(column)) {
@@ -208,12 +216,24 @@ const TableView = ({ data, hideStatus }: Props) => {
         key={uuidv4()}
         className="row"
         style={{
+          display: 'grid',
+          gap: '1rem',
+          gridTemplateRows: 'auto',
+          gridAutoRows: 'auto',
           gridTemplateColumns: flags['customOpportunityNameFlag']
-            ? `minmax(240px, 1fr) repeat(${filteredColumns.length - 1}, 1fr)`
-            : `repeat(${filteredColumns.length}, 1fr)`
+            ? `minmax(150px, 1fr) repeat(${filteredColumns.length -
+                2}, minmax(100px, 1fr)) ${
+                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+              }`
+            : `repeat(${filteredColumns.length - 1}, minmax(100px, 1fr)) ${
+                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+              }`
         }}
       >
         {orderedColumns.map(col => {
+          if (col === 'isFavourite' && !flags[featureFlags.FAVOURITE_FLAG]) {
+            return null;
+          }
           switch (col) {
             case 'opportunity number':
               return (
@@ -398,10 +418,12 @@ const TableView = ({ data, hideStatus }: Props) => {
                       </span>
                     </div>
                   ) : (
-                    <Favourite
-                      value={row[col]}
-                      onToggle={update => onFavouriteToggle(update)}
-                    />
+                    flags[featureFlags.FAVOURITE_FLAG] && (
+                      <Favourite
+                        value={row[col]}
+                        onToggle={update => onFavouriteToggle(update)}
+                      />
+                    )
                   )}
                 </div>
               );

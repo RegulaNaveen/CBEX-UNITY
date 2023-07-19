@@ -143,7 +143,6 @@ class Lookup extends Component<Props, State> {
     return (
       <div
         id="lookup"
-        style={className ? { paddingTop: 2 } : {}}
         className={classNames({ 'is-searching': !isEmpty(filteredData) })}
       >
         {title && <p className="input-title">{title}</p>}

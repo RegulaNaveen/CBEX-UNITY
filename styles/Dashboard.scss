@@ -1,7 +1,9 @@
 #dashboard {
+  // background-color: #f6f6f6;
   .tab-wrapper {
     padding: 10px;
     display: inherit !important;
+    background-color: #f6f6f6;
   }
 
   & > .tab-wrapper {
@@ -62,9 +64,30 @@
   font-weight: 600 !important;
 }
 .no-info-card {
-  text-align: center;
+  height: 128px;
   padding: 20px;
-  color: #595959;
+  border: 1px solid #e9e9e9;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  text-align: center;
+  margin: 20px auto 0;
+  display: flex; /* Use flexbox */
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+}
+
+.no-info-card p {
+  /* Add styles for the Typography component inside the card */
+  height: 24px;
+  width: 318px;
+  font-family: 'Proxima Nova';
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 24px;
+  text-align: center;
 }
 
 .assigned-tab.MuiTabs-root::before {
