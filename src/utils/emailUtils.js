@@ -163,7 +163,7 @@ export function generateApprovalEmailInfo(
  </style>
     </head><body>`;
   const emailFoot = `</body></html>`;
-  console.log('first', emailFoot);
+
   let emailBody = '';
   let questionsForThisApproval = [];
   let toUsers = [];
@@ -263,8 +263,6 @@ export function generateApprovalEmailInfo(
         );
       } else {
         answerHTML = '';
-        console.log('question?.answers', question?.answers);
-
         if (question?.answers[question?.answers?.length - 1]?.formattedAnswer) {
           const formattedAnswer =
             question.answers[question.answers.length - 1].formattedAnswer;
