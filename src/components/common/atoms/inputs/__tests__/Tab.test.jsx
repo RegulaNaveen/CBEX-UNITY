@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Provider } from "react-redux";
-import { render, screen, act, fireEvent, getByText } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { store } from "../../../../../store";
@@ -551,6 +551,6 @@ describe('testing for tab component', () => {
         const timelineTab = screen.getByText('Timeline');
         fireEvent.click(timelineTab);
         expect(container).toBeInTheDocument();
-        expect(getByText('Available Dates')).toBeInTheDocument();
+        expect(screen.getByText('Available Dates')).toBeInTheDocument();
     });
 });
