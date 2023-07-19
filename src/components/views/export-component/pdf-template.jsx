@@ -266,6 +266,12 @@ ul {
           .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
               margin-left: 25px;
           }
+          .public-DraftStyleDefault-ul { 
+            text-underline-position: under; 
+          }
+          .public-DraftStyleDefault-ol { 
+            text-underline-position: under; 
+          }
           .MuiGrid-root{
               display:none;
           }

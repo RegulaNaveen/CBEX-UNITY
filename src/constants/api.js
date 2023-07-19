@@ -177,7 +177,7 @@ switch (environment) {
       // 'http://localhost:5000';
       'https://olyxc9cn1m.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_ENDPOINT_2 =
-      'https://542gm4mu97.execute-api.us-east-1.amazonaws.com/dev';
+      'https://a9cm724u04.execute-api.us-east-1.amazonaws.com/dev';
     PROPOSAL_API_KEY = 'SmXooYpNRX4u0dlRrebjt3PUnJJma5cm5ipK3nSV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';

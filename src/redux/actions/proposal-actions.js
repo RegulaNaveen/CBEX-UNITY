@@ -126,6 +126,7 @@ const {
   CLEAR_EDIT_OPP_INFO,
   TOGGLE_EDIT_CUSTOM_NAME_MODAL,
   DASHBOARD_PROPOSAL_DETAIL,
+  UPDATE_DASHBOARD_OPPORTUNITY
 } = REDUX_TYPES.PROPOSAL;
 
 const { ON_GET_PROPOSALS, ON_GET_FAVOURITE } = REDUX_TYPES.PROPOSALS;
@@ -1557,6 +1558,17 @@ export const updateDashboardProposal = (data): ThunkAction<string, Object> => {
   };
 };
 
+export const updateOpportunityDashboardProposal = (
+  data
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: UPDATE_DASHBOARD_OPPORTUNITY,
+      payload: data
+    });
+  };
+};
+
 /**
  * Activate Proposal Loading - Action
  */
@@ -1785,7 +1797,7 @@ export const onSaveCustomName = (oppNo, customName) => {
       let proposalsFavourite = getFavouriteProposals(getState());
       const proposalIndex = proposals.findIndex(
         proposal => proposal['opportunity number'] === oppNo
-      ); 
+      );
       if (proposalIndex > -1) {
         proposals[proposalIndex]['customName'] = customName;
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
@@ -1869,7 +1881,7 @@ export const updateCustomNameAction = (oppNo, customName) => {
       proposalsFavourite[favouriteIndex]['customName'] = customName;
       dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
     }
-    
+
     if (proposalInfo['CRM #'] == oppNo) {
       dispatch({
         type: SET_CUSTOM_NAME,
