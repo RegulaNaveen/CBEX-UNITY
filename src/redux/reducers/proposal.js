@@ -1,11 +1,12 @@
 // @flow
 import _, { isEqual, cloneDeep } from 'lodash';
-import { Map, fromJS, OrderedMap } from 'immutable'; // NOSONAR
+import { Map, fromJS, OrderedMap, setIn } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
 import { getUniqueMilestones } from '../selectors/proposal';
 import { getQuestionsFilterApplied } from '../actions/proposal-actions';
 import { OpportunitySFUpDATE } from '../../constants/app';
+import moment from 'moment';
 const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
@@ -1367,6 +1368,41 @@ const updateProposalDetailSF = (state, action) => {
   } else {
     proposalDetail = data.proposalDetails;
   }
+  let opportunityData = state.get('opportunityData');
+  if (
+    data &&
+    data.proposalDetails &&
+    opportunityData &&
+    opportunityData.get(data?.proposalId)
+  ) {
+    let currentDate = opportunityData.getIn([
+      data?.proposalId,
+      'proposal',
+      'proposalDetails',
+      'Bid due date'
+    ]);
+    if (currentDate) {
+      currentDate = moment(currentDate).format('YYYY-MM-DD');
+    }
+    const newDate = moment(data.proposalDetails['Bid due date']).format(
+      'YYYY-MM-DD'
+    );
+    if (currentDate !== newDate) {
+      return state
+        .set('proposalDetails', { ...proposalDetail })
+        .setIn(
+          [
+            'opportunityData',
+            data.proposalId,
+            'proposal',
+            'proposalDetails',
+            'Bid due date'
+          ],
+          newDate
+        );
+    }
+  }
+
   return state.set('proposalDetails', { ...proposalDetail });
 };
 

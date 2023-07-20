@@ -256,18 +256,24 @@ const TableView = ({ data, hideStatus }: Props) => {
                         alignItems: 'center'
                       }}
                     >
-                      <Typography
-                        variant="caption"
-                        className={classNames({
-                          greytext: true,
-                          'font-weight-very-light': !row['customName']
-                        })}
-                        style={{ paddingRight: '.5rem' }}
-                        noWrap
+                      <Tooltip
                         title={row['customName'] || ''}
+                        placement="top"
+                        style={{ marginLeft: 48 }}
                       >
-                        {row['customName'] || 'New Custom Name'}
-                      </Typography>
+                        <Typography
+                          variant="caption"
+                          className={classNames({
+                            greytext: true,
+                            'font-weight-very-light': !row['customName']
+                          })}
+                          style={{ paddingRight: '.5rem' }}
+                          noWrap
+                          title={row['customName'] || ''}
+                        >
+                          {row['customName'] || 'New Custom Name'}
+                        </Typography>
+                      </Tooltip>
 
                       <Pencil
                         onClick={() =>
