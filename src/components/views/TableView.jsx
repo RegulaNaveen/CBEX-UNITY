@@ -96,13 +96,14 @@ const TableView = ({ data, hideStatus }: Props) => {
           gap: '1rem',
           gridTemplateRows: 'auto',
           gridAutoRows: 'auto',
+          padding: '10px',
           gridTemplateColumns: flags['customOpportunityNameFlag']
             ? `minmax(150px, 1fr) repeat(${filteredColumns.length -
                 2}, minmax(100px, 1fr)) ${
-                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+                flags[featureFlags.FAVOURITE_FLAG] ? '4rem' : ''
               }`
             : `repeat(${filteredColumns.length - 1}, minmax(100px, 1fr)) ${
-                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+                flags[featureFlags.FAVOURITE_FLAG] ? '4rem' : ''
               }`
         }}
       >
@@ -220,14 +221,17 @@ const TableView = ({ data, hideStatus }: Props) => {
           gap: '1rem',
           gridTemplateRows: 'auto',
           gridAutoRows: 'auto',
+          padding: '3px 8px 5px 10px',
+          height: '3rem',
           gridTemplateColumns: flags['customOpportunityNameFlag']
             ? `minmax(150px, 1fr) repeat(${filteredColumns.length -
                 2}, minmax(100px, 1fr)) ${
-                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
+                flags[featureFlags.FAVOURITE_FLAG] ? '4rem' : ''
               }`
             : `repeat(${filteredColumns.length - 1}, minmax(100px, 1fr)) ${
-                flags[featureFlags.FAVOURITE_FLAG] ? '3rem' : ''
-              }`
+                flags[featureFlags.FAVOURITE_FLAG] ? '4rem' : ''
+              }`,
+          alignItems: flags[featureFlags.FAVOURITE_FLAG] ? '5px' : '10px'
         }}
       >
         {orderedColumns.map(col => {
@@ -466,7 +470,11 @@ const TableView = ({ data, hideStatus }: Props) => {
     return [tableColumns, tableContent];
   };
 
-  return <div id="table-view">{renderContent()}</div>;
+  return (
+    <div id="table-view" className="table-view-container">
+      {renderContent()}
+    </div>
+  );
 };
 
 TableView.defaultProps = { hideStatus: false };
