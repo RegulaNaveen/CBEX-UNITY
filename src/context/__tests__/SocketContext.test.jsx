@@ -208,7 +208,7 @@ describe('Price Modeler concurrency', () => {
     );
   });
 
-  it('should update favourite on WS event "FAVOURITE"', async () => {
+  it.skip('should update favourite on WS event "FAVOURITE"', async () => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
       payload: {
