@@ -300,16 +300,11 @@ const loadSidebar = props => {
                 >
                   Custom Name
                 </Typography>
-                <Tooltip
-                  title={customName || ''}
-                  placement="top"
-                  style={{ marginLeft: 48 }}
-                >
+                <Tooltip title={customName || ''} placement="right">
                   <Typography
                     variant="body2"
                     className={customName ? 'boldtext' : 'greytext'}
                     noWrap
-                    style={{ marginLeft: 0 }}
                   >
                     {customName || 'New Custom Name'}
                   </Typography>
@@ -404,7 +399,7 @@ const loadSidebar = props => {
           <Typography variant="body2" className="greytext">
             Next Milestone
           </Typography>
-          <Tooltip title={nextMilestone || ''} placement="top">
+          <Tooltip title={nextMilestone || ''} placement="left">
             <Typography variant="body2" className="boldtext" noWrap>
               {nextMilestone || '-'}
             </Typography>
