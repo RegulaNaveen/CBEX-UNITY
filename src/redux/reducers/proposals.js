@@ -57,7 +57,8 @@ const setProposalsError = (state: Map, action: Object): Map => {
 const onSetFilteringProposals = (state: Map, action: Object): Map => {
   const { filteredProposals, isFiltering } = action.payload;
   return state
-    .set('filteredProposals', '')
+    .set('favouriteProposals', '')
+    .set('proposals', '')
     .set('filteredProposals', filteredProposals)
     .set('isFiltering', isFiltering);
 };
