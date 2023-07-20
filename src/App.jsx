@@ -44,6 +44,7 @@ import {
   selectCustomNameEditing,
   selectShowEditCustomNameModal
 } from './redux/selectors/proposal';
+import { saveRecentOppActivity } from './api/proposals';
 
 const EditCustomNameModal = ({ show }) => {
   const [editName, setEditName] = useState('');
@@ -77,6 +78,14 @@ const EditCustomNameModal = ({ show }) => {
     }
     dispatch(saveCustomNameAction(oppNoEditing, editName));
     updateCustomNameWrapper(oppNoEditing, editName);
+    if (window && window.location && window.location.href) {
+      const obj = {
+        url: window.location.href,
+        oppNo: oppNoEditing,
+        type: 'opportunity page'
+      };
+      saveRecentOppActivity(obj);
+    }
     handleEditModalClose();
   }
 
