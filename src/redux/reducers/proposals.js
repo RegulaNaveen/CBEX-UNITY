@@ -42,7 +42,6 @@ const INITIAL_STATE: Map = fromJS({
 const setProposals = (state: Map, action: Object): Map => {
   const { proposals } = action.payload;
   return state
-    .set('favouriteProposals', '')
     .set('proposals', proposals)
     .set('proposalsLoading', false);
 };
@@ -71,7 +70,6 @@ const onSetProposalsFilters = (state: Map, action: Object): Map => {
 const onSetProposalsFavourite = (state: Map, action: Object): Map => {
   const { proposalsFavourite } = action.payload;
   return state
-    .set('proposals', '')
     .set('favouriteProposals', proposalsFavourite)
     .set('proposalsLoading', false);
 };
@@ -258,7 +256,7 @@ const updateDashboradBid = (state, action) => {
       }
       return value;
     });
-    return state.set('favouriteProposals', [...[...updateProposals]]);
+    state.set('favouriteProposals', [...[...updateProposals]]);
   }
 
   if (data && data?.newBid && proposals) {
@@ -271,7 +269,7 @@ const updateDashboradBid = (state, action) => {
       }
       return value;
     });
-    return state.set('proposals', [...[...updateProposals]]);
+    state.set('proposals', [...[...updateProposals]]);
   }
   return state;
 };
@@ -304,7 +302,7 @@ const updateDasboardSF = (state, action) => {
       }
       return value;
     });
-    return state.set('favouriteProposals', [...[...updateProposals]]);
+    state.set('favouriteProposals', [...[...updateProposals]]);
   }
 
   if (proposals && Array.isArray(proposals) && proposals.length) {
@@ -332,7 +330,7 @@ const updateDasboardSF = (state, action) => {
       }
       return value;
     });
-    return state.set('proposals', [...[...updateProposals]]);
+    state.set('proposals', [...[...updateProposals]]);
   }
   return state;
 };
