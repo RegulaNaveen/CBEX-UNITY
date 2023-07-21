@@ -55,16 +55,16 @@ const Dashboard = () => {
             setFilterApply(e);
           }}
         >
-          <div label="Assigned">
+          <div label="Assigned" className="dashboard-content">
             <MyDocketTab allFlags={allFlags} filterApply={filterApply} />
           </div>
-          <div label="Favorites">
+          <div label="Favorites" className="dashboard-content">
             <FavoritesTab allFlags={allFlags} filterApply={filterApply} />
           </div>
-          <div label="Recent">
+          <div label="Recent" className="dashboard-content">
             <RecentTab allFlags={allFlags} />
           </div>
-          <div label="All">
+          <div label="All" className="dashboard-content">
             <AllTab allFlags={allFlags} />
           </div>
         </Tabbar>
