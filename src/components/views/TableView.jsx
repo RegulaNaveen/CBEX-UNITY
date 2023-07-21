@@ -221,7 +221,7 @@ const TableView = ({ data, hideStatus }: Props) => {
           gap: '1rem',
           gridTemplateRows: 'auto',
           gridAutoRows: 'auto',
-          padding: '3px 8px 5px 10px',
+          padding: '10px',
           height: '3rem',
           gridTemplateColumns: flags['customOpportunityNameFlag']
             ? `minmax(150px, 1fr) repeat(${filteredColumns.length -
@@ -231,7 +231,8 @@ const TableView = ({ data, hideStatus }: Props) => {
             : `repeat(${filteredColumns.length - 1}, minmax(100px, 1fr)) ${
                 flags[featureFlags.FAVOURITE_FLAG] ? '4rem' : ''
               }`,
-          alignItems: flags[featureFlags.FAVOURITE_FLAG] ? '5px' : '10px'
+
+          alignItems: 'center'
         }}
       >
         {orderedColumns.map(col => {
