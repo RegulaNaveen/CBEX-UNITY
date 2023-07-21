@@ -238,7 +238,7 @@ class RecentTab extends Component<Props, State> {
               <Tab label={`Past (${oldoppCount})`} />
             </Tabs>
           </Card>
-          <div style={{ padding: 24 }}>
+          <div>
             {tabValue === 0 && (
               <section id="all-tab" className="tab-content">
                 {this.renderSelectedView('current')}

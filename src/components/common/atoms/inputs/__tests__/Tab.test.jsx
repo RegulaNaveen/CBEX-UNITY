@@ -340,8 +340,21 @@ describe('testing for tab component', () => {
         disconnect: jest.fn()
     }));
     test('render the component without crashing', () => {
+        store.dispatch({
+            type:REDUX_TYPES.PROPOSAL.SET_FLAG,
+            payload: {
+                approvalsFlag: true,
+                showTimelineFlag: true
+            }
+        });
         const { container } = render(<TabWithRedux />);
         expect(container).toBeInTheDocument();
+        const moreButton = screen.getByText('More');
+        fireEvent.click(moreButton);
+        expect(screen.getByText('Strategy Development')).toBeInTheDocument();
+        expect(screen.getByText('Timeline')).toBeInTheDocument();
+        expect(screen.getByText('Approvals')).toBeInTheDocument();
+        expect(screen.getByText('Documents')).toBeInTheDocument();
     });
 
     test('render with questions tab', () => {
