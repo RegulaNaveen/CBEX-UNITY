@@ -13,6 +13,13 @@
     justify-content: center;
     margin: 50px auto;
   }
+
+  .dashboard-content {
+    .table-view-container {
+      max-width: 100%;
+      overflow: auto;
+    }
+  }
 }
 
 // Ubuild toolbar styles
