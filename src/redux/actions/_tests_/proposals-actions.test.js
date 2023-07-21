@@ -195,14 +195,16 @@ export const proposalDetails = {
   opportunityId: '0060100000AOuK0AAL',
   bidNo: 13,
   "opportunityName": "LakshmiAcntTest-666-Phase 2b",
+  'opportunity status': '3. Developing Proposal'
 };
 
 const data = {
   data: { 
     proposalDetails: proposalDetails,
     newBid: true,
-    bidStatusKey: true,
-    bidStopStatus: true
+    bidStatusKey: false,
+    bidStopStatus: true,
+    oppNo: 'UZA89257'
    },
   oppId: 'UZA89257',
   fromSF: true
@@ -385,5 +387,41 @@ describe('testing syncDashboardOpportunity action', () => {
     const updatedFavProposal = store.getState().proposals.toJS().favouriteProposals[0]['customer'];
     expect(updatedProposal).toBe('AVKASH TEST');
     expect(updatedFavProposal).toBe('AVKASH TEST');
+
+    data.fromSF = false;
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.DASHBOARD_PROPOSAL_DETAIL,
+      payload: data
+    });
+
+    data.data.bidStatusKey = true;
+    data.data.proposalDetails['CRM #'] = 'UZA89257';
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.DASHBOARD_PROPOSAL_DETAIL,
+      payload: data
+    });
+
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.ON_GET_FAVOURITE,
+      payload: { proposalsFavourite: [] }
+    });
+    data.fromSF = true;
+    data.data.bidStatusKey = false;
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.DASHBOARD_PROPOSAL_DETAIL,
+      payload: data
+    });
+
+    data.fromSF = false;
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.DASHBOARD_PROPOSAL_DETAIL,
+      payload: data
+    });
+
+    data.data.bidStatusKey = true;
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSALS.DASHBOARD_PROPOSAL_DETAIL,
+      payload: data
+    });
   })
 })
