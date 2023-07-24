@@ -157,7 +157,7 @@ switch (environment) {
     // L4 Data
     PROPOSAL_API_ENDPOINT =
       'https://v51h8rf355.execute-api.us-east-1.amazonaws.com/l4';
-    PROPOSAL_API_ENDPOINT_2 = '';
+    PROPOSAL_API_ENDPOINT_2 = 'https://o88gltcnk8.execute-api.us-east-1.amazonaws.com/l4';
     PROPOSAL_API_KEY = 'PZdKkDgB2p3BZXbm9QnTX2aJtdxJkkz37hgYksJ7';
     NORMAL_AUTH_API_ENDPOINT =
       'https://2gydoa5dw6.execute-api.us-east-1.amazonaws.com/l4';
