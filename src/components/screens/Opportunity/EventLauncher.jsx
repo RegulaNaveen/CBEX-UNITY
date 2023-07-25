@@ -132,9 +132,9 @@ const EventLauncher = ({
       ? activeTeamQuestions
           .filter(
             team =>
-              team.roleNames.some(role =>
-                eventData.EventRoles.includes(role)
-              ) && isEmpty(team.email)
+              Array.isArray(eventData.EventQuestions) &&
+              eventData.EventQuestions.includes(team.questionId) &&
+              isEmpty(team.email)
           )
           .map(team => team.questionText)
           .sort()
@@ -275,8 +275,7 @@ const EventLauncher = ({
           <Radio value={item} key={item} label={item} />
         ))}
       </RadioGroup>
-      {/* Hidden for 4.9 release */}
-      {/* <UnassignedRolesList unassignedRoles={unassignedRoles} /> */}
+      <UnassignedRolesList unassignedRoles={unassignedRoles} />
     </CustomModal>
   );
   const eventIcon = (
