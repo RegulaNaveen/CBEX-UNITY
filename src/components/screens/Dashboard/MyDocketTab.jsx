@@ -62,10 +62,13 @@ class RecentTab extends Component<Props, State> {
 
   componentDidMount() {
     const { setRows, allFlags } = this.props;
-    setRows(10);
+    setRows(15);
   }
 
   handleChangeTab = (event, value) => {
+    const { setRows, setPage } = this.props;
+    setRows(15);
+    setPage(1);
     this.setState({ tabValue: value });
   };
 
@@ -243,7 +246,7 @@ class RecentTab extends Component<Props, State> {
               <section id="all-tab" className="tab-content">
                 {this.renderSelectedView('current')}
                 {showPagination && showCurrentPaginationCount > 15 && (
-                  <ComplexPagination
+                  <AssignTabPagination
                     currentTab="Assigned Tab"
                     totalItems={
                       isFilteringProposals ? filteredProposals.length : oppCount
@@ -259,7 +262,7 @@ class RecentTab extends Component<Props, State> {
                 {this.renderSelectedView('past')}
                 {showPagination && showPastPaginationCount > 15 && (
                   <ComplexPagination
-                    currentTab="Assigned Tab"
+                    currentTab="Past Tab"
                     totalItems={
                       isFilteringProposals
                         ? filteredProposals.length
