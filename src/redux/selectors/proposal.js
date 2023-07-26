@@ -223,7 +223,9 @@ export const selectActiveTeamQuestions = createSelector(
         question =>
           question.section.sectionName === 'Proposal Team' &&
           question.visible === true &&
-          (question.active === true || question.isCustomQuestion === true)
+          (question.active === true || question.isCustomQuestion === true) &&
+          !question.notApplicable &&
+          !question.questionApproval
       )
       .map(question => {
         let email = [];
