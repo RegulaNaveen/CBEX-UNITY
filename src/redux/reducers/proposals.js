@@ -35,15 +35,13 @@ const INITIAL_STATE: Map = fromJS({
   selectedViewType: 1,
   page: 1,
   numRows: 15,
-  assignTabRows: 10,
+  assignTabRows: 15,
   nonEditableSF: []
 });
 
 const setProposals = (state: Map, action: Object): Map => {
   const { proposals } = action.payload;
-  return state
-    .set('proposals', proposals)
-    .set('proposalsLoading', false);
+  return state.set('proposals', proposals).set('proposalsLoading', false);
 };
 
 const setProposalsError = (state: Map, action: Object): Map => {
