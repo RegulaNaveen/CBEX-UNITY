@@ -257,6 +257,7 @@ const UnityTab = ({
         }
       });
       setNewTab(tempTab);
+      setTabStatus(true);
       setTabloaded(true);
     }
   }, [customTabs, changeBidStatus]);
@@ -326,6 +327,7 @@ const UnityTab = ({
         setNewTab([...tempTab]);
       }
       setTabloaded(true);
+      setTabStatus(true);
       tempTab.length = 0;
     }
   }, [customTabs, changeBidStatus]);
@@ -546,6 +548,7 @@ const UnityTab = ({
       typeof allFlags === 'object' &&
       Object.keys(allFlags)?.length > 0
     ) {
+      setTabStatus(false);
       const finalTab = [...tabs, ...newTab];
       const calculateTabList = checkTabsVisibility(finalTab);
       const winLocationSearch = window.location.search;
@@ -557,7 +560,9 @@ const UnityTab = ({
         setTabPresent(flagValue);
       }
       setTabs(calculateTabList);
-      setTabStatus(true);
+      setTimeout(() => {
+        setTabStatus(true);
+      }, 100);
       setNewTab([...[]]);
     }
   }, [newTab]);
@@ -571,6 +576,7 @@ const UnityTab = ({
       typeof allFlags === 'object' &&
       Object.keys(allFlags)?.length > 0
     ) {
+      setTabStatus(false);
       let finalTab = [...tabs];
       if (allFlags && !allFlags?.approvalsFlag) {
         finalTab = finalTab.filter(item => item.label !== 'Approvals');
@@ -590,7 +596,9 @@ const UnityTab = ({
         setTabPresent(flagValue);
       }
       setTabs(finalTab);
-      setTabStatus(true);
+      setTimeout(() => {
+        setTabStatus(true);
+      }, 100);
     }
   }, [newTab]);
   useEffect(() => {
