@@ -246,7 +246,7 @@ class RecentTab extends Component<Props, State> {
               <section id="all-tab" className="tab-content">
                 {this.renderSelectedView('current')}
                 {showPagination && showCurrentPaginationCount > 15 && (
-                  <AssignTabPagination
+                  <ComplexPagination
                     currentTab="Assigned Tab"
                     totalItems={
                       isFilteringProposals ? filteredProposals.length : oppCount
