@@ -124,9 +124,12 @@ const EventLauncher = ({
     const { EventQuestions: eventQuestions } = eventData;
     // onChange attendees value
     if (attendeesVal === attendees[0]) {
-      const filteredTeam = proposalTeam.filter(({ questionId }) =>
-        eventQuestions.includes(questionId)
-      );
+      const filteredTeam = proposalTeam.filter(({ questionId }) => {
+        if (Array.isArray(eventQuestions)) {
+          return eventQuestions.includes(questionId);
+        }
+        return false;
+      });
       return [...new Set(filteredTeam.map(i => i.email).flat())];
     }
     return [...new Set(proposalTeam.map(i => i.email).flat())];
