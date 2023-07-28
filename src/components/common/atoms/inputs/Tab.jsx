@@ -126,12 +126,6 @@ const UnityTab = ({
       value: 3,
       component: <Documents key="Documents" />,
       path: 'documents'
-    },
-    {
-      label: 'Validate',
-      value: 4,
-      component: <Validate key="Validate" />,
-      path: 'validate'
     }
   ];
   const [tabs, setTabs] = useState(defaultTabs);
@@ -198,7 +192,7 @@ const UnityTab = ({
   };
   useEffect(() => {
     setswitchTemplateState(element => [...element, switchTempStatus]);
-    if (switchTempStatus === 'success' && tabs?.length > 5) {
+    if (switchTempStatus === 'success' && tabs?.length > 4) {
       setTabStatus(false);
       setTabloaded(false);
       dispatch(setTabRefresh(`Refresh${Date.now().toString()}`));
@@ -218,12 +212,12 @@ const UnityTab = ({
     if (!currentviewType) {
       setTabStatus(false);
       setTabloaded(false);
-      if (tabs.length > 5) {
-        const refreshTab = tabs.slice(0, 5);
+      if (tabs.length > 4) {
+        const refreshTab = tabs.slice(0, 4);
         setTabs([...refreshTab]);
       }
       const tempTab = [];
-      let len = 5;
+      let len = 4;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
         .filter(
@@ -267,14 +261,14 @@ const UnityTab = ({
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
     if (changeBidStatus && currentviewType) {
-      if (tabs.length > 5) {
-        const refreshTab = tabs.slice(0, 5);
+      if (tabs.length > 4) {
+        const refreshTab = tabs.slice(0, 4);
         setTabStatus(false);
         setTabs([...refreshTab]);
       }
       setTabloaded(false);
       const tempTab = [];
-      let len = 5;
+      let len = 4;
       // eslint-disable-next-line no-restricted-syntax
       const orderedCustomTabs = Object.values(customTabs)
         .filter(
@@ -336,7 +330,7 @@ const UnityTab = ({
   }, [tabRefresh]);
   // Refresh Tab more button when switch template
 
-  const checkTabsVisibility = finalTabList => {
+  function checkTabsVisibility(finalTabList) {
     let tabsToReturn = finalTabList;
     const isApprovalTab = approvalsFlag;
     if (!isApprovalTab || !showApprovalTab) {
@@ -353,7 +347,7 @@ const UnityTab = ({
       return vc;
     });
     return tabsToReturn;
-  };
+  }
 
   useEffect(() => {
     dispatch(setPanelStatus(vtabCollpased));
