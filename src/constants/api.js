@@ -118,7 +118,7 @@ switch (environment) {
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
       'https://m7ci1wtmgf.execute-api.us-east-1.amazonaws.com/prod';
-    PROPOSAL_API_ENDPOINT_2 = '';
+    PROPOSAL_API_ENDPOINT_2 = 'https://8qm2fg3fx4.execute-api.us-east-1.amazonaws.com/prod';
     PROPOSAL_API_KEY = 'EWK61xXYCM9ofFmBOcOPR4xxxObhZxtwanqD3RHV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://sljfl1jmnc.execute-api.us-east-1.amazonaws.com/prod';
