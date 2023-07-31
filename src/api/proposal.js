@@ -383,6 +383,20 @@ export const getOTListData = () => {
   });
 };
 
+export const getData = async searchTerm => {
+  try {
+    return await fetch(`${USER_API_URL}/${searchTerm}`, {
+      headers: {
+        'x-api-key': API_KEY,
+        'x-access-token': getAccessToken()
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+};
+
 /**
  * Get Opportunity Type List
  */
