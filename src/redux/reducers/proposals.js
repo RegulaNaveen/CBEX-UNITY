@@ -21,7 +21,8 @@ const {
   ON_GET_FAVOURITE,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_DASHBOARD_BID,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  UPDATE_PROPOSAL_DETAIL_SF
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -92,162 +93,16 @@ const setPage = (state, action) => state.set('page', action.payload);
 
 const setNumOfRows = (state, action) => state.set('numRows', action.payload);
 
-const setProposalDetails = (state, action) => {
-  const data = action.payload;
-  const mapper = DashboardSFUpDATE;
-  let proposals = state.get('proposals');
-  let favouriteProposals = state.get('favouriteProposals');
-
-  if (
-    favouriteProposals &&
-    Array.isArray(favouriteProposals) &&
-    favouriteProposals.length
-  ) {
-    if (
-      data &&
-      data.data &&
-      data.data.proposalDetails &&
-      data.fromSF &&
-      !data?.data?.bidStatusKey
-    ) {
-      const updateProposals = favouriteProposals.map(value => {
-        if (data.data.oppNo === value['opportunity number']) {
-          value['bid due date'] =
-            data.data.proposalDetails?.['Bid due date'] || '';
-          value['verbatim indication'] =
-            data.data.proposalDetails['Verbatim indication'] || '';
-          value['therapeuticArea'] =
-            data.data.proposalDetails?.['Therapeutic area'] || '';
-          value['phase'] = data.data.proposalDetails['Phase'] || '';
-          value['protocol number'] =
-            data.data.proposalDetails?.['Protocol number'] || '';
-          value['product'] = data.data.proposalDetails?.['Product name'] || '';
-          value['customer'] = data.data.proposalDetails?.Customer || '';
-          value['bidNo'] = data.data.proposalDetails?.bidNo || '';
-          if (data?.data?.proposalDetails?.['opportunity status']) {
-            value['opportunity status'] =
-              data.data.proposalDetails?.['opportunity status'] || '';
-          }
-          if (data?.data?.proposalDetails?.['opportunityName']) {
-            value['opportunityName'] =
-              data.data.proposalDetails?.['opportunityName'] || '';
-          }
-        }
-        return value;
-      });
-      favouriteProposals = updateProposals;
-    }
-    if (!data.fromSF && !data?.data?.bidStatusKey) {
-      const updateProposals = favouriteProposals.map(value => {
-        if (
-          data?.data?.oppNo &&
-          data?.data?.oppNo === value['opportunity number']
-        ) {
-          value[mapper[data.data.sfField]] = data.data.answer;
-        }
-        return value;
-      });
-      favouriteProposals = updateProposals;
-    }
-
-    if (
-      data &&
-      data?.data &&
-      data?.data?.bidStatusKey &&
-      data?.data?.proposalDetails
-    ) {
-      const updateProposals = favouriteProposals.map(value => {
-        if (
-          data.data.proposalDetails['CRM #'] === value['opportunity number']
-        ) {
-          value['bidStopStatus'] = data.data.bidStopStatus || '';
-        }
-        return value;
-      });
-      favouriteProposals = updateProposals;
-    }
-    const results = cloneDeep(favouriteProposals);
-    return state.set('favouriteProposals', [...[...results]]);
-  }
-
-  if (proposals) {
-    if (
-      data &&
-      data.data &&
-      data.data.proposalDetails &&
-      data.fromSF &&
-      !data?.data?.bidStatusKey
-    ) {
-      const updateProposals = proposals.map(value => {
-        if (data.data.oppNo === value['opportunity number']) {
-          value['bid due date'] =
-            data.data.proposalDetails?.['Bid due date'] || '';
-          value['verbatim indication'] =
-            data.data.proposalDetails['Verbatim indication'] || '';
-          value['therapeuticArea'] =
-            data.data.proposalDetails?.['Therapeutic area'] || '';
-          value['phase'] = data.data.proposalDetails['Phase'] || '';
-          value['protocol number'] =
-            data.data.proposalDetails?.['Protocol number'] || '';
-          value['product'] = data.data.proposalDetails?.['Product name'] || '';
-          value['customer'] = data.data.proposalDetails?.Customer || '';
-          value['bidNo'] = data.data.proposalDetails?.bidNo || '';
-          if (data?.data?.proposalDetails?.['opportunity status']) {
-            value['opportunity status'] =
-              data.data.proposalDetails?.['opportunity status'] || '';
-          }
-          if (data?.data?.proposalDetails?.['opportunityName']) {
-            value['opportunityName'] =
-              data.data.proposalDetails?.['opportunityName'] || '';
-          }
-        }
-        return value;
-      });
-      proposals = updateProposals;
-    }
-    if (!data.fromSF && !data?.data?.bidStatusKey) {
-      const updateProposals = proposals.map(value => {
-        if (
-          data?.data?.oppNo &&
-          data?.data?.oppNo === value['opportunity number']
-        ) {
-          value[mapper[data.data.sfField]] = data.data.answer;
-        }
-        return value;
-      });
-      proposals = updateProposals;
-    }
-
-    if (
-      data &&
-      data?.data &&
-      data?.data?.bidStatusKey &&
-      data?.data?.proposalDetails
-    ) {
-      const updateProposals = proposals.map(value => {
-        if (
-          data.data.proposalDetails['CRM #'] === value['opportunity number']
-        ) {
-          value['bidStopStatus'] = data.data.bidStopStatus || '';
-        }
-        return value;
-      });
-      proposals = updateProposals;
-    }
-    const results = cloneDeep(proposals);
-    return state.set('proposals', [...[...results]]);
-  }
-  return state;
-};
-
 const updateDashboradBid = (state, action) => {
   const { data, oppId } = action.payload;
   let proposals = state.get('proposals');
   let favouriteProposals = state.get('favouriteProposals');
-  if (data && data?.newBid && favouriteProposals) {
+  if (data && data?.newBid && favouriteProposals && !data?.data?.bidStatusKey) {
     const updateProposals = favouriteProposals?.map(value => {
       if (oppId && oppId === value['opportunity number']) {
-        value['bidNo'] = parseInt(value['bidNo']) + 1 || '';
+        value['bidNo'] = data?.proposalDetails?.bidNo
+          ? data?.proposalDetails?.bidNo
+          : parseInt(value['bidNo']);
         value['bid due date'] = moment(
           data?.proposalDetails['Bid due date']
         ).format('YYYY-MM-DD');
@@ -257,17 +112,19 @@ const updateDashboradBid = (state, action) => {
     state.set('favouriteProposals', [...[...updateProposals]]);
   }
 
-  if (data && data?.newBid && proposals) {
+  if (data && data?.newBid && proposals && !data?.data?.bidStatusKey) {
     const updateProposals = proposals?.map(value => {
       if (oppId && oppId === value['opportunity number']) {
-        value['bidNo'] = parseInt(value['bidNo']) + 1 || '';
+        value['bidNo'] = data?.proposalDetails?.bidNo
+          ? data?.proposalDetails?.bidNo
+          : parseInt(value['bidNo']);
         value['bid due date'] = moment(
           data?.proposalDetails['Bid due date']
         ).format('YYYY-MM-DD');
       }
       return value;
     });
-    state.set('proposals', [...[...updateProposals]]);
+    return state.set('proposals', [...[...updateProposals]]);
   }
   return state;
 };
@@ -275,9 +132,10 @@ const updateDasboardSF = (state, action) => {
   const { data, oppId } = action.payload;
   let proposals = state.get('proposals');
   let favouriteProposals = state.get('favouriteProposals');
-  if (favouriteProposals) {
+  console.log(`favouriteProposals`, favouriteProposals);
+  if (favouriteProposals && !data?.data?.bidStatusKey) {
     const updateProposals = favouriteProposals.map(value => {
-      if (oppId === value['opportunity number']) {
+      if (data?.proposalId && data?.proposalId === value['proposalId']) {
         value['bid due date'] = data.proposalDetails?.['Bid due date'] || '';
         value['verbatim indication'] =
           data.proposalDetails['Verbatim indication'] || '';
@@ -303,9 +161,14 @@ const updateDasboardSF = (state, action) => {
     state.set('favouriteProposals', [...[...updateProposals]]);
   }
 
-  if (proposals && Array.isArray(proposals) && proposals.length) {
+  if (
+    proposals &&
+    Array.isArray(proposals) &&
+    proposals.length &&
+    !data?.data?.bidStatusKey
+  ) {
     const updateProposals = proposals.map(value => {
-      if (oppId === value['opportunity number']) {
+      if (data?.proposalId && data?.proposalId === value['proposalId']) {
         value['bid due date'] = data.proposalDetails?.['Bid due date'] || '';
         value['verbatim indication'] =
           data.proposalDetails['Verbatim indication'] || '';
@@ -328,7 +191,53 @@ const updateDasboardSF = (state, action) => {
       }
       return value;
     });
-    state.set('proposals', [...[...updateProposals]]);
+    return state.set('proposals', [...[...updateProposals]]);
+  }
+  return state;
+};
+
+const updateBidStopStatus = (state, action) => {
+  const data = action.payload;
+  let proposals = state.get('proposals');
+  let favouriteProposals = state.get('favouriteProposals');
+  if (
+    data &&
+    data?.data &&
+    data?.data?.bidStatusKey &&
+    data?.data?.proposalDetails &&
+    favouriteProposals
+  ) {
+    const updatefavouriteProposals = favouriteProposals.map(value => {
+      if (
+        data &&
+        data?.data &&
+        data?.data?.proposalId === value['proposalId']
+      ) {
+        value['bidStopStatus'] = data.data.bidStopStatus || '';
+      }
+      return value;
+    });
+    state.set('proposals', [...[...updatefavouriteProposals]]);
+  }
+
+  if (
+    proposals &&
+    data &&
+    data?.data &&
+    data?.data?.bidStatusKey &&
+    data?.data?.proposalDetails
+  ) {
+    const updateProposals = proposals.map(value => {
+      if (
+        data &&
+        data?.data &&
+        data?.data?.proposalId === value['proposalId']
+      ) {
+        value['bidStopStatus'] = data.data.bidStopStatus || '';
+      }
+      return value;
+    });
+    return state.set('proposals', [...[...updateProposals]]);
   }
   return state;
 };
@@ -352,9 +261,9 @@ const actionMap = {
   [SET_ASSIGNED_TAB_NUM_OF_ROWS]: setAssignedTabNumOfRows,
   [NON_EDITABLE_SF_FIELD]: setNonEditableField,
   [ON_GET_FAVOURITE]: onSetProposalsFavourite,
-  [DASHBOARD_PROPOSAL_DETAIL]: setProposalDetails,
   [UPDATE_DASHBOARD_BID]: updateDashboradBid,
-  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDasboardSF
+  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDasboardSF,
+  [UPDATE_PROPOSAL_DETAIL_SF]: updateBidStopStatus
 };
 
 export default function(
