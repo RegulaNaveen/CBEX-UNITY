@@ -100,6 +100,7 @@ const updateDashboradBid = (state, action) => {
   if (data && data?.newBid && favouriteProposals && !data?.data?.bidStatusKey) {
     const updateProposals = favouriteProposals?.map(value => {
       if (oppId && oppId === value['opportunity number']) {
+        value['proposalId'] = data.proposalId;
         value['bidNo'] = data?.proposalDetails?.bidNo
           ? data?.proposalDetails?.bidNo
           : parseInt(value['bidNo']);
@@ -115,6 +116,7 @@ const updateDashboradBid = (state, action) => {
   if (data && data?.newBid && proposals && !data?.data?.bidStatusKey) {
     const updateProposals = proposals?.map(value => {
       if (oppId && oppId === value['opportunity number']) {
+        value['proposalId'] = data.proposalId;
         value['bidNo'] = data?.proposalDetails?.bidNo
           ? data?.proposalDetails?.bidNo
           : parseInt(value['bidNo']);
@@ -263,7 +265,8 @@ const actionMap = {
   [ON_GET_FAVOURITE]: onSetProposalsFavourite,
   [UPDATE_DASHBOARD_BID]: updateDashboradBid,
   [UPDATE_DASHBOARD_OPPORTUNITY]: updateDasboardSF,
-  [UPDATE_PROPOSAL_DETAIL_SF]: updateBidStopStatus
+  [UPDATE_PROPOSAL_DETAIL_SF]: updateBidStopStatus,
+  [DASHBOARD_PROPOSAL_DETAIL]: updateBidStopStatus
 };
 
 export default function(
