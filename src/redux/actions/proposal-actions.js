@@ -347,7 +347,8 @@ export const setProposalAnswerData = (
   userData: Object,
   editorData: any,
   disableLoader = false,
-  cfProposalId = null
+  cfProposalId = null,
+  deleteEmail = ''
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     dispatch(setApprovalQuestionLoading(questionId, true));
@@ -367,7 +368,8 @@ export const setProposalAnswerData = (
         answer,
         userData,
         editorData,
-        cfProposalId
+        cfProposalId,
+        deleteEmail
       );
       if (data) {
         // Check is price modeler question

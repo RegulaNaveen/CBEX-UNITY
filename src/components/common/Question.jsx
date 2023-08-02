@@ -255,7 +255,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   }
 
-  handlePropsalChange = (textValue, lastValue, reason) => {
+  handlePropsalChange = (textValue, lastValue, reason, sectionName = '') => {
     try {
       const {
         setProposalAnswer,
@@ -266,33 +266,75 @@ export class TaskRow extends React.PureComponent<Props, State> {
         setAnswerLoading,
         deleteProposalUser
       } = this.props;
-      setProposalAnswer(
-        this.context,
-        proposalId,
-        questionId,
-        textValue,
-        userData
-      ).then(() => {
-        const [deletedVal] = xor(
-          textValue?.trim() ? textValue?.trim().split(',') : [],
-          lastValue?.trim() ? lastValue?.trim().split(',') : []
-        );
-        const [deletedEmail] = String(deletedVal).match(
-          /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
-        );
-        if (reason === 'remove-option' && deletedEmail) {
-          setAnswerLoading(questionId, false);
-          const { sectionName, sectionOrder } = section.toJS();
-          deleteProposalUser(
-            proposalId,
-            deletedEmail,
-            sectionOrder,
-            sectionName
-          ).then(() => {
+      if (sectionName && sectionName === 'Proposal Team') {
+        const checkDeleteProposalTeamAction = () => {
+          return (
+            !String(textValue)?.trim()?.length &&
+            String(lastValue)?.trim()?.length > 0 &&
+            sectionName === 'Proposal Team'
+          );
+        };
+        const deleteEmail = checkDeleteProposalTeamAction() ? lastValue : '';
+        setProposalAnswer(
+          this.context,
+          proposalId,
+          questionId,
+          textValue,
+          userData,
+          '',
+          false,
+          null,
+          deleteEmail
+        ).then(() => {
+          const [deletedVal] = xor(
+            textValue?.trim() ? textValue?.trim().split(',') : [],
+            lastValue?.trim() ? lastValue?.trim().split(',') : []
+          );
+          const [deletedEmail] = String(deletedVal).match(
+            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+          );
+          if (reason === 'remove-option' && deletedEmail) {
             setAnswerLoading(questionId, false);
-          });
-        }
-      });
+            const { sectionName, sectionOrder } = section.toJS();
+            deleteProposalUser(
+              proposalId,
+              deletedEmail,
+              sectionOrder,
+              sectionName
+            ).then(() => {
+              setAnswerLoading(questionId, false);
+            });
+          }
+        });
+      } else {
+        setProposalAnswer(
+          this.context,
+          proposalId,
+          questionId,
+          textValue,
+          userData
+        ).then(() => {
+          const [deletedVal] = xor(
+            textValue?.trim() ? textValue?.trim().split(',') : [],
+            lastValue?.trim() ? lastValue?.trim().split(',') : []
+          );
+          const [deletedEmail] = String(deletedVal).match(
+            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+          );
+          if (reason === 'remove-option' && deletedEmail) {
+            setAnswerLoading(questionId, false);
+            const { sectionName, sectionOrder } = section.toJS();
+            deleteProposalUser(
+              proposalId,
+              deletedEmail,
+              sectionOrder,
+              sectionName
+            ).then(() => {
+              setAnswerLoading(questionId, false);
+            });
+          }
+        });
+      }
       this.trackMatomoEventSubmitAnswer(textValue);
     } catch (error) {
       console.log('error :>> ', error);
@@ -895,7 +937,14 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
                   this.setSelectRow(false);
                 }}
-                onChange={this.handlePropsalChange}
+                onChange={(newValue, oldValue, reason) =>
+                  this.handlePropsalChange(
+                    newValue,
+                    oldValue,
+                    reason,
+                    sectionName
+                  )
+                }
                 text={answerValue}
                 disabled={checkDisableFlag() || isNotApplicable}
               />

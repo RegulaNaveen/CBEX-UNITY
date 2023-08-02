@@ -116,10 +116,11 @@ export const setProposalAnswer = async (
   answer: string,
   userData: Object,
   editorData: any,
-  cfProposalId: any
+  cfProposalId: any,
+  deleteEmail = ''
 ): Promise<Object> => {
   if (onGoingAnswer[questionId]) onGoingAnswer[questionId]();
-  const payload = { answer, userData };
+  const payload = { answer, userData, deleteEmail: deleteEmail };
   if (editorData) payload.formattedAnswer = editorData;
   if (cfProposalId !== null) payload.cfProposalId = cfProposalId;
 
