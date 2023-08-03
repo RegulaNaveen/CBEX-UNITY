@@ -7,9 +7,9 @@ include:
   - project: 'CBEx/devops'
     ref: test
     file: /gitlab_balckduck_scan.yml
-    except:
-      - tags
-      - pipeliens
+    only:
+      - pushes
+      - merge_requests
 
 #include:
 #- project: 'CBEx/unity/Unity-QA'
