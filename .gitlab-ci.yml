@@ -65,9 +65,9 @@ sonar:
   script:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
-  except:
-    - tags
-    - pipeliens
+  only:
+    - pushes
+    - merge_requests
 
 test:
   stage: prebuild
@@ -87,9 +87,9 @@ test:
   #allow_failure: false
   tags:
     - docker
-  except:
-    - tags
-    - pipeliens
+  only:
+    - pushes
+    - merge_requests
 
 dev:
   stage: builddev
