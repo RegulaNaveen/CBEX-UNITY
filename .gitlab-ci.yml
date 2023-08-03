@@ -7,7 +7,9 @@ include:
   - project: 'CBEx/devops'
     ref: test
     file: /gitlab_balckduck_scan.yml
-    when: always
+    except:
+    - tags
+    - pipeliens
 
 #include:
 #- project: 'CBEx/unity/Unity-QA'
@@ -63,6 +65,9 @@ sonar:
   script:
     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
+  except:
+    - tags
+    - pipeliens
 
 test:
   stage: prebuild
@@ -82,6 +87,9 @@ test:
   #allow_failure: false
   tags:
     - docker
+  except:
+    - tags
+    - pipeliens
 
 dev:
   stage: builddev
