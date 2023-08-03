@@ -8,8 +8,8 @@ include:
     ref: test
     file: /gitlab_balckduck_scan.yml
     except:
-    - tags
-    - pipeliens
+      - tags
+      - pipeliens
 
 #include:
 #- project: 'CBEx/unity/Unity-QA'
