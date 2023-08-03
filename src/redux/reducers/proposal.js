@@ -405,8 +405,7 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
-
-  let opportunityData = state.get('opportunityData');
+  const bidProposal = payload?.proposalDetails?.proposal;
   const {
     agreementId,
     accountId,
@@ -418,7 +417,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     bidStopStatus,
     isApprovalCountPresent,
     proposalDate
-  } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
+  } = bidProposal;
   let selectedBid = Map({
     id: payload.bid.bidId,
     isCurrent: payload.bid.isCurrent,
@@ -462,12 +461,14 @@ const onChangeBid = (state: Map, action: Object): Map => {
       .set('proposalQuestions', proposalQuestions)
       .set('questionsFilter', questionsFilter)
       .set('isProposalLoading', false)
-      .set('selectedBid', selectedBid);
+      .set('selectedBid', selectedBid)
+      .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
   }
   return state
     .set('proposalDetails', proposalDetails)
     .set('isProposalLoading', false)
-    .set('selectedBid', selectedBid);
+    .set('selectedBid', selectedBid)
+    .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
 };
 
 const newBidCreated = (state: Map, action: Object): Map => {
