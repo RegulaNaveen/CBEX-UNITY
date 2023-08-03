@@ -140,10 +140,6 @@ dev2:
   variables:
     Environment: $CI_JOB_NAME
   when: manual
-  needs:
-    - project: CBEx/unity/unity-ubuild-backend
-      job: deploy_to_dev
-      ref: $REF
   only:
     #- dev
     - migration
