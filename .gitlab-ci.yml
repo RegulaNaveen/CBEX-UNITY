@@ -121,10 +121,14 @@ deploydev:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - dev
-  only:
-    - dev
-    - tags
-    - pipelines
+  # only:
+  #   - dev
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="dev"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - aws --version
     - source build.env
@@ -140,11 +144,15 @@ dev2:
   variables:
     Environment: $CI_JOB_NAME
   when: manual
-  only:
-    #- dev
-    - migration
-    - tags
-    - pipelines
+  # only:
+  #   #- dev
+  #   - migration
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="dev2"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $devaccount > build.env #(Skip if creating env in production account)
     - cat devops/vars/${Environment}.env >> build.env
@@ -165,11 +173,15 @@ deploydev2:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - dev2
-  only:
-    #- dev
-    - migration
-    - tags
-    - pipelines
+  # only:
+  #   #- dev
+  #   - migration
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="dev2"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
@@ -178,59 +190,21 @@ deploydev2:
     - docker
   environment: dev2
 
-.dev3:
-  stage: builddev3
-  image: node:18
-  when: manual
-  variables:
-    Environment: $CI_JOB_NAME
-  only:
-    - L4
-    - pipelines
-  script:
-    - cat $devaccount >> build.env
-    - cat $frontendacmdev >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: dev3
-
-.deploydev3:
-  stage: deploydev3
-  when: manual
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - dev3
-  only:
-    - L4
-    - pipelines
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: dev3
-
 buildl4:
   stage: buildl4
   image: node:18
   when: manual
   variables:
     Environment: l4
-  only:
-    #- dev
-    - migration
-    - tags
-    - pipelines
+  # only:
+  #   #- dev
+  #   - migration
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="l4"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
@@ -252,10 +226,14 @@ deployl4:
   needs:
     - buildl4
   when: manual
-  only:
-    #- dev
-    - tags
-    - pipelines
+  # only:
+  #   #- dev
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="l4"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
@@ -270,11 +248,15 @@ demo:
   variables:
     Environment: $CI_JOB_NAME
   when: manual
-  only:
-    - demonew
-    - dev
-    - tags
-    - pipelines
+  # only:
+  #   - demonew
+  #   - dev
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="demo"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $devaccount >> build.env
     - cat $frontendacmdev >> build.env
@@ -297,11 +279,15 @@ deploydemo:
   needs:
     - demo
   when: manual
-  only:
-    - demonew
-    - dev
-    - tags
-    - pipelines
+  # only:
+  #   - demonew
+  #   - dev
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="demo"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
@@ -318,9 +304,13 @@ qa:
   when: manual
   variables:
     Environment: $CI_JOB_NAME
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="svt"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
@@ -342,9 +332,13 @@ deployqa:
   needs:
     - qa
   when: manual
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="svt"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
@@ -362,9 +356,13 @@ uat:
   #   - deploydev
   #- pafexecution_regression
   when: manual
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="uat"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $prod_build >> build.env
     - cat devops/vars/${Environment}.env >> build.env
@@ -386,9 +384,13 @@ deployuat:
   needs:
     - uat
   when: manual
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="uat"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
@@ -402,11 +404,15 @@ prod:
   image: node:18
   variables:
     Environment: $CI_JOB_NAME
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
   # needs:
   #   - deploydev
+  rules:
+    - if: $ENV=="prod"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   when: manual
   script:
     - cat $prod_build >> build.env
@@ -428,9 +434,13 @@ deployprod:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   needs:
     - prod
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="prod"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   when: manual
   script:
     - source build.env
