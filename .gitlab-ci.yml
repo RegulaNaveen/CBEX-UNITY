@@ -455,9 +455,13 @@ pafexecution_l4:
   needs:
     - deployl4
   #when: always
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="l4"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   variables:
     ENV_NAME: l4
   trigger:
@@ -470,9 +474,13 @@ pafexecution_svt:
   needs:
     - deployqa
   #when: always
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="svt"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   variables:
     ENV_NAME: svt
   trigger:
@@ -485,9 +493,13 @@ pafexecution_uat:
   needs:
     - deployuat
   #when: always
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="uat"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   variables:
     ENV_NAME: uat
   trigger:
@@ -500,9 +512,13 @@ pafexecution_prod:
   needs:
     - deployprod
   #when: always
-  only:
-    - tags
-    - pipelines
+  # only:
+  #   - tags
+  #   - pipelines
+  rules:
+    - if: $ENV=="prod"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   variables:
     ENV_NAME: prod
   trigger:
