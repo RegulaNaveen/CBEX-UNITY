@@ -267,7 +267,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
         deleteProposalUser
       } = this.props;
       let deleteEmail = '';
-      if (sectionName && sectionName === 'Proposal Team') {
+      if (
+        sectionName &&
+        sectionName === 'Proposal Team' &&
+        String(lastValue).trim()?.length &&
+        !String(textValue).trim()?.length
+      ) {
         const checkDeleteProposalTeamAction = () => {
           return (
             !String(textValue)?.trim()?.length &&
@@ -277,6 +282,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         };
         deleteEmail = checkDeleteProposalTeamAction() ? lastValue : '';
       }
+      console.log('deleteEmail :>> ', deleteEmail);
       setProposalAnswer(
         this.context,
         proposalId,
