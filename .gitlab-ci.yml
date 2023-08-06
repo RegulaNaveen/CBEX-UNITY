@@ -100,6 +100,11 @@ dev:
     - dev
     - tags
     - pipelines
+  rules:
+    - if: $ENV=="dev"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
+    - if: $CI_PIPELINE_SOURCE == "pushes"
   script:
     - cat $devaccount >> build.env
     - cat $frontendacmdev >> build.env
