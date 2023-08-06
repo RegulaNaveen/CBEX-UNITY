@@ -96,10 +96,6 @@ dev:
   image: node:18
   variables:
     Environment: $CI_JOB_NAME
-  only:
-    - dev
-    - tags
-    - pipelines
   rules:
     - if: $ENV=="dev"
     - if: '$CI_COMMIT_TAG'
