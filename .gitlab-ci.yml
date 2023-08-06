@@ -144,7 +144,7 @@ dev2:
   image: node:18
   variables:
     Environment: $CI_JOB_NAME
-  when: manual
+  #when: manual
   # only:
   #   #- dev
   #   - migration
@@ -153,6 +153,7 @@ dev2:
   rules:
     - if: $ENV=="dev2"
     - if: '$CI_COMMIT_TAG'
+      when: manual
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $devaccount > build.env #(Skip if creating env in production account)
