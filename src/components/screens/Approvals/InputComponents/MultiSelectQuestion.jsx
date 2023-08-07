@@ -42,9 +42,12 @@ const MultiSelectQuestion = ({
       finalOptions = getCountryOptions();
     }
 
-    const changeHandler = async textValue => {
+    const changeHandler = async (textValue, autoRef) => {
       try {
         const { proposalId, questionId } = question;
+        if (autoRef && autoRef?.current) {
+          autoRef?.current?.blur();
+        }
         await dispatch(
           setProposalAnswerData(
             socketContext,
