@@ -266,34 +266,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
         setAnswerLoading,
         deleteProposalUser
       } = this.props;
-      let deleteEmail = '';
-      if (
-        sectionName &&
-        sectionName === 'Proposal Team' &&
-        reason &&
-        reason === 'removeOption'
-      ) {
-        const lastEmail = String(lastValue)
-          .trim()
-          .split(',');
-        const currentEmail = String(textValue)
-          .trim()
-          .split(',');
-
-        let finalEmail = _.difference(lastEmail, currentEmail);
-        finalEmail = finalEmail.join(',');
-        deleteEmail = finalEmail;
-      }
       setProposalAnswer(
         this.context,
         proposalId,
         questionId,
         textValue,
-        userData,
-        '',
-        false,
-        null,
-        deleteEmail
+        userData
       ).then(() => {
         const [deletedVal] = xor(
           textValue?.trim() ? textValue?.trim().split(',') : [],
