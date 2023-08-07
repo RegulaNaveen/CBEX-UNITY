@@ -255,7 +255,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   }
 
-  handlePropsalChange = (textValue, lastValue, reason, sectionName = '') => {
+  handlePropsalChange = (textValue, lastValue, reason) => {
     try {
       const {
         setProposalAnswer,
@@ -858,6 +858,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
     }
+
     if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
@@ -895,14 +896,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
                   this.setSelectRow(false);
                 }}
-                onChange={(newValue, oldValue, reason) =>
-                  this.handlePropsalChange(
-                    newValue,
-                    oldValue,
-                    reason,
-                    sectionName
-                  )
-                }
+                onChange={this.handlePropsalChange}
                 text={answerValue}
                 disabled={checkDisableFlag() || isNotApplicable}
               />
