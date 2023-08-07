@@ -27,6 +27,7 @@ import {
   MentionComponentWithHyperLink
 } from './ApolloRichTextComponents/MentionComponent';
 import { cloneDeep } from 'lodash';
+import LinkModal from './LinkModal';
 
 let CAN_DECORATE_LINKS = false;
 
@@ -270,6 +271,78 @@ const CustomApolloRichText = ({
   const richTextEditorRefHidden = useRef(null);
   const richTextKeyRef = useRef(uuid());
   const richTextKeyRefHidden = useRef(uuid());
+  const [modalOpen, setModalOpen] = useState(false);
+  const [hyperlink, setHyperlink] = useState('');
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleSaveHyperlink = url => {
+    if (!url || !url.trim()) {
+      // If the URL is empty, don't create a hyperlink
+      setModalOpen(false);
+      return;
+    }
+
+    // Get the current editor state and selection
+    const editorState = richTextEditorRef.current.state.editorState;
+    const selectionState = editorState.getSelection();
+
+    // Get the selected text
+    const selectedText = editorState
+      .getCurrentContent()
+      .getBlockForKey(selectionState.getStartKey())
+      .getText()
+      .slice(selectionState.getStartOffset(), selectionState.getEndOffset());
+
+    // Check if any text is selected, otherwise don't create a hyperlink
+    if (!selectedText.trim()) {
+      setModalOpen(false);
+      return;
+    }
+
+    // Create a content state with the hyperlink
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithLink = contentState.createEntity('LINK', 'MUTABLE', {
+      url: url,
+      target: '_blank'
+    });
+
+    const entityKey = contentStateWithLink.getLastCreatedEntityKey();
+
+    // Apply the entity (link) to the selected text
+    const contentStateWithEntity = Modifier.applyEntity(
+      contentStateWithLink,
+      selectionState,
+      entityKey
+    );
+
+    // Update the editor state with the new content containing the hyperlink
+    const newEditorState = EditorState.push(
+      editorState,
+      contentStateWithEntity,
+      'apply-entity'
+    );
+    const newEditorStateWithSelection = EditorState.forceSelection(
+      newEditorState,
+      selectionState
+    );
+
+    // Set the new editor state with the hyperlink and close the modal
+    richTextEditorRef.current.setState({
+      editorState: newEditorStateWithSelection
+    });
+    setModalOpen(false);
+  };
+
+  const handleHyperlinkButtonClick = () => {
+    setModalOpen(true); // Open the custom modal
+  };
 
   /**
    * Function to Add Delay for Specific Seconds
@@ -708,124 +781,6 @@ const CustomApolloRichText = ({
     }
   };
 
-  function hyperLinkHandler() {
-    const { editorState } = richTextEditorRef.current.state;
-    const selectionState = editorState.getSelection();
-
-    const contentState = editorState.getCurrentContent();
-
-    const selectedText = editorState
-      .getCurrentContent()
-      .getBlockForKey(selectionState.getStartKey())
-      .getText()
-      .slice(selectionState.getStartOffset(), selectionState.getEndOffset());
-    const linkName = selectedText;
-    let linkAddress;
-    let linkInstance;
-    function getLinkAddress() {
-      const startKey = selectionState.getStartKey();
-
-      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
-
-      const index = selectionState.getStartOffset();
-      const linkKey = blockWithLinkAtBeginning.getEntityAt(index);
-
-      if (linkKey !== null) {
-        linkInstance = Entity.get(linkKey);
-
-        const datatest = linkInstance.getData();
-
-        const { url } = datatest;
-        if (url !== null) {
-          linkAddress = window.prompt('Link Address:', url);
-        } else {
-          linkAddress = window.prompt('Link Address:', 'Enter url');
-        }
-      } else {
-        linkAddress = window.prompt('Link Address:', 'Enter url');
-      }
-
-      return linkAddress;
-    }
-
-    linkAddress = getLinkAddress();
-
-    if (linkAddress !== null) {
-      const editorStateHidden =
-        richTextEditorRefHidden.current.state.editorState;
-
-      const link = linkAddress;
-
-      contentState.createEntity('LINK', 'MUTABLE', {
-        url: link,
-        target: '_blank'
-      });
-
-      const entityKey = contentState.getLastCreatedEntityKey();
-
-      const contentStateWithLink = Modifier.replaceText(
-        contentState,
-        selectionState,
-        linkName,
-        editorState.getCurrentInlineStyle(),
-        entityKey
-      );
-      let newSelectionState = selectionState.merge({
-        anchorOffset: selectionState.getAnchorOffset(),
-        focusOffset: selectionState.getAnchorOffset() + linkName.length
-      });
-      const contentStateWithEntity = Modifier.applyEntity(
-        contentStateWithLink,
-        newSelectionState,
-        entityKey
-      );
-
-      let newEditorState = EditorState.set(editorState, {
-        currentContent: contentStateWithEntity
-      });
-
-      newEditorState = EditorState.forceSelection(
-        newEditorState,
-        newSelectionState
-      );
-
-      const newContentStateRaw = convertToRaw(
-        newEditorState.getCurrentContent()
-      );
-      const text = newContentStateRaw.blocks
-        .map(item => item.text)
-        .filter(item => !isEmpty(item.trim()))
-        .join(' ');
-
-      const html =
-        richTextEditorRef.current.editorRef &&
-        richTextEditorRef.current.editorRef.current &&
-        richTextEditorRef.current.editorRef.current.editor &&
-        richTextEditorRef.current.editorRef.current.editor.innerHTML;
-
-      const htmlHidden =
-        richTextEditorRefHidden.current.editorRef &&
-        richTextEditorRefHidden.current.editorRef.current &&
-        richTextEditorRefHidden.current.editorRef.current.editor &&
-        richTextEditorRefHidden.current.editorRef.current.editor.innerHTML;
-
-      const valueHidden =
-        richTextEditorRefHidden.current &&
-        richTextEditorRefHidden.current.state.editorState &&
-        richTextEditorRefHidden.current.state.editorState.getCurrentContent();
-
-      const resultObj = {
-        text,
-        value: newContentStateRaw,
-        html,
-        htmlExport: htmlHidden,
-        docExport: valueHidden
-      };
-      setRichTextData(resultObj);
-      richTextEditorRef.current.setState({ editorState: newEditorState });
-      resetUnlockTimer();
-    }
-  }
   // Render Popover RichText Editor
   return (
     <>
@@ -864,7 +819,7 @@ const CustomApolloRichText = ({
                   <Link
                     data-testid="custom-hyperlink-button"
                     className="icon-button"
-                    onClick={hyperLinkHandler}
+                    onClick={handleHyperlinkButtonClick}
                   />
                 </div>
               </>
@@ -893,6 +848,12 @@ const CustomApolloRichText = ({
           />
         </div>
       )}
+
+      <div>
+        {modalOpen && (
+          <LinkModal onClose={handleModalClose} onSave={handleSaveHyperlink} />
+        )}
+      </div>
     </>
   );
 };
