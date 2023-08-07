@@ -280,9 +280,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
           .trim()
           .split(',');
 
-        console.log('lastEmail :>> ', lastEmail);
-        console.log('currentEmail :>> ', currentEmail);
-
         let finalEmail = _.difference(lastEmail, currentEmail);
         finalEmail = finalEmail.join(',');
         deleteEmail = finalEmail;
