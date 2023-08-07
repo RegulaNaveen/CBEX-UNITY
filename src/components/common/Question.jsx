@@ -287,24 +287,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         finalEmail = finalEmail.join(',');
         deleteEmail = finalEmail;
       }
-      // if (
-      //   reason &&
-      //   reason === 'removeOption' &&
-      //   sectionName &&
-      //   sectionName === 'Proposal Team' &&
-      //   String(lastValue).trim()?.length &&
-      //   !String(textValue).trim()?.length
-      // ) {
-      //   const checkDeleteProposalTeamAction = () => {
-      //     return (
-      //       !String(textValue)?.trim()?.length &&
-      //       String(lastValue)?.trim()?.length > 0 &&
-      //       sectionName === 'Proposal Team'
-      //     );
-      //   };
-      //   deleteEmail = checkDeleteProposalTeamAction() ? lastValue : '';
-      // }
-      // console.log('deleteEmail :>> ', deleteEmail);
       setProposalAnswer(
         this.context,
         proposalId,
