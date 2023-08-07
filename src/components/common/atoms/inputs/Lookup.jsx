@@ -1,11 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { isEmpty } from 'lodash';
+import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import TextField from 'apollo-react/components/TextField';
 import { objectContains } from '../../../../utils/helpers';
 import { CloseCircle } from '../../../svg';
+import { getData } from '../../../../api/proposal';
 
 type Props = {
   data: Array<any>,
@@ -55,22 +57,55 @@ class Lookup extends Component<Props, State> {
     });
   }
 
-  onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
-    const { data } = this.props;
-    const filteringData = data.filter(item =>
-      objectContains(item, value, false)
-    );
-
-    this.setState(
-      {
-        searchValue: value,
-        filteredData: filteringData,
-        error: !filteringData.length
-      },
-      () => {
-        this._resizeTextBox();
+  fetchData = debounce(async searchTerm => {
+    let updatedOptions = [];
+    try {
+      if (searchTerm && String(searchTerm)?.trim()?.length) {
+        await getData(searchTerm)
+          .then(response => response.json())
+          .then(response => {
+            updatedOptions = response.data.map(p => {
+              return {
+                name: `${p.first_name} ${p.last_name}`,
+                email: p.email.toLowerCase()
+              };
+            });
+          });
+        this.setState({ filteredData: updatedOptions }, () => {
+          this._resizeTextBox();
+        });
+      } else {
+        this.setState({ filteredData: [] }, () => {
+          this._resizeTextBox();
+        });
       }
-    );
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
+  }, 500);
+
+  onSearching = async ({
+    target: { value }
+  }: SyntheticInputEvent<EventTarget>) => {
+    try {
+      const { data } = this.props;
+      const filteringData = data.filter(item =>
+        objectContains(item, value, false)
+      );
+      this.setState(
+        {
+          searchValue: value,
+          error: !filteringData.length
+        },
+        async () => {
+          await this.fetchData(this.state.searchValue);
+          this._resizeTextBox();
+        }
+      );
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
   };
 
   _resizeTextBox = () => {
