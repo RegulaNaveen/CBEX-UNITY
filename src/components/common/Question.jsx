@@ -293,7 +293,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
           });
         }
       });
-
       this.trackMatomoEventSubmitAnswer(textValue);
     } catch (error) {
       console.log('error :>> ', error);
