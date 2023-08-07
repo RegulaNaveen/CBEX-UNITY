@@ -270,19 +270,41 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (
         sectionName &&
         sectionName === 'Proposal Team' &&
-        String(lastValue).trim()?.length &&
-        !String(textValue).trim()?.length
+        reason &&
+        reason === 'removeOption'
       ) {
-        const checkDeleteProposalTeamAction = () => {
-          return (
-            !String(textValue)?.trim()?.length &&
-            String(lastValue)?.trim()?.length > 0 &&
-            sectionName === 'Proposal Team'
-          );
-        };
-        deleteEmail = checkDeleteProposalTeamAction() ? lastValue : '';
+        const lastEmail = String(lastValue)
+          .trim()
+          .split(',');
+        const currentEmail = String(textValue)
+          .trim()
+          .split(',');
+
+        console.log('lastEmail :>> ', lastEmail);
+        console.log('currentEmail :>> ', currentEmail);
+
+        let finalEmail = _.difference(lastEmail, currentEmail);
+        finalEmail = finalEmail.join(',');
+        deleteEmail = finalEmail;
       }
-      console.log('deleteEmail :>> ', deleteEmail);
+      // if (
+      //   reason &&
+      //   reason === 'removeOption' &&
+      //   sectionName &&
+      //   sectionName === 'Proposal Team' &&
+      //   String(lastValue).trim()?.length &&
+      //   !String(textValue).trim()?.length
+      // ) {
+      //   const checkDeleteProposalTeamAction = () => {
+      //     return (
+      //       !String(textValue)?.trim()?.length &&
+      //       String(lastValue)?.trim()?.length > 0 &&
+      //       sectionName === 'Proposal Team'
+      //     );
+      //   };
+      //   deleteEmail = checkDeleteProposalTeamAction() ? lastValue : '';
+      // }
+      // console.log('deleteEmail :>> ', deleteEmail);
       setProposalAnswer(
         this.context,
         proposalId,
@@ -879,7 +901,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (isObject(answer)) answerValueComplex = answer.toJS();
       else answerValue = answer.toString();
     }
-
     if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
