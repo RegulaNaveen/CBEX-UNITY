@@ -42,7 +42,7 @@ const MultiSelectQuestion = ({
       finalOptions = getCountryOptions();
     }
 
-    const changeHandler = async (textValue, autoRef) => {
+    const changeHandler = async (textValue, autoRef = '') => {
       try {
         const { proposalId, questionId } = question;
         if (autoRef && autoRef?.current) {

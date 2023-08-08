@@ -106,7 +106,6 @@ const AutoCompleteWithAddOption = ({
       if (autoCompleteRef.current) {
         autoCompleteRef.current.blur();
       }
-      setOpenState(false);
       onChange(modifiedAnswer);
     } else {
       if (onCascadeChange) onCascadeChange();
