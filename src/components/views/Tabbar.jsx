@@ -247,9 +247,9 @@ class Tabbar extends Component<Props, State> {
     const { selected, showFilters, filterCount, filters } = this.state;
 
     // Filter out favorite tab if flag is off
-    const latestChildren = allFlags.favouriteFlag
+    const latestChildren = allFlags?.favouriteFlag
       ? children
-      : children.filter(item => item.props.label !== 'Favorites');
+      : children.filter(item => item?.props?.label !== 'Favorites');
 
     return (
       <div className="tab-wrapper">
