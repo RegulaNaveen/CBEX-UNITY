@@ -101,12 +101,12 @@ const AutoCompleteWithAddOption = ({
     setSelectedVal(modifiedAnswer);
     setModAnswer(modifiedAnswer);
     if (!multiple) {
-      onChange(modifiedAnswer);
       setOpenState(false);
       if (toggleWatch) toggleWatch(false);
       if (autoCompleteRef.current) {
         autoCompleteRef.current.blur();
       }
+      onChange(modifiedAnswer);
     } else {
       if (onCascadeChange) onCascadeChange();
     }
@@ -230,14 +230,14 @@ const AutoCompleteWithAddOption = ({
               (answer?.length !== modAnswer.length ||
                 !isEqual(answer, modAnswer))
             )
-              onChange(modAnswer);
+              onChange(modAnswer, autoCompleteRef);
           } else if (
             multiple &&
             modAnswer?.length &&
             // eslint-disable-next-line react/prop-types
             answer?.length !== modAnswer.length
           )
-            onChange(modAnswer);
+            onChange(modAnswer, autoCompleteRef);
           handleBlur();
           setOpenState(false);
         }}
