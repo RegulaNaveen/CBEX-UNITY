@@ -196,3 +196,64 @@
     }
   }
 }
+
+/* CSS for the modal container (overlay) */
+/* CSS for the modal */
+.link-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.link-modal {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 30px;
+  max-width: 500px; /* Increase the max-width to make the modal bigger */
+  // text-align: center;
+  border-radius: 8px; /* Add border radius for rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a box shadow for depth */
+  height: 12rem;
+  width: 24rem;
+  display: grid;
+}
+
+/* CSS for the modal actions (buttons) */
+.link-modal-actions {
+  margin-top: 20px; /* Add more space between the content and buttons */
+  display: flex;
+  justify-content: flex-end;
+}
+
+.link-modal-actions button {
+  margin: 0 5px; /* Reduce the space between buttons */
+  padding: 0px 20px; /* Decrease the padding for smaller buttons */
+  font-size: 14px; /* Increase padding for larger buttons */
+  color: white; /* Text color for buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(7, 104, 253);
+}
+.link-modal-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 2px solid #d9d9d9;
+  border-radius: 3px;
+  padding-left: 10px;
+  margin-top: -13px;
+  &:focus {
+    border-color: #0768fd;
+    transition-duration: 0.2s;
+    transition-property: border-color;
+    outline: none !important;
+  }
+}

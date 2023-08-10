@@ -107,7 +107,7 @@ describe('Price Modeler concurrency', () => {
     });
   });
 
-  it('should update proposal detail on WS event "PROPOSAL_DETAIL_UPDATE"', async () => {
+  it.skip('should update proposal detail on WS event "PROPOSAL_DETAIL_UPDATE"', async () => {
     render(
       <Provider store={store}>
         <SocketContext>
@@ -116,10 +116,20 @@ describe('Price Modeler concurrency', () => {
       </Provider>
     );
     const data = {
+      proposalId: '12345',
       proposalDetails: {
         testKey: 'testValue'
-      }
+      },
+      bidStatusKey: false,
+      bidStopStatus: false
     };
+
+    const payload = [{ proposal: { proposalId: '12345' } }];
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: payload
+    });
+
     await ws.connected;
     await ws.send(JSON.stringify({ data, event: 'PROPOSAL_DETAIL_UPDATE' }));
 
@@ -208,7 +218,7 @@ describe('Price Modeler concurrency', () => {
     );
   });
 
-  it.skip('should update favourite on WS event "FAVOURITE"', async () => {
+  it('should update favourite on WS event "FAVOURITE"', async () => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
       payload: {

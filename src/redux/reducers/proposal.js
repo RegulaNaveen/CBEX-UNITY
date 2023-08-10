@@ -405,8 +405,7 @@ const setOpportunityInfo = (state, action) => {
 
 const onChangeBid = (state: Map, action: Object): Map => {
   const { payload } = action;
-
-  let opportunityData = state.get('opportunityData');
+  const bidProposal = payload?.proposalDetails?.proposal;
   const {
     agreementId,
     accountId,
@@ -418,7 +417,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     bidStopStatus,
     isApprovalCountPresent,
     proposalDate
-  } = opportunityData.getIn([payload.bid.bidId, 'proposal']);
+  } = bidProposal;
   let selectedBid = Map({
     id: payload.bid.bidId,
     isCurrent: payload.bid.isCurrent,
@@ -462,12 +461,14 @@ const onChangeBid = (state: Map, action: Object): Map => {
       .set('proposalQuestions', proposalQuestions)
       .set('questionsFilter', questionsFilter)
       .set('isProposalLoading', false)
-      .set('selectedBid', selectedBid);
+      .set('selectedBid', selectedBid)
+      .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
   }
   return state
     .set('proposalDetails', proposalDetails)
     .set('isProposalLoading', false)
-    .set('selectedBid', selectedBid);
+    .set('selectedBid', selectedBid)
+    .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
 };
 
 const newBidCreated = (state: Map, action: Object): Map => {
@@ -1341,12 +1342,18 @@ const clearEditOppInfo = state => {
 
 const updateOportunityDetailData = (state, action) => {
   const { data } = action.payload;
+  let opportunityData = state.get('opportunityData');
+  let currentProposal = opportunityData.getIn([
+    data?.proposalId,
+    'proposal',
+    'proposalId'
+  ]);
   const proposalDetail = state.get('proposalDetails');
   if (
     data &&
     proposalDetail &&
-    proposalDetail &&
-    proposalDetail['CRM #'] == data.oppNo
+    currentProposal &&
+    currentProposal == data?.proposalId
   ) {
     const mapper = OpportunitySFUpDATE;
     proposalDetail[mapper[data.sfField]] = data.answer;
@@ -1357,18 +1364,26 @@ const updateOportunityDetailData = (state, action) => {
 
 const updateProposalDetailSF = (state, action) => {
   const { data } = action.payload;
+  let opportunityData = state.get('opportunityData');
+  let currentProposal = opportunityData.getIn([
+    data?.proposalId,
+    'proposal',
+    'proposalId'
+  ]);
   let proposalDetail = state.get('proposalDetails');
   let selectedbid = state.get('selectedBid');
   if (data && data.bidStatusKey && selectedbid) {
     const updatedSelectedbid = selectedbid?.toJS();
-    if (data.proposalId === updatedSelectedbid.id) {
+    if (currentProposal && currentProposal === data?.proposalId) {
       updatedSelectedbid.bidStopStatus = data.bidStopStatus;
     }
     return state.set('selectedBid', Map(updatedSelectedbid));
   } else {
-    proposalDetail = data.proposalDetails;
+    if (currentProposal && currentProposal === data?.proposalId) {
+      proposalDetail = data.proposalDetails;
+    }
   }
-  let opportunityData = state.get('opportunityData');
+
   if (
     data &&
     data.proposalDetails &&
@@ -1402,22 +1417,33 @@ const updateProposalDetailSF = (state, action) => {
         );
     }
   }
-
   return state.set('proposalDetails', { ...proposalDetail });
 };
 
 const updateDashboardDetail = (state, action) => {
-  const data = action.payload;
-  let proposalDetail = state.get('proposalDetails');
-  if (
-    proposalDetail &&
-    proposalDetail?.Customer !== data?.data?.proposalDetails.Customer
-  ) {
-    proposalDetail.Customer = data?.data?.proposalDetails.Customer;
-    return state.set('proposalDetails', { ...proposalDetail });
-  }
+  try {
+    const data = action.payload;
+    let opportunityData = state.get('opportunityData');
+    let currentProposal = opportunityData.getIn([
+      data?.data?.proposalId,
+      'proposal',
+      'proposalId'
+    ]);
+    let proposalDetail = state.get('proposalDetails');
+    if (
+      currentProposal &&
+      proposalDetail &&
+      currentProposal === data?.data?.proposalId
+    ) {
+      proposalDetail.Customer = data?.data?.proposalDetails.Customer;
+      return state.set('proposalDetails', { ...proposalDetail });
+    }
 
-  return state;
+    return state;
+  } catch (error) {
+    console.log(`error`, error);
+    return state;
+  }
 };
 
 const actionMap = {
