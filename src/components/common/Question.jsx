@@ -255,7 +255,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
   }
 
-  handlePropsalChange = (textValue, lastValue, reason) => {
+  handlePropsalChange = (textValue, multiSelectRef = '', lastValue, reason) => {
     try {
       const {
         setProposalAnswer,
@@ -266,6 +266,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
         setAnswerLoading,
         deleteProposalUser
       } = this.props;
+      if (multiSelectRef && multiSelectRef?.current) {
+        multiSelectRef?.current?.blur();
+      }
       setProposalAnswer(
         this.context,
         proposalId,
