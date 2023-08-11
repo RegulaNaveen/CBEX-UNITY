@@ -116,7 +116,7 @@ const QuestionsSectionMapping = ({
   const renderAllSection = (section, indx) => {
     let showSection = true;
     const sectionName = section.get('sectionName');
-    console.log('sectionName', sectionName);
+
     const sectionData = section.toJS();
     const sectionOrder = section.get('sectionOrder');
 

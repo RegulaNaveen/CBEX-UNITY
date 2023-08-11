@@ -6,7 +6,7 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
     questionId,
     sfField,
     proposalId,
-    // proposalDetail={proposalDetail},
+    proposalDetail,
     isNotApplicable,
     milestoneCond,
     NaLoading,
@@ -28,21 +28,21 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
     isCustomQuestion,
     notApplicable,
     isSetQuestionLoadingData,
-    // questionData,
+    questionData,
     section,
     milestoneNew,
     allSections,
     answerConfiguration,
-    // questionLockInfo,
+    questionLockInfo,
     roleNames,
     visible,
-    // setQuestionToDisplayHistory,
     hasDifferentSFanswer,
     qvidianIntegration,
     bidAnswerCopy,
     latestAnsweredBidNo,
     questionDataDestinations
   } = item;
+
   return (
     <div>
       <Question
@@ -50,7 +50,7 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
         sfField={sfField}
         proposalId={proposalId}
         questionId={questionId}
-        // proposalDetail={proposalDetail}
+        proposalDetail={proposalDetail}
         isNotApplicable={isNotApplicable}
         milestoneCond={milestoneCond}
         NaLoading={NaLoading}
@@ -72,12 +72,12 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
         isCustomQuestion={isCustomQuestion}
         notApplicable={notApplicable}
         isSetQuestionLoadingData={isSetQuestionLoadingData}
-        // questionData={questionData}
+        questionData={questionData}
         section={section}
         milestoneNew={milestoneNew}
         allSections={allSections}
         answerConfiguration={answerConfiguration}
-        // questionLockInfo={questionLockInfo}
+        questionLockInfo={questionLockInfo}
         roleNames={roleNames}
         visible={visible}
         setQuestionToDisplayHistory={setQuestionToDisplayHistory}

@@ -51,12 +51,7 @@ const VerticalTab = styled(Tab)({
   },
   alignItems: 'center',
   borderBottom: '2px solid #e0e0e0',
-  paddingBottom: '7px',
-  transition: 'border-color 0.3s' // Add a transition for a smooth color change on hover
-  // '&:hover': {
-  //   borderBottomColor: '#0557d5', // Change the border color on hover
-  //   cursor: 'pointer'
-  // }
+  paddingBottom: '7px'
 });
 
 function VerticalTabsCollapsiblePanel({
@@ -69,7 +64,7 @@ function VerticalTabsCollapsiblePanel({
   onTabClick
 }) {
   const activeTabIndex = useSelector(selectActiveVTabIndex);
-  console.log('activeTabIndex', activeTabIndex);
+
   const dispatch = useDispatch();
 
   useEffect(() => {

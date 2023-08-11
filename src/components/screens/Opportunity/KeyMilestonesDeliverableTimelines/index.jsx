@@ -14,7 +14,7 @@ import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import Question from '../../../common/Question';
+
 import { isEmpty, xor, isString, has, isObject } from 'lodash';
 import { List, fromJS } from 'immutable';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
@@ -43,6 +43,7 @@ const KeyMilestoneDeliverableTimelines = () => {
   const allSections = sections;
   const KeyMilestone = [];
   const wholeData = [];
+  let questionData;
   allSections.map(item => {
     if (item.get('sectionName') === 'Key Milestones & Deliverable Timelines') {
       KeyMilestone.push(item.toJS());
@@ -52,10 +53,10 @@ const KeyMilestoneDeliverableTimelines = () => {
   if (!isEmpty(KeyMilestone[0])) {
     Object.keys(KeyMilestone[0]?.questions).forEach(item => {
       const KeyMilestoneData = KeyMilestone[0].questions[item];
-      console.log('KeyMilestoneData', KeyMilestoneData);
+      questionData = fromJS(KeyMilestoneData);
 
       const { proposalId } = KeyMilestoneData;
-      //   const { proposalDetail } = KeyMilestoneData[0];
+      const proposalDetail = KeyMilestoneData.proposalDetail;
       const { notApplicable } = KeyMilestoneData;
       const NaLoading = KeyMilestoneData?.NaLoading;
 
@@ -90,9 +91,8 @@ const KeyMilestoneDeliverableTimelines = () => {
         const events = KeyMilestoneData?.events || {};
         const questionJSON = KeyMilestoneData?.questionJSON;
         const isCustomQuestion = KeyMilestoneData?.isCustomQuestion;
-        // const questionLockInfo = fromJS(
-        //   KeyMilestoneData[0].questions[item].questionLockInfo
-        // );
+        const questionLockInfo = fromJS(KeyMilestoneData.questionLockInfo);
+
         const hasDifferentSFanswer = KeyMilestoneData?.hasDifferentSFanswer;
         const visible =
           KeyMilestoneData?.visible &&
@@ -107,7 +107,7 @@ const KeyMilestoneDeliverableTimelines = () => {
           proposalId: proposalId,
           sfField: sfField,
           qvidianIntegration: qvidianIntegration,
-          //   proposalDetail: proposalDetail,
+          proposalDetail: proposalDetail,
           isNotApplicable: notApplicable,
           milestoneCond: milestoneCond,
           NaLoading: NaLoading,
@@ -128,13 +128,13 @@ const KeyMilestoneDeliverableTimelines = () => {
           questionJSON: questionJSON,
           isCustomQuestion: isCustomQuestion,
           isSetQuestionLoadingData: isSetQuestionLoadingData,
-          //   questionData: questionData,
+          questionData: questionData,
           section: section,
           milestoneNew: milestoneNew,
           allSections: allSections,
           answerConfiguration: answerConfiguration,
           roleNames: roleNames,
-          //   questionLockInfo: questionLockInfo,
+          questionLockInfo: questionLockInfo,
           visible: visible,
           hasDifferentSFanswer: hasDifferentSFanswer,
           bidAnswerCopy: KeyMilestoneData.bidAnswerCopy,
