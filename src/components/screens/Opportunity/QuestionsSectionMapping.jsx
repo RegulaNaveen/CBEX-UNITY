@@ -116,6 +116,7 @@ const QuestionsSectionMapping = ({
   const renderAllSection = (section, indx) => {
     let showSection = true;
     const sectionName = section.get('sectionName');
+
     const sectionData = section.toJS();
     const sectionOrder = section.get('sectionOrder');
 
@@ -179,7 +180,10 @@ const QuestionsSectionMapping = ({
       allSectionLength &&
       allSections.valueSeq().map((section, indx) => {
         if (
-          section.get('sectionName') !== 'Questions_for_the_Customer_left_panel'
+          section.get('sectionName') !==
+            'Questions_for_the_Customer_left_panel' &&
+          section.get('sectionName').trim() !==
+            'Key Milestones & Deliverable Timelines'
         )
           return renderAllSection(section, indx);
       })

@@ -41,6 +41,7 @@ import Timelines from '../../../screens/Timelines';
 import { checkTabRender } from '../../../screens/UnityTabs/utils';
 import { setTabRefresh } from '../../../../redux/actions/unitytab-action';
 import { DEFAULT_TABS_LEN } from '../../../../constants/app';
+// import KeyMilestoneDeliverableTimelines from '../../../screens/Opportunity/KeyMilestonesDeliverableTimelines';
 
 const Questions = React.lazy(() =>
   lazyWithRetry(() =>
@@ -76,6 +77,14 @@ const QuestionsForCustomer = React.lazy(() =>
   lazyWithRetry(() =>
     import(
       /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/QuestionsForCustomerTab'
+    )
+  )
+);
+
+const KeyMilestone = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/KeyMilestonesDeliverableTimelines'
     )
   )
 );
@@ -138,6 +147,10 @@ const UnityTab = ({
   const [
     showQuestionsForCustomerTab,
     setShowQuestionsForCustomerTab
+  ] = useState(false);
+  const [
+    showKeyMilestoneDeliverableTab,
+    setShowshowKeyMilestoneDeliverableTab
   ] = useState(false);
   const switchTempStatus = useSelector(
     state => state.proposal?.toJSON()?.switchTempCallStatus
@@ -387,6 +400,7 @@ const UnityTab = ({
     setShowQuestionsForCustomerTab(questionsForCustomerFlag);
     setShowNotepadTab(notepadFlag);
     setShowProposalTeamTab(proposalTeamFlag);
+    setShowshowKeyMilestoneDeliverableTab(true);
   }
 
   const evalAndSetVTabCollapse = useCallback(
@@ -858,10 +872,65 @@ const UnityTab = ({
         </div>
       );
     }
+    if (activeVerticleTab === 'keymilestonedeliverabletab') {
+      return (
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          ref={refVal => setPanelRef(refVal)}
+          className={classNames({
+            collapsed: vtabCollpased
+          })}
+        >
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            style={{ borderRadius: '5px' }}
+            resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
+            }}
+          >
+            <Suspense
+              fallback={
+                <Spinner
+                  type="TailSpin"
+                  color="#297DFD"
+                  width={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                  }}
+                />
+              }
+            >
+              <KeyMilestone />
+            </Suspense>
+          </Panel>
+        </div>
+      );
+    }
   };
 
   const renderTabList = () => {
     const tabList = tabs;
+
     if (tabList && tabList?.length && tabStatus) {
       return (
         <Tabs
@@ -895,9 +964,13 @@ const UnityTab = ({
       } else {
         activeVerticleTab = 'showNotepadTab';
       }
-    } else {
-      activeVerticleTab = 'showQuestionsForCustomerTab';
+    } else if (showKeyMilestoneDeliverableTab) {
+      activeVerticleTab = 'showKeyMilestoneDeliverableTab';
     }
+    // else {
+    //   activeVerticleTab = 'showKeyMilestoneDeliverableTab';
+    // }
+
     return (
       <>
         <div className="tab-size">{renderTabList()}</div>
@@ -909,6 +982,7 @@ const UnityTab = ({
                 showQuestionsForCustomerTab={showQuestionsForCustomerTab}
                 showNotepadTab={showNotepadTab}
                 showProposalTeamTab={showProposalTeamTab}
+                showKeyMilestoneDeliverableTab={showKeyMilestoneDeliverableTab}
                 activeVerticleTab={activeVerticleTab}
                 renderPanel={activeTab => {
                   // Check activeTab value and render required component
