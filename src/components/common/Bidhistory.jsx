@@ -32,7 +32,7 @@ const BidHistory = () => {
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
-
+  const bidType = selectedBid.get('bidType');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
@@ -194,13 +194,21 @@ const BidHistory = () => {
                   )}
                 </div>
                 <div className="bid-history-right-content">
+                  <p className="summary-title summury-bold">
+                    Bid Change Summary
+                  </p>
                   <p className="review-title">For Review</p>
-                  <p className="summary-title">Bid Change Summary</p>
                   <p className="pertinent-details-title">
-                    Pertinent Details / Specific Rebid Request
+                    {bidType && bidType.includes('Early_Engagement_Bid')
+                      ? 'Early Engagement Development Plan'
+                      : 'Pertinent Details / Specific Rebid Request'}
                   </p>
                   <div className="pertinent-details-section">
-                    <p>{selectedBid.get('pertinentDetails')}</p>
+                    <p>
+                      {bidType && bidType.includes('Early_Engagement_Bid')
+                        ? selectedBid.get('earlyEngagementDevelopmentPlan')
+                        : selectedBid.get('pertinentDetails')}
+                    </p>
                   </div>
                   <p className="helper-text">
                     This text was provided by Salesforce user when latest bid
