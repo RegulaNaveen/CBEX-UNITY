@@ -369,6 +369,11 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
           'proposalDetails',
           'pertinentDetails'
         ]),
+        earlyEngagementDevelopmentPlan: item.getIn([
+          'proposal',
+          'proposalDetails',
+          'earlyEngagementDevelopmentPlan'
+        ]),
         bidNo: String(
           item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
         )
