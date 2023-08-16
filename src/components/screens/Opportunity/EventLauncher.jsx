@@ -79,12 +79,21 @@ const EventLauncher = ({
     if (!openModal) return []; // break func
     const team = [];
     proposalQuestions.forEach(item => {
-      const { section, answers, roleNames, isCustomQuestion, active } = item;
+      const {
+        section,
+        answers,
+        roleNames,
+        isCustomQuestion,
+        active,
+        questionId
+      } = item;
       const { sectionName } = section;
       if (sectionName === 'Proposal Team') {
         const visible =
           item.visible === true &&
-          (active === true || isCustomQuestion === true);
+          (active === true || isCustomQuestion === true) &&
+          !item.notApplicable &&
+          !item.questionApproval;
 
         let email = [];
         if (!isEmpty(answers)) {
@@ -102,12 +111,8 @@ const EventLauncher = ({
           }
         }
 
-        if (
-          !isEmpty(email) &&
-          !isEmpty(roleNames) &&
-          (visible || typeof visible === 'undefined')
-        ) {
-          team.push({ email, roleNames });
+        if (!isEmpty(email) && (visible || typeof visible === 'undefined')) {
+          team.push({ email, questionId });
         }
       }
     });
@@ -116,31 +121,34 @@ const EventLauncher = ({
 
   const filteredEmails = useMemo(() => {
     if (isEmpty(proposalTeam)) return []; // break func
-    const { EventRoles: eventRoles } = eventData;
+    const { EventQuestions: eventQuestions } = eventData;
     // onChange attendees value
     if (attendeesVal === attendees[0]) {
-      const filteredTeam = proposalTeam.filter(i =>
-        i.roleNames.some(role => eventRoles.includes(role))
-      );
+      const filteredTeam = proposalTeam.filter(({ questionId }) => {
+        if (Array.isArray(eventQuestions)) {
+          return eventQuestions.includes(questionId);
+        }
+        return false;
+      });
       return [...new Set(filteredTeam.map(i => i.email).flat())];
     }
     return [...new Set(proposalTeam.map(i => i.email).flat())];
-  }, [openModal, attendeesVal]);
+  }, [openModal, attendeesVal, proposalTeam]);
 
   const unassignedRoles =
     attendeesVal === attendees[0]
       ? activeTeamQuestions
           .filter(
             team =>
-              team.roleNames.some(role =>
-                eventData.EventRoles.includes(role)
-              ) && isEmpty(team.email)
+              Array.isArray(eventData.EventQuestions) &&
+              eventData.EventQuestions.includes(team.questionId) &&
+              isEmpty(team.email)
           )
-          .map(team => team.questionText)
+          .map(team => team.questionText.trim())
           .sort()
       : activeTeamQuestions
           .filter(team => isEmpty(team.email))
-          .map(team => team.questionText)
+          .map(team => team.questionText.trim())
           .sort();
 
   /**
@@ -253,7 +261,6 @@ const EventLauncher = ({
         { className: 'display-none' },
         {
           label: PROPOSAL.LAUNCH_OUTLOOK,
-          disabled: isEmpty(filteredEmails),
           onClick: launchRichTextButtonHandler
         }
       ]}
@@ -264,19 +271,12 @@ const EventLauncher = ({
         name="attendees"
         value={attendeesVal}
         onChange={e => setAttendeesVal(e.target.value)}
-        error={isEmpty(filteredEmails)}
-        helperText={
-          isEmpty(filteredEmails)
-            ? "Doesn't have valid email id for this option"
-            : ''
-        }
       >
         {attendees.map(item => (
           <Radio value={item} key={item} label={item} />
         ))}
       </RadioGroup>
-      {/* Hidden for 4.9 release */}
-      {/* <UnassignedRolesList unassignedRoles={unassignedRoles} /> */}
+      <UnassignedRolesList unassignedRoles={unassignedRoles} />
     </CustomModal>
   );
   const eventIcon = (
