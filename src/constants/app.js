@@ -98,6 +98,11 @@ const SEARCH = {
     'The filters you are applying will affect your search results'
 };
 
+const BID_TYPES = {
+  Early_Engagement_Bid: 'Early Engagement',
+  Clinical_Bid: 'Bid'
+};
+
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
 export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // matches proposal team individual user
@@ -112,5 +117,6 @@ export {
   REFRESH_WEBSOCKET_CONNECTION,
   PROFILE,
   APPROVALS,
-  SEARCH
+  SEARCH,
+  BID_TYPES
 };

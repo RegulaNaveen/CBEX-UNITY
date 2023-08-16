@@ -4,7 +4,7 @@
 import jwt_decode from 'jwt-decode';
 import { cloneDeep, isArray, isEmpty, isString } from 'lodash';
 import ANSWER_TYPES from '../constants/answerTypes';
-import { DEFAULT } from '../constants/app';
+import { BID_TYPES, DEFAULT } from '../constants/app';
 import CountryMap from '../constants/country.json';
 import { UBUILD_ADMIN } from '../constants/types';
 import { formatTheDate } from './DateUtils';
@@ -534,6 +534,16 @@ const getNextMilestone = milestones => {
   return '';
 };
 
+const getBidNameByType = bidType => {
+  let bidName = '';
+  if (!isEmpty(BID_TYPES[bidType])) {
+    bidName = BID_TYPES[bidType];
+  } else {
+    bidName = 'Bid';
+  }
+  return bidName;
+};
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -549,5 +559,6 @@ export {
   throttle,
   createMatomoObj,
   getApprovalCount,
-  getNextMilestone
+  getNextMilestone,
+  getBidNameByType
 };

@@ -13,6 +13,7 @@ import {
 import NotesIcon from '../../../../../svg/Notes';
 import QuestionsForCustomerIcon from '../../../../../svg/QuestionsForCustomer';
 import ProposalTeamIcon from '../../../../../svg/ProposalTeam';
+import KeyMilestoneDeliverableTimelinesIcon from '../../../../../svg/KeyMilestoneDeliverableTimelines';
 import './styles.scss';
 import { selectActiveVTabIndex } from '../../../../../../redux/selectors/proposal';
 import { useSelector } from 'react-redux';
@@ -25,11 +26,10 @@ function getTabNameFromIndex(index) {
     return 'showNotepadTab';
   } else if (index === 2) {
     return 'proposalteamtab';
-  } else {
-    return '';
+  } else if (index === 3) {
+    return 'keymilestonedeliverabletab';
   }
 }
-
 const VerticalTabs = styled(Tabs)({
   '&::before': {
     borderBottom: 'none'
@@ -48,7 +48,10 @@ const VerticalTab = styled(Tab)({
   minWidth: '60px',
   '&.hide': {
     display: 'none'
-  }
+  },
+  alignItems: 'center',
+  borderBottom: '2px solid #e0e0e0',
+  paddingBottom: '7px'
 });
 
 function VerticalTabsCollapsiblePanel({
@@ -56,10 +59,12 @@ function VerticalTabsCollapsiblePanel({
   showQuestionsForCustomerTab,
   showNotepadTab,
   showProposalTeamTab,
+  showKeyMilestoneDeliverableTab,
   activeVerticleTab,
   onTabClick
 }) {
   const activeTabIndex = useSelector(selectActiveVTabIndex);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -72,11 +77,17 @@ function VerticalTabsCollapsiblePanel({
     } else {
       dispatch(setVTabActiveIndexAction(0));
     }
-  }, [showQuestionsForCustomerTab, showNotepadTab, showProposalTeamTab]);
+  }, [
+    showQuestionsForCustomerTab,
+    showNotepadTab,
+    showProposalTeamTab,
+    showKeyMilestoneDeliverableTab
+  ]);
   const tabArr = [
     { showQuestionsForCustomerTab },
     { showNotepadTab },
-    { showProposalTeamTab }
+    { showProposalTeamTab },
+    { showKeyMilestoneDeliverableTab } // Add this line
   ];
 
   function handleTabChange(event, newActiveTab) {
@@ -85,7 +96,10 @@ function VerticalTabsCollapsiblePanel({
   }
   const renderTab = () => {
     const tabs = tabArr.map((v, vIdx) => {
-      if (v['showQuestionsForCustomerTab']) {
+      if (
+        v['showQuestionsForCustomerTab'] !== undefined &&
+        v['showQuestionsForCustomerTab'] !== null
+      ) {
         return (
           <div onClick={e => handleTabChange(e, 0)} key={`vTab-QFC-${vIdx}`}>
             <VerticalTab
@@ -105,7 +119,8 @@ function VerticalTabsCollapsiblePanel({
           </div>
         );
       }
-      if (v['showNotepadTab']) {
+
+      if (v['showNotepadTab'] !== undefined && v['showNotepadTab'] !== null) {
         return (
           <div onClick={e => handleTabChange(e, 1)} key={`vTab-NOTE-${vIdx}`}>
             <VerticalTab
@@ -124,7 +139,10 @@ function VerticalTabsCollapsiblePanel({
           </div>
         );
       }
-      if (v['showProposalTeamTab']) {
+      if (
+        v['showProposalTeamTab'] !== undefined &&
+        v['showProposalTeamTab'] !== null
+      ) {
         return (
           <div onClick={e => handleTabChange(e, 2)} key={`vTab-TEAM-${vIdx}`}>
             <VerticalTab
@@ -143,6 +161,29 @@ function VerticalTabsCollapsiblePanel({
           </div>
         );
       }
+      if (
+        v['showKeyMilestoneDeliverableTab'] !== undefined &&
+        v['showKeyMilestoneDeliverableTab'] !== null
+      ) {
+        return (
+          <div onClick={e => handleTabChange(e, 3)} key={`vTab-KMD-${vIdx}`}>
+            <VerticalTab
+              textColor="primary"
+              icon={
+                <KeyMilestoneDeliverableTimelinesIcon
+                  fill={
+                    getTabNameFromIndex(activeTabIndex) ===
+                    'keymilestonedeliverabletab'
+                      ? '#0557d5'
+                      : '#999999 '
+                  }
+                />
+              }
+              // className={`${showKeyMilestoneDeliverableTab ? '' : 'hide'}`}
+            />
+          </div>
+        );
+      }
     });
     return tabs;
   };
@@ -150,14 +191,18 @@ function VerticalTabsCollapsiblePanel({
   return (
     <div
       className={`vertical-tabs-collapsible-panel ${
-        showQuestionsForCustomerTab || showNotepadTab || showProposalTeamTab
+        showQuestionsForCustomerTab ||
+        showNotepadTab ||
+        showProposalTeamTab ||
+        showKeyMilestoneDeliverableTab
           ? ''
           : 'hide'
       }`}
     >
       {(showQuestionsForCustomerTab ||
         showNotepadTab ||
-        showProposalTeamTab) && (
+        showProposalTeamTab ||
+        showKeyMilestoneDeliverableTab) && (
         <>
           <VerticalTabs
             value={activeTabIndex}

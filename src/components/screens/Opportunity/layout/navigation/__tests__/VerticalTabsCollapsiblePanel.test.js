@@ -18,6 +18,7 @@ describe('verticalTabs test cases', () => {
         showQuestionsForCustomerTab
         showNotepadTab
         showProposalTeamTab
+        showKeyMilestoneDeliverableTab
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
@@ -34,12 +35,13 @@ describe('verticalTabs test cases', () => {
     expect(getByTestId('vtab-1')).toBeInTheDocument();
   });
 
-  it.skip('should hide questionsforcustomer tab when flag is off and render notepad', () => {
+  it('should hide questionsforcustomer tab when flag is off and render notepad', () => {
     const { getByTestId } = render(
       <VerticalTabsCollapsiblePanelWithRedux
         showQuestionsForCustomerTab={false}
         showNotepadTab
         showProposalTeamTab
+        showKeyMilestoneDeliverableTab
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
@@ -56,12 +58,13 @@ describe('verticalTabs test cases', () => {
     expect(getByTestId('vtab-2')).toBeInTheDocument();
   });
 
-  it.skip('should show only proposal team tab when other flags are off', () => {
+  it('should show only proposal team tab when other flags are off', () => {
     const { getByTestId, queryByTestId } = render(
       <VerticalTabsCollapsiblePanelWithRedux
         showQuestionsForCustomerTab={false}
         showNotepadTab={false}
         showProposalTeamTab
+        showKeyMilestoneDeliverableTab
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
