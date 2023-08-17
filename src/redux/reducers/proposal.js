@@ -326,6 +326,12 @@ const setOpportunityInfo = (state, action) => {
           'bidName',
           `Bid ${proposal.proposal.proposalDetails['bidNo'] || ''}`
         )
+        .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
+        .set(
+          'earlyEngagementDevelopmentPlan',
+          `${proposal?.proposal?.proposalDetails
+            ?.earlyEngagementDevelopmentPlan || ''}`
+        )
         .set(
           'questionTemplateVersionNumber',
           proposal.proposal['questionTemplateVersionNumber'] || ''
@@ -416,12 +422,17 @@ const onChangeBid = (state: Map, action: Object): Map => {
     questionTemplateVersionNumber: templateversion,
     bidStopStatus,
     isApprovalCountPresent,
-    proposalDate
+    proposalDate,
+    bidType
   } = bidProposal;
+
   let selectedBid = Map({
     id: payload.bid.bidId,
     isCurrent: payload.bid.isCurrent,
     pertinentDetails: payload.bid.pertinentDetails,
+    bidType: bidType || '',
+    earlyEngagementDevelopmentPlan:
+      proposalDetails?.earlyEngagementDevelopmentPlan || '',
     bidName: payload.bid.bidName,
     questionTemplateVersionNumber: templateversion || '',
     bidStopStatus: bidStopStatus,
@@ -1378,6 +1389,27 @@ const updateProposalDetailSF = (state, action) => {
       updatedSelectedbid.bidStopStatus = data.bidStopStatus;
     }
     return state.set('selectedBid', Map(updatedSelectedbid));
+  } else if (data && data.earlyEngagementBid) {
+    proposalDetail.earlyEngagementDevelopmentPlan =
+      data.proposalDetails.earlyEngagementDevelopmentPlan;
+    const updatedSelectedbid = selectedbid?.toJS();
+    if (currentProposal && currentProposal === data?.proposalId) {
+      updatedSelectedbid.earlyEngagementDevelopmentPlan =
+        data.proposalDetails.earlyEngagementDevelopmentPlan;
+    }
+    return state
+      .set('selectedBid', Map(updatedSelectedbid))
+      .set('proposalDetails', proposalDetail)
+      .setIn(
+        [
+          'opportunityData',
+          data.proposalId,
+          'proposal',
+          'proposalDetails',
+          'earlyEngagementDevelopmentPlan'
+        ],
+        data?.proposalDetails?.earlyEngagementDevelopmentPlan || ''
+      );
   } else {
     if (currentProposal && currentProposal === data?.proposalId) {
       proposalDetail = data.proposalDetails;

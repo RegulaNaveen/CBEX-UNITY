@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 import { shouldInclude } from '../../components/views/export-component/word-template';
 import { extractEmails } from '../../utils/helpers';
+import { getBidNameByType } from '../../utils/utils';
 
 const generateMilestone = (proposalQuestions: Object) => {
   const flag = proposalQuestions.filter(question => question?.milestone);
@@ -359,13 +360,19 @@ export const getBidList = createSelector(getOpportunityData, opportunity => {
         bidDate: item.getIn(['proposal', 'proposalDate']),
         bidId: item.getIn(['proposal', 'proposalId']),
         isCurrent: item.get('isCurrent'),
-        bidName: `Bid ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) ||
-          ''}`,
+        bidName: `${getBidNameByType(
+          item.getIn(['proposal', 'bidType'])
+        )} ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
         bidStatus: item.get('inProgress') || '',
         pertinentDetails: item.getIn([
           'proposal',
           'proposalDetails',
           'pertinentDetails'
+        ]),
+        earlyEngagementDevelopmentPlan: item.getIn([
+          'proposal',
+          'proposalDetails',
+          'earlyEngagementDevelopmentPlan'
         ]),
         bidNo: String(
           item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
