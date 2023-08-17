@@ -148,6 +148,19 @@ const updateBidNoQueryparam = bidNo => {
   }
 };
 
+const updateBidTypeQueryparam = bidNo => {
+  if ('URLSearchParams' in window) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('bidType', bidNo);
+    // New url
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
+    // Update URL without pageload
+    window.history.pushState(null, '', newRelativePathQuery);
+  }
+};
+
 export type ProposalInfo = {};
 
 export const getProposal = (id: string): ThunkAction<string, Object> => {
@@ -1313,6 +1326,8 @@ export const closeNewbidflags = (): ThunkAction<string, Object> => {
 export const getOpportunity = (
   id: string,
   bidNumber,
+  bidType = 'Clinical_Bid',
+  history = null,
   flag = false
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
@@ -1323,26 +1338,28 @@ export const getOpportunity = (
     try {
       const allProposals = await getAllProposals(id);
       const proposal = allProposals.find(
-        thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
+        thisProposal =>
+          thisProposal.proposal.proposalDetails.bidNo === bidNo &&
+          (thisProposal.proposal.bidType || 'Clinical_Bid') === bidType
       );
-      const isCurrentProposal = allProposals.find(
+      const currentProposal = allProposals.find(
         thisProposal => thisProposal.isCurrent === true
       );
-      if (proposal) selectedProposalId = proposal.proposal.proposalId;
+      if (proposal) {
+        selectedProposalId = proposal.proposal.proposalId;
+      } else if (currentProposal && history) {
+        // navigate to current bid
+        // replace URL with correct params
+        history.replace(
+          `${history.location.pathname}?bidNo=${
+            currentProposal.proposal.proposalDetails.bidNo
+          }&bidType=${currentProposal.proposal.bidType || 'Clinical_Bid'}`
+        );
+      }
       const proposalCount = allProposals.length;
-      // const maxLimit = 500;
-      //
-      // let callstomake = parseInt(proposalCount / maxLimit);
-      // let additionalcallstomake = proposalCount % maxLimit;
-      // if (additionalcallstomake) {
-      //   callstomake = callstomake + 1;
-      // }
-      // let from = 0;
       const urls = [];
       const proposalsData = [];
       for (let index = 0; index < proposalCount; index += 1) {
-        // let trueOrFalse;
-
         if (selectedProposalId) {
           // user on previous bid
           if (allProposals[index].proposal.proposalId === selectedProposalId) {
@@ -1370,7 +1387,7 @@ export const getOpportunity = (
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
       data[0].isCurrent =
-        isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
+        currentProposal.proposal.proposalId === data[0].proposal.proposalId;
       if (data && data.length && data[0].proposal?.switchTemplateStatus) {
         dispatch({
           type: SWITCH_TEMP_IN_PROGRESS,
@@ -1451,6 +1468,9 @@ export const resetProposalId = () => {
 export const changeBid = bid => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
+  }
+  if (bid?.bidType) {
+    updateBidTypeQueryparam(bid.bidType);
   }
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();

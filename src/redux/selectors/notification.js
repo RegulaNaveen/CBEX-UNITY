@@ -1,13 +1,14 @@
 const onClickLink = (
   oppNo: string,
   notificationId: string,
-  bidNo: string | number | null
+  bidNo: string | number | null,
+  bidType: string
 ): string => {
   const link = () =>
     `/opportunities/${oppNo}?notification_id=${notificationId}`;
-  const linkWithBid = () =>
-    `/opportunities/${oppNo}?notification_id=${notificationId}&bidNo=${bidNo}`;
-  return bidNo ? linkWithBid() : link();
+  const linkWithBidAndBidType = () =>
+    `/opportunities/${oppNo}?notification_id=${notificationId}&bidNo=${bidNo}&bidType=${bidType}`;
+  return bidNo ? linkWithBidAndBidType() : link();
 };
 
 export const getAllNotifications = notification =>
@@ -68,7 +69,8 @@ export const getUnreadNotifications = notification =>
       item.url = onClickLink(
         item.opportunity_no,
         item.id,
-        item.bodyJson?.bidNo || null
+        item.bodyJson?.bidNo || null,
+        item.bodyJson?.bidType || 'Clinical_Bid'
       );
       // Add timestamp for sorting
       item.timestamp = new Date(item.created_date).getTime();

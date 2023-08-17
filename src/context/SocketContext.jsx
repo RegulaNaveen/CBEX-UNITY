@@ -408,7 +408,7 @@ const SocketContextProvider = props => {
    */
   const refreshOpportunity = (id, bidNo) => {
     try {
-      props.getOpportunityInfo(id, bidNo, true);
+      props.getOpportunityInfo(id, bidNo, null, null, true);
     } catch (error) {
       console.log('error refreshOpportunity :>> ', error);
     }

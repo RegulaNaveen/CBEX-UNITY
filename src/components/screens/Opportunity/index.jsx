@@ -134,13 +134,15 @@ export class Opportunity extends Component<Props, State> {
       location,
       ProposalLoading,
       getIntegrationsData,
-      updateProposalDetail
+      updateProposalDetail,
+      history
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
+    const bidType = queryparams.get('bidType') || 'Clinical_Bid';
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) setEventFlg(flagValue);
     if (notificationId) {
@@ -151,7 +153,7 @@ export class Opportunity extends Component<Props, State> {
     if (selectedView) this.setState({ selectedView });
     if (!authData) getRefreshAuthData();
     getSFNonEditabelInfoField();
-    getOpportunityInfo(params.id, bidNumber);
+    getOpportunityInfo(params.id, bidNumber, bidType, history);
     getIntegrationsData();
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
@@ -210,6 +212,7 @@ export class Opportunity extends Component<Props, State> {
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const bidNo = queryparams.get('bidNo');
+    const bidType = queryparams.get('bidType') || 'Clinical_Bid';
     const prevBidList = prevProps.bidList;
     if (
       bidNo &&
@@ -217,7 +220,9 @@ export class Opportunity extends Component<Props, State> {
       bidList.length > 0 &&
       bidList.length !== prevBidList.length // check to prevent infinite rerenders
     ) {
-      const bidItemToSelect = bidList.find(item => item.bidNo === bidNo);
+      const bidItemToSelect = bidList.find(
+        item => item.bidNo === bidNo && item.bidType === bidType
+      );
       if (!bidStatus && !isEmpty(bidItemToSelect)) {
         changeBidInView(bidItemToSelect);
       }
