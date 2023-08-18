@@ -502,7 +502,8 @@ const SocketContextProvider = props => {
             case 'COMPLETED':
               refreshOpportunity(
                 data.oppId,
-                data.data.proposal.proposalDetails.bidNo
+                data.data.proposal.proposalDetails.bidNo,
+                data.data.proposal.bidType || 'Clinical_Bid'
               );
               break;
             case 'ANSWER_UPDATE':

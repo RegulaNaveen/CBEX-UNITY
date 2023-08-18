@@ -181,6 +181,7 @@ const RecentActivity = ({ setNotifications }) => {
                             data={item.body}
                             isSeen={item.read}
                             createdAt={item.created_date}
+                            jsonBody={item.bodyJson}
                           />
                           <Divider variant="inset" className="divider-wrp" />
                         </td>

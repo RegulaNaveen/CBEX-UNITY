@@ -159,8 +159,8 @@ const BidHistory = () => {
                             onClick={() => {
                               if (
                                 !isQuestionAnswered &&
-                                currentbidNo !== item.bidNo &&
-                                currentBidType !== item.bidType
+                                (currentbidNo !== item.bidNo ||
+                                  currentBidType !== item.bidType)
                               )
                                 dispatch(changeBid(item));
                             }}

@@ -17,7 +17,8 @@ export const getAllNotifications = notification =>
     item.url = onClickLink(
       item.opportunity_no,
       item.id,
-      item.bodyJson?.bidNo || null
+      item.bodyJson?.bidNo || null,
+      item.bodyJson?.bidType || 'Clinical_Bid'
     );
 
     switch (item.preference_code) {
@@ -99,7 +100,8 @@ export const getUnreadNotifications = notification =>
               `<a style="display: inline-block;" target="_blank" href="${onClickLink(
                 item.opportunity_no,
                 item.id,
-                item.bodyJson?.bidNo || null
+                item.bodyJson?.bidNo || null,
+                item.bodyJson?.bidType || 'Clinical_Bid'
               )}">${item.bodyJson.questionText} ${
                 item.bodyJson.questionAnswer
               }</a>`
