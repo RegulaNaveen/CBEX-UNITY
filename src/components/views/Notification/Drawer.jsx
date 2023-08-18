@@ -106,6 +106,7 @@ const Drawer = ({ unreadNotifications, setNotifications }) => {
                         data={item.body}
                         isSeen={item.read}
                         createdAt={item.created_date}
+                        jsonBody={item.bodyJson}
                       />
                     );
                   })
