@@ -57,6 +57,7 @@ describe('ListItem component', () => {
           isSeen={false}
           setSeenOne={notificationActions.setSeenOne}
           createdAt={moment().toISOString()}
+          jsonBody={{ bidNo: 1 }}
         />
       </Provider>
     );
