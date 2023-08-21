@@ -1353,7 +1353,9 @@ const clearEditOppInfo = state => {
 
 const updateOportunityDetailData = (state, action) => {
   const { data } = action.payload;
+  const mapper = OpportunitySFUpDATE;
   let opportunityData = state.get('opportunityData');
+  let selectedbid = state.get('selectedBid');
   let currentProposal = opportunityData.getIn([
     data?.proposalId,
     'proposal',
@@ -1364,12 +1366,32 @@ const updateOportunityDetailData = (state, action) => {
     data &&
     proposalDetail &&
     currentProposal &&
-    currentProposal == data?.proposalId
+    currentProposal == data?.proposalId &&
+    data.sfField
   ) {
-    const mapper = OpportunitySFUpDATE;
     proposalDetail[mapper[data.sfField]] = data.answer;
     return state.set('proposalDetails', { ...proposalDetail });
+  } else if (
+    data &&
+    proposalDetail &&
+    currentProposal &&
+    currentProposal == data?.proposalId &&
+    data?.questionSfField
+  ) {
+    const updatedSelectedbid = selectedbid?.toJS();
+    if (updatedSelectedbid[mapper[data.questionSfField]]) {
+      updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
+    }
+    proposalDetail[mapper[data.questionSfField]] = data.answer;
+    return state
+      .set('selectedBid', Map(updatedSelectedbid))
+      .set('proposalDetails', { ...proposalDetail })
+      .setIn(
+        ['opportunityData', data.proposalId, 'proposal', 'proposalDetails'],
+        proposalDetail
+      );
   }
+
   return state;
 };
 
