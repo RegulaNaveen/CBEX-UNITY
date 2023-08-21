@@ -1,5 +1,6 @@
+/* eslint-disable camelcase */
 // @flow
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable'; // NOSONAR
 // eslint-disable-next-line
 import jwt_decode from 'jwt-decode';
 import type { ApiAction } from '../actions/action-types';
@@ -13,7 +14,10 @@ const {
   ERROR_ON_CHANGE_ROLE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
-  ERROR_ON_GET_LOOKUP_USERS
+  ERROR_ON_GET_LOOKUP_USERS,
+  SET_USER_FAVOURITES,
+  SET_CUSTOM_NAME_MAP,
+  SET_FAVOURITES_UPDATED_DATE
 } = REDUX_TYPES.SSO_AUTH;
 
 const INITIAL_STATE: Map = fromJS({
@@ -24,7 +28,10 @@ const INITIAL_STATE: Map = fromJS({
   role: '',
   errorOnSetNewRole: undefined,
   lookupUsers: [],
-  lookupUsersError: undefined
+  lookupUsersError: undefined,
+  favourites: [],
+  customNameMap: {},
+  favouritesUpdatedDate: []
 });
 
 const loginUser = (state: Map, action: Object) => {
@@ -35,7 +42,9 @@ const loginUser = (state: Map, action: Object) => {
     refresh_token: refreshToken
   } = data;
 
-  const { name, email, family_name: lName } = jwt_decode(idToken);
+  const { name, email, family_name: lName, preferred_username } = jwt_decode(
+    idToken
+  );
   const decoded = jwt_decode(idToken);
   const role = decoded['custom:role'];
 
@@ -45,6 +54,7 @@ const loginUser = (state: Map, action: Object) => {
   localStorage.setItem('userRole', role);
   localStorage.setItem('userEmail', email);
   localStorage.setItem('userName', `${name} ${lName}`);
+  localStorage.setItem('userId', preferred_username);
 
   return state
     .set('isAuthenticated', true)
@@ -98,6 +108,18 @@ const onErrorGetLookupUsers = (state: Map, action: Object): Map => {
   return state.set('lookupUsersError', error);
 };
 
+const setUserFavourites = (state, action) => {
+  return state.set('favourites', fromJS(action.payload));
+};
+
+const setCustomNameMap = (state, action) => {
+  return state.set('customNameMap', fromJS(action.payload));
+};
+
+const setUserFavouritesUpdatedDate = (state, action) => {
+  return state.set('favouritesUpdatedDate', fromJS(action.payload));
+};
+
 const actionMap = {
   [ON_USER_LOGIN]: loginUser,
   [ON_USER_LOGOUT]: logoutUser,
@@ -106,7 +128,10 @@ const actionMap = {
   [ERROR_ON_USER_LOGIN]: errorOnUserLogin,
   [ERROR_ON_CHANGE_ROLE]: errorOnSetNewUserRole,
   [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
-  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers
+  [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers,
+  [SET_USER_FAVOURITES]: setUserFavourites,
+  [SET_CUSTOM_NAME_MAP]: setCustomNameMap,
+  [SET_FAVOURITES_UPDATED_DATE]: setUserFavouritesUpdatedDate,
 };
 
 export default function(

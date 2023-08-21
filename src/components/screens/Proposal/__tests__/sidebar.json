@@ -30,12 +30,12 @@
             },
             "myUserRole": {
                 "checked": false,
-                "label": "My User Role",
+                "label": "Responsible",
                 "className": "questions-filter__row1-col1"
             },
             "interestedParty": {
                 "checked": false,
-                "label": "Interested Party",
+                "label": "Informed",
                 "className": "questions-filter__row2-col1"
             },
             "Challenge Call": {
@@ -53566,7 +53566,7 @@
             }
         }
     },
-    "id": "61682ae3-b186-4200-8bc5-68c1770d7e6b",
+    "id": "86462966-7e94-4648-b1e7-fb908f48eaf0",
     "currentTab": 0,
     "selectedtitle": "",
     "heighlightcard": false,
@@ -53846,5 +53846,18 @@
         "uploadingNote": false,
         "uploadNoteErrorMsg": "",
         "notepadMode": "notepad_mode_default"
+    },
+    "selectedBid": {
+        "questionTemplateVersionNumber": "v2023.12",
+        "agreementId": "aM701000000CbmBCAS",
+        "accountId": "0010100000K3Y1WAAV",
+        "bidName": "Bid 1",
+        "opportunityType": "Opportunity Launch Call (Pilot)",
+        "opportunityId": "0060100000BAJ0tAAH",
+        "isCurrent": true,
+        "bidStatus": false,
+        "pertinentDetails": "Testing",
+        "isApprovalCountPresent": true,
+        "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
     }
 }

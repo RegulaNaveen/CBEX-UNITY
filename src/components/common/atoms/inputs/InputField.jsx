@@ -9,8 +9,7 @@ type Props = {
   id?: string,
   onChange: Function,
   defaultValue?: string,
-  className?: string,
-  value?: string
+  className?: string
 };
 
 const InputField = ({
@@ -21,7 +20,6 @@ const InputField = ({
   id,
   onChange,
   className,
-  value,
   defaultValue
 }: Props) => (
   <>
@@ -42,8 +40,7 @@ InputField.defaultProps = {
   id: undefined,
   title: undefined,
   defaultValue: '',
-  className: '',
-  value: ''
+  className: ''
 };
 
 export default InputField;

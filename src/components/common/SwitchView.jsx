@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
 import { getProposalTypeView } from '../../redux/selectors';
 import MatomoHOC from '../HOC/MatomoHOC';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 type Props = {
   getSelectedTab: (selectedTab: 0 | 1) => void,
@@ -39,21 +40,37 @@ class SwitchView extends Component<Props> {
     const { selectedViewType } = this.props;
 
     return (
-      <div className="switch-view">
-        <button type="button" onClick={this.setViewToList}>
-          <ListView
-            className={classNames('switch-view__icon', {
-              'is-active': selectedViewType === 0
-            })}
-          />
-        </button>
-        <button type="button" onClick={this.setViewToGrid}>
-          <CardView
-            className={classNames('switch-view__icon', {
-              'is-active': selectedViewType === 1
-            })}
-          />
-        </button>
+      <div className="switch-view" data-testid="swicth-view">
+        <Tooltip title="List View" placement="top">
+          <span>
+            <button
+              type="button"
+              onClick={this.setViewToList}
+              data-testid="list-view"
+            >
+              <ListView
+                className={classNames('switch-view__icon', {
+                  'is-active': selectedViewType === 0
+                })}
+              />
+            </button>
+          </span>
+        </Tooltip>
+        <Tooltip title="Grid View" placement="top">
+          <span>
+            <button
+              type="button"
+              onClick={this.setViewToGrid}
+              data-testid="card-view"
+            >
+              <CardView
+                className={classNames('switch-view__icon', {
+                  'is-active': selectedViewType === 1
+                })}
+              />
+            </button>
+          </span>
+        </Tooltip>
       </div>
     );
   }

@@ -1,11 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { isEmpty } from 'lodash';
+import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import TextField from 'apollo-react/components/TextField';
 import { objectContains } from '../../../../utils/helpers';
 import { CloseCircle } from '../../../svg';
+import { getData } from '../../../../api/proposal';
 
 type Props = {
   data: Array<any>,
@@ -15,8 +17,7 @@ type Props = {
   sectionName?: string,
   getSelectedItem: (selectedItem: string) => void,
   withReset?: boolean,
-  className?: string,
-  defaultValue?: string
+  className?: string
 };
 
 type State = {
@@ -32,7 +33,6 @@ class Lookup extends Component<Props, State> {
     withReset: false,
     placeholder: '',
     className: '',
-    defaultValue: '',
     sectionName: '',
     error: false
   };
@@ -57,23 +57,55 @@ class Lookup extends Component<Props, State> {
     });
   }
 
-  onSearching = ({ target: { value } }: SyntheticInputEvent<EventTarget>) => {
-    const { data } = this.props;
-    const searchValue = value && value.slice(value.lastIndexOf(',') + 1).trim();
-    const filteringData = data.filter(item =>
-      objectContains(item, value, false)
-    );
-
-    this.setState(
-      {
-        searchValue: value,
-        filteredData: filteringData,
-        error: !filteringData.length
-      },
-      () => {
-        this._resizeTextBox();
+  fetchData = debounce(async searchTerm => {
+    let updatedOptions = [];
+    try {
+      if (searchTerm && String(searchTerm)?.trim()?.length) {
+        await getData(searchTerm)
+          .then(response => response.json())
+          .then(response => {
+            updatedOptions = response.data.map(p => {
+              return {
+                name: `${p.first_name} ${p.last_name}`,
+                email: p.email.toLowerCase()
+              };
+            });
+          });
+        this.setState({ filteredData: updatedOptions }, () => {
+          this._resizeTextBox();
+        });
+      } else {
+        this.setState({ filteredData: [] }, () => {
+          this._resizeTextBox();
+        });
       }
-    );
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
+  }, 500);
+
+  onSearching = async ({
+    target: { value }
+  }: SyntheticInputEvent<EventTarget>) => {
+    try {
+      const { data } = this.props;
+      const filteringData = data.filter(item =>
+        objectContains(item, value, false)
+      );
+      this.setState(
+        {
+          searchValue: value,
+          error: !filteringData.length
+        },
+        async () => {
+          await this.fetchData(this.state.searchValue);
+          this._resizeTextBox();
+        }
+      );
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
   };
 
   _resizeTextBox = () => {
@@ -93,7 +125,10 @@ class Lookup extends Component<Props, State> {
     const { getSelectedItem, withReset } = this.props;
 
     const { previouslySelectedValue } = this.state;
-    const newValue = ( previouslySelectedValue && previouslySelectedValue.length  ? `${previouslySelectedValue}, ` : '') + textContent;
+    const newValue =
+      (previouslySelectedValue && previouslySelectedValue.length
+        ? `${previouslySelectedValue}, `
+        : '') + textContent;
     this.setState(
       {
         searchValue: textContent,
@@ -137,17 +172,15 @@ class Lookup extends Component<Props, State> {
       withReset,
       placeholder,
       className,
-      defaultValue,
       sectionName
     } = this.props;
 
     return (
       <div
         id="lookup"
-        style={className ? { paddingTop: 3 } : {}}
         className={classNames({ 'is-searching': !isEmpty(filteredData) })}
       >
-        {title && <p>{title}</p>}
+        {title && <p className="input-title">{title}</p>}
         <div className="lookup-wrapper">
           <TextField
             ref={e => (this.textInput = e)}

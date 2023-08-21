@@ -28,7 +28,8 @@ type Props = {
   page: Number,
   numRows: Number,
   setPage: Function,
-  setRows: Function
+  setRows: Function,
+  allFlags: object
 };
 
 type State = {
@@ -43,6 +44,11 @@ class AllTab extends Component<Props, State> {
     this.state = {
       pageContent: []
     };
+  }
+
+  componentDidMount() {
+    const { setRows } = this.props;
+    setRows(15);
   }
 
   componentDidUpdate(prevProps) {
@@ -70,11 +76,11 @@ class AllTab extends Component<Props, State> {
   }
 
   renderSelectedView = () => {
-    const { selectedViewType } = this.props;
+    const { selectedViewType, allFlags } = this.props;
     const { pageContent } = this.state;
 
     if (selectedViewType === 0) return <TableView data={pageContent} />;
-    return <GridView data={pageContent} />;
+    return <GridView data={pageContent} allFlags={allFlags} />;
   };
 
   setPageContent = (pageContent: Array<Object>) =>
@@ -89,11 +95,12 @@ class AllTab extends Component<Props, State> {
       setPage,
       setRows
     } = this.props;
-
+    const proposalCount = isFilteringProposals
+      ? filteredProposals.length
+      : proposals.length;
     const showPagination = isFilteringProposals
       ? !isEmpty(filteredProposals)
       : !isEmpty(proposals);
-
     return loading ? (
       <Loader
         type="TailSpin"
@@ -107,7 +114,7 @@ class AllTab extends Component<Props, State> {
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {showPagination && (
+        {showPagination && proposalCount > 15 && (
           <ComplexPagination
             totalItems={
               isFilteringProposals ? filteredProposals.length : proposals.length
@@ -127,6 +134,7 @@ const mapStateToProps = state => ({
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
   isFilteringProposals: getIsFilteringProposals(state),
+
   page: getPage(state.proposals),
   numRows: getNumOfRows(state.proposals)
 });

@@ -1,0 +1,963 @@
+{
+    "currentTimezoneID": "",
+    "name": "Sushil Munda",
+    "email": "sushil.munda@iqvia.com",
+    "errorUpdatingTimezone": "",
+    "isFetchingTimezone": false,
+    "role": "Business Account Manager",
+    "roleName": "",
+    "timezoneID": 41,
+    "userPreference": [
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.506Z",
+            "default_type": "CHECKED",
+            "description": "",
+            "display_order": 1,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "REAL_TIME",
+            "preference_id": "2fbc583a-7c6e-4d21-be7e-fefbd43fe885",
+            "preference_type": "EMAIL",
+            "title": "Real time email updates",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.506Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.955Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 1,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "ASSIGN_OPPORTUNITY",
+            "preference_id": "29395943-77fe-4740-ae75-c16cb708160b",
+            "preference_type": "NOTIFICATION",
+            "title": "Assigned to an opportunity",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.955Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.528Z",
+            "default_type": "UN-CHECKED",
+            "description": "",
+            "display_order": 2,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "HOURLY",
+            "preference_id": "e6c2131b-36c4-491e-b595-8a9e2796150d",
+            "preference_type": "EMAIL",
+            "title": "Hourly email digest",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.528Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-26T08:30:35.493Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 2,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "NEW_DOCUMENT",
+            "preference_id": "34b98739-6b88-475d-8b32-8b0377133513",
+            "preference_type": "NOTIFICATION",
+            "title": "New document added",
+            "updated_by": "SYSTEM",
+            "updated_date": "2023-01-13T10:42:04.858Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-16T11:11:11.867Z",
+            "default_type": "UN-CHECKED",
+            "description": "",
+            "display_order": 3,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "ONCE_DAILY",
+            "preference_id": "085d58ef-5d66-49ae-af7f-30734d07e676",
+            "preference_type": "EMAIL",
+            "title": "Once daily email digest",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-16T11:11:11.867Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-09-29T10:10:09.841Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 3,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "NOTEPAD_TAG",
+            "preference_id": "1b161c88-a335-4738-9381-163a1ab6644d",
+            "preference_type": "NOTIFICATION",
+            "title": "Tagged in Notepad",
+            "updated_by": "SYSTEM",
+            "updated_date": "2022-09-29T10:10:09.841Z",
+            "visible": true
+        },
+        {
+            "created_by": "SYSTEM",
+            "created_date": "2022-11-29T14:03:55.008Z",
+            "default_type": "BOTH",
+            "description": "",
+            "display_order": 3,
+            "is_deleted": false,
+            "mandatory": "FALSE",
+            "preference_code": "ANSWER_TAG",
+            "preference_id": "0aef0893-3899-4ea6-9bf3-06ef7267102f",
+            "preference_type": "NOTIFICATION",
+            "title": "Tagged in Answer",
+            "updated_by": "SYSTEM",
+            "updated_date": "2023-01-23T09:39:33.987Z",
+            "visible": true
+        }
+    ],
+    "proposal": {
+        "isRolesLoading": false
+    },
+    "timezoneList": [
+        {
+            "time_zone_id": 1,
+            "description": "(UTC-12:00) International Date Line West",
+            "offset_hours": -12,
+            "time_zone": "Etc/GMT+12"
+        },
+        {
+            "time_zone_id": 2,
+            "description": "(UTC-11:00) Coordinated Universal Time-11",
+            "offset_hours": -11,
+            "time_zone": "Etc/GMT+11"
+        },
+        {
+            "time_zone_id": 3,
+            "description": "(UTC-10:00) Aleutian Islands",
+            "offset_hours": -10,
+            "time_zone": "Pacific/Honolulu"
+        },
+        {
+            "time_zone_id": 4,
+            "description": "(UTC-10:00) Hawaii",
+            "offset_hours": -10,
+            "time_zone": "Pacific/Honolulu"
+        },
+        {
+            "time_zone_id": 5,
+            "description": "(UTC-09:30) Marquesas Islands",
+            "offset_hours": -9.5,
+            "time_zone": "Pacific/Marquesas"
+        },
+        {
+            "time_zone_id": 6,
+            "description": "(UTC-09:00) Alaska",
+            "offset_hours": -9,
+            "time_zone": "Pacific/Gambier"
+        },
+        {
+            "time_zone_id": 7,
+            "description": "(UTC-09:00) Coordinated Universal Time-09",
+            "offset_hours": -9,
+            "time_zone": "Pacific/Gambier"
+        },
+        {
+            "time_zone_id": 8,
+            "description": "(UTC-08:00) Baja California",
+            "offset_hours": -8,
+            "time_zone": "US/Alaska"
+        },
+        {
+            "time_zone_id": 9,
+            "description": "(UTC-08:00) Coordinated Universal Time-08",
+            "offset_hours": -8,
+            "time_zone": "US/Alaska"
+        },
+        {
+            "time_zone_id": 10,
+            "description": "(UTC-08:00) Pacific Time (US & Canada)",
+            "offset_hours": -8,
+            "time_zone": "US/Alaska"
+        },
+        {
+            "time_zone_id": 11,
+            "description": "(UTC-07:00) Arizona",
+            "offset_hours": -7,
+            "time_zone": "America/Phoenix"
+        },
+        {
+            "time_zone_id": 12,
+            "description": "(UTC-07:00) Chihuahua, La Paz, Mazatlan",
+            "offset_hours": -7,
+            "time_zone": "America/Phoenix"
+        },
+        {
+            "time_zone_id": 13,
+            "description": "(UTC-07:00) Mountain Time (US & Canada)",
+            "offset_hours": -7,
+            "time_zone": "America/Phoenix"
+        },
+        {
+            "time_zone_id": 14,
+            "description": "(UTC-07:00) Yukon",
+            "offset_hours": -7,
+            "time_zone": "America/Phoenix"
+        },
+        {
+            "time_zone_id": 15,
+            "description": "(UTC-06:00) Central America",
+            "offset_hours": -6,
+            "time_zone": "America/Denver"
+        },
+        {
+            "time_zone_id": 16,
+            "description": "(UTC-06:00) Central Time (US & Canada)",
+            "offset_hours": -6,
+            "time_zone": "America/Denver"
+        },
+        {
+            "time_zone_id": 17,
+            "description": "(UTC-06:00) Easter Island",
+            "offset_hours": -6,
+            "time_zone": "America/Denver"
+        },
+        {
+            "time_zone_id": 18,
+            "description": "(UTC-06:00) Guadalajara, Mexico City, Monterrey",
+            "offset_hours": -6,
+            "time_zone": "America/Denver"
+        },
+        {
+            "time_zone_id": 19,
+            "description": "(UTC-06:00) Saskatchewan",
+            "offset_hours": -6,
+            "time_zone": "America/Denver"
+        },
+        {
+            "time_zone_id": 20,
+            "description": "(UTC-05:00) Bogota, Lima, Quito, Rio Branco",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 21,
+            "description": "(UTC-05:00) Chetumal",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 22,
+            "description": "(UTC-05:00) Eastern Time (US & Canada)",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 23,
+            "description": "(UTC-05:00) Haiti",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 24,
+            "description": "(UTC-05:00) Havana",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 25,
+            "description": "(UTC-05:00) Indiana (East)",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 26,
+            "description": "(UTC-05:00) Turks and Caicos",
+            "offset_hours": -5,
+            "time_zone": "America/Atikokan"
+        },
+        {
+            "time_zone_id": 27,
+            "description": "(UTC-04:00) Asuncion",
+            "offset_hours": -4,
+            "time_zone": "America/Antigua"
+        },
+        {
+            "time_zone_id": 28,
+            "description": "(UTC-04:00) Atlantic Time (Canada)",
+            "offset_hours": -4,
+            "time_zone": "America/Antigua"
+        },
+        {
+            "time_zone_id": 29,
+            "description": "(UTC-04:00) Caracas",
+            "offset_hours": -4,
+            "time_zone": "America/Antigua"
+        },
+        {
+            "time_zone_id": 30,
+            "description": "(UTC-04:00) Cuiaba",
+            "offset_hours": -4,
+            "time_zone": "America/Antigua"
+        },
+        {
+            "time_zone_id": 31,
+            "description": "(UTC-04:00) Georgetown, La Paz, Manaus, San Juan",
+            "offset_hours": -4,
+            "time_zone": "America/Antigua"
+        },
+        {
+            "time_zone_id": 32,
+            "description": "(UTC-04:00) Santiago",
+            "offset_hours": -4,
+            "time_zone": "America/Antigua"
+        },
+        {
+            "time_zone_id": 33,
+            "description": "(UTC-03:30) Newfoundland",
+            "offset_hours": -3.5,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 34,
+            "description": "(UTC-03:00) Araguaina",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 35,
+            "description": "(UTC-03:00) Brasilia",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 36,
+            "description": "(UTC-03:00) Cayenne, Fortaleza",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 37,
+            "description": "(UTC-03:00) City of Buenos Aires",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 38,
+            "description": "(UTC-03:00) Greenland",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 39,
+            "description": "(UTC-03:00) Montevideo",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 40,
+            "description": "(UTC-03:00) Punta Arenas",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 41,
+            "description": "(UTC-03:00) Saint Pierre and Miquelon",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 42,
+            "description": "(UTC-03:00) Salvador",
+            "offset_hours": -3,
+            "time_zone": "America/Argentina/Buenos_Aires"
+        },
+        {
+            "time_zone_id": 43,
+            "description": "(UTC-02:00) Coordinated Universal Time-02",
+            "offset_hours": -2,
+            "time_zone": "Brazil/DeNoronha"
+        },
+        {
+            "time_zone_id": 44,
+            "description": "(UTC-01:00) Azores",
+            "offset_hours": -1,
+            "time_zone": "Atlantic/Cape_Verde"
+        },
+        {
+            "time_zone_id": 45,
+            "description": "(UTC-01:00) Cabo Verde Is.",
+            "offset_hours": -1,
+            "time_zone": "Atlantic/Cape_Verde"
+        },
+        {
+            "time_zone_id": 46,
+            "description": "(UTC) Coordinated Universal Time",
+            "offset_hours": 0,
+            "time_zone": "Atlantic/Azores"
+        },
+        {
+            "time_zone_id": 47,
+            "description": "(UTC+00:00) Dublin, Edinburgh, Lisbon, London",
+            "offset_hours": 0,
+            "time_zone": "Atlantic/Azores"
+        },
+        {
+            "time_zone_id": 48,
+            "description": "(UTC+00:00) Monrovia, Reykjavik",
+            "offset_hours": 0,
+            "time_zone": "Atlantic/Azores"
+        },
+        {
+            "time_zone_id": 49,
+            "description": "(UTC+00:00) Sao Tome",
+            "offset_hours": 0,
+            "time_zone": "Atlantic/Azores"
+        },
+        {
+            "time_zone_id": 50,
+            "description": "(UTC+01:00) Casablanca",
+            "offset_hours": 1,
+            "time_zone": "Europe/London"
+        },
+        {
+            "time_zone_id": 51,
+            "description": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+            "offset_hours": 1,
+            "time_zone": "Europe/London"
+        },
+        {
+            "time_zone_id": 52,
+            "description": "(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+            "offset_hours": 1,
+            "time_zone": "Europe/London"
+        },
+        {
+            "time_zone_id": 53,
+            "description": "(UTC+01:00) Brussels, Copenhagen, Madrid, Paris",
+            "offset_hours": 1,
+            "time_zone": "Europe/London"
+        },
+        {
+            "time_zone_id": 54,
+            "description": "(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb",
+            "offset_hours": 1,
+            "time_zone": "Europe/London"
+        },
+        {
+            "time_zone_id": 55,
+            "description": "(UTC+01:00) West Central Africa",
+            "offset_hours": 1,
+            "time_zone": "Europe/London"
+        },
+        {
+            "time_zone_id": 56,
+            "description": "(UTC+02:00) Amman",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 57,
+            "description": "(UTC+02:00) Athens, Bucharest",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 58,
+            "description": "(UTC+02:00) Beirut",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 59,
+            "description": "(UTC+02:00) Cairo",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 60,
+            "description": "(UTC+02:00) Chisinau",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 61,
+            "description": "(UTC+02:00) Damascus",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 62,
+            "description": "(UTC+02:00) Gaza, Hebron",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 63,
+            "description": "(UTC+02:00) Harare, Pretoria",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 64,
+            "description": "(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 65,
+            "description": "(UTC+02:00) Jerusalem",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 66,
+            "description": "(UTC+02:00) Juba",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 67,
+            "description": "(UTC+02:00) Kaliningrad",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 68,
+            "description": "(UTC+02:00) Khartoum",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 69,
+            "description": "(UTC+02:00) Tripoli",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 70,
+            "description": "(UTC+02:00) Windhoek",
+            "offset_hours": 2,
+            "time_zone": "Etc/GMT-2"
+        },
+        {
+            "time_zone_id": 71,
+            "description": "(UTC+03:00) Baghdad",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 72,
+            "description": "(UTC+03:00) Istanbul",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 73,
+            "description": "(UTC+03:00) Kuwait, Riyadh",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 74,
+            "description": "(UTC+03:00) Minsk",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 75,
+            "description": "(UTC+03:00) Moscow, St. Petersburg",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 76,
+            "description": "(UTC+03:00) Nairobi",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 77,
+            "description": "(UTC+03:00) Volgograd",
+            "offset_hours": 3,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 78,
+            "description": "(UTC+03:30) Tehran",
+            "offset_hours": 3.5,
+            "time_zone": "Europe/Bucharest"
+        },
+        {
+            "time_zone_id": 79,
+            "description": "(UTC+04:00) Abu Dhabi, Muscat",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 80,
+            "description": "(UTC+04:00) Astrakhan, Ulyanovsk",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 81,
+            "description": "(UTC+04:00) Baku",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 82,
+            "description": "(UTC+04:00) Izhevsk, Samara",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 83,
+            "description": "(UTC+04:00) Port Louis",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 84,
+            "description": "(UTC+04:00) Saratov",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 85,
+            "description": "(UTC+04:00) Tbilisi",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 86,
+            "description": "(UTC+04:00) Yerevan",
+            "offset_hours": 4,
+            "time_zone": "Asia/Dubai"
+        },
+        {
+            "time_zone_id": 87,
+            "description": "(UTC+04:30) Kabul",
+            "offset_hours": 4.5,
+            "time_zone": "Asia/Kabul"
+        },
+        {
+            "time_zone_id": 88,
+            "description": "(UTC+05:00) Ashgabat, Tashkent",
+            "offset_hours": 5,
+            "time_zone": "Asia/Karachi"
+        },
+        {
+            "time_zone_id": 89,
+            "description": "(UTC+05:00) Ekaterinburg",
+            "offset_hours": 5,
+            "time_zone": "Asia/Karachi"
+        },
+        {
+            "time_zone_id": 90,
+            "description": "(UTC+05:00) Islamabad, Karachi",
+            "offset_hours": 5,
+            "time_zone": "Asia/Karachi"
+        },
+        {
+            "time_zone_id": 91,
+            "description": "(UTC+05:00) Qyzylorda",
+            "offset_hours": 5,
+            "time_zone": "Asia/Karachi"
+        },
+        {
+            "time_zone_id": 92,
+            "description": "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+            "offset_hours": 5.5,
+            "time_zone": "Asia/Kolkata"
+        },
+        {
+            "time_zone_id": 93,
+            "description": "(UTC+05:30) Sri Jayawardenepura",
+            "offset_hours": 5.5,
+            "time_zone": "Asia/Kolkata"
+        },
+        {
+            "time_zone_id": 94,
+            "description": "(UTC+05:45) Kathmandu",
+            "offset_hours": 5.7,
+            "time_zone": "Asia/Katmandu"
+        },
+        {
+            "time_zone_id": 95,
+            "description": "(UTC+06:00) Astana",
+            "offset_hours": 6,
+            "time_zone": "Asia/Dhaka"
+        },
+        {
+            "time_zone_id": 96,
+            "description": "(UTC+06:00) Dhaka",
+            "offset_hours": 6,
+            "time_zone": "Asia/Dhaka"
+        },
+        {
+            "time_zone_id": 97,
+            "description": "(UTC+06:00) Omsk",
+            "offset_hours": 6,
+            "time_zone": "Asia/Dhaka"
+        },
+        {
+            "time_zone_id": 98,
+            "description": "(UTC+06:30) Yangon (Rangoon)",
+            "offset_hours": 6.5,
+            "time_zone": "Rangoon"
+        },
+        {
+            "time_zone_id": 99,
+            "description": "(UTC+07:00) Bangkok, Hanoi, Jakarta",
+            "offset_hours": 7,
+            "time_zone": "Asia/Bangkok"
+        },
+        {
+            "time_zone_id": 100,
+            "description": "(UTC+07:00) Barnaul, Gorno-Altaysk",
+            "offset_hours": 7,
+            "time_zone": "Asia/Barnaul"
+        },
+        {
+            "time_zone_id": 101,
+            "description": "(UTC+07:00) Hovd",
+            "offset_hours": 7,
+            "time_zone": "Asia/Hovd"
+        },
+        {
+            "time_zone_id": 102,
+            "description": "(UTC+07:00) Krasnoyarsk",
+            "offset_hours": 7,
+            "time_zone": "Asia/Krasnoyarsk"
+        },
+        {
+            "time_zone_id": 103,
+            "description": "(UTC+07:00) Novosibirsk",
+            "offset_hours": 7,
+            "time_zone": "Asia/Novosibirsk"
+        },
+        {
+            "time_zone_id": 104,
+            "description": "(UTC+07:00) Tomsk",
+            "offset_hours": 7,
+            "time_zone": "Asia/Tomsk"
+        },
+        {
+            "time_zone_id": 105,
+            "description": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+            "offset_hours": 8,
+            "time_zone": "Asia/Chongqing"
+        },
+        {
+            "time_zone_id": 106,
+            "description": "(UTC+08:00) Irkutsk",
+            "offset_hours": 8,
+            "time_zone": "Asia/Irkutsk"
+        },
+        {
+            "time_zone_id": 107,
+            "description": "(UTC+08:00) Kuala Lumpur, Singapore",
+            "offset_hours": 8,
+            "time_zone": "Asia/Irkutsk"
+        },
+        {
+            "time_zone_id": 108,
+            "description": "(UTC+08:00) Perth",
+            "offset_hours": 8,
+            "time_zone": "Asia/Irkutsk"
+        },
+        {
+            "time_zone_id": 109,
+            "description": "(UTC+08:00) Taipei",
+            "offset_hours": 8,
+            "time_zone": "Asia/Irkutsk"
+        },
+        {
+            "time_zone_id": 110,
+            "description": "(UTC+08:00) Ulaanbaatar",
+            "offset_hours": 8,
+            "time_zone": "Asia/Irkutsk"
+        },
+        {
+            "time_zone_id": 111,
+            "description": "(UTC+08:45) Eucla",
+            "offset_hours": 8.7,
+            "time_zone": "Australia/Eucla"
+        },
+        {
+            "time_zone_id": 112,
+            "description": "(UTC+09:00) Chita",
+            "offset_hours": 9,
+            "time_zone": "Asia/Tokyo"
+        },
+        {
+            "time_zone_id": 113,
+            "description": "(UTC+09:00) Osaka, Sapporo, Tokyo",
+            "offset_hours": 9,
+            "time_zone": "Asia/Tokyo"
+        },
+        {
+            "time_zone_id": 114,
+            "description": "(UTC+09:00) Pyongyang",
+            "offset_hours": 9,
+            "time_zone": "Asia/Tokyo"
+        },
+        {
+            "time_zone_id": 115,
+            "description": "(UTC+09:00) Seoul",
+            "offset_hours": 9,
+            "time_zone": "Asia/Tokyo"
+        },
+        {
+            "time_zone_id": 116,
+            "description": "(UTC+09:00) Yakutsk",
+            "offset_hours": 9,
+            "time_zone": "Asia/Tokyo"
+        },
+        {
+            "time_zone_id": 117,
+            "description": "(UTC+09:30) Adelaide",
+            "offset_hours": 9.5,
+            "time_zone": "Australia/South"
+        },
+        {
+            "time_zone_id": 118,
+            "description": "(UTC+09:30) Darwin",
+            "offset_hours": 9.5,
+            "time_zone": "Australia/South"
+        },
+        {
+            "time_zone_id": 119,
+            "description": "(UTC+10:00) Brisbane",
+            "offset_hours": 10,
+            "time_zone": "Australia/Sydney"
+        },
+        {
+            "time_zone_id": 120,
+            "description": "(UTC+10:00) Canberra, Melbourne, Sydney",
+            "offset_hours": 10,
+            "time_zone": "Australia/Sydney"
+        },
+        {
+            "time_zone_id": 121,
+            "description": "(UTC+10:00) Guam, Port Moresby",
+            "offset_hours": 10,
+            "time_zone": "Australia/Sydney"
+        },
+        {
+            "time_zone_id": 122,
+            "description": "(UTC+10:00) Hobart",
+            "offset_hours": 10,
+            "time_zone": "Australia/Sydney"
+        },
+        {
+            "time_zone_id": 123,
+            "description": "(UTC+10:00) Vladivostok",
+            "offset_hours": 10,
+            "time_zone": "Australia/Sydney"
+        },
+        {
+            "time_zone_id": 124,
+            "description": "(UTC+10:30) Lord Howe Island",
+            "offset_hours": 10.5,
+            "time_zone": "Australia/Lord_Howe"
+        },
+        {
+            "time_zone_id": 125,
+            "description": "(UTC+11:00) Bougainville Island",
+            "offset_hours": 11,
+            "time_zone": "Pacific/Norfolk"
+        },
+        {
+            "time_zone_id": 126,
+            "description": "(UTC+11:00) Chokurdakh",
+            "offset_hours": 11,
+            "time_zone": "Pacific/Norfolk"
+        },
+        {
+            "time_zone_id": 127,
+            "description": "(UTC+11:00) Magadan",
+            "offset_hours": 11,
+            "time_zone": "Pacific/Norfolk"
+        },
+        {
+            "time_zone_id": 128,
+            "description": "(UTC+11:00) Norfolk Island",
+            "offset_hours": 11,
+            "time_zone": "Pacific/Norfolk"
+        },
+        {
+            "time_zone_id": 129,
+            "description": "(UTC+11:00) Sakhalin",
+            "offset_hours": 11,
+            "time_zone": "Pacific/Norfolk"
+        },
+        {
+            "time_zone_id": 130,
+            "description": "(UTC+11:00) Solomon Is., New Caledonia",
+            "offset_hours": 11,
+            "time_zone": "Pacific/Norfolk"
+        },
+        {
+            "time_zone_id": 131,
+            "description": "(UTC+12:00) Anadyr, Petropavlovsk-Kamchatsky",
+            "offset_hours": 12,
+            "time_zone": "Pacific/Auckland"
+        },
+        {
+            "time_zone_id": 132,
+            "description": "(UTC+12:00) Auckland, Wellington",
+            "offset_hours": 12,
+            "time_zone": "Pacific/Auckland"
+        },
+        {
+            "time_zone_id": 133,
+            "description": "(UTC+12:00) Coordinated Universal Time+12",
+            "offset_hours": 12,
+            "time_zone": "Pacific/Auckland"
+        },
+        {
+            "time_zone_id": 134,
+            "description": "(UTC+12:00) Fiji",
+            "offset_hours": 12,
+            "time_zone": "Pacific/Auckland"
+        },
+        {
+            "time_zone_id": 135,
+            "description": "(UTC+12:45) Chatham Islands",
+            "offset_hours": 12.7,
+            "time_zone": "NZ-CHAT"
+        },
+        {
+            "time_zone_id": 136,
+            "description": "(UTC+13:00) Coordinated Universal Time+13",
+            "offset_hours": 13,
+            "time_zone": "Pacific/Apia"
+        },
+        {
+            "time_zone_id": 137,
+            "description": "(UTC+13:00) Nuku'alofa",
+            "offset_hours": 13,
+            "time_zone": "Pacific/Apia"
+        },
+        {
+            "time_zone_id": 138,
+            "description": "(UTC+13:00) Samoa",
+            "offset_hours": 13,
+            "time_zone": "Pacific/Apia"
+        },
+        {
+            "time_zone_id": 139,
+            "description": "(UTC+14:00) Kiritimati Island",
+            "offset_hours": 14,
+            "time_zone": "Pacific/Kiritimati"
+        }
+    ]
+}

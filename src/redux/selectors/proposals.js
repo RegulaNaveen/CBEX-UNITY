@@ -1,5 +1,5 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import { isEmpty } from 'lodash';
 
 export const getProposals = (proposals: Map): Array<Object> => {
@@ -23,6 +23,13 @@ export const getFilteredProposals = (proposals: Map): Map => {
 
   return notEmptyProposals;
 };
+export const getFavouriteProposals = (proposals: Map): Map => {
+  const notEmptyProposals = !isEmpty(proposals.get('favouriteProposals'))
+    ? proposals.get('favouriteProposals').filter(proposal => !isEmpty(proposal))
+    : [];
+
+  return notEmptyProposals;
+};
 
 export const getIsFilteringProposals = (proposals: Map): boolean =>
   proposals.get('isFiltering');
@@ -34,3 +41,8 @@ export const getPage = (proposals: Map): Object => proposals.get('page');
 
 export const getNumOfRows = (proposals: Map): Object =>
   proposals.get('numRows');
+
+export const getAssignedTabNumOfRows = (proposals: Map): Object =>
+  proposals.get('assignTabRows');
+export const getnoneditableField = (proposals: Map): Object =>
+  proposals.get('nonEditableSF');

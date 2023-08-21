@@ -1,6 +1,8 @@
 // @flow
 import Checkmark from './Checkmark';
 import Edit from './Edit';
+import Outgoing from './Outgoing';
+import Incoming from './Incoming';
 import Add from './Add';
 import DropMenu from './DropMenu';
 import Bell from './Bell';
@@ -29,10 +31,14 @@ import Info from './Info';
 import ReportIssue from './ReportIssue';
 import Pencil from './Pencil';
 import Globe from './Globe';
+import CalendarWithNum from './CalendarWithNum';
+import CalendarWithMinus from './CalendarWithMinus';
 
 export {
   Checkmark,
   Edit,
+  Outgoing,
+  Incoming,
   Add,
   DropMenu,
   Bell,
@@ -60,5 +66,7 @@ export {
   Info,
   ReportIssue,
   Pencil,
-  Globe
+  Globe,
+  CalendarWithNum,
+  CalendarWithMinus
 };

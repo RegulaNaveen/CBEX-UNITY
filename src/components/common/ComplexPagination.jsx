@@ -69,16 +69,17 @@ class ComplexPagination extends Component<Props, State> {
     };
 
     return (
-      <div className="cmplx">
+      <div className="cmplx" data-testid="complex-pagination">
         <div className="cmplx__rows">
-          <p>Rows</p>
+          <p>Show</p>
           <div className="cmplx__dd__container">
             <Dropwdown
               value={maxRows.toString()}
               onClick={this.setMaxRows}
-              items={[15, 20, 50]}
+              items={[15, 30, 45]}
             />
           </div>
+          <span style={{ paddingLeft: 5 }}>Opportunities per page</span>
         </div>
         <p className="cmplx__items">{handleCountItems()}</p>
         <Pagination

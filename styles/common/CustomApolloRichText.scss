@@ -1,0 +1,259 @@
+@mixin popoverStyle {
+  display: inline-flex;
+  position: absolute;
+  right: -30px;
+  bottom: calc(100% + 6px);
+}
+@mixin popoverStyleCustomTab {
+  display: inline-flex;
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+}
+
+.custom-rich-text {
+  border: $border;
+  position: relative;
+  box-sizing: content-box;
+  border-radius: 0.25rem;
+  transition-duration: 0.2s;
+  transition-property: border-color;
+  transition-timing-function: linear;
+  transition-delay: 0.2s;
+  background: $white;
+
+  &:hover {
+    border-color: $neptune-primary;
+  }
+
+  &.disabled {
+    background-color: $neutral2;
+    border-color: $border-color-disabled;
+    opacity: 0.8;
+
+    &:hover {
+      border-color: $neutral4;
+    }
+  }
+
+  .custom-rich-text-inner {
+    min-height: 38px;
+    overflow: auto;
+    resize: vertical;
+  }
+
+  [class*='RichEditor-editor'] {
+    padding: 0;
+  }
+
+  &.readonly {
+    display: block;
+
+    [class*='public-DraftEditorPlaceholder-root'] {
+      padding-top: 8px;
+    }
+
+    [class*='DraftEditor-editorContainer'] {
+      cursor: pointer;
+    }
+
+    &.disabled {
+      [class*='DraftEditor-editorContainer'] {
+        cursor: not-allowed !important;
+      }
+    }
+  }
+
+  &.popover {
+    display: block;
+
+    .popover-inner {
+      & > div {
+        & > div:nth-child(1) {
+          @include popoverStyle;
+
+          & > div:nth-child(1) {
+            .MuiSvgIcon-root {
+              margin-right: 1px;
+              color: $neutral7 !important;
+            }
+          }
+          & > div:nth-child(2) {
+            width: 17rem;
+            transition: none;
+            .MuiInputBase-input {
+              font: inherit;
+              color: $black;
+              width: 100%;
+              border: 1px solid #d9d9d9;
+              height: 40px;
+              margin: 0;
+              display: block;
+              padding: 8px 8px 8px 7px;
+              min-width: 0;
+              background: none;
+              box-sizing: border-box;
+              line-height: 1.5;
+              border-radius: 4px;
+              animation-name: mui-auto-fill-cancel;
+              letter-spacing: inherit;
+              animation-duration: 10ms;
+              transition-duration: 0.4s;
+              transition-property: border-color;
+              -webkit-tap-highlight-color: transparent;
+            }
+          }
+        }
+      }
+    }
+    .popover-inner-custom-tab {
+      & > div {
+        & > div:nth-child(1) {
+          @include popoverStyleCustomTab;
+
+          & > div:nth-child(1) {
+            .MuiSvgIcon-root {
+              margin-right: 1px;
+              color: $neutral7 !important;
+            }
+          }
+          & > div:nth-child(2) {
+            width: 17rem;
+            transition: none;
+            .MuiInputBase-input {
+              font: inherit;
+              color: $black;
+              width: 100%;
+              border: 1px solid #d9d9d9;
+              height: 40px;
+              margin: 0;
+              display: block;
+              padding: 8px 8px 8px 7px;
+              min-width: 0;
+              background: none;
+              box-sizing: border-box;
+              line-height: 1.5;
+              border-radius: 4px;
+              animation-name: mui-auto-fill-cancel;
+              letter-spacing: inherit;
+              animation-duration: 10ms;
+              transition-duration: 0.4s;
+              transition-property: border-color;
+              -webkit-tap-highlight-color: transparent;
+            }
+          }
+        }
+      }
+    }
+
+    .style-button-group {
+      .icon-button {
+        height: 2.375rem;
+        width: 2.375rem;
+      }
+    }
+
+    [class*='RichEditor-editor'] {
+      border: none;
+      font-family: $proximaNova;
+
+      [class*='public-DraftEditorPlaceholder-root'] {
+        padding-top: 8px;
+      }
+
+      [class*='DraftEditor-root'] {
+        border: none;
+        line-height: inherit;
+        resize: none;
+
+        [class*='DraftEditor-editorContainer'] {
+          padding: 0;
+        }
+      }
+    }
+  }
+}
+
+.custom-rich-text.popover .question-customer-right > div > div:nth-child(1) {
+  right: 0;
+  bottom: calc(100% + 3px) !important;
+}
+
+.custom-rich-text-inner {
+  &.popover-inner {
+    & > div {
+      & > div:nth-child(1) {
+        display: none !important;
+      }
+    }
+
+    &.focused {
+      & > div {
+        & > div:nth-child(1) {
+          display: inline-flex !important;
+        }
+      }
+    }
+  }
+}
+
+/* CSS for the modal container (overlay) */
+/* CSS for the modal */
+.link-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.link-modal {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 30px;
+  max-width: 500px; /* Increase the max-width to make the modal bigger */
+  // text-align: center;
+  border-radius: 8px; /* Add border radius for rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a box shadow for depth */
+  height: 12rem;
+  width: 24rem;
+  display: grid;
+}
+
+/* CSS for the modal actions (buttons) */
+.link-modal-actions {
+  margin-top: 20px; /* Add more space between the content and buttons */
+  display: flex;
+  justify-content: flex-end;
+}
+
+.link-modal-actions button {
+  margin: 0 5px; /* Reduce the space between buttons */
+  padding: 0px 20px; /* Decrease the padding for smaller buttons */
+  font-size: 14px; /* Increase padding for larger buttons */
+  color: white; /* Text color for buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(7, 104, 253);
+}
+.link-modal-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 2px solid #d9d9d9;
+  border-radius: 3px;
+  padding-left: 10px;
+  margin-top: -13px;
+  &:focus {
+    border-color: #0768fd;
+    transition-duration: 0.2s;
+    transition-property: border-color;
+    outline: none !important;
+  }
+}

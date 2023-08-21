@@ -1,13 +1,36 @@
 // @flow
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Folder, Clipboard, RightArrow } from '../svg';
-import { OPPORTUNITY } from '../../routes';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import ThumbsUp from 'apollo-react-icons/ThumbsUp';
+import CalenderWithNumber from '../svg/CalenderWithNumber';
 import House from 'apollo-react-icons/House';
+import { Folder } from '../svg';
+import { OPPORTUNITY } from '../../routes';
+import Favourite from '../common/atoms/Favourite';
+import { toggleFavourite } from '../../api/sso-auth';
+import CircularProgress from '@mui/material/CircularProgress';
+import { updateFavourite } from '../../redux/actions/sso-auth-actions';
+import featureFlags from '../../constants/featureFlags';
+import { SocketContext } from '../../context/SocketContext';
+import { saveRecentOppActivity } from '../../api/proposals';
+import Tooltip from 'apollo-react/components/Tooltip';
+import CustomTooltip from './customTooltip';
+import Minus from 'apollo-react-icons/Minus';
+import Typography from 'apollo-react/components/Typography';
+import Pencil from '../common/atoms/Pencil';
+import {
+  onEditCustomName,
+  toggleEditCustomNameModal
+} from '../../redux/actions/proposal-actions';
+import classNames from 'classnames';
 
 type Props = {
   title: string,
   opportunityName: string,
+  opportunityStage: string,
+  bidNo: string,
   daysRemain: number | string,
   dueDate: string,
   customer: string,
@@ -15,7 +38,17 @@ type Props = {
   phase: string,
   therapeuticArea: string,
   verbatimIndication: string,
-  proposalId: string
+  proposalId: string,
+  approvalsCount: any,
+  isApprovalCountPresent: Boolean,
+  allFlags: Object,
+  bidStatus: boolean,
+  favourite: boolean,
+  bidStopStatus: boolean,
+  customName: string,
+  proposalDetails: Object,
+  tabIndex: number,
+  nextMilestone: string
 };
 
 const ProposalCard = ({
@@ -25,97 +58,229 @@ const ProposalCard = ({
   dueDate,
   customer,
   protocolNumber,
+  opportunityStage,
+  bidNo,
   phase,
   therapeuticArea,
   verbatimIndication,
-  proposalId
+  proposalId,
+  approvalsCount,
+  isApprovalCountPresent,
+  allFlags,
+  favourite,
+  bidStopStatus,
+  proposalDetails,
+  tabIndex,
+  customName,
+  nextMilestone
 }: Props) => {
+  const [favInProgress, setFavInProgress] = useState(false);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+
+  const dispatch = useDispatch();
+  const { updateFavouriteWrapper } = useContext(SocketContext);
+
   function setProposalTypeView({
     currentTarget
   }: SyntheticEvent<HTMLButtonElement>) {
     const { id } = currentTarget;
     localStorage.setItem('proposalTypeView', id);
   }
+  const NO_DATA = 'No data';
+  const NO_DATA_PLACEHOLDER = 'no-data-placeholder';
+  const CLASS_SECTION_DATA = 'section-data';
+
+  const checkNoDataClass = (keyToCheck: string) =>
+    keyToCheck === NO_DATA ? NO_DATA_PLACEHOLDER : undefined;
+
+  async function onFavouriteToggle(favourite) {
+    try {
+      setFavInProgress(true);
+      const favouriteUpdatedDate = moment().format();
+      proposalDetails['nextMilestone'] = nextMilestone;
+      const toggleFavouriteRes = await toggleFavourite(title, favourite);
+      updateFavouriteWrapper(
+        title,
+        favourite,
+        favouriteUpdatedDate,
+        proposalDetails
+      );
+      const obj = {
+        url: `${window.location.origin}/opportunities/${title}`,
+        oppNo: title,
+        type: 'opportunity page'
+      };
+      saveRecentOppActivity(obj);
+      if (toggleFavouriteRes && toggleFavouriteRes.data) {
+        await dispatch(
+          updateFavourite(
+            title,
+            favourite,
+            favouriteUpdatedDate,
+            proposalDetails
+          )
+        );
+      }
+    } catch (e) {
+      console.error(`Error in updating favourite for ${title}`, e);
+    } finally {
+      setFavInProgress(false);
+    }
+  }
+
+  function handleEditCustomName() {
+    dispatch(onEditCustomName(title, customName));
+    dispatch(toggleEditCustomNameModal(true));
+  }
 
   return (
     <div className="card">
       <div className="header-section">
         <div>
-          <p
-            className={title === 'No data' ? 'no-data-placeholder' : undefined}
+          <p className={checkNoDataClass(title)}>{title}</p>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'auto 1fr',
+              alignItems: 'center'
+            }}
           >
-            {title}
-          </p>
-          <p
-            className={
-              opportunityName === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {opportunityName}
-          </p>
+            <Typography
+              variant="body1"
+              className={classNames({
+                greytext: true,
+                NO_DATA_PLACEHOLDER: opportunityName === NO_DATA
+              })}
+              style={{ paddingRight: '.5rem' }}
+              noWrap
+              title={(opportunityName !== NO_DATA && opportunityName) || ''}
+            >
+              {opportunityName}
+            </Typography>
+          </div>
+          {flags[featureFlags.CUSTOM_NAME_FLAG] ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                alignItems: 'center'
+              }}
+            >
+              <Tooltip
+                title={customName || ''}
+                placement="top"
+                style={{ marginLeft: 48 }}
+              >
+                <Typography
+                  variant="caption"
+                  className={classNames({
+                    greytext: true,
+                    'font-weight-very-light': !customName
+                  })}
+                  style={{ paddingRight: '.5rem' }}
+                  noWrap
+                  title={customName || ''}
+                >
+                  {customName || 'New Custom Name'}
+                </Typography>
+              </Tooltip>
+              <Pencil onClick={handleEditCustomName} />
+            </div>
+          ) : null}
         </div>
+        {flags[featureFlags.FAVOURITE_FLAG] ? (
+          <div className="favourite-container">
+            {favInProgress ? (
+              <span
+                style={{
+                  display: 'flex',
+                  height: '2.5rem',
+                  width: '2.5rem',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <CircularProgress size={24} color="primary" />
+              </span>
+            ) : (
+              <Favourite
+                value={favourite}
+                onToggle={update => onFavouriteToggle(update)}
+              />
+            )}
+          </div>
+        ) : null}
       </div>
 
       <div className="info-section">
-        
-        <div className="section-data">
-          <span><b>Customer:</b> </span>
-          <span
-            className={
-              customer === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {customer}
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Customer:</b>{' '}
           </span>
+          <span className={checkNoDataClass(customer)}>{customer}</span>
         </div>
-        <div className="section-data">
-          <span><b>Protocol Number:</b></span>
-          <span
-            className={
-              protocolNumber === 'No data' ? 'no-data-placeholder' : undefined
-            }
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Current Bid:</b>
+          </span>
+          <span className={checkNoDataClass(bidNo)}>Bid {bidNo}</span>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Bid Due Date:</b>
+          </span>
+          <span className={checkNoDataClass(dueDate)}>{dueDate}</span>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Next Milestone:</b>
+          </span>
+          <Tooltip
+            title={nextMilestone || ''}
+            placement="top"
+            style={{ marginLeft: 48 }}
           >
+            <span className={checkNoDataClass(nextMilestone)}>
+              {nextMilestone}
+            </span>
+          </Tooltip>
+        </div>
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Protocol Number:</b>
+          </span>
+          <span className={checkNoDataClass(protocolNumber)}>
             {protocolNumber}
           </span>
         </div>
-        <div className="section-data">
-          <span><b>Phase:</b></span>
-          <span
-            className={phase === 'No data' ? 'no-data-placeholder' : undefined}
-          >
-            {phase}
+        {/* <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Phase:</b>
           </span>
-        </div>
-        <div className="section-data">
-          <span><b>Therapeutic Area:</b></span>
-          <span
-            className={
-              therapeuticArea === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
+          <span className={checkNoDataClass(phase)}>{phase}</span>
+        </div> */}
+        {/* <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Therapeutic Area:</b>
+          </span>
+          <span className={checkNoDataClass(therapeuticArea)}>
             {therapeuticArea}
           </span>
-        </div>
-        <div className="section-data">
-          <span><b>Verbatim Indication:</b></span>
-          <span
-            className={
-              verbatimIndication === 'No data'
-                ? 'no-data-placeholder'
-                : undefined
-            }
-          >
+        </div> */}
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Verbatim Indication:</b>
+          </span>
+          <span className={checkNoDataClass(verbatimIndication)}>
             {verbatimIndication}
           </span>
         </div>
-        <div className="section-data">
-          <span><b>Bid Due Date:</b></span>
-          <span
-            className={
-              dueDate === 'No data' ? 'no-data-placeholder' : undefined
-            }
-          >
-            {dueDate}
+        <div className={CLASS_SECTION_DATA}>
+          <span>
+            <b>Opportunity Stage:</b>
+          </span>
+          <span className={checkNoDataClass(opportunityStage)}>
+            {opportunityStage}
           </span>
         </div>
       </div>
@@ -128,9 +293,59 @@ const ProposalCard = ({
           onClick={setProposalTypeView}
         >
           <Link to={`${OPPORTUNITY}${title}`}>
-            <House fontSize="large" htmlColor="#b350bf"></House>
+            <Tooltip
+              variant="dark"
+              title="Strategy Development"
+              placement="top"
+            >
+              <House fontSize="large" htmlColor="#9E54B0" />
+            </Tooltip>
           </Link>
-          <p>Questions</p>
+        </div>
+        {allFlags?.showTimelineFlag && (
+          <div
+            className="button"
+            id="timelines"
+            role="presentation"
+            onClick={setProposalTypeView}
+          >
+            <Link to={`${OPPORTUNITY}${title}?viewType=timelines`}>
+              <CustomTooltip title="Timeline">
+                <CalenderWithNumber
+                  fontSize="large"
+                  style={{ height: '36px' }}
+                />
+              </CustomTooltip>
+            </Link>
+          </div>
+        )}
+
+        <div
+          className="button"
+          id="approvals"
+          role="presentation"
+          onClick={setProposalTypeView}
+          disabled={!isApprovalCountPresent}
+        >
+          {!isApprovalCountPresent ? (
+            <Tooltip variant="dark" title="Approvals" placement="top">
+              <ThumbsUp
+                fontSize="large"
+                htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
+                style={{ height: '41px' }}
+              />
+            </Tooltip>
+          ) : (
+            <Link to={`${OPPORTUNITY}${title}?viewType=approvals`}>
+              <Tooltip variant="dark" title="Approvals" placement="top">
+                <ThumbsUp
+                  fontSize="large"
+                  htmlColor={!isApprovalCountPresent ? '#7f7f7f' : '#1faa00'}
+                  style={{ height: '36px' }}
+                />
+              </Tooltip>
+            </Link>
+          )}
         </div>
 
         <div
@@ -139,10 +354,11 @@ const ProposalCard = ({
           role="presentation"
           onClick={setProposalTypeView}
         >
-          <Link to={`${OPPORTUNITY}${title}`}>
-            <Folder />
+          <Link to={`${OPPORTUNITY}${title}?viewType=documents`}>
+            <CustomTooltip title="Documents">
+              <Folder />
+            </CustomTooltip>
           </Link>
-          <p>Documents</p>
         </div>
 
         <div
@@ -151,9 +367,16 @@ const ProposalCard = ({
           role="presentation"
           onClick={setProposalTypeView}
         >
-         <div>
-            <p>{daysRemain}</p>
-            <p>Days until Bid Due</p>
+          <div>
+            <Tooltip variant="dark" title="Days until Bid Due" placement="top">
+              <p>
+                {daysRemain < 0 || bidStopStatus ? (
+                  <Minus value="medium" style={{ color: '#df216d' }} />
+                ) : (
+                  daysRemain
+                )}
+              </p>
+            </Tooltip>
           </div>
         </div>
       </div>

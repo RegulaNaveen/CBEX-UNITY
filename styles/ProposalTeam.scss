@@ -1,0 +1,95 @@
+.proposal-team-title {
+  padding-bottom: 5px;
+}
+.proposal-team-answer {
+  padding-left: 15px;
+  max-width: 550px !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}
+.proposalTeammarkNaAutoActive {
+  margin-bottom: -3px;
+  margin-left: -40px;
+  margin-top: -2px;
+}
+.divider-hr-proposal-team {
+  height: 1px;
+  border: 0.6em;
+  border-top: 1px solid #ddd;
+  padding: 0;
+}
+.proposal-team-flex {
+  display: flex;
+}
+.proposal-team-chipview {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-question {
+  padding-left: 15px;
+}
+.proposal-team-wrapper {
+  margin-top: 5px;
+  margin-bottom: 12px;
+}
+.integrations-icon {
+  margin-top: 3rem;
+  margin-left: -6rem;
+}
+.proposal-tema-tooltip {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+  transition: width 0.2s;
+}
+.status-txt {
+  color: $neptune-primary;
+  font-weight: 500;
+  font-size: 12px;
+  font-style: italic;
+}
+.proposal-team-edit-icon {
+  padding-left: 1rem;
+  cursor: pointer;
+}
+.padding-Na {
+  padding-left: 40px;
+}
+
+#proposal-team-left-section {
+  display: grid;
+  grid-template-rows: 0.1fr 1fr;
+  padding: 15px;
+
+  .proposal-team-wrapper-container {
+    overflow-y: auto;
+    margin: 2px 0px;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .proposal-team-wrapper-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .proposal-team-btn-wrapper {
+    align-self: center;
+    margin: 4% 0 0 2%;
+
+    .plus-icon-add-new-question {
+      min-width: 0 !important;
+      margin-right: 0;
+    }
+  }
+
+  .custom-autocomplete {
+    .MuiAutocomplete-popupIndicator {
+      display: none;
+    }
+  }
+}

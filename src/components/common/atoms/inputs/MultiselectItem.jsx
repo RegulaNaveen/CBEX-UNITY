@@ -1,29 +1,48 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import classNames from 'classnames';
 import { Check } from '../../../svg';
 
 type Props = {
   onClick: Function,
   item: string,
-  isSelected: boolean
+  isSelected: boolean,
+  parentRef: any,
+  focused: boolean,
+  key: any
 };
 
-class MultiselectItem extends PureComponent<Props> {
+class MultiselectItem extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.itemRef = React.createRef();
+  }
+
   handleClick = (event: SyntheticEvent<EventTarget>) => {
     const { onClick, item } = this.props;
     onClick(event, item);
   };
 
+  componentDidUpdate(prevProps) {
+    const { parentRef, focused } = this.props;
+    if (focused && prevProps.focused !== focused) {
+      if (parentRef.current && this.itemRef.current) {
+        parentRef.current.scrollTop = this.itemRef.current.offsetTop;
+      }
+    }
+  }
+
   render() {
-    const { item, isSelected } = this.props;
+    const { item, isSelected, focused } = this.props;
     return (
       <li
         role="presentation"
-        className={
-          isSelected
-            ? 'multiselect-list-item selected'
-            : 'multiselect-list-item'
-        }
+        className={classNames({
+          'multiselect-list-item': true,
+          selected: isSelected,
+          focused: focused
+        })}
+        ref={this.itemRef}
         onClick={this.handleClick}
       >
         <div className="multiselect-icon">{isSelected ? <Check /> : null}</div>

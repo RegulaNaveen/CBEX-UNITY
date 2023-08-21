@@ -1,0 +1,336 @@
+@media screen and (max-width: 1200px) and (min-width: 300px) {
+
+  .auto-complete-with-add-option,
+  .checkboxtype {
+    .MuiChip-root {
+      background-color: #ffffff;
+      border: 1px solid black;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      font-size: 12px;
+    }
+
+    .MuiAutocomplete-root {
+      .MuiInputBase-input {
+        font: inherit;
+        color: #000000;
+        width: auto;
+        border: 0px solid #d9d9d9;
+        height: auto;
+        margin: 0;
+        display: block;
+        padding: 8px 8px 8px 7px;
+        min-width: 0;
+        background: none;
+        box-sizing: border-box;
+        line-height: 1.5;
+        border-radius: 4px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        animation-name: mui-auto-fill-cancel;
+        letter-spacing: inherit;
+        animation-duration: 10ms;
+        transition-duration: 0.4s;
+        transition-property: border-color;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .MuiInputBase-root {
+        .autocomplete-multiline-chip {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          width: 100%;
+          overflow: auto hidden;
+        }
+      }
+    }
+
+    .MuiInputBase-root {
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .MuiChip-root.Mui-disabled {
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .MuiInputBase-root.Mui-disabled {
+      color: black;
+      cursor: not-allowed;
+      opacity: 0.4;
+      pointer-events: none;
+      background-color: #f2f2f2;
+      opacity: 0.8;
+    }
+
+    .MuiChip-labelSmall {
+      padding-left: 8px;
+      padding-right: 8px;
+      color: #000000;
+      font-family: 'ProximaNova-Regular';
+    }
+
+    .MuiOutlinedInput-root {
+      &:hover {
+        fieldset {
+          &.MuiOutlinedInput-notchedOutline {
+            border-color: #0768fd;
+          }
+        }
+      }
+
+      .MuiOutlinedInput-notchedOutline {
+        border-color: #d9d9d9;
+      }
+
+      &.Mui-focused {
+        .MuiOutlinedInput-notchedOutline {
+          border-width: 1px;
+        }
+
+        fieldset {
+          border-color: #0768fd;
+        }
+      }
+    }
+
+    .MuiAutocomplete-root:hover .MuiAutocomplete-clearIndicatorDirty {
+      visibility: hidden;
+    }
+
+    .MuiAutocomplete-root.Mui-focused .MuiAutocomplete-clearIndicatorDirty {
+      visibility: visible;
+    }
+
+    .MuiChip-deleteIcon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .a-MuiChip-label {
+      color: #000000 !important;
+      font-family: 'ProximaNova-Regular' !important;
+      font-size: 16px !important;
+      font-weight: bold;
+
+      .MuiChip-labelSmall {
+        padding-left: 7px;
+        padding-right: 4px;
+      }
+    }
+
+    .MuiIconButton-root {
+      width: 25px;
+      height: 25px;
+
+      .MuiSvgIcon-root {
+        width: 18px;
+        height: 18px;
+        color: #000000;
+        margin-bottom: 40%;
+        margin-top: 60%;
+      }
+    }
+
+    .MuiChip-deleteIcon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] .MuiAutocomplete-input:first-child {
+    padding-left: 6px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 3000px) and (min-width: 1201px) {
+
+  .auto-complete-with-add-option,
+  .checkboxtype {
+    .MuiChip-root {
+      background-color: #ffffff;
+      border: 1px solid black;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    .MuiAutocomplete-root {
+      .MuiInputBase-input {
+        font: inherit;
+        color: #000000;
+        width: auto;
+        border: 0px solid #d9d9d9;
+        height: auto;
+        margin: 0;
+        display: block;
+        padding: 8px 8px 8px 7px;
+        min-width: 0;
+        background: none;
+        box-sizing: border-box;
+        line-height: 1.5;
+        border-radius: 4px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        animation-name: mui-auto-fill-cancel;
+        letter-spacing: inherit;
+        animation-duration: 10ms;
+        transition-duration: 0.4s;
+        transition-property: border-color;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .MuiInputBase-root {
+        .autocomplete-multiline-chip {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          width: 100%;
+          overflow: auto hidden;
+        }
+      }
+    }
+
+    .MuiInputBase-root {
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    .MuiChip-root.Mui-disabled {
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .MuiInputBase-root.Mui-disabled {
+      color: black;
+      cursor: not-allowed;
+      opacity: 0.4;
+      pointer-events: none;
+      background-color: #f2f2f2;
+      opacity: 0.8;
+    }
+
+    .MuiChip-labelSmall {
+      padding-left: 8px;
+      padding-right: 8px;
+      color: #000000;
+      font-family: 'ProximaNova-Regular';
+    }
+
+    .MuiOutlinedInput-root {
+      &:hover {
+        fieldset {
+          &.MuiOutlinedInput-notchedOutline {
+            border-color: #0768fd;
+          }
+        }
+      }
+
+      .MuiOutlinedInput-notchedOutline {
+        border-color: #d9d9d9;
+      }
+
+      &.Mui-focused {
+        .MuiOutlinedInput-notchedOutline {
+          border-width: 1px;
+        }
+
+        fieldset {
+          border-color: #0768fd;
+        }
+      }
+    }
+
+    .MuiAutocomplete-root:hover .MuiAutocomplete-clearIndicatorDirty {
+      visibility: hidden;
+    }
+
+    .MuiAutocomplete-root.Mui-focused .MuiAutocomplete-clearIndicatorDirty {
+      visibility: visible;
+    }
+
+    .MuiChip-deleteIcon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .a-MuiChip-label {
+      color: #000000 !important;
+      font-family: 'ProximaNova-Regular' !important;
+      font-size: 16px !important;
+      font-weight: bold;
+
+      .MuiChip-labelSmall {
+        padding-left: 7px;
+        padding-right: 4px;
+      }
+    }
+
+    .MuiIconButton-root {
+      width: 25px;
+      height: 25px;
+
+      .MuiSvgIcon-root {
+        width: 18px;
+        height: 18px;
+        color: #000000;
+        margin-bottom: 40%;
+        margin-top: 60%;
+      }
+    }
+
+    .MuiChip-deleteIcon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] .MuiAutocomplete-input:first-child {
+    padding-left: 6px;
+    font-size: 16px;
+  }
+}
+
+.date-picker {
+  position: relative;
+
+  .MuiInputBase-root {
+    font-size: 16px;
+    font-family: $proximaNova, Nunito Sans, sans-serif;
+  }
+
+  .MuiInputBase-input {
+    font: inherit;
+    color: $black;
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    height: auto;
+    margin: 0;
+    display: block;
+    padding: 8px 8px 8px 7px;
+    min-width: 0;
+    background: none;
+    box-sizing: border-box;
+    line-height: 1.5;
+    border-radius: 4px;
+    animation-name: mui-auto-fill-cancel;
+    letter-spacing: inherit;
+    animation-duration: 10ms;
+    transition-duration: 0.4s;
+    transition-property: border-color;
+    -webkit-tap-highlight-color: transparent;
+  }
+}

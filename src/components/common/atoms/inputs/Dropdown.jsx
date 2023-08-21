@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 // @flow
 import React, { PureComponent } from 'react';
 import DropdownItem from './DropdownItem';
 import { CloseCircle } from '../../../svg';
+import { SocketContext } from '../../../../context/SocketContext';
 
 type Props = {
   id?: string,
@@ -13,7 +15,11 @@ type Props = {
   withReset?: boolean,
   selectedValue: mixed,
   error?: mixed,
-  disabled?: boolean
+  disabled?: boolean,
+  lockQuestionOnFocus?: boolean,
+  toggleWatch?: Function,
+  onCascadeChange?: Function,
+  forceBlur?: boolean
 };
 
 type State = {
@@ -23,6 +29,7 @@ type State = {
 
 class Dropdown extends PureComponent<Props, State> {
   ref: any;
+  static contextType = SocketContext;
 
   static defaultProps = {
     id: undefined,
@@ -31,72 +38,213 @@ class Dropdown extends PureComponent<Props, State> {
     value: undefined,
     withReset: false,
     error: [],
-    disabled: false
+    disabled: false,
+    lockQuestionOnFocus: false
   };
 
   constructor(props: Object) {
     super(props);
 
     this.ref = React.createRef();
+    this.listRef = React.createRef();
 
     this.state = {
-      isCollapsed: false,
-      selectedValue: ''
+      isCollapsed: true,
+      selectedValue: '',
+      isFocused: false,
+      focusedValue: ''
     };
   }
 
   componentDidMount() {
-    const { selectedValue } = this.props;
+    const { selectedValue, value } = this.props;
     window.addEventListener('click', this.closeOnOutsideClick);
+    window.addEventListener('keydown', this.handleKeyDown);
     if (selectedValue) {
       const { onClick } = this.props;
       onClick(selectedValue);
-      this.setState({ selectedValue });
+      this.setState({ selectedValue, focusedValue: selectedValue });
+    } else if (value) {
+      const { onClick } = this.props;
+      onClick(value);
+      this.setState({ selectedValue: value, focusedValue: value });
+    }
+
+    // add focus listener to element
+    if (this.ref.current) {
+      this.ref.current.addEventListener('focusin', this.handleFocusIn);
+      this.ref.current.addEventListener('focusout', this.handleFocusOut);
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.value != this.props.value) {
-      this.setState({ selectedValue: this.props.value });
+      this.setState({
+        selectedValue: this.props.value,
+        focusedValue: this.props.value
+      });
+    }
+
+    if (this.props.forceBlur) {
+      this.ref.current && this.ref.current.blur();
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('click', this.closeOnOutsideClick);
+    window.removeEventListener('keydown', this.handleKeyDown);
+    // remove focus listener from element
+    if (this.ref.current) {
+      this.ref.current.removeEventListener('focusin', this.handleFocusIn);
+      this.ref.current.removeEventListener('focusout', this.handleFocusOut);
+    }
   }
 
   closeOnOutsideClick = (event: SyntheticEvent<EventTarget>) => {
-    const { setSelectRow } = this.props;
+    const { setSelectRow, lockedBySelf } = this.props;
     if (this.ref.current !== event.target) {
-      this.setState({ isCollapsed: false });
-      if (setSelectRow) setSelectRow(false);
+      if (setSelectRow) {
+        this.setState({ isCollapsed: true }, () => {
+          setSelectRow(false);
+        });
+      }
     }
   };
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
-    const { setSelectRow } = this.props;
+    if (!isCollapsed) {
+      this.ref.current.blur();
+      this.setState({ focusedValue: '' });
+    }
     this.setState({ isCollapsed: !isCollapsed });
-    if (setSelectRow) setSelectRow(!isCollapsed);
   };
 
   handleClick = (event: SyntheticEvent<EventTarget>, value: string) => {
     event.stopPropagation();
-
-    const { onClick } = this.props;
+    const { onClick, setSelectRow } = this.props;
     onClick(value);
+    if (setSelectRow) setSelectRow(false);
 
-    this.setState({ selectedValue: value, isCollapsed: false });
+    this.setState({
+      selectedValue: value,
+      isCollapsed: true,
+      focusedValue: value
+    });
   };
 
   handleReset = () => {
     const { onClick } = this.props;
     onClick('');
-    this.setState({ selectedValue: '', isCollapsed: false });
+    this.setState({ selectedValue: '', isCollapsed: true, focusedValue: '' });
+  };
+
+  handleFocusIn = () => {
+    const {
+      setSelectRow,
+      lockQuestionOnFocus,
+      toggleWatch,
+      questionId
+    } = this.props;
+    this.setState({ isFocused: true });
+    if (setSelectRow) setSelectRow(true);
+    if (lockQuestionOnFocus) {
+      if (toggleWatch) {
+        toggleWatch(true);
+      }
+      this.context?.questionLockWrapper(questionId);
+    }
+  };
+
+  handleFocusOut = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { setSelectRow, lockedBySelf, questionId, toggleWatch } = this.props;
+    if (setSelectRow) {
+      setTimeout(() => {
+        this.setState({ isFocused: false, isCollapsed: true });
+        setSelectRow(false);
+        // call to unlock question
+        this.context.questionUnlockWrapper(questionId);
+        if (toggleWatch) {
+          toggleWatch(false);
+        }
+      }, 700);
+    }
+  };
+
+  handleDownArrowPress = () => {
+    const { focusedValue } = this.state;
+    const { items } = this.props;
+    let focusedIndex = 0;
+    if (items.size === 0) return;
+    const currentFocusedIndex = items.indexOf(focusedValue);
+    if (currentFocusedIndex > -1 && currentFocusedIndex <= items.size - 2) {
+      focusedIndex = currentFocusedIndex + 1;
+      this.setState({ focusedValue: items.get(focusedIndex) });
+    }
+  };
+
+  handleUpArrowPress = () => {
+    const { focusedValue } = this.state;
+    const { items } = this.props;
+    let focusedIndex = 0;
+    if (items.size === 0) return;
+    const currentFocusedIndex = items.indexOf(focusedValue);
+    if (currentFocusedIndex > -1 && currentFocusedIndex > 0) {
+      focusedIndex = currentFocusedIndex - 1;
+      this.setState({ focusedValue: items.get(focusedIndex) });
+    }
+  };
+
+  handleKeyDown = event => {
+    const { isCollapsed, focusedValue, isFocused } = this.state;
+    const { items, onClick } = this.props;
+
+    if (!isFocused) return;
+    if (['Escape', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.code)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    if (event.code === 'Escape' || event.code === 'Tab') {
+      this.setState({ isCollapsed: true });
+      return;
+    }
+
+    if (event.code === 'Enter') {
+      let newFocusedValue = focusedValue;
+      if (!isCollapsed && newFocusedValue) {
+        this.setState({ isCollapsed: true, selectedValue: newFocusedValue });
+        onClick(newFocusedValue);
+      } else {
+        if (items.size > 0 && focusedValue === '') {
+          newFocusedValue = items.get(0);
+          if (newFocusedValue) {
+            this.setState({
+              isCollapsed: false,
+              focusedValue: newFocusedValue
+            });
+          }
+        }
+      }
+      return;
+    }
+
+    if (isCollapsed) return;
+
+    if (event.code === 'ArrowDown') {
+      this.handleDownArrowPress();
+      return;
+    }
+
+    if (event.code === 'ArrowUp') {
+      this.handleUpArrowPress();
+    }
   };
 
   render() {
-    const { isCollapsed, selectedValue } = this.state;
+    const { isCollapsed, selectedValue, focusedValue } = this.state;
     const {
       placeholder,
       id,
@@ -126,6 +274,7 @@ class Dropdown extends PureComponent<Props, State> {
               }
               ref={this.ref}
               role="presentation"
+              tabIndex={0}
               onClick={() => {
                 if (!disabled) this.handleCollapse();
                 return;
@@ -137,14 +286,16 @@ class Dropdown extends PureComponent<Props, State> {
                 <div className="dd-header-placeholder">{placeholder}</div>
               )}
             </div>
-            {isCollapsed && (
-              <ul className="dd-list">
+            {!isCollapsed && (
+              <ul className="dd-list" tabIndex={-1} ref={this.listRef}>
                 {items &&
                   items.map(item => (
                     <DropdownItem
                       onClick={this.handleClick}
                       item={item}
                       key={item}
+                      focused={focusedValue === item}
+                      parentRef={this.listRef}
                     />
                   ))}
               </ul>
