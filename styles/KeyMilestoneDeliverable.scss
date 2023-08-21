@@ -13,28 +13,43 @@
 }
 
 #key-milestone-left-section {
-  flex: 1;
-  overflow-y: auto;
+  display: grid;
+  grid-template-rows: 0.1fr 1fr;
+  padding: 15px;
+
+  .key-milestone-wrapper-container {
+    overflow-y: auto;
+    margin: 2px 0px;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .key-milestone-wrapper-container::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .add-question-link {
-  position: sticky;
+  align-self: center;
+  margin: 4% 0 0 2%;
   bottom: 0;
   background-color: white;
-  padding: 10px;
   z-index: 1;
+  // position: absolute;
+  // padding: 10px;
 }
 
 .key-milestone-header {
   font-size: 20px;
   line-height: 1.04;
   font-weight: 600;
-  margin-top: 30px;
+  margin-top: 15px;
 }
 
 .key-milestone-divider-hr {
-  width: 95%;
-  margin-top: 15px;
+  // width: 95%;
+  // margin-top: 15px;
   height: 1px;
   border: 0.6em;
   border-top: 1px solid #ddd;

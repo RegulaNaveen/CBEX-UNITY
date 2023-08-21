@@ -24,6 +24,8 @@ const BidHistory = () => {
 
   const selectedView = new URLSearchParams(winLocationSearch).get('viewType');
   const currentbidNo = new URLSearchParams(winLocationSearch).get('bidNo');
+  const currentBidType =
+    new URLSearchParams(winLocationSearch).get('bidType') || 'Clinical_Bid';
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showHoverText, setShowHoverText] = useState(false);
   const [bidVal, setBidVal] = useState('');
@@ -157,7 +159,8 @@ const BidHistory = () => {
                             onClick={() => {
                               if (
                                 !isQuestionAnswered &&
-                                currentbidNo !== item.bidNo
+                                (currentbidNo !== item.bidNo ||
+                                  currentBidType !== item.bidType)
                               )
                                 dispatch(changeBid(item));
                             }}

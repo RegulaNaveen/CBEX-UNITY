@@ -60,7 +60,8 @@ export const OpportunitySFUpDATE = {
   Protocol_Number__c: 'Protocol number',
   Drug_Product_Name__c: 'Product name',
   Verbatim_Indication_Term__c: 'Verbatim indication',
-  StageName: 'Opportunity status'
+  StageName: 'Opportunity status',
+  Early_Engagement_Development_Plan__c: 'earlyEngagementDevelopmentPlan'
 };
 
 const PROFILE = {
