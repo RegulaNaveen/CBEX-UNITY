@@ -11,5 +11,6 @@ export default {
   SEARCH_FLAG: 'searchFlag',
   BID_COST_DETAILS: 'bidCostDetail',
   FAVOURITE_FLAG: 'favouriteFlag',
-  CUSTOM_NAME_FLAG: 'customOpportunityNameFlag'
+  CUSTOM_NAME_FLAG: 'customOpportunityNameFlag',
+  EARLY_ENGAGEMENT_BID_HISTORY: 'earlyEngagementInBidHistory'
 };
