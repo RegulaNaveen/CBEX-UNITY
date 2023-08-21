@@ -351,40 +351,53 @@ export const getPanelStatus = createSelector(selectProposal, proposal =>
   proposal.get('panelStatus')
 );
 
-export const getBidList = createSelector(getOpportunityData, opportunity => {
-  if (opportunity.size > 0) {
-    let bidList = [];
-    opportunity.valueSeq().forEach(item => {
-      bidList.push({
-        bidDueDate: item.getIn(['proposal', 'proposalDetails', 'Bid due date']),
-        bidDate: item.getIn(['proposal', 'proposalDate']),
-        bidId: item.getIn(['proposal', 'proposalId']),
-        isCurrent: item.get('isCurrent'),
-        bidName: `${getBidNameByType(
-          item.getIn(['proposal', 'bidType'])
-        )} ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
-        bidStatus: item.get('inProgress') || '',
-        pertinentDetails: item.getIn([
-          'proposal',
-          'proposalDetails',
-          'pertinentDetails'
-        ]),
-        earlyEngagementDevelopmentPlan: item.getIn([
-          'proposal',
-          'proposalDetails',
-          'earlyEngagementDevelopmentPlan'
-        ]),
-        bidNo: String(
-          item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
-        ),
-        bidType: String(item.getIn(['proposal', 'bidType'], 'Clinical_Bid'))
-      });
-    });
+export const getfetchAllFlags = createSelector(selectProposal, proposal =>
+  proposal?.get('eventflag')
+);
 
-    bidList = orderBy(bidList, ['bidDate'], ['desc']);
-    return bidList;
-  } else return [];
-});
+export const getBidList = createSelector(
+  getfetchAllFlags,
+  getOpportunityData,
+  (flags, opportunity) => {
+    if (opportunity.size > 0) {
+      let bidList = [];
+      opportunity.valueSeq().forEach(item => {
+        if (
+          (!flags['earlyEngagementInBidHistory'] &&
+            item.getIn(['proposal', 'bidType']) !== 'Early_Engagement_Bid') ||
+          flags['earlyEngagementInBidHistory']
+        ) {
+          bidList.push({
+            bidDueDate: item.getIn([
+              'proposal',
+              'proposalDetails',
+              'Bid due date'
+            ]),
+            bidDate: item.getIn(['proposal', 'proposalDate']),
+            bidId: item.getIn(['proposal', 'proposalId']),
+            isCurrent: item.get('isCurrent'),
+            bidName: `${getBidNameByType(
+              item.getIn(['proposal', 'bidType'])
+            )} ${item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''}`,
+            bidStatus: item.get('inProgress') || '',
+            pertinentDetails: item.getIn([
+              'proposal',
+              'proposalDetails',
+              'pertinentDetails'
+            ]),
+            bidNo: String(
+              item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
+            ),
+            bidType: String(item.getIn(['proposal', 'bidType'], 'Clinical_Bid'))
+          });
+        }
+      });
+
+      bidList = orderBy(bidList, ['bidDate'], ['desc']);
+      return bidList;
+    } else return [];
+  }
+);
 
 export const getProposalQuestions = createSelector(selectProposal, proposal =>
   proposal.get('proposalQuestions')
@@ -413,10 +426,6 @@ export const getPriceModuler = createSelector(selectProposal, proposal =>
 export const getCanUserTagInQuestion = createSelector(
   selectProposal,
   proposal => proposal?.get('canUserTagInQuestion')
-);
-
-export const getfetchAllFlags = createSelector(selectProposal, proposal =>
-  proposal?.get('eventflag')
 );
 
 export const getApprovalQuestionLoading = createSelector(
