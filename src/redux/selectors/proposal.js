@@ -385,6 +385,11 @@ export const getBidList = createSelector(
               'proposalDetails',
               'pertinentDetails'
             ]),
+            earlyEngagementDevelopmentPlan: item.getIn([
+              'proposal',
+              'proposalDetails',
+              'earlyEngagementDevelopmentPlan'
+            ]),
             bidNo: String(
               item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
             ),
