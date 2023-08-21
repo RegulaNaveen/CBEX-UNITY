@@ -12,7 +12,7 @@
     padding-top: 20px;
     padding-bottom: 20px;
 
-    .bid-history-pricemodeler-content{
+    .bid-history-pricemodeler-content {
       flex: 30%;
       border-left: 1px solid #dfdfdf;
       position: relative;
@@ -182,4 +182,9 @@
       }
     }
   }
+}
+p.summary-title.summury-bold {
+  color: #000000 !important;
+  font-size: 16px;
+  font-weight: 600;
 }

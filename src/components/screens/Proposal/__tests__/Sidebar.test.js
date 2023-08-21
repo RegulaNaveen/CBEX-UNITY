@@ -3,15 +3,27 @@
  **/
 import React from 'react';
 import '@testing-library/jest-dom';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '../../../../store';
 import { BrowserRouter as Router } from 'react-router-dom';
-import * as data from './sidebar.json';
 import Sidebar from '../../../views/Sidebar';
-import { Map } from 'immutable';
+import { OrderedMap, Map } from 'immutable';
+import { onHandleOpenClose } from '../../../../redux/actions/sidebar-actions';
 
 describe('Sidebar component', () => {
+  window.addEventListener = jest.fn();
+  window.removeEventListener = jest.fn();
+  document.addEventListener = jest.fn();
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
 
   test('Sidebar section Load', async () => {
     const { container } = render(
@@ -30,7 +42,9 @@ describe('Sidebar component', () => {
     const props = {
       setTabFromQuestionNotes: jest.fn(),
     };
-    const { getByTestId, getByText } = render(
+    
+    store.dispatch(onHandleOpenClose(true));
+    const { getByTestId, getByText, unmount } = render(
       <Provider store={store}>
         <Router>
           <Sidebar {...props} />
@@ -40,9 +54,10 @@ describe('Sidebar component', () => {
 
     const sidebarButton = getByTestId('sidebar-btn-testid');
     fireEvent.click(sidebarButton);
-
+    
     expect(getByText(/Controls/i)).toBeInTheDocument();
-
+    fireEvent.click(sidebarButton);
+    unmount();
   });
 
   test('check for add new question button', () => {
@@ -116,29 +131,44 @@ describe('Sidebar component', () => {
   });
 
   test('check for sections questions', () => {
-    const mapSections = Map(data.sections);
-    const mockRefreshProposal = jest.fn();
+    const sections = OrderedMap({
+      "Adding new section 1": Map({
+        "sectionName": "Adding new section 1",
+        "questions": OrderedMap({
+          "Adding new question 1": Map({
+            active: true,
+            visible: true,
+            isCustomQuestion: true
+          }),
+        }),
+      }),
+      "Adding new section 2": Map({
+        "sectionName": "Adding new section 2",
+        "questions": OrderedMap({
+          "Adding new question 2": Map({
+            active: true,
+            visible: true,
+            isCustomQuestion: true
+          }),
+        }),
+      }),
+    });
+    const mockOnScrollElement = jest.fn();
     const props = {
-      setTabFromQuestionNotes: jest.fn(),
-      isOpen: true,
-      sections: mapSections,
-      activeTabIndex: 0,
-      RefreshProposal: mockRefreshProposal
-    }
-
-    const { container, getByTestId } = render(
+      sections: sections,
+      onscrollelement: mockOnScrollElement,
+      setTabFromQuestionNotes: jest.fn()
+    };
+    store.dispatch(onHandleOpenClose(true));
+    render(
       <Provider store={store}>
         <Router>
           <Sidebar {...props} />
         </Router>
       </Provider>
     );
-
-    //expect(container.getElementsByClassName('sidebar-content-list')).toBeInTheDocument();
-    // const syncBtn = getByTestId('sync-icon-testid');
-    // expect(syncBtn).toBeInTheDocument();
-
-    // fireEvent.click(syncBtn);
-    // expect(mockRefreshProposal).toHaveBeenCalled();
-  })
+    const sectionName = screen.getByText('Adding new section 1');
+    fireEvent.click(sectionName);
+    expect(mockOnScrollElement).toHaveBeenCalled();
+  });
 });
