@@ -1,13 +1,14 @@
 const onClickLink = (
   oppNo: string,
   notificationId: string,
-  bidNo: string | number | null
+  bidNo: string | number | null,
+  bidType: string
 ): string => {
   const link = () =>
     `/opportunities/${oppNo}?notification_id=${notificationId}`;
-  const linkWithBid = () =>
-    `/opportunities/${oppNo}?notification_id=${notificationId}&bidNo=${bidNo}`;
-  return bidNo ? linkWithBid() : link();
+  const linkWithBidAndBidType = () =>
+    `/opportunities/${oppNo}?notification_id=${notificationId}&bidNo=${bidNo}&bidType=${bidType}`;
+  return bidNo ? linkWithBidAndBidType() : link();
 };
 
 export const getAllNotifications = notification =>
@@ -16,7 +17,8 @@ export const getAllNotifications = notification =>
     item.url = onClickLink(
       item.opportunity_no,
       item.id,
-      item.bodyJson?.bidNo || null
+      item.bodyJson?.bidNo || null,
+      item.bodyJson?.bidType || 'Clinical_Bid'
     );
 
     switch (item.preference_code) {
@@ -68,7 +70,8 @@ export const getUnreadNotifications = notification =>
       item.url = onClickLink(
         item.opportunity_no,
         item.id,
-        item.bodyJson?.bidNo || null
+        item.bodyJson?.bidNo || null,
+        item.bodyJson?.bidType || 'Clinical_Bid'
       );
       // Add timestamp for sorting
       item.timestamp = new Date(item.created_date).getTime();
@@ -97,7 +100,8 @@ export const getUnreadNotifications = notification =>
               `<a style="display: inline-block;" target="_blank" href="${onClickLink(
                 item.opportunity_no,
                 item.id,
-                item.bodyJson?.bidNo || null
+                item.bodyJson?.bidNo || null,
+                item.bodyJson?.bidType || 'Clinical_Bid'
               )}">${item.bodyJson.questionText} ${
                 item.bodyJson.questionAnswer
               }</a>`

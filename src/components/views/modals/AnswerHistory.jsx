@@ -393,6 +393,7 @@ class AnswerHistory extends Component<Props> {
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
     const { setProposalAnswer, userData } = this.props;
     const answerType = questionType;
+    let formattedAnswer = carryForwardAnswer.get('formattedAnswer');
     // picklist value should not be converted to string while saving
     if (
       answerType === ANSWER_TYPES.PICKLIST ||
@@ -415,7 +416,7 @@ class AnswerHistory extends Component<Props> {
         questionId,
         String(carryForwardAnswer.get('answer')).trim(),
         userData,
-        '',
+        formattedAnswer || '',
         false,
         cfProposalId
       );

@@ -105,12 +105,7 @@ const CustomTabs = React.lazy(() =>
   )
 );
 
-const UnityTab = ({
-  id,
-  enableValidateTab,
-  selectedView,
-  onChangeSelectedTab
-}) => {
+const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const defaultTabs = [
     {
       label: 'Strategy Development',
@@ -352,9 +347,6 @@ const UnityTab = ({
     if (!allFlags?.showTimelineFlag) {
       tabsToReturn = tabsToReturn.filter(item => item.label !== 'Timeline');
     }
-    if (!enableValidateTab) {
-      tabsToReturn = tabsToReturn.filter(item => item.label !== 'Validate');
-    }
     tabsToReturn = tabsToReturn.map((vc, i) => {
       vc.value = i;
       return vc;
@@ -591,9 +583,6 @@ const UnityTab = ({
       }
       if (allFlags && !allFlags?.showTimelineFlag) {
         finalTab = finalTab.filter(item => item.label !== 'Timeline');
-      }
-      if (!enableValidateTab) {
-        finalTab = finalTab.filter(item => item.label !== 'Validate');
       }
       const winLocationSearch = window.location.search;
       const selectView = new URLSearchParams(winLocationSearch);

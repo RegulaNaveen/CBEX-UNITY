@@ -291,12 +291,18 @@ export const onFilteringProposals = (
           data = response.data;
         }
       } else if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
+        const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
-          const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals(filterPayload, userEmail);
+          const response = await getFavoritesOpportunity(
+            filterPayload,
+            userEmail
+          );
           data = response.data;
         } else {
-          const response = await getFavoritesOpportunity();
+          const response = await getFavoritesOpportunity(
+            filterPayload,
+            userEmail
+          );
           data = response.data;
         }
       } else if (

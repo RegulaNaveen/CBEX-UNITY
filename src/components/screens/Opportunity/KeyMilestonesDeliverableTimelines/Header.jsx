@@ -7,7 +7,7 @@ const Header = () => {
       <Typography variant="h3">
         Key Milestones & Deliverable Timelines
       </Typography>
-      <hr className="key-milestone-divider-hr" />
+      <hr style={{ marginTop: '15px' }} className="key-milestone-divider-hr" />
     </>
   );
 };

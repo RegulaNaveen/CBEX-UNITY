@@ -276,7 +276,7 @@ describe('testing onFilteringProposals function', () => {
   test('testing for tabIndex 1| Favorite tab with filter applied', () => {
     const tabIndex = 1;
     const mockGetFavoritesOpportunity = jest
-      .spyOn(ProposalsAPIs, 'onGetAllProposals')
+      .spyOn(ProposalsAPIs, 'getFavoritesOpportunity')
       .mockResolvedValue({ data: proposals });
     store.dispatch(onFilteringProposals(filters, tabIndex));
     expect(mockGetFavoritesOpportunity).toHaveBeenCalled();

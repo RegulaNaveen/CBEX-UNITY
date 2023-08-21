@@ -7,7 +7,17 @@ import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 import * as notificationActions from '../../../redux/actions/notification-actions';
 import EnvelopeButton from './EnvelopeButton';
 
-const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
+const ListItem = ({
+  id,
+  url,
+  oppNo,
+  data,
+  isSeen,
+  setSeenOne,
+  createdAt,
+  jsonBody
+}) => {
+  const { bidNo } = jsonBody;
   const history = useHistory();
   const getYesterday = () => {
     let d = new Date();
@@ -42,6 +52,20 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
       if (word === oppNo) {
         return oppNoAsHyperlink(word);
       }
+      if (
+        word === 'Early' &&
+        arr[index + 1] === 'Engagement' &&
+        arr[index - 1] === oppNo
+      ) {
+        return oppNoAsHyperlink(word);
+      }
+      if (word === 'Engagement' && arr[index - 1] === 'Early') {
+        return oppNoAsHyperlink(word);
+      }
+
+      if (word === `${bidNo}.` && arr[index - 1] === 'Engagement') {
+        return oppNoAsHyperlink(word);
+      }
       if (word === 'Bid' && arr[index - 1] === oppNo) {
         return oppNoAsHyperlink(word);
       }
@@ -56,18 +80,18 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
   };
 
   return (
-    <div className='notification-item'>
+    <div className="notification-item">
       {/* Dot Icon */}
       {!isSeen && (
-        <StatusDotSolid fontSize='small' className='notification-item-dots' />
+        <StatusDotSolid fontSize="small" className="notification-item-dots" />
       )}
       {/* Content */}
-      <div className='notification-item-content'>
+      <div className="notification-item-content">
         {/* Header */}
-        <div className='notification-item-header'>
+        <div className="notification-item-header">
           <Typography
-            variant='body2'
-            className='notification-item-header-title'
+            variant="body2"
+            className="notification-item-header-title"
             onClick={() => {
               history.push(url);
               history.go();
@@ -80,12 +104,12 @@ const ListItem = ({ id, url, oppNo, data, isSeen, setSeenOne, createdAt }) => {
           <EnvelopeButton isSeen={isSeen} onClick={() => setSeenOne(id)} />
         </div>
         {/* Date */}
-        <Typography variant='body2' style={{ fontSize: '10px' }}>
+        <Typography variant="body2" style={{ fontSize: '10px' }}>
           {determineDate(createdAt)}
         </Typography>
         {/* Notification content */}
         <div
-          className='notification-content-data'
+          className="notification-content-data"
           dangerouslySetInnerHTML={{ __html: dataToHtml() }}
         ></div>
       </div>

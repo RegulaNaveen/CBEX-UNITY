@@ -35,7 +35,8 @@ import {
   selectProposalQuestions,
   getProposals,
   getProposalDetails,
-  getFavouriteProposals
+  getFavouriteProposals,
+  getfetchUserTagFlag
 } from '../selectors';
 import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
@@ -46,6 +47,7 @@ import { SEARCH, UI, UNITY_TABS } from '../../constants/types';
 import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
+import featureFlags from '../../constants/featureFlags';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -139,6 +141,19 @@ const updateBidNoQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
+    // New url
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
+    // Update URL without pageload
+    window.history.pushState(null, '', newRelativePathQuery);
+  }
+};
+
+const updateBidTypeQueryparam = bidNo => {
+  if ('URLSearchParams' in window) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('bidType', bidNo);
     // New url
     const newRelativePathQuery = `${
       window.location.pathname
@@ -1313,36 +1328,51 @@ export const closeNewbidflags = (): ThunkAction<string, Object> => {
 export const getOpportunity = (
   id: string,
   bidNumber,
+  bidType = 'Clinical_Bid',
+  history = null,
   flag = false
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     const bidNo = parseInt(bidNumber);
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     let selectedProposalId;
+    const flags = getfetchUserTagFlag(getState());
+    const earlyEngagmentBidHistoryFlag =
+      flags[featureFlags.EARLY_ENGAGEMENT_BID_HISTORY];
 
     try {
-      const allProposals = await getAllProposals(id);
+      let allProposals = await getAllProposals(id);
+      if (earlyEngagmentBidHistoryFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !==
+            'Early_Engagement_Bid'
+        );
+        allProposals[0].isCurrent = true;
+      }
       const proposal = allProposals.find(
-        thisProposal => thisProposal.proposal.proposalDetails.bidNo === bidNo
+        thisProposal =>
+          thisProposal.proposal.proposalDetails.bidNo === bidNo &&
+          (thisProposal.proposal.bidType || 'Clinical_Bid') === bidType
       );
-      const isCurrentProposal = allProposals.find(
+      const currentProposal = allProposals.find(
         thisProposal => thisProposal.isCurrent === true
       );
-      if (proposal) selectedProposalId = proposal.proposal.proposalId;
+      if (proposal) {
+        selectedProposalId = proposal.proposal.proposalId;
+      } else if (currentProposal && history) {
+        // navigate to current bid
+        // replace URL with correct params
+        history.replace(
+          `${history.location.pathname}?bidNo=${
+            currentProposal.proposal.proposalDetails.bidNo
+          }&bidType=${currentProposal.proposal.bidType || 'Clinical_Bid'}`
+        );
+      }
       const proposalCount = allProposals.length;
-      // const maxLimit = 500;
-      //
-      // let callstomake = parseInt(proposalCount / maxLimit);
-      // let additionalcallstomake = proposalCount % maxLimit;
-      // if (additionalcallstomake) {
-      //   callstomake = callstomake + 1;
-      // }
-      // let from = 0;
       const urls = [];
       const proposalsData = [];
       for (let index = 0; index < proposalCount; index += 1) {
-        // let trueOrFalse;
-
         if (selectedProposalId) {
           // user on previous bid
           if (allProposals[index].proposal.proposalId === selectedProposalId) {
@@ -1370,7 +1400,7 @@ export const getOpportunity = (
       let data = await getPaginateProposal(urls);
       data = data.map(v => v['data']).flat();
       data[0].isCurrent =
-        isCurrentProposal.proposal.proposalId === data[0].proposal.proposalId;
+        currentProposal.proposal.proposalId === data[0].proposal.proposalId;
       if (data && data.length && data[0].proposal?.switchTemplateStatus) {
         dispatch({
           type: SWITCH_TEMP_IN_PROGRESS,
@@ -1452,6 +1482,9 @@ export const changeBid = bid => {
   if (bid?.bidNo) {
     updateBidNoQueryparam(bid?.bidNo);
   }
+  if (bid?.bidType) {
+    updateBidTypeQueryparam(bid.bidType);
+  }
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
     if (selectedBid.bidName !== bid?.bidName) {
@@ -1493,7 +1526,9 @@ export const updateChangeBidStatusOperation = status => {
 export const UpdateNewBid = bid => {
   if (window && window?.location?.search) {
     let bidNo = bid?.proposal?.proposalDetails?.bidNo;
+    let bidType = bid?.proposal?.bidType || 'Clinical_Bid';
     updateBidNoQueryparam(bidNo);
+    updateBidTypeQueryparam(bidType);
   }
   return dispatch => {
     dispatch({

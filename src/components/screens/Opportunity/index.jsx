@@ -112,7 +112,6 @@ export class Opportunity extends Component<Props, State> {
     super(props);
     this.state = {
       selectedView: 'questions',
-      enableValidateTab: false,
       windowSize: window.innerWidth
     };
   }
@@ -135,13 +134,15 @@ export class Opportunity extends Component<Props, State> {
       location,
       ProposalLoading,
       getIntegrationsData,
-      updateProposalDetail
+      updateProposalDetail,
+      history
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
+    const bidType = queryparams.get('bidType') || 'Clinical_Bid';
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) setEventFlg(flagValue);
     if (notificationId) {
@@ -152,7 +153,7 @@ export class Opportunity extends Component<Props, State> {
     if (selectedView) this.setState({ selectedView });
     if (!authData) getRefreshAuthData();
     getSFNonEditabelInfoField();
-    getOpportunityInfo(params.id, bidNumber);
+    getOpportunityInfo(params.id, bidNumber, bidType, history);
     getIntegrationsData();
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
@@ -161,21 +162,9 @@ export class Opportunity extends Component<Props, State> {
         this.context.updateSocketOppId(params.id, proposalId);
       else this.context.updateSocketOppId(null, null);
     }
-
-    window.addEventListener('storage', e => this.handleStorageChange(e));
     window.addEventListener('resize', this.handleResize);
     // const windowSize = window.innerWidth;
 
-    // NOSONAR
-    const enableValidateTab = localStorage.getItem('enableValidateTab');
-    if (enableValidateTab === null) {
-      localStorage.setItem('enableValidateTab', false);
-    } else if (enableValidateTab === 'true') {
-      getValidatedData(params.id);
-      this.setState({
-        enableValidateTab: true
-      });
-    }
     if (window && window.location && window.location.href) {
       const obj = {
         url: window.location.href,
@@ -223,6 +212,7 @@ export class Opportunity extends Component<Props, State> {
     const winLocationSearch = window.location.search;
     const queryparams = new URLSearchParams(winLocationSearch);
     const bidNo = queryparams.get('bidNo');
+    const bidType = queryparams.get('bidType') || 'Clinical_Bid';
     const prevBidList = prevProps.bidList;
     if (
       bidNo &&
@@ -230,7 +220,9 @@ export class Opportunity extends Component<Props, State> {
       bidList.length > 0 &&
       bidList.length !== prevBidList.length // check to prevent infinite rerenders
     ) {
-      const bidItemToSelect = bidList.find(item => item.bidNo === bidNo);
+      const bidItemToSelect = bidList.find(
+        item => item.bidNo === bidNo && item.bidType === bidType
+      );
       if (!bidStatus && !isEmpty(bidItemToSelect)) {
         changeBidInView(bidItemToSelect);
       }
@@ -252,7 +244,6 @@ export class Opportunity extends Component<Props, State> {
     localStorage.removeItem('proposalTypeView');
     localStorage.removeItem('proposalId');
 
-    window.removeEventListener('storage', this.handleStorageChange);
     this.context.updateSocketOppId(null, null);
     if (resetQuestionsFilter) resetQuestionsFilter();
     if (resetApprovalsFilter) resetApprovalsFilter();
@@ -264,28 +255,6 @@ export class Opportunity extends Component<Props, State> {
     const windowSize = window.innerWidth;
     this.setState({ windowSize });
   };
-
-  handleStorageChange(e) {
-    const {
-      getValidatedData,
-      match: { params }
-    } = this.props;
-
-    if (e.key === 'enableValidateTab') {
-      const isEnabled = e.newValue === 'true';
-      const { selectedView: selectedViewState } = this.state;
-      this.setState({
-        enableValidateTab: isEnabled,
-        selectedView:
-          !isEnabled && selectedViewState === 'validate'
-            ? 'questions'
-            : selectedViewState
-      });
-      if (isEnabled) {
-        getValidatedData(params.id);
-      }
-    }
-  }
 
   trackMatomoEventTabs = tab => {
     const {
@@ -327,7 +296,7 @@ export class Opportunity extends Component<Props, State> {
   };
 
   renderContent = () => {
-    const { enableValidateTab, selectedView, windowSize } = this.state;
+    const { selectedView, windowSize } = this.state;
     const {
       isLoading,
       details,
@@ -372,7 +341,6 @@ export class Opportunity extends Component<Props, State> {
         <span className="unity-tabs-container-wrapper">
           <UnityTab
             id={params.id}
-            enableValidateTab={enableValidateTab}
             selectedView={selectedView}
             onChangeSelectedTab={this.onChangeSelectedTab}
           />

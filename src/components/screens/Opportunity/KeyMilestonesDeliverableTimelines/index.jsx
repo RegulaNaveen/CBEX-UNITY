@@ -176,13 +176,13 @@ const KeyMilestoneDeliverableTimelines = () => {
 
   return (
     <>
-      <div id="key-milestone-wrapper">
+      {/* <div id="key-milestone-wrapper"> */}
         <div id="key-milestone-left-section">
           <div className="key-milestone-header">
             <Header />
           </div>
           <div
-            className={classNames('proposal-team-wrapper-container', {
+            className={classNames('key-milestone-wrapper-container', {
               'padding-Na': showNaCheckbox
             })}
           >
@@ -198,7 +198,7 @@ const KeyMilestoneDeliverableTimelines = () => {
               );
             })}
           </div>
-          {/* <hr className="divider-hr-key-milestone" /> */}
+          <hr className="key-milestone-divider-hr" />
           <div className="add-question-link">
             <Link
               style={{ borderBottom: 'none' }}
@@ -214,7 +214,7 @@ const KeyMilestoneDeliverableTimelines = () => {
             </Link>
           </div>
         </div>
-      </div>
+      {/* </div> */}
       {showModal && (
         <CustomModal>
           <AddQuestionModalComponent
