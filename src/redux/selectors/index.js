@@ -1,12 +1,15 @@
 // @flow
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import * as proposalsSelectors from './proposals';
 import * as proposalSelectors from './proposal';
 import * as authSelectors from './auth';
 import * as siderbarSelectors from './sidebar';
 import * as ssoAuthSelectors from './sso-auth';
+import * as notificationSelectors from './notification';
 
 export * from './notepad';
+export * from './profile';
+export * from './timeline';
 
 // SSO Auth selectors
 export const getUserAuthStatus = (state: Object): boolean =>
@@ -14,6 +17,9 @@ export const getUserAuthStatus = (state: Object): boolean =>
 
 export const getUserRole = (state: Object): string =>
   ssoAuthSelectors.getUserRole(state.ssoAuth);
+
+export const getfetchUserTagFlag = (state: Object): string =>
+  proposalSelectors.getfetchUserTagFlag(state.proposal);
 
 export const getUserName = (state: Object): string =>
   ssoAuthSelectors.getUserName(state.ssoAuth);
@@ -113,6 +119,9 @@ export const isAnswerTypesInfoLoading = (state: Object): Boolean =>
 export const getRoles = (state: Map): Map =>
   proposalSelectors.getRoles(state.proposal);
 
+export const getIntegrations = (state: Map): Map =>
+  proposalSelectors.getIntegrations(state.proposal);
+
 export const isRolesInfoLoading = (state: Object): Boolean =>
   proposalSelectors.isRolesInfoLoading(state.proposal);
 
@@ -134,8 +143,14 @@ export const getProposalBoxIdError = (state: Object): string =>
 export const getProposalBoxId = (state: Object): string =>
   proposalSelectors.getProposalBoxId(state.proposal);
 
+export const getShowNaCheckbox = state => {
+  return state.proposal.get('showNaCheckbox');
+};
+
 export const getAllBidsForIndex = (state: Object): string =>
   state.proposal.get('boxBids');
+export const getAdditionalLinks = (state: Object): string =>
+  state.proposal.get('boxAdditionalLink');
 
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
@@ -152,6 +167,11 @@ export const selectIsQuestionsFilterEnabled = state =>
 export const selectProposalQuestions = state =>
   proposalSelectors.selectProposalQuestions(state);
 
+export const getQuestion = questionId => state =>
+  proposalSelectors
+    .selectProposalQuestions(state)
+    .find(i => i.questionId === questionId);
+
 export const selectSections = state => proposalSelectors.selectSections(state);
 
 export const selectFilteredSections = state =>
@@ -164,6 +184,8 @@ export const getEditQuestionData = state =>
   proposalSelectors.getEditQuestionData(state);
 
 export const getSelectedBid = state => proposalSelectors.getSelectedBid(state);
+export const getStatusOfNewBid = state =>
+  proposalSelectors.getStatusOfNewBid(state);
 
 // Tabbar Selectors
 export const getProposals = (state: Object): Array<Object> =>
@@ -178,6 +200,9 @@ export const getProposalsLoading = (state: Object): boolean =>
 export const getFilteredProposals = (state: Map): Map =>
   proposalsSelectors.getFilteredProposals(state.proposals);
 
+export const getFavouriteProposals = (state: Map): Map =>
+  proposalsSelectors.getFavouriteProposals(state.proposals);
+
 export const getIsFilteringProposals = (state: Map): boolean =>
   proposalsSelectors.getIsFilteringProposals(state.proposals);
 
@@ -186,7 +211,21 @@ export const getProposalsFilters = (state: Map): Object =>
 
 // Sidebar Selectors
 export const getSelectedSection = (state: Object): string =>
-  siderbarSelectors.getSelectedSectionSelector(state.sidebar);
+  siderbarSelectors.getSelectedSectionSelector(state?.sidebar);
 
 export const getIsOpen = (state: Object): string =>
   siderbarSelectors.getIsOpen(state.sidebar);
+
+export const getnoneditableField = (state: Map): Object =>
+  proposalsSelectors.getnoneditableField(state.proposals);
+
+export const getLookUpOptionsSelector = (state: Map): Object =>
+  proposalSelectors.getLookUpOptionsSelector(state.proposal);
+
+// Notification selectors
+export const getAllNotifications = state =>
+  notificationSelectors.getAllNotifications(state.notification);
+export const getNotificationLoading = state =>
+  notificationSelectors.getNotificationLoading(state.notification);
+export const getUnreadNotifications = state =>
+  notificationSelectors.getUnreadNotifications(state.notification);

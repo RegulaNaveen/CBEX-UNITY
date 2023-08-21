@@ -1,0 +1,244 @@
+.approvals-tab {
+  margin-top: 0.5rem;
+  min-height: 73vh;
+  position: relative;
+  flex-grow: 1;
+
+  .all-approvals-container {
+    position: relative;
+
+    .custom-autocomplete
+      .a-MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'][class*='MuiOutlinedInput-marginDense'] {
+      min-height: 40px;
+    }
+
+    .a-MuiOutlinedInput-root.Mui-disabled {
+      cursor: default;
+      pointer-events: none;
+      opacity: 1;
+
+      .a-MuiOutlinedInput-notchedOutline {
+        opacity: 1 !important;
+        background-color: $light !important;
+        border-color: $border-color-disabled !important;
+      }
+    }
+
+    .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'][class*='MuiOutlinedInput-marginDense'] {
+      padding: 4px;
+    }
+
+    .date-picker,
+    .checkboxtype,
+    .autocomplete-disabled {
+      .a-MuiInputBase-root.Mui-disabled {
+        opacity: 1;
+        background-color: $light;
+        .a-MuiInputBase-input.Mui-disabled {
+          border-color: $border-color-disabled !important;
+        }
+      }
+    }
+
+    .autocomplete-disabled {
+      .a-MuiChip-clickable {
+        z-index: 1;
+      }
+    }
+
+    .accordion-body {
+      position: relative;
+      display: block;
+      counter-reset: css-counter 0;
+
+      .approval-ques {
+        counter-increment: css-counter 1;
+        padding: 0 1rem;
+
+        .approval-sec-title {
+          &:after {
+            content: ' ' counter(css-counter);
+          }
+        }
+
+        &:first-child {
+          .approval-sec-title {
+            display: none;
+          }
+        }
+        .approval-sec-title {
+          color: $black;
+          font-weight: bold;
+          padding: 0.25rem 0.875rem 1rem;
+        }
+        hr {
+          width: calc(100% - 20px);
+          border-color: $neutral4 transparent transparent;
+          border-top-width: 2px;
+          margin: 1.625rem 0.625rem 1rem;
+          border-style: solid;
+        }
+        .question-active {
+          background-color: #0557d559;
+        }
+      }
+    }
+
+    .MuiBox-root {
+      padding: 10px 8px !important;
+      margin-top: 1.25rem;
+
+      &:first-child {
+        margin-top: 0.375rem;
+      }
+
+      label + .MuiInput-formControl {
+        margin-top: 0px;
+      }
+      .ques-title {
+        margin-bottom: 0.3125rem;
+      }
+
+      .loader-cover {
+        margin-left: 0px;
+        position: relative;
+        display: inline-block;
+        top: 11px;
+      }
+    }
+
+    .accordion-title,
+    .approval-sec-title {
+      letter-spacing: 0.4px;
+    }
+
+    .approval-ques {
+      &-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .email-btn svg {
+          min-width: 0;
+          margin-right: 8px;
+        }
+
+        .delete-btn svg {
+          font-size: 0.9375rem !important;
+          margin-top: -2px;
+          min-width: 0px;
+          margin-right: 7px;
+        }
+      }
+    }
+    .checkboxtype {
+      .MuiFormControl-fullWidth {
+        & > * {
+          margin: 0;
+        }
+      }
+      :hover {
+        border-color: $neptune-primary;
+      }
+      .MuiFormControl-marginNormal {
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      .MuiInputBase-input {
+        font: inherit;
+        color: #000000;
+        width: 100%;
+        border: 1px solid #d9d9d9;
+        height: 40px;
+        margin: 0;
+        display: block;
+        padding: 8px 8px 8px 7px;
+        min-width: 0;
+        background: none;
+        box-sizing: border-box;
+        line-height: 1.5;
+        border-radius: 4px;
+        animation-name: mui-auto-fill-cancel;
+        letter-spacing: inherit;
+        animation-duration: 10ms;
+        transition-duration: 0.4s;
+        transition-property: border-color;
+        -webkit-tap-highlight-color: transparent;
+      }
+    }
+  }
+
+  .filter-container {
+    .filter-btn {
+      display: flex;
+      justify-content: end;
+      padding-bottom: 0.875rem;
+      button {
+        font-size: 0.875rem;
+        padding: 0 0.5rem;
+        border-radius: 3px;
+        box-shadow: none;
+
+        svg {
+          font-size: 16.8px;
+          width: auto;
+          height: 1.25rem;
+          min-width: 0;
+          margin-right: 7px;
+        }
+      }
+    }
+  }
+
+  .filter-icon {
+    fill: $neptune-primary;
+    margin-right: 5px;
+  }
+
+  .filter-horizontal {
+    display: block;
+    height: 0.8px;
+    border: 0.6em;
+    border-top: 1px solid #ccc;
+    margin: 0.6em -0.5em 0.6em -0.5em;
+    padding: 0;
+  }
+
+  .no-approval-wrapper {
+    display: flex;
+    justify-content: center;
+    height: 60vh;
+  }
+  .approval-text-question {
+    .public-DraftStyleDefault-block {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+  }
+  .status-txt {
+    color: $neptune-primary;
+    font-weight: 500;
+    font-size: 12px;
+    font-style: italic;
+  }
+}
+
+.popover-approval {
+  .RichEditor-editor .public-DraftEditor-content {
+    font-size: 14px !important;
+    display: contents !important;
+  }
+
+  .public-DraftStyleDefault-block {
+    margin-bottom: 0 !important;
+  }
+}
+
+.approvals-delete-confirm-modal {
+  max-width: 460px;
+}
+
+.approvals-warning-modal {
+  max-width: 342px;
+}

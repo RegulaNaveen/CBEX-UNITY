@@ -1,6 +1,6 @@
 .card {
   display: grid;
-  width: 420px;
+  width: 480px;
   grid-template-rows: 80px auto 81px auto;
   box-sizing: border-box;
   border: $border;
@@ -10,13 +10,15 @@
 
   .header-section {
     display: grid;
-    grid-template-columns: 1fr 0.5fr;
+    grid-template-columns: auto 0.5fr;
     border-bottom: $border;
+    padding: 7px 0px;
 
     div:first-child {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      flex-grow: 1;
       padding: 0 25px;
 
       p {
@@ -34,6 +36,13 @@
           font-weight: 500;
         }
       }
+    }
+
+    .favourite-container {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 1rem;
+      align-items: center;
     }
   }
 
@@ -64,10 +73,9 @@
   }
 
   .buttons-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     align-items: center;
-    justify-items: center;
+    justify-content: space-around;
     background-color: #f8f9fb;
 
     .button {
@@ -97,7 +105,7 @@
 
         &:first-child {
           color: $pink;
-          font-size: 29.5px;
+          font-size: 33.5px;
           font-weight: 600;
         }
       }

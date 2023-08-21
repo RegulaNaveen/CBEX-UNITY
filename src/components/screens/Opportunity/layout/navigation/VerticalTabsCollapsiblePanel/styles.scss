@@ -1,0 +1,30 @@
+@import '../../../../../../../styles/Constants';
+
+.vertical-tabs-collapsible-panel {
+  display: flex;
+  height: 100vh;
+  position: sticky;
+  top: $toolbarHight;
+  margin-left: -16px;
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 5px;
+  }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c1a9a9;
+  }
+
+  &.hide {
+    display: none;
+  }
+}

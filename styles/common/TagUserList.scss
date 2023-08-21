@@ -1,0 +1,45 @@
+.tag-user-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background: $white;
+  border: 1px solid $neutral1;
+  border-radius: 2px;
+  list-style: none;
+  box-shadow: 0 4px 8px -2px rgba(9, 30, 66, 0.25),
+    0 0 1px rgba(9, 30, 66, 0.31);
+  z-index: 2;
+  max-height: 250px;
+  overflow-y: auto;
+
+  .list-item {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #888888;
+    border-bottom: 1px solid $neutral1;
+
+    b {
+      color: #333333;
+    }
+
+    &:last-child {
+      border: none;
+    }
+
+    &:hover,
+    &.active {
+      background-color: $neptune-hover;
+    }
+  }
+}
+
+.tag-user-list-loader {
+  font-size: 16px;
+  background: $white;
+  padding: 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 0 0 4px 4px;
+  color: #999999;
+  margin-top: 4px;
+}

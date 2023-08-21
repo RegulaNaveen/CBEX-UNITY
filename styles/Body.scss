@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'ProximaNova-Regular';
+  font-family: $proximaNova;
   src: url('../fonts/ProximaNova-Regular.otf') format('opentype');
 }
 
@@ -16,7 +16,52 @@
 
 html,
 body {
+  font-size: 16px;
   height: 100%;
   scroll-behavior: smooth;
   font-family: $proximaNova;
+  background-color: #f6f6f6 !important;
+
+  .a-MuiAutocomplete-popper {
+    &.disable {
+      display: none !important;
+    }
+  }
+
+  .MuiAutocomplete-popper {
+    & > * {
+      box-shadow: none !important;
+    }
+  }
+  .event-launcher__tooltip {
+    padding: 6px 10px;
+    h3 {
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
+    h4 {
+      font-weight: 400;
+      font-size: 14px;
+    }
+  }
+  .hidden {
+    display: none !important;
+  }
+}
+
+.search-highlight {
+  background-color: #0557d559 !important;
+}
+
+@media screen and (max-width: 1200px) and (min-width: 300px) {
+  .fav-icon-button {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.edit-custom-name-modal {
+  max-width: 480px;
+  width: 100%;
+  z-index: 99999;
 }

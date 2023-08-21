@@ -1,16 +1,17 @@
 // @flow
 import React, { PureComponent } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
+import Button from 'apollo-react/components/Button';
+import User from 'apollo-react-icons/User';
+import Grid from 'apollo-react/components/Grid';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
-import Loader from 'react-loader-spinner';
-import { LOGIN } from '../../../routes';
+import { Map } from 'immutable'; // NOSONAR
+import { LOGIN, PROFILE } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
 import {
   getUserEmail,
   getUserName,
@@ -93,10 +94,30 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
     return (
       <div className="toolbar-account-menu">
-        <p className="toolbar-account-menu-name">{name}</p>
-        <p className="toolbar-account-menu-email">{email}</p>
+        <Grid container style={{ padding: '10px' }}>
+          {/* <Grid item>
+            <Avatar alt="avatar" src="">
+              {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+            </Avatar>
+          </Grid> */}
+          <Grid item>
+            <p
+              className="toolbar-account-menu-name"
+              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {name}
+            </p>
+            <p
+              className="toolbar-account-menu-email"
+              style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {email}
+            </p>
+          </Grid>
+        </Grid>
+
         <div className="toolbar-account-menu-separator" />
-        <div className="toolbar-account-menu-option">
+        {/* <div className="toolbar-account-menu-option">
           {isRolesLoading ? (
             <div className="toolbar-account-menu-option-loader">
               <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
@@ -111,8 +132,20 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
               value={roleName}
             />
           )}
-        </div>
+        </div> */}
         <div className="menu-links">
+          <Button
+            // target='_blank'
+            variant="text"
+            icon={<User />}
+            className="menu-link-btn"
+            fullwidth
+            onClick={() => this.props.history.push(PROFILE)}
+            style={{ width: '100%' }}
+          >
+            Go to Profile
+          </Button>
+
           <a
             className="MuiButtonBase-root MuiButton-root MuiButton-text menu-link-btn MuiButton-textPrimary"
             tabIndex="0"

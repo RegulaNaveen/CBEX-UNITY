@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 
   @media (min-width: 1200px) {
     &.sidebar-open {
@@ -50,7 +51,7 @@
           background-color: #fff;
           border: 1px solid#e3e3e3;
           color: #297dfd;
-          font-family: 'ProximaNova-Regular';
+          font-family: $proximaNova;
           font-size: 16px;
           font-weight: 500;
 
@@ -63,6 +64,7 @@
             position: relative;
             top: 2px;
             color: #297dfd;
+            min-width: 0;
           }
         }
       }
@@ -166,7 +168,7 @@
   box-sizing: border-box;
   height: 94px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
@@ -183,7 +185,7 @@
   box-sizing: border-box;
   height: 40px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);

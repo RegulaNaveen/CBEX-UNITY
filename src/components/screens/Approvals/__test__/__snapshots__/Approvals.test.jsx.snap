@@ -1,0 +1,590 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot Test Approval Input Components Test CheckboxQuestion 1`] = `
+LoadedCheerio {
+  "0": <p>
+    Error rendering CheckBoxQuestion
+  </p>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test DateQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="date-picker "
+  >
+    <div
+      class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+    >
+      <label
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+        data-shrink="true"
+        for=":R5:"
+        id=":R5:-label"
+      />
+      <div
+        class="MuiInputBase-root MuiInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-1pa58rh-MuiInputBase-root-MuiInput-root"
+      >
+        <div
+          class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-standard MuiInputAdornment-sizeMedium makeStyles-startIcon-10 css-ittuaa-MuiInputAdornment-root"
+        >
+          <span
+            class="notranslate"
+          >
+            ​
+          </span>
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M20.2608696,3.625 L18.2173913,3.59 C18.0973294,3.59 18,3.50081229 18,3.38 L18,1.96875 C18,1.48550084 17.6106824,1 17.1304348,1 C16.6501872,1 16.2608696,1.48550084 16.2608696,1.96875 L16.2608696,6 C16.26,7 14.61,7 14.6086957,6 L14.6086957,4.0625 C14.6086957,3.82087542 14.4140368,3.625 14.173913,3.625 L8.95652174,3.59375 C8.83679861,3.59375096 8.73960933,3.49634544 8.73913043,3.375875 L8.73913043,1.84375 C8.73913043,1.36050084 8.34981283,1 7.86956522,1 C7.38931761,1 7,1.36050084 7,1.84375 L7,6 C7,7 5.5,7 5.47826087,6 L5.47826087,4.0625 C5.47826087,3.82087542 5.28360207,3.625 5.04347826,3.625 L3.73913043,3.625 C2.77863522,3.625 2,4.40850169 2,5.375 L2,20.25 C2,21.2164983 2.77863522,22 3.73913043,22 L20.2608696,22 C21.2213648,22 22,21.2164983 22,20.25 L22,5.375 C22,4.40850169 21.2213648,3.625 20.2608696,3.625 Z M19.5789474,20 L4.42105263,20 C4.18851168,20 4,19.810582 4,19.5769231 L4,9.42307692 C4,9.18941799 4.18851168,9 4.42105263,9 L19.5789474,9 C19.8114883,9 20,9.18941799 20,9.42307692 L20,19.5769231 C20,19.810582 19.8114883,20 19.5789474,20 Z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <input
+          aria-invalid="false"
+          class="MuiInputBase-input MuiInput-input MuiInputBase-inputAdornedStart css-1x51dt5-MuiInputBase-input-MuiInput-input"
+          id=":R5:"
+          placeholder="DD-MMM-YYYY"
+          style="resize:none;min-width:auto;padding-left:31px"
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test MultiSelectQuestion 1`] = `
+LoadedCheerio {
+  "0": <p>
+    Error rendering Multi select question
+  </p>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test NumberQuestion 1`] = `
+LoadedCheerio {
+  "0": <input
+    class="text-number-wrapper proposal-text-area"
+    value=""
+  />,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test ProposalTeamQuestion 1`] = `
+LoadedCheerio {
+  "0": <p>
+    Error rendering Proposal Team question
+  </p>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test RadioQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
+    role="radiogroup"
+  >
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-21 MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+    >
+      <span
+        class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-19x3w69-MuiButtonBase-root-MuiRadio-root"
+      >
+        <input
+          class="PrivateSwitchBase-input css-1m9pwf3"
+          name=":R2:"
+          type="radio"
+          value="Toyota"
+        />
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill-rule="evenodd"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              fill="#FFF"
+              r="7"
+            />
+          </g>
+        </svg>
+      </span>
+      <span
+        class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label makeStyles-label-22 css-ahj2mt-MuiTypography-root"
+      >
+        Toyota
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-21 MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+    >
+      <span
+        class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-19x3w69-MuiButtonBase-root-MuiRadio-root"
+      >
+        <input
+          class="PrivateSwitchBase-input css-1m9pwf3"
+          name=":R2:"
+          type="radio"
+          value="Mercedes"
+        />
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill-rule="evenodd"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              fill="#FFF"
+              r="7"
+            />
+          </g>
+        </svg>
+      </span>
+      <span
+        class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label makeStyles-label-22 css-ahj2mt-MuiTypography-root"
+      >
+        Mercedes
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-21 MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+    >
+      <span
+        class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-19x3w69-MuiButtonBase-root-MuiRadio-root"
+      >
+        <input
+          class="PrivateSwitchBase-input css-1m9pwf3"
+          name=":R2:"
+          type="radio"
+          value="Ferrari"
+        />
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill-rule="evenodd"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              fill="#FFF"
+              r="7"
+            />
+          </g>
+        </svg>
+      </span>
+      <span
+        class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label makeStyles-label-22 css-ahj2mt-MuiTypography-root"
+      >
+        Ferrari
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-21 MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+    >
+      <span
+        class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-19x3w69-MuiButtonBase-root-MuiRadio-root"
+      >
+        <input
+          class="PrivateSwitchBase-input css-1m9pwf3"
+          name=":R2:"
+          type="radio"
+          value="Ford"
+        />
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill-rule="evenodd"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              fill="#FFF"
+              r="7"
+            />
+          </g>
+        </svg>
+      </span>
+      <span
+        class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label makeStyles-label-22 css-ahj2mt-MuiTypography-root"
+      >
+        Ford
+      </span>
+    </label>
+    <label
+      class="MuiFormControlLabel-root makeStyles-root-21 MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+    >
+      <span
+        class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary MuiRadio-root MuiRadio-colorPrimary css-19x3w69-MuiButtonBase-root-MuiRadio-root"
+      >
+        <input
+          class="PrivateSwitchBase-input css-1m9pwf3"
+          name=":R2:"
+          type="radio"
+          value="BMW"
+        />
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill-rule="evenodd"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              fill="#FFF"
+              r="7"
+            />
+          </g>
+        </svg>
+      </span>
+      <span
+        class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label makeStyles-label-22 css-ahj2mt-MuiTypography-root"
+      >
+        BMW
+      </span>
+    </label>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test SelectQuestion 1`] = `
+LoadedCheerio {
+  "0": <div
+    class="auto-complete-with-add-option"
+  >
+    <div
+      class="MuiAutocomplete-root css-4xbbh5-MuiAutocomplete-root"
+      data-testid="autocomplete-test"
+      style="resize:vertical"
+    >
+      <div
+        class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+      >
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-multiline MuiAutocomplete-inputRoot css-z1o969-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <textarea
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-invalid="false"
+            autocapitalize="none"
+            autocomplete="off"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiInputBase-inputSizeSmall MuiAutocomplete-input MuiAutocomplete-inputFocused css-12tl3rr-MuiInputBase-input-MuiOutlinedInput-input"
+            id=":R0:"
+            placeholder="Click to answer"
+            role="combobox"
+            spellcheck="false"
+            style="height:0"
+          />
+          <textarea
+            aria-hidden="true"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMultiline MuiInputBase-inputSizeSmall MuiAutocomplete-input MuiAutocomplete-inputFocused css-12tl3rr-MuiInputBase-input-MuiOutlinedInput-input"
+            readonly=""
+            style="visibility:hidden;position:absolute;overflow:hidden;height:0;top:0;left:0;transform:translateZ(0);padding:0"
+            tabindex="-1"
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-ihdtdm"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;
+
+exports[`Snapshot Test Approval Input Components Test YesNoQuestion 1`] = `
+LoadedCheerio {
+  "0": <p>
+    Error rendering y/n question
+  </p>,
+  "_root": LoadedCheerio {
+    "0": Document {
+      "children": [
+        <html>
+          <head />
+          <body />
+        </html>,
+      ],
+      "endIndex": null,
+      "next": null,
+      "parent": null,
+      "prev": null,
+      "startIndex": null,
+      "type": "root",
+      "x-mode": "quirks",
+    },
+    "_root": [Circular],
+    "length": 1,
+    "options": {
+      "decodeEntities": true,
+      "xml": false,
+    },
+  },
+  "length": 1,
+  "options": {
+    "decodeEntities": true,
+    "xml": false,
+  },
+}
+`;

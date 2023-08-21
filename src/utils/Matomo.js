@@ -18,7 +18,7 @@ const envSideId = {
 
 const matomoInstace = createInstance({
   urlBase: PROPOSAL.MAMOTO_IQVIA,
-  siteId: envSideId[env]
+  siteId: envSideId[env] || 20
 });
 
 export default matomoInstace;

@@ -1,9 +1,8 @@
 .switch-view {
   display: flex;
   align-items: center;
-  justify-content: flex-end;  
+  justify-content: flex-end;
   button {
-    background-color: $white;
     border: none;
     outline: none;
     cursor: pointer;
@@ -12,8 +11,8 @@
       g {
         fill: $neutral6;
       }
-      
-      &.is-active {  
+
+      &.is-active {
         g {
           fill: $neptune-secondary;
         }
