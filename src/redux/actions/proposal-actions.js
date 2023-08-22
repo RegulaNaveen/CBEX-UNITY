@@ -35,7 +35,8 @@ import {
   selectProposalQuestions,
   getProposals,
   getProposalDetails,
-  getFavouriteProposals
+  getFavouriteProposals,
+  getfetchUserTagFlag
 } from '../selectors';
 import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
@@ -46,6 +47,7 @@ import { SEARCH, UI, UNITY_TABS } from '../../constants/types';
 import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
+import featureFlags from '../../constants/featureFlags';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -1334,9 +1336,20 @@ export const getOpportunity = (
     const bidNo = parseInt(bidNumber);
     dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     let selectedProposalId;
+    const flags = getfetchUserTagFlag(getState());
+    const earlyEngagmentBidHistoryFlag =
+      flags[featureFlags.EARLY_ENGAGEMENT_BID_HISTORY];
 
     try {
-      const allProposals = await getAllProposals(id);
+      let allProposals = await getAllProposals(id);
+      if (earlyEngagmentBidHistoryFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !==
+            'Early_Engagement_Bid'
+        );
+        allProposals[0].isCurrent = true;
+      }
       const proposal = allProposals.find(
         thisProposal =>
           thisProposal.proposal.proposalDetails.bidNo === bidNo &&

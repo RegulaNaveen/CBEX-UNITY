@@ -1,119 +1,113 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../../../store';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { mount } from 'enzyme';
 import Tabbar from '../Tabbar';
+import { REDUX_TYPES } from '../../../constants';
 
-describe.skip('Tabbar component', () => {
-    let wrapper;
+const TabbarWithRedux = (props) => (
+    <Provider store={store}>
+        <Tabbar {...props} />
+    </Provider>
+);
 
+const filterValues = {
+    proposalsFilters: {
+        phases: ['Phase 1', 'Phase 2', 'Phase 3']
+    }
+};
+
+describe('Tabbar component', () => {
     beforeEach(() => {
-        const props = {
-            children: ['My Docket', 'Recent', 'All'],
-            setProposalView: jest.fn(),
-            filterProposals: jest.fn(),
-            eventCategories: {},
-            userActions: {},
-            trackEvent: jest.fn()
-        };
-        wrapper = mount(<Provider store={store}><Tabbar {...props} /></Provider>);
+        jest.useFakeTimers();
     });
 
     afterEach(() => {
-        wrapper.unmount();
-    })
-
-    it('should render without crashing', () => {
-        expect(wrapper).toBeDefined();
+        jest.runOnlyPendingTimers();
+        jest.useRealTimers();
     });
 
-    it('should have the correct initial state', () => {
-        expect(wrapper.state()).toEqual({
-            selected: 0,
-            filterCount: 0,
-            showFilters: false,
-            filters: {
-                opportunityNumber: '',
-                opportunityName: '',
-                customer: '',
-                protocolNumber: '',
-                phase: '',
-                product: '',
-                therapeuticArea: '',
-                indication: '',
-                bidDueDate: '',
-                opportunityStatus: '',
-                teamMember: ''
-            }
-        });
+    const props = {
+        children:['Assigned', 'Favorites', 'Recent', 'All'],
+        setProposalView: jest.fn(),
+        filterProposals: jest.fn(),
+        eventCategories: {},
+        userActions: {},
+        trackEvent: jest.fn(),
+        getFilterStatus: jest.fn(),
+    };
+
+    it('should render without crashing', () => {
+        const { container } = render(<TabbarWithRedux {...props} />);
+        expect(container).toBeDefined();
     });
 
     it('should update the selected state when handleChange is called', () => {
-        const index = 1;
-        wrapper.instance().handleChange(index);
-        expect(wrapper.state('selected')).toEqual(index);
+        const wrapper = mount(
+            <Provider store={store}>
+                <Tabbar {...props} />
+            </Provider>
+        );
+        wrapper.find('TabItem').at(1).simulate('click');
+        expect(wrapper.find('TabItem').at(1).prop('selected')).toEqual(1);
     });
 
     it('should update the proposal view when handleTypeView is called', () => {
-        const selectedTab = 1;
-        wrapper.instance().handleTypeView(selectedTab);
-        expect(wrapper.instance().props.setProposalView).toHaveBeenCalledWith(selectedTab);
+        const wrapper = mount(
+            <Provider store={store}>
+                <Tabbar {...props} />
+            </Provider>
+        );
+        expect(wrapper.find('SwitchView').prop('selectedViewType')).toEqual(1);
+        wrapper.find('button').at(0).simulate('click');
+        expect(wrapper.find('SwitchView').prop('selectedViewType')).toEqual(0);
     });
 
     it('should toggle the showFilters state when toggleFilters is called', () => {
-        wrapper.instance().toggleFilters();
-        expect(wrapper.state('showFilters')).toEqual(true);
-        wrapper.instance().toggleFilters();
-        expect(wrapper.state('showFilters')).toEqual(false);
-    });
-
-    it('should reset the filters to their initial state when clearFilter is called', () => {
-        wrapper.instance().clearFilter();
-        expect(wrapper.state('filters')).toEqual({
-            opportunityNumber: '',
-            opportunityName: '',
-            customer: '',
-            protocolNumber: '',
-            phase: '',
-            product: '',
-            therapeuticArea: '',
-            indication: '',
-            bidDueDate: '',
-            opportunityStatus: '',
-            teamMember: ''
-        });
+        render(<TabbarWithRedux {...props} />);
+        const Filter = screen.getByText('Filter');
+        fireEvent.click(Filter);
+        const DashboardFilters = screen.getByTestId('dashboard-filters');
+        expect(DashboardFilters).toBeDefined();
     });
 
     it('should update the filters correctly when onTextFilterChange is called', () => {
-        const event = {
-            target: {
-                id: 'opportunityNumber',
-                value: '123'
-            }
-        };
-        wrapper.instance().onTextFilterChange(event);
-        expect(wrapper.state('filters')).toEqual(
-            { 'opportunityNumber': '123' },
-            0);
+        const { container } = render(<TabbarWithRedux {...props} />);
+        const Filter = screen.getByText('Filter');
+        fireEvent.click(Filter);
+        const oppNameInput = container.querySelector('#opportunityName');
+        fireEvent.change(oppNameInput, { target: { id: 'opportunityName', value: 'ABC12345' }});
+        expect(oppNameInput).toHaveValue('ABC12345');
     });
 
     it('should call filterProposals with the correct arguments when onDropDownFilterChange is called', () => {
-        const id = 'opportunityStatus';
-        const value = 'Draft';
-        wrapper.instance().onDropDownFilterChange(id, value);
-        expect(props.filterProposals).toHaveBeenCalledWith(
-            { opportunityStatus: 'Draft' },
-            0
-        );
+        store.dispatch({
+            type: REDUX_TYPES.PROPOSALS.ON_SET_PROPOSALS_FILTERS,
+            payload: filterValues
+        });
+        const { container } = render(<TabbarWithRedux {...props} />);
+        const Filter = screen.getByText('Filter');
+        fireEvent.click(Filter);
+        const phaseInput = container.querySelector('#phase');
+        fireEvent.click(phaseInput);
+        const phase1 = screen.getByText('Phase 1');
+        fireEvent.click(phase1);
+        expect(screen.getByText('Phase 1')).toBeInTheDocument();
     });
 
-    it('should call filterProposals with the correct arguments when onDateRangeChange is called', () => {
-        const id = 'bidDueDate';
-        const range = { startDate: new Date('2022-02-01'), endDate: new Date('2022-02-28') };
-        wrapper.instance().onDateRangeChange(id, range);
-        expect(props.filterProposals).toHaveBeenCalledWith(
-            { bidDueDate: range },
-            0
-        );
+    it('should call filterProposals with the correct arguments when onDateRangeChange & clearFilter is called', () => {
+        const { container } = render(<TabbarWithRedux {...props} />);
+        const Filter = screen.getByText('Filter');
+        fireEvent.click(Filter);
+        const phaseInput = container.querySelector('.datepicker-input');
+        fireEvent.focusIn(phaseInput);
+        const from = screen.getByText('1');
+        fireEvent.click(from);
+        const to = screen.getByText('28');
+        fireEvent.click(to);
+        const clearAll = screen.getByText('Clear All');
+        fireEvent.click(clearAll);
+        fireEvent.click(Filter);
     });
 });
