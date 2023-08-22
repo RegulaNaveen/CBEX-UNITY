@@ -200,8 +200,37 @@ const updateDasboardSF = (state, action) => {
 
 const updateBidStopStatus = (state, action) => {
   const data = action.payload;
+  const mapper = DashboardSFUpDATE;
   let proposals = state.get('proposals');
   let favouriteProposals = state.get('favouriteProposals');
+  if (data && data?.data && data?.data?.questionSfField && favouriteProposals) {
+    const updatefavouriteProposals = favouriteProposals.map(value => {
+      if (
+        data &&
+        data?.data &&
+        data?.data?.proposalId === value['proposalId']
+      ) {
+        value[mapper[data?.data?.questionSfField]] = data.data.answer;
+      }
+      return value;
+    });
+    state.set('proposals', [...[...updatefavouriteProposals]]);
+  }
+
+  if (data && data?.data && data?.data?.questionSfField && proposals) {
+    const updateProposals = proposals.map(value => {
+      if (
+        data &&
+        data?.data &&
+        data?.data?.proposalId === value['proposalId']
+      ) {
+        value[mapper[data?.data?.questionSfField]] = data.data.answer;
+      }
+      return value;
+    });
+    return state.set('proposals', [...[...updateProposals]]);
+  }
+
   if (
     data &&
     data?.data &&
