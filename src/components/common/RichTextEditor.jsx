@@ -1,26 +1,27 @@
-import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { Map, OrderedMap } from 'immutable';
-import { v4 as uuidv4 } from 'uuid';
-import Grid from 'apollo-react/components/Grid';
-import ListNumber from 'apollo-react-icons/ListNumber';
-import ListBullet from 'apollo-react-icons/ListBullet';
-import IndentDecrease from 'apollo-react-icons/IndentDecrease';
-import IndentIncrease from 'apollo-react-icons/IndentIncrease';
-import TextBold from 'apollo-react-icons/TextBold';
-import TextItalics from 'apollo-react-icons/TextItalics';
-import TextUnderline from 'apollo-react-icons/TextUnderline';
-import StrikeThrough from 'apollo-react-icons/StrikeThrough';
+import React, { useState, useRef } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import { Map, OrderedMap } from "immutable"; // NOSONAR
+import { v4 as uuidv4 } from "uuid";
+import Grid from "apollo-react/components/Grid";
+import ListNumber from "apollo-react-icons/ListNumber";
+import ListBullet from "apollo-react-icons/ListBullet";
+import IndentDecrease from "apollo-react-icons/IndentDecrease";
+import IndentIncrease from "apollo-react-icons/IndentIncrease";
+import TextBold from "apollo-react-icons/TextBold";
+import TextItalics from "apollo-react-icons/TextItalics";
+import TextUnderline from "apollo-react-icons/TextUnderline";
+import StrikeThrough from "apollo-react-icons/StrikeThrough";
 
 import {
   Editor,
   EditorState,
   RichUtils,
   convertToRaw,
-  DefaultDraftBlockRenderMap
-} from 'draft-js';
-import 'draft-js/dist/Draft.css';
+  DefaultDraftBlockRenderMap,
+} from "draft-js";
+import "draft-js/dist/Draft.css";
+import Typography from "apollo-react/components/Typography";
 
 function getInitialEditorState(defaultValue) {
   return defaultValue
@@ -28,50 +29,53 @@ function getInitialEditorState(defaultValue) {
     : EditorState.createEmpty();
 }
 
+const LEFT_INDENT = "left-indent";
+const RIGHT_INDENT = "right-indent";
+
 export const CONTROL_COMMANDS = {
-  bold: 'BOLD',
-  italics: 'ITALIC',
-  underline: 'UNDERLINE',
-  strikethrough: 'STRIKETHROUGH',
-  uppercase: 'UPPERCASE',
-  lowercase: 'LOWERCASE',
-  orderedList: 'ordered-list-item',
-  unorderedList: 'unordered-list-item',
-  indentDecrease: 'left-indent',
-  indentIncrease: 'right-indent'
+  bold: "BOLD",
+  italics: "ITALIC",
+  underline: "UNDERLINE",
+  strikethrough: "STRIKETHROUGH",
+  uppercase: "UPPERCASE",
+  lowercase: "LOWERCASE",
+  orderedList: "ordered-list-item",
+  unorderedList: "unordered-list-item",
+  indentDecrease: LEFT_INDENT,
+  indentIncrease: RIGHT_INDENT,
 };
 
 const blockRenderMap = Map({
   IndentBlock1: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock2: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock3: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock4: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock5: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock6: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock7: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock8: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock9: {
-    element: 'div'
+    element: "div",
   },
   IndentBlock10: {
-    element: 'div'
-  }
+    element: "div",
+  },
 });
 
 export const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(
@@ -80,25 +84,25 @@ export const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(
 
 export const cssStyles = {
   UPPERCASE: {
-    textTransform: 'uppercase'
+    textTransform: "uppercase",
   },
   LOWERCASE: {
-    textTransform: 'lowercase'
-  }
+    textTransform: "lowercase",
+  },
 };
 
 export function getBlockStyle(block) {
   const blockTypes = {
-    IndentBlock1: 'DraftEditor-indent-1',
-    IndentBlock2: 'DraftEditor-indent-2',
-    IndentBlock3: 'DraftEditor-indent-3',
-    IndentBlock4: 'DraftEditor-indent-4',
-    IndentBlock5: 'DraftEditor-indent-5',
-    IndentBlock6: 'DraftEditor-indent-6',
-    IndentBlock7: 'DraftEditor-indent-7',
-    IndentBlock8: 'DraftEditor-indent-8',
-    IndentBlock9: 'DraftEditor-indent-9',
-    IndentBlock10: 'DraftEditor-indent-10'
+    IndentBlock1: "DraftEditor-indent-1",
+    IndentBlock2: "DraftEditor-indent-2",
+    IndentBlock3: "DraftEditor-indent-3",
+    IndentBlock4: "DraftEditor-indent-4",
+    IndentBlock5: "DraftEditor-indent-5",
+    IndentBlock6: "DraftEditor-indent-6",
+    IndentBlock7: "DraftEditor-indent-7",
+    IndentBlock8: "DraftEditor-indent-8",
+    IndentBlock9: "DraftEditor-indent-9",
+    IndentBlock10: "DraftEditor-indent-10",
   };
   return blockTypes[block.getType()];
 }
@@ -112,24 +116,24 @@ function changeBlockDepth(block, editorstate, indentation) {
   const depth = block.getDepth();
   let newDepth = 0;
 
-  if (indentation === 'left-indent' && depth > 0) {
+  if (indentation === LEFT_INDENT && depth > 0) {
     newDepth = depth - 1;
-  } else if (indentation === 'right-indent' && depth < 4) {
+  } else if (indentation === RIGHT_INDENT && depth < 4) {
     newDepth = depth + 1;
   } else {
     newDepth = depth;
   }
 
-  const newBlock = block.set('depth', newDepth);
+  const newBlock = block.set("depth", newDepth);
   const contentState = editorstate.getCurrentContent();
   const blockMap = contentState.getBlockMap();
   const newBlockMap = blockMap.set(blockKey, newBlock);
   return EditorState.push(
     editorstate,
     contentState.merge({
-      blockMap: newBlockMap
+      blockMap: newBlockMap,
     }),
-    'adjust-depth'
+    "adjust-depth"
   );
 }
 
@@ -159,7 +163,7 @@ function RichTextEditor({
   readOnly,
   disabled,
   hideControls,
-  customStyles
+  customStyles,
 }) {
   const [editorState, setEditorState] = useState(
     getInitialEditorState(defaultValue)
@@ -206,17 +210,17 @@ function RichTextEditor({
     if (
       blockType === null || blockType === undefined
         ? undefined
-        : blockType.includes('IndentBlock')
+        : blockType.includes("IndentBlock")
     ) {
-      const indentIndex = parseInt(blockType.replace('IndentBlock', ''), 10);
+      const indentIndex = parseInt(blockType.replace("IndentBlock", ""), 10);
 
-      if (indentation === 'right-indent' && indentIndex < 10) {
+      if (indentation === RIGHT_INDENT && indentIndex < 10) {
         indentStyle = `IndentBlock${indentIndex + 1}`;
-      } else if (indentation === 'left-indent' && indentIndex > 1) {
+      } else if (indentation === LEFT_INDENT && indentIndex > 1) {
         indentStyle = `IndentBlock${indentIndex - 1}`;
       }
     } else {
-      indentStyle = 'IndentBlock1';
+      indentStyle = "IndentBlock1";
     }
     return indentStyle;
   }
@@ -232,8 +236,8 @@ function RichTextEditor({
     const blockType = currentContentBlock.getType();
     let newEditorState = null;
     if (
-      blockType === 'unordered-list-item' ||
-      blockType === 'ordered-list-item'
+      blockType === "unordered-list-item" ||
+      blockType === "ordered-list-item"
     ) {
       newEditorState = changeBlockDepth(
         currentContentBlock,
@@ -242,13 +246,13 @@ function RichTextEditor({
       );
     } else if (
       !(
-        (blockType === 'unstyled' || blockType === null) &&
-        indentation === 'left-indent'
+        (blockType === "unstyled" || blockType === null) &&
+        indentation === LEFT_INDENT
       )
     ) {
       const indentStyle = getNextIndentation(indentation, blockType);
 
-      if (indentStyle === null && indentation === 'right-indent') {
+      if (indentStyle === null && indentation === RIGHT_INDENT) {
         return;
       }
 
@@ -266,13 +270,13 @@ function RichTextEditor({
     const newState = RichUtils.toggleInlineStyle(editorState, command);
     if (newState) {
       handleChange(newState);
-      if (command === 'UPPERCASE') {
-        if (newState.getCurrentInlineStyle().has('LOWERCASE')) {
-          handleChange(RichUtils.toggleInlineStyle(newState, 'LOWERCASE'));
+      if (command === "UPPERCASE") {
+        if (newState.getCurrentInlineStyle().has("LOWERCASE")) {
+          handleChange(RichUtils.toggleInlineStyle(newState, "LOWERCASE"));
         }
-      } else if (command === 'LOWERCASE') {
-        if (newState.getCurrentInlineStyle().has('UPPERCASE')) {
-          handleChange(RichUtils.toggleInlineStyle(newState, 'UPPERCASE'));
+      } else if (command === "LOWERCASE") {
+        if (newState.getCurrentInlineStyle().has("UPPERCASE")) {
+          handleChange(RichUtils.toggleInlineStyle(newState, "UPPERCASE"));
         }
       }
       return true;
@@ -284,47 +288,47 @@ function RichTextEditor({
   const BLOCK_CONTROLGROUP = OrderedMap({
     [CONTROL_COMMANDS.orderedList]: {
       onToggle: toggleBlockType,
-      Icon: ListNumber
+      Icon: ListNumber,
     },
     [CONTROL_COMMANDS.unorderedList]: {
       onToggle: toggleBlockType,
-      Icon: ListBullet
+      Icon: ListBullet,
     },
     [CONTROL_COMMANDS.indentDecrease]: {
       onToggle: handleIndentation,
-      Icon: IndentDecrease
+      Icon: IndentDecrease,
     },
     [CONTROL_COMMANDS.indentIncrease]: {
       onToggle: handleIndentation,
-      Icon: IndentIncrease
-    }
+      Icon: IndentIncrease,
+    },
   });
 
   const INLINE_CONTROLGROUP = OrderedMap({
     [CONTROL_COMMANDS.bold]: {
       onToggle: toggleInlineStyle,
-      Icon: TextBold
+      Icon: TextBold,
     },
     [CONTROL_COMMANDS.italics]: {
       onToggle: toggleInlineStyle,
-      Icon: TextItalics
+      Icon: TextItalics,
     },
     [CONTROL_COMMANDS.underline]: {
       onToggle: toggleInlineStyle,
-      Icon: TextUnderline
+      Icon: TextUnderline,
     },
     [CONTROL_COMMANDS.strikethrough]: {
       onToggle: toggleInlineStyle,
-      Icon: StrikeThrough
+      Icon: StrikeThrough,
     },
     [CONTROL_COMMANDS.uppercase]: {
       onToggle: toggleInlineStyle,
-      Icon: Uppercase
+      Icon: Uppercase,
     },
     [CONTROL_COMMANDS.lowercase]: {
       onToggle: toggleInlineStyle,
-      Icon: Lowercase
-    }
+      Icon: Lowercase,
+    },
   });
 
   function LabelWithControls({ showControls }) {
@@ -344,9 +348,11 @@ function RichTextEditor({
     return (
       <Grid container alignItems="center">
         <Grid item xs={3}>
-          <p className="label">{label}</p>
+          <Typography component="span" className="label">
+            {label}
+          </Typography>
         </Grid>
-        <Grid item xs={9} style={{ textAlign: 'end' }}>
+        <Grid item xs={9} style={{ textAlign: "end" }}>
           {showControls ? (
             <div className="controls-container">
               {BLOCK_CONTROLS_TO_RENDER.size > 0 ? (
@@ -360,10 +366,10 @@ function RichTextEditor({
                       <Icon
                         key={uuidv4()}
                         className={classNames({
-                          'icon-button': true,
-                          active: isActive
+                          "icon-button": true,
+                          active: isActive,
                         })}
-                        onMouseDown={e => onToggle(e, key)}
+                        onMouseDown={(e) => onToggle(e, key)}
                       />
                     );
                   })}
@@ -380,10 +386,10 @@ function RichTextEditor({
                       <Icon
                         key={uuidv4()}
                         className={classNames({
-                          'icon-button': true,
-                          active: isActive
+                          "icon-button": true,
+                          active: isActive,
                         })}
-                        onMouseDown={e => onToggle(e, key)}
+                        onMouseDown={(e) => onToggle(e, key)}
                       />
                     );
                   })}
@@ -397,21 +403,22 @@ function RichTextEditor({
   }
 
   LabelWithControls.propTypes = {
-    showControls: PropTypes.bool.isRequired
+    showControls: PropTypes.bool.isRequired,
   };
 
   const contentState = editorState.getCurrentContent();
 
   return (
     <div
+      data-testid="rich-text-editor"
       className={classNames({
-        'MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth': true,
-        'RichEditor-hidePlaceholder':
+        "MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth": true,
+        "RichEditor-hidePlaceholder":
           !contentState.hasText() &&
           contentState
             .getBlockMap()
             .first()
-            .getType() !== 'unstyled'
+            .getType() !== "unstyled",
       })}
     >
       <LabelWithControls showControls={!(readOnly || disabled)} />
@@ -439,34 +446,34 @@ RichTextEditor.propTypes = {
   readOnly: PropTypes.bool,
   disabled: PropTypes.bool,
   hideControls: PropTypes.arrayOf(PropTypes.string),
-  customStyles: PropTypes.object
+  customStyles: PropTypes.object,
 };
 
 RichTextEditor.defaultProps = {
-  label: '',
+  label: "",
   defaultValue: null,
-  placeholder: '',
+  placeholder: "",
   readOnly: false,
   disabled: false,
   hideControls: [],
   customStyles: {},
-  onChange: () => {}
+  onChange: () => { },
 };
 
 Lowercase.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 Uppercase.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 Lowercase.defaultProps = {
-  className: ''
+  className: "",
 };
 
 Uppercase.defaultProps = {
-  className: ''
+  className: "",
 };
 
 export default RichTextEditor;

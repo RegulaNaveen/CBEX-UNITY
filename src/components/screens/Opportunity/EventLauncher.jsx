@@ -1,0 +1,322 @@
+import React, { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import CalendarEvent from 'apollo-react-icons/CalendarEvent';
+import Tooltip from 'apollo-react/components/Tooltip';
+import Radio from 'apollo-react/components/Radio';
+import RadioGroup from 'apollo-react/components/RadioGroup';
+import isEmpty from 'lodash/isEmpty';
+import PropTypes from 'prop-types';
+import IconButton from 'apollo-react/components/IconButton';
+import moment from 'moment';
+
+import CustomModal from '../../common/CustomModal';
+import { DEFAULT, PROPOSAL } from '../../../constants/app';
+import { extractEmails, parseStringifyJson } from '../../../utils/helpers';
+import {
+  getOpportunityData,
+  selectActiveTeamQuestions,
+  selectProposalQuestions
+} from '../../../redux/selectors/proposal';
+import { getUserData } from '../../../redux/selectors';
+import { updateEventSubjectBody } from '../../../utils/utils';
+import { isMap } from 'lodash';
+// import { getOpportunityData } from '../../../redux/selectors/proposal';
+
+const modalStyle = { maxWidth: 545, width: '100%' };
+const attendees = ['Expected team members', 'All assigned team members'];
+
+const UnassignedRolesList = ({ unassignedRoles = [] }) => {
+  if (unassignedRoles.length === 0) return null;
+
+  return (
+    <div className="unassigned-roles-list-container">
+      <p className="desc">
+        The following roles do not have a person assigned to it:{' '}
+      </p>
+      <div className="unassigned-roles-list-scrollable">
+        {unassignedRoles.map(roleName => (
+          <p>{roleName}</p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const EventLauncher = ({
+  questionData,
+  proposalDetail,
+  trackMatomoEventLauncher
+}) => {
+  const [bodyStr, setBodyStr] = useState('');
+  const [bodyHtml, setBodyHtml] = useState('');
+  const quesData = questionData?.toJS();
+  const hasEvent = quesData?.events && !isEmpty(quesData?.events);
+  const eventStartDate = !isEmpty(quesData?.answers)
+    ? [...quesData?.answers].pop()?.answer
+    : '';
+  const userData = useSelector(getUserData);
+  const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const eventFlag = allFlags.eventLauncher || false;
+  const { isCurrent, id: proposalId } = useSelector(state =>
+    state.proposal.get('selectedBid')
+  )?.toJS();
+
+  // Get proposalQuestions - Redux State
+  const proposalQuestions = useSelector(selectProposalQuestions);
+  const opportunityData = useSelector(getOpportunityData);
+  const eventData = parseStringifyJson(quesData?.events);
+  const activeTeamQuestions = useSelector(selectActiveTeamQuestions);
+
+  const bodytoHtml = eventData?.EventBody;
+  const eventSubject = eventData?.EventSubject;
+  // Component State
+  const [openModal, setOpenModal] = React.useState(false);
+  const [attendeesVal, setAttendeesVal] = useState(attendees[0]);
+  const proposalTeam = useMemo(() => {
+    if (!openModal) return []; // break func
+    const team = [];
+    proposalQuestions.forEach(item => {
+      const {
+        section,
+        answers,
+        roleNames,
+        isCustomQuestion,
+        active,
+        questionId
+      } = item;
+      const { sectionName } = section;
+      if (sectionName === 'Proposal Team') {
+        const visible =
+          item.visible === true &&
+          (active === true || isCustomQuestion === true) &&
+          !item.notApplicable &&
+          !item.questionApproval;
+
+        let email = [];
+        if (!isEmpty(answers)) {
+          const { answer } = [...answers].pop();
+          if (!isEmpty(answer.trim())) {
+            email = [
+              ...new Set(
+                answer
+                  .trim()
+                  .split(',')
+                  .map(i => extractEmails(i))
+                  .filter(i => i !== null)
+              )
+            ];
+          }
+        }
+
+        if (!isEmpty(email) && (visible || typeof visible === 'undefined')) {
+          team.push({ email, questionId });
+        }
+      }
+    });
+    return team;
+  }, [openModal]);
+
+  const filteredEmails = useMemo(() => {
+    if (isEmpty(proposalTeam)) return []; // break func
+    const { EventQuestions: eventQuestions } = eventData;
+    // onChange attendees value
+    if (attendeesVal === attendees[0]) {
+      const filteredTeam = proposalTeam.filter(({ questionId }) => {
+        if (Array.isArray(eventQuestions)) {
+          return eventQuestions.includes(questionId);
+        }
+        return false;
+      });
+      return [...new Set(filteredTeam.map(i => i.email).flat())];
+    }
+    return [...new Set(proposalTeam.map(i => i.email).flat())];
+  }, [openModal, attendeesVal, proposalTeam]);
+
+  const unassignedRoles =
+    attendeesVal === attendees[0]
+      ? activeTeamQuestions
+          .filter(
+            team =>
+              Array.isArray(eventData.EventQuestions) &&
+              eventData.EventQuestions.includes(team.questionId) &&
+              isEmpty(team.email)
+          )
+          .map(team => team.questionText.trim())
+          .sort()
+      : activeTeamQuestions
+          .filter(team => isEmpty(team.email))
+          .map(team => team.questionText.trim())
+          .sort();
+
+  /**
+   * Generate Event Url Function
+   */
+  const generateEventUrl = (startDate, endDate, body, subject, email) => {
+    const placeholderData = {
+      proposalDetail,
+      proposalUsers:
+        isMap(opportunityData) &&
+        opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
+      proposalQuestions
+    };
+
+    const updatedBody = updateEventSubjectBody(body, placeholderData, 'body');
+    const updatedSubject = updateEventSubjectBody(
+      subject,
+      placeholderData,
+      'subject'
+    );
+    setBodyStr(updatedBody);
+    const subjectStr = encodeURIComponent(
+      updatedSubject.replace(new RegExp('\\n', 'g'), ' ')
+    );
+    return `https://outlook.office.com/owa?path=%2Fcalendar%2Faction%2Fcompose%20&rru=addevent&startdt=${startDate}&enddt=${endDate}&to=${email}&.&subject=${subjectStr}&body=Unity%20has%20copied%20your%20invite%20details%20to%20your%20clipboard.%20Press%20Control%20%E2%9C%9A%20V%20to%20paste%20this%20content%20to%20include%20it%20in%20your%20meeting%20invite%20and%20share%20it%20with%20your%20team.&online=1`;
+  };
+
+  const checkDateAge = date => {
+    const formattedDt = moment(date).format('YYYY-MM-DD');
+    if (moment(formattedDt).isSame(moment(), 'day')) return 'today';
+    if (moment(formattedDt).isAfter(moment(), 'day')) return 'future';
+    if (moment(formattedDt).isBefore(moment(), 'day')) return null;
+    return null;
+  };
+
+  const copyToClipboardAndOpenModal = async () => {
+    try {
+      const placeholderData = {
+        proposalDetail,
+        proposalUsers: opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
+        proposalQuestions
+      };
+      const updatedBody = updateEventSubjectBody(
+        bodytoHtml,
+        placeholderData,
+        'body'
+      );
+      const blob = new Blob([updatedBody], { type: 'text/html' });
+      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+      await navigator.clipboard.write([clipboardItem]);
+      setOpenModal(true);
+    } catch (error) {
+      console.log('Error copy email body to clipboard ', error);
+    }
+  };
+
+  const launchRichTextButtonHandler = () => {
+    const dateTimeFormat = 'YYYY-MM-DDTHH:mm:ss';
+    const { EventBody: body, EventSubject: subject } = eventData;
+    const dateAge = checkDateAge(eventStartDate);
+    const formattedDt = moment(eventStartDate).format('YYYY-MM-DD');
+    let startDate = `${formattedDt}T08:00:00`;
+    if (dateAge === 'today') {
+      startDate = moment()
+        .add(60, 'minutes')
+        .startOf('hour')
+        .format(dateTimeFormat);
+    }
+    const endDate = moment(startDate)
+      .add(1, 'hours')
+      .format(dateTimeFormat);
+
+    // Calling generateEventUrl func
+    const geturl = generateEventUrl(
+      startDate,
+      endDate,
+      body,
+      subject,
+      filteredEmails.join(', ')
+    );
+
+    const trackEventPayload = {
+      action: `Event Launched : ${subject} : ${body}`,
+      customDimensions: [
+        {
+          id: 1,
+          value: JSON.stringify({
+            proposalDetail,
+            questionText: quesData?.questionText,
+            userData,
+            event: quesData?.events,
+            startDate,
+            endDate
+          })
+        }
+      ]
+    };
+    trackMatomoEventLauncher(trackEventPayload);
+    window.open(geturl, '_blank', 'noopener,noreferrer');
+  };
+  // Event Modal
+  const eventLauncherModal = openModal && (
+    <CustomModal
+      open={openModal}
+      data-testid="test-custom-model"
+      title={PROPOSAL.EVENT_LAUNCHER}
+      className="event-launcher__modal"
+      onClose={() => setOpenModal(prev => !prev)}
+      buttonProps={[
+        { className: 'display-none' },
+        {
+          label: PROPOSAL.LAUNCH_OUTLOOK,
+          onClick: launchRichTextButtonHandler
+        }
+      ]}
+    >
+      <RadioGroup
+        label={PROPOSAL.ATTENDEES}
+        aria-label="attendees"
+        name="attendees"
+        value={attendeesVal}
+        onChange={e => setAttendeesVal(e.target.value)}
+      >
+        {attendees.map(item => (
+          <Radio value={item} key={item} label={item} />
+        ))}
+      </RadioGroup>
+      <UnassignedRolesList unassignedRoles={unassignedRoles} />
+    </CustomModal>
+  );
+  const eventIcon = (
+    <IconButton
+      data-testid="event-launcher-icon-id"
+      className="event-launcher__tooltip-btn"
+      disabled={isEmpty(eventStartDate.trim())}
+      onClick={() => copyToClipboardAndOpenModal()}
+    >
+      <CalendarEvent />
+    </IconButton>
+  );
+
+  // Component will return null if no event found
+  if (!hasEvent || !eventFlag || !isCurrent) return null;
+  
+  return (
+    <div className="event-launcher">
+      {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (
+        <Tooltip
+          variant="light"
+          tabIndex={-1}
+          placement="top"
+          data-testid="custom-element"
+          title={
+            <div className="event-launcher__tooltip">
+              <h3>{PROPOSAL.EVENT_LAUNCHER}</h3>
+              <h4>{DEFAULT.CLICK_ICON_TO_BEGIN}</h4>
+            </div>
+          }
+        >
+          <span>{eventIcon}</span>
+        </Tooltip>
+      )}
+
+      {/* Call Event Modal */}
+      {eventLauncherModal}
+    </div>
+  );
+};
+
+EventLauncher.propTypes = {
+  questionData: PropTypes.object.isRequired
+};
+
+export default EventLauncher;

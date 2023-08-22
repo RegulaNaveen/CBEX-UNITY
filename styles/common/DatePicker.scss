@@ -1,20 +1,22 @@
 .date-picker {
   position: relative;
+  & > div {
+    margin: 0;
+  }
   .DayPickerInput {
     width: 100%;
   }
-
   .date-range-wrapper {
     display: flex;
   }
   .date-picker-title {
-    height: 24px;
+    height: 21px;
     width: 100%;
     color: $neutral8;
     font-family: $proximaNova;
     font-size: 14px;
     letter-spacing: 0;
-    line-height: 24px;
+    line-height: 21px;
     margin-bottom: 4px;
   }
 
@@ -73,7 +75,7 @@
     .datepicker-input {
       height: 24px;
       font-family: $proximaNova;
-      font-size: 16px;
+      font-size: 14px;
       letter-spacing: 0;
       line-height: 24px;
       border: none;
@@ -89,7 +91,7 @@
     }
 
     .date {
-      color: $black;;
+      color: $black;
     }
   }
 }

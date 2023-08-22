@@ -1,24 +1,40 @@
+/* eslint-disable react/prop-types */
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
-import type { Map } from 'immutable';
+import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
-import Grid from 'apollo-react/components/Grid';
 import Plus from 'apollo-react-icons/Plus';
-import Box from 'apollo-react/components/Box';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
+import Highlighter from 'react-highlight-words';
 import {
   getSelectedSection,
   selectNotes,
-  getProposalDetails
+  getProposalDetails,
+  getSelectedBid
 } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
-import Question from './Question';
 import MatomoHOC from '../HOC/MatomoHOC';
+import {
+  onHandleOpenClose,
+  handleSelectedSection
+} from '../../redux/actions/sidebar-actions';
+import lazyWithRetry from '../../utils/lazy';
+import {
+  selectAutoNavigatedToCurrentResult,
+  selectCurrentSearchResult,
+  selectQuery
+} from '../../redux/selectors/search';
+import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 
-import { onHandleOpenClose, handleSelectedSection } from '../../redux/actions/sidebar-actions';
-
+const CollapsibleQuestionMapping = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "collapsibleQuestionMapping" */ './CollapsibleQuestionMapping'
+    )
+  )
+);
 type State = {
   isCollapsed: boolean
 };
@@ -30,7 +46,7 @@ type Props = {
   isCheckedAll: boolean,
   setQuestionToDisplayHistory: (answer: string) => void,
   handleOpenClose: () => void,
-  changeSelectedSection:() => void,
+  changeSelectedSection: () => void,
   notes: Map,
   setTabFromQuestionNotes: (
     tabIndex: number,
@@ -42,7 +58,11 @@ type Props = {
   userActions: any,
   trackEvent: any,
   proposalDetail: any,
-  ismilestoneavailable?: any
+  milestone: any,
+  selectedBid: Map,
+  isNotepadOpen: boolean,
+  listIndex: number,
+  query: string
 };
 
 class CollapsibleList extends Component<Props, State> {
@@ -50,40 +70,116 @@ class CollapsibleList extends Component<Props, State> {
 
   constructor(props: Object) {
     super(props);
-
     this.taskRef = React.createRef();
-
-    this.state = {
-      isCollapsed: false
-    };
+    this.collapseTriggerRef = React.createRef(null);
+    this.titleRef = React.createRef(null);
+    this.state = { isCollapsed: false };
   }
 
   componentDidMount() {
-    const { isCheckedAll } = this.props;
-    setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }),0);
+    const { isCheckedAll, isFirstSection } = this.props;
+    const enableFirstExpand = window.localStorage.getItem('enableFirstExpand');
+    let setIsCollapsed;
+    if (enableFirstExpand === 'true') {
+      setIsCollapsed = { isCollapsed: !!isFirstSection || !!isCheckedAll };
+      window.localStorage.setItem('enableFirstExpand', 'false');
+    } else setIsCollapsed = { isCollapsed: !!isCheckedAll };
+
+    setTimeout(() => this.setState(setIsCollapsed), 0);
+    document.addEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedSection, isCheckedAll } = this.props;
+    const {
+      selectedSection,
+      isCheckedAll,
+      title,
+      currentSearchResult,
+      questions,
+      autoNavigationDone,
+      autoNavigatedToCurrentResult
+    } = this.props;
     const { id } = this.taskRef.current;
 
-    if (prevProps.selectedSection !== selectedSection)
-      // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(() => this.setState({ isCollapsed: id === selectedSection }),0);
+    let shouldBeCollapsed = this.state.isCollapsed;
 
-    if (prevProps.isCheckedAll !== isCheckedAll)
+    if (
+      prevProps.selectedSection !== selectedSection &&
+      id === selectedSection
+    ) {
+      shouldBeCollapsed = true;
+    }
+
+    if (prevProps.isCheckedAll !== isCheckedAll) {
+      shouldBeCollapsed = !!isCheckedAll;
+    }
+
+    if (
+      currentSearchResult !== null &&
+      this.titleRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
+      const questionIds = questions.toArray().map(question => question[0]);
+      if (currentSearchResult.searchIndex === title) {
+        // allow other collapsibleList to collapse before scrollIntoView
+        setTimeout(() => {
+          this.titleRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          autoNavigationDone();
+        }, 700);
+      } else if (
+        questionIds.includes(currentSearchResult.searchIndex) &&
+        ((currentSearchResult.sectionName !== null &&
+          currentSearchResult.sectionName === title) ||
+          currentSearchResult.sectionName === null)
+      ) {
+        shouldBeCollapsed = true;
+      } else {
+        shouldBeCollapsed = false;
+      }
+    }
+
+    if (isCheckedAll) {
+      shouldBeCollapsed = true;
+    }
+
+    if (this.state.isCollapsed !== shouldBeCollapsed) {
       // eslint-disable-next-line react/no-did-update-set-state
-      setTimeout(() => this.setState({ isCollapsed: !!isCheckedAll }), 0);
+      setTimeout(() => this.setState({ isCollapsed: shouldBeCollapsed }), 0);
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener(
+      'keydown',
+      this.keyboardShortcutListener.bind(this)
+    );
   }
 
   handleCollapse = () => {
     const { isCollapsed } = this.state;
-    this.setState({ isCollapsed: !isCollapsed });
+    const {
+      title,
+      selectedSection,
+      changeSelectedSection,
+      onExpandDone
+    } = this.props;
     this.trackMatomoEventBladeToggle(!isCollapsed);
-    const titleId = this.props.title.toLocaleLowerCase().split(' ').join('-');
-    if(titleId === this.props.selectedSection){
-      this.props.changeSelectedSection(null)
+    const titleId = title
+      .toLocaleLowerCase()
+      .split(' ')
+      .join('-');
+    if (titleId === selectedSection) {
+      changeSelectedSection(null);
+      onExpandDone();
     }
+    this.setState({ isCollapsed: !isCollapsed });
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -95,18 +191,15 @@ class CollapsibleList extends Component<Props, State> {
 
   createId = () => {
     const { title } = this.props;
-
-    const id = title
-      .toLocaleLowerCase()
+    return title
+      ?.toLocaleLowerCase()
       .split(' ')
       .join('-');
-
-    return id;
   };
 
   showNotesCount = title => {
     const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
-    if (notes && notes && notes.size && notes.size > 0) {
+    if (notes && notes.size && notes.size > 0) {
       const count = notes.filter(
         note => note.getIn(['section', 'sectionName'], '') === title
       );
@@ -163,24 +256,50 @@ class CollapsibleList extends Component<Props, State> {
     });
   };
 
+  keyboardShortcutListener = e => {
+    const { listIndex, questionsRef } = this.props;
+    const altKeyPressed = e.altKey;
+    if (altKeyPressed && String(e.key).toLowerCase() === 'q') {
+      if (this.taskRef.current.contains(document.activeElement)) {
+        this.collapseTriggerRef.current.focus();
+      } else if (!questionsRef.current.contains(document.activeElement)) {
+        if (listIndex === 0) {
+          this.collapseTriggerRef.current.focus();
+        }
+      }
+    }
+  };
+
   render() {
     const { isCollapsed } = this.state;
-    const { onAddQuestion } = this.props;
     const {
       questions,
       title,
       milestone,
-      setQuestionToDisplayHistory
+      setQuestionToDisplayHistory,
+      selectedBid,
+      isNotepadOpen,
+      onAddQuestion,
+      query,
+      currentSearchResult,
+      proposalDetail
     } = this.props;
     return (
-      <div className="task-wrapper" ref={this.taskRef} id={this.createId()}>
+      <div
+        className="task-wrapper"
+        ref={this.taskRef}
+        id={this.createId()}
+        data-testid="collapsible-list"
+      >
+        {/* Expand Arrow Icon */}
         <button
-          id="arrow-icon"
+          id={`arrow-icon-${this.createId()}`}
           className="task-icon-wrapper"
           onClick={this.handleCollapse}
           onKeyPress={this.handleKeyPress}
           type="button"
           tabIndex={0}
+          ref={this.collapseTriggerRef}
         >
           <img
             className="task-icon"
@@ -191,18 +310,32 @@ class CollapsibleList extends Component<Props, State> {
 
         {!isCollapsed ? (
           <div
-            className="task-title-wrapper"
+            className="task-title-wrapper collapsed"
             role="button"
             onClick={this.handleCollapse}
             onKeyPress={this.handleKeyPress}
             tabIndex={-1}
           >
-            <p id="task-title" className="task-title">
-              {title}
+            <p className="task-title" ref={this.titleRef}>
+              <Highlighter
+                searchWords={[
+                  `${
+                    currentSearchResult !== null &&
+                    currentSearchResult.searchIndex === title &&
+                    query !== null
+                      ? query
+                      : ''
+                  }`
+                ]}
+                autoEscape={true}
+                textToHighlight={title}
+                highlightClassName="search-highlight"
+              />
             </p>
           </div>
         ) : (
           <div className="task-table-wrapper">
+            {/* Section Header */}
             <div
               className="task-table-headers"
               role="button"
@@ -210,66 +343,58 @@ class CollapsibleList extends Component<Props, State> {
               onKeyPress={this.handleKeyPress}
               tabIndex={-1}
             >
-              <div className="task-title">
+              <div className="task-title" ref={this.titleRef}>
                 <p>
-                  {title}
+                  <Highlighter
+                    searchWords={[
+                      `${
+                        currentSearchResult !== null &&
+                        currentSearchResult.searchIndex === title &&
+                        query !== null
+                          ? query
+                          : ''
+                      }`
+                    ]}
+                    autoEscape={true}
+                    textToHighlight={title}
+                    highlightClassName="search-highlight"
+                  />
                   {this.showNotesCount(title)}
                 </p>
               </div>
             </div>
 
-            <div className="task-table-row">
-              <div className="task-subtitle subtitlebold">
-                <p>Questions</p>
-              </div>
-              <div className="task-subtitle task-subtitle-answer subtitlebold">
-                <p>Answers</p>
-              </div>
-              <div className="task-subtitle task-subtitle-completion-date subtitlebold">
-                <p>Date Completed</p>
-              </div>
-            </div>
+            {/* Question List */}
+            <Suspense fallback={<div>Loading...</div>}>
+              <CollapsibleQuestionMapping
+                questions={questions}
+                milestone={milestone}
+                title={title}
+                setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                isNotepadOpen={isNotepadOpen}
+                oppNo={proposalDetail?.['CRM #']}
+              />
+            </Suspense>
 
-            {questions.valueSeq().map(questionConfig => {
-              const visible = questionConfig.get('visible');
-              return (
-                (visible || typeof visible === 'undefined') && (
-                  <Question
-                    ismilestoneavailable={milestone}
-                    key={questionConfig.get('questionId')}
-                    milestone={questionConfig.get('milestone')}
-                    questionId={questionConfig.get('questionId')}
-                    proposalId={questionConfig.get('proposalId')}
-                    answers={questionConfig.get('answers')}
-                    questionText={questionConfig.get('questionText')}
-                    answerConfiguration={questionConfig.get(
-                      'answerConfiguration'
-                    )}
-                    sfObject={questionConfig.get('sfObject')}
-                    sfField={questionConfig.get('sfField')}
-                    sectionName={title}
-                    setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-                    loading={questionConfig.get('loading', false)}
-                    questionHint={questionConfig.get('questionHint', '')}
-                    roleNames={questionConfig.get('roleNames')}
-                    isCustomQuestion={questionConfig.get('isCustomQuestion')}
-                    hasDifferentSFanswer={questionConfig.get(
-                      'hasDifferentSFanswer'
-                    )}
+            {/* Add New Question Button */}
+            {selectedBid.get('isCurrent') && (
+              <div className="add-question">
+                <Link
+                  style={{ borderBottom: 'none' }}
+                  onClick={() => onAddQuestion(title)}
+                  size="small"
+                >
+                  <Plus
+                    className="plus-icon-add-new-question"
+                    fontSize="extraSmall"
                   />
-                )
-              );
-            })}
-            <div className="add-question">
-              <Link
-                style={{ borderBottom: 'none' }}
-                onClick={() => onAddQuestion(title)}
-                size="small"
-              >
-                <Plus fontSize="extraSmall" />
-                <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-              </Link>
-            </div>
+                  <span style={{ verticalAlign: 'top' }}>
+                    {' '}
+                    Add New Question
+                  </span>
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -281,12 +406,25 @@ const mapStateToProps = (state: Map) => {
   const selectedSection = getSelectedSection(state);
   const notes = selectNotes(state);
   const proposalDetail = getProposalDetails(state);
-  return { selectedSection, notes, proposalDetail };
+  return {
+    selectedSection,
+    notes,
+    proposalDetail,
+    selectedBid: getSelectedBid(state),
+    query: selectQuery(state),
+    currentSearchResult: selectCurrentSearchResult(state),
+    autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
+  };
 };
 
 const mapDispatchToProps = {
   handleOpenClose: onHandleOpenClose,
-  changeSelectedSection: handleSelectedSection
+  changeSelectedSection: handleSelectedSection,
+  autoNavigationDone: () => dispatch =>
+    dispatch(autoNavigationCompletedAction())
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(CollapsibleList));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MatomoHOC(CollapsibleList));

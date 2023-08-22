@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
 import removeSpecialChars from '../../../../utils/pasteUtils';
+import { QUESTION_UNLOCK_TIMEOUT } from '../../../../constants/app';
 
 type Props = {
   id?: string,
@@ -13,7 +14,8 @@ type Props = {
   value?: string,
   onBlur?: Function,
   onChange?: Function,
-  error?: mixed
+  error?: mixed,
+  disabled?: boolean
 };
 
 type State = {
@@ -33,17 +35,19 @@ class TextArea extends PureComponent<Props, State> {
     value: undefined,
     onBlur: undefined,
     onChange: undefined,
-    error: undefined
+    error: undefined,
+    disabled: false
   };
 
   constructor(props: Object) {
     super(props);
 
     this.textAreaInput = React.createRef();
-
+    this.numberInput = React.createRef();
     this.state = {
       textValue: '',
-      numberError: false
+      numberError: false,
+      unlockTimeout: null
     };
   }
 
@@ -52,13 +56,12 @@ class TextArea extends PureComponent<Props, State> {
   }
   updateValueFromProps() {
     const { value } = this.props;
-    if (!_.isEmpty(value)) this.setState({ textValue: value });
+    this.setState({ textValue: value });
   }
 
   componentDidUpdate(prevProps) {
     const { textValue: value } = this.state;
-    if(prevProps.value != this.props.value) this.updateValueFromProps();
-
+    if (prevProps.value != this.props.value) this.updateValueFromProps();
     if (
       this.textAreaInput.current !== null &&
       this.textAreaInput.current.id !== 'question-text-area'
@@ -74,9 +77,10 @@ class TextArea extends PureComponent<Props, State> {
   handleText = ({ target }: SyntheticInputEvent<EventTarget>) => {
     const { onChange } = this.props;
     const { value: textValue } = target;
-
-    if (onChange && textValue) onChange(textValue);
-
+    if (onChange && textValue) {
+      this.resetUnlockTimer();
+      onChange(textValue);
+    }
     this.setState({ textValue });
   };
 
@@ -89,8 +93,10 @@ class TextArea extends PureComponent<Props, State> {
         !numberRegex.test(String(textValue).trim())) ||
       Number(String(textValue).trim()) < 0 ||
       String(String(textValue).trim()).match(/-/g);
-    if (onChange && !numberError) onChange(textValue);
-
+    if (onChange && !numberError) {
+      onChange(textValue);
+    }
+    this.resetUnlockTimer();
     this.setState({ textValue, numberError: !!numberError });
   };
 
@@ -100,11 +106,17 @@ class TextArea extends PureComponent<Props, State> {
     const { value: textValue } = target;
 
     if (onBlur && !numberError) onBlur(textValue, lastAnswer);
+    else if (numberError) {
+      onBlur(lastAnswer, lastAnswer);
+      this.setState({ textValue: lastAnswer, numberError: false });
+    }
+    this.resetUnlockTimer(true);
   };
 
   handleOnFocus = () => {
     const { onFocus } = this.props;
     if (onFocus) onFocus();
+    this.resetUnlockTimer();
   };
 
   autoResize = (event: SyntheticInputEvent<EventTarget>) => {
@@ -116,8 +128,34 @@ class TextArea extends PureComponent<Props, State> {
     /* eslint-enable no-param-reassign */
   };
 
+  /**
+   *
+   * @param {*} clear to remove the timer
+   * function to set timer for auto unlock and auto save
+   */
+  resetUnlockTimer = (clear = false) => {
+    clearTimeout(this.state.unlockTimeout);
+    if (clear) {
+      this.setState({ unlockTimeout: null });
+    } else {
+      const timer = setTimeout(() => {
+        // write unlock logic here
+        if (this.numberInput.current) this.numberInput.current.blur();
+      }, QUESTION_UNLOCK_TIMEOUT);
+      this.setState({ unlockTimeout: timer });
+    }
+  };
+
   render() {
-    const { id, className, placeholder, title, type, error } = this.props;
+    const {
+      id,
+      className,
+      placeholder,
+      title,
+      type,
+      error,
+      disabled
+    } = this.props;
     const { textValue, numberError } = this.state;
     return (
       <>
@@ -126,6 +164,7 @@ class TextArea extends PureComponent<Props, State> {
           <>
             <input
               id={id}
+              ref={this.numberInput}
               className={classnames('text-number-wrapper', className, {
                 numberError
               })}
@@ -136,6 +175,7 @@ class TextArea extends PureComponent<Props, State> {
               onBlur={this.handleOnBlur}
               onFocus={this.handleOnFocus}
               placeholder={placeholder}
+              disabled={disabled}
             />
             {numberError && (
               <p className="number-error-text">Please enter a valid number</p>
@@ -156,6 +196,7 @@ class TextArea extends PureComponent<Props, State> {
                 if (this.props.onChange) {
                   this.setState({ textValue: sanitizedValue });
                   this.props.onChange(sanitizedValue);
+                  this.resetUnlockTimer();
                 }
               }}
               onInput={e => {
@@ -163,6 +204,7 @@ class TextArea extends PureComponent<Props, State> {
                 this.handleText(e);
                 if (this.props.onChange) {
                   this.props.onChange(e.target.value);
+                  this.resetUnlockTimer();
                 }
               }}
               onBlur={this.handleOnBlur}
@@ -170,6 +212,7 @@ class TextArea extends PureComponent<Props, State> {
               placeholder={placeholder}
               required
               type={type}
+              disabled={disabled}
             />
             {error &&
               error.length > 0 &&

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map } from 'immutable'; // NOSONAR
 import Loader from 'apollo-react/components/Loader';
 import AddNote from './AddNote';
 import ReadEditNote from './ReadEditNote';
@@ -15,7 +15,8 @@ import {
   selectNotes,
   selectIsFetchingNotes,
   selectIsAddingNote,
-  selectNotepadMode
+  selectNotepadMode,
+  getSelectedBid
 } from '../../../redux/selectors';
 import {
   addNote,
@@ -37,7 +38,8 @@ function Notepad({
   mode,
   change,
   selectedtitle,
-  trackMatomoNoteSubmit
+  trackMatomoNoteSubmit,
+  selectedBid
 }) {
   const [selectedNote, setSelectedNote] = useState(Map());
 
@@ -109,7 +111,9 @@ function Notepad({
         style={{ justifyContent: 'center', alignItems: 'center' }}
       >
         <Loader isInner />
-        <p className="loading-msg">Loading Notes</p>
+        <p className="loading-msg">
+          {selectedBid.get('bidName')} Notes Loading
+        </p>
       </div>
     );
   }
@@ -182,7 +186,8 @@ const mapStateToProps = state => ({
   notes: selectNotes(state),
   fetchingNotes: selectIsFetchingNotes(state),
   addingNote: selectIsAddingNote(state),
-  mode: selectNotepadMode(state)
+  mode: selectNotepadMode(state),
+  selectedBid: getSelectedBid(state)
 });
 
 const mapDispatchToProps = {

@@ -13,10 +13,10 @@
   box-sizing: border-box;
   height: 40px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
   font-family: $proximaNova;
   font-size: 16px;
@@ -28,10 +28,10 @@
 .text-number-wrapper {
   box-sizing: border-box;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
   font-family: $proximaNova;
   padding: 8px;
@@ -52,10 +52,10 @@
   box-sizing: border-box;
   height: 94px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
   font-family: $proximaNova;
   padding: 8px;
@@ -69,10 +69,10 @@
   box-sizing: border-box;
   height: 40px;
   width: 100%;
-  border: 1px solid $neutral4;
+  border: $border;
   border-radius: 4px;
   background-color: $white;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
   font-family: $proximaNova;
   padding: 8px;
@@ -91,19 +91,29 @@
   line-height: 26px !important;
   width: 100%;
   margin-top: 0 !important;
-  font-family: "ProximaNova-Regular";
+  font-family: $proximaNova;
   font-size: 16px;
-  min-width: 176px;
-  border: 1px solid #d9d9d9;
+  min-width: auto;
   border-radius: 4px;
 
-  &:hover, &:focus-within, &:focus-visible {
+  &:hover,
+  &:focus-within,
+  &:focus-visible {
     border-color: #0768fd;
     transition-duration: 0.2s;
     transition-property: border-color;
     outline: none !important;
   }
 
+  &:disabled {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+    border-color: $border-color-disabled;
+
+    &::placeholder {
+      color: #999999;
+    }
+  }
 
   .MuiInputBase-formControl {
     margin-top: 0 !important;
@@ -117,37 +127,44 @@
     line-height: 26px !important;
   }
 }
-.align-lookup{
+.align-lookup {
   padding: 0px !important;
   resize: none;
-  overflow: hidden!important;
+  overflow: hidden !important;
 }
-.hasDifferentSFanswer{
-  textarea, input, .dd-header, .multiselect-header, .a-MuiAutocomplete-root {
-   border: 2px solid #e20000!important;
-  }
+.hasDifferentSFanswer {
+  textarea,
+  input,
+  .dd-header,
+  .multiselect-header,
+  // .a-MuiAutocomplete-root {
+  //   border: 2px solid #e20000 !important;
+  // }
   .a-MuiAutocomplete-root {
-    input{
+    input {
       border: none !important;
     }
   }
-  .alert-sf-diff{
+  .alert-sf-diff {
     padding-left: 30px;
     font-size: 13px;
     margin-top: 5px;
-    ul li:first-child{
+    ul li:first-child {
       color: #e20000;
       cursor: auto;
     }
-    ul li:last-child{
+    ul li:last-child {
       color: #297dfd;
       list-style: none;
       cursor: pointer;
 
-      a{
+      a {
         color: #297dfd;
         text-decoration: none;
       }
     }
+  }
+  textarea {
+    padding: 5px !important;
   }
 }

@@ -1,11 +1,12 @@
-.controls-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
-}
+@media screen and (max-width: 1200px) and (min-width: 300px) {
+  .controls-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
-.RichEditor-root {
+  .RichEditor-root {
     background: #fff;
     border: 1px solid #ddd;
     font-family: 'Proxima Nova', 'Nunito Sans', sans-serif;
@@ -15,30 +16,37 @@
     margin-bottom: 5px;
     border-radius: 5px;
   }
-  
-  .RichEditor-editor {
-    cursor: text;
-    font-size: 16px;
+
+  .custom-rich-text-inner {
+    min-height: 38px;
+    overflow: auto;
+    resize: vertical;
+    .RichEditor-editor {
+      cursor: text;
+      font-size: 12px;
+    }
   }
-  
+
   .RichEditor-editor .public-DraftEditorPlaceholder-root,
   .RichEditor-editor .public-DraftEditor-content {
     padding: 5px;
+    overflow-wrap: anywhere;
   }
-  
+
   .RichEditor-editor .public-DraftEditorPlaceholder-root {
     position: absolute;
     color: #999999;
   }
-  
+
   .RichEditor-editor .public-DraftEditor-content {
-    min-height: 100px;
+    min-height: 0px !important;
+    overflow-wrap: anywhere;
   }
-  
+
   .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
     display: none;
   }
-  
+
   .RichEditor-editor .RichEditor-blockquote {
     border-left: 5px solid #eee;
     color: #666;
@@ -47,14 +55,14 @@
     margin: 16px 0;
     padding: 10px 20px;
   }
-  
+
   .RichEditor-editor .public-DraftStyleDefault-pre {
     background-color: rgba(0, 0, 0, 0.05);
     font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
     font-size: 16px;
     padding: 20px;
   }
-  
+
   .RichEditor-controls {
     font-family: Proxima Nova, Nunito Sans, sans-serif;
     font-size: 14px;
@@ -62,7 +70,7 @@
     user-select: none;
     display: inline-block;
   }
-  
+
   .RichEditor-styleButton {
     color: #999;
     cursor: pointer;
@@ -70,51 +78,51 @@
     padding: 2px 0;
     display: inline-block;
   }
-  
+
   .RichEditor-activeButton {
     color: #5890ff;
   }
-  
+
   .DraftEditor-alignLeft {
     text-align: left;
   }
-  
+
   .DraftEditor-alignCenter {
     text-align: center;
   }
-  
+
   .DraftEditor-alignRight {
     text-align: right;
   }
-  
+
   .DraftEditor-alignJustified {
     text-align: justify;
   }
-  
+
   h1 {
     font-size: 1.5em;
   }
-  
+
   h2 {
     font-size: 1.34em;
   }
-  
+
   h3 {
     font-size: 1.17em;
   }
-  
+
   h4 {
     font-size: 1em;
   }
-  
+
   h5 {
     font-size: 0.83em;
   }
-  
+
   h6 {
     font-size: 0.67em;
   }
-  
+
   .DraftEditor-indent-1 {
     margin-left: 20px;
   }
@@ -145,7 +153,7 @@
   .DraftEditor-indent-10 {
     margin-left: 200px;
   }
-  
+
   .style-toolbar {
     display: 'flex';
     flex-wrap: 'wrap';
@@ -164,7 +172,7 @@
     padding-bottom: 0;
     padding-left: 5;
   }
-  
+
   .style-button-group {
     flex-direction: row;
     border-radius: 3px;
@@ -172,18 +180,18 @@
     height: 36px;
     margin: 1px;
   }
-  
+
   .style-icon-button {
     flex: 1;
     padding: 3px;
   }
-  
+
   .style-icon-button-selected {
     flex: 1;
     border-left: 1px solid rgba(200, 200, 200, 0.8);
     border-right: 1px solid rgba(200, 200, 200, 0.8);
   }
-  
+
   .public-DraftStyleDefault-ltr {
     direction: ltr;
   }
@@ -196,10 +204,25 @@
   .public-DraftStyleDefault-listRTL {
     direction: rtl;
   }
-  .public-DraftStyleDefault-ol,
-  .public-DraftStyleDefault-ul {
-    margin: 16px 0;
-    padding: 0;
+  .questiontext-richtext {
+    .MuiTypography-root
+      .MuiTypography-body2
+      .RichEditor-editor
+      .DraftEditor-root
+      .DraftEditor-editorContainer
+      .public-DraftEditor-content
+      .public-DraftStyleDefault-ol,
+    .RichEditor-editor
+      .DraftEditor-root
+      .DraftEditor-editorContainer
+      .public-DraftEditor-content
+      .public-DraftStyleDefault-ol,
+    .public-DraftStyleDefault-ul {
+      margin: 0px !important;
+      padding: 0;
+      margin-block-start: 0px;
+      overflow-wrap: anywhere;
+    }
   }
   .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
     margin-left: 1.5em;
@@ -261,6 +284,10 @@
     content: counter(ol0) '. ';
     counter-increment: ol0;
   }
+  .public-DraftStyleDefault-block {
+    margin-bottom: 1em;
+    margin-top: 0em;
+  }
   .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth1:before {
     content: counter(ol1) '. ';
     counter-increment: ol1;
@@ -292,13 +319,13 @@
   .public-DraftStyleDefault-depth4.public-DraftStyleDefault-reset {
     counter-reset: ol4;
   }
-  
+
   .style-button-group {
     margin-right: 3px;
     margin-bottom: 3px;
     height: 30px;
   }
-  
+
   .style-button-group .icon-button {
     cursor: pointer;
     flex: 1;
@@ -308,7 +335,7 @@
     width: 28px;
     height: 28px;
   }
-  
+
   .style-button-group .text.icon-button {
     display: inline-flex;
     height: 26px;
@@ -323,30 +350,408 @@
     padding: 0;
     padding-top: 2px;
   }
-  
+
   .style-button-group .icon-button.active {
     background: #0768fd;
     color: #fff;
     border-radius: 0;
   }
-  
+
   .style-button-group .icon-button.active:first-child {
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
   }
-  
+
   .style-button-group .icon-button.active:last-child {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
   }
-  
+
   .rti-select {
     margin: 0 !important;
     margin-bottom: 3px !important;
     margin-right: 3px !important;
   }
-  
+
   .rti-select > div {
     margin-top: 0 !important;
   }
-  
+}
+@media only screen and (min-width: 1201px) and (max-width: 3000px) {
+  .controls-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .RichEditor-root {
+    background: #fff;
+    border: 1px solid #ddd;
+    font-family: 'Proxima Nova', 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+  .custom-rich-text-inner {
+    min-height: 38px;
+    overflow: auto;
+    resize: vertical;
+    .RichEditor-editor {
+      cursor: text;
+      font-size: 16px;
+    }
+  }
+
+  .RichEditor-editor .public-DraftEditorPlaceholder-root,
+  .RichEditor-editor .public-DraftEditor-content {
+    padding: 5px;
+    overflow-wrap: anywhere;
+  }
+
+  .RichEditor-editor .public-DraftEditorPlaceholder-root {
+    position: absolute;
+    color: #999999;
+  }
+
+  .RichEditor-editor .public-DraftEditor-content {
+    min-height: 0px !important;
+    overflow-wrap: anywhere;
+  }
+
+  .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+    display: none;
+  }
+
+  .RichEditor-editor .RichEditor-blockquote {
+    border-left: 5px solid #eee;
+    color: #666;
+    font-family: 'Hoefler Text', 'Georgia', serif;
+    font-style: italic;
+    margin: 16px 0;
+    padding: 10px 20px;
+  }
+
+  .RichEditor-editor .public-DraftStyleDefault-pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+    font-size: 16px;
+    padding: 20px;
+  }
+
+  .RichEditor-controls {
+    font-family: Proxima Nova, Nunito Sans, sans-serif;
+    font-size: 14px;
+    margin-bottom: 5px;
+    user-select: none;
+    display: inline-block;
+  }
+
+  .RichEditor-styleButton {
+    color: #999;
+    cursor: pointer;
+    margin-right: 16px;
+    padding: 2px 0;
+    display: inline-block;
+  }
+
+  .RichEditor-activeButton {
+    color: #5890ff;
+  }
+
+  .DraftEditor-alignLeft {
+    text-align: left;
+  }
+
+  .DraftEditor-alignCenter {
+    text-align: center;
+  }
+
+  .DraftEditor-alignRight {
+    text-align: right;
+  }
+
+  .DraftEditor-alignJustified {
+    text-align: justify;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.34em;
+  }
+
+  h3 {
+    font-size: 1.17em;
+  }
+
+  h4 {
+    font-size: 1em;
+  }
+
+  h5 {
+    font-size: 0.83em;
+  }
+
+  h6 {
+    font-size: 0.67em;
+  }
+
+  .DraftEditor-indent-1 {
+    margin-left: 20px;
+  }
+  .DraftEditor-indent-2 {
+    margin-left: 40px;
+  }
+  .DraftEditor-indent-3 {
+    margin-left: 60px;
+  }
+  .DraftEditor-indent-4 {
+    margin-left: 80px;
+  }
+  .DraftEditor-indent-5 {
+    margin-left: 100px;
+  }
+  .DraftEditor-indent-6 {
+    margin-left: 120px;
+  }
+  .DraftEditor-indent-7 {
+    margin-left: 140px;
+  }
+  .DraftEditor-indent-8 {
+    margin-left: 160px;
+  }
+  .DraftEditor-indent-9 {
+    margin-left: 180px;
+  }
+  .DraftEditor-indent-10 {
+    margin-left: 200px;
+  }
+
+  .style-toolbar {
+    display: 'flex';
+    flex-wrap: 'wrap';
+    flex: 1;
+    position: 'absolute';
+    background-color: 'white';
+    border-style: 'solid';
+    border-width: 1;
+    border-color: 'rgba(200, 200, 200, 0.8)';
+    border-radius: 2;
+    z-index: 10;
+    margin-top: -37;
+    margin-left: 15;
+    padding-top: 2;
+    padding-right: 5;
+    padding-bottom: 0;
+    padding-left: 5;
+  }
+
+  .style-button-group {
+    flex-direction: row;
+    border-radius: 3px;
+    border: 1px solid rgba(200, 200, 200, 0.8);
+    height: 36px;
+    margin: 1px;
+  }
+
+  .style-icon-button {
+    flex: 1;
+    padding: 3px;
+  }
+
+  .style-icon-button-selected {
+    flex: 1;
+    border-left: 1px solid rgba(200, 200, 200, 0.8);
+    border-right: 1px solid rgba(200, 200, 200, 0.8);
+  }
+
+  .public-DraftStyleDefault-ltr {
+    direction: ltr;
+  }
+  .public-DraftStyleDefault-rtl {
+    direction: rtl;
+  }
+  .public-DraftStyleDefault-listLTR {
+    direction: ltr;
+  }
+  .public-DraftStyleDefault-listRTL {
+    direction: rtl;
+  }
+  .questiontext-richtext {
+    .MuiTypography-root
+      .MuiTypography-body2
+      .RichEditor-editor
+      .DraftEditor-root
+      .DraftEditor-editorContainer
+      .public-DraftEditor-content
+      .public-DraftStyleDefault-ol,
+    .RichEditor-editor
+      .DraftEditor-root
+      .DraftEditor-editorContainer
+      .public-DraftEditor-content
+      .public-DraftStyleDefault-ol,
+    .public-DraftStyleDefault-ul {
+      margin: 0px !important;
+      padding: 0;
+      margin-block-start: 0px;
+      overflow-wrap: anywhere;
+    }
+  }
+  .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
+    margin-left: 1.5em;
+  }
+  .public-DraftStyleDefault-depth0.public-DraftStyleDefault-listRTL {
+    margin-right: 1.5em;
+  }
+  .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
+    margin-left: 3em;
+  }
+  .public-DraftStyleDefault-depth1.public-DraftStyleDefault-listRTL {
+    margin-right: 3em;
+  }
+  .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
+    margin-left: 4.5em;
+  }
+  .public-DraftStyleDefault-depth2.public-DraftStyleDefault-listRTL {
+    margin-right: 4.5em;
+  }
+  .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
+    margin-left: 6em;
+  }
+  .public-DraftStyleDefault-depth3.public-DraftStyleDefault-listRTL {
+    margin-right: 6em;
+  }
+  .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
+    margin-left: 7.5em;
+  }
+  .public-DraftStyleDefault-depth4.public-DraftStyleDefault-listRTL {
+    margin-right: 7.5em;
+  }
+  .public-DraftStyleDefault-unorderedListItem {
+    list-style-type: square;
+    position: relative;
+  }
+  .public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth0 {
+    list-style-type: disc;
+  }
+  .public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth1 {
+    list-style-type: circle;
+  }
+  .public-DraftStyleDefault-orderedListItem {
+    list-style-type: none;
+    position: relative;
+  }
+  .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-listLTR:before {
+    left: -36px;
+    position: absolute;
+    text-align: right;
+    width: 30px;
+  }
+  .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-listRTL:before {
+    position: absolute;
+    right: -36px;
+    text-align: left;
+    width: 30px;
+  }
+  .public-DraftStyleDefault-orderedListItem:before {
+    content: counter(ol0) '. ';
+    counter-increment: ol0;
+  }
+  .public-DraftStyleDefault-block {
+    margin-bottom: 1em;
+    margin-top: 0em;
+  }
+  .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth1:before {
+    content: counter(ol1) '. ';
+    counter-increment: ol1;
+  }
+  .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth2:before {
+    content: counter(ol2) '. ';
+    counter-increment: ol2;
+  }
+  .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth3:before {
+    content: counter(ol3) '. ';
+    counter-increment: ol3;
+  }
+  .public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth4:before {
+    content: counter(ol4) '. ';
+    counter-increment: ol4;
+  }
+  .public-DraftStyleDefault-depth0.public-DraftStyleDefault-reset {
+    counter-reset: ol0;
+  }
+  .public-DraftStyleDefault-depth1.public-DraftStyleDefault-reset {
+    counter-reset: ol1;
+  }
+  .public-DraftStyleDefault-depth2.public-DraftStyleDefault-reset {
+    counter-reset: ol2;
+  }
+  .public-DraftStyleDefault-depth3.public-DraftStyleDefault-reset {
+    counter-reset: ol3;
+  }
+  .public-DraftStyleDefault-depth4.public-DraftStyleDefault-reset {
+    counter-reset: ol4;
+  }
+
+  .style-button-group {
+    margin-right: 3px;
+    margin-bottom: 3px;
+    height: 30px;
+  }
+
+  .style-button-group .icon-button {
+    cursor: pointer;
+    flex: 1;
+    font-size: 19.22px;
+    padding: 6.2px;
+    border-radius: 3px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .style-button-group .text.icon-button {
+    display: inline-flex;
+    height: 26px;
+    width: 28px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16pt;
+    font-weight: 300;
+    font-family: sans-serif;
+    vertical-align: top;
+    padding: 0;
+    padding-top: 2px;
+  }
+
+  .style-button-group .icon-button.active {
+    background: #0768fd;
+    color: #fff;
+    border-radius: 0;
+  }
+
+  .style-button-group .icon-button.active:first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+  }
+
+  .style-button-group .icon-button.active:last-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+
+  .rti-select {
+    margin: 0 !important;
+    margin-bottom: 3px !important;
+    margin-right: 3px !important;
+  }
+
+  .rti-select > div {
+    margin-top: 0 !important;
+  }
+}

@@ -1,0 +1,191 @@
+.rbc-overlay {
+  max-width: 280px !important;
+
+  .rbc-event {
+    width: 265px !important;
+    border-radius: 5px;
+    height: 25px;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-family: 'ProximaNova-Regular';
+    .rbc-event-content {
+      width: 260px !important;
+      white-space: nowrap;
+      overflow: hidden;
+      height: 25px;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+#Timeline-main-wrapper {
+  .month-range-label {
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    font-weight: 600;
+
+    margin-bottom: 10px;
+  }
+  .timeline-calender-rtl {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: flex-start;
+    justify-items: center;
+    align-items: end;
+  }
+  .rbc-event-continues-after {
+    text-overflow: ellipsis;
+  }
+  .rbc-overlay {
+    width: 320px !important;
+  }
+
+  .rbc-off-range-bg {
+    background: inherit;
+  }
+  .rbc-off-range {
+    color: inherit;
+  }
+  .rbc-today {
+    background: #fff;
+  }
+
+  .timeline-container {
+    width: 97vw;
+    display: flex;
+
+    .react-resizable:nth-child(2) {
+      border-right: none;
+      margin-left: 0;
+      width: 100% !important;
+      display: flex;
+      justify-content: space-around;
+    }
+    .react-resizable:nth-child(1) {
+      margin-left: -20px;
+      background-color: #f6f7fb;
+      border: none;
+      box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+      height: inherit;
+
+      .MuiIconButton-root {
+        top: 50%;
+      }
+    }
+  }
+  .title {
+    height: 32px;
+    width: 258px;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 32px;
+  }
+  .subtitle {
+    height: 24px;
+    width: 258px;
+    color: #444444;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+  .MuiAccordion-root {
+    background-color: #f6f7fb;
+  }
+  .btn-container {
+    margin: 1em 0;
+    align-self: flex-end;
+    .MuiButtonBase-root {
+      margin-right: 0 !important;
+    }
+  }
+
+  .section-tile {
+    overflow-wrap: anywhere;
+  }
+  .timeline-question-header {
+    padding: 1em;
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    border-right: 1px solid #ededed;
+  }
+  .timeline-search-container {
+    padding: 5px 1em;
+    background-color: #f6f7fb;
+  }
+  .timeline-questions-container {
+    height: 75vh;
+    overflow-y: auto;
+
+    .MuiAccordion-root {
+      border-bottom: none;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 20px;
+    border: transparent;
+  }
+
+  .timeline-questions-list-container {
+    overflow-wrap: break-word;
+    list-style-type: none;
+    color: #000;
+  }
+  .timeline-question-listitem {
+    margin: 10px 0px;
+    cursor: pointer;
+    color: #000000;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 24px;
+  }
+
+  .timeline-calender-container {
+    padding: 5px 20px 20px 20px;
+    width: 72vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+
+  .rbc-button-link {
+    font-size: 16px;
+    font-family: 'ProximaNova-Regular';
+    color: #595959;
+  }
+  .rbc-show-more {
+    font-size: 14px !important;
+    font-family: 'ProximaNova-Regular';
+    color: #015ff1;
+  }
+  .rbc-event-content {
+    font-size: 14px !important;
+    font-family: 'ProximaNova-Regular';
+  }
+  .rbc-header {
+    color: #999999;
+    font-family: 'ProximaNova-Regular';
+    font-size: 14px;
+    font-weight: normal;
+  }
+  .rbc-addons-dnd-row-body {
+    margin-top: 3px;
+  }
+  .rbc-row-segment {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}

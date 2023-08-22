@@ -3,17 +3,18 @@ import React, { PureComponent } from 'react';
 import type { NavigationHistory } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
-import Loader from 'react-loader-spinner';
+import { Map } from 'immutable'; // NOSONAR
 import Button from 'apollo-react/components/Button';
 import PencilIcon from 'apollo-react-icons/Pencil';
 import GlobeIcon from 'apollo-react-icons/Globe';
-import { LOGIN } from '../../../routes';
+import Grid from 'apollo-react/components/Grid';
+import User from 'apollo-react-icons/User';
+import Tooltip from 'apollo-react/components/Tooltip';
+import { LOGIN, PROFILE } from '../../../routes';
 import { getRoles, isRolesInfoLoading } from '../../../redux/selectors';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { logout } from '../../../redux/actions/auth-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
-import Dropdown from '../../common/atoms/inputs/Dropdown';
 import {
   getUserEmail,
   getUserName,
@@ -42,8 +43,12 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   constructor(props: Object) {
     super(props);
     this.state = {
-      roleName: ''
+      roleName: '',
+      isNameTooltip: false,
+      isEmailTooltip: false
     };
+    this.nameRef = React.createRef();
+    this.emailRef = React.createRef();
   }
 
   componentDidMount() {
@@ -51,6 +56,19 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     const userRole = getUserRole();
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
+  }
+
+  componentDidUpdate() {
+    if (this.nameRef.current.clientWidth < this.nameRef.current.scrollWidth) {
+      this.setState({
+        isNameTooltip: true
+      });
+    }
+    if (this.emailRef.current.clientWidth < this.emailRef.current.scrollWidth) {
+      this.setState({
+        isEmailTooltip: true
+      });
+    }
   }
 
   handleLogout = () => {
@@ -74,6 +92,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
 
   trackMatomoLinkClicks = (link: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
+
     trackEvent({
       category: eventCategories.tb,
       action: `ToolBar: ${userActions.click} On ${link} Link`
@@ -89,37 +108,96 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
   };
 
   render() {
-    const { roleName } = this.state;
-    const { rolesList, isRolesLoading } = this.props;
+    const { isNameTooltip, isEmailTooltip } = this.state;
+    const { history } = this.props;
     const name = getUserName();
     const email = getUserEmail();
+    console.log('eventCategories', this.props);
+    const TooltipStyle = {
+      width: '100%',
+      cursor: 'pointer'
+    };
+    const style = {
+      width: '100%'
+    };
 
     return (
-      <div className="toolbar-account-menu">
-        <p className="toolbar-account-menu-name">{name}</p>
-        <p className="toolbar-account-menu-email">{email}</p>
+      <div className="toolbar-account-menu" style={{ zIndex: '1' }}>
+        <Grid container style={{ padding: '10px' }}>
+          {/* <Grid item>
+            <Avatar alt="avatar" src="">
+              {name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0)}
+            </Avatar>
+          </Grid> */}
+          <Grid item style={{ width: '100%' }}>
+            <Tooltip
+              title={isNameTooltip ? name : null}
+              variant="dark"
+              position="bottom"
+            >
+              <div style={isNameTooltip ? TooltipStyle : style}>
+                <p
+                  className="toolbar-account-menu-name"
+                  style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                  ref={this.nameRef}
+                >
+                  {name}
+                </p>
+              </div>
+            </Tooltip>
+            <Tooltip
+              title={isEmailTooltip ? email : null}
+              variant="dark"
+              position="bottom"
+            >
+              <div style={isEmailTooltip ? TooltipStyle : style}>
+                <p
+                  className="toolbar-account-menu-email"
+                  style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                  ref={this.emailRef}
+                >
+                  {email}
+                </p>
+              </div>
+            </Tooltip>
+          </Grid>
+        </Grid>
+
         <div className="toolbar-account-menu-separator" />
-        <div className="toolbar-account-menu-option">
+        {/* <div className='toolbar-account-menu-option'>
           {isRolesLoading ? (
-            <div className="toolbar-account-menu-option-loader">
-              <Loader type="TailSpin" color="#297DFD" height={35} width={35} />
+            <div className='toolbar-account-menu-option-loader'>
+              <Loader type='TailSpin' color='#297DFD' height={35} width={35} />
             </div>
           ) : (
             <Dropdown
-              id="dd-team-member"
-              title="User Role"
-              placeholder="Select"
+              id='dd-team-member'
+              title='User Role'
+              placeholder='Select'
               items={rolesList ? rolesList.sort() : []}
               onClick={this.onRoleChange}
               value={roleName}
             />
           )}
-        </div>
+        </div> */}
         <div className="menu-links">
+          <Button
+            // target='_blank'
+            variant="text"
+            icon={<User />}
+            data-testid="user-button"
+            className="menu-link-btn"
+            fullwidth
+            onClick={() => history.push(PROFILE)}
+            style={{ width: '100%' }}
+          >
+            Go to Profile
+          </Button>
           <Button
             target="_blank"
             variant="text"
             icon={<PencilIcon />}
+            data-testid="suggestion-button"
             className="menu-link-btn"
             href="https://suggestionboard.ideas.aha.io/ideas?project=CBEXU"
             onClick={() => this.trackMatomoLinkClicks('Suggestion Board')}
@@ -130,6 +208,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             target="_blank"
             variant="text"
             icon={<GlobeIcon />}
+            data-testid="unity-wiki-button"
             className="menu-link-btn"
             href="https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx"
             onClick={() => this.trackMatomoLinkClicks('Unity Wiki')}
@@ -142,6 +221,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             icon={
               <ReportIssue className="MuiSvgIcon-root IconComponent-icon-5" />
             }
+            data-testid="report-button"
             className="menu-link-btn"
             href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
             onClick={() => this.trackMatomoLinkClicks('Report an Issue')}
@@ -154,6 +234,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
           className="toolbar-account-menu-button"
           onClick={this.handleLogout}
           onKeyPress={this.handleKeyPress}
+          data-testid="logout-button"
           role="button"
           tabIndex={-1}
         >

@@ -1,4 +1,6 @@
 /* Colors */
+$neutral10: #7f7f7f;
+$neutral9: #696969;
 $neutral8: #444444;
 $neutral7: #595959;
 $neutral6: #999999;
@@ -6,6 +8,7 @@ $neutral4: #d9d9d9;
 $neutral3: #e9e9e9;
 $neutral2: #f2f2f2;
 $neutral1: #f8f9fb;
+$light: #f5f5f5;
 $white: #ffffff;
 $black: #000000;
 $blue: #297dfd;
@@ -15,9 +18,11 @@ $purple: #9e54b0;
 $error: #d8000c;
 $warning: #ff9300;
 $success: #53c458;
+$green: #017f16;
 $neptune-primary: #0768fd;
 $neptune-secondary: #297dfd;
 $neptune-hover: #ecf3ff;
+$border-color-disabled: rgba(0, 0, 0, 0.26);
 
 /* Fonts */
 $proximaNova: 'ProximaNova-Regular';

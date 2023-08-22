@@ -1,125 +1,263 @@
-#sidebar {
-  position: fixed;
-  height: 100%;
-  transform: translateX(100%);
-  top: 0;
-  width: 500px;
-  right: 0;
-  border-left: 1px solid rgba($color: $neutral7, $alpha: 0.1);
-  transition: 0.4s ease-in-out transform;
+@media screen and (max-width: 1200px) and (min-width: 300px) {
+  #sidebar {
+    position: fixed;
+    height: 100%;
+    transform: translateX(100%);
+    top: 0;
+    width: 15%;
+    right: 0;
+    border-left: 1px solid rgba($color: $neutral7, $alpha: 0.1);
+    transition: 0.4s ease-in-out transform;
 
-  .sidebar-content {
-    background: #fafafa;
-    position: relative;
-
-    .titlebar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 57px;
-      padding: 0 16px;
-      border-bottom: 1px solid #E9E9E9;
-      * {
-        font-weight: bold;
-        margin: 0;
-      }
-      background-color: #FFFFFF;
-    }
-
-    .controls-wrapper {
-      display: flex;
-      justify-content: flex-start;
-      padding: 8px 16px 0 16px;
-      button {
-        color: $black;
-        font-size: 14px;
-      }
-    }
-
-    & > button {
-      outline: none;
-      border: none;
-      display: block;
+    .sidebar-content {
       background: #fafafa;
-      color: white;
-      padding: 10px;
-      border: 1px solid rgba($color: $neutral7, $alpha: 0.1);
-      border-right: none;
-      border-radius: 50% 0% 0% 50%;
-      position: absolute;
-      left: -45px;
-      top: 58px;
-      z-index: 9999999;
-      cursor: pointer;
+      position: relative;
 
-      img {
-        width: 100%;
-        height: auto;
-        transition: 0.2s ease-in-out transform;
-        transform: rotate(-180deg);
-      }
-    }
-
-    &-list {
-      height: calc(100% - 57px - 34px - 48px);
-      overflow-y: scroll;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-
-      h1 {
-        padding: 16px 20px;
-        font-size: 20px;
-        border-bottom: 1px solid $neutral4;
+      .titlebar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 57px;
+        padding: 0 16px;
+        border-bottom: 1px solid #e9e9e9;
+        * {
+          font-weight: bold;
+          margin: 0;
+        }
+        background-color: #ffffff;
       }
 
-      p {
-        padding: 10px 8px 10px 16px;
+      .controls-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        padding: 8px 16px 0 16px;
+        button {
+          color: $black;
+          font-size: 14px;
+        }
+      }
+
+      & > button {
+        outline: none;
+        display: block;
+        background: #fafafa;
+        color: white;
+        padding: 10px;
+        border: 1px solid rgba($color: $neutral7, $alpha: 0.1);
+        border-right: none;
+        border-radius: 50% 0% 0% 50%;
+        position: absolute;
+        left: -45px;
+        top: 90px;
+        z-index: 9999999;
         cursor: pointer;
-        color: $neptune-secondary;
-        font-size: 14px;
 
-        &.is-selected {
-          background-color: rgba($color: $neptune-primary, $alpha: 1);
-          color: $white;
+        img {
+          width: 100%;
+          height: auto;
+          transition: 0.2s ease-in-out transform;
+          transform: rotate(-180deg);
+        }
+      }
+
+      &-list {
+        height: calc(100vh - 57px - 34px - 48px);
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        h1 {
+          padding: 16px 20px;
+          font-size: 20px;
+          border-bottom: $border;
+        }
+
+        p {
+          padding: 10px 8px 10px 16px;
+          cursor: pointer;
+          color: $neptune-secondary;
+          font-size: 14px;
+
+          &.is-selected {
+            background-color: rgba($color: $neptune-primary, $alpha: 1);
+            color: $white;
+
+            &:hover {
+              background-color: rgba($color: $neptune-primary, $alpha: 1);
+            }
+          }
 
           &:hover {
-            background-color: rgba($color: $neptune-primary, $alpha: 1);
+            background-color: rgba($color: $neptune-primary, $alpha: 0.05);
           }
         }
 
-        &:hover {
-          background-color: rgba($color: $neptune-primary, $alpha: 0.05);
+        &::-webkit-scrollbar {
+          display: none;
         }
       }
 
-      &::-webkit-scrollbar {
-        display: none;
+      .MuiTabs-root {
+        .MuiTabs-scroller {
+          padding-left: 16px;
+        }
       }
     }
 
-    .MuiTabs-root {
-      .MuiTabs-scroller {
-        padding-left: 16px;
+    &.is-open {
+      transform: translateX(0%);
+
+      .sidebar-content {
+        button {
+          img {
+            transform: rotate(0deg);
+          }
+        }
       }
     }
-
   }
+  button.is-btnopen {
+    top: 110 !important;
+  }
+  @media (min-width: 1200px) {
+    #sidebar {
+      z-index: 999;
+    }
+  }
+}
 
-  &.is-open {
-    transform: translateX(0%);
+@media only screen and (min-width: 1201px) and (max-width: 3000px) {
+  #sidebar {
+    position: fixed;
+    height: 100%;
+    transform: translateX(100%);
+    top: 0;
+    width: 15%;
+    right: 0;
+    border-left: 1px solid rgba($color: $neutral7, $alpha: 0.1);
+    transition: 0.4s ease-in-out transform;
 
     .sidebar-content {
-      button {
+      background: #fafafa;
+      position: relative;
+
+      .titlebar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 57px;
+        padding: 0 16px;
+        border-bottom: 1px solid #e9e9e9;
+        * {
+          font-weight: bold;
+          margin: 0;
+        }
+        background-color: #ffffff;
+      }
+
+      .controls-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        padding: 8px 16px 0 16px;
+        button {
+          color: $black;
+          font-size: 14px;
+        }
+      }
+
+      & > button {
+        outline: none;
+        display: block;
+        background: #fafafa;
+        color: white;
+        padding: 10px;
+        border: 1px solid rgba($color: $neutral7, $alpha: 0.1);
+        border-right: none;
+        border-radius: 50% 0% 0% 50%;
+        position: absolute;
+        left: -45px;
+        top: 58px;
+        z-index: 9999999;
+        cursor: pointer;
+
         img {
-          transform: rotate(0deg);
+          width: 100%;
+          height: auto;
+          transition: 0.2s ease-in-out transform;
+          transform: rotate(-180deg);
+        }
+      }
+
+      &-list {
+        height: calc(100vh - 57px - 34px - 48px);
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        h1 {
+          padding: 16px 20px;
+          font-size: 20px;
+          border-bottom: $border;
+        }
+
+        p {
+          padding: 10px 8px 10px 16px;
+          cursor: pointer;
+          color: $neptune-secondary;
+          font-size: 14px;
+
+          &.is-selected {
+            background-color: rgba($color: $neptune-primary, $alpha: 1);
+            color: $white;
+
+            &:hover {
+              background-color: rgba($color: $neptune-primary, $alpha: 1);
+            }
+          }
+
+          &:hover {
+            background-color: rgba($color: $neptune-primary, $alpha: 0.05);
+          }
+        }
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
+      .MuiTabs-root {
+        .MuiTabs-scroller {
+          padding-left: 16px;
+        }
+      }
+    }
+
+    &.is-open {
+      transform: translateX(0%);
+
+      .sidebar-content {
+        button {
+          img {
+            transform: rotate(0deg);
+          }
         }
       }
     }
   }
 }
+@media only screen and (min-width: 1201px) and (max-width: 3000px) {
+  button.is-btnopen {
+    top: 95px !important;
+  }
+}
+@media screen and (max-width: 1200px) and (min-width: 1163px) {
+  button.is-btnopen {
+    top: 114px !important;
+  }
+}
 
-@media (min-width: 1200px) {
-  #sidebar {
-    z-index: 999;
+@media screen and (max-width: 1199px) and (min-width: 1024px) {
+  button.is-btnopen {
+    top: 112px !important;
   }
 }

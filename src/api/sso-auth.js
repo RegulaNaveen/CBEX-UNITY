@@ -2,6 +2,8 @@
 import axios from 'axios';
 import qs from 'querystring';
 import { API } from '../constants';
+import { getAccessTokenFromLocalStorage } from '../SessionHandler';
+import { axiosInstance } from '../store';
 
 const {
   API_ENDPOINT,
@@ -11,6 +13,8 @@ const {
   AUTH_API_URL,
   VALIDATE_TOKEN
 } = API.AUTH;
+
+const { API_KEY, INTEGRATIONS_API_URL } = API.PROPOSAL;
 
 type Headers = {
   'Content-Type': string,
@@ -62,14 +66,11 @@ export const validateToken = async (token: string) => {
 };
 
 export const InitRefreshToken = () => {
-  console.log('Initiating the refreshToken loop');
-
   if (!interval) {
     interval = setInterval(() => {
       const rToken = localStorage.getItem('refresh_token');
       if (!rToken) {
         clearInterval(interval);
-        console.log('Cleared the refreshToken loop');
         return;
       }
       const config = {
@@ -89,7 +90,6 @@ export const InitRefreshToken = () => {
       };
       axios(config)
         .then(response => {
-          console.log('Going to update the A/I token');
           const result = response.data.AuthenticationResult || null;
           if (result) {
             if (result.IdToken)
@@ -104,4 +104,66 @@ export const InitRefreshToken = () => {
         });
     }, 900000);
   }
+};
+
+export const getOppPrefs = async () => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${INTEGRATIONS_API_URL}/user/opportunity/preferences`, {
+        headers: {
+          'x-api-key': API_KEY,
+          'x-access-token': getAccessTokenFromLocalStorage()
+        }
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const toggleFavourite = async (oppNo, favourite) => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(
+        `${INTEGRATIONS_API_URL}/user/favourite/${oppNo}?toggle=${favourite}`,
+        {},
+        {
+          headers: {
+            'x-api-key': API_KEY,
+            'x-access-token': getAccessTokenFromLocalStorage()
+          }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
+export const updateCustomName = async (oppNo, name) => {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(
+        `${INTEGRATIONS_API_URL}/user/custom-opportunity-name/${oppNo}`,
+        { name },
+        {
+          headers: {
+            'x-api-key': API_KEY,
+            'x-access-token': getAccessTokenFromLocalStorage()
+          }
+        }
+      )
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };

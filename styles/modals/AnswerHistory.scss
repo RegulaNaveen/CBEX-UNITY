@@ -16,7 +16,6 @@
     width: 60%;
     height: 60%;
     background: $white;
-    border-radius: 10px;
     padding: 20px;
     cursor: initial;
     overflow: hidden;
@@ -74,6 +73,7 @@
         position: relative;
         display: flex;
         padding: 20px 0;
+        justify-content: space-between;
 
         .avatar {
           display: flex;
@@ -91,6 +91,7 @@
 
         .main-container {
           display: flex;
+          max-width: 85%;
 
           li {
             margin-left: 15px;
@@ -110,6 +111,12 @@
             &.changed {
               color: $neptune-secondary;
             }
+            &.multi-select-answer-history {
+              margin-left: 0px;
+            }
+            &.unity-predicted-section {
+              display: flex;
+            }
           }
 
           p:first-of-type {
@@ -118,13 +125,15 @@
           }
         }
 
-        .date {
-          position: absolute;
-          right: 0;
-          top: 32px;
-          font-size: 14px;
-          font-weight: bold;
-          color: rgba($color: $neutral6, $alpha: 0.8);
+        .answer-meta-data {
+          display: flex;
+          flex-direction: column;
+          justify-content: start;
+          p {
+            font-size: 13px;
+            font-weight: bold;
+            color: rgba($color: $neutral6, $alpha: 0.8);
+          }
         }
 
         &::before {
@@ -157,7 +166,7 @@
       button {
         outline: none;
         border: none;
-        background: $neptune-secondary;
+        background: #0768fd;
         color: white;
         border-radius: 5px;
         font-size: 14px;
@@ -166,8 +175,48 @@
       }
     }
   }
+  .answer-history-para {
+    justify-content: flex-end;
+    display: flex;
+    flex-direction: row;
+  }
+  .answer-history-accept {
+    outline: none;
+    border: none;
+    background: #0768fd;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .answer-history-reject {
+    outline: none;
+    border: 1px solid $neutral4;
+    background: white;
+    color: #0768fd;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .answer-meta-buttons {
+    display: flex;
+  }
 }
 
 .no-scroll {
   overflow: hidden;
+}
+
+.bluegrid {
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, rgb(37, 0, 86), rgb(0, 118, 174));
 }

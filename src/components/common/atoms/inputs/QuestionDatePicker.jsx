@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import DatePicker from 'apollo-react/components/DatePickerV2';
+import React, { useState, useEffect, useRef } from 'react';
+import DatePicker from 'apollo-react/components/DatePicker';
 import moment from 'moment';
 import { CloseCircle } from '../../../svg';
-
-const date = moment();
 
 const QuestionDatePicker = ({
   value,
   resetDate,
   handleDayChange,
   onFocus,
-  onBlur
+  onBlur,
+  disabled = false,
+  toggleWatch,
+  onCascadeChange,
+  forceBlur
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
+  const datePickerRef = useRef(null);
   useEffect(() => {
     value = String(value)
       .trimStart()
@@ -26,21 +29,49 @@ const QuestionDatePicker = ({
     if (value) setresetsubmit(true);
     else setresetsubmit(false);
   }, [value]);
+
+  useEffect(() => {
+    if (forceBlur === true) {
+      value = String(value)
+        .trimStart()
+        .trimEnd();
+      value =
+        String(new Date(value)).includes('Invalid') || !String(value).length
+          ? ''
+          : moment(value).format('DD-MMM-YYYY');
+      setInputValue(value);
+      if (datePickerRef.current) {
+        datePickerRef.current.closeCalendar(); // close calendar popup
+        if (datePickerRef.current.inputRef.current) {
+          datePickerRef.current.inputRef.current.setAttribute(
+            'aria-invalid',
+            'false'
+          ); // remove error state from input
+          datePickerRef.current.inputRef.current.blur(); // closes watcher too
+        }
+      } else {
+        onBlur();
+      }
+    }
+  }, [forceBlur]);
+
   return (
-    <div className="date-picker">
+    <div className={`date-picker ${disabled ? 'disabled' : ''}`}>
       <DatePicker
         placeholder="DD-MMM-YYYY"
         dateFormat="DD-MMM-YYYY"
         fullWidth
+        disabled={disabled}
         inputProps={{
           onFocus: e => {
+            if (toggleWatch) toggleWatch(true);
             onFocus();
           },
           onBlur: e => {
+            if (toggleWatch) toggleWatch(false);
             onBlur();
           }
         }}
-        style={{ marginTop: 0 }}
         inputValue={inputValue}
         onInputChange={dte => {
           const dateregx = /^(([0-9])|([0-2][0-9])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{4}$/;
@@ -60,15 +91,16 @@ const QuestionDatePicker = ({
           ];
           setInputValue(dte);
           if (dte && dateregx.test(dte)) {
-            console.log(dte);
             dte = String(dte).split('-');
             dte = `${yr.indexOf(dte[1]) + 1}/${dte[0]}/${dte[2]}`;
-            handleDayChange(moment(dte).format(), value);
+            handleDayChange(moment(dte).format('DD-MMM-YYYY'), value);
           }
           if (!dte) handleDayChange(' ', value);
+          if (onCascadeChange) onCascadeChange();
         }}
+        ref={datePickerRef}
       />
-      {resetsubmit && (
+      {resetsubmit && !disabled && (
         <button
           onClick={() => {
             setresetsubmit(false);
@@ -83,6 +115,7 @@ const QuestionDatePicker = ({
           }}
           type="button"
           className="resetButton"
+          tabIndex={-1}
         >
           <CloseCircle fill="#444" />
         </button>
