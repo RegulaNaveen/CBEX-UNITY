@@ -47,8 +47,8 @@ stages:
 sonar:
   stage: prebuild
   image: sonarsource/sonar-scanner-cli:4.5
-  needs:
-    - test
+  # needs:
+  #   - test
   # rules:
   #   - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
   #   - when: always
