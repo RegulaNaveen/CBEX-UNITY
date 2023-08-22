@@ -43,6 +43,8 @@ const GenerateDocs = () => {
   const proposalDetails = useSelector(getProposalDetails);
   const roleList = useSelector(getRoles) || [];
   const selectedBid = useSelector(getSelectedBid);
+  const bidType = selectedBid.get('bidType');
+
   const editor = useSelector(selectEditor);
   const dispatch = useDispatch();
 
@@ -69,7 +71,13 @@ const GenerateDocs = () => {
         .then(blob => {
           logo.current = blob;
         });
-      const fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      let fileName;
+
+      if (bidType === 'Early_Engagement_Bid') {
+        fileName = `Unity Export_${proposalDetails['CRM #']}_Early Engagement Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      } else {
+        fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      }
       const derivedMileStones = setMileStonesAsPerCurrentQues(
         proposalQuestions || []
       );
