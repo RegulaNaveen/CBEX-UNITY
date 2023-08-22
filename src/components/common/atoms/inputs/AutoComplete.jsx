@@ -118,8 +118,8 @@ const Autocomplete = props => {
     const proposaluser = newValue.map(v => {
       return v.email ? v.label + '(' + v.email + ')' : v.label;
     });
-    if (proposaluser.length === 0) onChange(' ', text, reason);
-    else onChange(proposaluser.join(','), text, reason);
+    if (proposaluser.length === 0) onChange(' ', null, text, reason);
+    else onChange(proposaluser.join(','), null, text, reason);
     resetUnlockTimer(true);
   };
 

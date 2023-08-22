@@ -313,9 +313,20 @@ const history = createMemoryHistory({
   ]
 });
 
-const TabWithRedux = ({ props }) => (
+const TabWithRedux = (props) => (
   <Provider store={store}>
-    <Tab {...props} />
+    <SocketContext.Provider
+      value={{
+        socket: null,
+        questionLockWrapper: jest.fn(),
+        questionUnlockWrapper: jest.fn(),
+        questionLockDetailsWrapper: jest.fn()
+      }}
+    >
+      <Router history={history}>
+        <Tab {...props} />
+      </Router>
+    </SocketContext.Provider>
   </Provider>
 );
 
@@ -325,6 +336,7 @@ describe('testing for tab component', () => {
   });
 
   afterEach(() => {
+    jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
 
@@ -334,7 +346,7 @@ describe('testing for tab component', () => {
     unobserve: jest.fn(),
     disconnect: jest.fn()
   }));
-  test.skip('render the component without crashing', async () => {
+  test('render the component without crashing', async () => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_FLAG,
       payload: {
@@ -342,18 +354,18 @@ describe('testing for tab component', () => {
         showTimelineFlag: true
       }
     });
-    const { container, debug } = render(<TabWithRedux />);
+    const { container } = render(<TabWithRedux />);
     expect(container).toBeInTheDocument();
-    // const moreButton = screen.getByText('More');
-    // fireEvent.click(moreButton);
-    debug();
     await waitFor(() => {
+      const moreButton = screen.getByText('More');
+      expect(screen.getByText('More')).toBeInTheDocument();
+      fireEvent.click(moreButton);
       expect(screen.getByText('Strategy Development')).toBeInTheDocument();
       expect(screen.getByText('Timeline')).toBeInTheDocument();
       expect(screen.getByText('Approvals')).toBeInTheDocument();
       expect(screen.getByText('Documents')).toBeInTheDocument();
     });
-  });
+  }, 10000);
 
   test('render with questions tab', () => {
     store.dispatch({
@@ -369,16 +381,12 @@ describe('testing for tab component', () => {
       payload: customTab
     });
     const { container } = render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Tab
-            id="UZA89257"
-            enableValidateTab
-            selectedView="questions"
-            onChangeSelectedTab={jest.fn()}
-          />
-        </Router>
-      </Provider>
+      <TabWithRedux
+        id="UZA89257"
+        enableValidateTab
+        selectedView="questions"
+        onChangeSelectedTab={jest.fn()} 
+      />
     );
     expect(container).toBeInTheDocument();
 
@@ -433,16 +441,12 @@ describe('testing for tab component', () => {
       '/opportunities/UZA89257?viewType=timelines&bidNo=3'
     );
     const { container } = render(
-      <Provider store={store}>
-        <Router history={history}>
-          <Tab
-            id="UZA89257"
-            enableValidateTab
-            selectedView="timelines"
-            onChangeSelectedTab={jest.fn()}
-          />
-        </Router>
-      </Provider>
+      <TabWithRedux 
+        id="UZA89257"
+        enableValidateTab
+        selectedView="timelines"
+        onChangeSelectedTab={jest.fn()}
+      />
     );
     expect(container).toBeInTheDocument();
   });
@@ -465,23 +469,12 @@ describe('testing for tab component', () => {
       ]
     });
     const { container } = render(
-      <Provider store={store}>
-        <SocketContext.Provider
-          value={{
-            questionLockWrapper: jest.fn(),
-            questionUnlockWrapper: jest.fn()
-          }}
-        >
-          <Router history={history}>
-            <Tab
-              id="UZA89257"
-              enableValidateTab
-              selectedView="approvals"
-              onChangeSelectedTab={jest.fn()}
-            />
-          </Router>
-        </SocketContext.Provider>
-      </Provider>
+      <TabWithRedux 
+        id="UZA89257"
+        enableValidateTab
+        selectedView="approvals"
+        onChangeSelectedTab={jest.fn()}
+      />
     );
     expect(container).toBeInTheDocument();
   });
@@ -504,28 +497,17 @@ describe('testing for tab component', () => {
       ]
     });
     const { container } = render(
-      <Provider store={store}>
-        <SocketContext.Provider
-          value={{
-            questionLockWrapper: jest.fn(),
-            questionUnlockWrapper: jest.fn()
-          }}
-        >
-          <Router history={history}>
-            <Tab
-              id="UZA89257"
-              enableValidateTab
-              selectedView="documents"
-              onChangeSelectedTab={jest.fn()}
-            />
-          </Router>
-        </SocketContext.Provider>
-      </Provider>
+      <TabWithRedux 
+        id="UZA89257"
+        enableValidateTab
+        selectedView="documents"
+        onChangeSelectedTab={jest.fn()}
+      />
     );
     expect(container).toBeInTheDocument();
   });
 
-  test.skip('check for custom tab rendering', () => {
+  test('check for custom tab rendering', async () => {
     store.dispatch({
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: customTab
@@ -544,45 +526,27 @@ describe('testing for tab component', () => {
     });
 
     jest.spyOn(UtilsFunc, 'checkTabRender').mockReturnValue(true);
-
-    const history = createMemoryHistory({
-      initialEntries: [
-        {
-          pathname: '/opportunities/UZA89257?bidNo=3&viewType=tab_1',
-          search: '?bidNo=3&viewType=tab_1'
-        }
-      ]
-    });
     window.history.pushState(
       {},
       '',
       '/opportunities/UZA89257?viewType=testing&bidNo=3'
     );
-    const { container, debug } = render(
-      <Provider store={store}>
-        <SocketContext.Provider
-          value={{
-            questionLockWrapper: jest.fn(),
-            questionUnlockWrapper: jest.fn()
-          }}
-        >
-          <Router history={history}>
-            <Tab
-              id="UZA89257"
-              enableValidateTab
-              selectedView="validate"
-              onChangeSelectedTab={jest.fn()}
-            />
-          </Router>
-        </SocketContext.Provider>
-      </Provider>
+    const { container } = render(
+      <TabWithRedux 
+        id="UZA89257"
+        enableValidateTab
+        selectedView="validate"
+        onChangeSelectedTab={jest.fn()}
+      />
     );
-    // const moreButton = screen.getByText('More');
-    // fireEvent.click(moreButton);
-    debug();
-    const timelineTab = screen.getByText('Timeline');
-    fireEvent.click(timelineTab);
-    expect(container).toBeInTheDocument();
-    expect(screen.getByText('Available Dates')).toBeInTheDocument();
+    await waitFor(() => {
+      const moreButton = screen.getByText('More');
+      fireEvent.click(moreButton);
+
+      const timelineTab = screen.getByText('Timeline');
+      fireEvent.click(timelineTab);
+      expect(container).toBeInTheDocument();
+      expect(screen.getByText('Available Dates')).toBeInTheDocument();
+    })
   });
 });

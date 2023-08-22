@@ -61,9 +61,6 @@ const EventLauncher = ({
     state.proposal.get('selectedBid')
   )?.toJS();
 
-  // Component will return null if no event found
-  if (!hasEvent || !eventFlag || !isCurrent) return null;
-
   // Get proposalQuestions - Redux State
   const proposalQuestions = useSelector(selectProposalQuestions);
   const opportunityData = useSelector(getOpportunityData);
@@ -289,6 +286,10 @@ const EventLauncher = ({
       <CalendarEvent />
     </IconButton>
   );
+
+  // Component will return null if no event found
+  if (!hasEvent || !eventFlag || !isCurrent) return null;
+  
   return (
     <div className="event-launcher">
       {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (

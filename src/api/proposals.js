@@ -97,14 +97,22 @@ export const getAssignedOpportunity = (
   });
 };
 
-export const getFavoritesOpportunity = (): Promise<Object> => {
+export const getFavoritesOpportunity = (
+  payload,
+  userEmail
+): Promise<Object> => {
   if (onGoingDashboardCall) onGoingDashboardCall('SwitchError');
-  return axiosInstance.get(`${PROFILE_API_URL}/favoritestab`, {
-    headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
-    cancelToken: new CancelToken(function executor(c) {
-      onGoingDashboardCall = c;
-    }),
-  });
+  return axiosInstance.post(
+    `${PROFILE_API_URL}/favoritestab`,
+    { payload },
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() },
+      cancelToken: new CancelToken(function executor(c) {
+        onGoingDashboardCall = c;
+      }),
+      params: { userEmail }
+    }
+  );
 };
 
 export const onGetFilterValues = (): Promise<Object> =>
