@@ -29,10 +29,13 @@ describe('verticalTabs test cases', () => {
           if (activeTab === 'proposalteamtab') {
             return <div data-testid="vtab-3" />;
           }
+          if (activeTab === 'keymilestonedeliverabletab') {
+            return <div data-testid="vtab-4" />;
+          }
         }}
       />
     );
-    expect(getByTestId('vtab-1')).toBeInTheDocument();
+    expect(getByTestId('vtab-4')).toBeInTheDocument();
   });
 
   it('should hide questionsforcustomer tab when flag is off and render notepad', () => {
@@ -51,6 +54,9 @@ describe('verticalTabs test cases', () => {
           }
           if (activeTab === 'proposalteamtab') {
             return <div data-testid="vtab-3" />;
+          }
+          if (activeTab === 'keymilestonedeliverabletab') {
+            return <div data-testid="vtab-4" />;
           }
         }}
       />
@@ -74,6 +80,9 @@ describe('verticalTabs test cases', () => {
           }
           if (activeTab === 'proposalteamtab') {
             return <div data-testid="vtab-3" />;
+          }
+          if (activeTab === 'keymilestonedeliverabletab') {
+            return <div data-testid="vtab-4" />;
           }
         }}
       />
