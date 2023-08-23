@@ -75,7 +75,7 @@ function VerticalTabsCollapsiblePanel({
         dispatch(setVTabActiveIndexAction(1));
       }
     } else {
-      dispatch(setVTabActiveIndexAction(0));
+      dispatch(setVTabActiveIndexAction(3));
     }
   }, [
     showQuestionsForCustomerTab,
