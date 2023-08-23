@@ -296,7 +296,11 @@ function getHeaderInfoRows(details) {
       if (key === 'Bid due date') value = moment(value).format('DD-MMM-YYYY');
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${headFields[key]}</div>`;
-      html += `<div class="table-header-cell">${value.toString()}</div>`;
+      html += `<div class="table-header-cell">${
+        key == 'bidNo' && details && details?.bidType === 'Early_Engagement_Bid'
+          ? `Early Engagement ${value.toString()}`
+          : value.toString()
+      }</div>`;
       html += `</div>`;
     }
   } catch (error) {
