@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
 import Banner from 'apollo-react/components/Banner';
 import Lock from 'apollo-react-icons/Lock';
+import ExclamationTriangle from '../svg/ExclamationTriangle';
 
 import { PROPOSAL } from '../../constants/app';
 import SwitchTemplate from '../views/modals/SwitchTemplate';
@@ -17,8 +18,10 @@ import {
   updateSwitchInProgress,
   updateSwitchTempStatusFromWebSocket
 } from '../../redux/actions/proposal-actions';
+import { DEFAULT } from '../../constants/app';
+import CustomModal from './CustomModal';
 import ProcessingCRM from '../views/modals/ProcessingCRM';
-import { setTabRefresh } from '../../redux/actions/unitytab-action';
+import { fetchOTListData } from '../../redux/actions/proposal-actions';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const selectedBidState = useSelector(getSelectedBid);
@@ -30,6 +33,10 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const [openSwitchTempModal, setOpenSwitchTempModal] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [otProcessing, setOtProcessing] = useState(false);
+  const [pubTempVersion, setPubTempVersion] = useState('');
+  const [otList, setOtList] = useState([]);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const dispatch = useDispatch();
 
   // Footer text with template information
@@ -81,6 +88,28 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   }, [switchTempStatus]);
 
   /**
+   * Fetch OT list from Api
+   */
+  const fetchOtList = () => {
+    dispatch(fetchOTListData()).then(res => {
+      if (res.status) {
+        setOtList(res.data['Opportunity Type']);
+        setPubTempVersion(res.data['Publish Version']);
+      } else {
+        setError(true);
+        setErrorMsg(res.msg);
+      }
+    });
+  };
+
+  /**
+   * Trigger fetchOTList func when component load
+   */
+  useEffect(() => {
+    fetchOtList();
+  }, []);
+
+  /**
    * Render Switch Temp Error/Success Modal
    */
   let renderAlertModal;
@@ -115,6 +144,10 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     };
   }, [alertModal]);
 
+  // Refresh btn enable/disable logic
+  const isBtnDisabledRefresh = questionTemplateVersionNumber 
+    && pubTempVersion === questionTemplateVersionNumber;
+
   return (
     <>
       <Footer
@@ -129,7 +162,16 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                   icon: switchTempStatus ? (
                     <Lock fontSize="extraSmall" />
                   ) : (
-                    <Sync fontSize="extraSmall" data-testid="sync-icon" />
+                    <>
+                      {pubTempVersion 
+                        && !isBtnDisabledRefresh 
+                        && <ExclamationTriangle />}
+                      <Sync 
+                        fontSize="extraSmall" 
+                        data-testid="sync-icon" 
+                        style={{ marginRight: "5px"}} 
+                      />
+                    </>
                   ),
                   size: 'small',
                   disabled: !!switchTempStatus,
@@ -163,11 +205,29 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
           setOpenModal={setOpenSwitchTempModal}
           opportunityType={opportunityType || ''}
           selectedBidId={selectedBidId}
+          otList={otList}
+          isBtnDisabledRefresh={isBtnDisabledRefresh}
         />
       )}
 
       {/* Warning Modal */}
       {renderAlertModal}
+
+      {/* Error Warning Modal */}
+      {error && (
+        <CustomModal
+          open={error}
+          title={DEFAULT.ALERT}
+          message={errorMsg}
+          variant="error"
+          onClose={() => setError(false)}
+          buttonProps={[
+            { className: 'display-none' },
+            { label: DEFAULT.CLOSE }
+          ]}
+          className="switch-temp-warning-modal"
+        />
+      )}
     </>
   );
 };
