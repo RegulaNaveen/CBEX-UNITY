@@ -1421,26 +1421,26 @@ const updateProposalDetailSF = (state, action) => {
     }
     return state.set('selectedBid', Map(updatedSelectedbid));
   } else if (data && data.earlyEngagementBid) {
-    proposalDetail.earlyEngagementDevelopmentPlan =
-      data.proposalDetails.earlyEngagementDevelopmentPlan;
-    const updatedSelectedbid = selectedbid?.toJS();
     if (currentProposal && currentProposal === data?.proposalId) {
+      proposalDetail.earlyEngagementDevelopmentPlan =
+        data.proposalDetails.earlyEngagementDevelopmentPlan;
+      const updatedSelectedbid = selectedbid?.toJS();
       updatedSelectedbid.earlyEngagementDevelopmentPlan =
         data.proposalDetails.earlyEngagementDevelopmentPlan;
+      state
+        .set('selectedBid', Map(updatedSelectedbid))
+        .set('proposalDetails', proposalDetail)
+        .setIn(
+          [
+            'opportunityData',
+            data.proposalId,
+            'proposal',
+            'proposalDetails',
+            'earlyEngagementDevelopmentPlan'
+          ],
+          data?.proposalDetails?.earlyEngagementDevelopmentPlan || ''
+        );
     }
-    return state
-      .set('selectedBid', Map(updatedSelectedbid))
-      .set('proposalDetails', proposalDetail)
-      .setIn(
-        [
-          'opportunityData',
-          data.proposalId,
-          'proposal',
-          'proposalDetails',
-          'earlyEngagementDevelopmentPlan'
-        ],
-        data?.proposalDetails?.earlyEngagementDevelopmentPlan || ''
-      );
   } else {
     if (currentProposal && currentProposal === data?.proposalId) {
       proposalDetail = data.proposalDetails;
