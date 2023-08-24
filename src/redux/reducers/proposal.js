@@ -1427,7 +1427,7 @@ const updateProposalDetailSF = (state, action) => {
       const updatedSelectedbid = selectedbid?.toJS();
       updatedSelectedbid.earlyEngagementDevelopmentPlan =
         data.proposalDetails.earlyEngagementDevelopmentPlan;
-      state
+      return state
         .set('selectedBid', Map(updatedSelectedbid))
         .set('proposalDetails', proposalDetail)
         .setIn(
