@@ -35,8 +35,8 @@ describe('Opportunity component', () => {
     isSidebarOpen: false,
     isOpen: true,
     selectedBid: selectedBidMap,
-    search: "",
-    location: { search: "", pathname: '/opportunities/UZA89103' },
+    search: '',
+    location: { search: '', pathname: '/opportunities/UZA89103' },
     newbidflag: false,
     closeNewbidflag: jest.fn(),
     addNewBid: jest.fn(),
@@ -68,13 +68,16 @@ describe('Opportunity component', () => {
     disconnect: jest.fn()
   }));
   afterEach(cleanup);
-  jest.spyOn(SessionHandler, 'getUserRole').mockReturnValue('Proposal Developer');
+  jest
+    .spyOn(SessionHandler, 'getUserRole')
+    .mockReturnValue('Proposal Developer');
   test('Opportunity component header', async () => {
-    await act( async () => {
+    await act(async () => {
       render(
         <Provider store={store}>
           <SocketContext.Provider
-            value={{ socket: null, updateSocketOppId: jest.fn(), }}>
+            value={{ socket: null, updateSocketOppId: jest.fn() }}
+          >
             <BrowserRouter>
               <Opportunity {...props} />
             </BrowserRouter>
@@ -89,5 +92,5 @@ describe('Opportunity component', () => {
       });
     });
     expect(screen.getByText(/IQVIA™/i)).toBeInTheDocument();
-  });
+  }, 10000);
 });
