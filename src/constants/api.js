@@ -118,7 +118,8 @@ switch (environment) {
   case 'PROD':
     PROPOSAL_API_ENDPOINT =
       'https://m7ci1wtmgf.execute-api.us-east-1.amazonaws.com/prod';
-    PROPOSAL_API_ENDPOINT_2 = 'https://8qm2fg3fx4.execute-api.us-east-1.amazonaws.com/prod';
+    PROPOSAL_API_ENDPOINT_2 =
+      'https://8qm2fg3fx4.execute-api.us-east-1.amazonaws.com/prod';
     PROPOSAL_API_KEY = 'EWK61xXYCM9ofFmBOcOPR4xxxObhZxtwanqD3RHV';
     NORMAL_AUTH_API_ENDPOINT =
       'https://sljfl1jmnc.execute-api.us-east-1.amazonaws.com/prod';
@@ -157,7 +158,8 @@ switch (environment) {
     // L4 Data
     PROPOSAL_API_ENDPOINT =
       'https://v51h8rf355.execute-api.us-east-1.amazonaws.com/l4';
-    PROPOSAL_API_ENDPOINT_2 = 'https://o88gltcnk8.execute-api.us-east-1.amazonaws.com/l4';
+    PROPOSAL_API_ENDPOINT_2 =
+      'https://o88gltcnk8.execute-api.us-east-1.amazonaws.com/l4';
     PROPOSAL_API_KEY = 'PZdKkDgB2p3BZXbm9QnTX2aJtdxJkkz37hgYksJ7';
     NORMAL_AUTH_API_ENDPOINT =
       'https://2gydoa5dw6.execute-api.us-east-1.amazonaws.com/l4';
@@ -183,8 +185,8 @@ switch (environment) {
       'https://byp6zagvkb.execute-api.us-east-1.amazonaws.com/unity-dev';
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
-    REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
-    // REDIRECTION_URL = 'http://localhost:8080';
+    // REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+    REDIRECTION_URL = 'http://localhost:8080';
 
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
