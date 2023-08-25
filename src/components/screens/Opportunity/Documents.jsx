@@ -211,19 +211,30 @@ class Documents extends Component<Props, State> {
                 </AccordionSummary>
                 <AccordionDetails className="bidlistdetail">
                   <ul className="bidlist-document">
-                    {bids.map(v => (
-                      <li
-                        className={
-                          selectedBid === v.proposalId ? 'selectedBid' : ''
-                        }
-                        key={v.proposalId}
-                        onClick={() => {
-                          this.swtichTabs(v.proposalId);
-                        }}
-                      >
-                        {this.oppNo} - Bid {v.bidNo}
-                      </li>
-                    ))}
+                    {bids.map(v => {
+                      // Add this line to log the content of v
+                      const selectedBidObj = this.props.selectedBid;
+                      const bidType = selectedBidObj
+                        ? selectedBidObj.get('bidType')
+                        : '';
+                      return (
+                        <li
+                          className={
+                            selectedBid === v.proposalId ? 'selectedBid' : ''
+                          }
+                          key={v.proposalId}
+                          onClick={() => {
+                            this.swtichTabs(v.proposalId);
+                          }}
+                        >
+                          {this.oppNo} -{' '}
+                          {bidType === 'Early_Engagement_Bid'
+                            ? 'Early Engagement '
+                            : ''}
+                          Bid {v.bidNo}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </AccordionDetails>
               </Accordion>
