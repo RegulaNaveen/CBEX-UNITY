@@ -227,7 +227,7 @@ class Documents extends Component<Props, State> {
                             this.swtichTabs(v.proposalId);
                           }}
                         >
-                          {this.oppNo} -{' '}
+                          {this.oppNo} -
                           {bidType === 'Early_Engagement_Bid'
                             ? 'Early Engagement '
                             : ''}
