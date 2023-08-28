@@ -177,6 +177,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const [panelRef, setPanelRef] = useState(null);
   const [windowWidth, windowHeight] = useWindowSize();
   const [newTab, setNewTab] = useState([]);
+  const [recentSearch, setRecentSearch] = useState('');
   const resolution = window.screen.availWidth;
   const minPixelToExclude = 20;
   const notepadMinWidthPx =
@@ -222,6 +223,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       setTabloaded(false);
       if (tabs.length > 4) {
         const refreshTab = tabs.slice(0, 4);
+        setRecentSearch(window.location.search);
         setTabs([...refreshTab]);
       }
       const tempTab = [];
@@ -272,6 +274,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       if (tabs.length > 4) {
         const refreshTab = tabs.slice(0, 4);
         setTabStatus(false);
+        setRecentSearch(window.location.search);
         setTabs([...refreshTab]);
       }
       setTabloaded(false);
@@ -368,6 +371,12 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     ) {
       const custompath = tabs.find(item => item.path === selectedView);
       dispatch(setActiveTabIndexAction(custompath?.value));
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set('viewType', selectedView);
+      if (selectedView === 'questions') {
+        searchParams.delete('viewType');
+      }
+      history.replace(`${window.location.pathname}?${searchParams.toString()}`);
     }
   }, [tabs]);
 
@@ -551,13 +560,15 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       setTabStatus(false);
       const finalTab = [...tabs, ...newTab];
       const calculateTabList = checkTabsVisibility(finalTab);
-      const winLocationSearch = window.location.search;
-      const selectView = new URLSearchParams(winLocationSearch);
+      const selectView = new URLSearchParams(recentSearch);
       const viewType = selectView.get('viewType');
       if (viewType) {
         const isPresent = calculateTabList.some(v => v.path === viewType);
         const flagValue = isPresent ? 'present' : 'notPresent';
         setTabPresent(flagValue);
+        if (isPresent) {
+          onChangeSelectedTab(viewType);
+        }
       }
       setTabs(calculateTabList);
       setTimeout(() => {
@@ -584,15 +595,18 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       if (allFlags && !allFlags?.showTimelineFlag) {
         finalTab = finalTab.filter(item => item.label !== 'Timeline');
       }
-      const winLocationSearch = window.location.search;
-      const selectView = new URLSearchParams(winLocationSearch);
+      const selectView = new URLSearchParams(recentSearch);
       const viewType = selectView.get('viewType');
       if (viewType) {
         const isPresent = finalTab.some(v => v.path === viewType);
         const flagValue = isPresent ? 'present' : 'notPresent';
         setTabPresent(flagValue);
+        if (isPresent) {
+          onChangeSelectedTab(viewType);
+        }
       }
       setTabs(finalTab);
+      setRecentSearch('');
       setTimeout(() => {
         setTabStatus(true);
       }, 100);
@@ -621,7 +635,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   }, [tabPresent, tabStatus, newTab, switchTemplateState]);
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
-    const selectView = new URLSearchParams(winLocationSearch);
+    const selectView = new URLSearchParams(window.location.search);
     const currentTab = tabs.find(item => item.value === val);
     const currentPath = currentTab.path || '';
     dispatch(setActiveTabIndexAction(val));
@@ -631,11 +645,9 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       setShowVerticalTab(false);
     else if (allFlags.verticalTab) setShowVerticalTab(true);
     if (val === 0) {
-      // No need to update pathname for question tab
-      history.push(`${window.location.pathname}`);
-    } else {
-      history.push(`${window.location.pathname}?${selectView.toString()}`);
+      selectView.delete('viewType');
     }
+    history.push(`${window.location.pathname}?${selectView.toString()}`);
   };
 
   function handleVerticalTabClick(tab) {

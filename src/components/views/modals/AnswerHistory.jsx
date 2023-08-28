@@ -19,7 +19,8 @@ import { parseMomentDate } from '../../../utils/DateUtils';
 import {
   rearrangeDiff,
   getUserInitials,
-  getUserName
+  getUserName,
+  getBidNameByType
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import {
@@ -584,6 +585,11 @@ class AnswerHistory extends Component<Props> {
   renderContent = () => {
     const { opportunityData, selectedBid, isQuesFreezed } = this.props;
     const { question } = this.state;
+    const selectedBidObj = this.props.selectedBid;
+
+    const bidType = selectedBidObj ? selectedBidObj.get('bidType') : '';
+    const bidName = getBidNameByType(bidType);
+    console.log('bidName', bidName);
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -1087,14 +1093,26 @@ class AnswerHistory extends Component<Props> {
                 {userInitials}
               </span>
               <div>
-                <p>{getUserName(userName, cfBidNo, isAnswerEmpty(answer))}</p>
+                <p>
+                  {getUserName(
+                    userName,
+                    cfBidNo,
+                    isAnswerEmpty(answer),
+                    bidName
+                  )}
+                </p>
                 {renderAnswers()}
               </div>
             </div>
             <div className="answer-meta-data">
               <p className="answer-history-para">{parsedDate}</p>
               {bidNo ? (
-                <p className="answer-history-para">Bid {bidNo}</p>
+                <p className="answer-history-para">
+                  {bidName === 'Early Engagement'
+                    ? 'Early Engagement '
+                    : bidName}
+                  {bidNo}
+                </p>
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
