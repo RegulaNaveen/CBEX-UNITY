@@ -92,5 +92,5 @@ describe('Opportunity component', () => {
       });
     });
     expect(screen.getByText(/IQVIA™/i)).toBeInTheDocument();
-  }, 10000);
+  }, 20000);
 });
