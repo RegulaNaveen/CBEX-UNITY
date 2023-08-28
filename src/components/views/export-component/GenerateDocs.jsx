@@ -74,7 +74,7 @@ const GenerateDocs = () => {
       let fileName;
 
       if (bidType === 'Early_Engagement_Bid') {
-        fileName = `Unity Export_${proposalDetails['CRM #']}_Early Engagement Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+        fileName = `Unity Export_${proposalDetails['CRM #']}_Early Engagement ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       } else {
         fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       }

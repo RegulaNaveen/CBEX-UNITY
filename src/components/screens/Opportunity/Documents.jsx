@@ -229,9 +229,11 @@ class Documents extends Component<Props, State> {
                         >
                           {this.oppNo} -
                           {bidType === 'Early_Engagement_Bid'
-                            ? 'Early Engagement '
-                            : ''}
-                          Bid {v.bidNo}
+                            ? 'Early Engagement'
+                            : 'Bid'}
+                          {bidType === 'Early_Engagement_Bid'
+                            ? ` ${v.bidNo}`
+                            : ` ${v.bidNo}`}
                         </li>
                       );
                     })}

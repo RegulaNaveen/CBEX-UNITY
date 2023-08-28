@@ -589,7 +589,7 @@ class AnswerHistory extends Component<Props> {
 
     const bidType = selectedBidObj ? selectedBidObj.get('bidType') : '';
     const bidName = getBidNameByType(bidType);
-
+    console.log('bidName', bidName);
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -1108,7 +1108,10 @@ class AnswerHistory extends Component<Props> {
               <p className="answer-history-para">{parsedDate}</p>
               {bidNo ? (
                 <p className="answer-history-para">
-                  {bidName} {bidNo}
+                  {bidName === 'Early Engagement'
+                    ? 'Early Engagement '
+                    : bidName}
+                  {bidNo}
                 </p>
               ) : null}
               {indexNo === 0 &&

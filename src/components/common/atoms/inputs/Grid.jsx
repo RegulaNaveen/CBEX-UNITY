@@ -494,7 +494,7 @@ const loadSidebar = props => {
             Bid #
           </Typography>
           <Typography variant="body2" className="boldtext">
-            {bidType === 'Early_Engagement_Bid' ? 'Early Engagement Bid ' : ''}
+            {bidType === 'Early_Engagement_Bid' ? 'Early Engagement  ' : ''}
             {bidNo || placeholder}
           </Typography>
         </Paper>

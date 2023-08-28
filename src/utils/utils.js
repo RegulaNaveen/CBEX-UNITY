@@ -413,7 +413,7 @@ function getUserName(userName, lastChangedInBid, answerEmpty = false, bidName) {
     if (lastChangedInBid) {
       const derivedFromBidText =
         bidName === 'Early Engagement'
-          ? ' derived from Early Engagement bid'
+          ? ' derived from Early Engagement '
           : ` derived from ${bidName}`;
 
       if (answerEmpty) {
@@ -543,8 +543,8 @@ const getBidNameByType = bidType => {
   let bidName = '';
   if (!isEmpty(BID_TYPES[bidType])) {
     bidName = BID_TYPES[bidType];
-    if (bidName === 'Early Engagement') {
-      bidName += ' Bid'; // Append "Bid" to "Early Engagement"
+    if (bidName === 'Early Engagement Bid') {
+      bidName = 'Early Engagement ';
     }
   } else {
     bidName = 'Bid';
