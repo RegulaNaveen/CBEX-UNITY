@@ -1356,6 +1356,7 @@ const updateOportunityDetailData = (state, action) => {
   const mapper = OpportunitySFUpDATE;
   let opportunityData = state.get('opportunityData');
   let selectedbid = state.get('selectedBid');
+  const updatedSelectedbid = selectedbid?.toJS();
   let currentProposal = opportunityData.getIn([
     data?.proposalId,
     'proposal',
@@ -1369,8 +1370,17 @@ const updateOportunityDetailData = (state, action) => {
     currentProposal == data?.proposalId &&
     data.sfField
   ) {
+    if (updatedSelectedbid[mapper[data.questionSfField]]) {
+      updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
+    }
     proposalDetail[mapper[data.sfField]] = data.answer;
-    return state.set('proposalDetails', { ...proposalDetail });
+    return state
+      .set('selectedBid', Map(updatedSelectedbid))
+      .set('proposalDetails', { ...proposalDetail })
+      .setIn(
+        ['opportunityData', data.proposalId, 'proposal', 'proposalDetails'],
+        proposalDetail
+      );
   } else if (
     data &&
     proposalDetail &&
@@ -1378,7 +1388,6 @@ const updateOportunityDetailData = (state, action) => {
     currentProposal == data?.proposalId &&
     data?.questionSfField
   ) {
-    const updatedSelectedbid = selectedbid?.toJS();
     if (updatedSelectedbid[mapper[data.questionSfField]]) {
       updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
     }
@@ -1418,7 +1427,7 @@ const updateProposalDetailSF = (state, action) => {
       const updatedSelectedbid = selectedbid?.toJS();
       updatedSelectedbid.earlyEngagementDevelopmentPlan =
         data.proposalDetails.earlyEngagementDevelopmentPlan;
-      state
+      return state
         .set('selectedBid', Map(updatedSelectedbid))
         .set('proposalDetails', proposalDetail)
         .setIn(

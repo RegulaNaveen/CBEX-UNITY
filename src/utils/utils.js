@@ -406,15 +406,20 @@ function getUserInitials(userName, lastChangedInBid) {
     ?.join('');
 }
 
-function getUserName(userName, lastChangedInBid, answerEmpty = false) {
+function getUserName(userName, lastChangedInBid, answerEmpty = false, bidName) {
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
     if (lastChangedInBid) {
+      const derivedFromBidText =
+        bidName === 'Early Engagement'
+          ? ' derived from Early Engagement '
+          : ` derived from ${bidName}`;
+
       if (answerEmpty) {
-        return `Answer not derived from bid ${lastChangedInBid}`;
+        return `Answer not ${derivedFromBidText} ${lastChangedInBid}`;
       }
-      return `Answer derived from bid ${lastChangedInBid}`;
+      return `Answer ${derivedFromBidText} ${lastChangedInBid}`;
     }
     return 'Answer derived from bid';
   }
@@ -538,6 +543,9 @@ const getBidNameByType = bidType => {
   let bidName = '';
   if (!isEmpty(BID_TYPES[bidType])) {
     bidName = BID_TYPES[bidType];
+    if (bidName === 'Early Engagement Bid') {
+      bidName = 'Early Engagement ';
+    }
   } else {
     bidName = 'Bid';
   }

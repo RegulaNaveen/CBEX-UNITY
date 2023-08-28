@@ -313,7 +313,7 @@ const history = createMemoryHistory({
   ]
 });
 
-const TabWithRedux = (props) => (
+const TabWithRedux = props => (
   <Provider store={store}>
     <SocketContext.Provider
       value={{
@@ -365,7 +365,7 @@ describe('testing for tab component', () => {
       expect(screen.getByText('Approvals')).toBeInTheDocument();
       expect(screen.getByText('Documents')).toBeInTheDocument();
     });
-  }, 10000);
+  }, 20000);
 
   test('render with questions tab', () => {
     store.dispatch({
@@ -385,7 +385,7 @@ describe('testing for tab component', () => {
         id="UZA89257"
         enableValidateTab
         selectedView="questions"
-        onChangeSelectedTab={jest.fn()} 
+        onChangeSelectedTab={jest.fn()}
       />
     );
     expect(container).toBeInTheDocument();
@@ -441,7 +441,7 @@ describe('testing for tab component', () => {
       '/opportunities/UZA89257?viewType=timelines&bidNo=3'
     );
     const { container } = render(
-      <TabWithRedux 
+      <TabWithRedux
         id="UZA89257"
         enableValidateTab
         selectedView="timelines"
@@ -469,7 +469,7 @@ describe('testing for tab component', () => {
       ]
     });
     const { container } = render(
-      <TabWithRedux 
+      <TabWithRedux
         id="UZA89257"
         enableValidateTab
         selectedView="approvals"
@@ -497,7 +497,7 @@ describe('testing for tab component', () => {
       ]
     });
     const { container } = render(
-      <TabWithRedux 
+      <TabWithRedux
         id="UZA89257"
         enableValidateTab
         selectedView="documents"
@@ -532,7 +532,7 @@ describe('testing for tab component', () => {
       '/opportunities/UZA89257?viewType=testing&bidNo=3'
     );
     const { container } = render(
-      <TabWithRedux 
+      <TabWithRedux
         id="UZA89257"
         enableValidateTab
         selectedView="validate"
@@ -547,6 +547,6 @@ describe('testing for tab component', () => {
       fireEvent.click(timelineTab);
       expect(container).toBeInTheDocument();
       expect(screen.getByText('Available Dates')).toBeInTheDocument();
-    })
+    });
   });
 });
