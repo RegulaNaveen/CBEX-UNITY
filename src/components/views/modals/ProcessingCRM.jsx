@@ -13,7 +13,7 @@ const ProcessingCRM = ({ isOpen, title, message }) => {
       hideButtons
       variant="warning"
     >
-      <p>{message}</p>
+      <p style={{ textAlign: 'center' }}>{message}</p>
       <div className="apollo-progress-flexed">
         <ApolloProgress />
       </div>
