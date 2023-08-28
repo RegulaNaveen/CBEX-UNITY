@@ -1478,13 +1478,25 @@ export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
-export const changeBid = bid => {
+export const changeBid = (bid, viewType) => {
+  const searchParams = new URLSearchParams(window.location.search);
   if (bid?.bidNo) {
-    updateBidNoQueryparam(bid?.bidNo);
+    searchParams.set('bidNo', bid?.bidNo);
   }
   if (bid?.bidType) {
-    updateBidTypeQueryparam(bid.bidType);
+    searchParams.set('bidType', bid?.bidType);
   }
+  if (viewType) {
+    searchParams.set('viewType', viewType);
+  } else {
+    searchParams.delete('viewType');
+  }
+  const newRelativePathQuery = `${
+    window.location.pathname
+  }?${searchParams.toString()}`;
+  // Update URL without pageload
+  window.history.pushState(null, '', newRelativePathQuery);
+
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
     if (selectedBid.bidName !== bid?.bidName) {

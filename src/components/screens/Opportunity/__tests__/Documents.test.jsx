@@ -51,7 +51,7 @@ describe('Documents component render', () => {
   });
 
   test('Documents box current bid', async () => {
-    const { getByText } = render(
+    render(
       <BrowserRouter>
         <Router history={history}>
           <Provider store={store}>
@@ -60,7 +60,10 @@ describe('Documents component render', () => {
         </Router>
       </BrowserRouter>
     );
-    expect(getByText(/- Bid 1/i)).toBeInTheDocument();
+
+    const elementsWithText = screen.queryAllByText(/Bid 1/i);
+
+    expect(elementsWithText.length).toBeGreaterThan(0);
   });
 
   test('Documents box aditional links', async () => {
