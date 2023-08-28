@@ -20,6 +20,7 @@ import { isEmpty } from 'lodash';
 const Statement = props => {
   const [screenWidth, setScreenWidth] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedRow, setSelectRow] = useState(false);
 
   const quesTextInnerRightRef = useRef();
   const questionTextTitleRef = useRef(null);
@@ -114,7 +115,7 @@ const Statement = props => {
       });
       questionTextRef1.current.setState({ editorState: newEditorState });
     }
-  }, []); // provide dependancy here - Akash
+  }, [prevSearchResult, currentSearchResult, autoNavigatedToCurrentResult]); // provide dependancy here - Akash
 
   const handleQuestionHintRef = questionHintRef => {
     questionTextRef2.current = questionHintRef;
@@ -148,88 +149,102 @@ const Statement = props => {
   };
   return (
     <>
-      <Grid container className="question-title-grid">
-        <Grid item xs={gridColRatio[0]} className="question-grid-item">
-          {/* Question Text and Milestone */}
-          <div className="question-label-container">
-            <div className="question-label-inner" style={{ minHeight: 'auto' }}>
-              {/* Question Text */}
-              <div className="questiontext-richtext">
-                <div className="question-title-txt" ref={questionTextTitleRef}>
-                  {questionJSON ? (
-                    <RichTextEditor
-                      style={{ minHeight: '0px' }}
-                      variant="view"
-                      defaultValue={JSON.parse(questionJSON)}
-                      ref={questionTextRef1}
-                    />
-                  ) : (
-                    <p>{questionText}</p>
-                  )}
+      <div
+        className={`task-table-row question-row ${
+          selectedRow ? 'selected-task-table-row' : ''
+        }  `}
+        style={{ margin: '2px 0px' }}
+        data-testid="strategy-development-question"
+      >
+        <Grid container className="question-title-grid">
+          <Grid item xs={gridColRatio[0]} className="question-grid-item">
+            {/* Question Text and Milestone */}
+            <div className="question-label-container">
+              <div
+                className="question-label-inner"
+                style={{ minHeight: 'auto' }}
+              >
+                {/* Question Text */}
+                <div className="questiontext-richtext">
+                  <div
+                    className="question-title-txt"
+                    ref={questionTextTitleRef}
+                  >
+                    {questionJSON ? (
+                      <RichTextEditor
+                        style={{ minHeight: '0px' }}
+                        variant="view"
+                        defaultValue={JSON.parse(questionJSON)}
+                        ref={questionTextRef1}
+                      />
+                    ) : (
+                      <p>{questionText}</p>
+                    )}
+                  </div>
                 </div>
+
+                {/* Question Hint */}
+                {questionHint && (
+                  <div className="question-hint">
+                    <IconButton
+                      data-testid="question-tooltip-button"
+                      color="primary"
+                      size="small"
+                      className="question-tooltip-icon"
+                      onClick={e => setAnchorEl(e.currentTarget)}
+                    >
+                      <InfoIcon className="info-icon" />
+                    </IconButton>
+                    <Popover
+                      data-testid="question-popover"
+                      className="popover-strategy-question"
+                      open={!!anchorEl}
+                      anchorEl={anchorEl}
+                      onClose={() => setAnchorEl(e.currentTarget)}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center'
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center'
+                      }}
+                      PaperProps={{
+                        style: {
+                          borderColor: '#e9e9e9',
+                          boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                          padding: 10,
+                          maxInlineSize: '300px'
+                        }
+                      }}
+                    >
+                      <Typography>
+                        {questionHintJSON ? (
+                          <RichTextEditor
+                            variant="view"
+                            defaultValue={JSON.parse(questionHintJSON)}
+                            ref={handleQuestionHintRef}
+                          />
+                        ) : (
+                          <div>{questionHint}</div>
+                        )}
+                      </Typography>
+                    </Popover>
+                  </div>
+                )}
               </div>
 
-              {/* Question Hint */}
-              {questionHint && (
-                <div className="question-hint">
-                  <IconButton
-                    data-testid="question-tooltip-button"
-                    color="primary"
-                    size="small"
-                    className="question-tooltip-icon"
-                    onClick={e => setAnchorEl(e.currentTarget)}
-                  >
-                    <InfoIcon className="info-icon" />
-                  </IconButton>
-                  <Popover
-                    data-testid="question-popover"
-                    className="popover-strategy-question"
-                    open={!!anchorEl}
-                    anchorEl={anchorEl}
-                    onClose={() => setAnchorEl(e.currentTarget)}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'center'
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'center'
-                    }}
-                    PaperProps={{
-                      style: {
-                        borderColor: '#e9e9e9',
-                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
-                        padding: 10,
-                        maxInlineSize: '300px'
-                      }
-                    }}
-                  >
-                    <Typography>
-                      {questionHintJSON ? (
-                        <RichTextEditor
-                          variant="view"
-                          defaultValue={JSON.parse(questionHintJSON)}
-                          ref={handleQuestionHintRef}
-                        />
-                      ) : (
-                        <div>{questionHint}</div>
-                      )}
-                    </Typography>
-                  </Popover>
-                </div>
-              )}
+              {/* Milestone Chip */}
+              <div className="milestone-chip" ref={quesTextInnerRightRef}>
+                {renderTags(milestone, milestoneNew, ismilestoneavailable)}
+              </div>
             </div>
-
-            {/* Milestone Chip */}
-            <div className="milestone-chip" ref={quesTextInnerRightRef}>
-              {renderTags(milestone, milestoneNew, ismilestoneavailable)}
-            </div>
-          </div>
+          </Grid>
+          <Grid item xs={gridColRatio[1]} className="empty-grid-item">
+            <></>
+          </Grid>
         </Grid>
-        <Grid item xs={gridColRatio[1]} className="empty-grid-item">
-          <></>
-        </Grid>
-      </Grid>
+      </div>
     </>
   );
 };
