@@ -161,8 +161,9 @@ const BidHistory = () => {
                                 !isQuestionAnswered &&
                                 (currentbidNo !== item.bidNo ||
                                   currentBidType !== item.bidType)
-                              )
-                                dispatch(changeBid(item));
+                              ) {
+                                dispatch(changeBid(item, selectedView));
+                              }
                             }}
                             className={`bid-list-row ${
                               selectedBid.get('id') === item.bidId
