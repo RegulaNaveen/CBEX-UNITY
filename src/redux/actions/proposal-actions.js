@@ -1523,6 +1523,12 @@ export const changeBid = (bid, viewType) => {
       type: CHANGE_BID_STATUS_OPERATION,
       payload: true
     });
+    dispatch(
+      widgetUpdate(
+        response?.data?.proposal?.proposalId,
+        response?.data?.proposal?.typeOfWidget
+      )
+    );
   };
 };
 
