@@ -76,7 +76,7 @@ const SwitchTemplate = ({
       }
     });
   };
-
+  console.log('otlist is', otList);
   return (
     <>
       <CustomModal
@@ -110,8 +110,8 @@ const SwitchTemplate = ({
               placeholder={DEFAULT.SELECT_ITEM}
               fullWidth
             >
-              {!isEmpty(otList)
-                ? otList.map(item => (
+              {otList && !isEmpty(otList)
+                ? otList['Opportunity Type'].map(item => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>
