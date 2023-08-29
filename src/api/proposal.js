@@ -264,6 +264,17 @@ export const fetchAdditionalBoxLink = async (
   );
 };
 
+export const fetchOpportunityFolderLink = async (
+  oppID: string
+): Promise<Object> => {
+  return axiosInstance.get(
+    `${PROPOSAL_API_URL}/opportunity/box-folder-id?opportunityId=${oppID}`,
+    {
+      headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+    }
+  );
+};
+
 export const getValidatedProposalData = (id: string): Promise<Object> => {
   return axiosInstance.get(`${PROPOSAL_VALIDATED_DATA}/${id}`, {
     headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
