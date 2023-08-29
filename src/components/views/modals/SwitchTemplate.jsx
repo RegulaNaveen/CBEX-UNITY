@@ -11,9 +11,7 @@ import { useDispatch } from 'react-redux';
 
 import { DEFAULT, PROPOSAL } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
-import {
-  changeOpportunityType
-} from '../../../redux/actions/proposal-actions';
+import { changeOpportunityType } from '../../../redux/actions/proposal-actions';
 
 const SwitchTemplate = ({
   selectedBidId,
@@ -62,10 +60,10 @@ const SwitchTemplate = ({
         onClose={() => setOpenModal(prev => !prev)}
         buttonProps={[
           {
-            style: { color: '#0768fd', border: '1px solid #cdcdcd'}
+            style: { color: '#0768fd', border: '1px solid #cdcdcd' }
           },
           {
-            style: { color: '#0768fd', border: '1px solid #cdcdcd'},
+            style: { color: '#0768fd', border: '1px solid #cdcdcd' },
             label: DEFAULT.REFRESH,
             disabled: isBtnDisabledRefresh || !isBtnDisabled,
             onClick: switchTempBtnClickHandler
@@ -88,12 +86,18 @@ const SwitchTemplate = ({
           <Grid item xs={12} sm={9}>
             <Select
               label={PROPOSAL.OPPORTUNITY_TYPE}
-              helperText={isBtnDisabledRefresh || !isBtnDisabled
-                ? DEFAULT.SELECT_OPTION_MSG 
-                : <>
+              helperText={
+                isBtnDisabledRefresh || !isBtnDisabled ? (
+                  DEFAULT.SELECT_OPTION_MSG
+                ) : (
+                  <>
                     <ExclamationTriangle />
-                    <>{DEFAULT.SELECT_OPTION_REFRESH_MSG} {DEFAULT.SELECT_OPTION_MSG}</>
+                    <>
+                      {DEFAULT.SELECT_OPTION_REFRESH_MSG}{' '}
+                      {DEFAULT.SELECT_OPTION_MSG}
+                    </>
                   </>
+                )
               }
               value={!isEmpty(otList) ? selectValue : ''}
               onChange={e => setSelectValue(e.target.value)}
@@ -101,7 +105,7 @@ const SwitchTemplate = ({
               fullWidth
             >
               {otList && !isEmpty(otList)
-                ? otList['Opportunity Type'].map(item => (
+                ? otList.map(item => (
                     <MenuItem key={item} value={item}>
                       {item}
                     </MenuItem>

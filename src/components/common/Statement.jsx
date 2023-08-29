@@ -16,15 +16,17 @@ import {
 } from '../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 import { isEmpty } from 'lodash';
+import Typography from 'apollo-react/components/Typography';
 
 const Statement = props => {
   const [screenWidth, setScreenWidth] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectRow] = useState(false);
-
+  console.log('reached in statement key milestones');
   const quesTextInnerRightRef = useRef();
   const questionTextTitleRef = useRef(null);
   const questionTextRef1 = useRef();
+  const questionTextRef2 = useRef();
 
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const prevSearchResult = useSelector(selectPrevSearchResult);
@@ -200,7 +202,7 @@ const Statement = props => {
                       className="popover-strategy-question"
                       open={!!anchorEl}
                       anchorEl={anchorEl}
-                      onClose={() => setAnchorEl(e.currentTarget)}
+                      onClose={e => setAnchorEl(null)}
                       anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'center'

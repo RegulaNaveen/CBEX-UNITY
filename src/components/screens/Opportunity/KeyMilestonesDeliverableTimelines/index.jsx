@@ -174,7 +174,7 @@ const KeyMilestoneDeliverableTimelines = () => {
       setShowModal(true);
     }
   }, [editQuestionsData]);
-
+  console.log('wholeData is', wholeData);
   return (
     <>
       {/* <div id="key-milestone-wrapper"> */}
@@ -188,7 +188,7 @@ const KeyMilestoneDeliverableTimelines = () => {
           })}
         >
           {wholeData?.map(items => {
-            if (items.answerConfiguration?.type !== 'statement')
+            if (items.answerConfiguration.get('type') !== 'statement')
               return (
                 (items.visible || typeof items.visible === 'undefined') && (
                   <QuestionContainer
