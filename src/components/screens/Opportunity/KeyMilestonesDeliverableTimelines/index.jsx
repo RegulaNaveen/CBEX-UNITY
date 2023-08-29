@@ -21,6 +21,7 @@ import AnswerHistory from '../../../views/modals/AnswerHistory';
 import QuestionContainer from './QuestionContainer';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
 import Statement from '../../../common/Statement';
+
 const CustomModal = props => {
   const modalRoot = document.getElementById('modal-wrapper');
   return ReactDOM.createPortal(props.children, modalRoot);

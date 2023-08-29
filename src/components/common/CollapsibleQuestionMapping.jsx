@@ -23,7 +23,7 @@ const CollapsibleQuestionMapping = ({
     let answerType = questionConfig.get('answerConfiguration').get('type');
 
     switch (answerType) {
-      case 'Statement':
+      case 'statement':
         return (
           (visible || typeof visible === 'undefined') && (
             <Statement
