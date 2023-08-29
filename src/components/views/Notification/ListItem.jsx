@@ -62,7 +62,9 @@ const ListItem = ({
       if (word === 'Engagement' && arr[index - 1] === 'Early') {
         return oppNoAsHyperlink(word);
       }
-
+      if (word === `${bidNo}` && arr[index - 1] === 'Engagement') {
+        return oppNoAsHyperlink(word);
+      }
       if (word === `${bidNo}.` && arr[index - 1] === 'Engagement') {
         return oppNoAsHyperlink(word);
       }
