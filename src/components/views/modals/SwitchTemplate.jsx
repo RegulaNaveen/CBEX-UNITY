@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
@@ -21,9 +21,11 @@ const SwitchTemplate = ({
   otList,
   ...props
 }) => {
-  // States
+    // States
   const [selectValue, setSelectValue] = useState(opportunityType);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const dispatch = useDispatch();
 
   // Change btn enable/disable logic
@@ -42,7 +44,7 @@ const SwitchTemplate = ({
       })
     ).then(res => {
       setLoading(false);
-      if (res.status) {
+            if (res.status) {
         setOpenModal(false);
       } else {
         setError(true);
@@ -115,6 +117,22 @@ const SwitchTemplate = ({
           </Grid>
         </Grid>
       </CustomModal>
+
+      {/* Error Warning Modal */}
+      {error && (
+          <CustomModal
+            open={error}
+            title={DEFAULT.ALERT}
+            message={errorMsg}
+            variant="error"
+            onClose={() => setError(false)}
+            buttonProps={[
+              { className: 'display-none' },
+              { label: DEFAULT.CLOSE }
+            ]}
+            className="switch-temp-warning-modal"
+          />
+        )}
     </>
   );
 };
