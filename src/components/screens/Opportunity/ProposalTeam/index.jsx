@@ -20,6 +20,7 @@ import {
   getEditQuestionData
 } from '../../../../redux/selectors';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
+import Statement from '../../../common/Statement';
 
 const CustomModal = props => {
   const modalRoot = document.getElementById('modal-wrapper');
@@ -204,52 +205,71 @@ function ProposalTeam() {
           })}
         >
           {wholeData?.map(items => {
-            return (
-              (items.visible || typeof items.visible === 'undefined') && (
-                <Question
-                  key={items.questionId}
-                  sfField={items.sfField}
-                  proposalId={items.proposalId}
-                  questionId={items.questionId}
-                  proposalDetail={items.proposalDetail}
-                  isNotApplicable={items.isNotApplicable}
-                  milestoneCond={items.milestoneCond}
-                  NaLoading={items.NaLoading}
-                  currentSFanswer={items.currentSFAnswer}
-                  sficon={items.sficon}
-                  milestone={items.milestone}
-                  lastAns={items.lastAns}
-                  qvicon={items.qvicon}
-                  answers={items.answers}
-                  loading={items.loading}
-                  sfObject={items.sfObject}
-                  questionHint={items.questionHint}
-                  questionHintJSON={items.questionHintJSON}
-                  questionHTML={items.questionHTML}
-                  sectionName={items.sectionName}
-                  events={items.events}
-                  questionText={items.questionText}
-                  questionJSON={items.questionJSON}
-                  isCustomQuestion={items.isCustomQuestion}
-                  notApplicable={items.notApplicable}
-                  isSetQuestionLoadingData={isSetQuestionLoadingData}
-                  questionData={items.questionData}
-                  section={items.section}
-                  milestoneNew={items.milestoneNew}
-                  allSections={allSections}
-                  answerConfiguration={items.answerConfiguration}
-                  questionLockInfo={items.questionLockInfo}
-                  roleNames={items.roleNames}
-                  visible={items.visible}
-                  setQuestionToDisplayHistory={setQuestionToDisplayHistory}
-                  hasDifferentSFanswer={items.hasDifferentSFanswer}
-                  qvidianIntegration={items.qvidianIntegration}
-                  bidAnswerCopy={items.bidAnswerCopy}
-                  latestAnsweredBidNo={items.latestAnsweredBidNo}
-                  questionDataDestinations={items.questionDataDestinations}
-                />
-              )
-            );
+            if (items.answerConfiguration.get('type') === 'statement')
+              return (
+                (items.visible || typeof items.visible === 'undefined') && (
+                  <Statement
+                    key={items.questionId}
+                    ismilestoneavailable={items.milestone}
+                    milestone={items.milestone}
+                    milestoneNew={items.milestoneNew}
+                    questionId={items.questionId}
+                    questionText={items.questionText}
+                    questionJSON={items.questionJSON}
+                    sectionName={items.sectionName}
+                    questionHint={items.questionHint}
+                    questionHintJSON={items.questionHintJSON}
+                    // isNotepadOpen={items.isNotepadOpen}
+                  />
+                )
+              );
+            else
+              return (
+                (items.visible || typeof items.visible === 'undefined') && (
+                  <Question
+                    key={items.questionId}
+                    sfField={items.sfField}
+                    proposalId={items.proposalId}
+                    questionId={items.questionId}
+                    proposalDetail={items.proposalDetail}
+                    isNotApplicable={items.isNotApplicable}
+                    milestoneCond={items.milestoneCond}
+                    NaLoading={items.NaLoading}
+                    currentSFanswer={items.currentSFAnswer}
+                    sficon={items.sficon}
+                    milestone={items.milestone}
+                    lastAns={items.lastAns}
+                    qvicon={items.qvicon}
+                    answers={items.answers}
+                    loading={items.loading}
+                    sfObject={items.sfObject}
+                    questionHint={items.questionHint}
+                    questionHintJSON={items.questionHintJSON}
+                    questionHTML={items.questionHTML}
+                    sectionName={items.sectionName}
+                    events={items.events}
+                    questionText={items.questionText}
+                    questionJSON={items.questionJSON}
+                    isCustomQuestion={items.isCustomQuestion}
+                    notApplicable={items.notApplicable}
+                    isSetQuestionLoadingData={isSetQuestionLoadingData}
+                    questionData={items.questionData}
+                    section={items.section}
+                    milestoneNew={items.milestoneNew}
+                    allSections={allSections}
+                    answerConfiguration={items.answerConfiguration}
+                    questionLockInfo={items.questionLockInfo}
+                    roleNames={items.roleNames}
+                    visible={items.visible}
+                    setQuestionToDisplayHistory={setQuestionToDisplayHistory}
+                    hasDifferentSFanswer={items.hasDifferentSFanswer}
+                    qvidianIntegration={items.qvidianIntegration}
+                    bidAnswerCopy={items.bidAnswerCopy}
+                    latestAnsweredBidNo={items.latestAnsweredBidNo}
+                    questionDataDestinations={items.questionDataDestinations}
+                  />
+                )
+              );
           })}
         </div>
         <hr className="divider-hr-proposal-team" />
