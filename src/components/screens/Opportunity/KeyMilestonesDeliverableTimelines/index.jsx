@@ -20,6 +20,7 @@ import { List, fromJS } from 'immutable';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
 import QuestionContainer from './QuestionContainer';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
+import Statement from '../../../common/Statement';
 
 const CustomModal = props => {
   const modalRoot = document.getElementById('modal-wrapper');
@@ -173,20 +174,21 @@ const KeyMilestoneDeliverableTimelines = () => {
       setShowModal(true);
     }
   }, [editQuestionsData]);
-
+  console.log('wholeData is', wholeData);
   return (
     <>
       {/* <div id="key-milestone-wrapper"> */}
-        <div id="key-milestone-left-section">
-          <div className="key-milestone-header">
-            <Header />
-          </div>
-          <div
-            className={classNames('key-milestone-wrapper-container', {
-              'padding-Na': showNaCheckbox
-            })}
-          >
-            {wholeData?.map(items => {
+      <div id="key-milestone-left-section">
+        <div className="key-milestone-header">
+          <Header />
+        </div>
+        <div
+          className={classNames('key-milestone-wrapper-container', {
+            'padding-Na': showNaCheckbox
+          })}
+        >
+          {wholeData?.map(items => {
+            if (items.answerConfiguration.get('type') !== 'statement')
               return (
                 (items.visible || typeof items.visible === 'undefined') && (
                   <QuestionContainer
@@ -196,24 +198,42 @@ const KeyMilestoneDeliverableTimelines = () => {
                   />
                 )
               );
-            })}
-          </div>
-          <hr className="key-milestone-divider-hr" />
-          <div className="add-question-link">
-            <Link
-              style={{ borderBottom: 'none' }}
-              onClick={() => setShowModal(true)}
-              size="small"
-              disabled={!isCurrentBid}
-            >
-              <Plus
-                className="plus-icon-add-new-question"
-                fontSize="extraSmall"
-              />
-              <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-            </Link>
-          </div>
+            else
+              return (
+                (items.visible || typeof items.visible === 'undefined') && (
+                  <Statement
+                    key={items.questionId}
+                    ismilestoneavailable={items.milestone}
+                    milestone={items.milestone}
+                    milestoneNew={items.milestoneNew}
+                    questionId={items.questionId}
+                    questionText={items.questionText}
+                    questionJSON={items.questionJSON}
+                    sectionName={items.sectionName}
+                    questionHint={items.questionHint}
+                    questionHintJSON={items.questionHintJSON}
+                    // isNotepadOpen={items.isNotepadOpen}
+                  />
+                )
+              );
+          })}
         </div>
+        <hr className="key-milestone-divider-hr" />
+        <div className="add-question-link">
+          <Link
+            style={{ borderBottom: 'none' }}
+            onClick={() => setShowModal(true)}
+            size="small"
+            disabled={!isCurrentBid}
+          >
+            <Plus
+              className="plus-icon-add-new-question"
+              fontSize="extraSmall"
+            />
+            <span style={{ verticalAlign: 'top' }}> Add New Question</span>
+          </Link>
+        </div>
+      </div>
       {/* </div> */}
       {showModal && (
         <CustomModal>
