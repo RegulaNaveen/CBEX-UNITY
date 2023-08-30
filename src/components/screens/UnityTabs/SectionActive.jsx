@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import Grid from 'apollo-react/components/Grid';
-import QuestionItem from './QuestionItem';
+import SwitchItem from './SwitchItem';
 import { getSelectedBid } from '../../../redux/selectors';
 
 const SectionActive = ({
@@ -24,6 +24,7 @@ const SectionActive = ({
   useEffect(() => {
     setIsAllActiveDisplayed(isAllQuestionsVisible);
   }, [isAllQuestionsVisible]);
+  console.log('UnityTabSectionQuestions is', UnityTabSectionQuestions);
   return (
     <Grid container className="approval-ques">
       <Grid item xs={12} className="approval-sec-title">
@@ -32,7 +33,7 @@ const SectionActive = ({
       <Grid item xs={12} className="approval-ques-left">
         {!isEmpty(UnityTabSectionQuestions) &&
           UnityTabSectionQuestions.map(item => (
-            <QuestionItem
+            <SwitchItem
               questionId={item}
               UnityTabSectionTitle={UnityTabSectionTitle}
               key={item}

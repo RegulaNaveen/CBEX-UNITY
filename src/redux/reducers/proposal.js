@@ -54,6 +54,7 @@ const {
   INTEGRATIONS_INFO,
   BOX_ADDITIONAL_LINK,
   BOX_ADDITIONAL_LINK_ERROR,
+  BOX_OPPORTUNITY_FOLDER_ID,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
   RESET_PROPOSALID,
@@ -168,6 +169,7 @@ const INITIAL_STATE: Map = fromJS({
   boxBids: [],
   lookUpOptions: {},
   boxAdditionalLink: {},
+  boxOpportunityFolderId: '',
   switchTempCallStatus: false,
   switchTempInProgress: false,
   eventflag: {},
@@ -1103,6 +1105,11 @@ const onGettingfetchBoxAdditionalLinkError = (
   return state.set('boxAdditionalLink', error);
 };
 
+const onBoxOpportunityFolderId = (state, action) => {
+  const { folderId } = action.payload;
+  return state.set('boxOpportunityFolderId', folderId);
+};
+
 const onFetchingValidatedProposaData = (state: Map): Map => {
   return state
     .set('fetchingValidatedProposalData', true)
@@ -1564,6 +1571,7 @@ const actionMap = {
     state.set('proposalIntegrations', payload),
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
+  [BOX_OPPORTUNITY_FOLDER_ID]: onBoxOpportunityFolderId,
   [SWITCH_TEMP_STATUS]: (state, { payload }) =>
     state.set('switchTempCallStatus', payload),
   [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>

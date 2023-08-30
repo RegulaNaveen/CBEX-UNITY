@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Grid from 'apollo-react/components/Grid';
 import isEmpty from 'lodash/isEmpty';
-import QuestionItem from './QuestionItem';
+import SwitchItem from './SwitchItem';
 import { useDispatch, useSelector } from 'react-redux';
 import Highlighter from 'react-highlight-words';
 import {
@@ -72,7 +72,7 @@ const SectionFreezed = ({
           leftQues.map(item => {
             if (item.visible && (item.active || item.isCustomQuestion)) {
               return (
-                <QuestionItem
+                <SwitchItem
                   questionId={item.questionId}
                   approvalSectionTitle={title}
                   key={item.questionId}
@@ -91,7 +91,7 @@ const SectionFreezed = ({
           rightQues.map(item => {
             if (item.visible && (item.active || item.isCustomQuestion)) {
               return (
-                <QuestionItem
+                <SwitchItem
                   questionId={item.questionId}
                   approvalSectionTitle={title}
                   key={item.questionId}
