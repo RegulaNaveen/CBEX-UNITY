@@ -164,6 +164,7 @@ const BidHistory = () => {
                               ) {
                                 dispatch(changeBid(item, selectedView));
                               }
+                              console.log(item);
                             }}
                             className={`bid-list-row ${
                               selectedBid.get('id') === item.bidId
@@ -174,7 +175,9 @@ const BidHistory = () => {
                             key={item.bidId}
                           >
                             <div>
-                              {item.bidName}{' '}
+                              {item.bidName.startsWith('Early Engagement')
+                                ? `EE ${item.bidNo}`
+                                : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'

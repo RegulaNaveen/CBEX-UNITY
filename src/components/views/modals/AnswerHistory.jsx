@@ -584,12 +584,33 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData, selectedBid, isQuesFreezed } = this.props;
-    const { question } = this.state;
-    const selectedBidObj = this.props.selectedBid;
+    const oppordata = opportunityData.toJS();
+    // Initialize an array to store bidType values
+    const bidTypes = [];
 
-    const bidType = selectedBidObj ? selectedBidObj.get('bidType') : '';
-    const bidName = getBidNameByType(bidType);
-    console.log('bidName', bidName);
+    // Loop over each item in the oppordata object
+    for (const key in oppordata) {
+      if (oppordata.hasOwnProperty(key)) {
+        const proposal = oppordata[key].proposal;
+        if (proposal && proposal.bidType) {
+          bidTypes.push(proposal.bidType);
+        }
+      }
+    }
+
+    // Now the bidTypes array contains all the bidType values
+    const { question } = this.state;
+
+    const extractedData = {};
+    Object.keys(oppordata).forEach(key => {
+      const proposal = oppordata[key].proposal;
+      const proposalId = proposal.proposalId;
+      const bidType = proposal.bidType;
+
+      // Store the extracted data in the object
+      extractedData[proposalId] = bidType;
+    });
+    console.log('extractedData', extractedData);
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -619,6 +640,7 @@ class AnswerHistory extends Component<Props> {
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const cfProposalId = _answer.get('cfProposalId');
+
       let cfBidNo = null;
       const date = _answer.get('date');
       // get formattedAnswer if present or fallback to answer
@@ -1098,7 +1120,8 @@ class AnswerHistory extends Component<Props> {
                     userName,
                     cfBidNo,
                     isAnswerEmpty(answer),
-                    bidName
+                    extractedData,
+                    _answer.get('cfProposalId')
                   )}
                 </p>
                 {renderAnswers()}
@@ -1108,9 +1131,9 @@ class AnswerHistory extends Component<Props> {
               <p className="answer-history-para">{parsedDate}</p>
               {bidNo ? (
                 <p className="answer-history-para">
-                  {bidName === 'Early Engagement'
+                  {bidTypes[index] === 'Early_Engagement_Bid'
                     ? 'Early Engagement '
-                    : bidName}
+                    : 'Bid '}
                   {bidNo}
                 </p>
               ) : null}

@@ -303,13 +303,25 @@ const TableView = ({ data, hideStatus }: Props) => {
                 </div>
               );
             case 'bidNo':
+              const bidNumber = row[BIDNUM_COLUMN];
+              const isEarlyEngagementBid =
+                row.bidType === 'Early_Engagement_Bid';
+
+              const tooltipTitle = isEarlyEngagementBid
+                ? `Early Engagement Bid ${bidNumber}`
+                : `Bid ${bidNumber}`;
               return (
                 <div key={uuidv4()} className="cell">
-                  <Tooltip title={`Bid ${row[BIDNUM_COLUMN]}`} placement="top">
-                    <p>Bid {row[BIDNUM_COLUMN]}</p>
+                  <Tooltip title={tooltipTitle} placement="top">
+                    <p>
+                      {isEarlyEngagementBid
+                        ? `Early Engagement ${bidNumber}`
+                        : `Bid ${bidNumber}`}
+                    </p>
                   </Tooltip>
                 </div>
               );
+
             case 'bid due date':
               const bidDueDate = row[col];
               const tooltipData = bidDueDate
