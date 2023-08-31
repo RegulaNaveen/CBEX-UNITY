@@ -107,7 +107,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    */
   useEffect(() => {
     fetchOtList();
-  }, [questionTemplateVersionNumber]);
+  }, [questionTemplateVersionNumber, opportunityType]);
 
   /**
    * Render Switch Temp Error/Success Modal
@@ -147,7 +147,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   // Refresh btn enable/disable logic
   const isBtnDisabledRefresh = questionTemplateVersionNumber 
   && pubTempVersion === questionTemplateVersionNumber;
-  
+    
   return (
     <>
       <Footer
