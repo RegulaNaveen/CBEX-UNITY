@@ -72,7 +72,8 @@ const ProposalCard = ({
   proposalDetails,
   tabIndex,
   customName,
-  nextMilestone
+  nextMilestone,
+  bidType
 }: Props) => {
   const [favInProgress, setFavInProgress] = useState(false);
   const flags = useSelector(state => state.proposal.get('eventflag'));
@@ -223,7 +224,11 @@ const ProposalCard = ({
           <span>
             <b>Current Bid:</b>
           </span>
-          <span className={checkNoDataClass(bidNo)}>Bid {bidNo}</span>
+          {bidType === 'Early_Engagement_Bid' ? (
+            <span>Early Engagement {bidNo}</span>
+          ) : (
+            <span className={checkNoDataClass(bidNo)}>Bid {bidNo}</span>
+          )}
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>

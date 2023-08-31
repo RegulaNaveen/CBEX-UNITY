@@ -36,7 +36,8 @@ const formatProposal = (proposal: Object) => {
     isFavourite: proposal.isFavourite || false,
     bidStopStatus: proposal.bidStopStatus || false,
     customName: proposal.customName || '',
-    nextMilestone: getNextMilestone(proposal.nextMilestone)
+    nextMilestone: getNextMilestone(proposal.nextMilestone),
+    bidType: proposal.bidType || placeholder
   };
 
   return formatted;
@@ -84,6 +85,7 @@ class GridView extends Component<Props> {
               customName={formatted.customName}
               proposalDetails={proposal}
               nextMilestone={formatted.nextMilestone}
+              bidType={formatted.bidType}
             />
           );
         })}
