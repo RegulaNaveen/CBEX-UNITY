@@ -460,10 +460,10 @@ pafexecution_l4:
   # only:
   #   - tags
   #   - pipelines
-  # rules:
-  #   - if: $ENV=="l4"
-  #   - if: '$CI_COMMIT_TAG'
-  #   - if: $CI_PIPELINE_SOURCE == "pipelines"
+  rules:
+    - if: $ENV=="l4"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   variables:
     ENV_NAME: l4
   trigger:
@@ -479,10 +479,10 @@ pafexecution_svt:
   # only:
   #   - tags
   #   - pipelines
-  # rules:
-  #   - if: $ENV=="svt"
-  #   - if: '$CI_COMMIT_TAG'
-  #   - if: $CI_PIPELINE_SOURCE == "pipelines"
+  rules:
+    #- if: $ENV=="svt"
+    - if: '$CI_COMMIT_TAG'
+    - if: $CI_PIPELINE_SOURCE == "pipelines"
   variables:
     ENV_NAME: svt
   trigger:
