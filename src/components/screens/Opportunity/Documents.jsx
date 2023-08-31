@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
+import { fromJS } from 'immutable';
 import { compose } from 'redux';
 import type { Match } from 'react-router-dom';
 import Grid from 'apollo-react/components/Grid';
@@ -182,8 +183,9 @@ class Documents extends Component<Props, State> {
       boxOpportunityFolderId,
       oppdata
     } = this.props;
-    const oppordata = oppdata.toJS();
-
+    const oppordataImmutable = fromJS(oppdata);
+    const oppordataPlain = oppordataImmutable.toJS();
+    const oppordata = oppordataPlain;
     // Initialize an array to store bidType values
     const bidTypes = [];
 
