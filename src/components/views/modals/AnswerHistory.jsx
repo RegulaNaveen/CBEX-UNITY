@@ -1131,9 +1131,10 @@ class AnswerHistory extends Component<Props> {
               <p className="answer-history-para">{parsedDate}</p>
               {bidNo ? (
                 <p className="answer-history-para">
-                  {bidTypes[index] === 'Early_Engagement_Bid'
-                    ? 'Early Engagement '
-                    : 'Bid '}
+                  {!bidTypes[index] ||
+                  bidTypes[index] !== 'Early_Engagement_Bid'
+                    ? 'Bid '
+                    : 'Early Engagement '}
                   {bidNo}
                 </p>
               ) : null}

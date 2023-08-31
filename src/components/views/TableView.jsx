@@ -308,7 +308,7 @@ const TableView = ({ data, hideStatus }: Props) => {
                 row.bidType === 'Early_Engagement_Bid';
 
               const tooltipTitle = isEarlyEngagementBid
-                ? `Early Engagement Bid ${bidNumber}`
+                ? `Early Engagement ${bidNumber}`
                 : `Bid ${bidNumber}`;
               return (
                 <div key={uuidv4()} className="cell">
