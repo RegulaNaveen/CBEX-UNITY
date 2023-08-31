@@ -362,6 +362,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   }, [vtabCollpased]);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
     if (
       tabs.length > 4 &&
       (selectedView !== 'documents' ||
@@ -371,13 +372,27 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     ) {
       const custompath = tabs.find(item => item.path === selectedView);
       dispatch(setActiveTabIndexAction(custompath?.value));
-      const searchParams = new URLSearchParams(window.location.search);
       searchParams.set('viewType', selectedView);
       if (selectedView === 'questions') {
         searchParams.delete('viewType');
       }
-      history.replace(`${window.location.pathname}?${searchParams.toString()}`);
+    } else {
+      if (
+        selectedView !== 'documents' ||
+        selectedView !== 'approval' ||
+        selectedView !== 'timelines'
+      ) {
+        const tab = defaultTabs.find(tab => tab.path === selectedView);
+        if (tab && tab.value > 0) {
+          dispatch(setActiveTabIndexAction(tab.value));
+          searchParams.set('viewType', selectedView);
+        } else {
+          dispatch(setActiveTabIndexAction(0));
+          searchParams.delete('viewType');
+        }
+      }
     }
+    history.replace(`${window.location.pathname}?${searchParams.toString()}`);
   }, [tabs]);
 
   async function fetchTabFlags() {
