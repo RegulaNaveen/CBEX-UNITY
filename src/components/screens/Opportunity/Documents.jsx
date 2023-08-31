@@ -197,9 +197,6 @@ class Documents extends Component<Props, State> {
       }
     }
 
-    // Now the bidTypes array contains all the bidType values
-    console.log(bidTypes);
-
     const { data, oppfolderID } = boxLinks;
     const { selectedBid } = this.state;
     const consentPropertyName = localStorage.getItem('unity_document_consent');

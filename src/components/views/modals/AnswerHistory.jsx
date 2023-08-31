@@ -610,7 +610,7 @@ class AnswerHistory extends Component<Props> {
       // Store the extracted data in the object
       extractedData[proposalId] = bidType;
     });
-    console.log('extractedData', extractedData);
+
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();

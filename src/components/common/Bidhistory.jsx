@@ -164,7 +164,6 @@ const BidHistory = () => {
                               ) {
                                 dispatch(changeBid(item, selectedView));
                               }
-                              console.log(item);
                             }}
                             className={`bid-list-row ${
                               selectedBid.get('id') === item.bidId

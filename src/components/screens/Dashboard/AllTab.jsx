@@ -18,7 +18,6 @@ import {
 import GridView from '../../views/GridView';
 import TableView from '../../views/TableView';
 import ComplexPagination from '../../common/ComplexPagination';
-import { getOpportunityData } from '../../../redux/selectors/proposal';
 
 type Props = {
   selectedViewType: 0 | 1,
@@ -30,8 +29,7 @@ type Props = {
   numRows: Number,
   setPage: Function,
   setRows: Function,
-  allFlags: object,
-  oppdata: Object
+  allFlags: object
 };
 
 type State = {
@@ -59,8 +57,7 @@ class AllTab extends Component<Props, State> {
       numRows,
       proposals,
       filteredProposals,
-      isFilteringProposals,
-      oppdata
+      isFilteringProposals
     } = this.props;
     const contentChanged =
       prevProps.page !== page ||
@@ -95,24 +92,9 @@ class AllTab extends Component<Props, State> {
       isFilteringProposals,
       filteredProposals,
       setPage,
-      setRows,
-      oppdata
+      setRows
     } = this.props;
-    console.log('filteredProposals', filteredProposals);
-    const oppordata = oppdata.toJS();
-    // Initialize an array to store bidType values
-    const bidTypes = [];
 
-    // Loop over each item in the oppordata object
-    for (const key in oppordata) {
-      if (oppordata.hasOwnProperty(key)) {
-        const proposal = oppordata[key].proposal;
-        if (proposal && proposal.bidType) {
-          bidTypes.push(proposal.bidType);
-        }
-      }
-    }
-    console.log('bidTypes', bidTypes);
     const proposalCount = isFilteringProposals
       ? filteredProposals.length
       : proposals.length;
@@ -152,7 +134,6 @@ const mapStateToProps = state => ({
   loading: getProposalsLoading(state),
   filteredProposals: getFilteredProposals(state),
   isFilteringProposals: getIsFilteringProposals(state),
-  oppdata: getOpportunityData(state),
 
   page: getPage(state.proposals),
   numRows: getNumOfRows(state.proposals)

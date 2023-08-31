@@ -413,7 +413,6 @@ function getUserName(
   extractedData,
   cfProposalId
 ) {
-  console.log('cfProposalId', cfProposalId);
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
