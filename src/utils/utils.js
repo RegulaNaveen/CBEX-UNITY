@@ -421,7 +421,11 @@ function getUserName(
         return `Answer not derived from bid ${lastChangedInBid}`;
       }
       if (extractedData[cfProposalId] === 'Early_Engagement_Bid') {
-        return `Answer derived from Early Engagement ${lastChangedInBid}`;
+        if (answerEmpty) {
+          return `Answer not derived from Early Engagement ${lastChangedInBid}`;
+        } else {
+          return `Answer derived from Early Engagement ${lastChangedInBid}`;
+        }
       } else {
         return `Answer derived from bid ${lastChangedInBid}`;
       }
