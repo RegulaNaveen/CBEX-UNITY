@@ -59,7 +59,6 @@ class AllTab extends Component<Props, State> {
       filteredProposals,
       isFilteringProposals
     } = this.props;
-
     const contentChanged =
       prevProps.page !== page ||
       prevProps.numRows !== numRows ||
@@ -95,6 +94,7 @@ class AllTab extends Component<Props, State> {
       setPage,
       setRows
     } = this.props;
+
     const proposalCount = isFilteringProposals
       ? filteredProposals.length
       : proposals.length;
