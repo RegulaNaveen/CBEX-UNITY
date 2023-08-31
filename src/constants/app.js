@@ -11,6 +11,7 @@ const DEFAULT = {
   REFRESH: 'Refresh',
   SELECT_ITEM: 'Select item...',
   SELECT_OPTION_MSG: 'You can select one option',
+  SELECT_OPTION_LATEST_MSG: 'You are on the latest version',
   SELECT_OPTION_REFRESH_MSG: 'Please refresh to update the template.',
   ERROR_400: 'Error 400 bad request !!',
   ERROR_404: 'Error 404 not found !!',

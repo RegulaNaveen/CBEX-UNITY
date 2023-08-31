@@ -52,7 +52,7 @@ const SwitchTemplate = ({
       }
     });
   };
-  console.log('otlist is', otList);
+
   return (
     <>
       <CustomModal
@@ -85,18 +85,19 @@ const SwitchTemplate = ({
           <Grid item xs={12} className="switch-temp-description">
             {PROPOSAL.SWITCH_TEMP_MODAL_DESCRIPTION}
           </Grid>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={12}>
             <Select
               label={PROPOSAL.OPPORTUNITY_TYPE}
               helperText={
                 isBtnDisabledRefresh || !isBtnDisabled ? (
-                  DEFAULT.SELECT_OPTION_MSG
+                  isBtnDisabled
+                    ? DEFAULT.SELECT_OPTION_LATEST_MSG
+                    : DEFAULT.SELECT_OPTION_MSG
                 ) : (
                   <>
                     <ExclamationTriangle />
                     <>
-                      {DEFAULT.SELECT_OPTION_REFRESH_MSG}{' '}
-                      {DEFAULT.SELECT_OPTION_MSG}
+                      {DEFAULT.SELECT_OPTION_REFRESH_MSG}
                     </>
                   </>
                 )

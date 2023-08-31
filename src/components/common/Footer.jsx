@@ -24,7 +24,7 @@ import ProcessingCRM from '../views/modals/ProcessingCRM';
 import { fetchOTListData } from '../../redux/actions/proposal-actions';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
-    const selectedBidState = useSelector(getSelectedBid);
+  const selectedBidState = useSelector(getSelectedBid);
   const selectedBidId = selectedBidState.get('id');
   const selectedBidIsCurrent = !!selectedBidState.get('isCurrent');
   const { id: opportunityId } = useParams(); // Get Opportunity id from Url
@@ -107,7 +107,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    */
   useEffect(() => {
     fetchOtList();
-  }, []);
+  }, [questionTemplateVersionNumber]);
 
   /**
    * Render Switch Temp Error/Success Modal
