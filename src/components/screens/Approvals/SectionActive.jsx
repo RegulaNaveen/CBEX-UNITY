@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import Grid from 'apollo-react/components/Grid';
-import QuestionItem from './QuestionItem';
+import SwitchItem from './SwitchItem';
 import ActionButtons from './ActionButtons';
 import { getSelectedBid } from '../../../redux/selectors';
 
@@ -44,7 +44,7 @@ const SectionActive = ({
       <Grid item xs={8} className="approval-ques-left">
         {!isEmpty(leftQues) &&
           leftQues.map(item => (
-            <QuestionItem
+            <SwitchItem
               questionId={item}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}
@@ -57,7 +57,7 @@ const SectionActive = ({
       <Grid item xs={4} className="approval-ques-right">
         {!isEmpty(rightQues) &&
           rightQues.map(item => (
-            <QuestionItem
+            <SwitchItem
               questionId={item}
               approvalSectionTitle={ApprovalSectionTitle}
               key={item}

@@ -152,6 +152,9 @@ export const getAllBidsForIndex = (state: Object): string =>
 export const getAdditionalLinks = (state: Object): string =>
   state.proposal.get('boxAdditionalLink');
 
+export const getBoxOpportunityFolderId = state =>
+  state.proposal.get('boxOpportunityFolderId');
+
 export const getValidatedProposalData = (state: Object): Object =>
   proposalSelectors.getValidatedProposalData(state.proposal);
 

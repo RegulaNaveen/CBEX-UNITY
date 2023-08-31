@@ -21,13 +21,14 @@ import {
   getProposalBoxIdIsLoading,
   getAdditionalLinks,
   getProposalDetails,
-  getSelectedBid
+  getSelectedBid,
+  getBoxOpportunityFolderId
 } from '../../../redux/selectors';
 import {
   onGetProposalBoxId,
   getAdditionalBoxLink,
   setupdateBoxId,
-  changeBid
+  getOpportunityFolderId
 } from '../../../redux/actions/proposal-actions';
 import { getOpportunityData } from '../../../redux/selectors/proposal';
 
@@ -63,6 +64,7 @@ class Documents extends Component<Props, State> {
       bids,
       match,
       getAdditionalLink,
+      getOpportunityFolderIdAction,
       proposalDetail,
       selectedBid,
       location: { search }
@@ -71,12 +73,14 @@ class Documents extends Component<Props, State> {
     const selectedView = new URLSearchParams(search).get('viewType');
     // Opportunity number from the link
     this.oppNo = match.params.id;
-    if (proposalDetail.opportunityId)
+    if (proposalDetail.opportunityId) {
       getAdditionalLink(
         proposalDetail.opportunityId,
         this.oppNo,
         proposalDetail.Customer
       );
+      getOpportunityFolderIdAction(proposalDetail.opportunityId);
+    }
     // latest Bid logic
     if (bids && bids.length) {
       const currentBid = bids[0];
@@ -125,6 +129,13 @@ class Documents extends Component<Props, State> {
     });
   }
 
+  handleOpportunityFolderClick(activeLink) {
+    const { updateBoxId } = this.props;
+    this.setState({ selectedBid: activeLink }, () => {
+      updateBoxId(activeLink);
+    });
+  }
+
   isValidURL(str) {
     const res = str.match(
       /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
@@ -164,7 +175,13 @@ class Documents extends Component<Props, State> {
   };
 
   render() {
-    const { bids, boxLinks, boxId, oppdata } = this.props;
+    const {
+      bids,
+      boxLinks,
+      boxId,
+      boxOpportunityFolderId,
+      oppdata
+    } = this.props;
     const oppordata = oppdata.toJS();
 
     // Initialize an array to store bidType values
@@ -218,14 +235,32 @@ class Documents extends Component<Props, State> {
                   </Paper>
                 </Grid>
               </Grid>
-              {/* <ul className="opportunity-link">
-          <li
-           onClick={()=> this.openAdditonalUrl(oppfolderID, 'oppactive')}
-            className={`${selectedBid == 'oppactive' ? 'selectedBid' : ''} spacebetween`}
-           >
-            Opportunity {this.oppNo}
-          </li>
-        </ul> */}
+              {boxOpportunityFolderId ? (
+                <Accordion defaultExpanded={true}>
+                  <AccordionSummary>
+                    <Typography>Opportunity</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails className="opportunity-list-details">
+                    <ul className="bidlist-document">
+                      <li
+                        className={
+                          selectedBid === boxOpportunityFolderId
+                            ? 'selectedBid'
+                            : ''
+                        }
+                        key={boxOpportunityFolderId}
+                        onClick={() => {
+                          this.handleOpportunityFolderClick(
+                            boxOpportunityFolderId
+                          );
+                        }}
+                      >
+                        {this.oppNo}
+                      </li>
+                    </ul>
+                  </AccordionDetails>
+                </Accordion>
+              ) : null}
               <Accordion defaultExpanded={true}>
                 <AccordionSummary>
                   <Typography>Bids</Typography>
@@ -305,7 +340,8 @@ const mapStateToProps = state => ({
   selectedBid: getSelectedBid(state),
   boxLinks: getAdditionalLinks(state),
   proposalDetail: getProposalDetails(state),
-  oppdata: getOpportunityData(state)
+  oppdata: getOpportunityData(state),
+  boxOpportunityFolderId: getBoxOpportunityFolderId(state)
 });
 
 export default compose(
@@ -313,6 +349,7 @@ export default compose(
   connect(mapStateToProps, {
     getBoxId: onGetProposalBoxId,
     getAdditionalLink: getAdditionalBoxLink,
+    getOpportunityFolderIdAction: getOpportunityFolderId,
     updateBoxId: setupdateBoxId
   })
 )(Documents);

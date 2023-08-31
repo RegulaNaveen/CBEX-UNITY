@@ -27,7 +27,8 @@ import {
   getProposalAnswer,
   priceModelerApi,
   setNotApplicableQuestionApi,
-  getAllProposals
+  getAllProposals,
+  fetchOpportunityFolderLink
 } from '../../api/proposal';
 import { updateCustomName } from '../../api/sso-auth';
 import {
@@ -95,6 +96,7 @@ const {
   NEW_BID_CREATED,
   UPDATE_LOOKUP_OPTIONS,
   BOX_ADDITIONAL_LINK,
+  BOX_OPPORTUNITY_FOLDER_ID,
   BOX_ADDITIONAL_LINK_ERROR,
   SWITCH_TEMP_STATUS,
   SWITCH_TEMP_IN_PROGRESS,
@@ -755,6 +757,20 @@ export const getAdditionalBoxLink = (
         type: BOX_ADDITIONAL_LINK_ERROR,
         payload: { error: error }
       });
+    }
+  };
+};
+
+export const getOpportunityFolderId = (
+  oppID: string
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    try {
+      const { data: folderId } = await fetchOpportunityFolderLink(oppID);
+      dispatch({ type: BOX_OPPORTUNITY_FOLDER_ID, payload: { folderId } });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: BOX_OPPORTUNITY_FOLDER_ID, payload: { folderId: '' } });
     }
   };
 };
@@ -1523,6 +1539,12 @@ export const changeBid = (bid, viewType) => {
       type: CHANGE_BID_STATUS_OPERATION,
       payload: true
     });
+    dispatch(
+      widgetUpdate(
+        response?.data?.proposal?.proposalId,
+        response?.data?.proposal?.typeOfWidget
+      )
+    );
   };
 };
 
