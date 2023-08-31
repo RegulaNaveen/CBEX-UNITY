@@ -55,9 +55,9 @@ const formatProposalGrid = proposal => {
     bidStopStatus: proposal.bidStatus,
     nextMilestone: proposal.nextMilestone,
     opportunityName: proposal.opportunityName,
-    isApprovalCountPresent: proposal.isApprovalCountPresent
+    isApprovalCountPresent: proposal.isApprovalCountPresent,
+    bidType: proposal.bidType
   };
-
   return formatted;
 };
 
@@ -76,11 +76,13 @@ const formatProposal = (
     usersList,
     approvalsCount,
     isApprovalCountPresent,
-    bidStopStatus
+    bidStopStatus,
+    bidType
   } = proposal;
-
   // if (!isEmpty(opportunityOverview)) {
   formattedProposal.proposalId = proposalId;
+  formattedProposal.bidType = bidType;
+
   formattedProposal.opportunityName = opportunityName;
   formattedProposal['opportunity number'] = proposalDetails['CRM #'];
   formattedProposal['bidNo'] = proposalDetails['bidNo'];

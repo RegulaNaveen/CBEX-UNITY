@@ -54,7 +54,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const switchTempStatus = useSelector(
     state => state.proposal.toJSON().switchTempCallStatus
   );
-  // Get switchTempInProgress from Redux Store
+    // Get switchTempInProgress from Redux Store
   const switchTempInProgress = useSelector(
     state => state.proposal.toJSON().switchTempInProgress
   );
@@ -107,35 +107,35 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    */
   useEffect(() => {
     fetchOtList();
-  }, []);
+  }, [questionTemplateVersionNumber, opportunityType]);
 
   /**
    * Render Switch Temp Error/Success Modal
    */
   let renderAlertModal;
-  if (alertModal) {
-    let modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
-    let variant = 'success';
-
-    switch (switchTempStatus) {
-      case 'error':
-        modalMsg = PROPOSAL.SWITCH_TEMP_FAILED;
-        variant = 'error';
-        break;
-      default:
-        break;
+      if (alertModal) {
+      let modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
+      let variant = 'success';
+  
+      switch (switchTempStatus) {
+        case 'error':
+          modalMsg = PROPOSAL.SWITCH_TEMP_FAILED;
+          variant = 'error';
+          break;
+        default:
+          break;
+      }
+  
+      renderAlertModal = (
+        <Banner
+          open={alertModal}
+          message={modalMsg}
+          onClose={() => setAlertModal(false)}
+          variant={variant}
+        />
+      );
     }
-
-    renderAlertModal = (
-      <Banner
-        open={alertModal}
-        message={modalMsg}
-        onClose={() => setAlertModal(false)}
-        variant={variant}
-      />
-    );
-  }
-
+  
   useEffect(() => {
     let timeout;
     if (alertModal) timeout = setTimeout(() => setAlertModal(false), 10000);
@@ -146,8 +146,8 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
 
   // Refresh btn enable/disable logic
   const isBtnDisabledRefresh = questionTemplateVersionNumber 
-    && pubTempVersion === questionTemplateVersionNumber;
-
+  && pubTempVersion === questionTemplateVersionNumber;
+    
   return (
     <>
       <Footer
@@ -165,7 +165,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                     <>
                       {pubTempVersion 
                         && !isBtnDisabledRefresh 
-                        && <ExclamationTriangle />}
+                        && <ExclamationTriangle data-testid="update-triangle" />}
                       <Sync 
                         fontSize="extraSmall" 
                         data-testid="sync-icon" 

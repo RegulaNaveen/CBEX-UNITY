@@ -406,20 +406,25 @@ function getUserInitials(userName, lastChangedInBid) {
     ?.join('');
 }
 
-function getUserName(userName, lastChangedInBid, answerEmpty = false, bidName) {
+function getUserName(
+  userName,
+  lastChangedInBid,
+  answerEmpty = false,
+  extractedData,
+  cfProposalId
+) {
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
     if (lastChangedInBid) {
-      const derivedFromBidText =
-        bidName === 'Early Engagement'
-          ? ' derived from Early Engagement '
-          : ` derived from ${bidName}`;
-
       if (answerEmpty) {
-        return `Answer not ${derivedFromBidText} ${lastChangedInBid}`;
+        return `Answer not derived from bid ${lastChangedInBid}`;
       }
-      return `Answer ${derivedFromBidText} ${lastChangedInBid}`;
+      if (extractedData[cfProposalId] === 'Early_Engagement_Bid') {
+        return `Answer derived from Early Engagement ${lastChangedInBid}`;
+      } else {
+        return `Answer derived from bid ${lastChangedInBid}`;
+      }
     }
     return 'Answer derived from bid';
   }
