@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from 'apollo-react/components/MenuItem';
 import Select from 'apollo-react/components/Select';
@@ -21,9 +21,11 @@ const SwitchTemplate = ({
   otList,
   ...props
 }) => {
-  // States
+    // States
   const [selectValue, setSelectValue] = useState(opportunityType);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const dispatch = useDispatch();
 
   // Change btn enable/disable logic
@@ -42,7 +44,7 @@ const SwitchTemplate = ({
       })
     ).then(res => {
       setLoading(false);
-      if (res.status) {
+            if (res.status) {
         setOpenModal(false);
       } else {
         setError(true);
@@ -50,7 +52,7 @@ const SwitchTemplate = ({
       }
     });
   };
-  console.log('otlist is', otList);
+
   return (
     <>
       <CustomModal
@@ -83,18 +85,19 @@ const SwitchTemplate = ({
           <Grid item xs={12} className="switch-temp-description">
             {PROPOSAL.SWITCH_TEMP_MODAL_DESCRIPTION}
           </Grid>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={12}>
             <Select
               label={PROPOSAL.OPPORTUNITY_TYPE}
               helperText={
                 isBtnDisabledRefresh || !isBtnDisabled ? (
-                  DEFAULT.SELECT_OPTION_MSG
+                  isBtnDisabled
+                    ? DEFAULT.SELECT_OPTION_LATEST_MSG
+                    : DEFAULT.SELECT_OPTION_MSG
                 ) : (
                   <>
                     <ExclamationTriangle />
                     <>
-                      {DEFAULT.SELECT_OPTION_REFRESH_MSG}{' '}
-                      {DEFAULT.SELECT_OPTION_MSG}
+                      {DEFAULT.SELECT_OPTION_REFRESH_MSG}
                     </>
                   </>
                 )
@@ -115,6 +118,22 @@ const SwitchTemplate = ({
           </Grid>
         </Grid>
       </CustomModal>
+
+      {/* Error Warning Modal */}
+      {error && (
+          <CustomModal
+            open={error}
+            title={DEFAULT.ALERT}
+            message={errorMsg}
+            variant="error"
+            onClose={() => setError(false)}
+            buttonProps={[
+              { className: 'display-none' },
+              { label: DEFAULT.CLOSE }
+            ]}
+            className="switch-temp-warning-modal"
+          />
+        )}
     </>
   );
 };
