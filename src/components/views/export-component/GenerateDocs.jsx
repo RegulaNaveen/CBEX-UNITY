@@ -43,9 +43,8 @@ const GenerateDocs = () => {
   const proposalDetails = useSelector(getProposalDetails);
   const roleList = useSelector(getRoles) || [];
   const selectedBid = useSelector(getSelectedBid);
-  const bidType = selectedBid.get('bidType') || '';
+  const bidType = selectedBid.get('bidType') || 'Clinical_Bid';
   proposalDetails.bidType = bidType;
-
   const editor = useSelector(selectEditor);
   const dispatch = useDispatch();
 

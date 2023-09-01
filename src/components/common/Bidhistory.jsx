@@ -174,7 +174,9 @@ const BidHistory = () => {
                             key={item.bidId}
                           >
                             <div>
-                              {item.bidName}{' '}
+                              {item.bidName.startsWith('Early Engagement')
+                                ? `EE ${item.bidNo}`
+                                : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'
