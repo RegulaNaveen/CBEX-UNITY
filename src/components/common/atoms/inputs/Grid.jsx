@@ -16,7 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import featureFlags from '../../../../constants/featureFlags';
 import { SocketContext } from '../../../../context/SocketContext';
 import { saveRecentOppActivity } from '../../../../api/proposals';
-import { getSelectedBid } from '../../../../redux/selectors/proposal';
 
 const styles = { padding: 10 };
 const containerStyle = {
@@ -87,8 +86,6 @@ const loadSidebar = props => {
   const dispatch = useDispatch();
   const { updateFavouriteWrapper } = useContext(SocketContext);
   const updatedProposalDetail = useSelector(state => state?.proposal);
-  const selectedBid = useSelector(getSelectedBid);
-  const bidType = selectedBid.get('bidType');
 
   const {
     'Bid due date': bidDueDate,
@@ -101,9 +98,10 @@ const loadSidebar = props => {
     'CRM #': crm,
     Customer,
     bidNo,
+    bidType,
     opportunityId
   } = data;
-  const placeholder = 'No data';
+    const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
   const daysRemain = getRemainingDays(date);
   const redirect = () => {
@@ -494,7 +492,9 @@ const loadSidebar = props => {
             Bid #
           </Typography>
           <Typography variant="body2" className="boldtext">
-            {bidType === 'Early_Engagement_Bid' ? 'Early Engagement  ' : ''}
+            {bidType === 'Early_Engagement_Bid' 
+              || bidType === 'Bid Early_Engagement_Bid' 
+              ? 'Early Engagement  ' : ''}
             {bidNo || placeholder}
           </Typography>
         </Paper>
