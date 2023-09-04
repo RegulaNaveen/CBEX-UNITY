@@ -16,7 +16,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import featureFlags from '../../../../constants/featureFlags';
 import { SocketContext } from '../../../../context/SocketContext';
 import { saveRecentOppActivity } from '../../../../api/proposals';
-import { getSelectedBid } from '../../../../redux/selectors/proposal';
 
 const styles = { padding: 10 };
 const containerStyle = {
@@ -87,9 +86,6 @@ const loadSidebar = props => {
   const dispatch = useDispatch();
   const { updateFavouriteWrapper } = useContext(SocketContext);
   const updatedProposalDetail = useSelector(state => state?.proposal);
-  // const selectedBid = useSelector(getSelectedBid);
-  // const bidType = selectedBid.get('bidType');
-  // console.log('bidType', bidType);
 
   const {
     'Bid due date': bidDueDate,
