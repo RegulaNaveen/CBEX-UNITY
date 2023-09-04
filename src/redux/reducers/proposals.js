@@ -210,7 +210,14 @@ const updateBidStopStatus = (state, action) => {
         data?.data &&
         data?.data?.proposalId === value['proposalId']
       ) {
-        value[mapper[data?.data?.questionSfField]] = data.data.answer;
+        if (
+          data?.data?.questionSfField === 'Name' &&
+          data?.data?.questionsfObject === 'Opportunity'
+        ) {
+          value['opportunityName'] = data.data.answer;
+        } else {
+          value[mapper[data?.data?.questionSfField]] = data.data.answer;
+        }
       }
       return value;
     });
@@ -224,7 +231,14 @@ const updateBidStopStatus = (state, action) => {
         data?.data &&
         data?.data?.proposalId === value['proposalId']
       ) {
-        value[mapper[data?.data?.questionSfField]] = data.data.answer;
+        if (
+          data?.data?.questionSfField === 'Name' &&
+          data?.data?.questionsfObject === 'Opportunity'
+        ) {
+          value['opportunityName'] = data.data.answer;
+        } else {
+          value[mapper[data?.data?.questionSfField]] = data.data.answer;
+        }
       }
       return value;
     });
