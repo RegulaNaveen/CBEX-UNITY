@@ -307,29 +307,32 @@ export const onFilteringProposals = (
           );
           data = response.data;
         }
-      } else if (
-        allFlags.favouriteFlag ? Number(tabIndex) === 2 : Number(tabIndex) === 1
-      ) {
-        const userEmail = localStorage.getItem('userEmail') || '';
-        if (Object.keys(filterPayload).length > 1) {
-          const response = await getRecentOpportunity(
-            filterPayload,
-            true,
-            userEmail
-          );
-          data = response.data;
+      } else {
+        let checkTab = allFlags.favouriteFlag
+          ? Number(tabIndex) === 2
+          : Number(tabIndex) === 1;
+        if (checkTab) {
+          const userEmail = localStorage.getItem('userEmail') || '';
+          if (Object.keys(filterPayload).length > 1) {
+            const response = await getRecentOpportunity(
+              filterPayload,
+              true,
+              userEmail
+            );
+            data = response.data;
+          } else {
+            const response = await getRecentOpportunity(
+              filterPayload,
+              false,
+              userEmail
+            );
+            data = response.data;
+          }
         } else {
-          const response = await getRecentOpportunity(
-            filterPayload,
-            false,
-            userEmail
-          );
+          const userEmail = localStorage.getItem('userEmail') || '';
+          const response = await onGetAllProposals(filterPayload, userEmail);
           data = response.data;
         }
-      } else {
-        const userEmail = localStorage.getItem('userEmail') || '';
-        const response = await onGetAllProposals(filterPayload, userEmail);
-        data = response.data;
       }
 
       if (!isEmpty(data)) {
