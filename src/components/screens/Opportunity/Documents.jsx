@@ -32,6 +32,8 @@ import {
   getOpportunityFolderId
 } from '../../../redux/actions/proposal-actions';
 import { getOpportunityData } from '../../../redux/selectors/proposal';
+import { getBidTypeFromProposalId } from '../../../utils/utils';
+import { BID_TYPES } from '../../../constants/app';
 
 const styles = {
   padding: 16,
@@ -114,6 +116,7 @@ class Documents extends Component<Props, State> {
   };
 
   swtichTabs(proposalId) {
+    console.log('proposalId', proposalId);
     const { getBoxId } = this.props;
     // Setting the selected proposal
     this.setState(() => ({
@@ -187,6 +190,8 @@ class Documents extends Component<Props, State> {
     const oppordataPlain = oppordataImmutable.toJS();
     const oppordata = oppordataPlain;
     // Initialize an array to store bidType values
+    // const bidType = getBidTypeFromProposalId(oppordata);
+
     const bidTypes = [];
 
     // Loop over each item in the oppordata object
@@ -267,12 +272,16 @@ class Documents extends Component<Props, State> {
                 <AccordionDetails className="bidlistdetail">
                   <ul className="bidlist-document">
                     {bids.map((v, index) => {
+                      console.log('varsa', v);
+                      const displayName = v.bidType
+                        ? BID_TYPES[v.bidType]
+                        : BID_TYPES.Clinical_Bid;
                       // Add this line to log the content of v
-                      const bidType = bidTypes[index] || 'Bid'; // Get bidType from the array
-                      const displayName =
-                        bidType === 'Early_Engagement_Bid'
-                          ? 'Early Engagement'
-                          : 'Bid';
+                      // const bidType = bidTypes[index] || 'Bid'; // Get bidType from the array
+                      // const displayName =
+                      //   bidType === 'Early_Engagement_Bid'
+                      //     ? 'Early Engagement'
+                      //     : 'Bid';
                       return (
                         <li
                           className={

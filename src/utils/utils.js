@@ -406,13 +406,45 @@ function getUserInitials(userName, lastChangedInBid) {
     ?.join('');
 }
 
+// function getBidTypeFromProposalId(proposalId, opportunityData) {
+//   const proposal = opportunityData[proposalId];
+//   if (proposal) {
+//     let bidType = proposal.proposal.bidType;
+//     bidType = bidType === 'Clinical_Bid' || !bidType ? '' : bidType; // Add the condition
+//     return bidType || ''; // Return bidType if it exists, or an empty string if it's undefined
+//   } else {
+//     return '';
+//   }
+// }
+
+function getBidTypeFromProposalId(proposalId, opportunityData) {
+  const proposal = opportunityData[proposalId];
+  if (proposal) {
+    let bidType = proposal.proposal.bidType;
+    if (bidType === undefined || bidType !== 'Early_Engagement_Bid') {
+      return 'Clinical_Bid'; // If bidType is not present or not "Early_Engagement_Bid," consider it as "Clinical_Bid"
+    } else {
+      return bidType; // If bidType is explicitly set to "Early_Engagement_Bid," retain that value
+    }
+  } else {
+    return ''; // If proposalId doesn't exist, consider it as "Clinical_Bid"
+  }
+}
+
 function getUserName(
   userName,
   lastChangedInBid,
   answerEmpty = false,
-  extractedData,
-  cfProposalId
+  // extractedData,
+  oppordata,
+  cfProposalId,
+  proposalId
 ) {
+  console.log('cfProposalId', cfProposalId);
+  // const cfBidType = getBidTypeFromProposalId(cfProposalId, oppordata);
+  // console.log('cfBidType', cfBidType);
+  const CfbidType = getBidTypeFromProposalId(cfProposalId, oppordata);
+  console.log('CfbidType', CfbidType);
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
@@ -420,7 +452,7 @@ function getUserName(
       if (answerEmpty) {
         return `Answer not derived from bid ${lastChangedInBid}`;
       }
-      if (extractedData[cfProposalId] === 'Early_Engagement_Bid') {
+      if (CfbidType === 'Early_Engagement_Bid') {
         if (answerEmpty) {
           return `Answer not derived from Early Engagement ${lastChangedInBid}`;
         } else {
@@ -569,6 +601,7 @@ export {
   rearrangeDiff,
   getUserInitials,
   getUserName,
+  getBidTypeFromProposalId,
   getProposalIdlist,
   checkNonEditableFields,
   updateEventSubjectBody,
