@@ -22,7 +22,6 @@ const Statement = props => {
   const [screenWidth, setScreenWidth] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectRow] = useState(false);
-  console.log('reached in statement key milestones');
   const quesTextInnerRightRef = useRef();
   const questionTextTitleRef = useRef(null);
   const questionTextRef1 = useRef();
