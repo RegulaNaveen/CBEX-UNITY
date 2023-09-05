@@ -77,6 +77,7 @@ const CollapsibleQuestionMapping = ({
               events={questionConfig.get('events') || {}}
               isNotApplicable={questionConfig.get('notApplicable')}
               bidAnswerCopy={questionConfig.get('bidAnswerCopy', false)}
+              bidType={questionConfig.get('bidType', '')}
               latestAnsweredBidNo={questionConfig.get(
                 'latestAnsweredBidNo',
                 null
