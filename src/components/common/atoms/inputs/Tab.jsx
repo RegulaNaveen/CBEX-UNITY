@@ -270,7 +270,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     const searchParams = new URLSearchParams(window.location.search);
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
-    if (changeBidStatus && currentviewType) {
+    if (currentviewType) {
       if (tabs.length > 4) {
         const refreshTab = tabs.slice(0, 4);
         setTabStatus(false);

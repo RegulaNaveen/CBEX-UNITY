@@ -206,28 +206,6 @@ export class Opportunity extends Component<Props, State> {
         localStorage.setItem('proposalId', thisProposalId);
       }
     }
-    // Bid level redirection
-    // Applied when a `bidNo` query param is found in the url
-    // Example ?bidNo=3
-    const winLocationSearch = window.location.search;
-    const queryparams = new URLSearchParams(winLocationSearch);
-    const bidNo = queryparams.get('bidNo');
-    const bidType = queryparams.get('bidType') || 'Clinical_Bid';
-    const prevBidList = prevProps.bidList;
-    if (
-      bidNo &&
-      Array.isArray(bidList) &&
-      bidList.length > 0 &&
-      bidList.length !== prevBidList.length // check to prevent infinite rerenders
-    ) {
-      const bidItemToSelect = bidList.find(
-        item => item.bidNo === bidNo && item.bidType === bidType
-      );
-      if (!bidStatus && !isEmpty(bidItemToSelect)) {
-        changeBidInView(bidItemToSelect);
-      }
-    }
-    // END Bid level redirection
   }
 
   componentWillUnmount() {

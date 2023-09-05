@@ -319,8 +319,16 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
+  const searchParams = new URLSearchParams(window.location.search);
+  const currentbidNo = searchParams.get('bidNo');
+  const currentbidType = searchParams.get('bidType');
+  const latestProposal = payload[0];
+
   payload.forEach(proposal => {
-    if (proposal.isCurrent) {
+    if (
+      proposal?.proposal?.proposalDetails?.bidNo == currentbidNo &&
+      proposal?.proposal?.bidType === currentbidType
+    ) {
       selectedBid = selectedBid
         .set('id', proposal.proposal.proposalId)
         // .set('bidDate', proposal.proposal.proposalDate)
@@ -349,7 +357,11 @@ const setOpportunityInfo = (state, action) => {
           'opportunityStatus',
           proposal.proposal.opportunityOverview['OpportunityStatus'] || ''
         )
-        .set('isCurrent', true)
+        .set(
+          'isCurrent',
+          proposal?.proposal?.proposalDetails?.bidNo ===
+            latestProposal?.proposal?.proposalDetails?.bidNo
+        )
         .set('bidStatus', proposal.proposal['inProgress'] || false)
         .set('agreementId', proposal.proposal['agreementId'] || '')
         .set('accountId', proposal.proposal['accountId'] || '')

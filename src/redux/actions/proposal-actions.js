@@ -1515,6 +1515,7 @@ export const changeBid = (bid, viewType) => {
 
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
+    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
     if (selectedBid.bidName !== bid?.bidName) {
       dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
     }
