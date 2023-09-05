@@ -139,6 +139,7 @@ const KeyMilestoneDeliverableTimelines = () => {
           visible: visible,
           hasDifferentSFanswer: hasDifferentSFanswer,
           bidAnswerCopy: KeyMilestoneData.bidAnswerCopy,
+          bidType: KeyMilestoneData.bidType,
           latestAnsweredBidNo: KeyMilestoneData.latestAnsweredBidNo,
           questionDataDestinations: questionDataDestinations
         });

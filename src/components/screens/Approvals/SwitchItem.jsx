@@ -7,12 +7,16 @@ import { getQuestion } from '../../../redux/selectors';
 const SwitchItem = ({
   questionId,
   approvalSectionTitle,
-  key,
   disabled,
   updateQuestionVisibility,
-  highlightQuestionId
+  highlightQuestionId,
+  isQuesFreezed,
+  archivedQuestion
 }) => {
-  const question = useSelector(getQuestion(questionId));
+  const question = isQuesFreezed
+    ? archivedQuestion
+    : useSelector(getQuestion(questionId));
+
   return question?.answerConfiguration?.type === 'statement' ? (
     <StatementItem
       questionId={questionId}
@@ -20,6 +24,8 @@ const SwitchItem = ({
       disabled={disabled}
       updateQuestionVisibility={updateQuestionVisibility}
       highlightQuestionId={highlightQuestionId}
+      archivedQuestion={archivedQuestion}
+      isQuesFreezed={isQuesFreezed}
     />
   ) : (
     <QuestionItem
@@ -28,6 +34,8 @@ const SwitchItem = ({
       disabled={disabled}
       updateQuestionVisibility={updateQuestionVisibility}
       highlightQuestionId={highlightQuestionId}
+      archivedQuestion={archivedQuestion}
+      isQuesFreezed={isQuesFreezed}
     />
   );
 };

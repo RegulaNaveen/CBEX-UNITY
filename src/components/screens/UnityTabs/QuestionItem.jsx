@@ -482,6 +482,7 @@ const QuestionItem = ({
       sfObject,
       hasDifferentSFanswer,
       bidAnswerCopy = false,
+      bidType,
       latestAnsweredBidNo = null,
       questionDataDestinations
     } = question;
@@ -599,6 +600,7 @@ const QuestionItem = ({
         hasDifferentSFanswer={hasDifferentSFanswer}
         disabled={integrationLocked}
         bidAnswerCopy={bidAnswerCopy}
+        bidType={bidType}
         latestAnsweredBidNo={latestAnsweredBidNo}
         questionDataDestinations={questionDataDestinations}
       />

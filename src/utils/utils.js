@@ -406,31 +406,28 @@ function getUserInitials(userName, lastChangedInBid) {
     ?.join('');
 }
 
+function getBidTypeFromProposalId(proposalId, opportunityData) {
+  const bidType = opportunityData[proposalId]?.proposal.bidType;
+  return bidType ? BID_TYPES[bidType] : BID_TYPES.Clinical_Bid;
+}
+
 function getUserName(
   userName,
   lastChangedInBid,
   answerEmpty = false,
-  extractedData,
-  cfProposalId
+  bidType,
+  cfBidType
 ) {
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
     if (lastChangedInBid) {
       if (answerEmpty) {
-        return `Answer not derived from bid ${lastChangedInBid}`;
+        return `Answer not derived from ${cfBidType} ${lastChangedInBid}`;
       }
-      if (extractedData[cfProposalId] === 'Early_Engagement_Bid') {
-        if (answerEmpty) {
-          return `Answer not derived from Early Engagement ${lastChangedInBid}`;
-        } else {
-          return `Answer derived from Early Engagement ${lastChangedInBid}`;
-        }
-      } else {
-        return `Answer derived from bid ${lastChangedInBid}`;
-      }
+      return `Answer derived from ${cfBidType} ${lastChangedInBid}`;
     }
-    return 'Answer derived from bid';
+    return `Answer derived from ${bidType}`;
   }
   return userName;
 }
@@ -452,7 +449,8 @@ function getProposalIdlist(data = []) {
     return {
       proposalId: d.proposal.proposalId,
       boxId: d.proposal.proposalDetails.boxId,
-      bidNo: d.proposal.proposalDetails['bidNo'] || ''
+      bidNo: d.proposal.proposalDetails['bidNo'] || '',
+      bidType: d.proposal.bidType || ''
     };
   });
 }
@@ -569,6 +567,7 @@ export {
   rearrangeDiff,
   getUserInitials,
   getUserName,
+  getBidTypeFromProposalId,
   getProposalIdlist,
   checkNonEditableFields,
   updateEventSubjectBody,
