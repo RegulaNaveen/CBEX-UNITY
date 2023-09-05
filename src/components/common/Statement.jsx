@@ -61,6 +61,16 @@ const Statement = props => {
     window.addEventListener('resize', resize); // doubt -Akash
 
     resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
   }, []);
 
   useEffect(() => {
@@ -69,7 +79,7 @@ const Statement = props => {
 
       sectionName
     } = props;
-
+    
     if (
       currentSearchResult !== null &&
       questionTextTitleRef.current !== null &&
@@ -109,14 +119,6 @@ const Statement = props => {
         setSelectRow(false);
       }
     }
-    // updating question text with decorators
-    if (questionTextRef1.current !== null) {
-      const { editorState } = questionTextRef1.current.state;
-      const newEditorState = EditorState.set(editorState, {
-        decorator: compositeDecorator
-      });
-      questionTextRef1.current.setState({ editorState: newEditorState });
-    }
   }, [prevSearchResult, currentSearchResult, autoNavigatedToCurrentResult]); // provide dependancy here - Akash
 
   const handleQuestionHintRef = questionHintRef => {
@@ -149,6 +151,7 @@ const Statement = props => {
       </div>
     );
   };
+  
   return (
     <>
       <div
