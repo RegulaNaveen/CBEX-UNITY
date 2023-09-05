@@ -3,10 +3,9 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
-import { fromJS } from 'immutable';
-import { compose } from 'redux';
 import type { Match } from 'react-router-dom';
 import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
@@ -31,7 +30,7 @@ import {
   setupdateBoxId,
   getOpportunityFolderId
 } from '../../../redux/actions/proposal-actions';
-import { getOpportunityData } from '../../../redux/selectors/proposal';
+import { BID_TYPES } from '../../../constants/app';
 
 const styles = {
   padding: 16,
@@ -42,8 +41,7 @@ type Props = {
   getBoxId: (proposalId: string) => void,
   isGettingBoxId: boolean,
   onGettingBoxIdError: Object,
-  boxId: string,
-  oppdata: Object
+  boxId: string
 };
 
 type State = {
@@ -114,6 +112,7 @@ class Documents extends Component<Props, State> {
   };
 
   swtichTabs(proposalId) {
+    console.log('proposalId', proposalId);
     const { getBoxId } = this.props;
     // Setting the selected proposal
     this.setState(() => ({
@@ -176,29 +175,7 @@ class Documents extends Component<Props, State> {
   };
 
   render() {
-    const {
-      bids,
-      boxLinks,
-      boxId,
-      boxOpportunityFolderId,
-      oppdata
-    } = this.props;
-    const oppordataImmutable = fromJS(oppdata);
-    const oppordataPlain = oppordataImmutable.toJS();
-    const oppordata = oppordataPlain;
-    // Initialize an array to store bidType values
-    const bidTypes = [];
-
-    // Loop over each item in the oppordata object
-    for (const key in oppordata) {
-      if (oppordata.hasOwnProperty(key)) {
-        const proposal = oppordata[key].proposal;
-        if (proposal && proposal.bidType) {
-          bidTypes.push(proposal.bidType);
-        }
-      }
-    }
-
+    const { bids, boxLinks, boxId, boxOpportunityFolderId } = this.props;
     const { data, oppfolderID } = boxLinks;
     const { selectedBid } = this.state;
     const consentPropertyName = localStorage.getItem('unity_document_consent');
@@ -266,13 +243,10 @@ class Documents extends Component<Props, State> {
                 </AccordionSummary>
                 <AccordionDetails className="bidlistdetail">
                   <ul className="bidlist-document">
-                    {bids.map((v, index) => {
-                      // Add this line to log the content of v
-                      const bidType = bidTypes[index] || 'Bid'; // Get bidType from the array
-                      const displayName =
-                        bidType === 'Early_Engagement_Bid'
-                          ? 'Early Engagement'
-                          : 'Bid';
+                    {bids.map(v => {
+                      const displayName = v.bidType
+                        ? BID_TYPES[v.bidType]
+                        : BID_TYPES.Clinical_Bid;
                       return (
                         <li
                           className={
@@ -339,7 +313,6 @@ const mapStateToProps = state => ({
   selectedBid: getSelectedBid(state),
   boxLinks: getAdditionalLinks(state),
   proposalDetail: getProposalDetails(state),
-  oppdata: getOpportunityData(state),
   boxOpportunityFolderId: getBoxOpportunityFolderId(state)
 });
 
