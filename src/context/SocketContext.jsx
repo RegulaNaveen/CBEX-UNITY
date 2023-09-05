@@ -406,9 +406,9 @@ const SocketContextProvider = props => {
   /**
    * Function called after bid creation completed
    */
-  const refreshOpportunity = (id, bidNo) => {
+  const refreshOpportunity = (id, bidNo, bidType) => {
     try {
-      props.getOpportunityInfo(id, bidNo, null, null, true);
+      props.getOpportunityInfo(id, bidNo, bidType, null, true);
     } catch (error) {
       console.log('error refreshOpportunity :>> ', error);
     }
@@ -831,11 +831,7 @@ const SocketContextProvider = props => {
     );
   };
 
-  const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {
-    waitForSocketConnectionMinInterval(() =>
-      updateDashboardProposalCard(oppNo, sfField, answer, null)
-    );
-  };
+  const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {};
 
   const addQuestionWrapper = questionData => {
     waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
