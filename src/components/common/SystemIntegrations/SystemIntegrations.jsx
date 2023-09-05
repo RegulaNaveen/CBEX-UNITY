@@ -21,6 +21,7 @@ import {
   CalendarWithNum
 } from '../../svg';
 import classNames from 'classnames';
+import { BID_TYPES } from '../../../constants/app';
 
 const SystemIntegrations = ({
   checkSfAnswer,
@@ -40,6 +41,7 @@ const SystemIntegrations = ({
   disabled,
   answers,
   bidAnswerCopy = false,
+  bidType,
   latestAnsweredBidNo = null,
   questionId,
   questionDataDestinations
@@ -345,7 +347,9 @@ const SystemIntegrations = ({
         return (
           <Tooltip
             variant="light"
-            title={`Answer derived from bid ${latestAnsweredBidNo}`}
+            title={`Answer derived from ${
+              bidType ? BID_TYPES[bidType] : BID_TYPES.Clinical_Bid
+            } ${latestAnsweredBidNo}`}
             placement="left"
             tabIndex={-1}
           >

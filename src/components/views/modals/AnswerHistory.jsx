@@ -20,7 +20,7 @@ import {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  getBidNameByType
+  getBidTypeFromProposalId
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import {
@@ -310,6 +310,7 @@ class AnswerHistory extends Component<Props> {
     const questionId = questions.get('questionId');
     const questionText = questions.get('questionText');
     const proposalId = answers.get(0).get('proposalId');
+
     const answer = answers.get(0).get('answer');
     const { sectionName } = question.get('section').toJS();
     const questionHTML = questions.get('questionHtml');
@@ -584,33 +585,7 @@ class AnswerHistory extends Component<Props> {
 
   renderContent = () => {
     const { opportunityData, selectedBid, isQuesFreezed } = this.props;
-    const oppordata = opportunityData.toJS();
-    // Initialize an array to store bidType values
-    const bidTypes = [];
-
-    // Loop over each item in the oppordata object
-    for (const key in oppordata) {
-      if (oppordata.hasOwnProperty(key)) {
-        const proposal = oppordata[key].proposal;
-        if (proposal && proposal.bidType) {
-          bidTypes.push(proposal.bidType);
-        }
-      }
-    }
-
-    // Now the bidTypes array contains all the bidType values
     const { question } = this.state;
-
-    const extractedData = {};
-    Object.keys(oppordata).forEach(key => {
-      const proposal = oppordata[key].proposal;
-      const proposalId = proposal.proposalId;
-      const bidType = proposal.bidType;
-
-      // Store the extracted data in the object
-      extractedData[proposalId] = bidType;
-    });
-
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
@@ -640,8 +615,10 @@ class AnswerHistory extends Component<Props> {
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
       const cfProposalId = _answer.get('cfProposalId');
-
+      const getOpportunityData = opportunityData.toJS();
       let cfBidNo = null;
+      let bidType = null;
+      let cfBidType = null;
       const date = _answer.get('date');
       // get formattedAnswer if present or fallback to answer
       const answerCheck = _answer.get('formattedAnswer');
@@ -662,6 +639,7 @@ class AnswerHistory extends Component<Props> {
       ) {
         bidNo = opportunityData.get(proposalId).toJS().proposal.proposalDetails
           .bidNo;
+        bidType = getBidTypeFromProposalId(proposalId, getOpportunityData);
         isCurrentBid =
           opportunityData.get(proposalId).toJS().isCurrent === true
             ? opportunityData.get(proposalId).toJS().proposal.proposalDetails
@@ -675,6 +653,7 @@ class AnswerHistory extends Component<Props> {
       ) {
         cfBidNo = opportunityData.get(cfProposalId).toJS().proposal
           .proposalDetails.bidNo;
+        cfBidType = getBidTypeFromProposalId(cfProposalId, getOpportunityData);
       }
 
       const nextAnswerCheck = answers?.get(index + 1)?.get('formattedAnswer');
@@ -1120,8 +1099,8 @@ class AnswerHistory extends Component<Props> {
                     userName,
                     cfBidNo,
                     isAnswerEmpty(answer),
-                    extractedData,
-                    _answer.get('cfProposalId')
+                    bidType,
+                    cfBidType
                   )}
                 </p>
                 {renderAnswers()}
@@ -1131,11 +1110,7 @@ class AnswerHistory extends Component<Props> {
               <p className="answer-history-para">{parsedDate}</p>
               {bidNo ? (
                 <p className="answer-history-para">
-                  {!bidTypes[index] ||
-                  bidTypes[index] !== 'Early_Engagement_Bid'
-                    ? 'Bid '
-                    : 'Early Engagement '}
-                  {bidNo}
+                  {bidType} {bidNo}
                 </p>
               ) : null}
               {indexNo === 0 &&

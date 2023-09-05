@@ -39,6 +39,7 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
     hasDifferentSFanswer,
     qvidianIntegration,
     bidAnswerCopy,
+    bidType,
     latestAnsweredBidNo,
     questionDataDestinations
   } = item;
@@ -84,6 +85,7 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
         hasDifferentSFanswer={hasDifferentSFanswer}
         qvidianIntegration={qvidianIntegration}
         bidAnswerCopy={bidAnswerCopy}
+        bidType={bidType}
         latestAnsweredBidNo={latestAnsweredBidNo}
         questionDataDestinations={questionDataDestinations}
       />
