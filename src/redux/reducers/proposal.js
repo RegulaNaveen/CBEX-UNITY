@@ -1393,7 +1393,12 @@ const updateOportunityDetailData = (state, action) => {
     proposalDetail &&
     currentProposal &&
     currentProposal == data?.proposalId &&
-    data?.questionSfField
+    data?.questionSfField &&
+    !(
+      data.questionsfObject &&
+      data.questionSfField === 'Name' &&
+      data.questionsfObject === 'Opportunity'
+    )
   ) {
     if (updatedSelectedbid[mapper[data.questionSfField]]) {
       updatedSelectedbid[mapper[data.questionSfField]] = data.answer;

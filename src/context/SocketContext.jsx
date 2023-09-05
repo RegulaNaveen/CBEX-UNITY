@@ -831,11 +831,7 @@ const SocketContextProvider = props => {
     );
   };
 
-  const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {
-    waitForSocketConnectionMinInterval(() =>
-      updateDashboardProposalCard(oppNo, sfField, answer, null)
-    );
-  };
+  const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {};
 
   const addQuestionWrapper = questionData => {
     waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
