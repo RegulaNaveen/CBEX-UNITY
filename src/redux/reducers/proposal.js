@@ -322,8 +322,7 @@ const setOpportunityInfo = (state, action) => {
   const searchParams = new URLSearchParams(window.location.search);
   const currentbidNo = searchParams.get('bidNo');
   const currentbidType = searchParams.get('bidType');
-  const latestProposal = payload[0];
-
+  const latestProposal = payload.find(proposal => proposal.isCurrent === true);
   payload.forEach(proposal => {
     if (
       proposal?.proposal?.proposalDetails?.bidNo == currentbidNo &&
