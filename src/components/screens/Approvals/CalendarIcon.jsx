@@ -6,7 +6,8 @@ import CalendarCheck from 'apollo-react-icons/CalendarCheck';
 import { getLastAnswer } from './utils';
 import indeterminate from '../../../../img/Indeterminate.svg';
 import Tooltip from 'apollo-react/components/Tooltip';
-import { CalendarWithMinus, CalendarWithNum } from '../../svg';
+import { CalendarWithNum } from '../../svg';
+import { BID_TYPES } from '../../../constants/app';
 
 const IndeterminateIcon = () => <img src={indeterminate} alt="indeterminate" />;
 
@@ -33,7 +34,7 @@ const CalendarIcon = ({ question }) => {
   }, [allFlags]);
 
   const answers = Array.from(question.answers).reverse();
-  const { bidAnswerCopy, latestAnsweredBidNo } = question;
+  const { bidType, bidAnswerCopy, latestAnsweredBidNo } = question;
   const lastAnswer = getLastAnswer(question);
   const color = {
     unityPredicted: '#0768fd',
@@ -61,7 +62,9 @@ const CalendarIcon = ({ question }) => {
         return (
           <Tooltip
             variant="light"
-            title={`Answer derived from bid ${latestAnsweredBidNo}`}
+            title={`Answer derived from ${
+              bidType ? BID_TYPES[bidType] : BID_TYPES.Clinical_Bid
+            } ${latestAnsweredBidNo}`}
             placement="left"
             tabIndex={-1}
           >

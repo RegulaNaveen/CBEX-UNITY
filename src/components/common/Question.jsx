@@ -1554,6 +1554,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       NaLoading,
       showNaCheckbox,
       bidAnswerCopy,
+      bidType,
       latestAnsweredBidNo,
       questionDataDestinations
     } = this.props;
@@ -1852,6 +1853,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             hasDifferentSFanswer={hasDifferentSFanswer}
             disabled={integrationLocked}
             bidAnswerCopy={bidAnswerCopy}
+            bidType={bidType}
             latestAnsweredBidNo={latestAnsweredBidNo}
             questionId={qId}
             questionDataDestinations={this.props.questionDataDestinations}

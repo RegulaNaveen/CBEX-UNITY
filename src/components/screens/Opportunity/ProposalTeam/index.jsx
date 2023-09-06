@@ -139,6 +139,7 @@ function ProposalTeam() {
           visible: visible,
           hasDifferentSFanswer: hasDifferentSFanswer,
           bidAnswerCopy: proposalTeamData.bidAnswerCopy,
+          bidType: proposalTeamData.bidType,
           latestAnsweredBidNo: proposalTeamData.latestAnsweredBidNo,
           questionDataDestinations: questionDataDestinations
         });
@@ -265,6 +266,7 @@ function ProposalTeam() {
                     hasDifferentSFanswer={items.hasDifferentSFanswer}
                     qvidianIntegration={items.qvidianIntegration}
                     bidAnswerCopy={items.bidAnswerCopy}
+                    bidType={items.bidType}
                     latestAnsweredBidNo={items.latestAnsweredBidNo}
                     questionDataDestinations={items.questionDataDestinations}
                   />
