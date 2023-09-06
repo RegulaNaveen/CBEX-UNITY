@@ -175,12 +175,12 @@ const BidHistory = () => {
                           >
                             <div>
                               {item.bidName.startsWith('Early Engagement')
-                                ? `EE ${item.bidNo}`
+                                ? `EE Bid ${item.bidNo}`
                                 : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'
-                                : item.isCurrent && '(Current)'}
+                                : item.isCurrent && ' (Current)'}
                             </div>
                             <div>{parseMomentDate(item.bidDueDate)}</div>
                             {item.bidId === selectedBid.get('id') && (
