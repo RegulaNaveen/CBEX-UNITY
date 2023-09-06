@@ -406,63 +406,28 @@ function getUserInitials(userName, lastChangedInBid) {
     ?.join('');
 }
 
-// function getBidTypeFromProposalId(proposalId, opportunityData) {
-//   const proposal = opportunityData[proposalId];
-//   if (proposal) {
-//     let bidType = proposal.proposal.bidType;
-//     bidType = bidType === 'Clinical_Bid' || !bidType ? '' : bidType; // Add the condition
-//     return bidType || ''; // Return bidType if it exists, or an empty string if it's undefined
-//   } else {
-//     return '';
-//   }
-// }
-
 function getBidTypeFromProposalId(proposalId, opportunityData) {
-  const proposal = opportunityData[proposalId];
-  if (proposal) {
-    let bidType = proposal.proposal.bidType;
-    if (bidType === undefined || bidType !== 'Early_Engagement_Bid') {
-      return 'Clinical_Bid'; // If bidType is not present or not "Early_Engagement_Bid," consider it as "Clinical_Bid"
-    } else {
-      return bidType; // If bidType is explicitly set to "Early_Engagement_Bid," retain that value
-    }
-  } else {
-    return ''; // If proposalId doesn't exist, consider it as "Clinical_Bid"
-  }
+  const bidType = opportunityData[proposalId]?.proposal.bidType;
+  return bidType ? BID_TYPES[bidType] : BID_TYPES.Clinical_Bid;
 }
 
 function getUserName(
   userName,
   lastChangedInBid,
   answerEmpty = false,
-  // extractedData,
-  oppordata,
-  cfProposalId,
-  proposalId
+  bidType,
+  cfBidType
 ) {
-  console.log('cfProposalId', cfProposalId);
-  // const cfBidType = getBidTypeFromProposalId(cfProposalId, oppordata);
-  // console.log('cfBidType', cfBidType);
-  const CfbidType = getBidTypeFromProposalId(cfProposalId, oppordata);
-  console.log('CfbidType', CfbidType);
   if (userName === 'AnswerPulledFromSalesforce') return 'Salesforce Answer';
   if (userName === 'UnityPredictedAnswer') return 'Unity Predicted Answer';
   if (userName === 'CarryForwardAnswer') {
     if (lastChangedInBid) {
       if (answerEmpty) {
-        return `Answer not derived from bid ${lastChangedInBid}`;
+        return `Answer not derived from ${cfBidType} ${lastChangedInBid}`;
       }
-      if (CfbidType === 'Early_Engagement_Bid') {
-        if (answerEmpty) {
-          return `Answer not derived from Early Engagement ${lastChangedInBid}`;
-        } else {
-          return `Answer derived from Early Engagement ${lastChangedInBid}`;
-        }
-      } else {
-        return `Answer derived from bid ${lastChangedInBid}`;
-      }
+      return `Answer derived from ${cfBidType} ${lastChangedInBid}`;
     }
-    return 'Answer derived from bid';
+    return `Answer derived from ${bidType}`;
   }
   return userName;
 }
@@ -484,7 +449,8 @@ function getProposalIdlist(data = []) {
     return {
       proposalId: d.proposal.proposalId,
       boxId: d.proposal.proposalDetails.boxId,
-      bidNo: d.proposal.proposalDetails['bidNo'] || ''
+      bidNo: d.proposal.proposalDetails['bidNo'] || '',
+      bidType: d.proposal.bidType || ''
     };
   });
 }
