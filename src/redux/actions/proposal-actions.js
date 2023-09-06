@@ -1952,7 +1952,11 @@ export const updateCustomNameAction = (oppNo, customName) => {
       dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
     }
 
-    if (proposalInfo['CRM #'] == oppNo) {
+    if (
+      proposalInfo &&
+      proposalInfo['CRM #'] &&
+      proposalInfo['CRM #'] == oppNo
+    ) {
       dispatch({
         type: SET_CUSTOM_NAME,
         payload: customName
