@@ -36,7 +36,7 @@ const props = {
     '3065f3b8-2540-48f8-937f-cd6ae377426a-approval-91ecf807-94cd-4fb2-86db-9dd16172a3c2-left-ques'
 };
 
-describe.only('testing question item component in approval', () => {
+describe('testing question item component in approval', () => {
   test('render the component without crashing without props', async () => {
     const { container } = await render(
       <Provider store={store}>
