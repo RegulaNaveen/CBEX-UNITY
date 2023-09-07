@@ -544,7 +544,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       if (
         currentSearchResult.vTab !== null &&
         currentSearchResult.vTab >= 0 &&
-        currentSearchResult.vTab <= 2
+        currentSearchResult.vTab <= 3
       ) {
         if (!isNotepadOpen) {
           setSystemTriggeredClick(true);
