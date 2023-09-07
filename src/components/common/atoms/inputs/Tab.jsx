@@ -1,7 +1,13 @@
 /* eslint-disable dot-notation */
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  Suspense,
+  useRef
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import Tab from 'apollo-react/components/Tab';
@@ -132,6 +138,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       path: 'documents'
     }
   ];
+  const tabRef = useRef(null);
   const [tabs, setTabs] = useState(defaultTabs);
   const [tabStatus, setTabStatus] = useState(false);
   const [tabPresent, setTabPresent] = useState(null);
@@ -651,20 +658,19 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
 
   useEffect(() => {
     if (tabLoaded && tabStatus) {
-      const selectView = new URLSearchParams(window.location.search);
+      const className = '._question-tab > div > div > button:nth-child(1)';
+      const selectView = new URLSearchParams(window?.location?.search);
       const viewType = selectView.get('viewType');
       if (viewType) {
         const isPresent = tabs.some(v => v.path === viewType);
         const flagValue = isPresent ? 'present' : 'notPresent';
-        console.log('flagValue :>> ', flagValue);
-        const className = '._question-tab > div > div > button:nth-child(1)';
         if (
           flagValue === 'notPresent' &&
-          document &&
-          document.querySelector(className)
+          tabRef &&
+          tabRef?.current &&
+          tabRef?.current?.querySelector(className)
         ) {
-          document.querySelector(className).click();
-          setswitchTemplateState([...[]]);
+          tabRef.current.querySelector(className).click();
         }
       }
     }
@@ -972,6 +978,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     if (tabList && tabList?.length && tabStatus) {
       return (
         <Tabs
+          ref={tabRef}
           value={value}
           onChange={handleChangeTab}
           key={currentRefreshRate}
