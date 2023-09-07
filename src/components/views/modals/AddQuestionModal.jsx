@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { isEmpty } from 'lodash';
+import { isEmpty, isString } from 'lodash';
 import 'react-day-picker/src/style.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -431,7 +431,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 id="dd-team-member"
                 placeholder="Select"
                 items={filteredSectionNames}
-                selectedValue={isEditMode ? section : selectedValue}
+                selectedValue={isEditMode
+                  ? isString(section) 
+                    ? section : section?.sectionName
+                  : selectedValue}
                 title="Section"
                 error={error.filter(v => v.section)}
                 onClick={this.onQuestionSectionChange}
