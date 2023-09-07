@@ -359,7 +359,8 @@ const setOpportunityInfo = (state, action) => {
         .set(
           'isCurrent',
           proposal?.proposal?.proposalDetails?.bidNo ===
-            latestProposal?.proposal?.proposalDetails?.bidNo
+            latestProposal?.proposal?.proposalDetails?.bidNo &&
+            proposal?.proposal?.bidType === latestProposal?.proposal?.bidType
         )
         .set('bidStatus', proposal.proposal['inProgress'] || false)
         .set('agreementId', proposal.proposal['agreementId'] || '')
@@ -502,6 +503,7 @@ const newBidCreated = (state: Map, action: Object): Map => {
 
 const addNewBid = (state: Map, action: Object): Map => {
   const { payload } = action;
+  console.log(`addNewBid payload`, payload);
   let newopportunityData = new OrderedMap({});
   let data = payload;
   let selectedBid = Map({});

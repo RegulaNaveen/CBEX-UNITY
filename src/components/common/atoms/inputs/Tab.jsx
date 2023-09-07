@@ -648,6 +648,28 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       }
     }
   }, [tabPresent, tabStatus, newTab, switchTemplateState]);
+
+  useEffect(() => {
+    if (tabLoaded && tabStatus) {
+      const selectView = new URLSearchParams(window.location.search);
+      const viewType = selectView.get('viewType');
+      if (viewType) {
+        const isPresent = tabs.some(v => v.path === viewType);
+        const flagValue = isPresent ? 'present' : 'notPresent';
+        console.log('flagValue :>> ', flagValue);
+        const className = '._question-tab > div > div > button:nth-child(1)';
+        if (
+          flagValue === 'notPresent' &&
+          document &&
+          document.querySelector(className)
+        ) {
+          document.querySelector(className).click();
+          setswitchTemplateState([...[]]);
+        }
+      }
+    }
+  }, [tabLoaded, tabStatus]);
+
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(window.location.search);
