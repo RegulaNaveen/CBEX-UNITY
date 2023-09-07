@@ -85,6 +85,13 @@ export async function getSearchResults({
         allTabs[activeTab].tabName,
         activeTab
       );
+      searchInKeyMilestone(
+        finalResult,
+        regexp,
+        sectionsUnfiltered,
+        allTabs[activeTab].tabName,
+        activeTab
+      );
       verticalTabSearched = true;
     }
 
@@ -135,6 +142,13 @@ export async function getSearchResults({
             tab.tabName,
             tab.tabIndex
           );
+          searchInKeyMilestone(
+            finalResult,
+            regexp,
+            sectionsUnfiltered,
+            allTabs[activeTab].tabName,
+            activeTab
+          );
           verticalTabSearched = true;
         }
       });
@@ -183,6 +197,8 @@ export function searchInTab({
       section =>
         sections[section].sectionName !==
           'Questions_for_the_Customer_left_panel' &&
+        sections[section].sectionName !==
+          'Key Milestones & Deliverable Timelines' &&
         sections[section].sectionName !== 'Proposal Team'
     )
     .forEach(sectionKey => {
@@ -819,6 +835,73 @@ export function searchInQuestionsForCustomer(
                 finalResult,
                 tab,
                 vTab: 0,
+                tabName
+              });
+            }
+          }
+        });
+      }
+    });
+}
+
+export function searchInKeyMilestone(
+  finalResult,
+  regexp,
+  sections,
+  tabName,
+  tab
+) {
+  Object.keys(sections)
+    .filter(
+      section =>
+        sections[section].sectionName ===
+        'Key Milestones & Deliverable Timelines'
+    )
+    .forEach(sectionKey => {
+      const section = sections[sectionKey];
+      const questions = section['questions'];
+
+      if (Object.keys(questions).length > 0) {
+        // searching questions
+        Object.keys(questions).forEach(questionKey => {
+          const question = questions[questionKey];
+          // searching in questionText
+          if (question['questionText']) {
+            updateSearchMatches({
+              regexp,
+              inputText: question['questionText'],
+              index: questionKey,
+              finalResult,
+              tab,
+              vTab: 3,
+              tabName
+            });
+          }
+          // searching in answer
+          if (Array.isArray(question.answers) && question.answers.length > 0) {
+            let recentAnswer =
+              question.answers[question.answers.length - 1].answer;
+            // if multiple answer
+            if (Array.isArray(recentAnswer)) {
+              recentAnswer.forEach(answerChunk => {
+                updateSearchMatches({
+                  regexp,
+                  inputText: answerChunk,
+                  index: questionKey,
+                  finalResult,
+                  tab,
+                  vTab: 3,
+                  tabName
+                });
+              });
+            } else if (typeof recentAnswer === 'string') {
+              updateSearchMatches({
+                regexp,
+                inputText: recentAnswer,
+                index: questionKey,
+                finalResult,
+                tab,
+                vTab: 3,
                 tabName
               });
             }
