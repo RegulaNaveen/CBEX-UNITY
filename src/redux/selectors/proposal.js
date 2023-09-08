@@ -477,6 +477,11 @@ export const selectNextMilestones = createSelector(selectProposal, proposal =>
   proposal?.get('nextMilestone', [])
 );
 
+export const selectGetbidChangeLoader = createSelector(
+  selectProposal,
+  proposal => proposal?.get('changebidloader')
+);
+
 export const selectNextMilestone = createSelector(
   selectNextMilestones,
   milestones => {
