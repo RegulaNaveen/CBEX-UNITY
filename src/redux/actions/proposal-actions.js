@@ -828,6 +828,10 @@ function applyUnAnsweredFilter(questions, flags) {
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(val => {
+        // if statement type question than dont filter
+        if (val.get('answerConfiguration').get('type') === 'statement')
+          return true;
+
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
@@ -865,6 +869,10 @@ function applyVerificationRequiredFilter(questions, flags) {
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(val => {
+        // if statement type question than dont filter
+        if (val.get('answerConfiguration').get('type') === 'statement')
+          return true;
+
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
@@ -903,6 +911,10 @@ function applyAnsweredFilter(questions, flags) {
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(question => {
+        // if statement type question than dont filter
+        if (question.get('answerConfiguration').get('type') === 'statement')
+          return true;
+
         let Answer = question.get('answers', []);
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
@@ -1070,6 +1082,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
+
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
@@ -1154,10 +1167,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
 
       considerGroup = false;
     });
-
-    filteredQuestions = filteredQuestions.filter(
-      question => question.answerConfiguration?.type !== 'statement'
-    );
 
     dispatch({
       type: ON_QUESTIONS_FILTERED,
