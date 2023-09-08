@@ -130,7 +130,8 @@ const {
   CLEAR_EDIT_OPP_INFO,
   TOGGLE_EDIT_CUSTOM_NAME_MODAL,
   DASHBOARD_PROPOSAL_DETAIL,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  CHANGE_BID_LOADER
 } = REDUX_TYPES.PROPOSAL;
 
 const { ON_GET_PROPOSALS, ON_GET_FAVOURITE } = REDUX_TYPES.PROPOSALS;
@@ -1515,7 +1516,7 @@ export const changeBid = (bid, viewType) => {
 
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
-    dispatch({ type: PROPOSAL_INFO_LOADING, payload: {} });
+    dispatch({ type: CHANGE_BID_LOADER, payload: true });
     if (selectedBid.bidName !== bid?.bidName) {
       dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
     }

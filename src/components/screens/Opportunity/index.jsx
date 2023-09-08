@@ -59,7 +59,8 @@ import {
   getBidList,
   selectFavourite,
   selectCustomName,
-  selectNextMilestone
+  selectNextMilestone,
+  selectGetbidChangeLoader
 } from '../../../redux/selectors/proposal';
 import {
   clearSearchAction,
@@ -283,7 +284,8 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       favourite,
       customName,
-      nextMilestone
+      nextMilestone,
+      getbidChangeLoader
     } = this.props;
     const {
       bidStatus,
@@ -292,7 +294,6 @@ export class Opportunity extends Component<Props, State> {
       opportunityStatus,
       isApprovalCountPresent
     } = selectedBid.toJS();
-
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -300,7 +301,25 @@ export class Opportunity extends Component<Props, State> {
         </div>
       );
     return (
-      <div className="proposal-details">
+      <div
+        className={
+          getbidChangeLoader
+            ? 'proposal-details bid-change-loader-status'
+            : 'proposal-details'
+        }
+      >
+        {getbidChangeLoader && (
+          <div className="bid-change-loader">
+            <div>
+              <Loader
+                type="TailSpin"
+                color="#297DFD"
+                height={100}
+                width={100}
+              />
+            </div>
+          </div>
+        )}
         <GenerateDocs />
         <UnityGrid
           data={details}
@@ -382,7 +401,8 @@ const mapStateToProps = (state: Map) => ({
   bidList: getBidList(state),
   favourite: selectFavourite(state),
   customName: selectCustomName(state),
-  nextMilestone: selectNextMilestone(state)
+  nextMilestone: selectNextMilestone(state),
+  getbidChangeLoader: selectGetbidChangeLoader(state)
 });
 
 export default compose(

@@ -85,7 +85,8 @@ const {
   CLEAR_EDIT_OPP_INFO,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_PROPOSAL_DETAIL_SF,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  CHANGE_BID_LOADER
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -115,6 +116,7 @@ const INITIAL_STATE: Map = fromJS({
   setQuestionError: undefined,
   isGettingBoxId: false,
   onGettingBoxIdError: undefined,
+  changebidloader: false,
   boxId: '',
   fetchingValidatedProposalData: false,
   validatedProposalData: [],
@@ -487,13 +489,15 @@ const onChangeBid = (state: Map, action: Object): Map => {
       .set('questionsFilter', questionsFilter)
       .set('isProposalLoading', false)
       .set('selectedBid', selectedBid)
-      .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
+      .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal])
+      .set('changebidloader', false);
   }
   return state
     .set('proposalDetails', proposalDetails)
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid)
-    .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
+    .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal])
+    .set('changebidloader', false);
 };
 
 const newBidCreated = (state: Map, action: Object): Map => {
@@ -1620,7 +1624,9 @@ const actionMap = {
   [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo,
   [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData,
   [UPDATE_PROPOSAL_DETAIL_SF]: updateProposalDetailSF,
-  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDashboardDetail
+  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDashboardDetail,
+  [CHANGE_BID_LOADER]: (state, { payload }) =>
+    state.set('changebidloader', payload)
 };
 
 export default function(
