@@ -85,7 +85,8 @@ const {
   CLEAR_EDIT_OPP_INFO,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_PROPOSAL_DETAIL_SF,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  CHANGE_BID_LOADER
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -115,6 +116,7 @@ const INITIAL_STATE: Map = fromJS({
   setQuestionError: undefined,
   isGettingBoxId: false,
   onGettingBoxIdError: undefined,
+  changebidloader: false,
   boxId: '',
   fetchingValidatedProposalData: false,
   validatedProposalData: [],
@@ -319,8 +321,15 @@ const setOpportunityInfo = (state, action) => {
   const { payload } = action;
   let opportunityData = new OrderedMap({});
   let selectedBid = Map({});
+  const searchParams = new URLSearchParams(window.location.search);
+  const currentbidNo = searchParams.get('bidNo');
+  const currentbidType = searchParams.get('bidType');
+  const latestProposal = payload.find(proposal => proposal.isCurrent === true);
   payload.forEach(proposal => {
-    if (proposal.isCurrent) {
+    if (
+      proposal?.proposal?.proposalDetails?.bidNo == currentbidNo &&
+      proposal?.proposal?.bidType === currentbidType
+    ) {
       selectedBid = selectedBid
         .set('id', proposal.proposal.proposalId)
         // .set('bidDate', proposal.proposal.proposalDate)
@@ -349,7 +358,12 @@ const setOpportunityInfo = (state, action) => {
           'opportunityStatus',
           proposal.proposal.opportunityOverview['OpportunityStatus'] || ''
         )
-        .set('isCurrent', true)
+        .set(
+          'isCurrent',
+          proposal?.proposal?.proposalDetails?.bidNo ===
+            latestProposal?.proposal?.proposalDetails?.bidNo &&
+            proposal?.proposal?.bidType === latestProposal?.proposal?.bidType
+        )
         .set('bidStatus', proposal.proposal['inProgress'] || false)
         .set('agreementId', proposal.proposal['agreementId'] || '')
         .set('accountId', proposal.proposal['accountId'] || '')
@@ -475,13 +489,15 @@ const onChangeBid = (state: Map, action: Object): Map => {
       .set('questionsFilter', questionsFilter)
       .set('isProposalLoading', false)
       .set('selectedBid', selectedBid)
-      .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
+      .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal])
+      .set('changebidloader', false);
   }
   return state
     .set('proposalDetails', proposalDetails)
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid)
-    .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal]);
+    .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal])
+    .set('changebidloader', false);
 };
 
 const newBidCreated = (state: Map, action: Object): Map => {
@@ -491,6 +507,7 @@ const newBidCreated = (state: Map, action: Object): Map => {
 
 const addNewBid = (state: Map, action: Object): Map => {
   const { payload } = action;
+  console.log(`addNewBid payload`, payload);
   let newopportunityData = new OrderedMap({});
   let data = payload;
   let selectedBid = Map({});
@@ -1607,7 +1624,9 @@ const actionMap = {
   [CLEAR_EDIT_OPP_INFO]: clearEditOppInfo,
   [DASHBOARD_PROPOSAL_DETAIL]: updateOportunityDetailData,
   [UPDATE_PROPOSAL_DETAIL_SF]: updateProposalDetailSF,
-  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDashboardDetail
+  [UPDATE_DASHBOARD_OPPORTUNITY]: updateDashboardDetail,
+  [CHANGE_BID_LOADER]: (state, { payload }) =>
+    state.set('changebidloader', payload)
 };
 
 export default function(
