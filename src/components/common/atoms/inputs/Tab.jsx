@@ -1,7 +1,13 @@
 /* eslint-disable dot-notation */
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  Suspense,
+  useRef
+} from 'react';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import Tab from 'apollo-react/components/Tab';
@@ -132,6 +138,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       path: 'documents'
     }
   ];
+  const tabRef = useRef(null);
   const [tabs, setTabs] = useState(defaultTabs);
   const [tabStatus, setTabStatus] = useState(false);
   const [tabPresent, setTabPresent] = useState(null);
@@ -270,7 +277,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     const searchParams = new URLSearchParams(window.location.search);
     const currentviewType = searchParams.get('bidNo');
     // without bid no url
-    if (changeBidStatus && currentviewType) {
+    if (currentviewType) {
       if (tabs.length > 4) {
         const refreshTab = tabs.slice(0, 4);
         setTabStatus(false);
@@ -648,6 +655,27 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       }
     }
   }, [tabPresent, tabStatus, newTab, switchTemplateState]);
+
+  useEffect(() => {
+    if (tabLoaded && tabStatus) {
+      const className = '._question-tab > div > div > button:nth-child(1)';
+      const selectView = new URLSearchParams(window?.location?.search);
+      const viewType = selectView.get('viewType');
+      if (viewType) {
+        const isPresent = tabs.some(v => v.path === viewType);
+        const flagValue = isPresent ? 'present' : 'notPresent';
+        if (
+          flagValue === 'notPresent' &&
+          tabRef &&
+          tabRef?.current &&
+          tabRef?.current?.querySelector(className)
+        ) {
+          tabRef.current.querySelector(className).click();
+        }
+      }
+    }
+  }, [tabLoaded, tabStatus]);
+
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {
     const selectView = new URLSearchParams(window.location.search);
@@ -950,6 +978,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     if (tabList && tabList?.length && tabStatus) {
       return (
         <Tabs
+          ref={tabRef}
           value={value}
           onChange={handleChangeTab}
           key={currentRefreshRate}
