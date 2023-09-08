@@ -1155,6 +1155,10 @@ export function onQuestionsFilterApplied(questionsFilter) {
       considerGroup = false;
     });
 
+    filteredQuestions = filteredQuestions.filter(
+      question => question.answerConfiguration?.type !== 'statement'
+    );
+
     dispatch({
       type: ON_QUESTIONS_FILTERED,
       payload: { filteredQuestions }
