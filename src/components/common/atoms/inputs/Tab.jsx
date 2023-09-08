@@ -371,8 +371,13 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         selectedView !== 'questions')
     ) {
       const custompath = tabs.find(item => item.path === selectedView);
-      dispatch(setActiveTabIndexAction(custompath?.value));
-      searchParams.set('viewType', selectedView);
+      if (custompath) {
+        dispatch(setActiveTabIndexAction(custompath?.value));
+        searchParams.set('viewType', selectedView);
+      } else {
+        dispatch(setActiveTabIndexAction(0));
+        searchParams.delete('viewType')
+      }
       if (selectedView === 'questions') {
         searchParams.delete('viewType');
       }
