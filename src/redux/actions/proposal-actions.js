@@ -130,7 +130,8 @@ const {
   CLEAR_EDIT_OPP_INFO,
   TOGGLE_EDIT_CUSTOM_NAME_MODAL,
   DASHBOARD_PROPOSAL_DETAIL,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  CHANGE_BID_LOADER
 } = REDUX_TYPES.PROPOSAL;
 
 const { ON_GET_PROPOSALS, ON_GET_FAVOURITE } = REDUX_TYPES.PROPOSALS;
@@ -827,6 +828,10 @@ function applyUnAnsweredFilter(questions, flags) {
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(val => {
+        // if statement type question than dont filter
+        if (val.get('answerConfiguration').get('type') === 'statement')
+          return true;
+
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
@@ -864,6 +869,10 @@ function applyVerificationRequiredFilter(questions, flags) {
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(val => {
+        // if statement type question than dont filter
+        if (val.get('answerConfiguration').get('type') === 'statement')
+          return true;
+
         let Answer = val.get('answers', []);
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
@@ -902,6 +911,10 @@ function applyAnsweredFilter(questions, flags) {
   if (role) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(question => {
+        // if statement type question than dont filter
+        if (question.get('answerConfiguration').get('type') === 'statement')
+          return true;
+
         let Answer = question.get('answers', []);
         Answer = Answer.toJS();
         if (flags['carryForwardAnswerFlag']) {
@@ -1069,6 +1082,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
+
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
@@ -1153,10 +1167,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
 
       considerGroup = false;
     });
-
-    filteredQuestions = filteredQuestions.filter(
-      question => question.answerConfiguration?.type !== 'statement'
-    );
 
     dispatch({
       type: ON_QUESTIONS_FILTERED,
@@ -1519,6 +1529,7 @@ export const changeBid = (bid, viewType) => {
 
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
+    dispatch({ type: CHANGE_BID_LOADER, payload: true });
     if (selectedBid.bidName !== bid?.bidName) {
       dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
     }
@@ -1955,7 +1966,11 @@ export const updateCustomNameAction = (oppNo, customName) => {
       dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
     }
 
-    if (proposalInfo['CRM #'] == oppNo) {
+    if (
+      proposalInfo &&
+      proposalInfo['CRM #'] &&
+      proposalInfo['CRM #'] == oppNo
+    ) {
       dispatch({
         type: SET_CUSTOM_NAME,
         payload: customName
