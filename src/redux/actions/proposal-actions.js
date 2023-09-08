@@ -1069,6 +1069,12 @@ export function onQuestionsFilterApplied(questionsFilter) {
     });
 
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
+
+    // remove all statement type questions from filter
+    filteredQuestions = filteredQuestions.filter(
+      question => question.answerConfiguration?.type !== 'statement'
+    );
+
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
       // Set the logic for current filter Group
@@ -1153,10 +1159,11 @@ export function onQuestionsFilterApplied(questionsFilter) {
 
       considerGroup = false;
     });
-
-    filteredQuestions = filteredQuestions.filter(
-      question => question.answerConfiguration?.type !== 'statement'
+    // add all statement type questions
+    let statementQuestions = selectProposalQuestions(state).filter(
+      question => question.answerConfiguration?.type === 'statement'
     );
+    filteredQuestions = [...filteredQuestions, ...statementQuestions];
 
     dispatch({
       type: ON_QUESTIONS_FILTERED,
