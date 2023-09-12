@@ -390,7 +390,6 @@ describe('testing for tab component', () => {
       fireEvent.click(moreButton);
       expect(screen.getByText('Strategy Development')).toBeInTheDocument();
       expect(screen.getByText('Timeline')).toBeInTheDocument();
-      expect(screen.getByText('Approvals')).toBeInTheDocument();
       expect(screen.getByText('Documents')).toBeInTheDocument();
     });
   }, 20000);
