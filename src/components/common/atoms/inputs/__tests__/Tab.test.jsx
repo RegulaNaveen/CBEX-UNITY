@@ -5,6 +5,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { store } from '../../../../../store';
@@ -13,6 +14,7 @@ import { REDUX_TYPES } from '../../../../../constants';
 import { SocketContext } from '../../../../../context/SocketContext';
 import * as UtilsFunc from '../../../../screens/UnityTabs/utils';
 import Tab from '../Tab';
+import * as proposalData from '../../../../../components/views/__tests__/Search/data.json';
 
 const customTab = [
   {
@@ -58,7 +60,8 @@ const customTab = [
       '0859813c-0ff6-41f7-b2d8-d275d335f486',
       'af1d2c50-0d8d-4b7a-ab86-83071d33f5ed',
       '890b0eb9-df56-41a7-a4ba-cceefd042428',
-      'b2bac498-d182-4f20-bb60-1335312f07f1'
+      'b2bac498-d182-4f20-bb60-1335312f07f1',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
     ],
     UnityTabSectionTitle: 'Section 2',
     TabID: '47034daf-eed8-4b8f-966a-be33b4a98d5e',
@@ -69,7 +72,10 @@ const customTab = [
   {
     UnityTabSectionOrder: 3,
     UnityTabSectionId: '81fa95fe-ff2c-4b1f-8ec6-883fdc81816b',
-    UnityTabSectionQuestions: ['8daca6cc-2c99-4571-ae6d-470f0e7068b5'],
+    UnityTabSectionQuestions: [
+      '8daca6cc-2c99-4571-ae6d-470f0e7068b5',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
+    ],
     UnityTabSectionTitle: 'TEST',
     TabID: '8012c1fd-d09f-4661-a88b-281f31b62d5b',
     UnityTabOrder: 4,
@@ -85,7 +91,8 @@ const customTab = [
       '7ed8b7b3-0036-4490-a6ff-3ffe20d0fbeb',
       '28a76fcd-2758-4e99-bfbd-4fb3904e6a97',
       'ea7d114d-bc23-4705-909e-8262ce58639c',
-      '923dcff8-a672-46c1-8bce-0767714f4908'
+      '923dcff8-a672-46c1-8bce-0767714f4908',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
     ],
     UnityTabSectionTitle: 'Carry foward Checkbox unselected',
     TabID: '47034daf-eed8-4b8f-966a-be33b4a98d5e',
@@ -96,7 +103,10 @@ const customTab = [
   {
     UnityTabSectionOrder: 6,
     UnityTabSectionId: 'a50813c7-3e4b-4614-9be8-33464be442eb',
-    UnityTabSectionQuestions: ['eae4b849-36a0-4773-b320-cf02ca3048d7'],
+    UnityTabSectionQuestions: [
+      'eae4b849-36a0-4773-b320-cf02ca3048d7',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
+    ],
     UnityTabSectionTitle: 'New React JS',
     TabID: '47034daf-eed8-4b8f-966a-be33b4a98d5e',
     UnityTabOrder: 1,
@@ -109,7 +119,8 @@ const customTab = [
     UnityTabSectionQuestions: [
       '776a31fe-d4e3-40e7-b61b-dad4aa8acfa2',
       '3a25176d-5be6-4d4f-b4b9-cd20c1722ef2',
-      'Key stakeholders-Y0L'
+      'Key stakeholders-Y0L',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
     ],
     UnityTabSectionTitle: 'testing',
     TabID: '8012c1fd-d09f-4661-a88b-281f31b62d5b',
@@ -122,7 +133,8 @@ const customTab = [
     UnityTabSectionId: 'e3e1a71e-2e82-48b5-aaf8-12e26b91ee95',
     UnityTabSectionQuestions: [
       '3c8fee2b-6f66-4679-93a3-c99f1c94f535',
-      '5fec0e90-c7c1-40ef-b3d8-130265b17723'
+      '5fec0e90-c7c1-40ef-b3d8-130265b17723',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
     ],
     UnityTabSectionTitle: 'Customtab1',
     TabID: '47034daf-eed8-4b8f-966a-be33b4a98d5e',
@@ -135,7 +147,8 @@ const customTab = [
     UnityTabSectionId: 'e549df7a-27ac-4431-9237-3cdef1743cf1',
     UnityTabSectionQuestions: [
       'f0833ccd-6da3-4617-8525-bcc105903560',
-      '3d28a51b-f2c9-4fb4-bfa7-3312be657c16'
+      '3d28a51b-f2c9-4fb4-bfa7-3312be657c16',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
     ],
     UnityTabSectionTitle: 'SectionLogicChecking',
     TabID: '47034daf-eed8-4b8f-966a-be33b4a98d5e',
@@ -158,7 +171,8 @@ const customTab = [
       '63a07a05-4e90-457f-9701-e41c8fc905f4',
       '14ba79c0-ea17-4df8-b123-3b7262221425',
       '84d2e613-fcaf-4cf1-bb24-8793592cb12a',
-      'c292fac0-69c5-4891-b42c-6a711abdd07a'
+      'c292fac0-69c5-4891-b42c-6a711abdd07a',
+      '0314bfcc-357d-4231-8be4-1ca2461317c5'
     ],
     UnityTabSectionTitle: 'Carry forward check box select section',
     TabID: '47034daf-eed8-4b8f-966a-be33b4a98d5e',
@@ -330,6 +344,20 @@ const TabWithRedux = props => (
   </Provider>
 );
 
+jest.mock(
+  '../../../../../components/screens/Opportunity/Questions',
+  () => () => <p>Questions Mock Component</p>
+);
+
+jest.mock(
+  '../../../../../components/screens/Opportunity/Documents',
+  () => () => <p>Documents Mock Component</p>
+);
+
+jest.mock('../../../../../components/screens/UnityTabs', () => () => (
+  <p>Custom tab Mock Component</p>
+));
+
 describe('testing for tab component', () => {
   beforeEach(() => {
     jest.useFakeTimers();
@@ -350,7 +378,7 @@ describe('testing for tab component', () => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_FLAG,
       payload: {
-        approvalsFlag: true,
+        answerUserTagFlag: true,
         showTimelineFlag: true
       }
     });
@@ -547,6 +575,50 @@ describe('testing for tab component', () => {
       fireEvent.click(timelineTab);
       expect(container).toBeInTheDocument();
       expect(screen.getByText('Available Dates')).toBeInTheDocument();
+    });
+  });
+
+  test('bidType in URL', async () => {
+    window.history.pushState(
+      {},
+      '',
+      '/opportunities/UZA89257?bidNo=1&bidType=Clinical_Bid&viewType=questions'
+    );
+    store.dispatch({
+      type: UNITY_TABS.SET_UNITY_TABS,
+      payload: customTab
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [{ ...proposalData }]
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: {
+        searchFlag: true
+      }
+    });
+    const { getByText } = render(
+      <TabWithRedux
+        id="UZA89257"
+        selectedView="documents"
+        onChangeSelectedTab={jest.fn()}
+      />
+    );
+    store.dispatch({
+      type: UNITY_TABS.SET_UNITY_TABS,
+      payload: customTab.slice(1)
+    });
+    await waitFor(() => {
+      expect(getByText('More')).toBeInTheDocument();
+    });
+    fireEvent.click(getByText('More'));
+    await waitFor(() => {
+      expect(getByText('Strategy Development')).toBeInTheDocument();
+    });
+    fireEvent.click(getByText('Strategy Development'));
+    await waitFor(() => {
+      expect(getByText('Questions Mock Component')).toBeInTheDocument();
     });
   });
 });
