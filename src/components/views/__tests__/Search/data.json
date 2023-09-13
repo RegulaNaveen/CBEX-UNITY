@@ -7,6 +7,7 @@
     "agreementId": "agreementId",
     "agreementName": "agreementName",
     "proposalDate": "2023-01-12T12:44:20.497Z",
+    "bidType": "Clinical_Bid",
     "proposalDetails": {
       "Customer": "Test",
       "CRM #": "12345",

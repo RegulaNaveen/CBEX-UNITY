@@ -72,8 +72,10 @@ const GenerateDocs = () => {
           logo.current = blob;
         });
       let fileName;
-
-      if (bidType === 'Early_Engagement_Bid') {
+      if (
+        bidType === 'Early_Engagement_Bid' ||
+        bidType === 'Bid Early_Engagement_Bid'
+      ) {
         fileName = `Unity Export_${proposalDetails['CRM #']}_Early Engagement ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       } else {
         fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;

@@ -26,7 +26,8 @@
   .profileAvtar {
     color: $neutral8;
     font-weight: 600;
-    font-family: 'Proxima Nova';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+
     font-size: 40px;
   }
   .grey-text {
@@ -63,7 +64,7 @@
   }
 
   .card-heading {
-    font-family: 'Proxima Nova';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 0;
@@ -75,14 +76,14 @@
   }
   .card-label {
     color: #444444;
-    font-family: 'Proxima Nova';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
     font-size: 14px;
     letter-spacing: 0;
     line-height: 24px;
   }
   .optional-help-text {
     color: #444444;
-    font-family: 'Proxima Nova';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
     font-size: 13px;
     letter-spacing: 0;
     line-height: 24px;
@@ -90,7 +91,7 @@
 
   .card-item {
     color: #000000;
-    font-family: 'Proxima Nova';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
@@ -98,7 +99,7 @@
 
   .preference-label {
     color: #444444;
-    font-family: 'Proxima Nova';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
@@ -212,12 +213,12 @@
   .greyText {
     color: #7f7f7f;
     font-weight: 530;
-    font-family: 'ProximaNova-Regular';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
   }
   .bold-text {
     font-weight: 700;
     color: #000;
-    font-family: ProximaNova-Regular;
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
   }
   .nav-text {
     text-decoration: none;
@@ -237,7 +238,7 @@
   .user-name {
     height: 24px;
     color: #000000;
-    font-family: 'ProximaNova-Regular';
+    font-family: 'ProximaNova-Regular', Arial, sans-serif;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
@@ -246,7 +247,7 @@
   .user-role-label {
     height: 24px;
     color: #7f7f7f;
-    font-family: 'Proxima Nova';
+    font-family: 'Proxima Nova', Arial, sans-serif;
     font-size: 13px;
     letter-spacing: 0;
     line-height: 24px;
