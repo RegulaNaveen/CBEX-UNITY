@@ -139,12 +139,17 @@ const EventLauncher = ({
             team =>
               Array.isArray(eventData.EventQuestions) &&
               eventData.EventQuestions.includes(team.questionId) &&
-              isEmpty(team.email)
+              isEmpty(team.email) &&
+              team.answerConfiguration.type !== 'statement'
           )
           .map(team => team.questionText.trim())
           .sort()
       : activeTeamQuestions
-          .filter(team => isEmpty(team.email))
+          .filter(
+            team =>
+              isEmpty(team.email) &&
+              team.answerConfiguration.type !== 'statement'
+          )
           .map(team => team.questionText.trim())
           .sort();
 
@@ -289,7 +294,6 @@ const EventLauncher = ({
 
   // Component will return null if no event found
   if (!hasEvent || !eventFlag || !isCurrent) return null;
-  
   return (
     <div className="event-launcher">
       {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (
