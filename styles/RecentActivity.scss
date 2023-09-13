@@ -1,6 +1,6 @@
 .recent-header {
   color: #000000;
-  font-family: 'Proxima Nova';
+  font-family: 'Proxima Nova', Arial, sans-serif;
   letter-spacing: 0;
   height: 32px;
   width: 767px;
@@ -8,7 +8,6 @@
   line-height: 32px !important;
   font-size: 20px !important;
   padding-left: 0.75em !important;
-  width: auto;
 }
 .recent-cog {
   color: #595959 !important;
@@ -103,7 +102,7 @@
 .notification-content-data {
   padding-top: 4px;
   font-size: 14px;
-  color: #000000DE;
+  color: #000000de;
   a {
     color: $neptune-primary !important;
     text-decoration: none;
