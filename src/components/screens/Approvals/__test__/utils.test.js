@@ -12,7 +12,10 @@ describe('shouldShowQuestion', () => {
       }
     ],
     roleNames: ['admin', 'editor'],
-    interestedParties: 'admin,editor'
+    interestedParties: 'admin,editor',
+    answerConfiguration: {
+      type: 'text'
+    }
   };
 
   it('should return true if question is visible and active', () => {
