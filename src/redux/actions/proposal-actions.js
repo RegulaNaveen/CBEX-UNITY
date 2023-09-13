@@ -1378,7 +1378,9 @@ export const getOpportunity = (
             (proposal.proposal.bidType || 'Clinical_Bid') !==
             'Early_Engagement_Bid'
         );
-        allProposals[0].isCurrent = true;
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
       }
       const proposal = allProposals.find(
         thisProposal =>
