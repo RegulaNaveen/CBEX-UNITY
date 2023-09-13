@@ -31,6 +31,10 @@ const isCarryForwarded = (answer = {}) =>
 
 // answeredFilter => Only answered
 const answeredFilter: Boolean = (question, flags) => {
+  // filter statement type questions under answered filter
+  if (question.answerConfiguration.type === 'statement') {
+    return true;
+  }
   const lastAnswer = getLastAnswer(question);
   if (flags['carryForwardAnswerFlag']) {
     return (
@@ -43,6 +47,10 @@ const answeredFilter: Boolean = (question, flags) => {
 };
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
 const unansweredFilter: Boolean = (question, flags) => {
+  // filter statement type questions under unanswered filter
+  if (question.answerConfiguration.type === 'statement') {
+    return true;
+  }
   const lastAnswer = getLastAnswer(question);
   if (flags['carryForwardAnswerFlag']) {
     return (
@@ -72,6 +80,10 @@ const informedFilter: Boolean = question => {
 };
 
 export const verificationRequiredFilter = (question, flags) => {
+  // filter statement type questions under verification required filter
+  if (question.answerConfiguration.type === 'statement') {
+    return true;
+  }
   const lastAnswer = getLastAnswer(question);
   if (flags['carryForwardAnswerFlag']) {
     return (
