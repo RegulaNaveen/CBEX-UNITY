@@ -50,12 +50,11 @@
       height: auto;
       width: 100%;
       color: $neutral6;
-      font-family: 'ProximaNova-Regular';
+      font-family: 'ProximaNova-Regular', Arial, sans-serif;
       pointer-events: none;
       font-size: 0.75rem;
       letter-spacing: 0;
       line-height: 1rem;
-      pointer-events: none;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -66,7 +65,7 @@
     .date-picker input,
     .multiselect-wrapper .multiselect-header .multiselect-header-selected {
       font-size: 12px;
-      font-family: 'ProximaNova-Regular';
+      font-family: 'ProximaNova-Regular', Arial, sans-serif;
     }
 
     .proposal-text-area {
@@ -78,19 +77,18 @@
       line-height: 26px !important;
       width: 100%;
       margin-top: 0 !important;
-      font-family: 'ProximaNova-Regular';
+      font-family: 'ProximaNova-Regular', Arial, sans-serif;
       font-size: 16px;
       min-width: auto;
       border: 1px solid #d9d9d9;
       border-radius: 4px;
-      font-size: 12px;
     }
 
     .multiselect-wrapper .multiselect-header .multiselect-header-placeholder {
       min-height: 24px;
       width: 100%;
       color: $neutral6;
-      font-family: 'ProximaNova-Regular';
+      font-family: 'ProximaNova-Regular', Arial, sans-serif;
       pointer-events: none;
       font-size: 12px;
       letter-spacing: 0;
@@ -231,7 +229,7 @@
         * {
           color: $neptune-primary;
         }
-        
+
         .plus-icon-add-new-question {
           min-width: 0 !important;
           margin-right: 0;
@@ -263,7 +261,7 @@
       min-height: 24px;
       width: 100%;
       color: $neutral6;
-      font-family: 'ProximaNova-Regular';
+      font-family: 'ProximaNova-Regular', Arial, sans-serif;
       pointer-events: none;
       font-size: 16px;
       letter-spacing: 0;

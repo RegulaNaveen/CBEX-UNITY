@@ -1,5 +1,4 @@
 @media screen and (max-width: 1200px) and (min-width: 300px) {
-
   .auto-complete-with-add-option,
   .checkboxtype {
     .MuiChip-root {
@@ -116,7 +115,7 @@
 
     .a-MuiChip-label {
       color: #000000 !important;
-      font-family: 'ProximaNova-Regular' !important;
+      font-family: 'ProximaNova-Regular', Arial, sans-serif !important;
       font-size: 16px !important;
       font-weight: bold;
 
@@ -138,21 +137,16 @@
         margin-top: 60%;
       }
     }
-
-    .MuiChip-deleteIcon {
-      width: 14px;
-      height: 14px;
-    }
   }
 
-  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] .MuiAutocomplete-input:first-child {
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root']
+    .MuiAutocomplete-input:first-child {
     padding-left: 6px;
     font-size: 12px;
   }
 }
 
 @media screen and (max-width: 3000px) and (min-width: 1201px) {
-
   .auto-complete-with-add-option,
   .checkboxtype {
     .MuiChip-root {
@@ -227,7 +221,7 @@
       padding-left: 8px;
       padding-right: 8px;
       color: #000000;
-      font-family: 'ProximaNova-Regular';
+      font-family: 'ProximaNova-Regular', Arial, sans-serif;
     }
 
     .MuiOutlinedInput-root {
@@ -262,14 +256,9 @@
       visibility: visible;
     }
 
-    .MuiChip-deleteIcon {
-      width: 16px;
-      height: 16px;
-    }
-
     .a-MuiChip-label {
       color: #000000 !important;
-      font-family: 'ProximaNova-Regular' !important;
+      font-family: 'ProximaNova-Regular', Arial, sans-serif !important;
       font-size: 16px !important;
       font-weight: bold;
 
@@ -298,7 +287,8 @@
     }
   }
 
-  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] .MuiAutocomplete-input:first-child {
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root']
+    .MuiAutocomplete-input:first-child {
     padding-left: 6px;
     font-size: 16px;
   }
