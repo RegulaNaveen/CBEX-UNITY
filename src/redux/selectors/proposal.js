@@ -494,8 +494,7 @@ export const selectNextMilestone = createSelector(
           }
           return diff;
         });
-      console.log('sorted', sortedMilestones);
-      return sortedMilestones[0].name;
+      return sortedMilestones[0]?.name;
     }
     return '';
   }
