@@ -92,8 +92,27 @@ const QuestionItem = ({
   const [iconColor, seticonColor] = useState('#00c221');
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -662,6 +681,8 @@ const QuestionItem = ({
                   <div className="question-label-inner">
                     <div ref={questionTextRef} className="question-title-txt">
                       <QuestionLabel
+                        ref={questionTextRef1}
+                        questionJSON={question?.questionJSON}
                         questionLabel={question?.questionText || ''}
                       />
                       {!isEmpty(question?.questionLockInfo) &&

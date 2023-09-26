@@ -80,9 +80,32 @@ const QuestionItem = ({
   const isShowQuestion = shouldShowQuestion(question, approvalFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+
   const dispatch = useDispatch();
+
+  const resize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
     if (
@@ -344,51 +367,50 @@ const QuestionItem = ({
     if (questionHint) {
       return (
         <div className="question-hint" style={{ paddingLeft: '10px' }}>
-            <IconButton
-              data-testid="approval-icon-button" 
-              color="primary"
-              size="small"
-              className="question-tooltip-icon" 
-              onClick={(e) => setAnchorEl(e.currentTarget)}
-            >
-              <InfoIcon style={{ fontSize: '16px' }} />
-            </IconButton>
-            <Popover
-              data-testid="popover-approval"
-              className="popover-approval"
-              open={!!anchorEl}
-              anchorEl={anchorEl}
-              onClose={() => setAnchorEl(null)}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              PaperProps={{
-                style: { 
-                  borderColor: '#e9e9e9', 
-                  boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                  padding: 10,
-                  maxInlineSize: '300px',
-                },
-              }}
-            >
-              <Typography>{
-                questionHintJSON ? (
-                  <RichTextEditor
-                    variant="view"
-                    defaultValue={JSON.parse(questionHintJSON)}
-                    ref={handleHintRef}
-                  />
-                ) : (
-                  <div>{questionHint}</div>
-                )
+          <IconButton
+            data-testid="approval-icon-button"
+            color="primary"
+            size="small"
+            className="question-tooltip-icon"
+            onClick={e => setAnchorEl(e.currentTarget)}
+          >
+            <InfoIcon style={{ fontSize: '16px' }} />
+          </IconButton>
+          <Popover
+            data-testid="popover-approval"
+            className="popover-approval"
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+            PaperProps={{
+              style: {
+                borderColor: '#e9e9e9',
+                boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                padding: 10,
+                maxInlineSize: '300px'
               }
-              </Typography>
-            </Popover>
+            }}
+          >
+            <Typography>
+              {questionHintJSON ? (
+                <RichTextEditor
+                  variant="view"
+                  defaultValue={JSON.parse(questionHintJSON)}
+                  ref={handleHintRef}
+                />
+              ) : (
+                <div>{questionHint}</div>
+              )}
+            </Typography>
+          </Popover>
         </div>
       );
     }
@@ -421,8 +443,10 @@ const QuestionItem = ({
                     }}
                   >
                     <QuestionLabel
+                      ref={questionTextRef1}
+                      questionJSON={question?.questionJSON}
                       questionLabel={question?.questionText || ''}
-                    />   
+                    />
                   </Grid>
                   <Grid
                     item
@@ -434,7 +458,7 @@ const QuestionItem = ({
                   >
                     {renderQuestionHint()}
                   </Grid>
-                </span>      
+                </span>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
