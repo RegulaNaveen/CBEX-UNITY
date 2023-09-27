@@ -35,7 +35,8 @@ const StatementItem = ({
   disabled,
   eventCategories,
   trackEvent,
-  updateQuestionVisibility
+  updateQuestionVisibility,
+  questionJSON
 }) => {
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
@@ -47,8 +48,11 @@ const StatementItem = ({
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef();
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -74,6 +78,25 @@ const StatementItem = ({
       }
     }
   }, [questionTextRef.current, currentSearchResult, questionId]);
+  const resize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
 
   const renderTags = () => {
     const { milestone, milestoneNew } = question;
@@ -212,9 +235,18 @@ const StatementItem = ({
                 <div className="question-label-container">
                   <div className="question-label-inner">
                     <div ref={questionTextRef} className="question-title-txt">
-                      <QuestionLabel
-                        questionLabel={question?.questionText || ''}
-                      />
+                      {questionJSON ? (
+                        <RichTextEditor
+                          style={{ minHeight: '0px' }}
+                          variant="view"
+                          defaultValue={JSON.parse(questionJSON)}
+                          ref={questionTextRef1}
+                        />
+                      ) : (
+                        <Typography className="ques-title">
+                          {question.questionText}
+                        </Typography>
+                      )}
                     </div>
 
                     <div className="question-hint">{renderQuestionHint()}</div>

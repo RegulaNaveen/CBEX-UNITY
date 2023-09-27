@@ -16,6 +16,7 @@ const SwitchItem = ({
       questionId={questionId}
       UnityTabSectionTitle={UnityTabSectionTitle}
       disabled={disabled}
+      questionJSON={question?.questionJSON}
     />
   ) : (
     <QuestionItem

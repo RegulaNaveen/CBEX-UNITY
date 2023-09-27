@@ -1012,6 +1012,7 @@ const onQuestionSectionError = (state: Map, action: Object): Map => {
 
 const onAnswerTypesLoaded = (state: Map, action: Object): Map => {
   const answertypes = action.payload;
+  console.log('answer types are', answertypes);
   return state
     .set('proposalAnswerTypes', answertypes)
     .set('isAnswerTypesLoading', false);
