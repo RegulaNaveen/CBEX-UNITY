@@ -60,7 +60,7 @@ const StatementItem = ({
   };
 
   useEffect(() => {
-    window.addEventListener('resize', resize); // doubt -Akash
+    window.addEventListener('resize', resize); 
 
     resize();
     setTimeout(() => {
@@ -177,8 +177,6 @@ const StatementItem = ({
     }
     return null;
   };
-  console.log('questionJSON', questionJSON);
-
   const questionRender = useMemo(
     () =>
       isShowQuestion ? (
@@ -213,7 +211,7 @@ const StatementItem = ({
                       />
                     ) : (
                       <Typography className="ques-title">
-                        {questionLabel}
+                        {question?.questionText}
                       </Typography>
                     )}
                   </Grid>
