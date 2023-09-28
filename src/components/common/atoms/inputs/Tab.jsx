@@ -111,6 +111,14 @@ const CustomTabs = React.lazy(() =>
   )
 );
 
+const EmailTemplates = React.lazy(() => 
+  lazyWithRetry(() => 
+    import(
+      /* webpackChunkName: "EmailTemplates" */ '../../../screens/Opportunity/EmailTemplates'
+    )
+  )
+);
+
 const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const defaultTabs = [
     {
@@ -192,6 +200,8 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const notepadMaxWidthPx = isOpen
     ? notepadMinWidthPx
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+  const [showEmailTemplatesTab, setshowEmailTemplatesTab] = useState(false);
+
   const calculateTab = val => {
     const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
     if (questionCount) {
@@ -429,6 +439,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     setShowNotepadTab(notepadFlag);
     setShowProposalTeamTab(proposalTeamFlag);
     setShowshowKeyMilestoneDeliverableTab(true);
+    setshowEmailTemplatesTab(true)
   }
 
   const evalAndSetVTabCollapse = useCallback(
@@ -850,8 +861,8 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
                     pd: props =>
                       `Proposal Detail (CRM#: ${
                         props && props.proposalDetail
-                          ? props.proposalDetail['CRM #']
-                          : ''
+                        ? props.proposalDetail['CRM #']
+                        : ''
                       })`,
                     plainPd: `Proposal Detail`,
                     tb: `ToolBar Menu`,
@@ -975,6 +986,60 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         </div>
       );
     }
+    if (activeVerticleTab === 'emailtemplatestab') {
+      return (
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          ref={refVal => setPanelRef(refVal)}
+          className={classNames({
+            collapsed: vtabCollpased
+          })}
+        >
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            style={{ borderRadius: '5px' }}
+            resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
+            }}
+          >
+            <Suspense
+              fallback={
+                <Spinner
+                  type="TailSpin"
+                  color="#297DFD"
+                  width={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                  }}
+                />
+              }
+            >
+              <EmailTemplates />
+            </Suspense>
+          </Panel>
+        </div>
+      );
+    }
   };
 
   const renderTabList = () => {
@@ -1011,8 +1076,10 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     if (!showQuestionsForCustomerTab) {
       if (!showNotepadTab) {
         activeVerticleTab = 'proposalteamtab';
-      } else {
+      } else if (!showProposalTeamTab) {
         activeVerticleTab = 'showNotepadTab';
+      } else {
+        activeVerticleTab = 'showEmailTemplatesTab'
       }
     } else if (showKeyMilestoneDeliverableTab) {
       activeVerticleTab = 'showKeyMilestoneDeliverableTab';
@@ -1034,6 +1101,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
                 showProposalTeamTab={showProposalTeamTab}
                 showKeyMilestoneDeliverableTab={showKeyMilestoneDeliverableTab}
                 activeVerticleTab={activeVerticleTab}
+                showEmailTemplatesTab={showEmailTemplatesTab}
                 renderPanel={activeTab => {
                   // Check activeTab value and render required component
                   return <>{renderVerticleTabsComponent(activeTab)}</>;
