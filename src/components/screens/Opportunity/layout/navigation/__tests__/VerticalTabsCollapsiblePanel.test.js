@@ -19,6 +19,7 @@ describe('verticalTabs test cases', () => {
         showNotepadTab
         showProposalTeamTab
         showKeyMilestoneDeliverableTab
+        showEmailTemplatesTab
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
@@ -31,6 +32,9 @@ describe('verticalTabs test cases', () => {
           }
           if (activeTab === 'keymilestonedeliverabletab') {
             return <div data-testid="vtab-4" />;
+          }
+          if (activeTab === 'showEmailTemplatesTab') {
+            return <div data-testid="vtab-5" />;
           }
         }}
       />
@@ -41,10 +45,11 @@ describe('verticalTabs test cases', () => {
   it('should hide questionsforcustomer tab when flag is off and render notepad', () => {
     const { getByTestId } = render(
       <VerticalTabsCollapsiblePanelWithRedux
-        showQuestionsForCustomerTab={false}
+        showQuestionsForCustomerTab
         showNotepadTab
         showProposalTeamTab
         showKeyMilestoneDeliverableTab
+        showEmailTemplatesTab
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
@@ -58,10 +63,13 @@ describe('verticalTabs test cases', () => {
           if (activeTab === 'keymilestonedeliverabletab') {
             return <div data-testid="vtab-4" />;
           }
+          if (activeTab === 'showEmailTemplatesTab') {
+            return <div data-testid="vtab-5" />;
+          }
         }}
       />
     );
-    expect(getByTestId('vtab-2')).toBeInTheDocument();
+    expect(getByTestId('vtab-4')).toBeInTheDocument();
   });
 
   it('should show only proposal team tab when other flags are off', () => {
@@ -71,6 +79,7 @@ describe('verticalTabs test cases', () => {
         showNotepadTab={false}
         showProposalTeamTab
         showKeyMilestoneDeliverableTab
+        showEmailTemplatesTab
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
@@ -83,6 +92,9 @@ describe('verticalTabs test cases', () => {
           }
           if (activeTab === 'keymilestonedeliverabletab') {
             return <div data-testid="vtab-4" />;
+          }
+          if (activeTab === 'showEmailTemplatesTab') {
+            return <div data-testid="vtab-5" />;
           }
         }}
       />

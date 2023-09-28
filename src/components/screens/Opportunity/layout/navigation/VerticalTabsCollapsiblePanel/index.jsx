@@ -13,6 +13,7 @@ import {
 import NotesIcon from '../../../../../svg/Notes';
 import QuestionsForCustomerIcon from '../../../../../svg/QuestionsForCustomer';
 import ProposalTeamIcon from '../../../../../svg/ProposalTeam';
+import EmailTemplatesIcon from '../../../../../svg/EmailTemplates';
 import KeyMilestoneDeliverableTimelinesIcon from '../../../../../svg/KeyMilestoneDeliverableTimelines';
 import './styles.scss';
 import { selectActiveVTabIndex } from '../../../../../../redux/selectors/proposal';
@@ -28,6 +29,8 @@ function getTabNameFromIndex(index) {
     return 'proposalteamtab';
   } else if (index === 3) {
     return 'keymilestonedeliverabletab';
+  } else if (index === 4) {
+    return 'emailtemplatestab'
   }
 }
 const VerticalTabs = styled(Tabs)({
@@ -60,6 +63,7 @@ function VerticalTabsCollapsiblePanel({
   showNotepadTab,
   showProposalTeamTab,
   showKeyMilestoneDeliverableTab,
+  showEmailTemplatesTab,
   activeVerticleTab,
   onTabClick
 }) {
@@ -71,8 +75,10 @@ function VerticalTabsCollapsiblePanel({
     if (!showQuestionsForCustomerTab) {
       if (!showNotepadTab) {
         dispatch(setVTabActiveIndexAction(2));
-      } else {
+      } else if (!showEmailTemplatesTab) {
         dispatch(setVTabActiveIndexAction(1));
+      } else {
+        dispatch(setVTabActiveIndexAction(4))
       }
     } else {
       dispatch(setVTabActiveIndexAction(3));
@@ -81,13 +87,15 @@ function VerticalTabsCollapsiblePanel({
     showQuestionsForCustomerTab,
     showNotepadTab,
     showProposalTeamTab,
-    showKeyMilestoneDeliverableTab
+    showKeyMilestoneDeliverableTab,
+    showEmailTemplatesTab
   ]);
   const tabArr = [
     { showQuestionsForCustomerTab },
     { showNotepadTab },
     { showProposalTeamTab },
-    { showKeyMilestoneDeliverableTab } // Add this line
+    { showKeyMilestoneDeliverableTab }, // Add this line
+    { showEmailTemplatesTab }
   ];
 
   function handleTabChange(event, newActiveTab) {
@@ -108,7 +116,7 @@ function VerticalTabsCollapsiblePanel({
                 <QuestionsForCustomerIcon
                   fill={
                     getTabNameFromIndex(activeTabIndex) ===
-                    'showQuestionsForCustomerTab'
+                      'showQuestionsForCustomerTab'
                       ? '#0557d5'
                       : '#999999'
                   }
@@ -173,13 +181,35 @@ function VerticalTabsCollapsiblePanel({
                 <KeyMilestoneDeliverableTimelinesIcon
                   fill={
                     getTabNameFromIndex(activeTabIndex) ===
-                    'keymilestonedeliverabletab'
+                      'keymilestonedeliverabletab'
                       ? '#0557d5'
                       : '#999999 '
                   }
                 />
               }
               // className={`${showKeyMilestoneDeliverableTab ? '' : 'hide'}`}
+            />
+          </div>
+        );
+      }
+      if (
+        v['showEmailTemplatesTab'] !== undefined &&
+        v['showEmailTemplatesTab'] !== null
+      ) {
+        return (
+          <div onClick={e => handleTabChange(e, 4)} key={`vTab-EMAIL-${vIdx}`}>
+            <VerticalTab
+              textColor="primary"
+              icon={
+                <EmailTemplatesIcon
+                  fill={
+                    getTabNameFromIndex(activeTabIndex) ===
+                      'emailtemplatestab'
+                      ? '#0557d5'
+                      : '#999999 '
+                  }
+                />
+              }
             />
           </div>
         );
@@ -194,26 +224,28 @@ function VerticalTabsCollapsiblePanel({
         showQuestionsForCustomerTab ||
         showNotepadTab ||
         showProposalTeamTab ||
-        showKeyMilestoneDeliverableTab
-          ? ''
-          : 'hide'
-      }`}
+        showKeyMilestoneDeliverableTab ||
+        showEmailTemplatesTab
+        ? ''
+        : 'hide'
+        }`}
     >
       {(showQuestionsForCustomerTab ||
         showNotepadTab ||
         showProposalTeamTab ||
-        showKeyMilestoneDeliverableTab) && (
-        <>
-          <VerticalTabs
-            value={activeTabIndex}
-            onChange={handleTabChange}
-            orientation="vertical"
-          >
-            {renderTab()}
-          </VerticalTabs>
-          {renderPanel(getTabNameFromIndex(activeTabIndex))}
-        </>
-      )}
+        showKeyMilestoneDeliverableTab ||
+        showEmailTemplatesTab) && (
+          <>
+            <VerticalTabs
+              value={activeTabIndex}
+              onChange={handleTabChange}
+              orientation="vertical"
+            >
+              {renderTab()}
+            </VerticalTabs>
+            {renderPanel(getTabNameFromIndex(activeTabIndex))}
+          </>
+        )}
     </div>
   );
 }

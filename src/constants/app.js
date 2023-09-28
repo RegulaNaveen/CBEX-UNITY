@@ -115,6 +115,19 @@ export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // 
 export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
 export const DEFAULT_TABS_LEN = 4;
 
+const EMAIL_TEMPLATES = {
+  EMAIL_TEMPLATES_TITLE: "Email Templates",
+  EMAILS_IN_THIS_GROUP: "Emails in this group",
+  EMAIL_TEXT:
+    "Here are the answers to question that will determine your email content",
+  INTERNAL_REQUESTED_SERVICES: "Internal Reuqested Services",
+  NOEMAIL_TEMPLATES_AVAIABLE_TEXT:
+    "No Email Templates available for this Opportunity Type.",
+  TO: "To",
+  CC: "CC",
+  PARAMETERS: 'Parameters'
+};
+
 export {
   DEFAULT,
   PROPOSAL,
@@ -122,5 +135,6 @@ export {
   PROFILE,
   APPROVALS,
   SEARCH,
-  BID_TYPES
+  BID_TYPES,
+  EMAIL_TEMPLATES
 };
