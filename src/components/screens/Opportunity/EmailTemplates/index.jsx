@@ -124,7 +124,7 @@ const EmailTemplates = () => {
   };
 
   const handleSendEmailClick = (row) => {
-    // console.log(row);
+    console.log(row);
   };
 
   const DetailRow = ({ row }) => {
