@@ -66,6 +66,7 @@ import {
   clearSearchAction,
   closeSearchAction
 } from '../../../redux/actions/search-actions';
+import { fetchEmailTemplates } from '../../../redux/actions/emailTemplate-actions';
 
 type State = {
   selectedView: string
@@ -136,7 +137,8 @@ export class Opportunity extends Component<Props, State> {
       ProposalLoading,
       getIntegrationsData,
       updateProposalDetail,
-      history
+      history,
+      fetchEmailTemplates
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
@@ -156,6 +158,7 @@ export class Opportunity extends Component<Props, State> {
     getSFNonEditabelInfoField();
     getOpportunityInfo(params.id, bidNumber, bidType, history);
     getIntegrationsData();
+    fetchEmailTemplates();
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
     if ((this.props && location && location?.pathname) !== UBUILD) {
@@ -434,6 +437,7 @@ export default compose(
     saverecentoppactivity: saveRecentOppActivity,
     toggleEditCustomNameModal,
     onEditCustomName,
-    updateProposalDetailFromWebSocket
+    updateProposalDetailFromWebSocket,
+    fetchEmailTemplates
   })
 )(MatomoHOC(Opportunity));
