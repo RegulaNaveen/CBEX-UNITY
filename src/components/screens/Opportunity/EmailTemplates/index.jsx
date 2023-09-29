@@ -144,7 +144,6 @@ const EmailTemplates = () => {
 
   const handleSendEmailClick = async row => {
     let EmailTemplateTORolesAnswer = [];
-    let EmailTemplateCCRolesAnswer = [];
     let tempQuestion = [];
     let ProposalTeamQuestion = allSections.filter(
       item => item.get('sectionName') === 'Proposal Team'
@@ -178,7 +177,7 @@ const EmailTemplates = () => {
           if (email) {
             email = email.substr(0, [email.length - 1]);
           }
-          EmailTemplateTORolesAnswe.push(email);
+          EmailTemplateTORolesAnswer.push(email);
         }
       }
     }
@@ -196,7 +195,7 @@ const EmailTemplates = () => {
           if (email) {
             email = email.substr(0, [email.length - 1]);
           }
-          EmailTemplateCCRolesAnswer.push(email);
+          EmailTemplateTORolesAnswer.push(email);
         }
       }
     }
@@ -212,7 +211,7 @@ const EmailTemplates = () => {
     if (row?.EmailTemplateCC && row?.EmailTemplateCC?.length) {
       row?.EmailTemplateCC.map(value => {
         if (value && value.Type === 'Email') {
-          EmailTemplateCCRolesAnswer.push(value.Value);
+          EmailTemplateTORolesAnswer.push(value.Value);
         }
       });
     }
@@ -240,17 +239,9 @@ const EmailTemplates = () => {
     const blob = new Blob([updatedBody], { type: 'text/html' });
     const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     await navigator.clipboard.write([clipboardItem]);
-
-    if (
-      EmailTemplateTORolesAnswer?.length ||
-      EmailTemplateCCRolesAnswer?.length
-    ) {
+    if (EmailTemplateTORolesAnswer?.length) {
       window.open(
-        generateApprovalEmailURL(
-          subjectStr,
-          EmailTemplateTORolesAnswer,
-          EmailTemplateCCRolesAnswer
-        )
+        generateApprovalEmailURL(subjectStr, EmailTemplateTORolesAnswer, [])
       );
     }
   };
