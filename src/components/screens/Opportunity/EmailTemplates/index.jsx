@@ -144,6 +144,7 @@ const EmailTemplates = () => {
 
   const handleSendEmailClick = async row => {
     let EmailTemplateTORolesAnswer = [];
+    let EmailTemplateCCRoleAnswer = [];
     let tempQuestion = [];
     let ProposalTeamQuestion = allSections.filter(
       item => item.get('sectionName') === 'Proposal Team'
@@ -195,7 +196,7 @@ const EmailTemplates = () => {
           if (email) {
             email = email.substr(0, [email.length - 1]);
           }
-          EmailTemplateTORolesAnswer.push(email);
+          EmailTemplateCCRoleAnswer.push(email);
         }
       }
     }
@@ -211,7 +212,7 @@ const EmailTemplates = () => {
     if (row?.EmailTemplateCC && row?.EmailTemplateCC?.length) {
       row?.EmailTemplateCC.map(value => {
         if (value && value.Type === 'Email') {
-          EmailTemplateTORolesAnswer.push(value.Value);
+          EmailTemplateCCRoleAnswer.push(value.Value);
         }
       });
     }
@@ -239,9 +240,16 @@ const EmailTemplates = () => {
     const blob = new Blob([updatedBody], { type: 'text/html' });
     const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     await navigator.clipboard.write([clipboardItem]);
-    if (EmailTemplateTORolesAnswer?.length) {
+    if (
+      EmailTemplateTORolesAnswer?.length ||
+      EmailTemplateCCRoleAnswer?.length
+    ) {
       window.open(
-        generateApprovalEmailURL(subjectStr, EmailTemplateTORolesAnswer, [])
+        generateApprovalEmailURL(
+          subjectStr,
+          EmailTemplateTORolesAnswer,
+          EmailTemplateCCRoleAnswer
+        )
       );
     }
   };
@@ -259,13 +267,13 @@ const EmailTemplates = () => {
           <div style={{ marginBottom: 4 }}>
             <b>{EMAIL_TEMPLATES.TO}: </b>
             {getEmailsTooltipInfo(row.EmailTemplateTO)}
-            {row.EmailTemplateTO.length > 0 && <span>, </span>}
+            {/* {row.EmailTemplateTO.length > 0 && <span>, </span>} */}
             {row.EmailTemplateTORoles}
           </div>
           <div style={{ marginBottom: 4 }}>
             <b>{EMAIL_TEMPLATES.CC}: </b>
             {getEmailsTooltipInfo(row.EmailTemplateCC)}
-            {row.EmailTemplateCC.length > 0 && <span>, </span>}
+            {/* {row.EmailTemplateCC.length > 0 && <span>, </span>} */}
             {row.EmailTemplateCCRoles}
           </div>
         </div>
