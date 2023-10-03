@@ -60,6 +60,7 @@ const EmailTemplates = () => {
     return (
       <div>
         <IconButton
+          data-testid="expand-cell"
           id="expand"
           size="small"
           onClick={() => handleToggleRow(EmailTemplateId)}
@@ -120,6 +121,7 @@ const EmailTemplates = () => {
         return (
           <span key={index}>
             <Tooltip
+              data-testid="tooltip-btn"
               title={EMAIL_TEMPLATES.EMAILS_IN_THIS_GROUP}
               subtitle={item?.GroupValues}
               placement="top"
@@ -288,6 +290,7 @@ const EmailTemplates = () => {
         </div>
         <div className="email-button">
           <Button
+            data-testid="email-btn"
             variant="primary"
             icon={<EmailClick fontSize="extraSmall" />}
             style={{ marginRight: 10 }}
