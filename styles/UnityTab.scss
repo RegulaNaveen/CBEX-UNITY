@@ -96,4 +96,20 @@
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }
+
+  
+}
+
+.unity-tab-question-item {
+  margin: 2px 0px !important;
+  
+  .RichEditor-editor {
+    line-height: 1.2;
+    .public-DraftStyleDefault-block {
+      margin: 0 !important;
+    }
+  }
+}
+.accordion-body{
+  padding-right: 0;
 }

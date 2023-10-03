@@ -85,7 +85,7 @@
     }
 
     .MuiBox-root {
-      padding: 10px 8px !important;
+      padding: 10px 8px;
       margin-top: 1.25rem;
 
       &:first-child {
@@ -228,6 +228,7 @@
   .RichEditor-editor .public-DraftEditor-content {
     font-size: 14px !important;
     display: contents !important;
+    
   }
 
   .public-DraftStyleDefault-block {
@@ -242,3 +243,24 @@
 .approvals-warning-modal {
   max-width: 342px;
 }
+
+
+.all-approvals-container {
+  margin: 2px 0px !important;
+  .RichEditor-editor {
+    line-height: 1.2;
+    .public-DraftStyleDefault-block {
+      margin: 0 !important;
+    }
+  }
+  .MuiBox-root{
+    padding: 2px 2px !important;
+    margin-top: 0px !important;
+  }
+
+
+}
+
+
+
+
