@@ -27236,5 +27236,37 @@
       }
     },
     "isSetQuestionLoading": false
+  },
+  "emailTemplates": {
+    "emailTemplatesList": [
+      {
+        "EmailTemplateName": "concurrency",
+        "EmailTemplateDescription": "Description",
+        "EmailTemplateTORoles": "",
+        "EmailTemplateCC": [
+          {
+            "Value": "keerthiprasath.chandran@iqvia.com",
+            "Type": "Email"
+          }
+        ],
+        "EmailTemplateBody": "",
+        "EmailTemplateSubject": "",
+        "EmailTemplateId": "cb7785f5-ee69-41cd-be22-7baef15c7185",
+        "EmailTemplateTO": [
+          {
+            "Value": "sushil.munda@iqvia.com",
+            "Type": "Email"
+          },
+          {
+            "GroupName": "Test GroupName",
+            "Type": "EmailGroup"
+          }
+        ],
+        "EmailTemplateOpportunityTypes": "Core Opportunity Launch Call (APAC)",
+        "EmailTemplateCCRoles": ""
+      }
+    ],
+    "fetchEmailTemplatesErrorMsg": "",
+    "isLoadingEmailTemplates": true
   }
 }
