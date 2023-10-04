@@ -22,7 +22,7 @@ import {
   getSelectedBid,
   selectSections
 } from '../../../../redux/selectors';
-import { generateApprovalEmailURL } from '../../../../utils/emailUtils';
+import { generateEmailTemplateEmail } from '../../../../utils/emailUtils';
 import { updateEventSubjectBody } from '../../../../utils/utils';
 import { isMap } from 'lodash';
 import {
@@ -239,18 +239,22 @@ const EmailTemplates = () => {
       placeholderData,
       'body'
     );
-    const blob = new Blob([updatedBody], { type: 'text/html' });
-    const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
-    await navigator.clipboard.write([clipboardItem]);
+    if (updatedBody) {
+      const blob = new Blob([updatedBody], { type: 'text/html' });
+      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+      await navigator.clipboard.write([clipboardItem]);
+    }
+
     if (
       EmailTemplateTORolesAnswer?.length ||
       EmailTemplateCCRoleAnswer?.length
     ) {
       window.open(
-        generateApprovalEmailURL(
+        generateEmailTemplateEmail(
           subjectStr,
           EmailTemplateTORolesAnswer,
-          EmailTemplateCCRoleAnswer
+          EmailTemplateCCRoleAnswer,
+          updatedBody
         )
       );
     }
