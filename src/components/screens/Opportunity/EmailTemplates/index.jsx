@@ -263,7 +263,7 @@ const EmailTemplates = () => {
   const DetailRow = ({ row }) => {
     return (
       <div className="detailed-row">
-        <Typography style={{ fontWeight: 500, color: neutral8 }}>
+        <Typography style={{ fontWeight: 600, color: neutral8 }}>
           {EMAIL_TEMPLATES.PARAMETERS}
         </Typography>
         <Typography style={{ fontSize: 13, color: '#999999' }} variant="body2">
@@ -339,11 +339,23 @@ const EmailTemplates = () => {
             <Table
               title={EMAIL_TEMPLATES.EMAIL_TEMPLATES_TITLE}
               columns={columns}
-              rows={emailTemplatesList.map(row => ({
-                ...row,
-                handleToggleRow,
-                expanded: expandedRows.includes(row.EmailTemplateId)
-              }))}
+              rows={emailTemplatesList
+                .filter(emailTemplate => {
+                  return (
+                    emailTemplate.EmailTemplateOpportunityTypes &&
+                    emailTemplate.EmailTemplateOpportunityTypes.length > 0 &&
+                    typeof emailTemplate.EmailTemplateOpportunityTypes ===
+                      'string' &&
+                    emailTemplate.EmailTemplateOpportunityTypes.split(
+                      ','
+                    ).includes(selectedBid.toJS().opportunityType)
+                  );
+                })
+                .map(row => ({
+                  ...row,
+                  handleToggleRow,
+                  expanded: expandedRows.includes(row.EmailTemplateId)
+                }))}
               ExpandableComponent={ExpandableRow}
               rowId="EmailTemplateId"
               initialSortOrder="asc"
