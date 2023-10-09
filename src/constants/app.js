@@ -116,15 +116,15 @@ export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
 export const DEFAULT_TABS_LEN = 4;
 
 const EMAIL_TEMPLATES = {
-  EMAIL_TEMPLATES_TITLE: "Email Templates",
-  EMAILS_IN_THIS_GROUP: "Emails in this group",
+  EMAIL_TEMPLATES_TITLE: 'Email Templates',
+  EMAILS_IN_THIS_GROUP: 'Emails in this group',
   EMAIL_TEXT:
-    "Here are the answers to question that will determine your email content",
-  INTERNAL_REQUESTED_SERVICES: "Internal Reuqested Services",
+    'Here are the answers to question that will determine your email content',
+  INTERNAL_REQUESTED_SERVICES: 'Internal Requested Services',
   NOEMAIL_TEMPLATES_AVAIABLE_TEXT:
-    "No Email Templates available for this Opportunity Type.",
-  TO: "To",
-  CC: "CC",
+    'No Email Templates available for this Opportunity Type.',
+  TO: 'To',
+  CC: 'CC',
   PARAMETERS: 'Parameters'
 };
 
