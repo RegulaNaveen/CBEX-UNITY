@@ -69,6 +69,7 @@ const SectionActive = ({
               UnityTabSectionTitle={UnityTabSectionTitle}
               key={item}
               disabled={!selectedBidIsCurrent}
+              tabId = {tabId}
             />
           ))}
 

@@ -15,7 +15,6 @@ export const setUnityQuestionData = async (
   ): Promise<Object> => {
     
     return new Promise((resolve, reject) => {
-      console.log("hello")
       axiosInstance
         .post(`${CUSTOM_QUESTIONS_API_URL}/${proposalId}`, questionData, {
           headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }

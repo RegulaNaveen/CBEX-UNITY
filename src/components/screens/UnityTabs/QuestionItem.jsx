@@ -78,7 +78,8 @@ const QuestionItem = ({
   disabled,
   eventCategories,
   trackEvent,
-  updateQuestionVisibility
+  updateQuestionVisibility,
+  tabId
 }) => {
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
@@ -696,7 +697,7 @@ const QuestionItem = ({
                             questionJSON:question.questionJSON,
                             questionHintJSON:question.questionHintJSON,
                             section: question.section.sectionName,
-                            tabId: question.section.tabID,
+                            tabId:tabId,
                             answerType: question.answerConfiguration.type,
                             roleNames:question.roleNames,
                             questionId:question.questionId,

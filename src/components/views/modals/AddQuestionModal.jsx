@@ -25,7 +25,8 @@ import {
   getProposalDetails,
   getIsOpen,
   getEditQuestionData,
-  getSelectedBid
+  getSelectedBid,
+  getAllUnityTab
 } from '../../../redux/selectors';
 import {
   selectSectionNames,
@@ -74,7 +75,8 @@ type Props = {
   deleteProposalQuestion: (data: Object) => void,
   deleteUnityQuestion: (data: Object) => void,
   selectedBid: Map,
-  isOnlyDateAnswer: boolean
+  isOnlyDateAnswer: boolean,
+  allUnityTab: Map
 };
 
 type State = {
@@ -90,7 +92,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   constructor(props: Object) {
     super(props);
-
     this.state = {
       questionText: '',
       section: undefined,
@@ -98,16 +99,21 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       roleNames: [],
       error: [],
       submit: false,
-      loaderText: 'Uploading Question'
+      loaderText: 'Uploading Question',
+      unityAllTabSection: [],
+      unityAllSectionOrderInfo: []
     };
   }
 
   componentDidMount() {
+    let tabId = this.props.tabId;
     const {
       getAnswerTypesDataF,
       getRolesInfoF,
       editQuestionsData,
-      isOnlyDateAnswer
+      isOnlyDateAnswer,
+      allUnityTab,
+
     } = this.props;
     getAnswerTypesDataF();
     getRolesInfoF();
@@ -121,13 +127,34 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         answerType: editQuestionsData.get('answerType'),
         roleNames: editQuestionsData.get('roleNames').toJS()
       });
+
+      tabId = editQuestionsData.get('tabId')
+
     }
 
     if (isOnlyDateAnswer) {
       this.setState({ answerType: 'date' });
     }
-  }
+    
+    let tab = allUnityTab[tabId];
+    const sectionUnity = [];
+    const sectionOrderInfoUnity = [];
+    {
+      tab.length > 0 && tab.map(item => (
+        sectionUnity.push(item.UnityTabSectionTitle),
+        sectionOrderInfoUnity.push({
+          sectionName: item.UnityTabSectionTitle,
+          sectionOrder: item.UnityTabSectionOrder,
+          tabID: tabId
+        })
+      ))
+      
+    }
 
+    this.setState({ unityAllTabSection: sectionUnity,unityAllSectionOrderInfo: sectionOrderInfoUnity});
+    
+  }
+  
   componentDidUpdate() {
     this.calculateHeight();
   }
@@ -162,10 +189,18 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onQuestionSectionChange = (value: string) => {
-    const { sectionsOrderInfo, unitysectionOrderInfo, tabFlag, tabId } = this.props;
+    let tabFlag = this.props.tabFlag;
+    let tabId = this.props.tabId;
+    const { sectionsOrderInfo, editQuestionsData } = this.props;
+    const { unityAllSectionOrderInfo } = this.state ;
+    const isEditMode = editQuestionsData.size > 0 || false;
+    if (isEditMode) {
+      tabFlag = editQuestionsData.get('tabFlag');
+      tabId = editQuestionsData.get('tabId');
+    }
     let sectionOrder = -1;
     if (tabFlag == "customTab") {
-      unitysectionOrderInfo.forEach((section: Object) => {
+      unityAllSectionOrderInfo.forEach((section: Object) => {
         const { sectionOrder: order, sectionName: name } = section;
         if (name === value) sectionOrder = order;
       });
@@ -183,9 +218,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           this.validateSection();
         });
     }
-
-
-
   };
 
   onAnswerTypeChange = (value: string) => {
@@ -290,9 +322,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onSave = () => {
+    let tabFlag = this.props.tabFlag;
     const { questionText, section, answerType, roleNames } = this.state;
-    const { tabFlag } = this.props;
-
     const {
       setProposalQuestionF,
       setUnityQuestionF,
@@ -302,6 +333,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       selectedBid
     } = this.props;
     const isEditMode = editQuestionsData.size > 0 || false;
+    if (isEditMode) {
+      tabFlag = editQuestionsData.get('tabFlag');
+    }
     this.setState({ submit: true }, () => {
       this.validateQuestionText(true);
       this.validateSection();
@@ -346,7 +380,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         }));
         if (isEditMode) {
           this.setState({ loaderText: 'Updating Question' });
-          if (editQuestionsData.get('tabFlag') == "customTab") {
+          if (tabFlag == "customTab") {
             editUnityQuestion(
               proposalId,
               editQuestionsData.get('questionId'),
@@ -431,6 +465,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
+
   renderContent = (
     onClose: Function,
     sectionNames: Array<string>,
@@ -441,30 +476,28 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   ) => {
     if (rolesList) rolesList = rolesList.sort();
     const { editQuestionsData, isOnlyDateAnswer } = this.props;
+    let tabFlag = this.props.tabFlag;
     const {
       questionText,
       section,
       answerType,
       roleNames,
       loaderText,
-      error
+      error,
+      unityAllTabSection
     } = this.state;
-    const {
-      tabFlag,
-      unitySectionName
-    } = this.props;
     var filteredSectionNames = ""
+    const isEditMode = editQuestionsData.size > 0 || false;
+    if (isEditMode) {
+      tabFlag = editQuestionsData.get("tabFlag");
+    }
     if (tabFlag == "customTab") {
-      filteredSectionNames = unitySectionName.length > 0 ? unitySectionName : "";
+      filteredSectionNames = unityAllTabSection.length > 0 ? unityAllTabSection : "";
     } else {
       filteredSectionNames = sectionNames.filter(
         sectionName => sectionName !== 'Questions_for_the_Customer_left_panel'
       );
-
     }
-
-
-    const isEditMode = editQuestionsData.size > 0 || false;
     const isQuestionAnswered = editQuestionsData.get('questionAnswered');
     if (!isLoading) {
       return (
@@ -703,6 +736,7 @@ const mapStateToProps = (state: Map) => {
   const sectionNames = selectSectionNames(state);
   const sectionsOrderInfo = selectSectionOrderInfo(state);
   const isSidebarOpen = getIsOpen(state);
+
   return {
     answerTypesList,
     rolesList,
@@ -715,7 +749,8 @@ const mapStateToProps = (state: Map) => {
     sectionsOrderInfo,
     isSidebarOpen,
     editQuestionsData: getEditQuestionData(state),
-    selectedBid: getSelectedBid(state)
+    selectedBid: getSelectedBid(state),
+    allUnityTab: getAllUnityTab(state)
   };
 };
 
