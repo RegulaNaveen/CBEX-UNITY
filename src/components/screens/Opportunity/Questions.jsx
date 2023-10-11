@@ -587,32 +587,34 @@ class Questions extends Component {
                     color="primary"
                     size="small"
                     className="question-tooltip-icon"
-                    onClick={(e) => this.setState({anchorEl: e.currentTarget})}
-                  >      
+                    onClick={e => this.setState({ anchorEl: e.currentTarget })}
+                  >
                     <InfoIcon className="info-icon" />
                   </IconButton>
                   <Popover
                     data-testid="questions-popover"
                     open={!!anchorEl}
                     anchorEl={anchorEl}
-                    onClose={() => this.setState({anchorEl: null})}
+                    onClose={() => this.setState({ anchorEl: null })}
                     anchorOrigin={{
                       vertical: 'bottom',
-                      horizontal: 'center',
+                      horizontal: 'center'
                     }}
                     transformOrigin={{
                       vertical: 'top',
-                      horizontal: 'center',
+                      horizontal: 'center'
                     }}
                     PaperProps={{
-                      style: { 
-                        borderColor: '#e9e9e9', 
-                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                        padding: 10 
-                      },
+                      style: {
+                        borderColor: '#e9e9e9',
+                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                        padding: 10
+                      }
                     }}
                   >
-                    <Typography variant="body2">{showNaCheckbox ? 'NA ON' : 'NA OFF'}</Typography>
+                    <Typography variant="body2">
+                      {showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                    </Typography>
                   </Popover>
                 </>
               </div>

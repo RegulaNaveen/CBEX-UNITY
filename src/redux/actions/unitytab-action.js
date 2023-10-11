@@ -129,6 +129,7 @@ export const editUnityQuestion = (
         payload: data
       });
       if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }

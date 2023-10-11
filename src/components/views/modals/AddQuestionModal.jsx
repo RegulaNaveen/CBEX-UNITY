@@ -111,8 +111,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       getRolesInfoF,
       editQuestionsData,
       isOnlyDateAnswer,
-      allUnityTab,
-
+      allUnityTab
     } = this.props;
     getAnswerTypesDataF();
     getRolesInfoF();
@@ -127,33 +126,36 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         roleNames: editQuestionsData.get('roleNames').toJS()
       });
 
-      tabId = editQuestionsData.get('tabId')
-
+      tabId = editQuestionsData.get('tabId');
     }
 
     if (isOnlyDateAnswer) {
       this.setState({ answerType: 'date' });
     }
-    
-    let tab = allUnityTab[tabId] ?allUnityTab[tabId] : "";
+
+    let tab = allUnityTab[tabId] ? allUnityTab[tabId] : '';
     const sectionUnity = [];
     const sectionOrderInfoUnity = [];
     {
-      tab.length > 0 && tab.map(item => (
-        sectionUnity.push(item.UnityTabSectionTitle),
-        sectionOrderInfoUnity.push({
-          sectionName: item.UnityTabSectionTitle,
-          sectionOrder: item.UnityTabSectionOrder,
-          tabID: tabId
-        })
-      ))
-      
+      tab.length > 0 &&
+        tab.map(
+          item => (
+            sectionUnity.push(item.UnityTabSectionTitle),
+            sectionOrderInfoUnity.push({
+              sectionName: item.UnityTabSectionTitle,
+              sectionOrder: item.UnityTabSectionOrder,
+              tabID: tabId
+            })
+          )
+        );
     }
 
-    this.setState({ unityAllTabSection: sectionUnity,unityAllSectionOrderInfo: sectionOrderInfoUnity});
-    
+    this.setState({
+      unityAllTabSection: sectionUnity,
+      unityAllSectionOrderInfo: sectionOrderInfoUnity
+    });
   }
-  
+
   componentDidUpdate() {
     this.calculateHeight();
   }
@@ -191,14 +193,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     let tabFlag = this.props.tabFlag;
     let tabId = this.props.tabId;
     const { sectionsOrderInfo, editQuestionsData } = this.props;
-    const { unityAllSectionOrderInfo } = this.state ;
+    const { unityAllSectionOrderInfo } = this.state;
     const isEditMode = editQuestionsData.size > 0 || false;
     if (isEditMode) {
       tabFlag = editQuestionsData.get('tabFlag');
       tabId = editQuestionsData.get('tabId');
     }
     let sectionOrder = -1;
-    if (tabFlag == "customTab") {
+    if (tabFlag == 'customTab') {
       unityAllSectionOrderInfo.forEach((section: Object) => {
         const { sectionOrder: order, sectionName: name } = section;
         if (name === value) sectionOrder = order;
@@ -332,7 +334,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       editQuestionsData,
       editProposalQuestion,
       editUnityQuestion,
-      selectedBid
+      selectedBid,
+      onClose
     } = this.props;
     const isEditMode = editQuestionsData.size > 0 || false;
     if (isEditMode) {
@@ -379,13 +382,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         }));
         if (isEditMode) {
           this.setState({ loaderText: 'Updating Question' });
-          if (tabFlag == "customTab") {
-            editUnityQuestion(
+          if (tabFlag == 'customTab') {
+            const result = editUnityQuestion(
               proposalId,
               editQuestionsData.get('questionId'),
               questionData,
               this.context
             );
+            if (result) onClose();
           } else {
             editProposalQuestion(
               proposalId,
@@ -396,8 +400,13 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           }
         } else {
           if (tabFlag == 'customTab') {
-            setUnityQuestionF(proposalId, questionData, this.context);
+            const result = setUnityQuestionF(
+              proposalId,
+              questionData,
+              this.context
+            );
             this.trackMatomoEventCreateQ(questionData);
+            if (result) onClose();
           } else {
             setProposalQuestionF(proposalId, questionData, this.context);
             this.trackMatomoEventCreateQ(questionData);
@@ -451,7 +460,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     });
   };
 
-
   renderContent = (
     onClose: Function,
     sectionNames: Array<string>,
@@ -472,13 +480,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       error,
       unityAllTabSection
     } = this.state;
-    var filteredSectionNames = ""
+    var filteredSectionNames = '';
     const isEditMode = editQuestionsData.size > 0 || false;
     if (isEditMode) {
-      tabFlag = editQuestionsData.get("tabFlag");
+      tabFlag = editQuestionsData.get('tabFlag');
     }
-    if (tabFlag == "customTab") {
-      filteredSectionNames = unityAllTabSection.length > 0 ? unityAllTabSection : "";
+    if (tabFlag == 'customTab') {
+      filteredSectionNames =
+        unityAllTabSection.length > 0 ? unityAllTabSection : '';
     } else {
       filteredSectionNames = sectionNames.filter(
         sectionName => sectionName !== 'Questions_for_the_Customer_left_panel'
