@@ -23,7 +23,7 @@ const generateSections = (
   try {
     let sections = Map();
     const userRole = role !== '' ? role : false;
-
+ 
     proposalQuestions.forEach(question => {
       const {
         questionId,
@@ -36,9 +36,12 @@ const generateSections = (
       const createSections = () => {
         let section = Map({});
         let questions = sections.getIn([sectionName, 'questions']) || Map({});
+        
 
         questions = questions.set(questionId, fromJS(question));
         questions = questions.sortBy(item => item.get('questionOrder'));
+        
+        
 
         section = section
           .set('sectionOrder', sectionOrder)
@@ -46,6 +49,7 @@ const generateSections = (
           .set('questions', questions);
 
         sections = sections.set(sectionName, section);
+        
       };
 
       if (filter && userRole) {
@@ -54,6 +58,7 @@ const generateSections = (
     });
 
     sections = sections.sortBy(section => section.get('sectionOrder'));
+    
 
     return sections;
   } catch (error) {

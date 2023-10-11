@@ -41,6 +41,12 @@ import {
 } from '../../../redux/actions/proposal-actions';
 import MatomoHOC from '../../HOC/MatomoHOC';
 import { SocketContext } from '../../../context/SocketContext';
+import {
+  setUnityQuestion,
+  editUnityQuestion,
+  deleteUnityQuestion,
+} from '../../../redux/actions/unitytab-action';
+
 
 type Props = {
   onClose: Function,
@@ -49,6 +55,7 @@ type Props = {
   getAnswerTypesDataF: Function,
   getRolesInfoF: Function,
   setProposalQuestionF: Function,
+  setUnityQuestionF: Function,
   isLoading: boolean,
   isQuestionSectionLoading: boolean,
   isAnswerTypesLoading: boolean,
@@ -63,7 +70,9 @@ type Props = {
   setEditQuestionData: (data: Object) => void,
   editQuestionsData: Map,
   editProposalQuestion: (data: Object) => void,
+  editUnityQuestion: (data: Object) => void,
   deleteProposalQuestion: (data: Object) => void,
+  deleteUnityQuestion: (data: Object) => void,
   selectedBid: Map,
   isOnlyDateAnswer: boolean
 };
@@ -116,7 +125,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
     if (isOnlyDateAnswer) {
       this.setState({ answerType: 'date' });
-      console.log('inside answer type', this.state.answerType);
     }
   }
 
@@ -154,18 +162,30 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   };
 
   onQuestionSectionChange = (value: string) => {
-    const { sectionsOrderInfo } = this.props;
+    const { sectionsOrderInfo, unitysectionOrderInfo, tabFlag, tabId } = this.props;
     let sectionOrder = -1;
-
-    sectionsOrderInfo.forEach((section: Object) => {
-      const { sectionOrder: order, sectionName: name } = section;
-      if (name === value) sectionOrder = order;
-    });
-
-    if (sectionOrder > -1 && value)
-      this.setState({ section: { sectionOrder, sectionName: value } }, () => {
-        this.validateSection();
+    if (tabFlag == "customTab") {
+      unitysectionOrderInfo.forEach((section: Object) => {
+        const { sectionOrder: order, sectionName: name } = section;
+        if (name === value) sectionOrder = order;
       });
+      if (sectionOrder > -1 && value)
+        this.setState({ section: { sectionOrder, sectionName: value, tabID: tabId } }, () => {
+          this.validateSection();
+        });
+    } else {
+      sectionsOrderInfo.forEach((section: Object) => {
+        const { sectionOrder: order, sectionName: name } = section;
+        if (name === value) sectionOrder = order;
+      });
+      if (sectionOrder > -1 && value)
+        this.setState({ section: { sectionOrder, sectionName: value } }, () => {
+          this.validateSection();
+        });
+    }
+
+
+
   };
 
   onAnswerTypeChange = (value: string) => {
@@ -271,10 +291,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
 
   onSave = () => {
     const { questionText, section, answerType, roleNames } = this.state;
+    const { tabFlag } = this.props;
+
     const {
       setProposalQuestionF,
+      setUnityQuestionF,
       editQuestionsData,
       editProposalQuestion,
+      editUnityQuestion,
       selectedBid
     } = this.props;
     const isEditMode = editQuestionsData.size > 0 || false;
@@ -292,29 +316,65 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         !isEmpty(roleNames)
       ) {
         const proposalId = selectedBid.get('id');
-        const questionData = {
-          proposalId,
-          questionText,
-          section,
-          answerType,
-          options: [],
-          roleNames
-        };
+        let questionData = {};
+        if (tabFlag == "customTab") {
+          questionData = {
+            proposalId,
+            questionText,
+            section,
+            answerType,
+            options: [],
+            roleNames,
+            type: "customTab"
+
+          };
+
+        } else {
+          questionData = {
+            proposalId,
+            questionText,
+            section,
+            answerType,
+            options: [],
+            roleNames
+          };
+
+        }
+
         this.setState(prevState => ({
           error: []
         }));
         if (isEditMode) {
           this.setState({ loaderText: 'Updating Question' });
+          if (editQuestionsData.get('tabFlag') == "customTab") {
+            editUnityQuestion(
+              proposalId,
+              editQuestionsData.get('questionId'),
+              questionData,
+              this.context
+            );
 
-          editProposalQuestion(
-            proposalId,
-            editQuestionsData.get('questionId'),
-            questionData,
-            this.context
-          );
+          } else {
+            editProposalQuestion(
+              proposalId,
+              editQuestionsData.get('questionId'),
+              questionData,
+              this.context
+            )
+          }
+
+
         } else {
-          setProposalQuestionF(proposalId, questionData, this.context);
-          this.trackMatomoEventCreateQ(questionData);
+          if (tabFlag == "customTab") {
+            setUnityQuestionF(proposalId, questionData, this.context)
+            this.trackMatomoEventCreateQ(questionData);
+          } else {
+            setProposalQuestionF(proposalId, questionData, this.context);
+            this.trackMatomoEventCreateQ(questionData);
+
+          }
+
+
         }
       }
     });
@@ -323,16 +383,38 @@ export class AddQuestionModal extends PureComponent<Props, State> {
   onDelete = () => {
     const {
       deleteProposalQuestion,
+      deleteUnityQuestion,
       editQuestionsData,
-      selectedBid
+      selectedBid,
     } = this.props;
+
     const proposalId = selectedBid.get('id');
+    const tabFlag = editQuestionsData.get('tabFlag');
     this.setState({ loaderText: 'Deleting Question' });
-    const res = deleteProposalQuestion(
-      proposalId,
-      editQuestionsData.get('questionId'),
-      this.context
-    );
+
+    if (tabFlag == "customTab") {
+
+      const question_data = {
+        proposalId: proposalId,
+        questionId: editQuestionsData.get('questionId'),
+        sectioName: editQuestionsData.get('section'),
+        tabId: editQuestionsData.get('tabId'),
+        type: tabFlag
+
+      }
+      const res = deleteUnityQuestion(
+        question_data,
+        this.context
+      );
+
+    } else {
+      const res = deleteProposalQuestion(
+        proposalId,
+        editQuestionsData.get('questionId'),
+        this.context
+      );
+    }
+
   };
 
   trackMatomoEventCreateQ = data => {
@@ -367,9 +449,21 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       loaderText,
       error
     } = this.state;
-    const filteredSectionNames = sectionNames.filter(
-      sectionName => sectionName !== 'Questions_for_the_Customer_left_panel'
-    );
+    const {
+      tabFlag,
+      unitySectionName
+    } = this.props;
+    var filteredSectionNames = ""
+    if (tabFlag == "customTab") {
+      filteredSectionNames = unitySectionName.length > 0 ? unitySectionName : "";
+    } else {
+      filteredSectionNames = sectionNames.filter(
+        sectionName => sectionName !== 'Questions_for_the_Customer_left_panel'
+      );
+
+    }
+
+
     const isEditMode = editQuestionsData.size > 0 || false;
     const isQuestionAnswered = editQuestionsData.get('questionAnswered');
     if (!isLoading) {
@@ -432,7 +526,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 placeholder="Select"
                 items={filteredSectionNames}
                 selectedValue={isEditMode
-                  ? isString(section) 
+                  ? isString(section)
                     ? section : section?.sectionName
                   : selectedValue}
                 title="Section"
@@ -449,7 +543,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                 value={isEditMode && roleNames}
                 error={error.filter(v => v.roleNames)}
                 onClick={this.onRoleChange}
-                onChange={() => {}}
+                onChange={() => { }}
               />
             </div>
           </div>
@@ -540,7 +634,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       isRolesLoading,
       currentsection,
       sectionNames,
-      isSidebarOpen
+      isSidebarOpen,
     } = this.props;
     const { error } = this.state;
     if (
@@ -569,8 +663,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         <div className="add-question-modal-dialog-blur" />
         <div className="add-question-modal-dialog-wrapper">
           {!isQuestionSectionLoading &&
-          !isAnswerTypesLoading &&
-          !isRolesLoading ? (
+            !isAnswerTypesLoading &&
+            !isRolesLoading ? (
             this.renderContent(
               onClose,
               sectionNames,
@@ -631,8 +725,11 @@ export default compose(
     getAnswerTypesDataF: getAnswerTypesInfo,
     getRolesInfoF: getRolesInfo,
     setProposalQuestionF: setProposalQuestion,
+    setUnityQuestionF: setUnityQuestion,
     setEditQuestionData,
     editProposalQuestion,
-    deleteProposalQuestion
+    editUnityQuestion,
+    deleteProposalQuestion,
+    deleteUnityQuestion
   })
 )(MatomoHOC(AddQuestionModal));
