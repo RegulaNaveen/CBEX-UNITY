@@ -2,7 +2,7 @@
 /* eslint-disable guard-for-in */
 import _ from 'lodash';
 import { UNITY_TABS } from '../../constants/types';
-import { Map, fromJS, OrderedMap, setIn,set } from 'immutable'; // NOSONAR
+import { Map, fromJS, OrderedMap, setIn, set } from 'immutable'; // NOSONAR
 
 const INITIAL_STATE = {
   fetching: false,
@@ -52,6 +52,41 @@ const setUnityTab = (state, action) => {
     ...state,
     fetching: false,
     allTabs: data
+  };
+};
+
+const setCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.tabID];
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === section.sectionName
+  );
+  selectTab[tabIndex].UnityTabSectionQuestions.push(questionId);
+  tabs[section.tabID] = selectTab;
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
+const deleteCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, sectionName, tabId } = payload;
+  const selectTab = tabs[tabId];
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === sectionName
+  );
+  const updatedData = selectTab[tabIndex].UnityTabSectionQuestions.filter(
+    value => value !== questionId
+  );
+  selectTab[tabIndex].UnityTabSectionQuestions = updatedData;
+  tabs[tabId] = selectTab;
+  return {
+    ...state,
+    allTabs: tabs
   };
 };
 
@@ -114,7 +149,9 @@ const actionMap = {
   [UNITY_TABS.RESET_SINGLE_TAB_FILTERS]: resetSingleFilters,
   [UNITY_TABS.RESET_TAB]: resetTab,
   [UNITY_TABS.SET_TAB_REFRESH]: customTabRefresh,
-  [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
+  [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter,
+  [UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB]: setCustomQuestion,
+  [UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB]: deleteCustomQuestion
 };
 
 export default function(state = INITIAL_STATE, action) {
