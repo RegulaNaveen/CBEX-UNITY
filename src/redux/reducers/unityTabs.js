@@ -2,12 +2,15 @@
 /* eslint-disable guard-for-in */
 import _ from 'lodash';
 import { UNITY_TABS } from '../../constants/types';
+import { Map, fromJS, OrderedMap, setIn,set } from 'immutable'; // NOSONAR
 
 const INITIAL_STATE = {
   fetching: false,
   allTabs: {},
   canSendEmail: false,
   tabRefresh: `Refresh${Date.now().toString()}`,
+  isSetQuestionLoading: false,
+  setQuestionError: undefined,
   filters: [
     {
       name: 'answered',
@@ -102,6 +105,53 @@ const addNewFilter = (state, action) => {
     filters: [...state.filters, ...payload]
   };
 };
+
+const onSetQuestion = (state: Map, action: Object): Map => {
+  const data = action.payload;
+  const updatedProposalQuestions = state.get('proposalQuestions');
+  const isQuestionExist = updatedProposalQuestions.find(
+    item => item?.questionId === data?.questionId
+  );
+  if (isQuestionExist) {
+    return;
+  }
+
+  updatedProposalQuestions.push(data);
+
+  let questionsFilter = state.get('questionsFilter');
+  const filterQuestionsVal = getQuestionsFilterApplied(
+    updatedProposalQuestions,
+    questionsFilter,
+    state.get('eventflag')
+  );
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
+    .setIn(
+      ['opportunityData', selectedBidId, 'proposalQuestions'],
+      cloneDeep(updatedProposalQuestions)
+    )
+    .set('setQuestionData', data)
+    .set('isSetQuestionLoading', false);
+};
+
+const onSetQuestionLoading = (state: Map): Map => {
+    return {
+      ...state,
+      isSetQuestionLoading: true,
+      setQuestionError:undefined
+    };
+};
+
+const onSetQuestionError = (state: Map, action: Object): Map => {
+  const { payload } = action;
+  return state.setQuestionError()
+    .set('setQuestionError', payload)
+    .set('isSetQuestionLoading', false);
+};
+
 
 const actionMap = {
   [UNITY_TABS.FETCH_UNITY_TABS]: state => ({ ...state, fetching: true }),

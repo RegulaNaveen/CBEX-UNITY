@@ -17,15 +17,27 @@ const SectionActive = ({
   UnityTabSectionTitle = '',
   UnityTabSectionQuestions = [],
   setIsAllActiveDisplayed,
-  TabID
+  tabId,
 }) => {
-
+  const allTab = useSelector(state => state.unitytab.allTabs);
+  let tab = allTab[tabId];
+  const section = [] ;
+  const sectionOrderInfo = [] ;
+  tab.map(item => (
+    section.push(item.UnityTabSectionTitle),
+    sectionOrderInfo.push({
+      sectionName : item.UnityTabSectionTitle ,
+      sectionOrder : item.UnityTabSectionOrder
+    })
+  ))
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
   const selectedBidIsCurrent = !!isCurrent;
   const [questionVisibility, setQuestionVisibility] = useState({});
   const [currentsection, setCurrentSection] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [unityAllSection,setUnityAllSection] = useState(section);
   const questionsRef = useRef(null);
+   
   const isAllQuestionsVisible = useMemo(() => {
     const valuesArr = Object.values(questionVisibility) || [];
     if (valuesArr.length > 0 && valuesArr.every(i => i === false)) {
@@ -44,7 +56,6 @@ const SectionActive = ({
   const onClose = () => {
     if (showModal) setShowModal(false);
   };
-  console.log("isCurrent", isCurrent)
   return (
     <Grid container className="approval-ques">
       <Grid item xs={12} className="approval-sec-title">
@@ -84,8 +95,11 @@ const SectionActive = ({
         {showModal && (
           <AddQuestionModalComponent
             onClose={onClose}
-            // eslint-disable-next-line react/destructuring-assignment
             currentsection={UnityTabSectionTitle}
+            unitySectionName = {unityAllSection}
+            unitysectionOrderInfo = {sectionOrderInfo}
+            tabFlag="customTab"
+            tabId = {tabId}
           />
         )}
       </Grid>
