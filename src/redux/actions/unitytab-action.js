@@ -15,7 +15,8 @@ const {
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
   PROPOSAL_SET_QUESTION_ERROR,
-  PROPOSAL_DELETE_QUESTION
+  PROPOSAL_DELETE_QUESTION,
+  PROPOSAL_EDIT_QUESTION
 } = REDUX_TYPES.PROPOSAL;
 
 export const setAllUnityTab = data => ({
@@ -122,9 +123,12 @@ export const editUnityQuestion = (
         questionId,
         questionData
       );
-
-      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+      dispatch({
+        type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: data
+      });
+      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }

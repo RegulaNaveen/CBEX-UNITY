@@ -90,6 +90,29 @@ const deleteCustomQuestion = (state, action) => {
   };
 };
 
+const updateCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.tabID];
+  selectTab.forEach(value => {
+    value.UnityTabSectionQuestions = value.UnityTabSectionQuestions.filter(
+      questionID => questionID !== questionId
+    );
+  });
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === section.sectionName
+  );
+  if (tabIndex > -1) {
+    selectTab[tabIndex].UnityTabSectionQuestions.push(questionId);
+    tabs[section.tabID] = selectTab;
+  }
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
 const updateFilter = (state, action) => {
   const { payload } = action;
   const { name, value } = payload;
@@ -151,7 +174,8 @@ const actionMap = {
   [UNITY_TABS.SET_TAB_REFRESH]: customTabRefresh,
   [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter,
   [UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB]: setCustomQuestion,
-  [UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB]: deleteCustomQuestion
+  [UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB]: deleteCustomQuestion,
+  [UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB]: updateCustomQuestion
 };
 
 export default function(state = INITIAL_STATE, action) {
