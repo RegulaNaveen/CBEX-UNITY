@@ -192,7 +192,7 @@ export const checkTabRender = (question, OT) => {
         if (
           questionObj.active &&
           questionObj.visible &&
-          questionObj.opportunityType.split(',').includes(OT)
+          questionObj?.opportunityType?.split(',').includes(OT)
         ) {
           arr.push(true);
         }

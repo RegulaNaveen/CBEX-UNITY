@@ -4,15 +4,20 @@ import { getErrorMessage } from '../../utils/utils';
 import { getQuestionsFilters } from '../selectors';
 import { selectQuery } from '../selectors/search';
 import { doSearchAction } from './search-actions';
-import { setUnityQuestionData, editUnityQuestionData,deleteUnityQuestionData } from "../../api/unityTab";
+import {
+  setUnityQuestionData,
+  editUnityQuestionData,
+  deleteUnityQuestionData
+} from '../../api/unityTab';
 import { REDUX_TYPES, API } from '../../constants';
 
 const {
   PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
   PROPOSAL_SET_QUESTION_ERROR,
+  PROPOSAL_DELETE_QUESTION,
+  PROPOSAL_EDIT_QUESTION
 } = REDUX_TYPES.PROPOSAL;
-
 
 export const setAllUnityTab = data => ({
   type: UNITY_TABS.SET_UNITY_TABS,
@@ -76,13 +81,11 @@ export function resetSingleTabFiltersAction() {
   };
 }
 
-
 export const setUnityQuestion = (
   proposalId: string,
   questionData: Object,
   socketContext
 ): ThunkAction<string, Object> => {
-
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
@@ -91,6 +94,10 @@ export const setUnityQuestion = (
     try {
       const data = await setUnityQuestionData(proposalId, questionData);
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
+      dispatch({
+        type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: data
+      });
       if (socketContext) await socketContext?.addQuestionWrapper(data);
       return data;
     } catch (err) {
@@ -116,9 +123,13 @@ export const editUnityQuestion = (
         questionId,
         questionData
       );
-
-      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+      dispatch({
+        type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: data
+      });
+      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -135,13 +146,25 @@ export const deleteUnityQuestion = (
       payload: {}
     });
     try {
-      console.log("delete api call", questionData)
+      console.log('delete api call', questionData);
       const data = await deleteUnityQuestionData(questionData);
-      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
-      if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
+      dispatch({
+        type: PROPOSAL_DELETE_QUESTION,
+        payload: questionData.questionId
+      });
+      dispatch({
+        type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: {
+          questionId: questionData.questionId,
+          sectionName: questionData.sectionName,
+          tabId: questionData.tabId
+        }
+      });
+      if (socketContext)
+        await socketContext?.questionDeleteWrapper(questionData.questionId);
     } catch (err) {
+      console.log(`err`, err);
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
   };
 };
-

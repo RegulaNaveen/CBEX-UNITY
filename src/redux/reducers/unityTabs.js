@@ -2,7 +2,7 @@
 /* eslint-disable guard-for-in */
 import _ from 'lodash';
 import { UNITY_TABS } from '../../constants/types';
-import { Map, fromJS, OrderedMap, setIn,set } from 'immutable'; // NOSONAR
+import { Map, fromJS, OrderedMap, setIn, set } from 'immutable'; // NOSONAR
 
 const INITIAL_STATE = {
   fetching: false,
@@ -52,6 +52,64 @@ const setUnityTab = (state, action) => {
     ...state,
     fetching: false,
     allTabs: data
+  };
+};
+
+const setCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.tabID];
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === section.sectionName
+  );
+  selectTab[tabIndex].UnityTabSectionQuestions.push(questionId);
+  tabs[section.tabID] = selectTab;
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
+const deleteCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, sectionName, tabId } = payload;
+  const selectTab = tabs[tabId];
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === sectionName
+  );
+  const updatedData = selectTab[tabIndex].UnityTabSectionQuestions.filter(
+    value => value !== questionId
+  );
+  selectTab[tabIndex].UnityTabSectionQuestions = updatedData;
+  tabs[tabId] = selectTab;
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
+const updateCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.tabID];
+  selectTab.forEach(value => {
+    value.UnityTabSectionQuestions = value.UnityTabSectionQuestions.filter(
+      questionID => questionID !== questionId
+    );
+  });
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === section.sectionName
+  );
+  if (tabIndex > -1) {
+    selectTab[tabIndex].UnityTabSectionQuestions.push(questionId);
+    tabs[section.tabID] = selectTab;
+  }
+  return {
+    ...state,
+    allTabs: tabs
   };
 };
 
@@ -106,53 +164,6 @@ const addNewFilter = (state, action) => {
   };
 };
 
-const onSetQuestion = (state: Map, action: Object): Map => {
-  const data = action.payload;
-  const updatedProposalQuestions = state.get('proposalQuestions');
-  const isQuestionExist = updatedProposalQuestions.find(
-    item => item?.questionId === data?.questionId
-  );
-  if (isQuestionExist) {
-    return;
-  }
-
-  updatedProposalQuestions.push(data);
-
-  let questionsFilter = state.get('questionsFilter');
-  const filterQuestionsVal = getQuestionsFilterApplied(
-    updatedProposalQuestions,
-    questionsFilter,
-    state.get('eventflag')
-  );
-  let selectedBidId = state.getIn(['selectedBid', 'id']);
-
-  return state
-    .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
-    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
-    .setIn(
-      ['opportunityData', selectedBidId, 'proposalQuestions'],
-      cloneDeep(updatedProposalQuestions)
-    )
-    .set('setQuestionData', data)
-    .set('isSetQuestionLoading', false);
-};
-
-const onSetQuestionLoading = (state: Map): Map => {
-    return {
-      ...state,
-      isSetQuestionLoading: true,
-      setQuestionError:undefined
-    };
-};
-
-const onSetQuestionError = (state: Map, action: Object): Map => {
-  const { payload } = action;
-  return state.setQuestionError()
-    .set('setQuestionError', payload)
-    .set('isSetQuestionLoading', false);
-};
-
-
 const actionMap = {
   [UNITY_TABS.FETCH_UNITY_TABS]: state => ({ ...state, fetching: true }),
   [UNITY_TABS.SET_UNITY_TABS]: setUnityTab,
@@ -161,7 +172,10 @@ const actionMap = {
   [UNITY_TABS.RESET_SINGLE_TAB_FILTERS]: resetSingleFilters,
   [UNITY_TABS.RESET_TAB]: resetTab,
   [UNITY_TABS.SET_TAB_REFRESH]: customTabRefresh,
-  [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter
+  [UNITY_TABS.UPDATE_NEW_FILTER]: addNewFilter,
+  [UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB]: setCustomQuestion,
+  [UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB]: deleteCustomQuestion,
+  [UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB]: updateCustomQuestion
 };
 
 export default function(state = INITIAL_STATE, action) {
