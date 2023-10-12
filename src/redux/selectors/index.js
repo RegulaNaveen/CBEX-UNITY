@@ -176,6 +176,7 @@ export const getQuestion = questionId => state =>
     .find(i => i.questionId === questionId);
 
 export const selectSections = state => proposalSelectors.selectSections(state);
+export const getAllUnityTab = state => state.unitytab.allTabs ;
 
 export const selectFilteredSections = state =>
   proposalSelectors.selectFilteredSections(state);

@@ -282,19 +282,14 @@ const EmailTemplates = () => {
       await navigator.clipboard.write([clipboardItem]);
     }
 
-    if (
-      EmailTemplateTORolesAnswer?.length ||
-      EmailTemplateCCRoleAnswer?.length
-    ) {
-      window.open(
-        generateEmailTemplateEmail(
-          subjectStr,
-          EmailTemplateTORolesAnswer,
-          EmailTemplateCCRoleAnswer,
-          updatedBody
-        )
-      );
-    }
+    window.open(
+      generateEmailTemplateEmail(
+        subjectStr,
+        EmailTemplateTORolesAnswer,
+        EmailTemplateCCRoleAnswer,
+        updatedBody
+      )
+    );
   };
 
   const DetailRow = ({ row }) => {
