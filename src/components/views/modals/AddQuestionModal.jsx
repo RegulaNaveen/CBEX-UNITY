@@ -172,7 +172,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           sectionApproval.push(item.ApprovalSectionTitle)
           sectionOrderInfoApproval.push({
             approvalSectionName: item.ApprovalSectionTitle,
-            sectionName:"Approvals",
+            sectionName:"",
             sectionOrder: item.ApprovalSectionOrder,
             direction: "left"
 
@@ -184,6 +184,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     )
 
     }
+    console.log("filteredSectionNames",sectionApproval)
+
     this.setState({
       approvalAllTabSection: sectionApproval,
       approvalAllSectionOrderInfo: sectionOrderInfoApproval
@@ -253,7 +255,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       });
       if (sectionOrder > -1 && value)
         this.setState(
-          { section: { approvalSectionName,sectionOrder, sectionName: value, direction} },
+          { section: { sectionOrder, sectionName: value, direction: "left"} },
           () => {
             this.validateSection();
           }
@@ -391,7 +393,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     if (isEditMode) {
       tabFlag = editQuestionsData.get('tabFlag');
     }
-    this.setState({ submit: true }, () => {
+    this.setState({ submit: true }, async () => {
       this.validateQuestionText(true);
       this.validateSection();
       this.validateAnswer();
@@ -462,7 +464,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           }
         } else {
           if (tabFlag == 'customTab' || tabFlag == 'approvalTab') {
-            const result = setUnityQuestionF(
+          
+            const result = await setUnityQuestionF(
               proposalId,
               questionData,
               this.context
