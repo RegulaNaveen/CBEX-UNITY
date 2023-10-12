@@ -400,11 +400,12 @@ const setOpportunityInfo = (state, action) => {
     let milestoneGroup = fromJS({});
     milestones.forEach(milestone => {
       milestoneGroup = milestoneGroup.set(
-        milestone,
+        milestone.Name,
         Map({
           checked: false,
-          label: milestone,
-          className: CLASS_QUES_FIL_ITEM
+          label: milestone.Name,
+          className: CLASS_QUES_FIL_ITEM,
+          color: milestone.Color
         })
       );
     });
@@ -472,11 +473,12 @@ const onChangeBid = (state: Map, action: Object): Map => {
     let milestoneGroup = fromJS({});
     milestones.forEach(milestone => {
       milestoneGroup = milestoneGroup.set(
-        milestone,
+        milestone.Name,
         Map({
           checked: false,
-          label: milestone,
-          className: CLASS_QUES_FIL_ITEM
+          label: milestone.Name,
+          className: CLASS_QUES_FIL_ITEM,
+          color: milestone.Color
         })
       );
     });
@@ -584,11 +586,12 @@ const addNewBid = (state: Map, action: Object): Map => {
   let milestoneGroup = fromJS({});
   milestones.forEach(milestone => {
     milestoneGroup = milestoneGroup.set(
-      milestone,
+      milestone.Name,
       Map({
         checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
+        label: milestone.Name,
+        className: CLASS_QUES_FIL_ITEM,
+        color: milestone.Color
       })
     );
   });

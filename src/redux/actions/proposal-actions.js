@@ -962,8 +962,10 @@ function applyMilestoneFilter(questions, flags, milestone) {
   if (milestone) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(question => {
-        const questionMilestone = question.get('milestone');
-        return questionMilestone === milestone;
+        const questionMilestone = question.get('milestoneNew').toJS();
+        return questionMilestone
+          .map(milestone => milestone.Name)
+          .includes(milestone);
       })
       .toJS();
   }

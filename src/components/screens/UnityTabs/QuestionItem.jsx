@@ -52,6 +52,7 @@ import MultiSelectQuestion from '../Approvals/InputComponents/MultiSelectQuestio
 import YesNoQuestion from '../Approvals/InputComponents/YesNoQuestion';
 import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -365,23 +366,18 @@ const QuestionItem = ({
   };
 
   const renderTags = () => {
-    const { milestone, milestoneNew } = question;
-    const lastAnswer = getLastAnswer(question);
-    const lastAns = isString(lastAnswer) ? lastAnswer : '';
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview unity-tab-chip">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAns} />
-          ) : null}
-        </div>
-      );
+    const { milestoneNew } = question;
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview unity-tab-chip">
-        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
-      </div>
-    );
   };
 
   const renderQuestionHint = () => {

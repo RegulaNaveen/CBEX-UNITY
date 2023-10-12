@@ -92,8 +92,29 @@
     font-size: 14px !important;
     display: contents !important;
   }
-  
+
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
+  }
+}
+
+.question-label-container {
+  .milestone-chip {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-basis: auto;
+    flex-grow: 1;
+    padding-left: 0.25rem;
+
+    .tag {
+      display: inline;
+      .tag-box {
+        display: inline-block !important;
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
 }
