@@ -12,11 +12,12 @@ import {
 import { REDUX_TYPES, API } from '../../constants';
 
 const {
-  PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
   PROPOSAL_SET_QUESTION_ERROR,
   PROPOSAL_DELETE_QUESTION,
-  PROPOSAL_EDIT_QUESTION
+  PROPOSAL_EDIT_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
 } = REDUX_TYPES.PROPOSAL;
 
 export const setAllUnityTab = data => ({
@@ -93,13 +94,19 @@ export const setUnityQuestion = (
     });
     try {
       const data = await setUnityQuestionData(proposalId, questionData);
-      dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
-      dispatch({
-        type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
-        payload: data
-      });
-      if (socketContext) await socketContext?.addQuestionWrapper(data);
-      return data;
+      if (data) {
+        dispatch({
+          type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: data
+        });
+        dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
+        dispatch({
+          type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+          payload: data
+        });
+        if (socketContext) await socketContext?.addQuestionWrapper(data);
+        return data;
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }

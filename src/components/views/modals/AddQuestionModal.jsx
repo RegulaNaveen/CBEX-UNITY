@@ -341,7 +341,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     if (isEditMode) {
       tabFlag = editQuestionsData.get('tabFlag');
     }
-    this.setState({ submit: true }, () => {
+    this.setState({ submit: true }, async () => {
       this.validateQuestionText(true);
       this.validateSection();
       this.validateAnswer();
@@ -389,7 +389,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
               questionData,
               this.context
             );
-            if (result) onClose();
           } else {
             editProposalQuestion(
               proposalId,
@@ -400,12 +399,13 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           }
         } else {
           if (tabFlag == 'customTab') {
-            const result = setUnityQuestionF(
+            const result = await setUnityQuestionF(
               proposalId,
               questionData,
               this.context
             );
             this.trackMatomoEventCreateQ(questionData);
+            console.log('111111111111', result);
             if (result) onClose();
           } else {
             setProposalQuestionF(proposalId, questionData, this.context);

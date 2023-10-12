@@ -37,9 +37,6 @@ const SectionActive = ({
     )
   );
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
-  const isQuestionLoading = useSelector(
-    state => state.proposal.isSetQuestionLoading
-  );
 
   const selectedBidIsCurrent = !!isCurrent;
   const [questionVisibility, setQuestionVisibility] = useState({});
@@ -55,6 +52,11 @@ const SectionActive = ({
     }
     return true;
   }, [questionVisibility]);
+
+  const onClose = () => {
+    if (showModal) setShowModal(false);
+  };
+
   useEffect(() => {
     setIsAllActiveDisplayed(isAllQuestionsVisible);
   }, [isAllQuestionsVisible]);
@@ -62,9 +64,7 @@ const SectionActive = ({
   const onAddQuestion = value => {
     setShowModal(true);
   };
-  const onClose = () => {
-    if (showModal) setShowModal(false);
-  };
+
   return (
     <Grid container className="approval-ques">
       <Grid item xs={12} className="approval-sec-title">
