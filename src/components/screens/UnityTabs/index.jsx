@@ -93,8 +93,7 @@ const CustomTabs = ({ tabId, key }) => {
       <ViewAboveVerticalTabs>
         <BidHistory data-testid="bid-history" />
       </ViewAboveVerticalTabs>
-
-      <div className="filter-container">
+     
         <div
           data-testid="selectedbid-testid"
           title="Add New Question"
@@ -104,15 +103,15 @@ const CustomTabs = ({ tabId, key }) => {
         >
           <Add className="tasksList-add-icon" />
         </div>
-
+      
+      <div className="filter-container">
+        
         <div className="filter-btn">
           <FilterButton setIsShowFilters={setIsShowFilters} />
+          
         </div>
         {isShowFilters && <Filters />}
-
       </div>
-
-
 
       <div className="all-approvals-container">
         {!isEmpty(tab) ? (

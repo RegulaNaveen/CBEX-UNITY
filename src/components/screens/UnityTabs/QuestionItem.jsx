@@ -79,7 +79,7 @@ const QuestionItem = ({
   eventCategories,
   trackEvent,
   updateQuestionVisibility,
-  tabId
+  tabId,
 }) => {
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
@@ -669,7 +669,7 @@ const QuestionItem = ({
                         questionLabel={question?.questionText || ''}
                       />
                       {!isEmpty(question?.questionLockInfo) &&
-                      isQuestionLockedByOther() ? (
+                        isQuestionLockedByOther() ? (
                         <Typography variant="subtitle1" className="status-txt">
                           {question.questionLockInfo?.userName} is typing...
                         </Typography>
@@ -686,30 +686,34 @@ const QuestionItem = ({
                       />
                     )}
                     
-                  <div className="question-edit">
-                    <span
-                      aria-hidden="true"
-                      onClick={() => {
-                        dispatch(
-                          setEditQuestionData({
-                            questionText:question.questionText,
-                            questionHTML:question.questionHTML,
-                            questionJSON:question.questionJSON,
-                            questionHintJSON:question.questionHintJSON,
-                            section: question.section.sectionName,
-                            tabId:tabId,
-                            answerType: question.answerConfiguration.type,
-                            roleNames:question.roleNames,
-                            questionId:question.questionId,
-                            tabFlag:"customTab"
-                          })
-                        );
-                      }}
-                    >
-                      <Edit className="edit-icon" />
-                    </span>
-                  </div>
-                
+
+                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (<div className="question-edit">
+                      <span
+                        aria-hidden="true"
+                        onClick={() => {
+                          dispatch(
+                            setEditQuestionData({
+                              questionText: question.questionText,
+                              questionHTML: question.questionHTML,
+                              questionJSON: question.questionJSON,
+                              questionHintJSON: question.questionHintJSON,
+                              section: question.section.sectionName,
+                              tabId: tabId,
+                              answerType: question.answerConfiguration.type,
+                              roleNames: question.roleNames,
+                              questionId: question.questionId,
+                              tabFlag: "customTab"
+                            })
+                          );
+                        }}
+                      >
+                        <Edit className="edit-icon" />
+                      </span>
+                    </div>)
+                    }
+
+
+
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
                   <div className="milestone-chip">{renderTags()}</div>
@@ -738,7 +742,7 @@ const QuestionItem = ({
             />
           )}
 
-        
+
         </>
       ) : null,
     [

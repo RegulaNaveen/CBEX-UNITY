@@ -167,9 +167,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       allApprovalTab.length > 0 && allApprovalTab.map(item => {
         sectionApproval.push(item.ApprovalSectionTitle)
         sectionOrderInfoApproval.push({
-          sectionName: item.ApprovalSectionTitle,
+          sectionName: "Approvals",
+          approvalSectionName:item.ApprovalSectionTitle,
           tabID: tabId,
-          sectionOrder: item.ApprovalSectionOrder
+          sectionOrder: item.ApprovalSectionOrder,
+          direction:"left"
         })
       }
       )
@@ -241,12 +243,12 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         );
     } else if (tabFlag == 'approvalTab') {
       approvalAllSectionOrderInfo.forEach((section: Object) => {
-        const { sectionOrder: order, sectionName: name } = section;
+        const { sectionOrder: order, approvalSectionName: name } = section;
         if (name === value) sectionOrder = order;
       });
       if (sectionOrder > -1 && value)
         this.setState(
-          { section: { sectionOrder, sectionName: value, direction: "left" } },
+          { section: { sectionOrder, approvalSectionName: value, sectionName,direction } },
           () => {
             this.validateSection();
           }
