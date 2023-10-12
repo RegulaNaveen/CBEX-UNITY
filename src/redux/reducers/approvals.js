@@ -51,6 +51,41 @@ const setApprovals = (state, action) => {
     }))
   };
 };
+const setApprovalQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allApprovals;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.tabID];
+  const tabIndex = selectTab.findIndex(
+    value => value.ApprovalSectionTitle === section.sectionName
+  );
+  selectTab[tabIndex].ApprovalSectionRightQuestions.push(questionId);
+  tabs[section.tabID] = selectTab;
+  return {
+    ...state,
+    allApprovals: tabs
+  };
+};
+
+const deleteCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allApprovals;
+  const { questionId, sectionName, tabId } = payload;
+  const selectTab = tabs[tabId];
+  const tabIndex = selectTab.findIndex(
+    value => value.ApprovalSectionTitle === sectionName
+  );
+  const updatedData = selectTab[tabIndex].ApprovalSectionRightQuestions.filter(
+    value => value !== questionId
+  );
+  selectTab[tabIndex].ApprovalSectionRightQuestions = updatedData;
+  tabs[tabId] = selectTab;
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
 
 const duplicateApproval = (state, action) => {
   const { sectionId, proposalId, data } = action.payload;
@@ -124,7 +159,8 @@ const actionMap = {
   [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
   [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
   [APPROVALS.UPDATE_FILTERS]: updateFilter,
-  [APPROVALS.RESET_FILTERS]: resetFilters
+  [APPROVALS.RESET_FILTERS]: resetFilters,
+  [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]:setApprovalQuestion
 };
 
 export default function(state = INITIAL_STATE, action) {

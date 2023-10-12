@@ -25,17 +25,6 @@ const SectionActive = ({
 }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
   let tab = allTab[tabId];
-  const section = [];
-  const sectionOrderInfo = [];
-  tab.map(
-    item => (
-      section.push(item.UnityTabSectionTitle),
-      sectionOrderInfo.push({
-        sectionName: item.UnityTabSectionTitle,
-        sectionOrder: item.UnityTabSectionOrder
-      })
-    )
-  );
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
   const isQuestionLoading = useSelector(
     state => state.proposal.isSetQuestionLoading
@@ -45,7 +34,6 @@ const SectionActive = ({
   const [questionVisibility, setQuestionVisibility] = useState({});
   const [currentsection, setCurrentSection] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [unityAllSection, setUnityAllSection] = useState(section);
   const questionsRef = useRef(null);
 
   const isAllQuestionsVisible = useMemo(() => {
@@ -105,8 +93,6 @@ const SectionActive = ({
           <AddQuestionModalComponent
             onClose={onClose}
             currentsection={UnityTabSectionTitle}
-            unitySectionName={unityAllSection}
-            unitysectionOrderInfo={sectionOrderInfo}
             tabFlag="customTab"
             tabId={tabId}
           />
