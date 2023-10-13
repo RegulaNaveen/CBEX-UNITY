@@ -15,6 +15,8 @@ import {
   resetFiltersAction
 } from '../../../redux/actions/unitytab-action';
 import { shouldShowSection } from './utils';
+import { Add, Refresh } from '../../svg';
+import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 
 const CustomTabs = ({ tabId, key }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
@@ -28,6 +30,7 @@ const CustomTabs = ({ tabId, key }) => {
     }
   ]);
   const [isShowFilters, setIsShowFilters] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -78,6 +81,13 @@ const CustomTabs = ({ tabId, key }) => {
     }
   }, []);
 
+  const onAddQuestion = value => {
+    setShowModal(true);
+  };
+  const onClose = () => {
+    if (showModal) setShowModal(false);
+  };
+
   return (
     <div className="approvals-tab">
       <ViewAboveVerticalTabs>
@@ -86,11 +96,20 @@ const CustomTabs = ({ tabId, key }) => {
 
       <div className="filter-container">
         <div className="filter-btn">
+        <div
+          data-testid="selectedbid-testid"
+          title="Add New Question"
+          className="tasksList-add-icon-wrapper"
+          role="presentation"
+          onClick={onAddQuestion}
+        >
+          <Add className="tasksList-add-icon" />
+        </div>
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
       </div>
-
+  
       <div className="all-approvals-container">
         {!isEmpty(tab) ? (
           tab.map(tabs => {
@@ -131,6 +150,14 @@ const CustomTabs = ({ tabId, key }) => {
           </>
         )}
         <div id="modal-wrapper" />
+        {showModal && (
+          <AddQuestionModalComponent
+            onClose={onClose}
+            currentsection={""}
+            tabFlag="customTab"
+            tabId={tabId}
+          />
+        )}
       </div>
     </div>
   );
