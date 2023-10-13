@@ -14,7 +14,7 @@ import InfoIcon from 'apollo-react-icons/Info';
 import Popover from 'apollo-react/components/Popover';
 import Typography from 'apollo-react/components/Typography';
 import moment from 'moment';
-import classNames from 'classnames';
+import Tooltip from 'apollo-react/components/Tooltip';
 import Checkbox from 'apollo-react/components/Checkbox';
 import Highlighter from 'react-highlight-words';
 import {
@@ -132,7 +132,7 @@ type Props = {
   sfObject: string,
   sfField: string,
   milestone: any,
-  milestoneNew: any,
+  milestoneNew: any[],
   ismilestoneavailable: string,
   loading: Boolean,
   NaLoading: Boolean,
@@ -1446,21 +1446,17 @@ export class TaskRow extends React.PureComponent<Props, State> {
   };
 
   renderTags = (milestone, milestoneNew, ismilestoneavailable, lastAnswer) => {
-    const lastAns = isString(lastAnswer) ? lastAnswer : '';
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAns} />
-          ) : null}
-        </div>
-      );
+    if (Array.isArray(milestoneNew.toJS()) && milestoneNew.toJS().length > 0) {
+      return milestoneNew.toJS().map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview">
-        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
-      </div>
-    );
   };
 
   isAnswered = (answer, isAnswerPredicted) => {

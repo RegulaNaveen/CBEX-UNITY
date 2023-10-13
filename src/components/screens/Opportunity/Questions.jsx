@@ -22,6 +22,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import moment from 'moment';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
+import RenderFilterLabel from '../../common/RenderFilterLabel';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
   getProposalUpdated,
@@ -518,7 +519,13 @@ class Questions extends Component {
                     >
                       <ApolloCheckbox
                         size="small"
-                        label={filter.get('label')}
+                        label={
+                          <RenderFilterLabel
+                            labelText={filter.get('label')}
+                            showColor={groupName === 'milestoneGroup'}
+                            color={filter.get('color', '')}
+                          />
+                        }
                         checked={filter.get('checked')}
                         onChange={(e, checked) =>
                           this.handleFilterChange(key, checked, groupName)

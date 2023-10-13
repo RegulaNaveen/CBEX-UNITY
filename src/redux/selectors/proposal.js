@@ -195,8 +195,13 @@ export function getUniqueMilestones(questions) {
   fromJS(filteredQuestions)
     .valueSeq()
     .forEach(question => {
-      if (question.get('milestone')) {
-        milestones.push(question.get('milestone'));
+      if (question.get('milestoneNew')) {
+        question
+          .get('milestoneNew')
+          .toJS()
+          .forEach(milestone => {
+            milestones.push(milestone);
+          });
       }
     });
 

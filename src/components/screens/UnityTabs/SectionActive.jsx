@@ -25,27 +25,12 @@ const SectionActive = ({
 }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
   let tab = allTab[tabId];
-  const section = [];
-  const sectionOrderInfo = [];
-  tab.map(
-    item => (
-      section.push(item.UnityTabSectionTitle),
-      sectionOrderInfo.push({
-        sectionName: item.UnityTabSectionTitle,
-        sectionOrder: item.UnityTabSectionOrder
-      })
-    )
-  );
   const { isCurrent } = useSelector(getSelectedBid)?.toJS();
-  const isQuestionLoading = useSelector(
-    state => state.proposal.isSetQuestionLoading
-  );
 
   const selectedBidIsCurrent = !!isCurrent;
   const [questionVisibility, setQuestionVisibility] = useState({});
   const [currentsection, setCurrentSection] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [unityAllSection, setUnityAllSection] = useState(section);
   const questionsRef = useRef(null);
 
   const isAllQuestionsVisible = useMemo(() => {
@@ -55,6 +40,11 @@ const SectionActive = ({
     }
     return true;
   }, [questionVisibility]);
+
+  const onClose = () => {
+    if (showModal) setShowModal(false);
+  };
+
   useEffect(() => {
     setIsAllActiveDisplayed(isAllQuestionsVisible);
   }, [isAllQuestionsVisible]);
@@ -62,9 +52,7 @@ const SectionActive = ({
   const onAddQuestion = value => {
     setShowModal(true);
   };
-  const onClose = () => {
-    if (showModal) setShowModal(false);
-  };
+
   return (
     <Grid container className="approval-ques">
       <Grid item xs={12} className="approval-sec-title">
@@ -105,8 +93,6 @@ const SectionActive = ({
           <AddQuestionModalComponent
             onClose={onClose}
             currentsection={UnityTabSectionTitle}
-            unitySectionName={unityAllSection}
-            unitysectionOrderInfo={sectionOrderInfo}
             tabFlag="customTab"
             tabId={tabId}
           />

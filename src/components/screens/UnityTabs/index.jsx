@@ -15,6 +15,8 @@ import {
   resetFiltersAction
 } from '../../../redux/actions/unitytab-action';
 import { shouldShowSection } from './utils';
+import { Add, Refresh } from '../../svg';
+import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 
 const CustomTabs = ({ tabId, key }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
@@ -28,6 +30,7 @@ const CustomTabs = ({ tabId, key }) => {
     }
   ]);
   const [isShowFilters, setIsShowFilters] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,40 +46,49 @@ const CustomTabs = ({ tabId, key }) => {
     arr = arr.flat(1);
     const allquestion = allQuestion;
 
-    let result = arr
-      .map(v => {
-        const res = allquestion.filter(
-          c =>
-            c.questionId === v &&
-            c?.milestone &&
-            c?.milestoneNew?.length > 0 &&
-            c.active &&
-            c.visible
+    let milestones = [];
+    const milestoneNames = [];
+    arr.forEach(v => {
+      const res = allquestion.filter(
+        c =>
+          c.questionId === v &&
+          c?.milestoneNew?.length > 0 &&
+          c.active &&
+          c.visible
+      );
+      if (res?.length) {
+        const newMilestones = res[0].milestoneNew.filter(
+          milestone => !milestoneNames.includes(milestone.Name)
         );
-        if (res?.length) {
-          return {
-            displayName: res[0]?.milestone
-          };
-        }
-      })
-      .filter(v => v && typeof v === 'object' && Object.keys(v)?.length > 0);
-    result = [...new Set(result.map(i => i.displayName))];
-
-    if (result && result.length) {
-      const resp = [];
-      for (let index = 0; index < result.length; index += 1) {
-        const element = result[index];
-        const obj = {
-          displayName: element,
-          group: 'milestone',
-          name: String(element).toLowerCase(),
-          value: false
-        };
-        resp.push(obj);
+        milestoneNames.push(...newMilestones.map(m => m.Name));
+        milestones.push(...newMilestones);
       }
-      dispatch(updateNewFilters(resp));
+    });
+
+    // remove duplicates
+    milestones = [...new Set(milestones)];
+
+    if (milestones.length) {
+      dispatch(
+        updateNewFilters(
+          milestones.map(milestone => ({
+            displayName: milestone.Name,
+            group: 'milestone',
+            name: String(milestone.Name).toLowerCase(),
+            color: milestone.Color,
+            value: false
+          }))
+        )
+      );
     }
   }, []);
+
+  const onAddQuestion = value => {
+    setShowModal(true);
+  };
+  const onClose = () => {
+    if (showModal) setShowModal(false);
+  };
 
   return (
     <div className="approvals-tab">
@@ -86,6 +98,15 @@ const CustomTabs = ({ tabId, key }) => {
 
       <div className="filter-container">
         <div className="filter-btn">
+          <div
+            data-testid="selectedbid-testid"
+            title="Add New Question"
+            className="tasksList-add-icon-wrapper"
+            role="presentation"
+            onClick={onAddQuestion}
+          >
+            <Add className="tasksList-add-icon" />
+          </div>
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
@@ -131,6 +152,14 @@ const CustomTabs = ({ tabId, key }) => {
           </>
         )}
         <div id="modal-wrapper" />
+        {showModal && (
+          <AddQuestionModalComponent
+            onClose={onClose}
+            currentsection={''}
+            tabFlag="customTab"
+            tabId={tabId}
+          />
+        )}
       </div>
     </div>
   );

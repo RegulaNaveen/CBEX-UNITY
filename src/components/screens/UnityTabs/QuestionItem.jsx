@@ -32,9 +32,7 @@ import {
   getUnityTabQuestionLoading,
   getPanelStatus
 } from '../../../redux/selectors/proposal';
-import {
-  setEditQuestionData
-} from '../../../redux/actions/proposal-actions';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
@@ -55,6 +53,7 @@ import MultiSelectQuestion from '../Approvals/InputComponents/MultiSelectQuestio
 import YesNoQuestion from '../Approvals/InputComponents/YesNoQuestion';
 import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
@@ -369,23 +368,18 @@ const QuestionItem = ({
   };
 
   const renderTags = () => {
-    const { milestone, milestoneNew } = question;
-    const lastAnswer = getLastAnswer(question);
-    const lastAns = isString(lastAnswer) ? lastAnswer : '';
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview unity-tab-chip">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAns} />
-          ) : null}
-        </div>
-      );
+    const { milestoneNew } = question;
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview unity-tab-chip">
-        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
-      </div>
-    );
   };
 
   const renderQuestionHint = () => {
@@ -685,31 +679,33 @@ const QuestionItem = ({
                         }
                       />
                     )}
-                    
-                  <div className="question-edit">
-                    <span
-                      aria-hidden="true"
-                      onClick={() => {
-                        dispatch(
-                          setEditQuestionData({
-                            questionText:question.questionText,
-                            questionHTML:question.questionHTML,
-                            questionJSON:question.questionJSON,
-                            questionHintJSON:question.questionHintJSON,
-                            section: question.section.sectionName,
-                            tabId:tabId,
-                            answerType: question.answerConfiguration.type,
-                            roleNames:question.roleNames,
-                            questionId:question.questionId,
-                            tabFlag:"customTab"
-                          })
-                        );
-                      }}
-                    >
-                      <Edit className="edit-icon" />
-                    </span>
-                  </div>
-                
+
+                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
+                      <div className="question-edit">
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question.questionText,
+                                questionHTML: question.questionHTML,
+                                questionJSON: question.questionJSON,
+                                questionHintJSON: question.questionHintJSON,
+                                section: question.section.sectionName,
+                                tabId: tabId,
+                                answerType: question.answerConfiguration.type,
+                                roleNames: question.roleNames,
+                                questionId: question.questionId,
+                                tabFlag: 'customTab'
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
+
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
                   <div className="milestone-chip">{renderTags()}</div>
@@ -737,8 +733,6 @@ const QuestionItem = ({
               }}
             />
           )}
-
-        
         </>
       ) : null,
     [
