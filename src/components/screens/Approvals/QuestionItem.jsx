@@ -41,11 +41,9 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
+import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
-import {
-  setEditQuestionData
-} from '../../../redux/actions/proposal-actions';
-
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -128,7 +126,6 @@ const QuestionItem = ({
   const [isShowHistory, setIsShowHistory] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
-  console.log("selectedBid",selectedBid.isCurrent)
   const allOppData = useSelector(getOpportunityData)?.toJS();
   const proposalId = selectedBid?.id;
   const opportunityData = allOppData[proposalId];
@@ -355,7 +352,7 @@ const QuestionItem = ({
             color="primary"
             size="small"
             className="question-tooltip-icon"
-            onClick={(e) => setAnchorEl(e.currentTarget)}
+            onClick={e => setAnchorEl(e.currentTarget)}
           >
             <InfoIcon style={{ fontSize: '16px' }} />
           </IconButton>
@@ -367,23 +364,23 @@ const QuestionItem = ({
             onClose={() => setAnchorEl(null)}
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'center',
+              horizontal: 'center'
             }}
             transformOrigin={{
               vertical: 'top',
-              horizontal: 'center',
+              horizontal: 'center'
             }}
             PaperProps={{
               style: {
                 borderColor: '#e9e9e9',
                 boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
                 padding: 10,
-                maxInlineSize: '300px',
-              },
+                maxInlineSize: '300px'
+              }
             }}
           >
-            <Typography>{
-              questionHintJSON ? (
+            <Typography>
+              {questionHintJSON ? (
                 <RichTextEditor
                   variant="view"
                   defaultValue={JSON.parse(questionHintJSON)}
@@ -391,14 +388,27 @@ const QuestionItem = ({
                 />
               ) : (
                 <div>{questionHint}</div>
-              )
-            }
+              )}
             </Typography>
           </Popover>
         </div>
       );
     }
     return null;
+  };
+
+  const renderTags = milestoneNew => {
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
+    }
   };
 
   const questionRender = useMemo(
@@ -429,39 +439,34 @@ const QuestionItem = ({
                     <QuestionLabel
                       questionLabel={question?.questionText || ''}
                     />
-                    
                     {question.isCustomQuestion && selectedBid.isCurrent && (
-                    <div className="question-edit" style={{ "margin-left" :"10px"
-                    }}>
-                     
-                    <span
-                      aria-hidden="true"
-                      onClick={() => {
-                        dispatch(
-                          setEditQuestionData({
-                            questionText: question?.questionText,
-                            questionHTML: question?.questionHTML,
-                            questionJSON: question?.questionJSON,
-                            questionHintJSON: question?.questionHintJSON,
-                            section: question?.section.approvalSectionName,
-                            answerType: question?.answerConfiguration.type,
-                            roleNames: question?.roleNames,
-                            questionId: question?.questionId,
-                            tabFlag: "Approvals"
-                          })
-                        );
-                      }}
-
-                    >
-                      <Edit className="edit-icon" />
-
-                    </span>
-                  </div>
-                    )
-}
-
+                      <div
+                        className="question-edit"
+                        style={{ 'margin-left': '10px' }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question?.questionText,
+                                questionHTML: question?.questionHTML,
+                                questionJSON: question?.questionJSON,
+                                questionHintJSON: question?.questionHintJSON,
+                                section: question?.section.approvalSectionName,
+                                answerType: question?.answerConfiguration.type,
+                                roleNames: question?.roleNames,
+                                questionId: question?.questionId,
+                                tabFlag: 'Approvals'
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
                   </Grid>
-                  
                   <Grid
                     item
                     xs={2}
@@ -473,6 +478,9 @@ const QuestionItem = ({
                     {renderQuestionHint()}
                   </Grid>
                 </span>
+                <div className="tags-container">
+                  {renderTags(question.milestoneNew)}
+                </div>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
@@ -481,11 +489,9 @@ const QuestionItem = ({
                   </Typography>
                 </Grid>
               ) : null}
-
               <Grid item xs={10} className="answer-input">
                 {renderQuestion()}
               </Grid>
-
               <Grid item xs={2} className="answer-actions">
                 <IconButton
                   size="small"
@@ -547,7 +553,7 @@ QuestionItem.defaultProps = {
     visible: false,
     active: false
   },
-  updateQuestionVisibility: () => { }
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,

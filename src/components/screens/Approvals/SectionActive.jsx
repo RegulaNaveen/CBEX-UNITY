@@ -76,7 +76,6 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-right-ques`}
             />
           ))}
-
         {isCurrent && (
           <>
             <div className="add-question">
@@ -103,12 +102,10 @@ const SectionActive = ({
           selectedBidIsCurrent={selectedBidIsCurrent}
         />
       </Grid>
-
       {showModal && (
         <AddQuestionModalComponent
           onClose={onClose}
           currentsection={ApprovalSectionTitle}
-          //sectionNames="Approvals"
           tabFlag="Approvals"
           tabId={ApprovalSectionId}
         />
