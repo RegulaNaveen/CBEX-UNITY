@@ -86,7 +86,9 @@ const {
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_PROPOSAL_DETAIL_SF,
   UPDATE_DASHBOARD_OPPORTUNITY,
-  CHANGE_BID_LOADER
+  CHANGE_BID_LOADER,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -1047,6 +1049,35 @@ const onRolesError = (state: Map, action: Object): Map => {
   return state.set('rolesError', payload).set('isRolesLoading', false);
 };
 
+const onSetCustomTabQuestion = (state: Map, action: Object): Map => {
+  const data = action.payload;
+  const updatedProposalQuestions = state.get('proposalQuestions');
+  const isQuestionExist = updatedProposalQuestions.find(
+    item => item?.questionId === data?.questionId
+  );
+  if (isQuestionExist) {
+    return;
+  }
+
+  updatedProposalQuestions.push(data);
+
+  let questionsFilter = state.get('questionsFilter');
+  const filterQuestionsVal = getQuestionsFilterApplied(
+    updatedProposalQuestions,
+    questionsFilter,
+    state.get('eventflag')
+  );
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
+    .setIn(
+      ['opportunityData', selectedBidId, 'proposalQuestions'],
+      cloneDeep(updatedProposalQuestions)
+    );
+};
+
 const onSetQuestion = (state: Map, action: Object): Map => {
   const data = action.payload;
   const updatedProposalQuestions = state.get('proposalQuestions');
@@ -1562,6 +1593,12 @@ const actionMap = {
   [ROLES_LOADING]: onRolesLoading,
   [ROLES_ERROR]: onRolesError,
   [PROPOSAL_SET_QUESTION]: onSetQuestion,
+  [PROPOSAL_CUSTOM_TAB_SET_QUESTION]: onSetCustomTabQuestion,
+  [PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD]: (state, { payload }) => {
+    return state
+      .set('setQuestionData', payload)
+      .set('isSetQuestionLoading', false);
+  },
   [PROPOSAL_SET_QUESTION_LOADING]: onSetQuestionLoading,
   [PROPOSAL_SET_QUESTION_ERROR]: onSetQuestionError,
   [PROPOSAL_BOX_ID_LOADING]: onGettingProposalBoxId,

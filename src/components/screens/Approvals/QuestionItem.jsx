@@ -42,6 +42,8 @@ import { autoNavigationCompletedAction } from '../../../redux/actions/search-act
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { Edit } from '../../svg';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -437,6 +439,33 @@ const QuestionItem = ({
                     <QuestionLabel
                       questionLabel={question?.questionText || ''}
                     />
+                    {question.isCustomQuestion && selectedBid.isCurrent && (
+                      <div
+                        className="question-edit"
+                        style={{ 'margin-left': '10px' }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question?.questionText,
+                                questionHTML: question?.questionHTML,
+                                questionJSON: question?.questionJSON,
+                                questionHintJSON: question?.questionHintJSON,
+                                section: question?.section.approvalSectionName,
+                                answerType: question?.answerConfiguration.type,
+                                roleNames: question?.roleNames,
+                                questionId: question?.questionId,
+                                tabFlag: 'Approvals'
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
                   </Grid>
                   <Grid
                     item

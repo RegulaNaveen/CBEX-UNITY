@@ -32,6 +32,7 @@ import {
   getUnityTabQuestionLoading,
   getPanelStatus
 } from '../../../redux/selectors/proposal';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
@@ -53,6 +54,7 @@ import YesNoQuestion from '../Approvals/InputComponents/YesNoQuestion';
 import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { Edit } from '../../svg';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -75,7 +77,8 @@ const QuestionItem = ({
   disabled,
   eventCategories,
   trackEvent,
-  updateQuestionVisibility
+  updateQuestionVisibility,
+  tabId
 }) => {
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
@@ -187,7 +190,6 @@ const QuestionItem = ({
       // END of copied Logic
       return questionMap;
     } catch (error) {
-      console.error(error);
       return questionMap;
     }
   };
@@ -677,6 +679,33 @@ const QuestionItem = ({
                         }
                       />
                     )}
+
+                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
+                      <div className="question-edit">
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question.questionText,
+                                questionHTML: question.questionHTML,
+                                questionJSON: question.questionJSON,
+                                questionHintJSON: question.questionHintJSON,
+                                section: question.section.sectionName,
+                                tabId: tabId,
+                                answerType: question.answerConfiguration.type,
+                                roleNames: question.roleNames,
+                                questionId: question.questionId,
+                                tabFlag: 'customTab'
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
+
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
                   <div className="milestone-chip">{renderTags()}</div>

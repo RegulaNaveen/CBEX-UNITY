@@ -51,6 +51,22 @@ const setApprovals = (state, action) => {
     }))
   };
 };
+const setApprovalQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allApprovals;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.ApprovalSectionTitle];
+  const tabIndex = selectTab.findIndex(
+    value => value.ApprovalSectionTitle === section.ApprovalSectionTitle
+  );
+  selectTab[tabIndex].ApprovalSectionLeftQuestions.push(questionId);
+  tabs[section.ApprovalSectionTitle] = selectTab;
+  return {
+    ...state,
+    allApprovals: tabs
+  };
+};
+
 
 const duplicateApproval = (state, action) => {
   const { sectionId, proposalId, data } = action.payload;
@@ -124,7 +140,8 @@ const actionMap = {
   [APPROVALS.DELETE_APPROVALS]: deleteApprovals,
   [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
   [APPROVALS.UPDATE_FILTERS]: updateFilter,
-  [APPROVALS.RESET_FILTERS]: resetFilters
+  [APPROVALS.RESET_FILTERS]: resetFilters,
+  [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]:setApprovalQuestion
 };
 
 export default function(state = INITIAL_STATE, action) {

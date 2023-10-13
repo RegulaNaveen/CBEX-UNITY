@@ -4,6 +4,24 @@ import { getErrorMessage } from '../../utils/utils';
 import { getQuestionsFilters } from '../selectors';
 import { selectQuery } from '../selectors/search';
 import { doSearchAction } from './search-actions';
+import {
+  setUnityQuestionData,
+  editUnityQuestionData,
+  deleteUnityQuestionData
+} from '../../api/unityTab';
+import { REDUX_TYPES, API } from '../../constants';
+
+const {
+  PROPOSAL_SET_QUESTION_LOADING,
+  PROPOSAL_SET_QUESTION_ERROR,
+  PROPOSAL_DELETE_QUESTION,
+  PROPOSAL_EDIT_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
+} = REDUX_TYPES.PROPOSAL;
+const {
+  SET_APPROVAL_QUESTION_APPROVALS_TAB
+} = REDUX_TYPES.APPROVALS
 
 export const setAllUnityTab = data => ({
   type: UNITY_TABS.SET_UNITY_TABS,
@@ -66,3 +84,111 @@ export function resetSingleTabFiltersAction() {
     dispatch({ type: UNITY_TABS.RESET_SINGLE_TAB_FILTERS });
   };
 }
+
+export const setUnityQuestion = (
+  proposalId: string,
+  questionData: Object,
+  socketContext
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await setUnityQuestionData(proposalId, questionData);
+      if (data) {
+        if(questionData.type == "customTab"){
+          dispatch({
+            type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+            payload: data
+          });
+          dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
+          dispatch({
+            type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+            payload: data
+          });
+
+        }else{
+
+          dispatch({
+            type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
+            payload: data
+          });
+
+          dispatch({
+            type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+            payload: data
+          });
+
+        }
+        if (socketContext) await socketContext?.addQuestionWrapper(data);
+        return data;
+      }
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const editUnityQuestion = (
+  proposalId: string,
+  questionId: string,
+  questionData: Object,
+  socketContext
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await editUnityQuestionData(
+        proposalId,
+        questionId,
+        questionData
+      );
+      dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+      dispatch({
+        type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: data
+      });
+      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      return data;
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const deleteUnityQuestion = (
+  questionData: Object,
+  socketContext
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      const data = await deleteUnityQuestionData(questionData);
+      dispatch({
+        type: PROPOSAL_DELETE_QUESTION,
+        payload: questionData.questionId
+      });
+      dispatch({
+        type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: {
+          questionId: questionData.questionId,
+          sectionName: questionData.sectionName,
+          tabId: questionData.tabId
+        }
+      });
+      if (socketContext)
+        await socketContext?.questionDeleteWrapper(questionData.questionId);
+    } catch (err) {
+      console.log(`err`, err);
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
