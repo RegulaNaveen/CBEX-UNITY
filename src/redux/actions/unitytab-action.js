@@ -12,12 +12,16 @@ import {
 import { REDUX_TYPES, API } from '../../constants';
 
 const {
-  PROPOSAL_SET_QUESTION,
   PROPOSAL_SET_QUESTION_LOADING,
   PROPOSAL_SET_QUESTION_ERROR,
   PROPOSAL_DELETE_QUESTION,
-  PROPOSAL_EDIT_QUESTION
+  PROPOSAL_EDIT_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
 } = REDUX_TYPES.PROPOSAL;
+const {
+  SET_APPROVAL_QUESTION_APPROVALS_TAB
+} = REDUX_TYPES.APPROVALS
 
 export const setAllUnityTab = data => ({
   type: UNITY_TABS.SET_UNITY_TABS,
@@ -93,13 +97,34 @@ export const setUnityQuestion = (
     });
     try {
       const data = await setUnityQuestionData(proposalId, questionData);
-      dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
-      dispatch({
-        type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
-        payload: data
-      });
-      if (socketContext) await socketContext?.addQuestionWrapper(data);
-      return data;
+      if (data) {
+        if(questionData.type == "customTab"){
+          dispatch({
+            type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+            payload: data
+          });
+          dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
+          dispatch({
+            type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+            payload: data
+          });
+
+        }else{
+
+          dispatch({
+            type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
+            payload: data
+          });
+
+          dispatch({
+            type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+            payload: data
+          });
+
+        }
+        if (socketContext) await socketContext?.addQuestionWrapper(data);
+        return data;
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -146,7 +171,6 @@ export const deleteUnityQuestion = (
       payload: {}
     });
     try {
-      console.log('delete api call', questionData);
       const data = await deleteUnityQuestionData(questionData);
       dispatch({
         type: PROPOSAL_DELETE_QUESTION,

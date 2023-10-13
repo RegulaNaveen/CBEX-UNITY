@@ -41,6 +41,9 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
+import Tooltip from 'apollo-react/components/Tooltip';
+import { Edit } from '../../svg';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -344,55 +347,68 @@ const QuestionItem = ({
     if (questionHint) {
       return (
         <div className="question-hint" style={{ paddingLeft: '10px' }}>
-            <IconButton
-              data-testid="approval-icon-button" 
-              color="primary"
-              size="small"
-              className="question-tooltip-icon" 
-              onClick={(e) => setAnchorEl(e.currentTarget)}
-            >
-              <InfoIcon style={{ fontSize: '16px' }} />
-            </IconButton>
-            <Popover
-              data-testid="popover-approval"
-              className="popover-approval"
-              open={!!anchorEl}
-              anchorEl={anchorEl}
-              onClose={() => setAnchorEl(null)}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              PaperProps={{
-                style: { 
-                  borderColor: '#e9e9e9', 
-                  boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                  padding: 10,
-                  maxInlineSize: '300px',
-                },
-              }}
-            >
-              <Typography>{
-                questionHintJSON ? (
-                  <RichTextEditor
-                    variant="view"
-                    defaultValue={JSON.parse(questionHintJSON)}
-                    ref={handleHintRef}
-                  />
-                ) : (
-                  <div>{questionHint}</div>
-                )
+          <IconButton
+            data-testid="approval-icon-button"
+            color="primary"
+            size="small"
+            className="question-tooltip-icon"
+            onClick={e => setAnchorEl(e.currentTarget)}
+          >
+            <InfoIcon style={{ fontSize: '16px' }} />
+          </IconButton>
+          <Popover
+            data-testid="popover-approval"
+            className="popover-approval"
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+            PaperProps={{
+              style: {
+                borderColor: '#e9e9e9',
+                boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                padding: 10,
+                maxInlineSize: '300px'
               }
-              </Typography>
-            </Popover>
+            }}
+          >
+            <Typography>
+              {questionHintJSON ? (
+                <RichTextEditor
+                  variant="view"
+                  defaultValue={JSON.parse(questionHintJSON)}
+                  ref={handleHintRef}
+                />
+              ) : (
+                <div>{questionHint}</div>
+              )}
+            </Typography>
+          </Popover>
         </div>
       );
     }
     return null;
+  };
+
+  const renderTags = milestoneNew => {
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
+    }
   };
 
   const questionRender = useMemo(
@@ -422,7 +438,34 @@ const QuestionItem = ({
                   >
                     <QuestionLabel
                       questionLabel={question?.questionText || ''}
-                    />   
+                    />
+                    {question.isCustomQuestion && selectedBid.isCurrent && (
+                      <div
+                        className="question-edit"
+                        style={{ 'margin-left': '10px' }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question?.questionText,
+                                questionHTML: question?.questionHTML,
+                                questionJSON: question?.questionJSON,
+                                questionHintJSON: question?.questionHintJSON,
+                                section: question?.section.approvalSectionName,
+                                answerType: question?.answerConfiguration.type,
+                                roleNames: question?.roleNames,
+                                questionId: question?.questionId,
+                                tabFlag: 'Approvals'
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
                   </Grid>
                   <Grid
                     item
@@ -434,7 +477,10 @@ const QuestionItem = ({
                   >
                     {renderQuestionHint()}
                   </Grid>
-                </span>      
+                </span>
+                <div className="tags-container">
+                  {renderTags(question.milestoneNew)}
+                </div>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
