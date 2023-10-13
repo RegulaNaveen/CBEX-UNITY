@@ -167,11 +167,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       allApprovalTab.length > 0 && allApprovalTab.map(item => {
         sectionApproval.push(item.ApprovalSectionTitle)
         sectionOrderInfoApproval.push({
-          sectionName: "Approvals",
-          approvalSectionName:item.ApprovalSectionTitle,
-          tabID: tabId,
+          sectionName: item.ApprovalSectionTitle,
           sectionOrder: item.ApprovalSectionOrder,
-          direction:"left"
         })
       }
       )
@@ -241,14 +238,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             this.validateSection();
           }
         );
-    } else if (tabFlag == 'approvalTab') {
+    } else if (tabFlag == 'Approvals') {
       approvalAllSectionOrderInfo.forEach((section: Object) => {
-        const { sectionOrder: order, approvalSectionName: name } = section;
+        const { sectionOrder: order, sectionName: name } = section;
         if (name === value) sectionOrder = order;
       });
       if (sectionOrder > -1 && value)
         this.setState(
-          { section: { sectionOrder, approvalSectionName: value, sectionName,direction } },
+          { section: { sectionOrder, sectionName: value } },
           () => {
             this.validateSection();
           }
@@ -411,8 +408,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             roleNames,
             type: 'customTab'
           };
-        } else if (tabFlag == 'approvalTab') {
-
+        } else if (tabFlag == 'Approvals') {
+          section['approvalSectionName'] = section.sectionName ;
+          section['sectionName'] = "Approvals";
+          section['direction'] = "left" ;
           questionData = {
             proposalId,
             questionText,
@@ -421,7 +420,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             options: [],
             roleNames,
             type: 'Approvals'
-
           };
 
         } else {
@@ -456,8 +454,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             );
           }
         } else {
-          if (tabFlag == 'customTab' || tabFlag == 'approvalTab') {
-
+          if (tabFlag == 'customTab' || tabFlag == 'Approvals') {
             const result = await setUnityQuestionF(
               proposalId,
               questionData,
@@ -495,6 +492,16 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         type: tabFlag
       };
       const res = deleteUnityQuestion(question_data, this.context);
+    }else if(tabFlag == 'Approvals'){
+
+      const question_data = {
+        proposalId: proposalId,
+        questionId: editQuestionsData.get('questionId'),
+        sectionName: editQuestionsData.get('section'),
+        type: tabFlag
+      };
+      const res = deleteUnityQuestion(question_data, this.context);
+
     } else {
       const res = deleteProposalQuestion(
         proposalId,
@@ -547,7 +554,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     if (tabFlag == 'customTab') {
       filteredSectionNames =
         unityAllTabSection.length > 0 ? unityAllTabSection : '';
-    } else if (tabFlag == 'approvalTab') {
+    } else if (tabFlag == 'Approvals') {
       filteredSectionNames =
         approvalAllTabSection.length > 0 ? approvalAllTabSection : '';
     } else {

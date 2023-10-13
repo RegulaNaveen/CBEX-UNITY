@@ -19,6 +19,9 @@ const {
   PROPOSAL_CUSTOM_TAB_SET_QUESTION,
   PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
 } = REDUX_TYPES.PROPOSAL;
+const {
+  SET_APPROVAL_QUESTION_APPROVALS_TAB
+} = REDUX_TYPES.APPROVALS
 
 export const setAllUnityTab = data => ({
   type: UNITY_TABS.SET_UNITY_TABS,
@@ -95,15 +98,30 @@ export const setUnityQuestion = (
     try {
       const data = await setUnityQuestionData(proposalId, questionData);
       if (data) {
-        dispatch({
-          type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
-          payload: data
-        });
-        dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
-        dispatch({
-          type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
-          payload: data
-        });
+        if(questionData.type == "customTab"){
+          dispatch({
+            type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+            payload: data
+          });
+          dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
+          dispatch({
+            type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+            payload: data
+          });
+
+        }else{
+
+          dispatch({
+            type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
+            payload: data
+          });
+
+          dispatch({
+            type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+            payload: data
+          });
+
+        }
         if (socketContext) await socketContext?.addQuestionWrapper(data);
         return data;
       }
@@ -153,7 +171,6 @@ export const deleteUnityQuestion = (
       payload: {}
     });
     try {
-      console.log('delete api call', questionData);
       const data = await deleteUnityQuestionData(questionData);
       dispatch({
         type: PROPOSAL_DELETE_QUESTION,

@@ -108,7 +108,8 @@ const SectionActive = ({
         <AddQuestionModalComponent
           onClose={onClose}
           currentsection={ApprovalSectionTitle}
-          tabFlag="approvalTab"
+          //sectionNames="Approvals"
+          tabFlag="Approvals"
           tabId={ApprovalSectionId}
         />
       )}
