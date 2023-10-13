@@ -22,6 +22,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import moment from 'moment';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
+import RenderFilterLabel from '../../common/RenderFilterLabel';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
   getProposalUpdated,
@@ -89,19 +90,6 @@ const QuestionsSectionMapping = React.lazy(() =>
     )
   )
 );
-
-function RenderFilterLabel({ labelText, showColor = false, color }) {
-  if (showColor) {
-    return (
-      <span style={{ display: 'inline-flex', gap: '4px' }}>
-        <span className="tag-box" style={{ backgroundColor: color }}></span>
-        <Typography>{labelText}</Typography>
-      </span>
-    );
-  } else {
-    return <Typography>{labelText}</Typography>;
-  }
-}
 
 type Props = {
   match: Match,

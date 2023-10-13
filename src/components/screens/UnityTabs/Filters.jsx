@@ -8,6 +8,7 @@ import {
   resetSingleTabFiltersAction,
   updateFilters
 } from '../../../redux/actions/unitytab-action';
+import RenderFilterLabel from '../../common/RenderFilterLabel';
 
 const Filters = props => {
   const unityTabFilters = useSelector(state => state.unitytab.filters);
@@ -44,7 +45,13 @@ const Filters = props => {
                   <Grid item xs={3} key={item.name}>
                     <ApolloCheckbox
                       size="small"
-                      label={item.displayName}
+                      label={
+                        <RenderFilterLabel
+                          labelText={item.displayName}
+                          showColor={group === 'milestone'}
+                          color={item.color}
+                        />
+                      }
                       checked={item.value}
                       onChange={(e, checked) => {
                         updateFilter(item.name, checked);
