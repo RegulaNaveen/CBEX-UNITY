@@ -8,6 +8,8 @@ const ANSWER_TYPES = {
   PICKLIST: 'picklist',
   PICKLIST_LOOKUP: 'picklist-lookup',
   RADIO: 'radio',
-  CHECKBOX: 'checkbox'
+  CHECKBOX: 'checkbox',
+  MULTI_SELECT: 'multi-select',
+  MULTI_SELECT_LOOKUP: 'multi-select-lookup',
 };
 export default ANSWER_TYPES;
