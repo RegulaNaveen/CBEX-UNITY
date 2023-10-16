@@ -78,13 +78,17 @@ const QuestionItem = ({
   eventCategories,
   trackEvent,
   updateQuestionVisibility,
-  tabId
+  tabId,
+
 }) => {
+
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
   ).toJS();
+
+
   const oppdata = useSelector(state => getOpportunityData(state));
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
@@ -98,6 +102,7 @@ const QuestionItem = ({
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -105,6 +110,17 @@ const QuestionItem = ({
   }, [unityTabFilters]);
 
   useEffect(() => {
+    if (
+      question?.answers &&
+      Array.isArray(question?.answers) &&
+      !question?.answers.length
+    ) {
+      setshowLastAnswer(false);
+    } else {
+      const lastAnswer = question?.answers[question?.answers.length - 1];
+      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
+      setshowLastAnswer(lastAnswerVisibility ? true : false);
+    }
     if (question && question.questionLockInfo) {
       setLocked(true);
     } else {
@@ -663,7 +679,7 @@ const QuestionItem = ({
                         questionLabel={question?.questionText || ''}
                       />
                       {!isEmpty(question?.questionLockInfo) &&
-                      isQuestionLockedByOther() ? (
+                        isQuestionLockedByOther() ? (
                         <Typography variant="subtitle1" className="status-txt">
                           {question.questionLockInfo?.userName} is typing...
                         </Typography>
@@ -679,32 +695,31 @@ const QuestionItem = ({
                         }
                       />
                     )}
-
-                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
-                      <div className="question-edit">
-                        <span
-                          aria-hidden="true"
-                          onClick={() => {
-                            dispatch(
-                              setEditQuestionData({
-                                questionText: question.questionText,
-                                questionHTML: question.questionHTML,
-                                questionJSON: question.questionJSON,
-                                questionHintJSON: question.questionHintJSON,
-                                section: question.section.sectionName,
-                                tabId: tabId,
-                                answerType: question.answerConfiguration.type,
-                                roleNames: question.roleNames,
-                                questionId: question.questionId,
-                                tabFlag: 'customTab'
-                              })
-                            );
-                          }}
-                        >
-                          <Edit className="edit-icon" />
-                        </span>
-                      </div>
-                    )}
+                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (<div className="question-edit">
+                      <span
+                        aria-hidden="true"
+                        onClick={() => {
+                          dispatch(
+                            setEditQuestionData({
+                              questionText: question.questionText,
+                              questionHTML: question.questionHTML,
+                              questionJSON: question.questionJSON,
+                              questionHintJSON: question.questionHintJSON,
+                              section: question.section.sectionName,
+                              tabId: tabId,
+                              answerType: question.answerConfiguration.type,
+                              roleNames: question.roleNames,
+                              questionId: question.questionId,
+                              tabFlag: "customTab",
+                              questionAnswered: showLastAnswer
+                            })
+                          );
+                        }}
+                      >
+                        <Edit className="edit-icon" />
+                      </span>
+                    </div>)
+                    }
 
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
@@ -755,7 +770,7 @@ const QuestionItem = ({
 
 QuestionItem.defaultProps = {
   disabled: false,
-  updateQuestionVisibility: () => {}
+  updateQuestionVisibility: () => { }
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
