@@ -20,7 +20,8 @@ const {
   PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
 } = REDUX_TYPES.PROPOSAL;
 const {
-  SET_APPROVAL_QUESTION_APPROVALS_TAB
+  SET_APPROVAL_QUESTION_APPROVALS_TAB,
+  UPDATE_APPROVAL_QUESTION_CUSTOM_TAB
 } = REDUX_TYPES.APPROVALS
 
 export const setAllUnityTab = data => ({
@@ -99,19 +100,19 @@ export const setUnityQuestion = (
       const data = await setUnityQuestionData(proposalId, questionData);
       if (data) {
         dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
-        if(questionData.type == "customTab"){
+        if (questionData.type == "customTab") {
           dispatch({
             type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
             payload: data
           });
-          
+
           dispatch({
             type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
             payload: data
           });
 
-        }else{
-          
+        } else {
+
           dispatch({
             type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
             payload: data
@@ -149,11 +150,21 @@ export const editUnityQuestion = (
         questionId,
         questionData
       );
+
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
-      dispatch({
-        type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
-        payload: data
-      });
+
+      if (questionData.type == "customTab") {
+        dispatch({
+          type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: data
+        });
+      }else{
+        dispatch({
+          type:UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+          payload: data
+        });
+
+      }
       if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
       return data;
     } catch (err) {
@@ -166,6 +177,8 @@ export const deleteUnityQuestion = (
   questionData: Object,
   socketContext
 ): ThunkAction<string, Object> => {
+  console.log(questionData)
+  
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
@@ -177,14 +190,28 @@ export const deleteUnityQuestion = (
         type: PROPOSAL_DELETE_QUESTION,
         payload: questionData.questionId
       });
-      dispatch({
-        type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
-        payload: {
-          questionId: questionData.questionId,
-          sectionName: questionData.sectionName,
-          tabId: questionData.tabId
-        }
-      });
+      if (questionData.type == "customTab") {
+
+        dispatch({
+          type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: {
+            questionId: questionData.questionId,
+            sectionName: questionData.sectionName,
+            tabId: questionData.tabId
+          }
+        });
+      } else {
+
+        dispatch({
+          type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: {
+            questionId: questionData.questionId,
+            approvalSectionName: questionData.sectionName,
+            sectionName: questionData.type,
+
+          }
+        });
+      }
       if (socketContext)
         await socketContext?.questionDeleteWrapper(questionData.questionId);
     } catch (err) {

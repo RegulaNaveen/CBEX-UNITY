@@ -164,7 +164,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         );
     }
     {
-      allApprovalTab.length > 0 && allApprovalTab.map(item => {
+      allApprovalTab.length > 0 && allApprovalTab.map(item => 
+        {
         sectionApproval.push(item.ApprovalSectionTitle)
         sectionOrderInfoApproval.push({
           sectionName: item.ApprovalSectionTitle,
@@ -377,7 +378,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       editProposalQuestion,
       editUnityQuestion,
       selectedBid,
-      onClose
+      onClose,
+      direction
     } = this.props;
     const isEditMode = editQuestionsData.size > 0 || false;
     if (isEditMode) {
@@ -411,7 +413,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         } else if (tabFlag == 'Approvals') {
           section['approvalSectionName'] = section.sectionName ;
           section['sectionName'] = "Approvals";
-          section['direction'] = "left" ;
+          section['direction'] = direction;
           questionData = {
             proposalId,
             questionText,

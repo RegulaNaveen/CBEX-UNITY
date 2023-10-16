@@ -53,54 +53,65 @@ const setApprovals = (state, action) => {
 };
 
 const setApprovalQuestion = (state, action) => {
-
   const { payload } = action;
-  const approvals = state.allApprovals;
   const { questionId, section } = payload;
-
-
-};
-
-const deleteCustomQuestion = (state, action) => {
-  const { payload } = action;
-  const tabs = state.allApprovals;
-  const { questionId, ApprovalSectionTitle } = payload;
-  const selectTab = tabs[ApprovalSectionTitle];
-  const tabIndex = selectTab.findIndex(
-    value => value.ApprovalSectionTitle === ApprovalSectionTitle
-  );
-  const updatedData = selectTab[tabIndex].UnityTabSectionQuestions.filter(
-    value => value !== questionId
-  );
-  selectTab[tabIndex].UnityTabSectionQuestions = updatedData;
-  tabs[tabId] = selectTab;
-  return {
-    ...state,
-    allTabs: tabs
-  };
-};
-
-const updateCustomQuestion = (state, action) => {
-  const { payload } = action;
-  const tabs = state.allTabs;
-  const { questionId, section } = payload;
-  const selectTab = tabs[section.tabID];
-  selectTab.forEach(value => {
-    value.UnityTabSectionQuestions = value.UnityTabSectionQuestions.filter(
-      questionID => questionID !== questionId
-    );
+  const approval = state.allApprovals;
+  const result = approval.map(value => {
+    if (
+      section.sectionName === 'Approvals' &&
+      value.ApprovalSectionTitle === section.approvalSectionName
+    ) {
+      if (section.direction === 'left') {
+        value.ApprovalSectionLeftQuestions.push(questionId);
+      } else {
+        value.ApprovalSectionRightQuestions.push(questionId);
+      }
+    }
+    return value;
   });
-  const tabIndex = selectTab.findIndex(
-    value => value.UnityTabSectionTitle === section.sectionName
-  );
-  if (tabIndex > -1) {
-    selectTab[tabIndex].UnityTabSectionQuestions.push(questionId);
-    tabs[section.tabID] = selectTab;
-  }
+  return {
+
+    ...state,
+
+    allApprovals: result
+
+  };
+};
+
+const updateApprovalQuestion = (state, action) => {
+  const { payload } = action;
+  const { questionId, section } = payload;
+  const approval = state.allApprovals;
+  approval.forEach(value=>{
+    if(section.direction === 'left'){
+      value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions .filter(QuestionId => QuestionId !==  questionId)
+    }else{
+      value.ApprovalSectionRightQuestions = value.ApprovalSectionRightQuestions .filter(QuestionId => QuestionId !==  questionId)
+    }
+  })
+
+  const result = approval.map(value => {
+    if (
+      section.sectionName === 'Approvals' &&
+      value.ApprovalSectionTitle === section.approvalSectionName
+    ) {
+      if (section.direction === 'left') {
+        value.ApprovalSectionLeftQuestions.push(questionId);
+      } else {
+        value.ApprovalSectionRightQuestions.push(questionId);
+      }
+    }
+    return value;
+
+  });
+  console.log("result",result)
+
   return {
     ...state,
-    allTabs: tabs
+    allApprovals: result
   };
+
+  
 };
 
 
@@ -178,9 +189,11 @@ const actionMap = {
   [APPROVALS.SET_CAN_SEND_EMAIL_IN_APPROVALS]: setCanSendEmail,
   [APPROVALS.UPDATE_FILTERS]: updateFilter,
   [APPROVALS.RESET_FILTERS]: resetFilters,
-  [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]:setApprovalQuestion
+  [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]: setApprovalQuestion,
+  [APPROVALS.UPDATE_APPROVAL_QUESTION_CUSTOM_TAB]: updateApprovalQuestion
+
 };
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }
