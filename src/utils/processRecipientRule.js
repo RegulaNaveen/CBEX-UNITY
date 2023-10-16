@@ -426,7 +426,7 @@ const processCondition = (answer, filter, operator, answerType, ruleAnswer) => {
 
 const processQuestion = (data, proposalQuestion) => {
   const answer = proposalQuestion.find(value => {
-    return value.questionId === data.RecipientRuleQuestion;
+    return value.questionId === data.QuestionId;
   });
   if (answer) {
     const lastAnswer = answer?.answers[answer?.answers.length - 1];
