@@ -51,20 +51,14 @@ const setApprovals = (state, action) => {
     }))
   };
 };
+
 const setApprovalQuestion = (state, action) => {
+
   const { payload } = action;
-  const tabs = state.allApprovals;
+  const approvals = state.allApprovals;
   const { questionId, section } = payload;
-  const selectTab = tabs[section.ApprovalSectionTitle];
-  const tabIndex = selectTab.findIndex(
-    value => value.ApprovalSectionTitle === section.ApprovalSectionTitle
-  );
-  selectTab[tabIndex].ApprovalSectionLeftQuestions.push(questionId);
-  tabs[section.ApprovalSectionTitle] = selectTab;
-  return {
-    ...state,
-    allApprovals: tabs
-  };
+
+
 };
 
 const deleteCustomQuestion = (state, action) => {

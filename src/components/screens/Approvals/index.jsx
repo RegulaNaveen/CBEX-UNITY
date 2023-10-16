@@ -21,12 +21,16 @@ import Filters from './Filters';
 import FilterButton from './FilterButton';
 import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 import { SocketContext } from '../../../context/SocketContext';
+import { Add, Refresh } from '../../svg';
+import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
+
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const questions = useSelector(getProposalQuestions);
   const [isShowFilters, setIsShowFilters] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -63,6 +67,14 @@ const Approvals = () => {
     return () => {};
   }, [memoizeBid]);
 
+  const onAddQuestion = value => {
+    setShowModal(true);
+  };
+  const onClose = () => {
+    if (showModal) setShowModal(false);
+  };
+
+
   return (
     <div className="approvals-tab">
       <ViewAboveVerticalTabs>
@@ -71,6 +83,15 @@ const Approvals = () => {
 
       <div className="filter-container">
         <div className="filter-btn">
+        <div
+          data-testid="selectedbid-testid"
+          title="Add New Question"
+          className="tasksList-add-icon-wrapper"
+          role="presentation"
+          onClick={onAddQuestion}
+        >
+          <Add className="tasksList-add-icon" />
+        </div>
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
@@ -127,6 +148,16 @@ const Approvals = () => {
         />
       )}
       <div id="modal-wrapper" />
+     
+        {showModal && (
+          <AddQuestionModalComponent
+            onClose={onClose}
+            currentsection={""}
+            tabFlag="Approvals"
+            //tabId={tabId}
+          />
+        )}
+     
     </div>
   );
 };
