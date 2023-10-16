@@ -111,9 +111,17 @@ const QuestionItem = ({
   }, [unityTabFilters]);
 
   useEffect(() => {
-    const lastAnswer = question?.answers[question?.answers.length-1];
-    const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length ;
-    setshowLastAnswer(lastAnswerVisibility?true:false)
+    if (
+      question?.answers &&
+      Array.isArray(question?.answers) &&
+      !question?.answers.length
+    ) {
+      setshowLastAnswer(false);
+    } else {
+      const lastAnswer = question?.answers[question?.answers.length - 1];
+      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
+      setshowLastAnswer(lastAnswerVisibility ? true : false);
+    }
     if (question && question.questionLockInfo) {
       setLocked(true);
     } else {

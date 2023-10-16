@@ -87,6 +87,7 @@ const QuestionItem = ({
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -98,6 +99,17 @@ const QuestionItem = ({
       setLocked(true);
     } else {
       setLocked(false);
+    }
+    if (
+      question?.answers &&
+      Array.isArray(question?.answers) &&
+      !question?.answers.length
+    ) {
+      setshowLastAnswer(false);
+    } else {
+      const lastAnswer = question?.answers[question?.answers.length - 1];
+      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
+      setshowLastAnswer(lastAnswerVisibility ? true : false);
     }
   }, [isQuesFreezed, activeQuestionInfo]);
 
@@ -128,7 +140,6 @@ const QuestionItem = ({
   const [isShowHistory, setIsShowHistory] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
-  console.log("selectedBid",selectedBid.isCurrent)
   const allOppData = useSelector(getOpportunityData)?.toJS();
   const proposalId = selectedBid?.id;
   const opportunityData = allOppData[proposalId];
@@ -447,7 +458,8 @@ const QuestionItem = ({
                             answerType: question?.answerConfiguration.type,
                             roleNames: question?.roleNames,
                             questionId: question?.questionId,
-                            tabFlag: "Approvals"
+                            tabFlag: "Approvals",
+                            questionAnswered:showLastAnswer 
                           })
                         );
                       }}
