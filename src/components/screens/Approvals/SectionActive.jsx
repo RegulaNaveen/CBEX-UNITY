@@ -24,6 +24,7 @@ const SectionActive = ({
   // Used to decide the visibility of a section
   const [questionVisibility, setQuestionVisibility] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [direction, setDirection] = useState();
   const isAllQuestionsVisible = useMemo(() => {
     const valuesArr = Object.values(questionVisibility) || [];
     if (valuesArr.length > 0 && valuesArr.every(i => i === false)) {
@@ -40,6 +41,7 @@ const SectionActive = ({
     setIsAllActiveDisplayed(isAllQuestionsVisible);
   }, [isAllQuestionsVisible]);
   const onAddQuestion = value => {
+    setDirection(value)
     setShowModal(true);
   };
   const onClose = () => {
@@ -63,6 +65,24 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-left-ques`}
             />
           ))}
+           {isCurrent && (
+          <>
+            <div className="add-question">
+              <Link
+                style={{ borderBottom: 'none' }}
+                //onClick={() => onAddQuestion(title)}
+                size="small"
+                onClick={()=>onAddQuestion("left")}
+              >
+                <Plus
+                  className="plus-icon-add-new-question"
+                  fontSize="extraSmall"
+                />
+                <span style={{ verticalAlign: 'top' }}> Add New Question</span>
+              </Link>
+            </div>
+          </>
+        )}
       </Grid>
       <Grid item xs={4} className="approval-ques-right">
         {!isEmpty(rightQues) &&
@@ -76,14 +96,14 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-right-ques`}
             />
           ))}
-        {isCurrent && (
+           {isCurrent && (
           <>
             <div className="add-question">
               <Link
                 style={{ borderBottom: 'none' }}
                 //onClick={() => onAddQuestion(title)}
                 size="small"
-                onClick={onAddQuestion}
+                onClick={()=>onAddQuestion("right")}
               >
                 <Plus
                   className="plus-icon-add-new-question"
@@ -94,7 +114,10 @@ const SectionActive = ({
             </div>
           </>
         )}
+
+       
       </Grid>
+     
       <Grid item xs={12} className="approval-ques-actions">
         <ActionButtons
           sectionId={ApprovalSectionId}
@@ -108,6 +131,7 @@ const SectionActive = ({
           currentsection={ApprovalSectionTitle}
           tabFlag="Approvals"
           tabId={ApprovalSectionId}
+          direction = {direction}
         />
       )}
     </Grid>
