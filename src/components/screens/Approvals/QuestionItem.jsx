@@ -85,6 +85,7 @@ const QuestionItem = ({
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -96,6 +97,17 @@ const QuestionItem = ({
       setLocked(true);
     } else {
       setLocked(false);
+    }
+    if (
+      question?.answers &&
+      Array.isArray(question?.answers) &&
+      !question?.answers.length
+    ) {
+      setshowLastAnswer(false);
+    } else {
+      const lastAnswer = question?.answers[question?.answers.length - 1];
+      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
+      setshowLastAnswer(lastAnswerVisibility ? true : false);
     }
   }, [isQuesFreezed, activeQuestionInfo]);
 
@@ -440,32 +452,36 @@ const QuestionItem = ({
                       questionLabel={question?.questionText || ''}
                     />
                     {question.isCustomQuestion && selectedBid.isCurrent && (
-                      <div
-                        className="question-edit"
-                        style={{ 'margin-left': '10px' }}
-                      >
-                        <span
-                          aria-hidden="true"
-                          onClick={() => {
-                            dispatch(
-                              setEditQuestionData({
-                                questionText: question?.questionText,
-                                questionHTML: question?.questionHTML,
-                                questionJSON: question?.questionJSON,
-                                questionHintJSON: question?.questionHintJSON,
-                                section: question?.section.approvalSectionName,
-                                answerType: question?.answerConfiguration.type,
-                                roleNames: question?.roleNames,
-                                questionId: question?.questionId,
-                                tabFlag: 'Approvals'
-                              })
-                            );
-                          }}
-                        >
-                          <Edit className="edit-icon" />
-                        </span>
-                      </div>
-                    )}
+                    <div className="question-edit" style={{ "margin-left" :"10px"
+                    }}>
+                     
+                    <span
+                      aria-hidden="true"
+                      onClick={() => {
+                        dispatch(
+                          setEditQuestionData({
+                            questionText: question?.questionText,
+                            questionHTML: question?.questionHTML,
+                            questionJSON: question?.questionJSON,
+                            questionHintJSON: question?.questionHintJSON,
+                            section: question?.section.approvalSectionName,
+                            answerType: question?.answerConfiguration.type,
+                            roleNames: question?.roleNames,
+                            questionId: question?.questionId,
+                            tabFlag: "Approvals",
+                            questionAnswered:showLastAnswer 
+                          })
+                        );
+                      }}
+
+                    >
+                      <Edit className="edit-icon" />
+
+                    </span>
+                  </div>
+                    )
+}
+
                   </Grid>
                   <Grid
                     item
