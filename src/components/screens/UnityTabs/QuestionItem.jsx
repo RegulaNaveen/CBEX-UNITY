@@ -80,12 +80,16 @@ const QuestionItem = ({
   trackEvent,
   updateQuestionVisibility,
   tabId,
+  
 }) => {
+
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
   ).toJS();
+ 
+  
   const oppdata = useSelector(state => getOpportunityData(state));
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
@@ -99,6 +103,7 @@ const QuestionItem = ({
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -106,6 +111,9 @@ const QuestionItem = ({
   }, [unityTabFilters]);
 
   useEffect(() => {
+    const lastAnswer = question?.answers[question?.answers.length-1];
+    const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length ;
+    setshowLastAnswer(lastAnswerVisibility?true:false)
     if (question && question.questionLockInfo) {
       setLocked(true);
     } else {
@@ -702,7 +710,8 @@ const QuestionItem = ({
                               answerType: question.answerConfiguration.type,
                               roleNames: question.roleNames,
                               questionId: question.questionId,
-                              tabFlag: "customTab"
+                              tabFlag: "customTab",
+                              questionAnswered:showLastAnswer 
                             })
                           );
                         }}

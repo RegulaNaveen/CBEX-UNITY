@@ -77,7 +77,9 @@ const SectionActive = ({
             />
           ))}
 
-        {isCurrent && (
+       
+      </Grid>
+      {isCurrent && (
           <>
             <div className="add-question">
               <Link
@@ -95,7 +97,6 @@ const SectionActive = ({
             </div>
           </>
         )}
-      </Grid>
       <Grid item xs={12} className="approval-ques-actions">
         <ActionButtons
           sectionId={ApprovalSectionId}

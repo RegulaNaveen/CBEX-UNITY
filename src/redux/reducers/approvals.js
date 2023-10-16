@@ -67,6 +67,49 @@ const setApprovalQuestion = (state, action) => {
   };
 };
 
+const deleteCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allApprovals;
+  const { questionId, ApprovalSectionTitle } = payload;
+  const selectTab = tabs[ApprovalSectionTitle];
+  const tabIndex = selectTab.findIndex(
+    value => value.ApprovalSectionTitle === ApprovalSectionTitle
+  );
+  const updatedData = selectTab[tabIndex].UnityTabSectionQuestions.filter(
+    value => value !== questionId
+  );
+  selectTab[tabIndex].UnityTabSectionQuestions = updatedData;
+  tabs[tabId] = selectTab;
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
+const updateCustomQuestion = (state, action) => {
+  const { payload } = action;
+  const tabs = state.allTabs;
+  const { questionId, section } = payload;
+  const selectTab = tabs[section.tabID];
+  selectTab.forEach(value => {
+    value.UnityTabSectionQuestions = value.UnityTabSectionQuestions.filter(
+      questionID => questionID !== questionId
+    );
+  });
+  const tabIndex = selectTab.findIndex(
+    value => value.UnityTabSectionTitle === section.sectionName
+  );
+  if (tabIndex > -1) {
+    selectTab[tabIndex].UnityTabSectionQuestions.push(questionId);
+    tabs[section.tabID] = selectTab;
+  }
+  return {
+    ...state,
+    allTabs: tabs
+  };
+};
+
+
 
 const duplicateApproval = (state, action) => {
   const { sectionId, proposalId, data } = action.payload;

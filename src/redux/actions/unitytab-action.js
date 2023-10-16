@@ -98,19 +98,20 @@ export const setUnityQuestion = (
     try {
       const data = await setUnityQuestionData(proposalId, questionData);
       if (data) {
+        dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
         if(questionData.type == "customTab"){
           dispatch({
             type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
             payload: data
           });
-          dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
+          
           dispatch({
             type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
             payload: data
           });
 
         }else{
-
+          
           dispatch({
             type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
             payload: data

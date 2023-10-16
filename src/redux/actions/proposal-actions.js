@@ -1264,6 +1264,7 @@ export function expandAllSectionsAction(expand = false) {
 }
 
 export function setEditQuestionData(data = {}) {
+  console.log("data",data)
   return async dispatch => {
     dispatch({ type: SET_EDIT_QUESTION_DATA, payload: data });
   };
