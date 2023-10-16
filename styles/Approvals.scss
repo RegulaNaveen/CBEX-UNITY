@@ -242,3 +242,23 @@
 .approvals-warning-modal {
   max-width: 342px;
 }
+
+.ques-title-cover {
+  display: flex;
+  .tags-container {
+    flex-basis: auto;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 6px;
+    .tag {
+      display: inline;
+      .tag-box {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

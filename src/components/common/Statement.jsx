@@ -17,6 +17,7 @@ import {
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 import { isEmpty } from 'lodash';
 import Typography from 'apollo-react/components/Typography';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 const Statement = props => {
   const [screenWidth, setScreenWidth] = useState('');
@@ -78,7 +79,7 @@ const Statement = props => {
 
       sectionName
     } = props;
-    
+
     if (
       currentSearchResult !== null &&
       questionTextTitleRef.current !== null &&
@@ -135,22 +136,19 @@ const Statement = props => {
   };
 
   const renderTags = (milestone, milestoneNew, ismilestoneavailable) => {
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={'green'} />
-          ) : null}
-        </div>
-      );
+    if (Array.isArray(milestoneNew.toJS()) && milestoneNew.toJS().length > 0) {
+      return milestoneNew.toJS().map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview">
-        {milestone ? <ChipView label={milestone} answer={'green'} /> : null}
-      </div>
-    );
   };
-  
+
   return (
     <>
       <div

@@ -254,6 +254,9 @@
 
           .questions-filter__item {
             margin-bottom: 4px;
+            .MuiFormControlLabel-root {
+              align-items: baseline;
+            }
             .MuiFormControlLabel-label {
               font-size: 12px;
             }
