@@ -452,7 +452,6 @@ const QuestionItem = ({
                       questionLabel={question?.questionText || ''}
                     />
                     {question.isCustomQuestion && selectedBid.isCurrent && (
-<<<<<<< HEAD
                     <div className="question-edit" style={{ "margin-left" :"10px"
                     }}>
                      
@@ -483,34 +482,6 @@ const QuestionItem = ({
                     )
 }
 
-=======
-                      <div
-                        className="question-edit"
-                        style={{ 'margin-left': '10px' }}
-                      >
-                        <span
-                          aria-hidden="true"
-                          onClick={() => {
-                            dispatch(
-                              setEditQuestionData({
-                                questionText: question?.questionText,
-                                questionHTML: question?.questionHTML,
-                                questionJSON: question?.questionJSON,
-                                questionHintJSON: question?.questionHintJSON,
-                                section: question?.section.approvalSectionName,
-                                answerType: question?.answerConfiguration.type,
-                                roleNames: question?.roleNames,
-                                questionId: question?.questionId,
-                                tabFlag: 'Approvals'
-                              })
-                            );
-                          }}
-                        >
-                          <Edit className="edit-icon" />
-                        </span>
-                      </div>
-                    )}
->>>>>>> da4e0889a011ed30738367c035cc66a5987272e5
                   </Grid>
                   <Grid
                     item
