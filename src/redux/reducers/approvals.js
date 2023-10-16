@@ -104,8 +104,6 @@ const updateApprovalQuestion = (state, action) => {
     return value;
 
   });
-  console.log("result",result)
-
   return {
     ...state,
     allApprovals: result

@@ -177,8 +177,6 @@ export const deleteUnityQuestion = (
   questionData: Object,
   socketContext
 ): ThunkAction<string, Object> => {
-  console.log(questionData)
-  
   return async (dispatch: Dispatch<string, Object>) => {
     dispatch({
       type: PROPOSAL_SET_QUESTION_LOADING,
