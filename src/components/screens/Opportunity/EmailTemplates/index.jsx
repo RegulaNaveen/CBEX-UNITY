@@ -467,9 +467,10 @@ const EmailTemplates = () => {
               </div>
             </div>
             <div>
-              {renderRecipientRuleQuestionAnswers(
-                row?.EmailTemplateRecipientRule?.RecipientRuleGroups
-              )}
+              {row?.EmailTemplateRecipientRule?.RecipientRuleGroups &&
+                renderRecipientRuleQuestionAnswers(
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups
+                )}
             </div>
           </AccordionDetails>
         </Accordion>
