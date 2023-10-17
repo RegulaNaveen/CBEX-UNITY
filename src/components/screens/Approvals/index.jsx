@@ -33,6 +33,7 @@ const Approvals = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
+  const [direction, setDirection] = useState();
   const [warningTitle, setWarningTitle] = useState('');
   const [warningText, setWarningText] = useState('');
   const selectedBid = useSelector(getSelectedBid)?.toJS();
@@ -68,6 +69,7 @@ const Approvals = () => {
   }, [memoizeBid]);
 
   const onAddQuestion = value => {
+    setDirection(value);
     setShowModal(true);
   };
   const onClose = () => {
@@ -88,9 +90,9 @@ const Approvals = () => {
           title="Add New Question"
           className="tasksList-add-icon-wrapper"
           role="presentation"
-          onClick={onAddQuestion}
+          onClick={()=>onAddQuestion("left")}
         >
-          <Add className="tasksList-add-icon" />
+          <Add className="tasksList-add-icon add-icon-btn" />
         </div>
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
@@ -154,7 +156,7 @@ const Approvals = () => {
             onClose={onClose}
             currentsection={""}
             tabFlag="Approvals"
-            //tabId={tabId}
+            direction = {direction}
           />
         )}
      
