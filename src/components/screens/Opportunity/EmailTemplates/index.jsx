@@ -378,7 +378,6 @@ const EmailTemplates = () => {
   };
 
   const renderRecipientRuleQuestionAnswers = (group) => {
-    console.log("group", group[0].RecipientRules);
     return group.map((groupItem) => {
       return groupItem.RecipientRules.map((item) => {
         switch (item.RecipientRuleAnswerType) {
@@ -469,7 +468,7 @@ const EmailTemplates = () => {
             </div>
             <div>
               {renderRecipientRuleQuestionAnswers(
-                row.EmailTemplateRecipientRule.RecipientRuleGroups
+                row?.EmailTemplateRecipientRule?.RecipientRuleGroups
               )}
             </div>
           </AccordionDetails>
