@@ -382,10 +382,9 @@ const EmailTemplates = () => {
     return question?.questionText;
   };
 
-  const renderRecipientRuleQuestionAnswers = group => {
-    console.log('group', group[0].RecipientRules);
-    return group.map(groupItem => {
-      return groupItem.RecipientRules.map(item => {
+  const renderRecipientRuleQuestionAnswers = (group) => {
+    return group.map((groupItem) => {
+      return groupItem.RecipientRules.map((item) => {
         switch (item.RecipientRuleAnswerType) {
           case ANSWER_TYPES.TEXT:
           case ANSWER_TYPES.NUMBER:
@@ -473,9 +472,10 @@ const EmailTemplates = () => {
               </div>
             </div>
             <div>
-              {renderRecipientRuleQuestionAnswers(
-                row.EmailTemplateRecipientRule.RecipientRuleGroups
-              )}
+              {row?.EmailTemplateRecipientRule?.RecipientRuleGroups &&
+                renderRecipientRuleQuestionAnswers(
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups
+                )}
             </div>
           </AccordionDetails>
         </Accordion>
