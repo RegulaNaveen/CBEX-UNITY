@@ -290,16 +290,13 @@ const NOTIFICATION = {
   NOTIFICATION_API_URL
 };
 
-
 const EMAILTEMPLATES = {
   EMAILTEMPLATES_API_URL
 };
 
-
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
 const CUSTOM_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/custom-question`;
 const CUSTOM_QUESTIONS_DELETE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/delete-custom-question`;
-
 
 export {
   AUTH,
