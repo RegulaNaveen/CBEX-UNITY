@@ -105,7 +105,7 @@ const CustomTabs = ({ tabId, key }) => {
             role="presentation"
             onClick={onAddQuestion}
           >
-            <Add className="tasksList-add-icon" />
+            <Add className="tasksList-add-icon add-icon-btn" />
           </div>
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>

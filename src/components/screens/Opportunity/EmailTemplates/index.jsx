@@ -1,47 +1,51 @@
-import ChevronDown from "apollo-react-icons/ChevronDown";
-import ChevronRight from "apollo-react-icons/ChevronRight";
-import React, { useState, useEffect } from "react";
-import { neutral8 } from "apollo-react/colors";
-import IconButton from "apollo-react/components/IconButton";
+import ChevronDown from 'apollo-react-icons/ChevronDown';
+import ChevronRight from 'apollo-react-icons/ChevronRight';
+import React, { useState, useEffect } from 'react';
+import { neutral8 } from 'apollo-react/colors';
+import IconButton from 'apollo-react/components/IconButton';
 import Table, {
   compareStrings,
-  createStringSearchFilter,
-} from "apollo-react/components/Table";
-import Tooltip from "apollo-react/components/Tooltip";
-import Typography from "apollo-react/components/Typography";
-import Header from "./Header";
-import Button from "apollo-react/components/Button";
-import { DEFAULT, EMAIL_TEMPLATES } from "../../../../constants/app";
-import EmailClick from "apollo-react-icons/EmailClick";
-import Rocket from "../../../../../img/rocket.svg";
-import TextField from "apollo-react/components/TextField";
-import { useSelector } from "react-redux";
-import Loader from "apollo-react/components/Loader";
+  createStringSearchFilter
+} from 'apollo-react/components/Table';
+import Tooltip from 'apollo-react/components/Tooltip';
+import Typography from 'apollo-react/components/Typography';
+import Header from './Header';
+import Button from 'apollo-react/components/Button';
+import { DEFAULT, EMAIL_TEMPLATES } from '../../../../constants/app';
+import EmailClick from 'apollo-react-icons/EmailClick';
+import Rocket from '../../../../../img/rocket.svg';
+import TextField from 'apollo-react/components/TextField';
+import { useSelector } from 'react-redux';
+import Loader from 'apollo-react/components/Loader';
 import {
   getProposalDetails,
   getSelectedBid,
-  selectSections,
-} from "../../../../redux/selectors";
-import { generateEmailTemplateEmail } from "../../../../utils/emailUtils";
-import { updateEventSubjectBody } from "../../../../utils/utils";
-import { isMap } from "lodash";
+  selectSections
+} from '../../../../redux/selectors';
+import { generateEmailTemplateEmail } from '../../../../utils/emailUtils';
+import { updateEventSubjectBody } from '../../../../utils/utils';
+import { isMap } from 'lodash';
 import {
   getOpportunityData,
   selectActiveTeamQuestions,
-  selectProposalQuestions,
-} from "../../../../redux/selectors/proposal";
+  selectProposalQuestions
+} from '../../../../redux/selectors/proposal';
 import processRecipientRule from '../../../../utils/processRecipientRule';
+import Accordion from 'apollo-react/components/Accordion';
+import AccordionDetails from 'apollo-react/components/AccordionDetails';
+import AccordionSummary from 'apollo-react/components/AccordionSummary';
+import ANSWER_TYPES from '../../../../constants/answerTypes';
 
 const EmailTemplates = () => {
   const { emailTemplatesList, isLoadingEmailTemplates } = useSelector(
-    (state) => state.emailTemplates
+    state => state.emailTemplates
   );
   const [expandedRows, setExpandedRows] = useState([]);
   const selectedBid = useSelector(getSelectedBid);
-  const { id: proposalId } = useSelector((state) =>
-    state.proposal.get("selectedBid")
+  const { id: proposalId } = useSelector(state =>
+    state.proposal.get('selectedBid')
   )?.toJS();
-  const isCurrentBid = selectedBid.get("isCurrent");
+  const isCurrentBid = selectedBid.get('isCurrent');
   const sections = useSelector(selectSections);
   const allSections = sections || [];
   const proposalDetail = useSelector(getProposalDetails);
@@ -49,16 +53,20 @@ const EmailTemplates = () => {
   const proposalQuestions = useSelector(selectProposalQuestions);
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
 
-  const handleToggleRow = (EmailTemplateId) => {
-    setExpandedRows((expandedRows) =>
+  const handleToggleRow = EmailTemplateId => {
+    setExpandedRows(expandedRows =>
       expandedRows.includes(EmailTemplateId)
-        ? expandedRows.filter((id) => id !== EmailTemplateId)
+        ? expandedRows.filter(id => id !== EmailTemplateId)
         : [...expandedRows, EmailTemplateId]
     );
   };
 
+  useEffect(() => {
+    setExpandedRows([]);
+  }, [selectedBid, proposalId]);
+
   const ExpandCell = ({
-    row: { EmailTemplateId, handleToggleRow, expanded },
+    row: { EmailTemplateId, handleToggleRow, expanded }
   }) => {
     return (
       <div>
@@ -75,7 +83,7 @@ const EmailTemplates = () => {
   };
 
   const Cell = ({ row, column }) => (
-    <div className={row.expanded ? "activeRow" : ""}>
+    <div className={row.expanded ? 'activeRow' : ''}>
       {row[column.accessor]}
     </div>
   );
@@ -96,51 +104,54 @@ const EmailTemplates = () => {
 
   const columns = [
     {
-      header: "",
-      accessor: "expand",
-      customCell: ExpandCell,
+      header: '',
+      accessor: 'expand',
+      customCell: ExpandCell
     },
     {
-      header: "Template",
-      accessor: "EmailTemplateName",
+      header: 'Template',
+      accessor: 'EmailTemplateName',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: createStringSearchFilter("EmailTemplateName"),
-      filterComponent: TextFieldFilter,
+      filterFunction: isCurrentBid
+        ? createStringSearchFilter('EmailTemplateName')
+        : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
     },
     {
-      header: "Summary",
-      accessor: "EmailTemplateDescription",
+      header: 'Summary',
+      accessor: 'EmailTemplateDescription',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: createStringSearchFilter("EmailTemplateDescription"),
-      filterComponent: TextFieldFilter,
-    },
+      filterFunction: isCurrentBid
+        ? createStringSearchFilter('EmailTemplateDescription')
+        : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
+    }
   ];
 
   const getRolesAndEmails = (values, proposalTeamQues) => {
     return (
       values &&
-      values.map((item) => {
-        if (item.Type === "Email") return item.Value;
+      values.map(item => {
+        if (item.Type === 'Email') return item.Value;
         return (
-          proposalTeamQues.find((ques) => ques.questionId === item.Value)
-            ?.questionText || ""
+          proposalTeamQues.find(ques => ques.questionId === item.Value)
+            ?.questionText || ''
         );
       })
     );
   };
 
-  const getEmailsTooltipInfo = (rowInfo) => {
-    console.log('rowInfo', rowInfo)
+  const getEmailsTooltipInfo = rowInfo => {
     const availableProposalTeamQuestions = proposalTeamQuestions?.filter(
-      (question) =>
+      question =>
         question.opportunityType
-          .split(",")
+          .split(',')
           .includes(selectedBid.toJS().opportunityType)
     );
-    return rowInfo.map((item, index) => {
-      if (item.Type == "EmailGroup") {
+    return rowInfo?.map((item, index) => {
+      if (item.Type == 'EmailGroup') {
         return (
           <span key={index}>
             <Tooltip
@@ -159,9 +170,9 @@ const EmailTemplates = () => {
             </Tooltip>
           </span>
         );
-      } else if (item.Type == "Role") {
+      } else if (item.Type == 'Role') {
         const proposalTeamQuestion = availableProposalTeamQuestions.find(
-          (question) =>
+          question =>
             question.questionText.toLowerCase() === item.Value.toLowerCase()
         );
         if (proposalTeamQuestion && proposalTeamQuestion?.email.length) {
@@ -170,7 +181,7 @@ const EmailTemplates = () => {
               <Tooltip
                 data-testid="tooltip-btn"
                 title={EMAIL_TEMPLATES.EMAILS_IN_THIS_GROUP}
-                subtitle={proposalTeamQuestion?.email.join(",")}
+                subtitle={proposalTeamQuestion?.email.join(',')}
                 placement="top"
               >
                 <span>
@@ -253,11 +264,11 @@ const EmailTemplates = () => {
     let EmailTemplateCCRoleAnswer = [];
     let tempQuestion = [];
     let ProposalTeamQuestion = allSections.filter(
-      (item) => item.get("sectionName") === "Proposal Team"
+      item => item.get('sectionName') === 'Proposal Team'
     );
     ProposalTeamQuestion = ProposalTeamQuestion.getIn([
-      "Proposal Team",
-      "questions",
+      'Proposal Team',
+      'questions'
     ]);
     ProposalTeamQuestion = ProposalTeamQuestion?.toJS() || {};
     for (const key in ProposalTeamQuestion) {
@@ -340,25 +351,25 @@ const EmailTemplates = () => {
       proposalUsers:
         isMap(opportunityData) &&
         opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
-      proposalQuestions,
+      proposalQuestions
     };
-    const subject = row?.EmailTemplateSubject || "";
+    const subject = row?.EmailTemplateSubject || '';
     const updatedSubject = updateEventSubjectBody(
       subject,
       placeholderData,
-      "subject"
+      'subject'
     );
     const subjectStr = encodeURIComponent(
-      updatedSubject.replace(new RegExp("\\n", "g"), " ")
+      updatedSubject.replace(new RegExp('\\n', 'g'), ' ')
     );
     const updatedBody = updateEventSubjectBody(
       row.EmailTemplateBody,
       placeholderData,
-      "body"
+      'body'
     );
     if (updatedBody) {
-      const blob = new Blob([updatedBody], { type: "text/html" });
-      const clipboardItem = new window.ClipboardItem({ "text/html": blob });
+      const blob = new Blob([updatedBody], { type: 'text/html' });
+      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
       await navigator.clipboard.write([clipboardItem]);
     }
 
@@ -372,42 +383,110 @@ const EmailTemplates = () => {
     );
   };
 
+  const getQuestion = questionId => {
+    const question = proposalQuestions.find(
+      question => question.questionId === questionId
+    );
+    return question?.questionText;
+  };
+
+  const renderRecipientRuleQuestionAnswers = group => {
+    return group.map(groupItem => {
+      return groupItem.RecipientRules.map(item => {
+        switch (item.RecipientRuleAnswerType) {
+          case ANSWER_TYPES.TEXT:
+          case ANSWER_TYPES.NUMBER:
+          case ANSWER_TYPES.YES_NO:
+            return (
+              <div className="recipient-answers">
+                <p>{getQuestion(item.QuestionId)}</p>
+                <ul>
+                  {item.RecipientRuleAnswer.map(answer => {
+                    return <li>{answer}</li>;
+                  })}
+                </ul>
+              </div>
+            );
+          case ANSWER_TYPES.DATE:
+            return (
+              <div className="recipient-answers">
+                <p>{getQuestion(item.QuestionId)}</p>
+                <ul>
+                  <li>{item.RecipientRuleAnswer}</li>
+                </ul>
+              </div>
+            );
+          case ANSWER_TYPES.CHECKBOX:
+          case ANSWER_TYPES.SELECT:
+          case ANSWER_TYPES.SELECT_LOOKUP:
+          case ANSWER_TYPES.RADIO:
+          case ANSWER_TYPES.MULTI_SELECT:
+          case ANSWER_TYPES.MULTI_SELECT_LOOKUP:
+            return (
+              <div className="recipient-answers">
+                <p>{getQuestion(item.QuestionId)}</p>
+                <div>
+                  <ul>
+                    {item.RecipientRuleAnswer.map(answer => {
+                      return <li>{answer.Value}</li>;
+                    })}
+                  </ul>
+                </div>
+              </div>
+            );
+          default:
+            return;
+        }
+      });
+    });
+  };
+
   const DetailRow = ({ row }) => {
     return (
       <div className="detailed-row">
-        <Typography style={{ fontWeight: 600, color: neutral8 }}>
-          {EMAIL_TEMPLATES.PARAMETERS}
-        </Typography>
-        <Typography style={{ fontSize: 13, color: "#999999" }} variant="body2">
-          {EMAIL_TEMPLATES.EMAIL_TEXT}
-        </Typography>
-        <div style={{ fontSize: 14 }}>
-          <div style={{ marginBottom: 4 }}>
-            <b>{EMAIL_TEMPLATES.TO}: </b>
-            {getEmailsTooltipInfo(row.EmailTemplateTO)}
-            <div>
-            {row.EmailTemplateRecipientRule.RecipientRuleGroups.map((group) => 
-               getEmailsTooltipInfo(group.RecipientRuleToAnswer)
-            )}
+        <Accordion>
+          <AccordionSummary>
+            <Typography
+              style={{ fontWeight: 600, color: neutral8, fontSize: 14 }}
+            >
+              {EMAIL_TEMPLATES.PARAMETERS}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography
+              style={{ fontSize: 13, color: '#999999', marginTop: 10 }}
+              variant="body2"
+            >
+              {EMAIL_TEMPLATES.EMAIL_TEXT}
+            </Typography>
+            <div style={{ fontSize: 14 }}>
+              <div style={{ marginBottom: 4 }}>
+                <b>{EMAIL_TEMPLATES.TO}: </b>
+                {row.EmailTemplateTO &&
+                  getEmailsTooltipInfo(row.EmailTemplateTO)}
+                <div>
+                  {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
+                    group => getEmailsTooltipInfo(group.RecipientRuleToAnswer)
+                  )}
+                </div>
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                <b>{EMAIL_TEMPLATES.CC}: </b>
+                {row.EmailTemplateCC &&
+                  getEmailsTooltipInfo(row.EmailTemplateCC)}
+                {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
+                  group => getEmailsTooltipInfo(group.RecipientRuleCCAnswer)
+                )}
+              </div>
             </div>
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <b>{EMAIL_TEMPLATES.CC}: </b>
-            {getEmailsTooltipInfo(row.EmailTemplateCC)}
-            {row.EmailTemplateRecipientRule.RecipientRuleGroups.map((group) => 
-               getEmailsTooltipInfo(group.RecipientRuleCCAnswer)
-            )}
-          </div>
-        </div>
-        <Typography style={{ fontSize: 14 }}>
-          {EMAIL_TEMPLATES.INTERNAL_REQUESTED_SERVICES}
-        </Typography>
-        <div style={{ fontSize: 14, marginLeft: 20 }}>
-          <ul>
-            <li>ECOA</li>
-            <li>Connected Devices</li>
-          </ul>
-        </div>
+            <div>
+              {row?.EmailTemplateRecipientRule?.RecipientRuleGroups &&
+                renderRecipientRuleQuestionAnswers(
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups
+                )}
+            </div>
+          </AccordionDetails>
+        </Accordion>
         <div className="email-button">
           <Button
             data-testid="email-btn"
@@ -437,8 +516,8 @@ const EmailTemplates = () => {
         <div
           className={
             !isCurrentBid
-              ? "email-template-panel disabled"
-              : "email-template-panel"
+              ? 'email-template-panel disabled'
+              : 'email-template-panel'
           }
         >
           {isLoadingEmailTemplates && (
@@ -446,8 +525,8 @@ const EmailTemplates = () => {
               isInner
               size={20}
               style={{
-                width: "20px",
-                height: "20px",
+                width: '20px',
+                height: '20px'
               }}
             />
           )}
@@ -456,27 +535,27 @@ const EmailTemplates = () => {
               title={EMAIL_TEMPLATES.EMAIL_TEMPLATES_TITLE}
               columns={columns}
               rows={emailTemplatesList
-                .filter((emailTemplate) => {
+                .filter(emailTemplate => {
                   return (
                     emailTemplate.EmailTemplateOpportunityTypes &&
                     emailTemplate.EmailTemplateOpportunityTypes.length > 0 &&
                     typeof emailTemplate.EmailTemplateOpportunityTypes ===
-                      "string" &&
+                      'string' &&
                     emailTemplate.EmailTemplateOpportunityTypes.split(
-                      ","
+                      ','
                     ).includes(selectedBid.toJS().opportunityType)
                   );
                 })
-                .map((row) => ({
+                .map(row => ({
                   ...row,
                   handleToggleRow,
-                  expanded: expandedRows.includes(row.EmailTemplateId),
+                  expanded: expandedRows.includes(row.EmailTemplateId)
                 }))}
               ExpandableComponent={ExpandableRow}
               rowId="EmailTemplateId"
               initialSortOrder="asc"
               initialSortedColumn="EmailTemplateName"
-              rowsPerPage={"All"}
+              rowsPerPage={'All'}
             />
           )}
           {!emailTemplatesList.length && !isLoadingEmailTemplates && (
