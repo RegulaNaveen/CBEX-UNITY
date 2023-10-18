@@ -31,6 +31,10 @@ import {
   selectProposalQuestions
 } from '../../../../redux/selectors/proposal';
 import processRecipientRule from '../../../../utils/processRecipientRule';
+import Accordion from 'apollo-react/components/Accordion';
+import AccordionDetails from 'apollo-react/components/AccordionDetails';
+import AccordionSummary from 'apollo-react/components/AccordionSummary';
+import ANSWER_TYPES from '../../../../constants/answerTypes';
 
 const EmailTemplates = () => {
   const { emailTemplatesList, isLoadingEmailTemplates } = useSelector(
@@ -146,7 +150,7 @@ const EmailTemplates = () => {
           .split(',')
           .includes(selectedBid.toJS().opportunityType)
     );
-    return rowInfo.map((item, index) => {
+    return rowInfo?.map((item, index) => {
       if (item.Type == 'EmailGroup') {
         return (
           <span key={index}>
@@ -379,42 +383,110 @@ const EmailTemplates = () => {
     );
   };
 
+  const getQuestion = questionId => {
+    const question = proposalQuestions.find(
+      question => question.questionId === questionId
+    );
+    return question?.questionText;
+  };
+
+  const renderRecipientRuleQuestionAnswers = group => {
+    return group.map(groupItem => {
+      return groupItem.RecipientRules.map(item => {
+        switch (item.RecipientRuleAnswerType) {
+          case ANSWER_TYPES.TEXT:
+          case ANSWER_TYPES.NUMBER:
+          case ANSWER_TYPES.YES_NO:
+            return (
+              <div className="recipient-answers">
+                <p>{getQuestion(item.QuestionId)}</p>
+                <ul>
+                  {item.RecipientRuleAnswer.map(answer => {
+                    return <li>{answer}</li>;
+                  })}
+                </ul>
+              </div>
+            );
+          case ANSWER_TYPES.DATE:
+            return (
+              <div className="recipient-answers">
+                <p>{getQuestion(item.QuestionId)}</p>
+                <ul>
+                  <li>{item.RecipientRuleAnswer}</li>
+                </ul>
+              </div>
+            );
+          case ANSWER_TYPES.CHECKBOX:
+          case ANSWER_TYPES.SELECT:
+          case ANSWER_TYPES.SELECT_LOOKUP:
+          case ANSWER_TYPES.RADIO:
+          case ANSWER_TYPES.MULTI_SELECT:
+          case ANSWER_TYPES.MULTI_SELECT_LOOKUP:
+            return (
+              <div className="recipient-answers">
+                <p>{getQuestion(item.QuestionId)}</p>
+                <div>
+                  <ul>
+                    {item.RecipientRuleAnswer.map(answer => {
+                      return <li>{answer.Value}</li>;
+                    })}
+                  </ul>
+                </div>
+              </div>
+            );
+          default:
+            return;
+        }
+      });
+    });
+  };
+
   const DetailRow = ({ row }) => {
     return (
       <div className="detailed-row">
-        <Typography style={{ fontWeight: 600, color: neutral8 }}>
-          {EMAIL_TEMPLATES.PARAMETERS}
-        </Typography>
-        <Typography style={{ fontSize: 13, color: '#999999' }} variant="body2">
-          {EMAIL_TEMPLATES.EMAIL_TEXT}
-        </Typography>
-        <div style={{ fontSize: 14 }}>
-          <div style={{ marginBottom: 4 }}>
-            <b>{EMAIL_TEMPLATES.TO}: </b>
-            {getEmailsTooltipInfo(row.EmailTemplateTO)}
-            <div>
-              {row.EmailTemplateRecipientRule.RecipientRuleGroups.map(group =>
-                getEmailsTooltipInfo(group.RecipientRuleToAnswer)
-              )}
+        <Accordion>
+          <AccordionSummary>
+            <Typography
+              style={{ fontWeight: 600, color: neutral8, fontSize: 14 }}
+            >
+              {EMAIL_TEMPLATES.PARAMETERS}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography
+              style={{ fontSize: 13, color: '#999999', marginTop: 10 }}
+              variant="body2"
+            >
+              {EMAIL_TEMPLATES.EMAIL_TEXT}
+            </Typography>
+            <div style={{ fontSize: 14 }}>
+              <div style={{ marginBottom: 4 }}>
+                <b>{EMAIL_TEMPLATES.TO}: </b>
+                {row.EmailTemplateTO &&
+                  getEmailsTooltipInfo(row.EmailTemplateTO)}
+                <div>
+                  {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
+                    group => getEmailsTooltipInfo(group.RecipientRuleToAnswer)
+                  )}
+                </div>
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                <b>{EMAIL_TEMPLATES.CC}: </b>
+                {row.EmailTemplateCC &&
+                  getEmailsTooltipInfo(row.EmailTemplateCC)}
+                {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
+                  group => getEmailsTooltipInfo(group.RecipientRuleCCAnswer)
+                )}
+              </div>
             </div>
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <b>{EMAIL_TEMPLATES.CC}: </b>
-            {getEmailsTooltipInfo(row.EmailTemplateCC)}
-            {row.EmailTemplateRecipientRule.RecipientRuleGroups.map(group =>
-              getEmailsTooltipInfo(group.RecipientRuleCCAnswer)
-            )}
-          </div>
-        </div>
-        <Typography style={{ fontSize: 14 }}>
-          {EMAIL_TEMPLATES.INTERNAL_REQUESTED_SERVICES}
-        </Typography>
-        <div style={{ fontSize: 14, marginLeft: 20 }}>
-          <ul>
-            <li>ECOA</li>
-            <li>Connected Devices</li>
-          </ul>
-        </div>
+            <div>
+              {row?.EmailTemplateRecipientRule?.RecipientRuleGroups &&
+                renderRecipientRuleQuestionAnswers(
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups
+                )}
+            </div>
+          </AccordionDetails>
+        </Accordion>
         <div className="email-button">
           <Button
             data-testid="email-btn"
