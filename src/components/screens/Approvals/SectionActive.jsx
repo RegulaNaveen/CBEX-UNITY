@@ -96,26 +96,6 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-right-ques`}
             />
           ))}
-           {isCurrent && (
-          <>
-            <div className="add-question">
-              <Link
-                style={{ borderBottom: 'none' }}
-                //onClick={() => onAddQuestion(title)}
-                size="small"
-                onClick={()=>onAddQuestion("right")}
-              >
-                <Plus
-                  className="plus-icon-add-new-question"
-                  fontSize="extraSmall"
-                />
-                <span style={{ verticalAlign: 'top' }}> Add New Question</span>
-              </Link>
-            </div>
-          </>
-        )}
-
-       
       </Grid>
      
       <Grid item xs={12} className="approval-ques-actions">
