@@ -61,6 +61,10 @@ const EmailTemplates = () => {
     );
   };
 
+  useEffect(() => {
+    setExpandedRows([]);
+  }, [selectedBid, proposalId]);
+
   const ExpandCell = ({
     row: { EmailTemplateId, handleToggleRow, expanded }
   }) => {
@@ -109,16 +113,20 @@ const EmailTemplates = () => {
       accessor: 'EmailTemplateName',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: createStringSearchFilter('EmailTemplateName'),
-      filterComponent: TextFieldFilter
+      filterFunction: isCurrentBid
+        ? createStringSearchFilter('EmailTemplateName')
+        : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
     },
     {
       header: 'Summary',
       accessor: 'EmailTemplateDescription',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: createStringSearchFilter('EmailTemplateDescription'),
-      filterComponent: TextFieldFilter
+      filterFunction: isCurrentBid
+        ? createStringSearchFilter('EmailTemplateDescription')
+        : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
     }
   ];
 
@@ -383,7 +391,6 @@ const EmailTemplates = () => {
   };
 
   const renderRecipientRuleQuestionAnswers = group => {
-    console.log('group', group[0].RecipientRules);
     return group.map(groupItem => {
       return groupItem.RecipientRules.map(item => {
         switch (item.RecipientRuleAnswerType) {
@@ -473,9 +480,10 @@ const EmailTemplates = () => {
               </div>
             </div>
             <div>
-              {renderRecipientRuleQuestionAnswers(
-                row.EmailTemplateRecipientRule.RecipientRuleGroups
-              )}
+              {row?.EmailTemplateRecipientRule?.RecipientRuleGroups &&
+                renderRecipientRuleQuestionAnswers(
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups
+                )}
             </div>
           </AccordionDetails>
         </Accordion>
