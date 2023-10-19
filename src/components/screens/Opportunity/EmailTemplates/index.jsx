@@ -107,6 +107,10 @@ const EmailTemplates = () => {
     );
   };
 
+  useEffect(() => {
+    setExpandedRows([]);
+  }, [selectedBid, proposalId]);
+
   const ExpandCell = ({
     row: { EmailTemplateId, handleToggleRow, expanded },
     row
@@ -187,16 +191,20 @@ const EmailTemplates = () => {
       accessor: 'EmailTemplateName',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: createStringSearchFilter('EmailTemplateName'),
-      filterComponent: TextFieldFilter
+      filterFunction: isCurrentBid
+        ? createStringSearchFilter('EmailTemplateName')
+        : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
     },
     {
       header: 'Summary',
       accessor: 'EmailTemplateDescription',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: createStringSearchFilter('EmailTemplateDescription'),
-      filterComponent: TextFieldFilter
+      filterFunction: isCurrentBid
+        ? createStringSearchFilter('EmailTemplateDescription')
+        : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
     }
   ];
 
