@@ -70,8 +70,12 @@ const responsibleFilter: Boolean = question => {
   );
 };
 
-const milestoneFilters: Boolean = (question, filter) => {
-  return filter.some(v => v.displayName === question.milestone);
+export const milestoneFilters: Boolean = (question, milestoneFilterApplied) => {
+  return milestoneFilterApplied.some(milestoneName =>
+    question.milestoneNew
+      .map(milestone => milestone.Name.toLowerCase())
+      .includes(milestoneName)
+  );
 };
 
 const informedFilter: Boolean = question => {
@@ -125,18 +129,16 @@ export const shouldShowQuestion = (
       const milestonefilter = alltabFilter.filter(
         v => v.value === true && v.group === 'milestone'
       );
-      // console.log(`milestonefilter`, milestonefilter);
-
-      if (milestonefilter && milestonefilter.length > 0) {
-        for (let index = 0; index < milestonefilter.length; index += 1) {
-          filterAnswers.push(milestoneFilters(question, milestonefilter));
-        }
+      const milestoneFiltersApplied = milestonefilter.map(i =>
+        i.name.toLowerCase()
+      );
+      if (milestoneFiltersApplied.length > 0) {
+        filterAnswers.push(milestoneFilters(question, milestoneFiltersApplied));
       }
 
       if (appliedFilters.includes('verificationRequired')) {
         filterAnswers.push(verificationRequiredFilter(question, flags));
       }
-      // console.log(`filterAnswers`, filterAnswers);
     }
     return filterAnswers.length > 0 && filterAnswers.every(i => i === true);
   } catch (error) {

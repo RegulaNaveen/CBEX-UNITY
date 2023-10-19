@@ -15,7 +15,7 @@ import { DEFAULT, EMAIL_TEMPLATES } from '../../../../constants/app';
 import EmailClick from 'apollo-react-icons/EmailClick';
 import Rocket from '../../../../../img/rocket.svg';
 import TextField from 'apollo-react/components/TextField';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from 'apollo-react/components/Loader';
 import {
   getProposalDetails,
@@ -35,6 +35,12 @@ import Accordion from 'apollo-react/components/Accordion';
 import AccordionDetails from 'apollo-react/components/AccordionDetails';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import ANSWER_TYPES from '../../../../constants/answerTypes';
+import {
+  selectAutoNavigatedToCurrentResult,
+  selectCurrentSearchResult
+} from '../../../../redux/selectors/search';
+import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
+import classNames from 'classnames';
 
 const EmailTemplates = () => {
   const { emailTemplatesList, isLoadingEmailTemplates } = useSelector(
@@ -52,6 +58,46 @@ const EmailTemplates = () => {
   const opportunityData = useSelector(getOpportunityData);
   const proposalQuestions = useSelector(selectProposalQuestions);
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!autoNavigatedToCurrentResult && currentSearchResult) {
+      if (
+        emailTemplatesList
+          .filter(emailTemplate => {
+            return (
+              emailTemplate.EmailTemplateOpportunityTypes &&
+              emailTemplate.EmailTemplateOpportunityTypes.length > 0 &&
+              typeof emailTemplate.EmailTemplateOpportunityTypes === 'string' &&
+              emailTemplate.EmailTemplateOpportunityTypes.split(',').includes(
+                selectedBid.toJS().opportunityType
+              )
+            );
+          })
+          .map(template => template.EmailTemplateId)
+          .includes(currentSearchResult.searchIndex)
+      ) {
+        // allow others to collapse before scrollIntoView
+        setTimeout(() => {
+          if (document.getElementById(currentSearchResult.searchIndex)) {
+            document
+              .getElementById(currentSearchResult.searchIndex)
+              .scrollIntoView({
+                behaviour: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+              });
+          }
+          dispatch(autoNavigationCompletedAction());
+        }, 0);
+      }
+    }
+  }, [emailTemplatesList, currentSearchResult, autoNavigatedToCurrentResult]);
 
   const handleToggleRow = EmailTemplateId => {
     setExpandedRows(expandedRows =>
@@ -66,10 +112,18 @@ const EmailTemplates = () => {
   }, [selectedBid, proposalId]);
 
   const ExpandCell = ({
-    row: { EmailTemplateId, handleToggleRow, expanded }
+    row: { EmailTemplateId, handleToggleRow, expanded },
+    row
   }) => {
     return (
-      <div>
+      <div
+        id={EmailTemplateId}
+        className={classNames({
+          'search-highlight':
+            currentSearchResult &&
+            currentSearchResult.searchIndex === EmailTemplateId
+        })}
+      >
         <IconButton
           data-testid="expand-cell"
           id="expand"
@@ -82,11 +136,35 @@ const EmailTemplates = () => {
     );
   };
 
-  const Cell = ({ row, column }) => (
-    <div className={row.expanded ? 'activeRow' : ''}>
-      {row[column.accessor]}
-    </div>
-  );
+  const Cell = ({ row, column }) => {
+    if (column.accessor === 'EmailTemplateDescription' && !row.expanded) {
+      return (
+        <Tooltip subtitle={row[column.accessor]} placement="top">
+          <div
+            className={classNames({
+              'search-highlight':
+                currentSearchResult &&
+                currentSearchResult.searchIndex === row.EmailTemplateId
+            })}
+          >
+            {row[column.accessor]}
+          </div>
+        </Tooltip>
+      );
+    }
+    return (
+      <div
+        className={classNames({
+          'search-highlight':
+            currentSearchResult &&
+            currentSearchResult.searchIndex === row.EmailTemplateId,
+          activeRow: row.expanded
+        })}
+      >
+        {row[column.accessor]}
+      </div>
+    );
+  };
 
   const TextFieldFilter = ({ accessor, filters, updateFilterValue }) => {
     return (
@@ -509,10 +587,7 @@ const EmailTemplates = () => {
 
   return (
     <>
-      <div id="key-milestone-left-section">
-        <div className="key-milestone-header">
-          <Header />
-        </div>
+      <div id="email-template-tab">
         <div
           className={
             !isCurrentBid
