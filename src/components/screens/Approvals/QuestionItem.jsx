@@ -98,19 +98,7 @@ const QuestionItem = ({
     } else {
       setLocked(false);
     }
-    if (
-      question?.answers &&
-      Array.isArray(question?.answers) &&
-      !question?.answers.length
-    ) {
-      setshowLastAnswer(false);
-    } else {
-      const lastAnswer = question?.answers[question?.answers.length - 1];
-      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
-      setshowLastAnswer(lastAnswerVisibility ? true : false);
-    }
-  }, [isQuesFreezed, activeQuestionInfo]);
-
+  }, [isQuesFreezed,activeQuestionInfo]);
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
       if (currentSearchResult.searchIndex === highlightQuestionId) {
@@ -147,6 +135,24 @@ const QuestionItem = ({
     email: getUserEmail(),
     role: getUserId()
   });
+
+  const checkLastAnswerOfQuestionVisibility = (answers) =>{
+    if (
+      answers &&
+      Array.isArray(answers) &&
+      !answers.length
+    ) {
+      return false ;
+    } else {
+      const lastAnswerVisibility = String(answers?.answer)?.trim()?.length;
+      if(lastAnswerVisibility){
+        return true ;
+      }else{
+        return false ;
+      }
+    }
+
+  }
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
@@ -451,7 +457,7 @@ const QuestionItem = ({
                     <QuestionLabel
                       questionLabel={question?.questionText || ''}
                     />
-                    {question.isCustomQuestion && selectedBid.isCurrent && (
+                    {question.isCustomQuestion && selectedBid.isCurrent &&  !isQuesFreezed && (
                     <div className="question-edit" style={{ "margin-left" :"10px"
                     }}>
                      
@@ -469,7 +475,8 @@ const QuestionItem = ({
                             roleNames: question?.roleNames,
                             questionId: question?.questionId,
                             tabFlag: "Approvals",
-                            questionAnswered:showLastAnswer 
+                            direction: "left",
+                            questionAnswered:checkLastAnswerOfQuestionVisibility(question?.answers) 
                           })
                         );
                       }}

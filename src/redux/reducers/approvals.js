@@ -100,33 +100,21 @@ const updateApprovalQuestion = (state, action) => {
   const { questionId, section } = payload;
   const approval = state.allApprovals;
   approval.forEach(value => {
-    if (section.direction === 'left') {
       value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions.filter(
         QuestionId => QuestionId !== questionId
       );
-    } else {
-      value.ApprovalSectionRightQuestions = value.ApprovalSectionRightQuestions.filter(
-        QuestionId => QuestionId !== questionId
-      );
-    }
   });
-
-  const result = approval.map(value => {
+   approval.map(value => {
     if (
       section.sectionName === 'Approvals' &&
       value.ApprovalSectionTitle === section.approvalSectionName
     ) {
-      if (section.direction === 'left') {
         value.ApprovalSectionLeftQuestions.push(questionId);
-      } else {
-        value.ApprovalSectionRightQuestions.push(questionId);
-      }
     }
-    return value;
   });
   return {
     ...state,
-    allApprovals: result
+    allApprovals: approval
   };
 };
 

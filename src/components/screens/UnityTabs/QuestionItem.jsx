@@ -117,8 +117,7 @@ const QuestionItem = ({
     ) {
       setshowLastAnswer(false);
     } else {
-      const lastAnswer = question?.answers[question?.answers.length - 1];
-      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
+      const lastAnswerVisibility = String(question?.answers?.answer)?.trim()?.length;
       setshowLastAnswer(lastAnswerVisibility ? true : false);
     }
     if (question && question.questionLockInfo) {
