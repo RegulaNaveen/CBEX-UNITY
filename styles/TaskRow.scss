@@ -323,7 +323,7 @@
       width: calc(100% - 28px);
     }
     .question-label-inner {
-      flex-basis: 50%;
+      flex-basis: auto;
       flex-grow: 1;
       display: flex;
 
@@ -378,9 +378,10 @@
       align-items: flex-end;
       justify-content: flex-end;
       gap: 6px;
-      flex-basis: 50%;
+      flex-basis: auto;
       flex-grow: 1;
       padding-left: 0.25rem;
+      flex-wrap: wrap;
 
       .tag {
         display: inline;

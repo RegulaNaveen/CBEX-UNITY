@@ -32,7 +32,8 @@ export async function getSearchResults({
   allTabs,
   filteredQuestionsMap,
   sectionsUnfiltered,
-  allFlags
+  allFlags,
+  emailTemplates
 }) {
   let finalResult = {
     count: 0,
@@ -92,6 +93,13 @@ export async function getSearchResults({
         allTabs[activeTab].tabName,
         activeTab
       );
+      searchInEmailTemplates(
+        finalResult,
+        regexp,
+        emailTemplates,
+        allTabs[activeTab].tabName,
+        activeTab
+      );
       verticalTabSearched = true;
     }
 
@@ -146,6 +154,13 @@ export async function getSearchResults({
             finalResult,
             regexp,
             sectionsUnfiltered,
+            allTabs[activeTab].tabName,
+            activeTab
+          );
+          searchInEmailTemplates(
+            finalResult,
+            regexp,
+            emailTemplates,
             allTabs[activeTab].tabName,
             activeTab
           );
@@ -909,6 +924,41 @@ export function searchInKeyMilestone(
         });
       }
     });
+}
+
+export function searchInEmailTemplates(
+  finalResult,
+  regexp,
+  templates,
+  tabName,
+  tab
+) {
+  if (Array.isArray(templates)) {
+    templates.forEach(template => {
+      if (template.EmailTemplateName) {
+        updateSearchMatches({
+          regexp,
+          inputText: template.EmailTemplateName,
+          index: template.EmailTemplateId,
+          finalResult,
+          tab,
+          vTab: 4,
+          tabName
+        });
+      }
+      if (template.EmailTemplateDescription) {
+        updateSearchMatches({
+          regexp,
+          inputText: template.EmailTemplateDescription,
+          index: template.EmailTemplateId,
+          finalResult,
+          tab,
+          vTab: 4,
+          tabName
+        });
+      }
+    });
+  }
 }
 
 export function searchInProposalTeam(

@@ -9,6 +9,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import EmailTemplates from '../EmailTemplates';
 import StateData from './mockdata/eventlauncher.json';
+import { INITIAL_STATE as searchInitialState } from '../../../../redux/reducers/search';
 
 const proposal = StateData.proposal;
 const selectedBidMap = Map(proposal.selectedBid);
@@ -19,7 +20,8 @@ const initState = {
   proposalDetail: StateData.proposalDetail,
   emailTemplates: StateData.emailTemplates,
   questionData: Map(StateData.questionData),
-  proposal: Map(proposal)
+  proposal: Map(proposal),
+  search: searchInitialState
 };
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
