@@ -1338,7 +1338,6 @@ export const deleteProposalQuestion = (
     });
     try {
       const data = await deleteProposalQuestionData(proposalId, questionId);
-
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
       if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
     } catch (err) {
@@ -1357,6 +1356,32 @@ export const deleteProposalQuestionFromSocket = (
     });
     try {
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const deleteProposalCustomTabQuestionFromSocket = (
+  questionId: string,
+  sectionName,
+  tabId
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+      dispatch({
+        type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: {
+          questionId: questionId,
+          approvalSectionName: sectionName,
+          sectionName: tabId
+        }
+      });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }

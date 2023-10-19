@@ -24,7 +24,8 @@ import {
   updateNextMilestone,
   updateDashboardProposal,
   updateCustomNameAction,
-  updateOpportunityDashboardProposal
+  updateOpportunityDashboardProposal,
+  deleteProposalCustomTabQuestionFromSocket
 } from '../redux/actions/proposal-actions';
 import {
   updateDashboardBid,
@@ -360,6 +361,29 @@ const SocketContextProvider = props => {
     }
   };
 
+  const customQuestionDelete = (questionId, sectionName, tabId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_DELETE',
+            data: {
+              questionId,
+              sectionName,
+              tabId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log('customQuestionDelete', error);
+    }
+  };
+
   /**
    *  Question unLock
    */
@@ -488,7 +512,8 @@ const SocketContextProvider = props => {
           updateCustomNameAction,
           syncdashboard,
           syncBidDashboard,
-          updateDetailPage
+          updateDetailPage,
+          deleteCustomTabCustomQuestionFromSocket
         } = props;
 
         // On Message Recieve
@@ -569,8 +594,15 @@ const SocketContextProvider = props => {
               break;
 
             case 'QUESTION_DELETE':
-              if (data.data.questionId) {
+              if (data?.data?.questionId && !data?.data?.tabId) {
                 deleteProposalQuestionFromSocket(data.data.questionId);
+              }
+              if (data?.data?.questionId && data?.data?.tabId) {
+                deleteCustomTabCustomQuestionFromSocket(
+                  data.data.questionId,
+                  data.data.sectionName,
+                  data.data.tabId
+                );
               }
               break;
 
@@ -847,6 +879,12 @@ const SocketContextProvider = props => {
     waitForSocketConnectionMinInterval(() => questionDelete(questionId, null));
   };
 
+  const customQuestionDeleteWrapper = (questionId, sectionName, tabId) => {
+    waitForSocketConnectionMinInterval(() =>
+      customQuestionDelete(questionId, sectionName, tabId, null)
+    );
+  };
+
   const naQuestionUpdateWrapper = (questionId, status) => {
     waitForSocketConnectionMinInterval(() =>
       naQuestionUpdate(questionId, status, null)
@@ -933,6 +971,7 @@ const SocketContextProvider = props => {
         naQuestionUpdateWrapper,
         questionTextUpdateWrapper,
         questionDeleteWrapper,
+        customQuestionDeleteWrapper,
         addQuestionWrapper,
         approvalSectionDuplicatingWrapper,
         approvalSectionDuplicatedWrapper,
@@ -980,7 +1019,8 @@ const mapDispatchToProps = {
   updateCustomNameAction,
   syncBidDashboard: updateDashboardBid,
   syncdashboard: syncDashboardOpportunity,
-  updateDetailPage: updateOpportunityDashboardProposal
+  updateDetailPage: updateOpportunityDashboardProposal,
+  deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket
 };
 
 export default connect(

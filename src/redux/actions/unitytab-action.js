@@ -22,7 +22,7 @@ const {
 const {
   SET_APPROVAL_QUESTION_APPROVALS_TAB,
   UPDATE_APPROVAL_QUESTION_CUSTOM_TAB
-} = REDUX_TYPES.APPROVALS
+} = REDUX_TYPES.APPROVALS;
 
 export const setAllUnityTab = data => ({
   type: UNITY_TABS.SET_UNITY_TABS,
@@ -100,7 +100,7 @@ export const setUnityQuestion = (
       const data = await setUnityQuestionData(proposalId, questionData);
       if (data) {
         dispatch({ type: PROPOSAL_CUSTOM_TAB_SET_QUESTION, payload: data });
-        if (questionData.type == "customTab") {
+        if (questionData.type == 'customTab') {
           dispatch({
             type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
             payload: data
@@ -110,9 +110,7 @@ export const setUnityQuestion = (
             type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
             payload: data
           });
-
         } else {
-
           dispatch({
             type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
             payload: data
@@ -122,7 +120,6 @@ export const setUnityQuestion = (
             type: PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
             payload: data
           });
-
         }
         if (socketContext) await socketContext?.addQuestionWrapper(data);
         return data;
@@ -153,17 +150,16 @@ export const editUnityQuestion = (
 
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
 
-      if (questionData.type == "customTab") {
+      if (questionData.type == 'customTab') {
         dispatch({
           type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
           payload: data
         });
-      }else{
+      } else {
         dispatch({
-          type:UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+          type: UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
           payload: data
         });
-
       }
       if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
       return data;
@@ -188,8 +184,7 @@ export const deleteUnityQuestion = (
         type: PROPOSAL_DELETE_QUESTION,
         payload: questionData.questionId
       });
-      if (questionData.type == "customTab") {
-
+      if (questionData.type == 'customTab') {
         dispatch({
           type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
           payload: {
@@ -199,19 +194,21 @@ export const deleteUnityQuestion = (
           }
         });
       } else {
-
         dispatch({
           type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
           payload: {
             questionId: questionData.questionId,
             approvalSectionName: questionData.sectionName,
-            sectionName: questionData.type,
-
+            sectionName: questionData.type
           }
         });
       }
       if (socketContext)
-        await socketContext?.questionDeleteWrapper(questionData.questionId);
+        await socketContext?.customQuestionDeleteWrapper(
+          questionData.questionId,
+          questionData.sectionName,
+          questionData.tabId
+        );
     } catch (err) {
       console.log(`err`, err);
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
