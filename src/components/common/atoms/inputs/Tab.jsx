@@ -111,8 +111,8 @@ const CustomTabs = React.lazy(() =>
   )
 );
 
-const EmailTemplates = React.lazy(() => 
-  lazyWithRetry(() => 
+const EmailTemplates = React.lazy(() =>
+  lazyWithRetry(() =>
     import(
       /* webpackChunkName: "EmailTemplates" */ '../../../screens/Opportunity/EmailTemplates'
     )
@@ -162,6 +162,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     showKeyMilestoneDeliverableTab,
     setShowshowKeyMilestoneDeliverableTab
   ] = useState(false);
+  const [showEmailTemplatesTab, setshowEmailTemplatesTab] = useState(false);
   const switchTempStatus = useSelector(
     state => state.proposal?.toJSON()?.switchTempCallStatus
   );
@@ -200,7 +201,6 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const notepadMaxWidthPx = isOpen
     ? notepadMinWidthPx
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
-  const [showEmailTemplatesTab, setshowEmailTemplatesTab] = useState(false);
 
   const calculateTab = val => {
     const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
@@ -393,7 +393,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         searchParams.set('viewType', selectedView);
       } else {
         dispatch(setActiveTabIndexAction(0));
-        searchParams.delete('viewType')
+        searchParams.delete('viewType');
       }
       if (selectedView === 'questions') {
         searchParams.delete('viewType');
@@ -424,12 +424,16 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     const notepadFlag = allFlags.notepad || false; // Notepad flag
     const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
     const approvalFlag = allFlags.approvalsFlag || false;
+    const emailTemplatesFlag = allFlags.emailTemplatesFlag || false;
 
     if (
       !verticalTabFlag ||
-      ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
-        flag => !!flag
-      )
+      ![
+        questionsForCustomerFlag,
+        notepadFlag,
+        proposalTeamFlag,
+        emailTemplatesFlag
+      ].some(flag => !!flag)
     ) {
       verticalTabFlag = false;
     }
@@ -439,7 +443,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     setShowNotepadTab(notepadFlag);
     setShowProposalTeamTab(proposalTeamFlag);
     setShowshowKeyMilestoneDeliverableTab(true);
-    setshowEmailTemplatesTab(true)
+    setshowEmailTemplatesTab(emailTemplatesFlag);
   }
 
   const evalAndSetVTabCollapse = useCallback(
@@ -861,8 +865,8 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
                     pd: props =>
                       `Proposal Detail (CRM#: ${
                         props && props.proposalDetail
-                        ? props.proposalDetail['CRM #']
-                        : ''
+                          ? props.proposalDetail['CRM #']
+                          : ''
                       })`,
                     plainPd: `Proposal Detail`,
                     tb: `ToolBar Menu`,
@@ -1079,7 +1083,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       } else if (!showProposalTeamTab) {
         activeVerticleTab = 'showNotepadTab';
       } else {
-        activeVerticleTab = 'showEmailTemplatesTab'
+        activeVerticleTab = 'showEmailTemplatesTab';
       }
     } else if (showKeyMilestoneDeliverableTab) {
       activeVerticleTab = 'showKeyMilestoneDeliverableTab';
