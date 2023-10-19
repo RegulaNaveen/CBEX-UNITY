@@ -70,11 +70,9 @@ const setApprovalQuestion = (state, action) => {
     return value;
   });
   return {
-
     ...state,
 
     allApprovals: result
-
   };
 };
 
@@ -82,13 +80,17 @@ const updateApprovalQuestion = (state, action) => {
   const { payload } = action;
   const { questionId, section } = payload;
   const approval = state.allApprovals;
-  approval.forEach(value=>{
-    if(section.direction === 'left'){
-      value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions .filter(QuestionId => QuestionId !==  questionId)
-    }else{
-      value.ApprovalSectionRightQuestions = value.ApprovalSectionRightQuestions .filter(QuestionId => QuestionId !==  questionId)
+  approval.forEach(value => {
+    if (section.direction === 'left') {
+      value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions.filter(
+        QuestionId => QuestionId !== questionId
+      );
+    } else {
+      value.ApprovalSectionRightQuestions = value.ApprovalSectionRightQuestions.filter(
+        QuestionId => QuestionId !== questionId
+      );
     }
-  })
+  });
 
   const result = approval.map(value => {
     if (
@@ -102,17 +104,12 @@ const updateApprovalQuestion = (state, action) => {
       }
     }
     return value;
-
   });
   return {
     ...state,
     allApprovals: result
   };
-
-  
 };
-
-
 
 const duplicateApproval = (state, action) => {
   const { sectionId, proposalId, data } = action.payload;
@@ -179,6 +176,15 @@ const resetFilters = (state, action) => {
   };
 };
 
+const addNewFilter = (state, action) => {
+  const { payload } = action;
+
+  return {
+    ...state,
+    filters: [...state.filters, ...payload]
+  };
+};
+
 const actionMap = {
   [APPROVALS.FETCH_APPROVALS]: state => ({ ...state, fetching: true }),
   [APPROVALS.SET_APPROVALS]: setApprovals,
@@ -188,10 +194,10 @@ const actionMap = {
   [APPROVALS.UPDATE_FILTERS]: updateFilter,
   [APPROVALS.RESET_FILTERS]: resetFilters,
   [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]: setApprovalQuestion,
-  [APPROVALS.UPDATE_APPROVAL_QUESTION_CUSTOM_TAB]: updateApprovalQuestion
-
+  [APPROVALS.UPDATE_APPROVAL_QUESTION_CUSTOM_TAB]: updateApprovalQuestion,
+  [APPROVALS.UPDATE_NEW_FILTER]: addNewFilter
 };
 
-export default function (state = INITIAL_STATE, action) {
+export default function(state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }

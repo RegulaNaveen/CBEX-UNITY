@@ -109,6 +109,11 @@ export const fetchApprovalSendEmailFlag = val => {
   };
 };
 
+export const updateNewFilters = data => ({
+  type: APPROVALS.UPDATE_NEW_FILTER,
+  payload: data
+});
+
 export const updateFilters = (name, value) => {
   return async (dispatch, getState) => {
     const state = getState();
