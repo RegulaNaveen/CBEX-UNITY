@@ -1314,7 +1314,7 @@ export const editProposalQuestionfromSocket = (
     try {
       const data = questionData;
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
-      if (questionData && questionData?.section?.tabID) {
+      if (data && data?.section?.tabID) {
         dispatch({
           type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
           payload: data
