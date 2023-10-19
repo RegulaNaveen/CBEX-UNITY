@@ -7,6 +7,7 @@ import {
   resetFiltersAction,
   updateFilters
 } from '../../../redux/actions/approval-actions';
+import RenderFilterLabel from '../../common/RenderFilterLabel';
 
 const Filters = props => {
   const approvalFilters = useSelector(state => state.approvals.filters);
@@ -44,7 +45,13 @@ const Filters = props => {
                   <Grid item xs={3} key={item.name}>
                     <ApolloCheckbox
                       size="small"
-                      label={item.displayName}
+                      label={
+                        <RenderFilterLabel
+                          labelText={item.displayName}
+                          showColor={group === 'milestone'}
+                          color={item.color}
+                        />
+                      }
                       checked={item.value}
                       onChange={(e, checked) => {
                         updateFilter(item.name, checked);

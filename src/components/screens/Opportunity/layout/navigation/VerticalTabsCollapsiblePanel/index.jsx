@@ -30,7 +30,7 @@ function getTabNameFromIndex(index) {
   } else if (index === 3) {
     return 'keymilestonedeliverabletab';
   } else if (index === 4) {
-    return 'emailtemplatestab'
+    return 'emailtemplatestab';
   }
 }
 const VerticalTabs = styled(Tabs)({
@@ -78,7 +78,7 @@ function VerticalTabsCollapsiblePanel({
       } else if (!showEmailTemplatesTab) {
         dispatch(setVTabActiveIndexAction(1));
       } else {
-        dispatch(setVTabActiveIndexAction(4))
+        dispatch(setVTabActiveIndexAction(4));
       }
     } else {
       dispatch(setVTabActiveIndexAction(3));
@@ -94,15 +94,18 @@ function VerticalTabsCollapsiblePanel({
     { showQuestionsForCustomerTab },
     { showNotepadTab },
     { showProposalTeamTab },
-    { showKeyMilestoneDeliverableTab }, // Add this line
-    { showEmailTemplatesTab }
+    { showKeyMilestoneDeliverableTab } // Add this line
   ];
+  if (showEmailTemplatesTab) {
+    tabArr.push({ showEmailTemplatesTab });
+  }
 
   function handleTabChange(event, newActiveTab) {
     dispatch(setVTabActiveIndexAction(newActiveTab));
     onTabClick(newActiveTab);
   }
   const renderTab = () => {
+    console.log(tabArr);
     const tabs = tabArr.map((v, vIdx) => {
       if (
         v['showQuestionsForCustomerTab'] !== undefined &&
@@ -116,7 +119,7 @@ function VerticalTabsCollapsiblePanel({
                 <QuestionsForCustomerIcon
                   fill={
                     getTabNameFromIndex(activeTabIndex) ===
-                      'showQuestionsForCustomerTab'
+                    'showQuestionsForCustomerTab'
                       ? '#0557d5'
                       : '#999999'
                   }
@@ -181,7 +184,7 @@ function VerticalTabsCollapsiblePanel({
                 <KeyMilestoneDeliverableTimelinesIcon
                   fill={
                     getTabNameFromIndex(activeTabIndex) ===
-                      'keymilestonedeliverabletab'
+                    'keymilestonedeliverabletab'
                       ? '#0557d5'
                       : '#999999 '
                   }
@@ -203,10 +206,9 @@ function VerticalTabsCollapsiblePanel({
               icon={
                 <EmailTemplatesIcon
                   fill={
-                    getTabNameFromIndex(activeTabIndex) ===
-                      'emailtemplatestab'
+                    getTabNameFromIndex(activeTabIndex) === 'emailtemplatestab'
                       ? '#0557d5'
-                      : '#999999 '
+                      : '#999999'
                   }
                 />
               }
@@ -226,26 +228,26 @@ function VerticalTabsCollapsiblePanel({
         showProposalTeamTab ||
         showKeyMilestoneDeliverableTab ||
         showEmailTemplatesTab
-        ? ''
-        : 'hide'
-        }`}
+          ? ''
+          : 'hide'
+      }`}
     >
       {(showQuestionsForCustomerTab ||
         showNotepadTab ||
         showProposalTeamTab ||
         showKeyMilestoneDeliverableTab ||
         showEmailTemplatesTab) && (
-          <>
-            <VerticalTabs
-              value={activeTabIndex}
-              onChange={handleTabChange}
-              orientation="vertical"
-            >
-              {renderTab()}
-            </VerticalTabs>
-            {renderPanel(getTabNameFromIndex(activeTabIndex))}
-          </>
-        )}
+        <>
+          <VerticalTabs
+            value={activeTabIndex}
+            onChange={handleTabChange}
+            orientation="vertical"
+          >
+            {renderTab()}
+          </VerticalTabs>
+          {renderPanel(getTabNameFromIndex(activeTabIndex))}
+        </>
+      )}
     </div>
   );
 }

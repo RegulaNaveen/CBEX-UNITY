@@ -162,10 +162,27 @@ export const doSearchAction = () => {
     const selectedBid = getSelectedBid(currentState).toJS();
     const shouldCheckNotepad =
       (allFlags.notepad || false) && (allFlags.verticalTab || false);
+    const shouldCheckEmailTemplates =
+      (allFlags.emailTemplatesFlag || false) && (allFlags.verticalTab || false);
     let notepadData = [];
+    let emailTemplates = [];
     const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
     const shouldCheckApprovals = isApprovalCount && allFlags.approvalsFlag;
     const approvals = selectAllApprovals(currentState);
+    if (shouldCheckEmailTemplates) {
+      emailTemplates = currentState.emailTemplates.emailTemplatesList.filter(
+        emailTemplate => {
+          return (
+            emailTemplate.EmailTemplateOpportunityTypes &&
+            emailTemplate.EmailTemplateOpportunityTypes.length > 0 &&
+            typeof emailTemplate.EmailTemplateOpportunityTypes === 'string' &&
+            emailTemplate.EmailTemplateOpportunityTypes.split(',').includes(
+              selectedBid.opportunityType
+            )
+          );
+        }
+      );
+    }
     if (shouldCheckNotepad) {
       try {
         if (selectedBid.id) {
@@ -184,7 +201,8 @@ export const doSearchAction = () => {
                 approvals: shouldCheckApprovals ? approvals : [],
                 notepadData: extractTextFromProseMirrorJSON(
                   notepadJSON.noteJson
-                )
+                ),
+                emailTemplates
               })
             );
           } else {
@@ -202,7 +220,8 @@ export const doSearchAction = () => {
               : sections.toJS(),
             sectionsUnfiltered: sections.toJS(),
             approvals: shouldCheckApprovals ? approvals : [],
-            notepadData
+            notepadData,
+            emailTemplates
           })
         );
       }
@@ -216,7 +235,8 @@ export const doSearchAction = () => {
             : sections.toJS(),
           sectionsUnfiltered: sections.toJS(),
           approvals: shouldCheckApprovals ? approvals : [],
-          notepadData
+          notepadData,
+          emailTemplates
         })
       );
     }
@@ -229,7 +249,8 @@ export const resumeSearchAction = ({
   sections,
   sectionsUnfiltered,
   approvals,
-  notepadData
+  notepadData,
+  emailTemplates
 }) => {
   return async (dispatch, getState) => {
     const currentState = getState();
@@ -337,7 +358,8 @@ export const resumeSearchAction = ({
       allTabs,
       filteredQuestionsMap,
       sectionsUnfiltered,
-      allFlags
+      allFlags,
+      emailTemplates
     });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;

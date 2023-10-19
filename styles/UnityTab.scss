@@ -107,6 +107,7 @@
     flex-basis: auto;
     flex-grow: 1;
     padding-left: 0.25rem;
+    flex-wrap: wrap;
 
     .tag {
       display: inline;
@@ -143,6 +144,6 @@
 .unity-tab-question-item .question-title-txt .question-edit {
   cursor: pointer;
 }
-svg.add-icon-btn{
+svg.add-icon-btn {
   width: 12px;
 }
