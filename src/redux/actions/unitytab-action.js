@@ -21,7 +21,8 @@ const {
 } = REDUX_TYPES.PROPOSAL;
 const {
   SET_APPROVAL_QUESTION_APPROVALS_TAB,
-  UPDATE_APPROVAL_QUESTION_CUSTOM_TAB
+  UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+  DELETE_APPROVAL_QUESTION_CUSTOM_TAB
 } = REDUX_TYPES.APPROVALS;
 
 export const setAllUnityTab = data => ({
@@ -193,22 +194,27 @@ export const deleteUnityQuestion = (
             tabId: questionData.tabId
           }
         });
+        if (socketContext)
+          await socketContext?.customQuestionDeleteWrapper(
+            questionData.questionId,
+            questionData.sectionName,
+            questionData.tabId
+          );
       } else {
         dispatch({
-          type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+          type: DELETE_APPROVAL_QUESTION_CUSTOM_TAB,
           payload: {
             questionId: questionData.questionId,
-            approvalSectionName: questionData.sectionName,
-            sectionName: questionData.type
+            approvalSectionName: questionData.sectionName
           }
         });
+        if (socketContext)
+          await socketContext?.ApprovalCustomQuestionDeleteWrapper(
+            questionData.questionId,
+            questionData.type,
+            questionData.sectionName
+          );
       }
-      if (socketContext)
-        await socketContext?.customQuestionDeleteWrapper(
-          questionData.questionId,
-          questionData.sectionName,
-          questionData.tabId
-        );
     } catch (err) {
       console.log(`err`, err);
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });

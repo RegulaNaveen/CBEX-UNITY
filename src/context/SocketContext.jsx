@@ -25,7 +25,8 @@ import {
   updateDashboardProposal,
   updateCustomNameAction,
   updateOpportunityDashboardProposal,
-  deleteProposalCustomTabQuestionFromSocket
+  deleteProposalCustomTabQuestionFromSocket,
+  deleteApprovalCustomTabCustomQuestionFromSocketAction
 } from '../redux/actions/proposal-actions';
 import {
   updateDashboardBid,
@@ -384,6 +385,34 @@ const SocketContextProvider = props => {
     }
   };
 
+  const approvalCustomQuestionDelete = (
+    questionId,
+    sectionName,
+    approvalSectionName,
+    ws
+  ) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_DELETE',
+            data: {
+              questionId,
+              sectionName,
+              approvalSectionName
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log('customQuestionDelete', error);
+    }
+  };
+
   /**
    *  Question unLock
    */
@@ -513,7 +542,8 @@ const SocketContextProvider = props => {
           syncdashboard,
           syncBidDashboard,
           updateDetailPage,
-          deleteCustomTabCustomQuestionFromSocket
+          deleteCustomTabCustomQuestionFromSocket,
+          deleteApprovalCustomTabCustomQuestionFromSocket
         } = props;
 
         // On Message Recieve
@@ -594,9 +624,14 @@ const SocketContextProvider = props => {
               break;
 
             case 'QUESTION_DELETE':
-              if (data?.data?.questionId && !data?.data?.tabId) {
+              if (
+                data?.data?.questionId &&
+                !data?.data?.tabId &&
+                !data?.data?.approvalSectionName
+              ) {
                 deleteProposalQuestionFromSocket(data.data.questionId);
               }
+
               if (data?.data?.questionId && data?.data?.tabId) {
                 deleteCustomTabCustomQuestionFromSocket(
                   data.data.questionId,
@@ -604,8 +639,18 @@ const SocketContextProvider = props => {
                   data.data.tabId
                 );
               }
+              if (
+                data?.data?.questionId &&
+                !data?.data?.tabId &&
+                data?.data?.approvalSectionName
+              ) {
+                deleteApprovalCustomTabCustomQuestionFromSocket(
+                  data.data.questionId,
+                  data.data.sectionName,
+                  data?.data?.approvalSectionName
+                );
+              }
               break;
-
             case 'ADD_QUESTION':
               if (data.data.questionData) {
                 setProposalQuestionFromSocket(data.data.questionData);
@@ -885,6 +930,21 @@ const SocketContextProvider = props => {
     );
   };
 
+  const ApprovalCustomQuestionDeleteWrapper = (
+    questionId,
+    sectionName,
+    approvalSectionName
+  ) => {
+    waitForSocketConnectionMinInterval(() =>
+      approvalCustomQuestionDelete(
+        questionId,
+        sectionName,
+        approvalSectionName,
+        null
+      )
+    );
+  };
+
   const naQuestionUpdateWrapper = (questionId, status) => {
     waitForSocketConnectionMinInterval(() =>
       naQuestionUpdate(questionId, status, null)
@@ -979,7 +1039,8 @@ const SocketContextProvider = props => {
         approvalSectionDeletedWrapper,
         updateFavouriteWrapper,
         updateCustomNameWrapper,
-        updateDashboardSFValueWrapper
+        updateDashboardSFValueWrapper,
+        ApprovalCustomQuestionDeleteWrapper
       }}
     >
       {props.children}
@@ -1020,7 +1081,8 @@ const mapDispatchToProps = {
   syncBidDashboard: updateDashboardBid,
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
-  deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket
+  deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
 };
 
 export default connect(

@@ -77,6 +77,24 @@ const setApprovalQuestion = (state, action) => {
   };
 };
 
+const deleteApprovalQuestion = (state, action) => {
+  const { payload } = action;
+  const { questionId, approvalSectionName } = payload;
+  const approval = state.allApprovals;
+
+  approval.forEach(value => {
+    if (value.ApprovalSectionTitle === approvalSectionName) {
+      value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions.filter(
+        QuestionId => QuestionId !== questionId
+      );
+    }
+  });
+  return {
+    ...state,
+    allApprovals: approval
+  };
+};
+
 const updateApprovalQuestion = (state, action) => {
   const { payload } = action;
   const { questionId, section } = payload;
@@ -210,7 +228,8 @@ const actionMap = {
   [APPROVALS.UPDATE_FILTERS]: updateFilter,
   [APPROVALS.RESET_FILTERS]: resetFilters,
   [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]: setApprovalQuestion,
-  [APPROVALS.UPDATE_APPROVAL_QUESTION_CUSTOM_TAB]: updateApprovalQuestion
+  [APPROVALS.UPDATE_APPROVAL_QUESTION_CUSTOM_TAB]: updateApprovalQuestion,
+  [APPROVALS.DELETE_APPROVAL_QUESTION_CUSTOM_TAB]: deleteApprovalQuestion
 };
 
 export default function(state = INITIAL_STATE, action) {

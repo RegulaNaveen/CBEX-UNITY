@@ -136,7 +136,11 @@ const {
 
 const { ON_GET_PROPOSALS, ON_GET_FAVOURITE } = REDUX_TYPES.PROPOSALS;
 const { SET_CUSTOM_NAME_MAP } = REDUX_TYPES.SSO_AUTH;
-
+const {
+  SET_APPROVAL_QUESTION_APPROVALS_TAB,
+  UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+  DELETE_APPROVAL_QUESTION_CUSTOM_TAB
+} = REDUX_TYPES.APPROVALS;
 /**
  * Updates bidNo Query param without page reload
  */
@@ -664,6 +668,12 @@ export const setProposalQuestionFromSocket = (
       if (questionData && questionData?.section?.tabID) {
         dispatch({
           type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: questionData
+        });
+      }
+      if (questionData && questionData?.section?.approvalSectionName) {
+        dispatch({
+          type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
           payload: questionData
         });
       }
@@ -1320,6 +1330,12 @@ export const editProposalQuestionfromSocket = (
           payload: data
         });
       }
+      if (data && data?.section?.approvalSectionName) {
+        dispatch({
+          type: UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+          payload: data
+        });
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -1380,6 +1396,31 @@ export const deleteProposalCustomTabQuestionFromSocket = (
           questionId: questionId,
           approvalSectionName: sectionName,
           sectionName: tabId
+        }
+      });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const deleteApprovalCustomTabCustomQuestionFromSocketAction = (
+  questionId: string,
+  sectionName,
+  approvalSectionName
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+      dispatch({
+        type: DELETE_APPROVAL_QUESTION_CUSTOM_TAB,
+        payload: {
+          questionId: questionId,
+          approvalSectionName: approvalSectionName
         }
       });
     } catch (err) {
