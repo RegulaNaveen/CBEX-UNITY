@@ -219,6 +219,15 @@ const resetFilters = (state, action) => {
   };
 };
 
+const addNewFilter = (state, action) => {
+  const { payload } = action;
+
+  return {
+    ...state,
+    filters: [...state.filters, ...payload]
+  };
+};
+
 const actionMap = {
   [APPROVALS.FETCH_APPROVALS]: state => ({ ...state, fetching: true }),
   [APPROVALS.SET_APPROVALS]: setApprovals,
@@ -229,6 +238,7 @@ const actionMap = {
   [APPROVALS.RESET_FILTERS]: resetFilters,
   [APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB]: setApprovalQuestion,
   [APPROVALS.UPDATE_APPROVAL_QUESTION_CUSTOM_TAB]: updateApprovalQuestion,
+  [APPROVALS.UPDATE_NEW_FILTER]: addNewFilter,
   [APPROVALS.DELETE_APPROVAL_QUESTION_CUSTOM_TAB]: deleteApprovalQuestion
 };
 
