@@ -661,6 +661,12 @@ export const setProposalQuestionFromSocket = (
     });
     try {
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: questionData });
+      if (questionData && questionData?.section?.tabID) {
+        dispatch({
+          type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: questionData
+        });
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
