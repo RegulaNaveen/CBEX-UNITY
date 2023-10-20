@@ -7,7 +7,9 @@ import ClipboardCheck from 'apollo-react-icons/ClipboardCheck';
 import Card from 'apollo-react/components/Card';
 import {
   fetchAllApprovals,
-  fetchApprovalSendEmailFlag
+  fetchApprovalSendEmailFlag,
+  resetFiltersAction,
+  updateNewFilters
 } from '../../../redux/actions/approval-actions';
 import {
   getSelectedBid,
@@ -23,7 +25,6 @@ import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 import { SocketContext } from '../../../context/SocketContext';
 import { Add, Refresh } from '../../svg';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
-
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
@@ -56,8 +57,55 @@ const Approvals = () => {
     if (!proposalId) return () => {};
     setLoading(true);
 
+    const approvalQuestions = [];
+    const questionsMap = questions.reduce((acc, question) => {
+      acc[question.questionId] = question;
+      return acc;
+    }, {});
+    let milestones = [];
+    const milestoneNames = [];
+
     (async () => {
       const response = await dispatch(fetchAllApprovals(proposalId, questions));
+      if (response.status) {
+        response.data.forEach(approval => {
+          approval.ApprovalSectionLeftQuestions.forEach(questionId => {
+            if (questionsMap[questionId]) {
+              approvalQuestions.push(questionsMap[questionId]);
+            }
+          });
+          approval.ApprovalSectionRightQuestions.forEach(questionId => {
+            if (questionsMap[questionId]) {
+              approvalQuestions.push(questionsMap[questionId]);
+            }
+          });
+        });
+      }
+
+      approvalQuestions.forEach(question => {
+        question.milestoneNew.forEach(milestone => {
+          if (!milestoneNames.includes(milestone.Name)) {
+            milestoneNames.push(milestone.Name);
+            milestones.push(milestone);
+          }
+        });
+      });
+      // remove duplicates
+      milestones = [...new Set(milestones)];
+      if (milestones.length) {
+        dispatch(
+          updateNewFilters(
+            milestones.map(milestone => ({
+              displayName: milestone.Name,
+              group: 'milestone',
+              name: String(milestone.Name).toLowerCase(),
+              color: milestone.Color,
+              value: false
+            }))
+          )
+        );
+      }
+
       setLoading(false);
       if (!response.status) {
         setWarningTitle(response.title);
@@ -76,7 +124,6 @@ const Approvals = () => {
     if (showModal) setShowModal(false);
   };
 
-
   return (
     <div className="approvals-tab">
       <ViewAboveVerticalTabs>
@@ -85,15 +132,15 @@ const Approvals = () => {
 
       <div className="filter-container">
         <div className="filter-btn">
-        <div
-          data-testid="selectedbid-testid"
-          title="Add New Question"
-          className="tasksList-add-icon-wrapper"
-          role="presentation"
-          onClick={()=>onAddQuestion("left")}
-        >
-          <Add className="tasksList-add-icon add-icon-btn" />
-        </div>
+          <div
+            data-testid="selectedbid-testid"
+            title="Add New Question"
+            className="tasksList-add-icon-wrapper"
+            role="presentation"
+            onClick={() => onAddQuestion('left')}
+          >
+            <Add className="tasksList-add-icon add-icon-btn" />
+          </div>
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
@@ -150,16 +197,15 @@ const Approvals = () => {
         />
       )}
       <div id="modal-wrapper" />
-     
-        {showModal && (
-          <AddQuestionModalComponent
-            onClose={onClose}
-            currentsection={""}
-            tabFlag="Approvals"
-            direction = {direction}
-          />
-        )}
-     
+
+      {showModal && (
+        <AddQuestionModalComponent
+          onClose={onClose}
+          currentsection={''}
+          tabFlag="Approvals"
+          direction={direction}
+        />
+      )}
     </div>
   );
 };

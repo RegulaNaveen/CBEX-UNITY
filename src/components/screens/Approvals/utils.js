@@ -2,6 +2,7 @@
 /* eslint no-param-reassign: 0 */
 import isEmpty from 'lodash/isEmpty';
 import { store } from '../../../store';
+import { milestoneFilters } from '../UnityTabs/utils';
 
 /**
  * Function to get the last answer object from a proposal question object
@@ -128,6 +129,15 @@ export const shouldShowQuestion = (
         if (appliedFilters.includes('unanswered')) {
           filterAnswers.push(unansweredFilter(question, flags));
         }
+      }
+      const milestonefilter = approvalfilters.filter(
+        v => v.value === true && v.group === 'milestone'
+      );
+      const milestoneFiltersApplied = milestonefilter.map(i =>
+        i.name.toLowerCase()
+      );
+      if (milestoneFiltersApplied.length > 0) {
+        filterAnswers.push(milestoneFilters(question, milestoneFiltersApplied));
       }
 
       if (appliedFilters.includes('verificationRequired')) {
