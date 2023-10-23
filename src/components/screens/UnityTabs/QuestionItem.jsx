@@ -78,16 +78,13 @@ const QuestionItem = ({
   eventCategories,
   trackEvent,
   updateQuestionVisibility,
-  tabId,
-
+  tabId
 }) => {
-
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
   ).toJS();
-
 
   const oppdata = useSelector(state => getOpportunityData(state));
   const panelStatus = useSelector(state => getPanelStatus(state));
@@ -539,7 +536,7 @@ const QuestionItem = ({
     );
     if (
       typeof currentSFanswer !== 'undefined' &&
-      _.isEmpty(currentSFanswer) !== true
+      isEmpty(currentSFanswer) !== true
     ) {
       checkSfAnswer = currentSFanswer.toJS().value;
     }
@@ -679,7 +676,7 @@ const QuestionItem = ({
                         questionLabel={question?.questionText || ''}
                       />
                       {!isEmpty(question?.questionLockInfo) &&
-                        isQuestionLockedByOther() ? (
+                      isQuestionLockedByOther() ? (
                         <Typography variant="subtitle1" className="status-txt">
                           {question.questionLockInfo?.userName} is typing...
                         </Typography>
@@ -695,31 +692,32 @@ const QuestionItem = ({
                         }
                       />
                     )}
-                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (<div className="question-edit">
-                      <span
-                        aria-hidden="true"
-                        onClick={() => {
-                          dispatch(
-                            setEditQuestionData({
-                              questionText: question.questionText,
-                              questionHTML: question.questionHTML,
-                              questionJSON: question.questionJSON,
-                              questionHintJSON: question.questionHintJSON,
-                              section: question.section.sectionName,
-                              tabId: tabId,
-                              answerType: question.answerConfiguration.type,
-                              roleNames: question.roleNames,
-                              questionId: question.questionId,
-                              tabFlag: "customTab",
-                              questionAnswered: showLastAnswer
-                            })
-                          );
-                        }}
-                      >
-                        <Edit className="edit-icon" />
-                      </span>
-                    </div>)
-                    }
+                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
+                      <div className="question-edit">
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question.questionText,
+                                questionHTML: question.questionHTML,
+                                questionJSON: question.questionJSON,
+                                questionHintJSON: question.questionHintJSON,
+                                section: question.section.sectionName,
+                                tabId: tabId,
+                                answerType: question.answerConfiguration.type,
+                                roleNames: question.roleNames,
+                                questionId: question.questionId,
+                                tabFlag: 'customTab',
+                                questionAnswered: showLastAnswer
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
 
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
@@ -770,7 +768,7 @@ const QuestionItem = ({
 
 QuestionItem.defaultProps = {
   disabled: false,
-  updateQuestionVisibility: () => { }
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
