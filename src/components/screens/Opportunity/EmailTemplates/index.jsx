@@ -62,7 +62,7 @@ const EmailTemplates = () => {
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
-
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -211,7 +211,13 @@ const EmailTemplates = () => {
   const getRolesAndEmails = (values, proposalTeamQues) => {
     return (
       values &&
-      values.map(item => {
+      values.filter(value => {
+        if (value.Type === 'Role')
+          return proposalTeamQues.some(
+            question => question.questionId === value.Value
+          );
+        return true;
+      }).map(item => {
         if (item.Type === 'Email') return item.Value;
         return (
           proposalTeamQues.find(ques => ques.questionId === item.Value)
@@ -228,7 +234,12 @@ const EmailTemplates = () => {
           .split(',')
           .includes(selectedBid.toJS().opportunityType)
     );
-    return rowInfo?.map((item, index) => {
+    return rowInfo?.filter((row) => {
+      if (row.Type === 'Role')
+        return availableProposalTeamQuestions.some(question => question.questionId === row.Value);
+      return true;
+    })
+    .map((item, index) => {
       if (item.Type == 'EmailGroup') {
         return (
           <span key={index}>
@@ -237,8 +248,8 @@ const EmailTemplates = () => {
               title={EMAIL_TEMPLATES.EMAILS_IN_THIS_GROUP}
               subtitle={getRolesAndEmails(
                 item?.GroupValues,
-                proposalTeamQuestions
-              )}
+                availableProposalTeamQuestions
+              ).join(', ')}
               placement="top"
             >
               <span>
@@ -251,15 +262,15 @@ const EmailTemplates = () => {
       } else if (item.Type == 'Role') {
         const proposalTeamQuestion = availableProposalTeamQuestions.find(
           question =>
-            question.questionText.toLowerCase() === item.Value.toLowerCase()
+            question.questionId.toLowerCase() === item.Value.toLowerCase()
         );
         if (proposalTeamQuestion && proposalTeamQuestion?.email.length) {
           return (
             <span key={index}>
               <Tooltip
                 data-testid="tooltip-btn"
-                title={EMAIL_TEMPLATES.EMAILS_IN_THIS_GROUP}
-                subtitle={proposalTeamQuestion?.email.join(',')}
+                title={EMAIL_TEMPLATES.EMAILS_IN_THIS_ROLE}
+                subtitle={proposalTeamQuestion?.email.join(', ')}
                 placement="top"
               >
                 <span>
@@ -544,16 +555,20 @@ const EmailTemplates = () => {
                 <b>{EMAIL_TEMPLATES.TO}: </b>
                 {row.EmailTemplateTO &&
                   getEmailsTooltipInfo(row.EmailTemplateTO)}
-                <div>
-                  {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
-                    group => getEmailsTooltipInfo(group.RecipientRuleToAnswer)
-                  )}
-                </div>
+                {row?.EmailTemplateTO?.length > 0 && 
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.some(group => group?.RecipientRuleToAnswer?.length > 0) && 
+                  <span>, </span>}
+                {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
+                  group => getEmailsTooltipInfo(group.RecipientRuleToAnswer)
+                )}
               </div>
               <div style={{ marginBottom: 4 }}>
                 <b>{EMAIL_TEMPLATES.CC}: </b>
                 {row.EmailTemplateCC &&
                   getEmailsTooltipInfo(row.EmailTemplateCC)}
+                {row?.EmailTemplateCC?.length > 0 && 
+                  row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.some(group => group?.RecipientRuleCCAnswer?.length > 0) && 
+                  <span>, </span>}
                 {row?.EmailTemplateRecipientRule?.RecipientRuleGroups?.map(
                   group => getEmailsTooltipInfo(group.RecipientRuleCCAnswer)
                 )}
