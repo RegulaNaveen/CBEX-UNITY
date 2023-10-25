@@ -475,16 +475,18 @@ const EmailTemplates = () => {
           case ANSWER_TYPES.TEXT:
           case ANSWER_TYPES.NUMBER:
           case ANSWER_TYPES.YES_NO:
-            return (
-              <div className="recipient-answers">
-                <p>{getQuestion(item.QuestionId)}</p>
-                <ul>
-                  {item.RecipientRuleAnswer.map(answer => {
-                    return <li>{answer}</li>;
-                  })}
-                </ul>
-              </div>
-            );
+            if(!getQuestion(item.QuestionId)){
+              return
+            } else {
+              return (
+                <div className="recipient-answers">
+                  <p>{getQuestion(item.QuestionId)}</p>
+                  <ul>
+                    <li>{item.RecipientRuleAnswer}</li>
+                  </ul>
+                </div>
+              );
+            }
           case ANSWER_TYPES.DATE:
             return (
               <div className="recipient-answers">
