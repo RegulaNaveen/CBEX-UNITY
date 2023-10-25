@@ -98,19 +98,7 @@ const QuestionItem = ({
     } else {
       setLocked(false);
     }
-    if (
-      question?.answers &&
-      Array.isArray(question?.answers) &&
-      !question?.answers.length
-    ) {
-      setshowLastAnswer(false);
-    } else {
-      const lastAnswer = question?.answers[question?.answers.length - 1];
-      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
-      setshowLastAnswer(lastAnswerVisibility ? true : false);
-    }
   }, [isQuesFreezed, activeQuestionInfo]);
-
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
       if (currentSearchResult.searchIndex === highlightQuestionId) {
@@ -147,6 +135,24 @@ const QuestionItem = ({
     email: getUserEmail(),
     role: getUserId()
   });
+
+  const checkLastAnswerOfQuestionVisibility = (answers) => {
+    if (
+      answers &&
+      Array.isArray(answers) &&
+      !answers.length
+    ) {
+      return false;
+    } else {
+      const lastAnswerVisibility = String(answers?.answer)?.trim()?.length;
+      if (lastAnswerVisibility) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+  }
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
@@ -455,7 +461,7 @@ const QuestionItem = ({
                       <QuestionLabel
                         questionLabel={question?.questionText || ''}
                       />
-                      {question.isCustomQuestion && selectedBid.isCurrent && (
+                      {question.isCustomQuestion && selectedBid.isCurrent && !isQuesFreezed && (
                         <div
                           className="question-edit"
                           style={{ 'margin-left': '10px' }}
@@ -469,14 +475,13 @@ const QuestionItem = ({
                                   questionHTML: question?.questionHTML,
                                   questionJSON: question?.questionJSON,
                                   questionHintJSON: question?.questionHintJSON,
-                                  section:
-                                    question?.section.approvalSectionName,
-                                  answerType:
-                                    question?.answerConfiguration.type,
+                                  section: question?.section.approvalSectionName,
+                                  answerType: question?.answerConfiguration.type,
                                   roleNames: question?.roleNames,
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
-                                  questionAnswered: showLastAnswer
+                                  direction: "left",
+                                  questionAnswered: checkLastAnswerOfQuestionVisibility(question?.answers)
                                 })
                               );
                             }}
@@ -501,6 +506,9 @@ const QuestionItem = ({
                     {renderTags(question.milestoneNew)}
                   </div>
                 </span>
+                <div className="tags-container">
+                  {renderTags(question.milestoneNew)}
+                </div>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
@@ -573,7 +581,7 @@ QuestionItem.defaultProps = {
     visible: false,
     active: false
   },
-  updateQuestionVisibility: () => {}
+  updateQuestionVisibility: () => { }
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,

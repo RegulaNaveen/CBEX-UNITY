@@ -420,7 +420,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         } else if (tabFlag == 'Approvals') {
           section['approvalSectionName'] = section.sectionName;
           section['sectionName'] = "Approvals";
-          section['direction'] = direction;
+          if (isEditMode) {
+            section['direction'] = editQuestionsData.get('direction')
+          }else{
+            section['direction'] = direction;
+          }
           questionData = {
             proposalId,
             questionText,
@@ -430,7 +434,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             roleNames,
             type: 'Approvals'
           };
-
         } else {
           questionData = {
             proposalId,
@@ -447,7 +450,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         }));
         if (isEditMode) {
           this.setState({ loaderText: 'Updating Question' });
-          if (tabFlag == 'customTab') {
+          if (tabFlag == 'customTab' || tabFlag == 'Approvals') {
             const result = editUnityQuestion(
               proposalId,
               editQuestionsData.get('questionId'),
@@ -674,6 +677,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                           <Tooltip
                             title="The question was answered previously and cannot be deleted"
                             placement="top"
+                            classes={{
+                              tooltip: 'modal-delete-btn-tooltip'
+                            }}
                           >
                             <div>
                               <Trash

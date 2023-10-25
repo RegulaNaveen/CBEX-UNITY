@@ -4,6 +4,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import _ from 'lodash';
 import DatePickerCustomInput from './DatePickerCustomInput';
 import { parseMomentDate } from '../../../../utils/DateUtils';
+import { isEmpty } from 'lodash';
 
 type Props = {
   label?: any,
@@ -23,7 +24,7 @@ const DatePicker = ({
   value
 }: Props) => {
   let dateFormat = '';
-  if (!_.isEmpty(value)) dateFormat = value && parseMomentDate(value);
+  if (!isEmpty(value)) dateFormat = value && parseMomentDate(value);
 
   function handleChange(pickedDay: string) {
     handleDayChange(pickedDay, value);
