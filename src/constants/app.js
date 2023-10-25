@@ -118,6 +118,7 @@ export const DEFAULT_TABS_LEN = 4;
 const EMAIL_TEMPLATES = {
   EMAIL_TEMPLATES_TITLE: 'Email Templates',
   EMAILS_IN_THIS_GROUP: 'Emails in this group',
+  EMAILS_IN_THIS_ROLE: 'Emails in this role',
   EMAIL_TEXT:
     'Here are the answers to question that will determine your email content',
   INTERNAL_REQUESTED_SERVICES: 'Internal Requested Services',
