@@ -506,7 +506,7 @@ pafexecution_uat:
     ENV_NAME: uat
   trigger:
     project: 'CBEx/unity/Unity-QA'
-    branch: Unity_QA_Testing
+    branch: uat
     strategy: depend
 
 pafexecution_prod:
@@ -525,7 +525,7 @@ pafexecution_prod:
     ENV_NAME: prod
   trigger:
     project: 'CBEx/unity/Unity-QA'
-    branch: Unity_QA_Testing
+    branch: prd
     strategy: depend
 
 .deploystack:
