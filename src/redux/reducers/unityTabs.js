@@ -160,7 +160,10 @@ const addNewFilter = (state, action) => {
 
   return {
     ...state,
-    filters: [...state.filters, ...payload]
+    filters: [
+      ...state.filters.filter(filter => filter.group !== 'milestone'),
+      ...payload
+    ]
   };
 };
 
