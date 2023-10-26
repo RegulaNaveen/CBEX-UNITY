@@ -100,16 +100,16 @@ const updateApprovalQuestion = (state, action) => {
   const { questionId, section } = payload;
   const approval = state.allApprovals;
   approval.forEach(value => {
-      value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions.filter(
-        QuestionId => QuestionId !== questionId
-      );
+    value.ApprovalSectionLeftQuestions = value.ApprovalSectionLeftQuestions.filter(
+      QuestionId => QuestionId !== questionId
+    );
   });
-   approval.map(value => {
+  approval.map(value => {
     if (
       section.sectionName === 'Approvals' &&
       value.ApprovalSectionTitle === section.approvalSectionName
     ) {
-        value.ApprovalSectionLeftQuestions.push(questionId);
+      value.ApprovalSectionLeftQuestions.push(questionId);
     }
   });
   return {
@@ -212,7 +212,10 @@ const addNewFilter = (state, action) => {
 
   return {
     ...state,
-    filters: [...state.filters, ...payload]
+    filters: [
+      ...state.filters.filter(filter => filter.group !== 'milestone'),
+      ...payload
+    ]
   };
 };
 
