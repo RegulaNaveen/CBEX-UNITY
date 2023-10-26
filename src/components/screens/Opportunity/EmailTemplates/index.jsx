@@ -74,7 +74,7 @@ const EmailTemplates = () => {
               emailTemplate.EmailTemplateOpportunityTypes &&
               emailTemplate.EmailTemplateOpportunityTypes.length > 0 &&
               typeof emailTemplate.EmailTemplateOpportunityTypes === "string" &&
-              emailTemplate.EmailTemplateOpportunityTypes.split(",").includes(
+              emailTemplate?.EmailTemplateOpportunityTypes?.split(",").includes(
                 selectedBid.toJS().opportunityType
               )
             );
@@ -232,8 +232,7 @@ const EmailTemplates = () => {
   const getEmailsTooltipInfo = (rowInfo) => {
     const availableProposalTeamQuestions = proposalTeamQuestions?.filter(
       (question) =>
-        question.opportunityType
-          .split(",")
+        question?.opportunityType?.split(",")
           .includes(selectedBid.toJS().opportunityType)
     );
     return rowInfo
@@ -319,7 +318,7 @@ const EmailTemplates = () => {
             const splitToEmail = answerData?.split(",");
             if (Array.isArray(splitToEmail)) {
               for (let i = 0; i < splitToEmail.length; i++) {
-                const breakEmail = splitToEmail[i].split("(");
+                const breakEmail = splitToEmail[i]?.split("(");
                 let parseEmail = breakEmail[1].substring(
                   0,
                   breakEmail[1].length - 1
@@ -649,7 +648,7 @@ const EmailTemplates = () => {
                     emailTemplate.EmailTemplateOpportunityTypes.length > 0 &&
                     typeof emailTemplate.EmailTemplateOpportunityTypes ===
                       "string" &&
-                    emailTemplate.EmailTemplateOpportunityTypes.split(
+                    emailTemplate?.EmailTemplateOpportunityTypes?.split(
                       ","
                     ).includes(selectedBid.toJS().opportunityType)
                   );
