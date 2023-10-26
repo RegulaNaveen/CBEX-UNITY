@@ -51,7 +51,7 @@ const loginUser = (state: Map, action: Object) => {
   );
   const decoded = jwt_decode(idToken);
   const role = decoded['custom:role'];
-  const acknowledged = decoded['custom:acknowledgment'];
+  const acknowledged = decoded['custom:acknowledgement'];
 
   localStorage.setItem('access_token', accessToken);
   localStorage.setItem('refresh_token', refreshToken);

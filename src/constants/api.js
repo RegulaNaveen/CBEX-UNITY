@@ -224,7 +224,7 @@ const AUTH_API_ENDPOINT = `${COGNITO_HOST}/oauth2/token`;
 const AUTH_API_URL = `${NORMAL_AUTH_API_ENDPOINT}/api/auth`;
 const ROLE_ENDPOINT = `${AUTH_API_URL}/changerole`;
 const VALIDATE_TOKEN = `${AUTH_API_URL}/validate-token`;
-const ACKNOWLEDGE_ENDPOINT = `${AUTH_API_URL}/acknowledge`;
+const ACKNOWLEDGE_ENDPOINT = `${AUTH_API_URL}/acknowledgement`;
 
 const AUTH = {
   COGNITO_HOST,
