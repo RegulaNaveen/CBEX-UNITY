@@ -192,9 +192,9 @@ const EmailTemplates = () => {
       customCell: Cell,
       sortFunction: compareStrings,
       filterFunction: isCurrentBid
-        ? createStringSearchFilter("EmailTemplateName")
+        ? createStringSearchFilter('EmailTemplateName')
         : null,
-      filterComponent: isCurrentBid ? TextFieldFilter : null,
+      filterComponent: isCurrentBid ? TextFieldFilter : null
     },
     {
       header: "Summary",
@@ -202,10 +202,10 @@ const EmailTemplates = () => {
       customCell: Cell,
       sortFunction: compareStrings,
       filterFunction: isCurrentBid
-        ? createStringSearchFilter("EmailTemplateDescription")
+        ? createStringSearchFilter('EmailTemplateDescription')
         : null,
-      filterComponent: isCurrentBid ? TextFieldFilter : null,
-    },
+      filterComponent: isCurrentBid ? TextFieldFilter : null
+    }
   ];
 
   const getRolesAndEmails = (values, proposalTeamQues) => {
@@ -479,9 +479,9 @@ const EmailTemplates = () => {
     return question?.questionText;
   };
 
-  const renderRecipientRuleQuestionAnswers = (group) => {
-    return group.map((groupItem) => {
-      return groupItem.RecipientRules.map((item) => {
+  const renderRecipientRuleQuestionAnswers = group => {
+    return group.map(groupItem => {
+      return groupItem.RecipientRules.map(item => {
         switch (item.RecipientRuleAnswerType) {
           case ANSWER_TYPES.TEXT:
           case ANSWER_TYPES.NUMBER:
