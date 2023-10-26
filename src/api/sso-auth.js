@@ -11,7 +11,8 @@ const {
   CLIENT_ID,
   ROLE_ENDPOINT,
   AUTH_API_URL,
-  VALIDATE_TOKEN
+  VALIDATE_TOKEN,
+  ACKNOWLEDGE_ENDPOINT
 } = API.AUTH;
 
 const { API_KEY, INTEGRATIONS_API_URL } = API.PROPOSAL;
@@ -48,6 +49,17 @@ export const onChangeUserRole = (
   const headers = { Authorization: `Bearer ${idToken}` };
 
   return axios.put(ROLE_ENDPOINT, data, { headers });
+};
+
+export const onUserAcknowledge = (
+  accessToken: string,
+  idToken: string,
+  role: string
+): Promise<Object> => {
+  const data = { accessToken, acknowledge: true };
+  const headers = { Authorization: `Bearer ${idToken}` };
+
+  return axios.put(ACKNOWLEDGE_ENDPOINT, data, { headers });
 };
 
 export const getUsers = (idToken: string): Promise<Object> => {

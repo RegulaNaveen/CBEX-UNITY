@@ -3,6 +3,7 @@ import type { Dispatch, ThunkAction } from './action-types';
 import {
   onLoginRequest,
   onChangeUserRole,
+  onUserAcknowledge,
   getUsers,
   getOppPrefs
 } from '../../api/sso-auth';
@@ -17,7 +18,9 @@ const {
   ON_USER_LOGOUT,
   ERROR_ON_USER_LOGIN,
   ON_CHANGE_ROLE,
+  ON_USER_ACKNOWLEDGE,
   ERROR_ON_CHANGE_ROLE,
+  ERROR_ON_USER_ACKNOWLEDGE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
@@ -65,6 +68,22 @@ export const onSetUserRole = (role: string): ThunkAction<string, Object> => {
       }
     } catch (error) {
       dispatch({ type: ERROR_ON_CHANGE_ROLE, payload: { error } });
+    }
+  };
+};
+
+export const onSetUserAcknowledge = (role: string): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    const accessToken = localStorage.getItem('access_token');
+    const idToken = localStorage.getItem('id_token');
+
+    try {
+      if (accessToken && idToken) {
+        const { data } = await onUserAcknowledge(accessToken, idToken, role);
+        dispatch({ type: ON_USER_ACKNOWLEDGE, payload: data });
+      }
+    } catch (error) {
+      dispatch({ type: ERROR_ON_USER_ACKNOWLEDGE, payload: { error } });
     }
   };
 };
