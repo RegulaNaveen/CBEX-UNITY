@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'apollo-react/components/Modal';
 import Select from 'apollo-react/components/Select';
 import MenuItem from 'apollo-react/components/MenuItem';
@@ -15,11 +15,11 @@ const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged })
   const cls =
     '.MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div:nth-child(2) > h3 > button';
   const selector = document.querySelector(cls);
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     image: true
   });
-  const [role, setrole] = React.useState(roleName || '');
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [role, setrole] = useState(roleName || '');
+  const [activeStep, setActiveStep] = useState(0);
 
 
   function handleClose(variant) {

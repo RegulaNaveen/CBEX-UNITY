@@ -101,11 +101,11 @@ const setNewUserRole = (state: Map, action: Object) => {
 };
 
 const setUserAcknowledge = (state: Map, action: Object) => {
-  const { data } = action.payload;
+  const { acknowledgement } = action.payload;
 
-  localStorage.setItem('userAcknowledged', data);
+  localStorage.setItem('userAcknowledged', acknowledgement);
 
-  return state.set('acknowledged', data);
+  return state.set('acknowledged', acknowledgement);
 };
 
 const errorOnSetNewUserRole = (state: Map, action: Object) => {

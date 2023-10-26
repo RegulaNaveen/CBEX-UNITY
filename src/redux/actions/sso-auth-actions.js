@@ -72,15 +72,15 @@ export const onSetUserRole = (role: string): ThunkAction<string, Object> => {
   };
 };
 
-export const onSetUserAcknowledge = (role: string): ThunkAction<string, Object> => {
+export const onSetUserAcknowledge = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
     const accessToken = localStorage.getItem('access_token');
     const idToken = localStorage.getItem('id_token');
 
     try {
       if (accessToken && idToken) {
-        const { data } = await onUserAcknowledge(accessToken, idToken, role);
-        dispatch({ type: ON_USER_ACKNOWLEDGE, payload: data });
+        const { acknowledgement } = await onUserAcknowledge(accessToken, idToken);
+        dispatch({ type: ON_USER_ACKNOWLEDGE, payload: acknowledgement });
       }
     } catch (error) {
       dispatch({ type: ERROR_ON_USER_ACKNOWLEDGE, payload: { error } });

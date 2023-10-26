@@ -54,7 +54,6 @@ export const onChangeUserRole = (
 export const onUserAcknowledge = (
   accessToken: string,
   idToken: string,
-  role: string
 ): Promise<Object> => {
   const data = { accessToken, acknowledge: true };
   const headers = { Authorization: `Bearer ${idToken}` };
