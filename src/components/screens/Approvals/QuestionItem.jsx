@@ -136,12 +136,8 @@ const QuestionItem = ({
     role: getUserId()
   });
 
-  const checkLastAnswerOfQuestionVisibility = (answers) => {
-    if (
-      answers &&
-      Array.isArray(answers) &&
-      !answers.length
-    ) {
+  const checkLastAnswerOfQuestionVisibility = answers => {
+    if (answers && Array.isArray(answers) && !answers.length) {
       return false;
     } else {
       const lastAnswerVisibility = String(answers?.answer)?.trim()?.length;
@@ -151,8 +147,7 @@ const QuestionItem = ({
         return false;
       }
     }
-
-  }
+  };
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
@@ -461,35 +456,42 @@ const QuestionItem = ({
                       <QuestionLabel
                         questionLabel={question?.questionText || ''}
                       />
-                      {question.isCustomQuestion && selectedBid.isCurrent && !isQuesFreezed && (
-                        <div
-                          className="question-edit"
-                          style={{ 'margin-left': '10px' }}
-                        >
-                          <span
-                            aria-hidden="true"
-                            onClick={() => {
-                              dispatch(
-                                setEditQuestionData({
-                                  questionText: question?.questionText,
-                                  questionHTML: question?.questionHTML,
-                                  questionJSON: question?.questionJSON,
-                                  questionHintJSON: question?.questionHintJSON,
-                                  section: question?.section.approvalSectionName,
-                                  answerType: question?.answerConfiguration.type,
-                                  roleNames: question?.roleNames,
-                                  questionId: question?.questionId,
-                                  tabFlag: 'Approvals',
-                                  direction: "left",
-                                  questionAnswered: checkLastAnswerOfQuestionVisibility(question?.answers)
-                                })
-                              );
-                            }}
+                      {question.isCustomQuestion &&
+                        selectedBid.isCurrent &&
+                        !isQuesFreezed && (
+                          <div
+                            className="question-edit"
+                            style={{ 'margin-left': '10px' }}
                           >
-                            <Edit className="edit-icon" />
-                          </span>
-                        </div>
-                      )}
+                            <span
+                              aria-hidden="true"
+                              onClick={() => {
+                                dispatch(
+                                  setEditQuestionData({
+                                    questionText: question?.questionText,
+                                    questionHTML: question?.questionHTML,
+                                    questionJSON: question?.questionJSON,
+                                    questionHintJSON:
+                                      question?.questionHintJSON,
+                                    section:
+                                      question?.section.approvalSectionName,
+                                    answerType:
+                                      question?.answerConfiguration.type,
+                                    roleNames: question?.roleNames,
+                                    questionId: question?.questionId,
+                                    tabFlag: 'Approvals',
+                                    direction: 'left',
+                                    questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                      question?.answers
+                                    )
+                                  })
+                                );
+                              }}
+                            >
+                              <Edit className="edit-icon" />
+                            </span>
+                          </div>
+                        )}
                     </Grid>
                     <Grid
                       item
@@ -506,9 +508,6 @@ const QuestionItem = ({
                     {renderTags(question.milestoneNew)}
                   </div>
                 </span>
-                <div className="tags-container">
-                  {renderTags(question.milestoneNew)}
-                </div>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
@@ -581,7 +580,7 @@ QuestionItem.defaultProps = {
     visible: false,
     active: false
   },
-  updateQuestionVisibility: () => { }
+  updateQuestionVisibility: () => {}
 };
 QuestionItem.propTypes = {
   questionId: PropTypes.string.isRequired,
