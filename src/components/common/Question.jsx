@@ -1605,7 +1605,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     );
     if (
       typeof currentSFanswer !== 'undefined' &&
-      _.isEmpty(currentSFanswer) !== true
+      isEmpty(currentSFanswer) !== true
     ) {
       checkSfAnswer = currentSFanswer.toJS().value;
     }

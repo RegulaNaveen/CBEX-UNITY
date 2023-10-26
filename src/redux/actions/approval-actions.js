@@ -45,9 +45,12 @@ export const fetchAllApprovals = (proposalId, questions) => async dispatch => {
   }
 };
 
-export const deleteApprovalAction = approvalId => ({
+export const deleteApprovalAction = (sectionId, proposalQuestions = []) => ({
   type: APPROVALS.DELETE_APPROVALS,
-  payload: approvalId
+  payload: {
+    sectionId,
+    proposalQuestions
+  }
 });
 
 export const deleteApproval = (proposalId, sectionId) => async (
@@ -56,13 +59,14 @@ export const deleteApproval = (proposalId, sectionId) => async (
 ) => {
   try {
     const proposalDetails = getState().proposal?.get('proposalDetails');
+    const proposalQuestions = getState().proposal?.get('proposalQuestions');
     // Api Response
     const response = await deleteApprovalsApi(
       proposalId,
       sectionId,
       proposalDetails['CRM #']
     );
-    dispatch(deleteApprovalAction(sectionId));
+    dispatch(deleteApprovalAction(sectionId, proposalQuestions));
     await new Promise(resolve => setTimeout(resolve, 1000));
     return { status: true, title: DEFAULT.SUCCESS, data: response.data };
   } catch (error) {
@@ -108,6 +112,11 @@ export const fetchApprovalSendEmailFlag = val => {
     dispatch(setCanSendEmailInApprovals(val));
   };
 };
+
+export const updateNewFilters = data => ({
+  type: APPROVALS.UPDATE_NEW_FILTER,
+  payload: data
+});
 
 export const updateFilters = (name, value) => {
   return async (dispatch, getState) => {
@@ -180,7 +189,8 @@ export function onApprovalSectionDuplicatedAction({ proposalId, userEmail }) {
     const currentState = getState();
     if (userEmail !== getUserEmail()) {
       const questions = getProposalQuestions(currentState);
-      await dispatch(fetchAllApprovals(proposalId, questions));
+      const results = fetchAllApprovals(proposalId, questions);
+      await dispatch(results);
     }
   };
 }

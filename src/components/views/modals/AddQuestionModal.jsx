@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Trash from 'apollo-react-icons/Trash';
 import Tooltip from 'apollo-react/components/Tooltip';
+import sortBy from 'lodash/sortBy';
 import { Map } from 'immutable'; // NOSONAR
 import Loader from 'react-loader-spinner';
 import { compose } from 'redux';
@@ -50,6 +51,7 @@ import {
   deleteUnityQuestion
 } from '../../../redux/actions/unitytab-action';
 import { shouldShowSection } from '../../screens/UnityTabs/utils';
+import { shouldShowSection as shouldShowSectionForApproval } from '../../screens/Approvals/utils';
 
 type Props = {
   onClose: Function,
@@ -134,7 +136,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         answerType: editQuestionsData.get('answerType'),
         roleNames: editQuestionsData.get('roleNames').toJS()
       });
-
       tabId = editQuestionsData.get('tabId');
     }
 
@@ -143,6 +144,11 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     }
 
     let tab = allUnityTab[tabId] ? allUnityTab[tabId] : '';
+    tab = sortBy(tab, [
+      o => {
+        return o.UnityTabSectionOrder;
+      }
+    ]);
     const sectionUnity = [];
     const sectionOrderInfoUnity = [];
     const sectionApproval = [];
@@ -164,13 +170,14 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         );
     }
     {
-      allApprovalTab.length > 0 && allApprovalTab.map(item => 
-        {
-        sectionApproval.push(item.ApprovalSectionTitle)
-        sectionOrderInfoApproval.push({
-          sectionName: item.ApprovalSectionTitle,
-          sectionOrder: item.ApprovalSectionOrder,
-        })
+      allApprovalTab.length > 0 && allApprovalTab.map(item => {
+        if (shouldShowSectionForApproval(item.ApprovalSectionId,allFlags)) {
+          sectionApproval.push(item.ApprovalSectionTitle)
+          sectionOrderInfoApproval.push({
+            sectionName: item.ApprovalSectionTitle,
+            sectionOrder: item.ApprovalSectionOrder,
+          })
+        }
       }
       )
     }
@@ -411,9 +418,13 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             type: 'customTab'
           };
         } else if (tabFlag == 'Approvals') {
-          section['approvalSectionName'] = section.sectionName ;
+          section['approvalSectionName'] = section.sectionName;
           section['sectionName'] = "Approvals";
-          section['direction'] = direction;
+          if (isEditMode) {
+            section['direction'] = editQuestionsData.get('direction')
+          }else{
+            section['direction'] = direction;
+          }
           questionData = {
             proposalId,
             questionText,
@@ -423,7 +434,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             roleNames,
             type: 'Approvals'
           };
-
         } else {
           questionData = {
             proposalId,
@@ -440,7 +450,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         }));
         if (isEditMode) {
           this.setState({ loaderText: 'Updating Question' });
-          if (tabFlag == 'customTab') {
+          if (tabFlag == 'customTab' || tabFlag == 'Approvals') {
             const result = editUnityQuestion(
               proposalId,
               editQuestionsData.get('questionId'),
@@ -494,7 +504,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
         type: tabFlag
       };
       const res = deleteUnityQuestion(question_data, this.context);
-    }else if(tabFlag == 'Approvals'){
+    } else if (tabFlag == 'Approvals') {
 
       const question_data = {
         proposalId: proposalId,
@@ -667,6 +677,9 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                           <Tooltip
                             title="The question was answered previously and cannot be deleted"
                             placement="top"
+                            classes={{
+                              tooltip: 'modal-delete-btn-tooltip'
+                            }}
                           >
                             <div>
                               <Trash

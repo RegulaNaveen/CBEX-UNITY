@@ -243,22 +243,43 @@
   max-width: 342px;
 }
 
-.ques-title-cover {
+.question-label-container {
   display: flex;
-  .tags-container {
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+  transition: width 0.2s;
+  .question-label-inner {
     flex-basis: auto;
     flex-grow: 1;
     display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: 6px;
-    .tag {
-      display: inline;
-      .tag-box {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
+    .milestone-chip {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-basis: auto;
+      flex-grow: 1;
+      padding-left: 0.25rem;
+      flex-wrap: wrap;
+
+      .tag {
+        display: inline;
+        .tag-box {
+          display: inline-block !important;
+          width: 16px;
+          height: 16px;
+        }
       }
     }
+
+    .chipview {
+      z-index: 1;
+      position: relative;
+    }
   }
+}
+
+.ques-title-cover {
+  display: flex;
 }

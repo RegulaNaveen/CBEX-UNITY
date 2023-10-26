@@ -98,19 +98,7 @@ const QuestionItem = ({
     } else {
       setLocked(false);
     }
-    if (
-      question?.answers &&
-      Array.isArray(question?.answers) &&
-      !question?.answers.length
-    ) {
-      setshowLastAnswer(false);
-    } else {
-      const lastAnswer = question?.answers[question?.answers.length - 1];
-      const lastAnswerVisibility = String(lastAnswer?.answer)?.trim()?.length;
-      setshowLastAnswer(lastAnswerVisibility ? true : false);
-    }
   }, [isQuesFreezed, activeQuestionInfo]);
-
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
       if (currentSearchResult.searchIndex === highlightQuestionId) {
@@ -147,6 +135,19 @@ const QuestionItem = ({
     email: getUserEmail(),
     role: getUserId()
   });
+
+  const checkLastAnswerOfQuestionVisibility = answers => {
+    if (answers && Array.isArray(answers) && !answers.length) {
+      return false;
+    } else {
+      const lastAnswerVisibility = String(answers?.answer)?.trim()?.length;
+      if (lastAnswerVisibility) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
@@ -438,65 +439,75 @@ const QuestionItem = ({
           >
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
-                <span ref={questionTextRef}>
-                  <Grid
-                    item
-                    xs={10}
-                    style={{
-                      display: 'flex',
-                      float: 'left',
-                      paddingTop: '4px'
-                    }}
-                  >
-                    <QuestionLabel
-                      questionLabel={question?.questionText || ''}
-                    />
-                    {question.isCustomQuestion && selectedBid.isCurrent && (
-                    <div className="question-edit" style={{ "margin-left" :"10px"
-                    }}>
-                     
-                    <span
-                      aria-hidden="true"
-                      onClick={() => {
-                        dispatch(
-                          setEditQuestionData({
-                            questionText: question?.questionText,
-                            questionHTML: question?.questionHTML,
-                            questionJSON: question?.questionJSON,
-                            questionHintJSON: question?.questionHintJSON,
-                            section: question?.section.approvalSectionName,
-                            answerType: question?.answerConfiguration.type,
-                            roleNames: question?.roleNames,
-                            questionId: question?.questionId,
-                            tabFlag: "Approvals",
-                            questionAnswered:showLastAnswer 
-                          })
-                        );
+                <span
+                  ref={questionTextRef}
+                  className="question-label-container"
+                >
+                  <div className="question-label-inner">
+                    <Grid
+                      item
+                      xs={10}
+                      style={{
+                        display: 'flex',
+                        float: 'left',
+                        paddingTop: '4px'
                       }}
-
                     >
-                      <Edit className="edit-icon" />
-
-                    </span>
+                      <QuestionLabel
+                        questionLabel={question?.questionText || ''}
+                      />
+                      {question.isCustomQuestion &&
+                        selectedBid.isCurrent &&
+                        !isQuesFreezed && (
+                          <div
+                            className="question-edit"
+                            style={{ 'margin-left': '10px' }}
+                          >
+                            <span
+                              aria-hidden="true"
+                              onClick={() => {
+                                dispatch(
+                                  setEditQuestionData({
+                                    questionText: question?.questionText,
+                                    questionHTML: question?.questionHTML,
+                                    questionJSON: question?.questionJSON,
+                                    questionHintJSON:
+                                      question?.questionHintJSON,
+                                    section:
+                                      question?.section.approvalSectionName,
+                                    answerType:
+                                      question?.answerConfiguration.type,
+                                    roleNames: question?.roleNames,
+                                    questionId: question?.questionId,
+                                    tabFlag: 'Approvals',
+                                    direction: 'left',
+                                    questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                      question?.answers
+                                    )
+                                  })
+                                );
+                              }}
+                            >
+                              <Edit className="edit-icon" />
+                            </span>
+                          </div>
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2}
+                      style={{
+                        display: 'flex',
+                        float: 'left'
+                      }}
+                    >
+                      {renderQuestionHint()}
+                    </Grid>
                   </div>
-                    )
-}
-
-                  </Grid>
-                  <Grid
-                    item
-                    xs={2}
-                    style={{
-                      display: 'flex',
-                      float: 'left'
-                    }}
-                  >
-                    {renderQuestionHint()}
-                  </Grid>
+                  <div className="milestone-chip">
+                    {renderTags(question.milestoneNew)}
+                  </div>
                 </span>
-                <div className="tags-container">
-                  {renderTags(question.milestoneNew)}
-                </div>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
