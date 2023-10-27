@@ -29,7 +29,7 @@ import {
 import { changeMode } from '../../redux/actions/notepad-actions';
 import { REDUX_TYPES } from '../../constants';
 
-import MatomoHOC from '../HOC/MatomoHOC';
+import AnalyticsHOC from '../HOC/AnalyticsHOC';
 import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
 import { actionChannel, UI_ACTION } from '../../uiActions/ui-actions';
 import NotepadWrapper from './WysiwygNotepad/NotepadWrapper';
@@ -440,4 +440,4 @@ export default connect(mapStateToProps, {
   handleOpenClose: onHandleOpenClose,
   change: changeMode,
   RefreshTabUI: setTabRefresh
-})(MatomoHOC(Sidebar));
+})(AnalyticsHOC(Sidebar));

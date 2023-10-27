@@ -39,7 +39,7 @@ import {
   editProposalQuestion,
   deleteProposalQuestion
 } from '../../../redux/actions/proposal-actions';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import { SocketContext } from '../../../context/SocketContext';
 
 type Props = {
@@ -635,4 +635,4 @@ export default compose(
     editProposalQuestion,
     deleteProposalQuestion
   })
-)(MatomoHOC(AddQuestionModal));
+)(AnalyticsHOC(AddQuestionModal));

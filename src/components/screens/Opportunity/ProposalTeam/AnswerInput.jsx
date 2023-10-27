@@ -38,7 +38,7 @@ import { SocketContext } from '../../../../context/SocketContext';
 import { checkNonEditableFields } from '../../../../utils/utils';
 import AnswerHistory from '../../../views/modals/AnswerHistory';
 import ChipView from '../../../common/Chip/ChipView';
-import MatomoHOC from '../../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../../HOC/AnalyticsHOC';
 import { getProposalAnswer } from '../../../../api/proposal';
 import TextArea from '../../../common/atoms/inputs/TextArea';
 import QuestionDatePicker from '../../../common/atoms/inputs/QuestionDatePicker';
@@ -750,4 +750,4 @@ const AnswerInput = props => {
     </>
   );
 };
-export default MatomoHOC(AnswerInput);
+export default AnalyticsHOC(AnswerInput);

@@ -21,7 +21,7 @@ import {
   getUserRole
 } from '../../../SessionHandler';
 import { ReportIssue } from '../../svg';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 
 type Props = {
   rolesList: Array<string>,
@@ -255,5 +255,5 @@ export default withRouter(
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
     changeUserRole: onSetUserRole
-  })(MatomoHOC(ToolbarMenuComponent))
+  })(AnalyticsHOC(ToolbarMenuComponent))
 );

@@ -24,7 +24,7 @@ import {
 import { getProposalDetails } from '../../../redux/selectors';
 import { APPROVALS, DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import { cloneDeep } from 'lodash';
 import { SocketContext } from '../../../context/SocketContext';
 import { getUserEmail } from '../../../SessionHandler';
@@ -382,4 +382,4 @@ ActionButtons.propTypes = {
   selectedBidIsCurrent: PropTypes.bool.isRequired
 };
 
-export default MatomoHOC(ActionButtons);
+export default AnalyticsHOC(ActionButtons);

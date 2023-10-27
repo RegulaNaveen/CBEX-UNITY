@@ -15,7 +15,7 @@ import {
 } from '../../redux/selectors';
 import chevronRight from '../../../img/chevron-right.svg';
 import chevronDown from '../../../img/chevron-down.svg';
-import MatomoHOC from '../HOC/MatomoHOC';
+import AnalyticsHOC from '../HOC/AnalyticsHOC';
 import {
   onHandleOpenClose,
   handleSelectedSection
@@ -427,4 +427,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MatomoHOC(CollapsibleList));
+)(AnalyticsHOC(CollapsibleList));

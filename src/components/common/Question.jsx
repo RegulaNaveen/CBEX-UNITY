@@ -52,7 +52,7 @@ import {
   getfetchAllFlags,
   getOpportunityData
 } from '../../redux/selectors/proposal';
-import MatomoHOC from '../HOC/MatomoHOC';
+import MatomoHOC from '../HOC/AnalyticsHOC';
 import {
   checkNonEditableFields,
   getCountriesNameForCode,

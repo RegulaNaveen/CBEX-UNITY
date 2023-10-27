@@ -12,7 +12,7 @@ import TabItem from '../common/atoms/TabItem';
 import SwitchView from '../common/SwitchView';
 import DashboardFilters from '../common/DashboardFilters';
 import { Filter } from '../svg';
-import MatomoHOC from '../HOC/MatomoHOC';
+import AnalyticsHOC from '../HOC/AnalyticsHOC';
 
 type Props = {
   children: any,
@@ -300,6 +300,6 @@ class Tabbar extends Component<Props, State> {
 const TabBarComponent = connect(null, {
   setProposalView: setProposalTypeView,
   filterProposals: onFilteringProposals
-})(MatomoHOC(Tabbar));
+})(AnalyticsHOC(Tabbar));
 
 export default TabBarComponent;

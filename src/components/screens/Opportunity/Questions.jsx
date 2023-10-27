@@ -62,7 +62,7 @@ import {
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   createMatomoObj,
   getCountriesNameForCode,
@@ -794,4 +794,4 @@ export default compose(
     fetchUserTagFlagInQuestion,
     getPriceModeler: getPriceModelerData
   })
-)(MatomoHOC(Questions));
+)(AnalyticsHOC(Questions));

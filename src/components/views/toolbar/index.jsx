@@ -17,7 +17,7 @@ import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import MatomoHOC from '../../HOC/AnalyticsHOC';
 import Notification from '../Notification/index';
 import Search from '../Search';
 import PrivateRoute from '../../../PrivateRoute';

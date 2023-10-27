@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { chunk, last } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { ArrowLeft, ArrowRight, More } from '../../svg';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 
 type Props = {
   maxRows: number,
@@ -156,4 +156,4 @@ class Pagination extends PureComponent<Props, State> {
   }
 }
 
-export default MatomoHOC(Pagination);
+export default AnalyticsHOC(Pagination);

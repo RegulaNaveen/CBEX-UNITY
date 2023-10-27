@@ -18,7 +18,7 @@ import {
   getUserRole
 } from '../../../SessionHandler';
 import { Pencil, Globe, ReportIssue } from '../../svg';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import MatomoHOC from '../../HOC/AnalyticsHOC';
 
 type Props = {
   rolesList: Array<string>,

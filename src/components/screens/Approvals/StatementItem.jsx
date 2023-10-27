@@ -13,7 +13,7 @@ import { EditorState } from 'apollo-react/node_modules/draft-js';
 import isEmpty from 'lodash/isEmpty';
 import QuestionLabel from './QuestionLabel';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid
@@ -274,4 +274,4 @@ StatementItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(StatementItem);
+export default AnalyticsHOC(StatementItem);

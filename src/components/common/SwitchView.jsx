@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
 import { getProposalTypeView } from '../../redux/selectors';
-import MatomoHOC from '../HOC/MatomoHOC';
+import MatomoHOC from '../HOC/AnalyticsHOC';
 import Tooltip from 'apollo-react/components/Tooltip';
 
 type Props = {

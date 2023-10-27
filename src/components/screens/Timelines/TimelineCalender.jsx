@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatTheDate, parseMomentDate } from '../../../utils/DateUtils';
 import { setProposalAnswerData } from '../../../redux/actions/proposal-actions';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import CustomComponents from './CustomComponents';
 import CustomTimelineMonth from './CustomTimelineMonth';
 import { selectTimelineDateRange } from '../../../redux/selectors';
@@ -290,4 +290,4 @@ DnDOutsideResource.propTypes = {
   setDraggedQuestionData: PropTypes.func.isRequired
 };
 
-export default MatomoHOC(DnDOutsideResource);
+export default AnalyticsHOC(DnDOutsideResource);

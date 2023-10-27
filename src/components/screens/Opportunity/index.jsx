@@ -42,7 +42,7 @@ import {
   getStatusOfNewBid
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
@@ -108,7 +108,6 @@ type Props = {
 
 export class Opportunity extends Component<Props, State> {
   static contextType = SocketContext;
-
   constructor(props: Object) {
     super(props);
     this.state = {
@@ -436,4 +435,4 @@ export default compose(
     onEditCustomName,
     updateProposalDetailFromWebSocket
   })
-)(MatomoHOC(Opportunity));
+)(AnalyticsHOC(Opportunity));

@@ -17,7 +17,7 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
 import { EditorState } from 'apollo-react/node_modules/draft-js';
 import QuestionLabel from './QuestionLabel';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getUnityTabQuestionLoading,
   getPanelStatus
@@ -290,4 +290,4 @@ StatementItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(StatementItem);
+export default AnalyticsHOC(StatementItem);

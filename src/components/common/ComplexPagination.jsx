@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { chunk } from 'lodash';
 import Dropwdown from './atoms/inputs/Dropdown';
 import Pagination from './atoms/Pagination';
-import MatomoHoc from '../HOC/MatomoHOC';
+import AnalyticsHOC from '../HOC/AnalyticsHOC';
 
 type Props = {
   totalItems: number,
@@ -92,4 +92,4 @@ class ComplexPagination extends Component<Props, State> {
   }
 }
 
-export default MatomoHoc(ComplexPagination);
+export default AnalyticsHOC(ComplexPagination);

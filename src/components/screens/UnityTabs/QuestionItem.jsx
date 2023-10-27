@@ -25,7 +25,7 @@ import { getCountriesNameForCode } from '../../../utils/utils';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid,
@@ -762,4 +762,4 @@ QuestionItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(QuestionItem);
+export default AnalyticsHOC(QuestionItem);

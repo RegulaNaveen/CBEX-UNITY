@@ -1,6 +1,7 @@
 // @flow
 import React, { useEffect, useState, useContext } from 'react';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import {useAnalytics} from "../../../hooks" ;
+
 import * as serviceWorker from 'register-service-worker';
 import { useDispatch, useSelector } from 'react-redux';
 import Toolbar from '../../views/toolbar';
@@ -17,7 +18,7 @@ import featureFlags from '../../../constants/featureFlags';
 serviceWorker.unregister();
 
 const Dashboard = () => {
-  const { trackPageView } = useMatomo();
+  const { trackPageView } = useAnalytics();
   const [filterApply, setFilterApply] = useState(0);
   const dispatch = useDispatch();
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
