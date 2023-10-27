@@ -34,7 +34,8 @@ const ActionButtons = ({
   trackEvent,
   eventCategories,
   proposalId,
-  selectedBidIsCurrent
+  selectedBidIsCurrent,
+  duplicateDisable = false
 }) => {
   const { dispatchLoadingEvent } = useContext(ApprovalContext);
   const {
@@ -299,7 +300,7 @@ const ActionButtons = ({
         >
           <span style={{ display: 'inline-block' }}>
             <Button
-              disabled={sectionLocked}
+              disabled={sectionLocked || duplicateDisable}
               variant="secondary"
               style={{ marginRight: 10 }}
               className="duplicate-btn"
