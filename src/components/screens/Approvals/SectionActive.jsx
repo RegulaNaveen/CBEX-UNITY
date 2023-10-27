@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 import Grid from 'apollo-react/components/Grid';
 import SwitchItem from './SwitchItem';
 import ActionButtons from './ActionButtons';
-import { getSelectedBid } from '../../../redux/selectors';
+import { getSelectedBid, getQuestion } from '../../../redux/selectors';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
+import { shouldShowQuestion } from './utils';
 
 const SectionActive = ({
   ApprovalSectionId,
@@ -19,6 +20,8 @@ const SectionActive = ({
 }) => {
   const { id: proposalId, isCurrent } = useSelector(getSelectedBid)?.toJS();
   const selectedBidIsCurrent = !!isCurrent;
+  const approvalFilters = useSelector(state => state.approvals.filters);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
 
   // Stores the hash of visible questions
   // Used to decide the visibility of a section
@@ -41,12 +44,52 @@ const SectionActive = ({
     setIsAllActiveDisplayed(isAllQuestionsVisible);
   }, [isAllQuestionsVisible]);
   const onAddQuestion = value => {
-    setDirection(value)
+    setDirection(value);
     setShowModal(true);
   };
+
   const onClose = () => {
     if (showModal) setShowModal(false);
   };
+
+  let leftQuestions = null;
+  let RightQuestion = [];
+  let duplicateDisable = false;
+
+  if (leftQues && leftQues.length) {
+    leftQuestions = leftQues
+      .map(item => {
+        const questionObj = useSelector(getQuestion(item));
+        return questionObj;
+      })
+      .filter(
+        value => value && value?.answerConfiguration?.type !== 'statement'
+      );
+    leftQuestions = leftQuestions.filter(value => {
+      const isShowQuestion = shouldShowQuestion(value, approvalFilters, flags);
+      return isShowQuestion;
+    });
+    leftQuestions = leftQuestions.every(value => value.isCustomQuestion);
+  }
+
+  if (rightQues && rightQues.length) {
+    RightQuestion = rightQues
+      .map(item => {
+        const questionObj = useSelector(getQuestion(item));
+        return questionObj;
+      })
+      .filter(
+        value => value && value?.answerConfiguration?.type !== 'statement'
+      );
+    RightQuestion = RightQuestion.filter(value => {
+      const isShowQuestion = shouldShowQuestion(value, approvalFilters, flags);
+      return isShowQuestion;
+    });
+  }
+
+  if (!RightQuestion.length && leftQuestions) {
+    duplicateDisable = true;
+  }
 
   return (
     <Grid container className="approval-ques">
@@ -65,14 +108,14 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-left-ques`}
             />
           ))}
-           {isCurrent && (
+        {isCurrent && (
           <>
             <div className="add-question">
               <Link
                 style={{ borderBottom: 'none' }}
                 //onClick={() => onAddQuestion(title)}
                 size="small"
-                onClick={()=>onAddQuestion("left")}
+                onClick={() => onAddQuestion('left')}
               >
                 <Plus
                   className="plus-icon-add-new-question"
@@ -97,12 +140,13 @@ const SectionActive = ({
             />
           ))}
       </Grid>
-     
+
       <Grid item xs={12} className="approval-ques-actions">
         <ActionButtons
           sectionId={ApprovalSectionId}
           proposalId={proposalId}
           selectedBidIsCurrent={selectedBidIsCurrent}
+          duplicateDisable={duplicateDisable}
         />
       </Grid>
       {showModal && (
@@ -111,7 +155,7 @@ const SectionActive = ({
           currentsection={ApprovalSectionTitle}
           tabFlag="Approvals"
           tabId={ApprovalSectionId}
-          direction = {direction}
+          direction={direction}
         />
       )}
     </Grid>
