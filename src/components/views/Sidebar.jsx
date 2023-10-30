@@ -138,7 +138,7 @@ class Sidebar extends Component<Props, State> {
     RefreshTabUI(`Refresh${Date.now().toString()}`);
     handleOpenClose(!isOpen);
     if (isOpen) this.setState({ activeTabIndex: 0 });
-    this.trackMatomoEventSidebarToggle(!isOpen);
+    this.trackEventSidebarToggle(!isOpen);
   };
 
   timeout = ms => {
@@ -168,7 +168,7 @@ class Sidebar extends Component<Props, State> {
 
     handleOpenClose(false);
     setSelectedSection(itemToScroll);
-    this.trackMatomoEventScroll(itemToScroll);
+    this.trackEventScroll(itemToScroll);
 
     this.setState({ selectedSection: id, activeTabIndex: 0 });
   };
@@ -182,10 +182,10 @@ class Sidebar extends Component<Props, State> {
     }
     this.setState({ activeTabIndex });
     setTabFromQuestionNotes(activeTabIndex, selectedtitle || '', false);
-    this.trackMatomoEventTabSwitch(activeTabIndex);
+    this.trackEventTabSwitch(activeTabIndex);
   };
 
-  trackMatomoEvent = ({ action }) => {
+  trackEvent = ({ action }) => {
     const { proposalDetail, trackEvent, eventCategories } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -199,37 +199,37 @@ class Sidebar extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventScroll = action => {
+  trackEventScroll = action => {
     const { userActions } = this.props;
-    this.trackMatomoEvent({
+    this.trackEvent({
       action: `Blade: ${userActions.scroll} From Blade To ${action} Section`
     });
   };
 
-  trackMatomoEventSidebarToggle = action => {
+  trackEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions } = this.props;
-    this.trackMatomoEvent({
+    this.trackEvent({
       action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`
     });
   };
 
-  trackMatomoEventTabSwitch = index => {
+  trackEventTabSwitch = index => {
     const screen = index ? 'Notepad' : 'Index';
     const { userActions } = this.props;
-    this.trackMatomoEvent({
+    this.trackEvent({
       action: `Blade: ${userActions.click} On ${screen} Tab`
     });
   };
 
-  trackMatomoEventIconClick = icon => {
+  trackEventIconClick = icon => {
     const { userActions } = this.props;
-    this.trackMatomoEvent({
+    this.trackEvent({
       action: `Blade: ${userActions.click} On ${icon} Icon`
     });
   };
 
-  trackMatomoNoteSubmit = (section, note, mode = 'submit') => {
+  trackNoteSubmit = (section, note, mode = 'submit') => {
     const { text } = JSON.parse(note).blocks[0];
     const { userActions } = this.props;
 
@@ -237,7 +237,7 @@ class Sidebar extends Component<Props, State> {
       ? `Blade: ${userActions[mode]} A Note (${text}) Under Section ${section}`
       : `Blade: ${userActions[mode]} A Note (${text})`;
 
-    this.trackMatomoEvent({
+    this.trackEvent({
       action: actionString
     });
   };
@@ -308,7 +308,7 @@ class Sidebar extends Component<Props, State> {
                   onClick={e => {
                     const { onAddQuestion } = this.props;
                     onAddQuestion('');
-                    this.trackMatomoEventIconClick('Add New Question');
+                    this.trackEventIconClick('Add New Question');
                     this.handleItemsVisibility(e);
                     AddNewQuestion();
                   }}
@@ -325,7 +325,7 @@ class Sidebar extends Component<Props, State> {
                     cursor: 'pointer'
                   }}
                   onClick={e => {
-                    this.trackMatomoEventIconClick('Expand All');
+                    this.trackEventIconClick('Expand All');
                     this.handleItemsVisibility(e);
                     expandAll(!allSectionsExpanded);
                   }}
@@ -363,7 +363,7 @@ class Sidebar extends Component<Props, State> {
                       cursor: 'pointer'
                     }}
                     onClick={e => {
-                      this.trackMatomoEventIconClick('Refresh');
+                      this.trackEventIconClick('Refresh');
                       this.handleItemsVisibility(e);
                       RefreshProposal();
                     }}

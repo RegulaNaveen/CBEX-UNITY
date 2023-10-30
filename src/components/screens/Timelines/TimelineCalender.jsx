@@ -55,7 +55,7 @@ const DnDOutsideResource = ({
     };
   }, []);
 
-  const trackMatomoEventSubmitAnswer = (answer, question) => {
+  const trackEventSubmitAnswer = (answer, question) => {
     const {
       section,
       questionText,
@@ -108,7 +108,7 @@ const DnDOutsideResource = ({
             true
           )
         );
-        trackMatomoEventSubmitAnswer(selectedDay, question);
+        trackEventSubmitAnswer(selectedDay, question);
       }
     } catch (error) {
       console.error(error);

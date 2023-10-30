@@ -32,7 +32,7 @@ class ComplexPagination extends Component<Props, State> {
   setMaxRows = (maxRows: number) => {
     const { getMaxRows } = this.props;
     this.setState({ maxRows }, () => getMaxRows(maxRows));
-    this.trackMatomoPaginationClicks(maxRows);
+    this.trackPaginationClicks(maxRows);
   };
 
   getCurrentPage = (currentPage: number) => {
@@ -40,7 +40,7 @@ class ComplexPagination extends Component<Props, State> {
     this.setState({ currentPage }, () => getCurrentPosition(currentPage));
   };
 
-  trackMatomoPaginationClicks = (size: number) => {
+  trackPaginationClicks = (size: number) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pg,

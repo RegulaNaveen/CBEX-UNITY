@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { ListView, CardView } from '../svg';
 import { getProposalTypeView } from '../../redux/selectors';
-import MatomoHOC from '../HOC/AnalyticsHOC';
+import AnalyticsHOC from '../HOC/AnalyticsHOC';
 import Tooltip from 'apollo-react/components/Tooltip';
 
 type Props = {
@@ -19,16 +19,16 @@ class SwitchView extends Component<Props> {
   setViewToList = () => {
     const { getSelectedTab } = this.props;
     getSelectedTab(0);
-    this.trackMatomoEvent('List');
+    this.trackEvent('List');
   };
 
   setViewToGrid = () => {
     const { getSelectedTab } = this.props;
     getSelectedTab(1);
-    this.trackMatomoEvent('Card');
+    this.trackEvent('Card');
   };
 
-  trackMatomoEvent = view => {
+  trackEvent = view => {
     const { eventCategories, userActions, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.dp,
@@ -80,4 +80,4 @@ const mapStateToProps = state => ({
   selectedViewType: getProposalTypeView(state)
 });
 
-export default connect(mapStateToProps)(MatomoHOC(SwitchView));
+export default connect(mapStateToProps)(AnalyticsHOC(SwitchView));

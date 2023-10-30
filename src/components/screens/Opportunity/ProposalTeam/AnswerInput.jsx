@@ -225,7 +225,7 @@ const AnswerInput = props => {
       answerValue = '';
     }
   }
-  const trackMatomoEventSubmitAnswer = data => {
+  const trackEventSubmitAnswer = data => {
     trackEvent({
       category: eventCategories.pd(),
       action: events
@@ -253,7 +253,7 @@ const AnswerInput = props => {
     });
   };
 
-  const trackMatomoEventAnswerHistory = data => {
+  const trackEventAnswerHistory = data => {
     trackEvent({
       category: eventCategories.pd(),
       action: `Answer History: Clicked On ${questionText} (${sectionName})`,
@@ -382,7 +382,7 @@ const AnswerInput = props => {
           });
         }
       });
-      trackMatomoEventSubmitAnswer(textValue);
+      trackEventSubmitAnswer(textValue);
     } catch (error) {
       console.log('error :>> ', error);
     }
@@ -397,7 +397,7 @@ const AnswerInput = props => {
   };
   const displayAnswerOnHistory = () => {
     setQuestionToDisplayHistory(questionId);
-    trackMatomoEventAnswerHistory();
+    trackEventAnswerHistory();
   };
 
   const handleDayChange = (selectedDay: string, lastAnswer: Date) => {
@@ -417,7 +417,7 @@ const AnswerInput = props => {
         )
       );
 
-    trackMatomoEventSubmitAnswer(selectedDay);
+    trackEventSubmitAnswer(selectedDay);
   };
 
   const resetDate = () => {
@@ -431,7 +431,7 @@ const AnswerInput = props => {
         userData
       )
     );
-    trackMatomoEventSubmitAnswer(' ');
+    trackEventSubmitAnswer(' ');
   };
 
   const handleTextChange = (textValue, editorData) => {
@@ -474,7 +474,7 @@ const AnswerInput = props => {
     }
     questionUnlockWrapper(questionId);
 
-    trackMatomoEventSubmitAnswer(valueForText);
+    trackEventSubmitAnswer(valueForText);
     setSelectedRow(false);
   };
   return (

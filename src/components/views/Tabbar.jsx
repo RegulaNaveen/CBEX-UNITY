@@ -62,7 +62,7 @@ class Tabbar extends Component<Props, State> {
         filterProposals(newFilters, selected);
         this.fileterCount();
       });
-      this.trackMatomoEventFilterChange({ ...filters, [id]: value });
+      this.trackEventFilterChange({ ...filters, [id]: value });
     }, 600);
   }
 
@@ -91,7 +91,7 @@ class Tabbar extends Component<Props, State> {
   };
 
   handleChange = (index: number) => {
-    this.trackMatomoEventTabs(index);
+    this.trackEventTabs(index);
     this.setState({ selected: index });
     // Reset filters on tab switch
     this.setState({ showFilters: false }, () => this.clearFilter());
@@ -116,7 +116,7 @@ class Tabbar extends Component<Props, State> {
       filterProposals(newFilters, selected);
       this.fileterCount();
     });
-    this.trackMatomoEventFilterChange({ ...filters, [id]: value });
+    this.trackEventFilterChange({ ...filters, [id]: value });
   };
 
   onDateRangeChange = (id: string, range: Object) => {
@@ -128,14 +128,14 @@ class Tabbar extends Component<Props, State> {
       filterProposals(newFilters, selected);
       this.fileterCount();
     });
-    this.trackMatomoEventFilterChange({ ...filters, [id]: range });
+    this.trackEventFilterChange({ ...filters, [id]: range });
   };
 
   toggleFilters = () => {
     const { showFilters, filterCount } = this.state;
     const { getFilterStatus } = this.props;
     this.setState({ showFilters: !showFilters });
-    this.trackMatomoEventFilterToggle(!showFilters);
+    this.trackEventFilterToggle(!showFilters);
   };
 
   clearFilter = () => {
@@ -207,7 +207,7 @@ class Tabbar extends Component<Props, State> {
     );
   };
 
-  trackMatomoEventTabs = index => {
+  trackEventTabs = index => {
     const tabs = ['My Docket', 'Recent', 'All'];
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
@@ -216,7 +216,7 @@ class Tabbar extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventFilterToggle = action => {
+  trackEventFilterToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
@@ -225,7 +225,7 @@ class Tabbar extends Component<Props, State> {
     });
   };
 
-  trackMatomoEventFilterChange = filterValues => {
+  trackEventFilterChange = filterValues => {
     const filStrings = [];
     const { eventCategories, trackEvent } = this.props;
     for (const key in filterValues) {

@@ -234,7 +234,7 @@ export class Opportunity extends Component<Props, State> {
     this.setState({ windowSize });
   };
 
-  trackMatomoEventTabs = tab => {
+  trackEventTabs = tab => {
     const {
       eventCategories,
       userActions,
@@ -259,7 +259,7 @@ export class Opportunity extends Component<Props, State> {
 
   onChangeProposalView = (selectedView: string) => {
     this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView);
+    this.trackEventTabs(selectedView);
   };
 
   handleEditCustomName = () => {

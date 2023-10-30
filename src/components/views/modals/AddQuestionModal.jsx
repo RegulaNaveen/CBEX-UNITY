@@ -314,7 +314,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           );
         } else {
           setProposalQuestionF(proposalId, questionData, this.context);
-          this.trackMatomoEventCreateQ(questionData);
+          this.trackEventCreateQ(questionData);
         }
       }
     });
@@ -335,7 +335,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     );
   };
 
-  trackMatomoEventCreateQ = data => {
+  trackEventCreateQ = data => {
     const { eventCategories, proposalDetail, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),

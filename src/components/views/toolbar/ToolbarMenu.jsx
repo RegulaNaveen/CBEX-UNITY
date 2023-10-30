@@ -87,10 +87,10 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     changeUserRole(value);
 
     this.setState({ roleName: value });
-    this.trackMatomoRoleChange(value);
+    this.trackRoleChange(value);
   };
 
-  trackMatomoLinkClicks = (link: string) => {
+  trackLinkClicks = (link: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
 
     trackEvent({
@@ -99,7 +99,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     });
   };
 
-  trackMatomoRoleChange = (role: string) => {
+  trackRoleChange = (role: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
@@ -200,7 +200,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             data-testid="suggestion-button"
             className="menu-link-btn"
             href="https://suggestionboard.ideas.aha.io/ideas?project=CBEXU"
-            onClick={() => this.trackMatomoLinkClicks('Suggestion Board')}
+            onClick={() => this.trackLinkClicks('Suggestion Board')}
           >
             Suggestion Board
           </Button>
@@ -211,7 +211,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             data-testid="unity-wiki-button"
             className="menu-link-btn"
             href="https://quintiles.sharepoint.com/sites/ltc/CBEx/SitePages/Unity-Wiki.aspx"
-            onClick={() => this.trackMatomoLinkClicks('Unity Wiki')}
+            onClick={() => this.trackLinkClicks('Unity Wiki')}
           >
             Unity Wiki
           </Button>
@@ -224,7 +224,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
             data-testid="report-button"
             className="menu-link-btn"
             href="https://quintiles.service-now.com/via?id=sc_cat_item&sys_id=dd5c819fdb8fdc107cf37e77f4961917"
-            onClick={() => this.trackMatomoLinkClicks('Report an Issue')}
+            onClick={() => this.trackLinkClicks('Report an Issue')}
           >
             Report an Issue
           </Button>

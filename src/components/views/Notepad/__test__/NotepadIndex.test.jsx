@@ -44,7 +44,7 @@ describe('Notepad component', () => {
           addingNote={false}
           mode="default"
           selectedtitle=""
-          trackMatomoNoteSubmit={() => {}}
+          trackNoteSubmit={() => {}}
           selectedBid={{}}
         />
       </Provider>
@@ -74,7 +74,7 @@ describe('Notepad component', () => {
           fetchingNotes={fetchingNotesMock}
           addingNote={false}
           selectedtitle=""
-          trackMatomoNoteSubmit={() => {}}
+          trackNoteSubmit={() => {}}
           selectedBid={{}}
         />
       </Provider>
@@ -107,7 +107,7 @@ describe('Notepad component', () => {
           addingNote
           mode="default"
           selectedtitle=""
-          trackMatomoNoteSubmit={() => {}}
+          trackNoteSubmit={() => {}}
           selectedBid={{}}
         />
       </Provider>
@@ -142,7 +142,7 @@ describe('Notepad component', () => {
           addingNote={false}
           mode="default"
           selectedtitle=""
-          trackMatomoNoteSubmit={() => {}}
+          trackNoteSubmit={() => {}}
           selectedBid={{}}
         />
       </Provider>

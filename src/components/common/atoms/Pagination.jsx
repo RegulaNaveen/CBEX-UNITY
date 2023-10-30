@@ -36,7 +36,7 @@ class Pagination extends PureComponent<Props, State> {
     const value = Number(event.target.id);
     const { getCurrentPage } = this.props;
     this.setState({ currentPage: value }, () => getCurrentPage(value));
-    this.trackMatomoPaginationClicks(`Page No. ${value}`);
+    this.trackPaginationClicks(`Page No. ${value}`);
   };
 
   handlePreviousChunk = () => {
@@ -50,7 +50,7 @@ class Pagination extends PureComponent<Props, State> {
         () => getCurrentPage(lastItem)
       );
     }
-    this.trackMatomoPaginationClicks('Left Arrow');
+    this.trackPaginationClicks('Left Arrow');
   };
 
   handleNextChunk = () => {
@@ -64,10 +64,10 @@ class Pagination extends PureComponent<Props, State> {
         () => getCurrentPage(first)
       );
     }
-    this.trackMatomoPaginationClicks('Right Arrow');
+    this.trackPaginationClicks('Right Arrow');
   };
 
-  trackMatomoPaginationClicks = (type: string) => {
+  trackPaginationClicks = (type: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pg,

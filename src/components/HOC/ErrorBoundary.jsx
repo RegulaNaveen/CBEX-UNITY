@@ -53,7 +53,7 @@ async function getPublicIP() {
 const ErrorBoundaryComponent = ({ children, eventCategories, trackEvent }) => {
   const date = new Date();
   const proposalDetail = useSelector(state => getProposalDetails(state));
-  const trackMatomoEventErrorHandler = error => {
+  const trackEventErrorHandler = error => {
     getPublicIP()
       .then(ipAddress => {
         trackEvent({
@@ -85,7 +85,7 @@ const ErrorBoundaryComponent = ({ children, eventCategories, trackEvent }) => {
       });
   };
   const errorHandler = error => {
-    trackMatomoEventErrorHandler(error);
+    trackEventErrorHandler(error);
   };
   return (
     <>

@@ -170,7 +170,7 @@ class CollapsibleList extends Component<Props, State> {
       changeSelectedSection,
       onExpandDone
     } = this.props;
-    this.trackMatomoEventBladeToggle(!isCollapsed);
+    this.trackEventBladeToggle(!isCollapsed);
     const titleId = title
       .toLocaleLowerCase()
       .split(' ')
@@ -235,7 +235,7 @@ class CollapsibleList extends Component<Props, State> {
     return null;
   };
 
-  trackMatomoEventBladeToggle = action => {
+  trackEventBladeToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
       userActions,
