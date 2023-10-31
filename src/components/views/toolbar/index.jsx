@@ -12,9 +12,9 @@ import ArrowUp from 'apollo-react-icons/ArrowUp';
 import ToolbarMenu from './ToolbarMenu';
 import { DASHBOARD, OPPORTUNITYS, UBUILD } from '../../../routes';
 import { isUserUbuildAdmin } from '../../../utils/utils';
-import { getUserName, getUserRole } from '../../../SessionHandler';
+import { getUserName, getUserRole, getUserAcknowledged } from '../../../SessionHandler';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
-import { onSetUserRole } from '../../../redux/actions/sso-auth-actions';
+import { onSetUserRole, onSetUserAcknowledge } from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import AnalyticsHOC from '../../HOC/AnalyticsHOC';
@@ -32,7 +32,8 @@ class Toolbar extends Component<{}, State> {
 
     this.state = {
       isCollapsed: false,
-      roleName: ''
+      roleName: '',
+      acknowledged: undefined
     };
   }
 
@@ -40,8 +41,10 @@ class Toolbar extends Component<{}, State> {
     const { rolesList, getRolesInfoF } = this.props;
     window.addEventListener('mousedown', this.handleClickOutside);
     const userRole = getUserRole();
+    const userAcknowledged = getUserAcknowledged();
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
+    if(userAcknowledged) this.setState({ acknowledged: userAcknowledged });
   }
 
   componentWillUnmount() {
@@ -69,6 +72,12 @@ class Toolbar extends Component<{}, State> {
     this.trackRoleChange(value);
   };
 
+  onUserAcknowledged = () => {
+    const { acknowledgeUser } = this.props;
+    acknowledgeUser();
+    this.setState({ acknowledged: true });
+  };
+
   isRoleInUbuild = (
     uBuildRoles: Array<string> = [],
     currentUserRole: string
@@ -86,7 +95,7 @@ class Toolbar extends Component<{}, State> {
   };
 
   render() {
-    const { isCollapsed, roleName } = this.state;
+    const { isCollapsed, roleName, acknowledged } = this.state;
     const { rolesList, location, withinErrorBoundary } = this.props;
 
     const results = isUserUbuildAdmin();
@@ -168,11 +177,15 @@ class Toolbar extends Component<{}, State> {
         )}
         {(!roleName ||
           roleName === 'undefined' ||
-          !this.isRoleInUbuild(rolesList || [], roleName)) && (
+          !this.isRoleInUbuild(rolesList || [], roleName)) ||
+          !acknowledged ||
+          acknowledged === 'undefined' && (
           <WelcomeModal
             id="welcomemodal"
             roles={rolesList || []}
+            roleName={roleName || ''}
             onRoleChange={e => this.onRoleChange(e)}
+            onUserAcknowledged={this.onUserAcknowledged}
           />
         )}
       </div>
@@ -188,6 +201,7 @@ export default compose(
   withRouter,
   connect(mapStateToProps, {
     getRolesInfoF: getRolesInfo,
-    changeUserRole: onSetUserRole
+    changeUserRole: onSetUserRole,
+    acknowledgeUser: onSetUserAcknowledge
   })
 )(AnalyticsHOC(Toolbar));
