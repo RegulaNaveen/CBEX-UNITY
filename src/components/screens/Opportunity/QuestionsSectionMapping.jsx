@@ -130,7 +130,11 @@ const QuestionsSectionMapping = ({
       showSection = false;
     }
 
-    if (sectionName !== 'Proposal Team')
+    if (
+      sectionName !== 'Proposal Team' &&
+      sectionName !== 'Questions_for_the_Customer_left_panel' &&
+      sectionName !== 'Key Milestones & Deliverable Timelines'
+    )
       return (
         <QuestionsRefContext.Consumer key={sectionName}>
           {questionsRef => {
