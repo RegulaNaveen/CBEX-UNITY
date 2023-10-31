@@ -447,7 +447,6 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   }
 
   const evalAndSetVTabCollapse = useCallback(
-  
     windowWidth => {
       // we can only make change if panelRef is captured
       if (panelRef !== null) {
@@ -633,12 +632,9 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       setTabStatus(false);
       let finalTab = [...tabs];
       if (allFlags && !allFlags?.approvalsFlag) {
-        console.log("approvalsFlag",approvalsFlag)
         finalTab = finalTab.filter(item => item.label !== 'Approvals');
       }
-      
       if (allFlags && !allFlags?.showTimelineFlag) {
-        console.log("showTimelineFlag",showTimelineFlag)
         finalTab = finalTab.filter(item => item.label !== 'Timeline');
       }
       const selectView = new URLSearchParams(recentSearch);
