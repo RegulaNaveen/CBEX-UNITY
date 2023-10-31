@@ -1,11 +1,11 @@
 #welcomemodal {
-  .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded
-    > div
-    > div {
-    height: 90px;
-  }
   .MuiDialog-paperWidthSm {
-    max-width: 590px !important;
+    max-width: 460px !important;
+    height: 480px;
+  }
+
+  .MuiStepper-root.MuiStepper-horizontal.MuiStepper-alternativeLabel {
+    padding: 16px;
   }
 
   .MuiIconButton-root {
@@ -13,8 +13,13 @@
   }
 
   .role-modal {
-    padding-top: 10px;
+    padding-top: 15px;
     display: inline-flex;
+    padding-bottom: 15px;
+
+    a {
+      text-decoration: none;
+    }
   }
 
   .MuiDialogActions-root.MuiDialogActions-spacing > div > button:nth-child(1) {
@@ -35,5 +40,9 @@
       padding: 8px 8px 8px 7px;
       line-height: 1.5;
     }
+  }
+
+  .MuiFormControl-root.MuiFormControl-marginNormal.MuiFormControl-fullWidth.MuiTextField-root {
+    margin-bottom: 20px;
   }
 }
