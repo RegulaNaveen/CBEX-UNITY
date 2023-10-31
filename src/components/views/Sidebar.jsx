@@ -399,7 +399,12 @@ class Sidebar extends Component<Props, State> {
                     )
                     .includes(true);
 
-                  if (someQuestionsAreVisible)
+                  if (
+                    someQuestionsAreVisible &&
+                    sectionName !== 'Key Milestones & Deliverable Timelines' &&
+                    sectionName !== 'Proposal Team' &&
+                    sectionName !== 'Questions_for_the_Customer_left_panel'
+                  )
                     return (
                       <p
                         key={sectionName}
