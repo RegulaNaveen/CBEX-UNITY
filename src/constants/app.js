@@ -107,6 +107,13 @@ const BID_TYPES = {
   Clinical_Bid: 'Bid'
 };
 
+const SECTIONS = {
+  KEY_MILESTONES_AND_DELIVERABLE_TIMELINES:
+    'Key Milestones & Deliverable Timelines',
+  PROPOSAL_TEAM: 'Proposal Team',
+  QUESTIONS_FOR_CUSTOMER_LEFT_PANEL: 'Questions_for_the_Customer_left_panel'
+};
+
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
 export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // matches proposal team individual user
@@ -137,5 +144,6 @@ export {
   APPROVALS,
   SEARCH,
   BID_TYPES,
-  EMAIL_TEMPLATES
+  EMAIL_TEMPLATES,
+  SECTIONS
 };
