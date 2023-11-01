@@ -11,6 +11,7 @@ import CollapsibleList from '../../common/CollapsibleList';
 import { SocketContext } from '../../../context/SocketContext';
 import { QuestionsRefContext } from './Questions';
 import { selectSections } from '../../../redux/selectors';
+import { SECTIONS } from '../../../constants/app';
 
 const NUM_PER_PAGE = 2;
 
@@ -131,9 +132,9 @@ const QuestionsSectionMapping = ({
     }
 
     if (
-      sectionName !== 'Proposal Team' &&
-      sectionName !== 'Questions_for_the_Customer_left_panel' &&
-      sectionName !== 'Key Milestones & Deliverable Timelines'
+      sectionName !== SECTIONS.KEY_MILESTONES_AND_DELIVERABLE_TIMELINES &&
+      sectionName !== SECTIONS.PROPOSAL_TEAM &&
+      sectionName !== SECTIONS.QUESTIONS_FOR_CUSTOMER_LEFT_PANEL
     )
       return (
         <QuestionsRefContext.Consumer key={sectionName}>
@@ -185,9 +186,9 @@ const QuestionsSectionMapping = ({
       allSections.valueSeq().map((section, indx) => {
         if (
           section.get('sectionName') !==
-            'Questions_for_the_Customer_left_panel' &&
+            SECTIONS.QUESTIONS_FOR_CUSTOMER_LEFT_PANEL &&
           section.get('sectionName').trim() !==
-            'Key Milestones & Deliverable Timelines'
+            SECTIONS.KEY_MILESTONES_AND_DELIVERABLE_TIMELINES
         )
           return renderAllSection(section, indx);
       })
