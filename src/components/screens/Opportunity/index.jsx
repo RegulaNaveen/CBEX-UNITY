@@ -146,6 +146,19 @@ export class Opportunity extends Component<Props, State> {
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
     const bidType = queryparams.get('bidType') || 'Clinical_Bid';
+    
+    if (!queryparams.get('bidType')) {
+      queryparams.set('bidType', 'Clinical_Bid');
+      history.push({
+        search: queryparams.toString()
+      });
+    } else {
+      queryparams.set('bidType', queryparams.get('bidType'));
+      history.push({
+        search: queryparams.toString()
+      });
+    }
+
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) setEventFlg(flagValue);
     if (notificationId) {
