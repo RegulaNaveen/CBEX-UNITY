@@ -550,7 +550,7 @@ const EmailTemplates = () => {
               {EMAIL_TEMPLATES.EMAIL_TEXT}
             </Typography>
             <div style={{ fontSize: 14 }}>
-              <div style={{ marginBottom: 4 }}>
+              <div style={{ marginBottom: 4, display: 'block' }}>
                 <b>{EMAIL_TEMPLATES.TO}: </b>
                 {row.EmailTemplateTO &&
                   getEmailsTooltipInfo(row.EmailTemplateTO)}
@@ -569,7 +569,7 @@ const EmailTemplates = () => {
                   }
                 )}
               </div>
-              <div style={{ marginBottom: 4 }}>
+              <div style={{ marginBottom: 4, display: 'block' }}>
                 <b>{EMAIL_TEMPLATES.CC}: </b>
                 {row.EmailTemplateCC &&
                   getEmailsTooltipInfo(row.EmailTemplateCC)}
