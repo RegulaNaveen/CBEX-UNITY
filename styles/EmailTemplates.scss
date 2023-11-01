@@ -5,7 +5,9 @@
   .MuiPaper-root {
     height: 100%;
     & > div {
-      height: 100%;
+      &:first-child {
+        height: 100%;
+      }
     }
     table {
       height: calc(100% - 80px);
