@@ -209,6 +209,7 @@ buildl4:
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $prod_build >> build.env
+    - set
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - npm cache clean --force
@@ -238,6 +239,7 @@ deployl4:
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
+    - set
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
