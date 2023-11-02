@@ -173,6 +173,8 @@ switch (environment) {
       'wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://gni5ivpjhh.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://1cg9b1a39f.execute-api.us-east-1.amazonaws.com';
     break;
   case 'DEV':
     // DEV Data
@@ -195,7 +197,8 @@ switch (environment) {
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
-    ANALYTICS_API_URL ="https://4ge59gajp4.execute-api.us-east-1.amazonaws.com";
+    ANALYTICS_API_URL =
+      'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
     break;
   default:
     // DEV Data
@@ -215,7 +218,8 @@ switch (environment) {
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
-      ANALYTICS_API_URL ="https://4ge59gajp4.execute-api.us-east-1.amazonaws.com";
+    ANALYTICS_API_URL =
+      'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
     break;
 }
 
@@ -297,7 +301,7 @@ const NOTIFICATION = {
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
 const CUSTOM_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/custom-question`;
 const CUSTOM_QUESTIONS_DELETE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/delete-custom-question`;
-const ANALYTICS_URL =`${ANALYTICS_API_URL}/track`
+const ANALYTICS_URL = `${ANALYTICS_API_URL}/track`;
 
 export {
   AUTH,
