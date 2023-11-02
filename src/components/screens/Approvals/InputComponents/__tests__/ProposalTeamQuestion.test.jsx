@@ -27,7 +27,7 @@ const mockUserData = {
   email: 'john.doe@example.com'
 };
 
-const mockTrackMatomoEventSubmitAnswer = jest.fn();
+const mockTrackEventSubmitAnswer = jest.fn();
 
 const mockDeleteProposalUserFromDB = jest.fn();
 
@@ -44,7 +44,7 @@ describe('ProposalTeamQuestion', () => {
           lastAnswer={mockLastAnswer}
           userData={mockUserData}
           socketContext={mockSocketContext}
-          trackMatomoEventSubmitAnswer={mockTrackMatomoEventSubmitAnswer}
+          trackEventSubmitAnswer={mockTrackEventSubmitAnswer}
         />
       </Provider>
     );

@@ -17,7 +17,7 @@ import { getRolesInfo } from '../../../redux/actions/proposal-actions';
 import { onSetUserRole, onSetUserAcknowledge } from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import Notification from '../Notification/index';
 import Search from '../Search';
 import PrivateRoute from '../../../PrivateRoute';
@@ -69,7 +69,7 @@ class Toolbar extends Component<{}, State> {
     const { changeUserRole } = this.props;
     changeUserRole(value);
     this.setState({ roleName: value });
-    this.trackMatomoRoleChange(value);
+    this.trackRoleChange(value);
   };
 
   onUserAcknowledged = () => {
@@ -86,7 +86,7 @@ class Toolbar extends Component<{}, State> {
     return uBuildRoles.includes(currentUserRole);
   };
 
-  trackMatomoRoleChange = (role: string) => {
+  trackRoleChange = (role: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
@@ -204,4 +204,4 @@ export default compose(
     changeUserRole: onSetUserRole,
     acknowledgeUser: onSetUserAcknowledge
   })
-)(MatomoHOC(Toolbar));
+)(AnalyticsHOC(Toolbar));

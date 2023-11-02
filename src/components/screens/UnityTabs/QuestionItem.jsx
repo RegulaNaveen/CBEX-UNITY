@@ -25,7 +25,7 @@ import { getCountriesNameForCode } from '../../../utils/utils';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid,
@@ -214,7 +214,7 @@ const QuestionItem = ({
     return <div>Question type not found</div>;
   };
 
-  const trackMatomoEventSubmitAnswer = answer => {
+  const trackEventSubmitAnswer = answer => {
     const {
       section,
       questionText,
@@ -269,14 +269,14 @@ const QuestionItem = ({
       disabled,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer,
+      trackEventSubmitAnswer,
       checkDisableFlag
     };
     if (
       inputProps.lastAnswer &&
       inputProps.lastAnswer.userName === 'UnityPredictedAnswer'
     ) {
-      trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
+      trackEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
       return (
@@ -626,7 +626,7 @@ const QuestionItem = ({
     );
   };
 
-  const trackMatomoEventLauncher = data => {
+  const trackEventLauncher = data => {
     trackEvent({
       category: eventCategories.pd(proposalDetail),
       action: `Unity Tab: Event Launcher: ${question.questionText}`,
@@ -697,8 +697,8 @@ const QuestionItem = ({
                         questionData={Map(question)}
                         proposalDetail={proposalDetail}
                         eventCategories={eventCategories}
-                        trackMatomoEventLauncher={c =>
-                          trackMatomoEventLauncher(c)
+                        trackEventLauncher={c =>
+                          trackEventLauncher(c)
                         }
                       />
                     )}
@@ -762,4 +762,4 @@ QuestionItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(QuestionItem);
+export default AnalyticsHOC(QuestionItem);

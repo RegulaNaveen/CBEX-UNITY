@@ -29,7 +29,7 @@ import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid
@@ -197,7 +197,7 @@ const QuestionItem = ({
     return <div>Question type not found</div>;
   };
 
-  const trackMatomoEventSubmitAnswer = answer => {
+  const trackEventSubmitAnswer = answer => {
     const {
       section,
       questionText,
@@ -241,14 +241,14 @@ const QuestionItem = ({
       disabled,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer,
+      trackEventSubmitAnswer,
       checkDisableFlag
     };
     if (
       inputProps.lastAnswer &&
       inputProps.lastAnswer.userName === 'UnityPredictedAnswer'
     ) {
-      trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
+      trackEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
       return <ProposalTeamQuestion {...inputProps} />;
@@ -544,4 +544,4 @@ QuestionItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(QuestionItem);
+export default AnalyticsHOC(QuestionItem);

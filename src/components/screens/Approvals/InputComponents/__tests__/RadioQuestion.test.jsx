@@ -24,7 +24,7 @@ const socketContext = {
   questionLockWrapper: jest.fn(),
   questionUnlockWrapper: jest.fn()
 };
-const trackMatomoEventSubmitAnswer = jest.fn();
+const trackEventSubmitAnswer = jest.fn();
 const checkDisableFlag = jest.fn();
 
 const initState = {
@@ -32,7 +32,7 @@ const initState = {
   lastAnswer,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag
 };
 

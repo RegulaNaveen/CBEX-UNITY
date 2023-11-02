@@ -39,7 +39,7 @@ import {
   editProposalQuestion,
   deleteProposalQuestion
 } from '../../../redux/actions/proposal-actions';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import { SocketContext } from '../../../context/SocketContext';
 
 type Props = {
@@ -314,7 +314,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           );
         } else {
           setProposalQuestionF(proposalId, questionData, this.context);
-          this.trackMatomoEventCreateQ(questionData);
+          this.trackEventCreateQ(questionData);
         }
       }
     });
@@ -335,7 +335,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     );
   };
 
-  trackMatomoEventCreateQ = data => {
+  trackEventCreateQ = data => {
     const { eventCategories, proposalDetail, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -635,4 +635,4 @@ export default compose(
     editProposalQuestion,
     deleteProposalQuestion
   })
-)(MatomoHOC(AddQuestionModal));
+)(AnalyticsHOC(AddQuestionModal));

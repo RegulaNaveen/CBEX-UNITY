@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
-
-const MatomoHOC = Component => {
+import {useAnalytics} from "../../hooks" ;
+const AnalyticsHOC = Component => {
   const categories = {
     dp: 'Unity Dashboard',
     pd: props =>
@@ -22,8 +21,7 @@ const MatomoHOC = Component => {
     edit: 'Edited'
   };
   return props => {
-    const { trackPageView, trackEvent, pushInstruction } = useMatomo();
-
+   const { trackPageView, trackEvent, pushInstruction } = useAnalytics();
     if (!localStorage.getItem('MatomoUserIdSet')) {
       const userEmail = localStorage.getItem('userEmail');
       const userRole = localStorage.getItem('userRole');
@@ -46,4 +44,4 @@ const MatomoHOC = Component => {
   };
 };
 
-export default MatomoHOC;
+export default AnalyticsHOC;

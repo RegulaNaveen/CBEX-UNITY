@@ -17,7 +17,7 @@ proposal.selectedBid = selectedBidMap;
 const initState = {
   ssoAuth: Map(StateData.ssoAuth),
   proposalDetail: StateData.proposalDetail,
-  trackMatomoEventLauncher: jest.fn(),
+  trackEventLauncher: jest.fn(),
   questionData: Map(StateData.questionData),
   proposal: Map(proposal)
 };

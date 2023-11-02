@@ -11,7 +11,7 @@ const NumberQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag
 }) => {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const NumberQuestion = ({
             )
           );
           questionUnlockWrapper(question?.questionId);
-          trackMatomoEventSubmitAnswer(String(textValue).trim());
+          trackEventSubmitAnswer(String(textValue).trim());
         } else {
           questionUnlockWrapper(question?.questionId);
         }
@@ -63,7 +63,7 @@ const NumberQuestion = ({
           )
         );
         questionUnlockWrapper(question?.questionId);
-        trackMatomoEventSubmitAnswer(String(textValue).trim());
+        trackEventSubmitAnswer(String(textValue).trim());
       } else {
         questionUnlockWrapper(question?.questionId);
       }
@@ -97,7 +97,7 @@ NumberQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default NumberQuestion;

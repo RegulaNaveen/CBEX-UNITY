@@ -52,7 +52,7 @@ import {
   getfetchAllFlags,
   getOpportunityData
 } from '../../redux/selectors/proposal';
-import MatomoHOC from '../HOC/MatomoHOC';
+import AnalyticsHOC from '../HOC/AnalyticsHOC';
 import {
   checkNonEditableFields,
   getCountriesNameForCode,
@@ -296,7 +296,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
           });
         }
       });
-      this.trackMatomoEventSubmitAnswer(textValue);
+      this.trackEventSubmitAnswer(textValue);
     } catch (error) {
       console.log('error :>> ', error);
     }
@@ -378,7 +378,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     }
     this.context.questionUnlockWrapper(questionId);
 
-    this.trackMatomoEventSubmitAnswer(textValue);
+    this.trackEventSubmitAnswer(textValue);
     this.setSelectRow(false);
   };
 
@@ -425,7 +425,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (editorText && editorText?.length > 0)
         widgetUpdates(proposalId, 'Bid_Cost');
     }
-    this.trackMatomoEventSubmitAnswer(editorData.text);
+    this.trackEventSubmitAnswer(editorData.text);
     this.setSelectRow(false);
   };
 
@@ -493,12 +493,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
         const stage = parseInt(selectedValue.match(/\d+/)[0]) >= 4;
         if (stage) widgetUpdates(proposalId, 'Bid_Cost');
       }
-      this.trackMatomoEventSubmitAnswer(selectedValue);
+      this.trackEventSubmitAnswer(selectedValue);
       return dataResponse;
       // eslint-disable-next-line no-else-return
     } else {
       this.context.questionUnlockWrapper(questionId);
-      this.trackMatomoEventSubmitAnswer(selectedValue);
+      this.trackEventSubmitAnswer(selectedValue);
       return null;
     }
   };
@@ -534,7 +534,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         );
       }
     });
-    this.trackMatomoEventSubmitAnswer(selectedDay);
+    this.trackEventSubmitAnswer(selectedDay);
   };
 
   handleUncheckNaQuestion = async type => {
@@ -617,13 +617,13 @@ export class TaskRow extends React.PureComponent<Props, State> {
         );
       }
     }
-    this.trackMatomoEventSubmitAnswer(selectedValues);
+    this.trackEventSubmitAnswer(selectedValues);
   };
 
   displayAnswerOnHistory = () => {
     const { setQuestionToDisplayHistory, questionId } = this.props;
     setQuestionToDisplayHistory(questionId);
-    this.trackMatomoEventAnswerHistory();
+    this.trackEventAnswerHistory();
   };
 
   onChildInputFocus = () => {
@@ -636,7 +636,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setState({ selectedRow: value });
   };
 
-  trackMatomoEventSubmitAnswer = data => {
+  trackEventSubmitAnswer = data => {
     const {
       eventCategories,
       proposalDetail,
@@ -676,7 +676,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  trackMatomoEventAnswerHistory = () => {
+  trackEventAnswerHistory = () => {
     const {
       eventCategories,
       proposalDetail,
@@ -708,7 +708,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     });
   };
 
-  trackMatomoEventLauncher = data => {
+  trackEventLauncher = data => {
     const { eventCategories, trackEvent } = this.props;
     const { action, customDimensions } = data;
     trackEvent({
@@ -728,7 +728,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.state.selectedDay,
         userData
       );
-      this.trackMatomoEventSubmitAnswer(' ');
+      this.trackEventSubmitAnswer(' ');
     });
   };
 
@@ -1708,7 +1708,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     questionData={questionData}
                     proposalDetail={proposalDetail}
                     eventCategories={eventCategories}
-                    trackMatomoEventLauncher={this.trackMatomoEventLauncher}
+                    trackEventLauncher={this.trackEventLauncher}
                   />
                 )}
 
@@ -1902,4 +1902,4 @@ export default connect(mapStateToProps, {
   setEditQuestionData,
   autoNavigationDone: () => dispatch =>
     dispatch(autoNavigationCompletedAction())
-})(MatomoHOC(TaskRow));
+})(AnalyticsHOC(TaskRow));

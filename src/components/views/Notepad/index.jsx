@@ -38,7 +38,7 @@ function Notepad({
   mode,
   change,
   selectedtitle,
-  trackMatomoNoteSubmit,
+  trackNoteSubmit,
   selectedBid
 }) {
   const [selectedNote, setSelectedNote] = useState(Map());
@@ -60,7 +60,7 @@ function Notepad({
       );
     }
     // Matomo event from Parent component
-    trackMatomoNoteSubmit(note.section, note.note);
+    trackNoteSubmit(note.section, note.note);
     add(id, newNote);
   }
 
@@ -96,7 +96,7 @@ function Notepad({
         .toJS();
     }
     // Matomo event from Parent component
-    trackMatomoNoteSubmit(
+    trackNoteSubmit(
       newEditedNote.section ? newEditedNote.section.sectionName : '',
       newEditedNote.noteText,
       'edit'
@@ -179,7 +179,7 @@ Notepad.propTypes = {
   addingNote: PropTypes.bool.isRequired,
   mode: PropTypes.string.isRequired,
   selectedtitle: PropTypes.string.isRequired,
-  trackMatomoNoteSubmit: PropTypes.func.isRequired
+  trackNoteSubmit: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
