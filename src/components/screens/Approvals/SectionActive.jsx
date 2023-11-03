@@ -10,7 +10,7 @@ import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import { shouldShowQuestion } from './utils';
-
+import { getProposalQuestions } from '../../../redux/selectors/proposal';
 const SectionActive = ({
   ApprovalSectionId,
   ApprovalSectionTitle = '',
@@ -22,7 +22,11 @@ const SectionActive = ({
   const selectedBidIsCurrent = !!isCurrent;
   const approvalFilters = useSelector(state => state.approvals.filters);
   const flags = useSelector(state => state.proposal.get('eventflag'));
-
+  const questions = useSelector(getProposalQuestions);
+  const questionsMap = questions.reduce((acc, question) => {
+    acc[question.questionId] = question;
+    return acc;
+  }, {});
   // Stores the hash of visible questions
   // Used to decide the visibility of a section
   const [questionVisibility, setQuestionVisibility] = useState({});
@@ -51,15 +55,14 @@ const SectionActive = ({
   const onClose = () => {
     if (showModal) setShowModal(false);
   };
-
-  let leftQuestions = null;
+  let leftQuestions = [];
   let RightQuestion = [];
   let duplicateDisable = false;
 
   if (leftQues && leftQues.length) {
     leftQuestions = leftQues
       .map(item => {
-        const questionObj = useSelector(getQuestion(item));
+        const questionObj = questionsMap[item];
         return questionObj;
       })
       .filter(
@@ -75,7 +78,7 @@ const SectionActive = ({
   if (rightQues && rightQues.length) {
     RightQuestion = rightQues
       .map(item => {
-        const questionObj = useSelector(getQuestion(item));
+        const questionObj = questionsMap[item];
         return questionObj;
       })
       .filter(
