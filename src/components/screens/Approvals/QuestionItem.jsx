@@ -410,19 +410,20 @@ const QuestionItem = ({
     return null;
   };
 
-  const renderTags = milestoneNew => {
-    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
-      return milestoneNew.map(({ Name, Color }) => (
-        <Tooltip title={Name} placement="top">
-          <div className="tag">
-            <span className="tag-box" style={{ backgroundColor: Color }}></span>
-          </div>
-        </Tooltip>
-      ));
-    } else {
-      return null;
-    }
-  };
+  //this function is used to show tags in the approvals tab
+  // const renderTags = milestoneNew => {
+  //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+  //     return milestoneNew.map(({ Name, Color }) => (
+  //       <Tooltip title={Name} placement="top">
+  //         <div className="tag">
+  //           <span className="tag-box" style={{ backgroundColor: Color }}></span>
+  //         </div>
+  //       </Tooltip>
+  //     ));
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   const questionRender = useMemo(
     () =>
@@ -505,7 +506,7 @@ const QuestionItem = ({
                     </Grid>
                   </div>
                   <div className="milestone-chip">
-                    {renderTags(question.milestoneNew)}
+                    {/* {renderTags(question.milestoneNew)} */}
                   </div>
                 </span>
               </Grid>
