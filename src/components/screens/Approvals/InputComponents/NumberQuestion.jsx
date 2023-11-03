@@ -19,7 +19,6 @@ const NumberQuestion = ({
 
   const handleTextChange = async (textValue, lastAns = ' ', editorData) => {
     textValue = isNumber(textValue) ? textValue : ' ' ;
-
     try {
       const { proposalId, questionId } = question;
       const s1 = textValue
@@ -84,7 +83,7 @@ const NumberQuestion = ({
         className="proposal-text-area"
         data-testid="proposal--text--area"
         type="number"
-        value={lastAnswer.answer}
+        value={lastAnswer.answer || ' '}
         onBlur={handleTextChange}
         onFocus={() => questionLockWrapper(question?.questionId)}
       />

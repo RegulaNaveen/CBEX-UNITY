@@ -468,7 +468,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
             }
           }
           if (value === 2) {
-            shouldvtabCollapsed = false;
+            shouldvtabCollapsed = true;
             if (vTabUserPreference && vTabUserPreference[2]) {
               shouldvtabCollapsed = vTabUserPreference[2].collapsed;
             }
