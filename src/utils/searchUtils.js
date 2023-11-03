@@ -229,6 +229,7 @@ export function searchInTab({
           return (
             questions[questionKey]['active'] &&
             questions[questionKey]['visible'] &&
+            !questions[questionKey]['section']['approvalSectionName'] &&
             customTabShouldShowQuestion(
               questions[questionKey],
               unityTabFilters,
@@ -238,6 +239,7 @@ export function searchInTab({
         } else {
           return (
             questions[questionKey]['visible'] &&
+            !questions[questionKey]['section']['approvalSectionName'] &&
             (questions[questionKey]['active'] ||
               questions[questionKey]['isCustomQuestion']) &&
             (!questions[questionKey]['notApplicable'] ||
