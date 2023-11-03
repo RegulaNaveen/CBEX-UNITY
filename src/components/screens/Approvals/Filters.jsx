@@ -40,7 +40,7 @@ const Filters = props => {
           <div key={group}>
             <Grid container spacing={2}>
               {approvalFilters
-                .filter(i => i.group === group)
+                .filter(i => i.group === group && i.group != 'milestone')
                 .map(item => (
                   <Grid item xs={3} key={item.name}>
                     <ApolloCheckbox
