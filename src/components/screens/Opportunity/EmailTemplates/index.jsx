@@ -374,8 +374,13 @@ const EmailTemplates = () => {
     for (const key in ProposalTeamQuestion) {
       tempQuestion.push(ProposalTeamQuestion[key]);
     }
-    const { RecipientRuleToAnswer, RecipientRuleCCAnswer } =
-      processRecipientRule(row?.EmailTemplateRecipientRule, proposalQuestions);
+    const {
+      RecipientRuleToAnswer,
+      RecipientRuleCCAnswer
+    } = processRecipientRule(
+      row?.EmailTemplateRecipientRule,
+      proposalQuestions
+    );
 
     if (RecipientRuleToAnswer && RecipientRuleToAnswer.length) {
       RecipientRuleToAnswer.forEach(value => {
