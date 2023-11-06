@@ -11,7 +11,6 @@ import { PrimaryButton } from '../../common/atoms/Buttons';
 const steps = ['Select Role', 'Accept Tracking'];
 
 const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged }) => {
-  console.log('roleName', roleName);
   const rolesList = roles || [];
   const cls =
     '.MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div:nth-child(2) > h3 > button';
