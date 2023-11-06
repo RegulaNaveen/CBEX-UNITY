@@ -79,8 +79,11 @@ export const onSetUserAcknowledge = (): ThunkAction<string, Object> => {
 
     try {
       if (accessToken && idToken) {
-        const { acknowledgement } = await onUserAcknowledge(accessToken, idToken);
-        dispatch({ type: ON_USER_ACKNOWLEDGE, payload: acknowledgement });
+        const { data } = await onUserAcknowledge(accessToken, idToken);
+        dispatch({
+          type: ON_USER_ACKNOWLEDGE,
+          payload: { acknowledgement: data.acknowledgement }
+        });
       }
     } catch (error) {
       dispatch({ type: ERROR_ON_USER_ACKNOWLEDGE, payload: { error } });
@@ -128,7 +131,7 @@ export const fetchUserOpportunityPrefs = () => {
             if (pref.favourite_updated_date) {
               userFavouritesUpdatedDateMap.push(
                 {
-                  'opportunity number': pref.opp_number, 
+                  'opportunity number': pref.opp_number,
                   'updated date': pref.favourite_updated_date
                 }
               );
@@ -197,7 +200,7 @@ export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, prop
       if (favourite) {
         favourites.push(oppNumber);
         favouritesUpdatedDate.unshift({
-          'opportunity number': oppNumber, 
+          'opportunity number': oppNumber,
           'updated date': favouriteUpdatedDate
         });
       } else {
@@ -209,8 +212,8 @@ export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, prop
       favourites = favourites.filter((item, index) => favourites.indexOf(item) === index);
       favouritesUpdatedDate = favouritesUpdatedDate.filter((value, index, self) =>
                                 index === self.findIndex((t) => (
-                                  t["opportunity number"] === value["opportunity number"] 
-                                  && t["updated date"] === value["updated date"]
+                                    t["opportunity number"] === value["opportunity number"] 
+                                    && t["updated date"] === value["updated date"]
                                 )));
       dispatch({
         type: SET_USER_FAVOURITES,

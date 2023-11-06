@@ -12,9 +12,16 @@ import ArrowUp from 'apollo-react-icons/ArrowUp';
 import ToolbarMenu from './ToolbarMenu';
 import { DASHBOARD, OPPORTUNITYS, UBUILD } from '../../../routes';
 import { isUserUbuildAdmin } from '../../../utils/utils';
-import { getUserName, getUserRole, getUserAcknowledged } from '../../../SessionHandler';
+import {
+  getUserName,
+  getUserRole,
+  getUserAcknowledged
+} from '../../../SessionHandler';
 import { getRolesInfo } from '../../../redux/actions/proposal-actions';
-import { onSetUserRole, onSetUserAcknowledge } from '../../../redux/actions/sso-auth-actions';
+import {
+  onSetUserRole,
+  onSetUserAcknowledge
+} from '../../../redux/actions/sso-auth-actions';
 import { getRoles } from '../../../redux/selectors';
 import WelcomeModal from '../modals/WelcomeModal';
 import MatomoHOC from '../../HOC/MatomoHOC';
@@ -44,7 +51,7 @@ class Toolbar extends Component<{}, State> {
     const userAcknowledged = getUserAcknowledged();
     if (!rolesList) getRolesInfoF();
     if (userRole) this.setState({ roleName: userRole });
-    if(userAcknowledged) this.setState({ acknowledged: userAcknowledged });
+    if (userAcknowledged) this.setState({ acknowledged: userAcknowledged });
   }
 
   componentWillUnmount() {
@@ -177,9 +184,9 @@ class Toolbar extends Component<{}, State> {
         )}
         {(!roleName ||
           roleName === 'undefined' ||
-          !this.isRoleInUbuild(rolesList || [], roleName)) ||
+          !this.isRoleInUbuild(rolesList || [], roleName) ||
           !acknowledged ||
-          acknowledged === 'undefined' && (
+          acknowledged === 'undefined') && (
           <WelcomeModal
             id="welcomemodal"
             roles={rolesList || []}

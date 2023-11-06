@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'apollo-react/components/Modal';
 import Select from 'apollo-react/components/Select';
 import MenuItem from 'apollo-react/components/MenuItem';
@@ -11,6 +11,7 @@ import { PrimaryButton } from '../../common/atoms/Buttons';
 const steps = ['Select Role', 'Accept Tracking'];
 
 const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged }) => {
+  console.log('roleName', roleName);
   const rolesList = roles || [];
   const cls =
     '.MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-rounded > div > div:nth-child(2) > h3 > button';
@@ -18,7 +19,7 @@ const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged })
   const [state, setState] = useState({
     image: true
   });
-  const [role, setrole] = useState(roleName || '');
+  const [role, setrole] = useState('');
   const [activeStep, setActiveStep] = useState(0);
 
 
@@ -26,7 +27,14 @@ const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged })
     setState({ ...state, [variant]: false });
   }
 
-  React.useEffect(() => {
+  /** Set default user role */
+  useEffect(() => {
+    if (roleName) {
+      setrole(roleName);
+    }
+  }, [roleName]);
+
+  useEffect(() => {
     if (selector) {
       selector.addEventListener('click', () => {
         handleClose('image');
