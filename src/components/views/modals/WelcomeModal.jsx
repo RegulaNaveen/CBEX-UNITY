@@ -28,7 +28,7 @@ const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged })
 
   /** Set default user role */
   useEffect(() => {
-    if (roleName) {
+    if (roleName && roleName !== 'undefined') {
       setrole(roleName);
     }
   }, [roleName]);
@@ -47,7 +47,7 @@ const WelcomeModal = ({ roles, onRoleChange, id, roleName, onUserAcknowledged })
       }
     };
   }, [selector]);
-
+  
   return (
     <Modal
       open={state.image}
