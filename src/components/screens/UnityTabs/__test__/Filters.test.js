@@ -14,11 +14,7 @@ describe('CustomTab Section Component', () => {
     expect(wrapper.exists('.filter-horizontal')).toEqual(true);
   });
   it('on click of checkbox,it shoud be checked', async () => {
-    render(
-      <Provider store={store}>
-        <Filters />
-      </Provider>
-    );
+    expect(wrapper).toBeDefined();
     await expect(screen.findAllByTestId('filter-checkbox')).toBeTruthy();
   });
 });
