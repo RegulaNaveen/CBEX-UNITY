@@ -27,12 +27,6 @@ describe('CustomTab Section Component', () => {
       </Provider>
     );
   });
-
-  it('should component render', async () => {
-    expect(wrapper).toBeDefined();
-    await expect(screen.findByText(/ Filters/i)).toBeTruthy();
-  });
-
   it('should check filter ', async () => {
     expect(wrapper).toBeDefined();
     expect(wrapper.exists('.filter-horizontal')).toEqual(true);
