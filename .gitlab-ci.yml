@@ -20,9 +20,10 @@ include:
 #- deployqa
 
 stages:
-  - prebuild
+  #- prebuild
   #- sonar #sonar report
   - test
+  - sonar
   - blackduckscan
   - builddev
   - deploydev
@@ -45,7 +46,7 @@ stages:
   - deploystack
 
 sonar:
-  stage: prebuild
+  stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
   # needs:
   #   - test
@@ -70,7 +71,7 @@ sonar:
     - merge_requests
 
 test:
-  stage: prebuild
+  stage: test
   image: node:18
   except:
     - qa
