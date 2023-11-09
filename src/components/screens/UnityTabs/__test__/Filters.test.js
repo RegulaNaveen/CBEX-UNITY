@@ -1,0 +1,30 @@
+import React from 'react';
+import { Provider } from 'react-redux';
+import { screen } from '@testing-library/react';
+import Filters from '../Filters';
+import { store } from "../../../../store";
+import { mount, render } from 'enzyme';
+
+describe('CustomTab Section Component', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = mount(
+      <Provider store={store}>
+        <Filters />
+      </Provider>
+    );
+  });
+  it('should component render', async () => {
+    expect(wrapper).toBeDefined();
+    await expect(screen.findByText(/ Filters/i)).toBeTruthy();
+  });
+  it('should check filter ', async () => {
+    expect(wrapper).toBeDefined();
+    expect(wrapper.exists('.filter-horizontal')).toEqual(true);
+  });
+  it('on click of checkbox,it shoud be checked', async () => {
+    expect(wrapper).toBeDefined();
+    await expect(screen.findAllByTestId('filter-checkbox')).toBeTruthy();
+  });
+});
