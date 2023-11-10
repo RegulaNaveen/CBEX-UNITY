@@ -123,7 +123,7 @@ switch (environment) {
       'https://8qm2fg3fx4.execute-api.us-east-1.amazonaws.com/prod';
     PROPOSAL_API_KEY = 'EWK61xXYCM9ofFmBOcOPR4xxxObhZxtwanqD3RHV';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://sljfl1jmnc.execute-api.us-east-1.amazonaws.com/prod';
+      'https://s9j2gvwlk2.execute-api.us-east-1.amazonaws.com/prod';
     COGNITO_HOST = 'https://prod-unity.auth.us-east-1.amazoncognito.com';
     // AUTH_KEY = '';
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
