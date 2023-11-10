@@ -135,6 +135,8 @@ switch (environment) {
     NOTES_SOCKET_URL =
       'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
     LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
+    ANALYTICS_API_URL =
+      'https://3runl1h5nf.execute-api.us-east-1.amazonaws.com';
     break;
   case 'QA':
     // UDEV Data
