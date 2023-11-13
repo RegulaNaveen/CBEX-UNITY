@@ -20,8 +20,7 @@ const initialState = {
   search: { query: null }
 };
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([thunk]);
 const store = mockStore(initialState);
 const QuestionsForCustomer = () => {
   return (
@@ -39,10 +38,10 @@ const QuestionsForCustomer = () => {
 };
 
 describe('test question for customer tab', () => {
-  jest.spyOn(global, 'setTimeout');
-  jest
-    .spyOn(ProposalActions, 'setProposalQuestion')
-    .mockResolvedValue(MockState.lastSetQuestionData);
+  jest.spyOn(ProposalActions, 'setProposalQuestion').mockResolvedValue({});
+  jest.spyOn(ProposalActions, 'deleteProposalQuestion').mockResolvedValue({
+    message: 'Successfully deleted da23d5a3-912c-438c-ba3f-0b7a97b7cae8'
+  });
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -62,13 +61,13 @@ describe('test question for customer tab', () => {
     ).toBeInTheDocument();
   });
 
-  it('test for adding new question', async () => {
+  it('test for adding new question', () => {
     const { getByText } = render(<QuestionsForCustomer />);
     const addNewQues = getByText(/Add New/i);
-    fireEvent.mouseDown(addNewQues);
+    fireEvent.keyDown(addNewQues, { key: 'Enter', code: 'Enter' });
   });
 
-  it('check for copy to clipboard', async () => {
+  it('check for copy to clipboard', () => {
     const { getByText } = render(<QuestionsForCustomer />);
     expect(getByText(/Copy to clipboard/i)).toBeInTheDocument();
     const clipboardButton = screen.getByRole('button', {
@@ -87,34 +86,47 @@ describe('test question for customer tab', () => {
     fireEvent.click(clipboardButton);
   });
 
-  it('check for question and answer input', async () => {
+  it('check for question and answer input', () => {
     render(<QuestionsForCustomer />);
     const questionInput = screen.getAllByText('test quick thrrjjjjj');
     fireEvent.focus(questionInput[0]);
+    fireEvent.paste(questionInput[0], {
+      clipboardData: {
+        getData: () => 'test question input'
+      }
+    });
     fireEvent.blur(questionInput[0]);
+    expect(screen.getByText('test question input')).toBeInTheDocument();
+
     const answerInput = screen.getAllByText('test answer one');
     fireEvent.focus(answerInput[0]);
+    fireEvent.paste(answerInput[0], {
+      clipboardData: {
+        getData: () => 'test answer input'
+      }
+    });
     fireEvent.blur(answerInput[0]);
   });
 
-  it('check for show delete modal', async () => {
+  it('check for show delete modal', () => {
     render(<QuestionsForCustomer />);
-    const deleteBtn = screen.getByTestId('delete-question');
-    fireEvent.click(deleteBtn);
+    const deleteBtn = screen.getAllByTestId('delete-question');
+    fireEvent.click(deleteBtn[0]);
     expect(screen.getByText('Are you sure?')).toBeInTheDocument();
 
+    fireEvent.click(screen.getByText('Cancel'));
+    expect(screen.getByText('Are you sure?')).not.toBeVisible();
+
+    fireEvent.click(deleteBtn[0]);
     const button = screen.getByRole('button', { name: 'Yes, Delete' });
     fireEvent.click(button);
     expect(screen.getByText('Are you sure?')).not.toBeVisible();
   });
 
-  it('check for deleting question without answer', async () => {
-    initialState.proposal = initialState.proposal.set('proposalQuestions', [
-      MockState.lastSetQuestionData
-    ]);
+  it('check for deleting question without answer', () => {
     render(<QuestionsForCustomer />);
-    const deleteBtn = screen.getByTestId('delete-question');
-    fireEvent.click(deleteBtn);
-    expect(deleteBtn).toBeInTheDocument();
+    const deleteBtn = screen.getAllByTestId('delete-question');
+    fireEvent.click(deleteBtn[1]);
+    expect(deleteBtn[1]).toBeInTheDocument();
   });
 });
