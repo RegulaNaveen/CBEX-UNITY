@@ -23,6 +23,7 @@ let SF_HOST_URL = '';
 let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
 let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
+let ANALYTICS_API_URL = '';
 
 switch (environment) {
   case 'UAT':
@@ -122,7 +123,7 @@ switch (environment) {
       'https://8qm2fg3fx4.execute-api.us-east-1.amazonaws.com/prod';
     PROPOSAL_API_KEY = 'EWK61xXYCM9ofFmBOcOPR4xxxObhZxtwanqD3RHV';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://sljfl1jmnc.execute-api.us-east-1.amazonaws.com/prod';
+      'https://s9j2gvwlk2.execute-api.us-east-1.amazonaws.com/prod';
     COGNITO_HOST = 'https://prod-unity.auth.us-east-1.amazoncognito.com';
     // AUTH_KEY = '';
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
@@ -134,6 +135,8 @@ switch (environment) {
     NOTES_SOCKET_URL =
       'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
     LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
+    ANALYTICS_API_URL =
+      'https://3runl1h5nf.execute-api.us-east-1.amazonaws.com';
     break;
   case 'QA':
     // UDEV Data
@@ -172,6 +175,8 @@ switch (environment) {
       'wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://gni5ivpjhh.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://1cg9b1a39f.execute-api.us-east-1.amazonaws.com';
     break;
   case 'DEV':
     // DEV Data
@@ -187,12 +192,15 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
     // REDIRECTION_URL = 'http://localhost:8080';
+
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
     break;
   default:
     // DEV Data
@@ -212,6 +220,8 @@ switch (environment) {
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
     break;
 }
 
@@ -223,6 +233,7 @@ const AUTH_API_ENDPOINT = `${COGNITO_HOST}/oauth2/token`;
 const AUTH_API_URL = `${NORMAL_AUTH_API_ENDPOINT}/api/auth`;
 const ROLE_ENDPOINT = `${AUTH_API_URL}/changerole`;
 const VALIDATE_TOKEN = `${AUTH_API_URL}/validate-token`;
+const ACKNOWLEDGE_ENDPOINT = `${AUTH_API_URL}/acknowledgement`;
 
 const AUTH = {
   COGNITO_HOST,
@@ -231,6 +242,7 @@ const AUTH = {
   CLIENT_ID,
   REDIRECTION_URL,
   ROLE_ENDPOINT,
+  ACKNOWLEDGE_ENDPOINT,
   NORMAL_AUTH_API_ENDPOINT,
   AUTH_API_URL,
   VALIDATE_TOKEN
@@ -296,6 +308,7 @@ const EMAILTEMPLATES = {
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
 const CUSTOM_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/custom-question`;
 const CUSTOM_QUESTIONS_DELETE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/delete-custom-question`;
+const ANALYTICS_URL = `${ANALYTICS_API_URL}/track`;
 
 export {
   AUTH,
@@ -310,7 +323,8 @@ export {
   NOTES_SOCKET_URL,
   LAUNCH_DARKLY_CLIENT_ID,
   APPROVALS_URL,
-  EMAILTEMPLATES,
   CUSTOM_QUESTIONS_API_URL,
-  CUSTOM_QUESTIONS_DELETE_API_URL
+  CUSTOM_QUESTIONS_DELETE_API_URL,
+  ANALYTICS_URL,
+  EMAILTEMPLATES
 };

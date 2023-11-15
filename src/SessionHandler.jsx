@@ -35,6 +35,10 @@ export const getUserRole = () => {
   return localStorage.getItem('userRole');
 };
 
+export const getUserAcknowledged = () => {
+  return localStorage.getItem('userAcknowledged');
+}
+
 export const getUserName = () => {
   return localStorage.getItem('userName');
 };

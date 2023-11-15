@@ -45,7 +45,7 @@ const UnassignedRolesList = ({ unassignedRoles = [] }) => {
 const EventLauncher = ({
   questionData,
   proposalDetail,
-  trackMatomoEventLauncher
+  trackEventLauncher
 }) => {
   const [bodyStr, setBodyStr] = useState('');
   const [bodyHtml, setBodyHtml] = useState('');
@@ -248,7 +248,7 @@ const EventLauncher = ({
         }
       ]
     };
-    trackMatomoEventLauncher(trackEventPayload);
+    trackEventLauncher(trackEventPayload);
     window.open(geturl, '_blank', 'noopener,noreferrer');
   };
   // Event Modal

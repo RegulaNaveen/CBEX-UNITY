@@ -10,7 +10,7 @@ const YesNoQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag,
   toggleWatch,
   onCascadeChange,
@@ -34,7 +34,7 @@ const YesNoQuestion = ({
             )
           );
           questionUnlockWrapper(question?.questionId);
-          trackMatomoEventSubmitAnswer(selectedValue);
+          trackEventSubmitAnswer(selectedValue);
         }
       } catch (error) {
         console.error(error);
@@ -81,7 +81,7 @@ YesNoQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  trackEventSubmitAnswer: PropTypes.func.isRequired,
   toggleWatch: PropTypes.func,
   onCascadeChange: PropTypes.func,
   forceBlur: PropTypes.bool

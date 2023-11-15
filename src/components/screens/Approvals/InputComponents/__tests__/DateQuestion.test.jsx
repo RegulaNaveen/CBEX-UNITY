@@ -14,7 +14,7 @@ describe('DateQuestion', () => {
   };
   const userData = {};
   const socketContext = {};
-  const trackMatomoEventSubmitAnswer = jest.fn();
+  const trackEventSubmitAnswer = jest.fn();
   const checkDisableFlag = jest.fn(() => false);
   const mockStore = configureStore([]);
   let store;
@@ -29,7 +29,7 @@ describe('DateQuestion', () => {
           lastAnswer={lastAnswer}
           userData={userData}
           socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
+          trackEventSubmitAnswer={trackEventSubmitAnswer}
           checkDisableFlag={checkDisableFlag}
         />
       </Provider>

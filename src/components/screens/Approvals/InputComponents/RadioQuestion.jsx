@@ -10,7 +10,7 @@ const RadioQuestionInput = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag
 }) => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const RadioQuestionInput = ({
           )
         );
         questionUnlockWrapper(question?.questionId);
-        trackMatomoEventSubmitAnswer(selectedValue);
+        trackEventSubmitAnswer(selectedValue);
       }
     } catch (error) {
       console.error(error);
@@ -63,7 +63,7 @@ RadioQuestionInput.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default RadioQuestionInput;

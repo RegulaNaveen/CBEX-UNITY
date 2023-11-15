@@ -25,7 +25,7 @@ import { getCountriesNameForCode } from '../../../utils/utils';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid,
@@ -97,8 +97,27 @@ const QuestionItem = ({
   const [iconColor, seticonColor] = useState('#00c221');
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
+
   const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
@@ -114,7 +133,8 @@ const QuestionItem = ({
     ) {
       setshowLastAnswer(false);
     } else {
-      const lastAnswerVisibility = String(question?.answers?.answer)?.trim()?.length;
+      const lastAnswerVisibility = String(question?.answers?.answer)?.trim()
+        ?.length;
       setshowLastAnswer(lastAnswerVisibility ? true : false);
     }
     if (question && question.questionLockInfo) {
@@ -210,7 +230,7 @@ const QuestionItem = ({
     return <div>Question type not found</div>;
   };
 
-  const trackMatomoEventSubmitAnswer = answer => {
+  const trackEventSubmitAnswer = answer => {
     const {
       section,
       questionText,
@@ -265,14 +285,14 @@ const QuestionItem = ({
       disabled,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer,
+      trackEventSubmitAnswer,
       checkDisableFlag
     };
     if (
       inputProps.lastAnswer &&
       inputProps.lastAnswer.userName === 'UnityPredictedAnswer'
     ) {
-      trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
+      trackEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
       return (
@@ -617,7 +637,7 @@ const QuestionItem = ({
     );
   };
 
-  const trackMatomoEventLauncher = data => {
+  const trackEventLauncher = data => {
     trackEvent({
       category: eventCategories.pd(proposalDetail),
       action: `Unity Tab: Event Launcher: ${question.questionText}`,
@@ -672,6 +692,8 @@ const QuestionItem = ({
                   <div className="question-label-inner">
                     <div ref={questionTextRef} className="question-title-txt">
                       <QuestionLabel
+                        ref={questionTextRef1}
+                        questionJSON={question?.questionJSON}
                         questionLabel={question?.questionText || ''}
                       />
                       {!isEmpty(question?.questionLockInfo) &&
@@ -686,9 +708,7 @@ const QuestionItem = ({
                         questionData={Map(question)}
                         proposalDetail={proposalDetail}
                         eventCategories={eventCategories}
-                        trackMatomoEventLauncher={c =>
-                          trackMatomoEventLauncher(c)
-                        }
+                        trackEventLauncher={c => trackEventLauncher(c)}
                       />
                     )}
                     {question.isCustomQuestion && selectedBid.get('isCurrent') && (
@@ -778,4 +798,4 @@ QuestionItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(QuestionItem);
+export default AnalyticsHOC(QuestionItem);
