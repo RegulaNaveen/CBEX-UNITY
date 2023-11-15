@@ -86,12 +86,8 @@ const QuestionItem = ({
   const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
-<<<<<<< HEAD
   const [screenWidth, setScreenWidth] = useState('');
-
-=======
   const [showLastAnswer, setshowLastAnswer] = useState(false);
->>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
   const dispatch = useDispatch();
 
   const resize = () => {
@@ -466,34 +462,6 @@ const QuestionItem = ({
           >
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
-<<<<<<< HEAD
-                <span ref={questionTextRef}>
-                  <Grid
-                    item
-                    xs={10}
-                    style={{
-                      display: 'flex',
-                      float: 'left',
-                      paddingTop: '4px'
-                    }}
-                  >
-                    <QuestionLabel
-                      ref={questionTextRef1}
-                      questionJSON={question?.questionJSON}
-                      questionLabel={question?.questionText || ''}
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    xs={2}
-                    style={{
-                      display: 'flex',
-                      float: 'left'
-                    }}
-                  >
-                    {renderQuestionHint()}
-                  </Grid>
-=======
                 <span
                   ref={questionTextRef}
                   className="question-label-container"
@@ -562,7 +530,6 @@ const QuestionItem = ({
                   <div className="milestone-chip">
                     {/* {renderTags(question.milestoneNew)} */}
                   </div>
->>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
                 </span>
               </Grid>
               {locked ? (

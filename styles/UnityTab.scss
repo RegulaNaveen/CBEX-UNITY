@@ -96,13 +96,11 @@
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }
-
-  
 }
 
 .unity-tab-question-item {
   margin: 2px 0px !important;
-  
+
   .RichEditor-editor {
     line-height: 1.2;
     .public-DraftStyleDefault-block {
@@ -110,11 +108,9 @@
     }
   }
 }
-<<<<<<< HEAD
-.accordion-body{
+.accordion-body {
   padding-right: 0;
-=======
-
+}
 .question-label-container {
   .milestone-chip {
     display: flex;
@@ -165,7 +161,6 @@ svg.add-icon-btn {
   width: 12px;
 }
 .unity-tab-question-item .RichEditor-editor .public-DraftStyleDefault-block {
-  font-family: "ProximaNova-Regular"; 
-    color: #000000;
->>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
+  font-family: 'ProximaNova-Regular';
+  color: #000000;
 }

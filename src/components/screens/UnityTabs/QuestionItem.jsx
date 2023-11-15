@@ -100,7 +100,6 @@ const QuestionItem = ({
   const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
-<<<<<<< HEAD
   const [screenWidth, setScreenWidth] = useState('');
 
   useEffect(() => {
@@ -119,9 +118,7 @@ const QuestionItem = ({
     }, 100);
   }, []);
 
-=======
   const [showLastAnswer, setshowLastAnswer] = useState(false);
->>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -136,7 +133,8 @@ const QuestionItem = ({
     ) {
       setshowLastAnswer(false);
     } else {
-      const lastAnswerVisibility = String(question?.answers?.answer)?.trim()?.length;
+      const lastAnswerVisibility = String(question?.answers?.answer)?.trim()
+        ?.length;
       setshowLastAnswer(lastAnswerVisibility ? true : false);
     }
     if (question && question.questionLockInfo) {
@@ -710,9 +708,7 @@ const QuestionItem = ({
                         questionData={Map(question)}
                         proposalDetail={proposalDetail}
                         eventCategories={eventCategories}
-                        trackEventLauncher={c =>
-                          trackEventLauncher(c)
-                        }
+                        trackEventLauncher={c => trackEventLauncher(c)}
                       />
                     )}
                     {question.isCustomQuestion && selectedBid.get('isCurrent') && (
