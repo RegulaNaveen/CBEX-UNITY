@@ -7,7 +7,8 @@ import { getQuestion } from '../../../redux/selectors';
 const SwitchItem = ({
   questionId = '',
   UnityTabSectionTitle = '',
-  disabled
+  disabled,
+  tabId
 }) => {
   const question = useSelector(getQuestion(questionId));
   return question?.answerConfiguration?.type === 'statement' ? (
@@ -24,6 +25,7 @@ const SwitchItem = ({
       questionId={questionId}
       UnityTabSectionTitle={UnityTabSectionTitle}
       disabled={disabled}
+      tabId = {tabId}
     />
   );
 };

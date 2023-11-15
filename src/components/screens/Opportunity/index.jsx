@@ -66,6 +66,7 @@ import {
   clearSearchAction,
   closeSearchAction
 } from '../../../redux/actions/search-actions';
+import { fetchEmailTemplates } from '../../../redux/actions/emailTemplate-actions';
 
 type State = {
   selectedView: string
@@ -135,7 +136,8 @@ export class Opportunity extends Component<Props, State> {
       ProposalLoading,
       getIntegrationsData,
       updateProposalDetail,
-      history
+      history,
+      fetchEmailTemplates
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
@@ -143,6 +145,19 @@ export class Opportunity extends Component<Props, State> {
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
     const bidType = queryparams.get('bidType') || 'Clinical_Bid';
+    
+    if (!queryparams.get('bidType')) {
+      queryparams.set('bidType', 'Clinical_Bid');
+      history.push({
+        search: queryparams.toString()
+      });
+    } else {
+      queryparams.set('bidType', queryparams.get('bidType'));
+      history.push({
+        search: queryparams.toString()
+      });
+    }
+
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) setEventFlg(flagValue);
     if (notificationId) {
@@ -155,6 +170,7 @@ export class Opportunity extends Component<Props, State> {
     getSFNonEditabelInfoField();
     getOpportunityInfo(params.id, bidNumber, bidType, history);
     getIntegrationsData();
+    fetchEmailTemplates();
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
     if ((this.props && location && location?.pathname) !== UBUILD) {
@@ -433,6 +449,7 @@ export default compose(
     saverecentoppactivity: saveRecentOppActivity,
     toggleEditCustomNameModal,
     onEditCustomName,
-    updateProposalDetailFromWebSocket
+    updateProposalDetailFromWebSocket,
+    fetchEmailTemplates
   })
 )(AnalyticsHOC(Opportunity));

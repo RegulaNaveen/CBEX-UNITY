@@ -28,6 +28,7 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import ChipView from '../../common/Chip/ChipView';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 const StatementItem = ({
   questionId = '',
@@ -99,23 +100,18 @@ const StatementItem = ({
   }, []);
 
   const renderTags = () => {
-    const { milestone, milestoneNew } = question;
-    const lastAnswer = getLastAnswer(question);
-    const lastAns = isString(lastAnswer) ? lastAnswer : '';
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview unity-tab-chip">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAns} />
-          ) : null}
-        </div>
-      );
+    const { milestoneNew } = question;
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview unity-tab-chip">
-        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
-      </div>
-    );
   };
 
   const renderQuestionHint = () => {

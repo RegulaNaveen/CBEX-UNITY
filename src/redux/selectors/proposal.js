@@ -28,33 +28,29 @@ const generateSections = (
       const {
         questionId,
         roleNames,
-        section: { sectionName, sectionOrder }
+        section: { sectionName, sectionOrder, tabID = '' }
       } = question;
+      if (!tabID) {
+        const roles = roleNames || [];
+        const createSections = () => {
+          let section = Map({});
+          let questions = sections.getIn([sectionName, 'questions']) || Map({});
+          questions = questions.set(questionId, fromJS(question));
+          questions = questions.sortBy(item => item.get('questionOrder'));
+          section = section
+            .set('sectionOrder', sectionOrder)
+            .set('sectionName', sectionName)
+            .set('questions', questions);
+          sections = sections.set(sectionName, section);
+        };
 
-      const roles = roleNames || [];
-
-      const createSections = () => {
-        let section = Map({});
-        let questions = sections.getIn([sectionName, 'questions']) || Map({});
-
-        questions = questions.set(questionId, fromJS(question));
-        questions = questions.sortBy(item => item.get('questionOrder'));
-
-        section = section
-          .set('sectionOrder', sectionOrder)
-          .set('sectionName', sectionName)
-          .set('questions', questions);
-
-        sections = sections.set(sectionName, section);
-      };
-
-      if (filter && userRole) {
-        if (roles.includes(userRole)) createSections();
-      } else createSections();
+        if (filter && userRole) {
+          if (roles.includes(userRole)) createSections();
+        } else createSections();
+      }
     });
 
     sections = sections.sortBy(section => section.get('sectionOrder'));
-
     return sections;
   } catch (error) {
     console.log(error);
@@ -199,8 +195,13 @@ export function getUniqueMilestones(questions) {
   fromJS(filteredQuestions)
     .valueSeq()
     .forEach(question => {
-      if (question.get('milestone')) {
-        milestones.push(question.get('milestone'));
+      if (question.get('milestoneNew')) {
+        question
+          .get('milestoneNew')
+          .toJS()
+          .forEach(milestone => {
+            milestones.push(milestone);
+          });
       }
     });
 

@@ -323,6 +323,8 @@
       width: calc(100% - 28px);
     }
     .question-label-inner {
+      flex-basis: auto;
+      flex-grow: 1;
       display: flex;
 
       .questiontext-richtext {
@@ -372,7 +374,23 @@
     }
 
     .milestone-chip {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-basis: auto;
+      flex-grow: 1;
       padding-left: 0.25rem;
+      flex-wrap: wrap;
+
+      .tag {
+        display: inline;
+        .tag-box {
+          display: inline-block !important;
+          width: 16px;
+          height: 16px;
+        }
+      }
 
       .chipview {
         z-index: 1;
@@ -398,4 +416,11 @@
       opacity: 0.1;
     }
   }
+}
+
+// tag styles
+.tag-box {
+  display: inline-block !important;
+  width: 16px;
+  height: 16px;
 }

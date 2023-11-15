@@ -92,7 +92,7 @@
     font-size: 14px !important;
     display: contents !important;
   }
-  
+
   .public-DraftStyleDefault-block {
     margin-bottom: 0 !important;
   }
@@ -110,6 +110,62 @@
     }
   }
 }
+<<<<<<< HEAD
 .accordion-body{
   padding-right: 0;
+=======
+
+.question-label-container {
+  .milestone-chip {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-basis: auto;
+    flex-grow: 1;
+    padding-left: 0.25rem;
+    flex-wrap: wrap;
+
+    .tag {
+      display: inline;
+      .tag-box {
+        display: inline-block !important;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+.approvals-tab .tasksList-add-icon-wrapper {
+  display: flex;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-color: #0557d5;
+  box-shadow: 0 4px 8px 0 rgba(41, 125, 253, 0.16),
+    0 4px 4px 0 rgba(0, 0, 0, 0.04), 0 8px 16px 0 rgba(41, 125, 253, 0.32);
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.add-question {
+  margin: 20px 0 0 !important;
+}
+
+.taskList-filter-icon-wrapper {
+  min-width: 0;
+  margin-right: 7px;
+}
+.unity-tab-question-item .question-title-txt .question-edit {
+  cursor: pointer;
+}
+svg.add-icon-btn {
+  width: 12px;
+}
+.unity-tab-question-item .RichEditor-editor .public-DraftStyleDefault-block {
+  font-family: "ProximaNova-Regular"; 
+    color: #000000;
+>>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
 }

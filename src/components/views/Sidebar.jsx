@@ -34,6 +34,7 @@ import { selectAreAllSectionsExpanded } from '../../redux/selectors/proposal';
 import { actionChannel, UI_ACTION } from '../../uiActions/ui-actions';
 import NotepadWrapper from './WysiwygNotepad/NotepadWrapper';
 import { setTabRefresh } from '../../redux/actions/unitytab-action';
+import { SECTIONS } from '../../constants/app';
 const MANUAL_REFRESH = false;
 
 type Props = {
@@ -399,7 +400,13 @@ class Sidebar extends Component<Props, State> {
                     )
                     .includes(true);
 
-                  if (someQuestionsAreVisible)
+                  if (
+                    someQuestionsAreVisible &&
+                    sectionName !==
+                      SECTIONS.KEY_MILESTONES_AND_DELIVERABLE_TIMELINES &&
+                    sectionName !== SECTIONS.PROPOSAL_TEAM &&
+                    sectionName !== SECTIONS.QUESTIONS_FOR_CUSTOMER_LEFT_PANEL
+                  )
                     return (
                       <p
                         key={sectionName}

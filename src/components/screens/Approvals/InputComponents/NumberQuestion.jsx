@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import { useDispatch } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import TextArea from '../../../common/atoms/inputs/TextArea';
@@ -18,6 +18,7 @@ const NumberQuestion = ({
   const { questionLockWrapper, questionUnlockWrapper } = socketContext;
 
   const handleTextChange = async (textValue, lastAns = ' ', editorData) => {
+    textValue = isNumber(textValue) ? textValue : ' ' ;
     try {
       const { proposalId, questionId } = question;
       const s1 = textValue
@@ -28,7 +29,7 @@ const NumberQuestion = ({
         .trim()
         .split(' ')
         .filter(v => v.trim().length > 0);
-
+      
       if (!isEmpty(textValue.replace(/\r?\n|\r| /g, ''))) {
         if (
           s1.length !== s2.length ||
@@ -73,6 +74,8 @@ const NumberQuestion = ({
     }
   };
 
+  const isNumber = (n) => { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
+
   return (
     <>
       <TextArea
@@ -80,7 +83,7 @@ const NumberQuestion = ({
         className="proposal-text-area"
         data-testid="proposal--text--area"
         type="number"
-        value={lastAnswer.answer}
+        value={lastAnswer.answer || ' '}
         onBlur={handleTextChange}
         onFocus={() => questionLockWrapper(question?.questionId)}
       />

@@ -111,6 +111,14 @@ const CustomTabs = React.lazy(() =>
   )
 );
 
+const EmailTemplates = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "EmailTemplates" */ '../../../screens/Opportunity/EmailTemplates'
+    )
+  )
+);
+
 const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const defaultTabs = [
     {
@@ -154,6 +162,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     showKeyMilestoneDeliverableTab,
     setShowshowKeyMilestoneDeliverableTab
   ] = useState(false);
+  const [showEmailTemplatesTab, setshowEmailTemplatesTab] = useState(false);
   const switchTempStatus = useSelector(
     state => state.proposal?.toJSON()?.switchTempCallStatus
   );
@@ -192,6 +201,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const notepadMaxWidthPx = isOpen
     ? notepadMinWidthPx
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+
   const calculateTab = val => {
     const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
     if (questionCount) {
@@ -383,7 +393,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         searchParams.set('viewType', selectedView);
       } else {
         dispatch(setActiveTabIndexAction(0));
-        searchParams.delete('viewType')
+        searchParams.delete('viewType');
       }
       if (selectedView === 'questions') {
         searchParams.delete('viewType');
@@ -414,12 +424,16 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     const notepadFlag = allFlags.notepad || false; // Notepad flag
     const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
     const approvalFlag = allFlags.approvalsFlag || false;
+    const emailTemplatesFlag = allFlags.emailTemplatesFlag || false;
 
     if (
       !verticalTabFlag ||
-      ![questionsForCustomerFlag, notepadFlag, proposalTeamFlag].some(
-        flag => !!flag
-      )
+      ![
+        questionsForCustomerFlag,
+        notepadFlag,
+        proposalTeamFlag,
+        emailTemplatesFlag
+      ].some(flag => !!flag)
     ) {
       verticalTabFlag = false;
     }
@@ -429,6 +443,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     setShowNotepadTab(notepadFlag);
     setShowProposalTeamTab(proposalTeamFlag);
     setShowshowKeyMilestoneDeliverableTab(true);
+    setshowEmailTemplatesTab(emailTemplatesFlag);
   }
 
   const evalAndSetVTabCollapse = useCallback(
@@ -975,6 +990,60 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         </div>
       );
     }
+    if (activeVerticleTab === 'emailtemplatestab') {
+      return (
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          ref={refVal => setPanelRef(refVal)}
+          className={classNames({
+            collapsed: vtabCollpased
+          })}
+        >
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            style={{ borderRadius: '5px' }}
+            resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
+            }}
+          >
+            <Suspense
+              fallback={
+                <Spinner
+                  type="TailSpin"
+                  color="#297DFD"
+                  width={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                  }}
+                />
+              }
+            >
+              <EmailTemplates />
+            </Suspense>
+          </Panel>
+        </div>
+      );
+    }
   };
 
   const renderTabList = () => {
@@ -1011,8 +1080,10 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     if (!showQuestionsForCustomerTab) {
       if (!showNotepadTab) {
         activeVerticleTab = 'proposalteamtab';
-      } else {
+      } else if (!showProposalTeamTab) {
         activeVerticleTab = 'showNotepadTab';
+      } else {
+        activeVerticleTab = 'showEmailTemplatesTab';
       }
     } else if (showKeyMilestoneDeliverableTab) {
       activeVerticleTab = 'showKeyMilestoneDeliverableTab';
@@ -1034,6 +1105,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
                 showProposalTeamTab={showProposalTeamTab}
                 showKeyMilestoneDeliverableTab={showKeyMilestoneDeliverableTab}
                 activeVerticleTab={activeVerticleTab}
+                showEmailTemplatesTab={showEmailTemplatesTab}
                 renderPanel={activeTab => {
                   // Check activeTab value and render required component
                   return <>{renderVerticleTabsComponent(activeTab)}</>;

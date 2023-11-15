@@ -22,6 +22,7 @@ import IconButton from 'apollo-react/components/IconButton';
 import moment from 'moment';
 import { Add, Refresh } from '../../svg';
 import BidHistory from '../../common/Bidhistory';
+import RenderFilterLabel from '../../common/RenderFilterLabel';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import {
   getProposalUpdated,
@@ -518,7 +519,13 @@ class Questions extends Component {
                     >
                       <ApolloCheckbox
                         size="small"
-                        label={filter.get('label')}
+                        label={
+                          <RenderFilterLabel
+                            labelText={filter.get('label')}
+                            showColor={groupName === 'milestoneGroup'}
+                            color={filter.get('color', '')}
+                          />
+                        }
                         checked={filter.get('checked')}
                         onChange={(e, checked) =>
                           this.handleFilterChange(key, checked, groupName)
@@ -587,32 +594,34 @@ class Questions extends Component {
                     color="primary"
                     size="small"
                     className="question-tooltip-icon"
-                    onClick={(e) => this.setState({anchorEl: e.currentTarget})}
-                  >      
+                    onClick={e => this.setState({ anchorEl: e.currentTarget })}
+                  >
                     <InfoIcon className="info-icon" />
                   </IconButton>
                   <Popover
                     data-testid="questions-popover"
                     open={!!anchorEl}
                     anchorEl={anchorEl}
-                    onClose={() => this.setState({anchorEl: null})}
+                    onClose={() => this.setState({ anchorEl: null })}
                     anchorOrigin={{
                       vertical: 'bottom',
-                      horizontal: 'center',
+                      horizontal: 'center'
                     }}
                     transformOrigin={{
                       vertical: 'top',
-                      horizontal: 'center',
+                      horizontal: 'center'
                     }}
                     PaperProps={{
-                      style: { 
-                        borderColor: '#e9e9e9', 
-                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                        padding: 10 
-                      },
+                      style: {
+                        borderColor: '#e9e9e9',
+                        boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                        padding: 10
+                      }
                     }}
                   >
-                    <Typography variant="body2">{showNaCheckbox ? 'NA ON' : 'NA OFF'}</Typography>
+                    <Typography variant="body2">
+                      {showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                    </Typography>
                   </Popover>
                 </>
               </div>

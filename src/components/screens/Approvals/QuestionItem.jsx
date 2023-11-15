@@ -41,6 +41,9 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
+import Tooltip from 'apollo-react/components/Tooltip';
+import { Edit } from '../../svg';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -83,8 +86,12 @@ const QuestionItem = ({
   const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+<<<<<<< HEAD
   const [screenWidth, setScreenWidth] = useState('');
 
+=======
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
+>>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
   const dispatch = useDispatch();
 
   const resize = () => {
@@ -118,7 +125,6 @@ const QuestionItem = ({
       setLocked(false);
     }
   }, [isQuesFreezed, activeQuestionInfo]);
-
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
       if (currentSearchResult.searchIndex === highlightQuestionId) {
@@ -155,6 +161,19 @@ const QuestionItem = ({
     email: getUserEmail(),
     role: getUserId()
   });
+
+  const checkLastAnswerOfQuestionVisibility = answers => {
+    if (answers && Array.isArray(answers) && !answers.length) {
+      return false;
+    } else {
+      const lastAnswerVisibility = String(answers?.answer)?.trim()?.length;
+      if (lastAnswerVisibility) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
@@ -417,6 +436,21 @@ const QuestionItem = ({
     return null;
   };
 
+  //this function is used to show tags in the approvals tab
+  // const renderTags = milestoneNew => {
+  //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+  //     return milestoneNew.map(({ Name, Color }) => (
+  //       <Tooltip title={Name} placement="top">
+  //         <div className="tag">
+  //           <span className="tag-box" style={{ backgroundColor: Color }}></span>
+  //         </div>
+  //       </Tooltip>
+  //     ));
+  //   } else {
+  //     return null;
+  //   }
+  // };
+
   const questionRender = useMemo(
     () =>
       isShowQuestion ? (
@@ -432,6 +466,7 @@ const QuestionItem = ({
           >
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
+<<<<<<< HEAD
                 <span ref={questionTextRef}>
                   <Grid
                     item
@@ -458,6 +493,76 @@ const QuestionItem = ({
                   >
                     {renderQuestionHint()}
                   </Grid>
+=======
+                <span
+                  ref={questionTextRef}
+                  className="question-label-container"
+                >
+                  <div className="question-label-inner">
+                    <Grid
+                      item
+                      xs={10}
+                      style={{
+                        display: 'flex',
+                        float: 'left',
+                        paddingTop: '4px'
+                      }}
+                    >
+                      <QuestionLabel
+                        questionLabel={question?.questionText || ''}
+                      />
+                      {question.isCustomQuestion &&
+                        selectedBid.isCurrent &&
+                        !isQuesFreezed && (
+                          <div
+                            className="question-edit"
+                            style={{ 'margin-left': '10px' }}
+                          >
+                            <span
+                              aria-hidden="true"
+                              onClick={() => {
+                                dispatch(
+                                  setEditQuestionData({
+                                    questionText: question?.questionText,
+                                    questionHTML: question?.questionHTML,
+                                    questionJSON: question?.questionJSON,
+                                    questionHintJSON:
+                                      question?.questionHintJSON,
+                                    section:
+                                      question?.section.approvalSectionName,
+                                    answerType:
+                                      question?.answerConfiguration.type,
+                                    roleNames: question?.roleNames,
+                                    questionId: question?.questionId,
+                                    tabFlag: 'Approvals',
+                                    direction: 'left',
+                                    questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                      question?.answers
+                                    )
+                                  })
+                                );
+                              }}
+                            >
+                              <Edit className="edit-icon" />
+                            </span>
+                          </div>
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2}
+                      style={{
+                        display: 'flex',
+                        float: 'left'
+                      }}
+                    >
+                      {renderQuestionHint()}
+                    </Grid>
+                  </div>
+                  <div className="milestone-chip">
+                    {/* {renderTags(question.milestoneNew)} */}
+                  </div>
+>>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
                 </span>
               </Grid>
               {locked ? (

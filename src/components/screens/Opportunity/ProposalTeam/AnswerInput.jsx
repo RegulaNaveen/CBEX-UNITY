@@ -213,7 +213,7 @@ const AnswerInput = props => {
   });
   if (
     typeof currentSFAnswer !== 'undefined' &&
-    _.isEmpty(currentSFAnswer) !== true
+    isEmpty(currentSFAnswer) !== true
   ) {
     checkSFAnswer = currentSFAnswer.value;
   }

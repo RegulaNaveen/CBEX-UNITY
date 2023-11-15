@@ -191,8 +191,12 @@ switch (environment) {
     COGNITO_HOST = 'https://dev-unity.auth.us-east-1.amazoncognito.com';
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
+<<<<<<< HEAD
     //REDIRECTION_URL = 'http://localhost:8080';
 
+=======
+    // REDIRECTION_URL = 'http://localhost:8080';
+>>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
@@ -287,6 +291,7 @@ const PROPOSAL = {
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
 const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
+const EMAILTEMPLATES_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals/emailTemplates`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
@@ -300,10 +305,17 @@ const NOTIFICATION = {
   NOTIFICATION_API_URL
 };
 
+const EMAILTEMPLATES = {
+  EMAILTEMPLATES_API_URL
+};
+
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
 const CUSTOM_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/custom-question`;
 const CUSTOM_QUESTIONS_DELETE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/delete-custom-question`;
+<<<<<<< HEAD
 const ANALYTICS_URL = `${ANALYTICS_API_URL}/track`;
+=======
+>>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
 
 export {
   AUTH,
@@ -318,7 +330,13 @@ export {
   NOTES_SOCKET_URL,
   LAUNCH_DARKLY_CLIENT_ID,
   APPROVALS_URL,
+<<<<<<< HEAD
   CUSTOM_QUESTIONS_API_URL,
   CUSTOM_QUESTIONS_DELETE_API_URL,
   ANALYTICS_URL
+=======
+  EMAILTEMPLATES,
+  CUSTOM_QUESTIONS_API_URL,
+  CUSTOM_QUESTIONS_DELETE_API_URL
+>>>>>>> 090836b256d93e6ec116772938cee6e9062a3cf2
 };
