@@ -28,7 +28,7 @@ describe('CheckBoxQuestion', () => {
     questionLockWrapper: jest.fn(),
     questionUnlockWrapper: jest.fn(),
   };
-  const trackMatomoEventSubmitAnswer = jest.fn();
+  const trackEventSubmitAnswer = jest.fn();
   const checkDisableFlag = jest.fn().mockReturnValue(false);
 
   const mockStore = configureStore([]);
@@ -46,7 +46,7 @@ describe('CheckBoxQuestion', () => {
           lastAnswer={lastAnswer}
           userData={userData}
           socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
+          trackEventSubmitAnswer={trackEventSubmitAnswer}
           checkDisableFlag={checkDisableFlag}
         />
       </Provider>
@@ -63,7 +63,7 @@ describe('CheckBoxQuestion', () => {
           disabled={true}
           userData={userData}
           socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
+          trackEventSubmitAnswer={trackEventSubmitAnswer}
           checkDisableFlag={checkDisableFlag}
         />
       </Provider>
@@ -79,7 +79,7 @@ describe('CheckBoxQuestion', () => {
           lastAnswer={lastAnswer}
           userData={userData}
           socketContext={socketContext}
-          trackMatomoEventSubmitAnswer={trackMatomoEventSubmitAnswer}
+          trackEventSubmitAnswer={trackEventSubmitAnswer}
           checkDisableFlag={checkDisableFlag}
         />
       </Provider>
@@ -93,7 +93,7 @@ describe('CheckBoxQuestion', () => {
     expect(socketContext.questionUnlockWrapper).toHaveBeenCalledWith(
       'question123'
     );
-    expect(trackMatomoEventSubmitAnswer).toHaveBeenCalledWith([
+    expect(trackEventSubmitAnswer).toHaveBeenCalledWith([
       'option1',
       'option2',
     ]);

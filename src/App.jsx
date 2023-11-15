@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { MatomoProvider } from '@datapunt/matomo-tracker-react';
 import Modal from 'apollo-react/components/Modal';
 import TextField from 'apollo-react/components/TextField';
 import Typography from 'apollo-react/components/Typography';
@@ -27,7 +26,7 @@ import UbuildShellComponent from './components/screens/Ubuild';
 import ProfileComponent from './components/screens/Profile/AccountPreferences';
 import RecentActivityComponent from './components/screens/Profile/RecentActivity';
 import '../styles/App.scss';
-import matomoInstace from './utils/Matomo';
+//import matomoInstace from './utils/Matomo';
 import SocketContextProvider, { SocketContext } from './context/SocketContext';
 import ErrorBoundaryComponent from './components/HOC/ErrorBoundary';
 import ReduxSnackbar from './components/common/ReduxSnackbar/ReduxSnackbar';
@@ -154,7 +153,6 @@ const Home = () => {
 const App = () => (
   <Provider store={store}>
     <SocketContextProvider>
-      <MatomoProvider value={matomoInstace}>
         <ErrorBoundaryComponent>
           <ReduxSnackbar />
           <BrowserRouter>
@@ -173,7 +171,6 @@ const App = () => (
             </SessionHandler>
           </BrowserRouter>
         </ErrorBoundaryComponent>
-      </MatomoProvider>
     </SocketContextProvider>
   </Provider>
 );

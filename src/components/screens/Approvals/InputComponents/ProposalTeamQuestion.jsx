@@ -14,7 +14,7 @@ const ProposalTeamQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag
 }) => {
   try {
@@ -52,7 +52,7 @@ const ProposalTeamQuestion = ({
             );
           }
         });
-        trackMatomoEventSubmitAnswer(textValue);
+        trackEventSubmitAnswer(textValue);
       } catch (error) {
         console.error(error);
         questionUnlockWrapper(question?.questionId);
@@ -91,7 +91,7 @@ ProposalTeamQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default ProposalTeamQuestion;

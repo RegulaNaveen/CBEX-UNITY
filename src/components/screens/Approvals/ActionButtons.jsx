@@ -24,7 +24,7 @@ import {
 import { getProposalDetails } from '../../../redux/selectors';
 import { APPROVALS, DEFAULT } from '../../../constants/app';
 import CustomModal from '../../common/CustomModal';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import { cloneDeep } from 'lodash';
 import { SocketContext } from '../../../context/SocketContext';
 import { getUserEmail } from '../../../SessionHandler';
@@ -181,7 +181,7 @@ const ActionButtons = ({
     });
   };
 
-  const trackMatomoEventSubmitAnswer = (action, aprovaldata) => {
+  const trackEventSubmitAnswer = (action, aprovaldata) => {
     if (action === 'Duplicate') {
       duplicateEventMatomo(action, aprovaldata);
     }
@@ -203,7 +203,7 @@ const ActionButtons = ({
       approvalFilters,
       flags
     );
-    trackMatomoEventSubmitAnswer('Email', approval);
+    trackEventSubmitAnswer('Email', approval);
     try {
       const blob = new Blob([emailInfo.body], { type: 'text/html' });
       const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
@@ -228,7 +228,7 @@ const ActionButtons = ({
     (async () => {
       const response = await dispatch(deleteApproval(proposalId, sectionId));
       if (response) {
-        trackMatomoEventSubmitAnswer('Delete', approval);
+        trackEventSubmitAnswer('Delete', approval);
       }
       approvalSectionDeletingWrapper({
         sectionId,
@@ -319,7 +319,7 @@ const ActionButtons = ({
                     duplicating: false
                   });
                   dispatchLoadingEvent('SET_LOADING', false);
-                  trackMatomoEventSubmitAnswer('Duplicate', approval);
+                  trackEventSubmitAnswer('Duplicate', approval);
                   if (!response.status) {
                     setWarningTitle(response.title);
                     setWarningText(response.message);
@@ -383,4 +383,4 @@ ActionButtons.propTypes = {
   selectedBidIsCurrent: PropTypes.bool.isRequired
 };
 
-export default MatomoHOC(ActionButtons);
+export default AnalyticsHOC(ActionButtons);

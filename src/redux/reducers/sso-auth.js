@@ -11,7 +11,9 @@ const {
   ON_USER_LOGOUT,
   ERROR_ON_USER_LOGIN,
   ON_CHANGE_ROLE,
+  ON_USER_ACKNOWLEDGE,
   ERROR_ON_CHANGE_ROLE,
+  ERROR_ON_USER_ACKNOWLEDGE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
@@ -27,11 +29,13 @@ const INITIAL_STATE: Map = fromJS({
   name: '',
   role: '',
   errorOnSetNewRole: undefined,
+  errorOnSetUserAcknowledge: undefined,
   lookupUsers: [],
   lookupUsersError: undefined,
   favourites: [],
   customNameMap: {},
-  favouritesUpdatedDate: []
+  favouritesUpdatedDate: [],
+  acknowledged: undefined
 });
 
 const loginUser = (state: Map, action: Object) => {
@@ -47,6 +51,7 @@ const loginUser = (state: Map, action: Object) => {
   );
   const decoded = jwt_decode(idToken);
   const role = decoded['custom:role'];
+  const acknowledged = decoded['custom:acknowledgement'];
 
   localStorage.setItem('access_token', accessToken);
   localStorage.setItem('refresh_token', refreshToken);
@@ -55,12 +60,14 @@ const loginUser = (state: Map, action: Object) => {
   localStorage.setItem('userEmail', email);
   localStorage.setItem('userName', `${name} ${lName}`);
   localStorage.setItem('userId', preferred_username);
+  localStorage.setItem('userAcknowledged', acknowledged);
 
   return state
     .set('isAuthenticated', true)
     .set('email', email)
     .set('name', `${name} ${lName}`)
-    .set('role', role);
+    .set('role', role)
+    .set('acknowledged', acknowledged);
 };
 
 const logoutUser = (state: Map) => {
@@ -93,9 +100,22 @@ const setNewUserRole = (state: Map, action: Object) => {
   return state.set('role', role);
 };
 
+const setUserAcknowledge = (state: Map, action: Object) => {
+  const { acknowledgement } = action.payload;
+
+  localStorage.setItem('userAcknowledged', acknowledgement);
+
+  return state.set('acknowledged', acknowledgement);
+};
+
 const errorOnSetNewUserRole = (state: Map, action: Object) => {
   const { error } = action.payload;
   return state.set('errorOnSetNewRole', error);
+};
+
+const errorOnSetUserAcknowledge = (state: Map, action: Object) => {
+  const { error } = action.payload;
+  return state.set('errorOnSetUserAcknowledge', error);
 };
 
 const onGetLookupUsers = (state: Map, action: Object): Map => {
@@ -124,9 +144,11 @@ const actionMap = {
   [ON_USER_LOGIN]: loginUser,
   [ON_USER_LOGOUT]: logoutUser,
   [ON_CHANGE_ROLE]: setNewUserRole,
+  [ON_USER_ACKNOWLEDGE]: setUserAcknowledge,
   [ON_REFRESH_USER_DATA]: onRefreshUserData,
   [ERROR_ON_USER_LOGIN]: errorOnUserLogin,
   [ERROR_ON_CHANGE_ROLE]: errorOnSetNewUserRole,
+  [ERROR_ON_USER_ACKNOWLEDGE]: errorOnSetUserAcknowledge,
   [ON_GET_LOOKUP_USERS]: onGetLookupUsers,
   [ERROR_ON_GET_LOOKUP_USERS]: onErrorGetLookupUsers,
   [SET_USER_FAVOURITES]: setUserFavourites,

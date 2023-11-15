@@ -7,7 +7,7 @@ import Bell from 'apollo-react-icons/Bell';
 import Cog from 'apollo-react-icons/Cog';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Typography from 'apollo-react/components/Typography';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import { getUnreadNotifications } from '../../../redux/selectors';
 import * as notificationActions from '../../../redux/actions/notification-actions';
 import ListItem from './ListItem';
@@ -145,4 +145,4 @@ const mapStateToProps = (state: Map) => ({
 const mapDispatchToProps = {
   setNotifications: notificationActions.setNotification
 };
-export default connect(mapStateToProps, mapDispatchToProps)(MatomoHOC(Drawer));
+export default connect(mapStateToProps, mapDispatchToProps)(AnalyticsHOC(Drawer));

@@ -23,7 +23,7 @@ describe('NumberQuestion', () => {
     questionUnlockWrapper: jest.fn()
   };
 
-  const mockTrackMatomoEventSubmitAnswer = jest.fn();
+  const mockTrackEventSubmitAnswer = jest.fn();
 
   const mockCheckDisableFlag = jest.fn(() => false);
   const mockStore = configureStore([]);
@@ -40,7 +40,7 @@ describe('NumberQuestion', () => {
           lastAnswer={mockLastAnswer}
           userData={mockUserData}
           socketContext={mockSocketContext}
-          trackMatomoEventSubmitAnswer={mockTrackMatomoEventSubmitAnswer}
+          trackEventSubmitAnswer={mockTrackEventSubmitAnswer}
           checkDisableFlag={mockCheckDisableFlag}
         />
       </Provider>

@@ -11,7 +11,7 @@ const DateQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag,
   toggleWatch,
   onCascadeChange,
@@ -34,7 +34,7 @@ const DateQuestion = ({
         )
       );
       questionUnlockWrapper(question?.questionId);
-      trackMatomoEventSubmitAnswer(' ');
+      trackEventSubmitAnswer(' ');
     } catch (error) {
       console.error(error);
       questionUnlockWrapper(question?.questionId);
@@ -61,7 +61,7 @@ const DateQuestion = ({
           )
         );
         questionUnlockWrapper(question?.questionId);
-        trackMatomoEventSubmitAnswer(selectedDay);
+        trackEventSubmitAnswer(selectedDay);
       }
     } catch (error) {
       console.error(error);
@@ -106,7 +106,7 @@ DateQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  trackEventSubmitAnswer: PropTypes.func.isRequired,
   toggleWatch: PropTypes.func,
   onCascadeChange: PropTypes.func,
   forceBlur: PropTypes.bool
