@@ -15,7 +15,7 @@ const CheckBoxQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag,
   toggleWatch,
   onCascadeChange,
@@ -55,7 +55,7 @@ const CheckBoxQuestion = ({
           )
         );
         questionUnlockWrapper(question?.questionId);
-        trackMatomoEventSubmitAnswer(textValue);
+        trackEventSubmitAnswer(textValue);
       } catch (error) {
         console.error(error);
         questionUnlockWrapper(question?.questionId);
@@ -101,7 +101,7 @@ CheckBoxQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired,
+  trackEventSubmitAnswer: PropTypes.func.isRequired,
   toggleWatch: PropTypes.func,
   onCascadeChange: PropTypes.func,
   forceBlur: PropTypes.boo

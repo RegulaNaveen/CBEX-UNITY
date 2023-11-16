@@ -13,7 +13,7 @@ import { EditorState } from 'apollo-react/node_modules/draft-js';
 import isEmpty from 'lodash/isEmpty';
 import QuestionLabel from './QuestionLabel';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid
@@ -35,7 +35,8 @@ const StatementItem = ({
   eventCategories,
   trackEvent,
   updateQuestionVisibility,
-  highlightQuestionId
+  highlightQuestionId,
+  questionJSON
 }) => {
   const question = isQuesFreezed
     ? archivedQuestion
@@ -43,12 +44,36 @@ const StatementItem = ({
   const activeQuestionInfo = useSelector(getQuestion(questionId));
   const approvalFilters = useSelector(state => state.approvals.filters);
   const flags = useSelector(state => state.proposal.get('eventflag'));
+
+  const questionTextRef1 = useRef();
+
   const isShowQuestion = shouldShowQuestion(question, approvalFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
+  const [screenWidth, setScreenWidth] = useState('');
+
+  const resize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); 
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
@@ -152,7 +177,6 @@ const StatementItem = ({
     }
     return null;
   };
-
   const questionRender = useMemo(
     () =>
       isShowQuestion ? (
@@ -178,9 +202,18 @@ const StatementItem = ({
                       paddingTop: '4px'
                     }}
                   >
-                    <QuestionLabel
-                      questionLabel={question?.questionText || ''}
-                    />
+                    {questionJSON ? (
+                      <RichTextEditor
+                        style={{ minHeight: '0px' }}
+                        variant="view"
+                        defaultValue={JSON.parse(questionJSON)}
+                        ref={questionTextRef1}
+                      />
+                    ) : (
+                      <Typography className="ques-title">
+                        {question?.questionText}
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid
                     item
@@ -241,4 +274,4 @@ StatementItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(StatementItem);
+export default AnalyticsHOC(StatementItem);

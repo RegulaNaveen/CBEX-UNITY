@@ -64,7 +64,7 @@ const history = {
   }
 };
 const onClick = jest.fn();
-const trackMatomoLinkClicks = jest.fn();
+const trackLinkClicks = jest.fn();
 const handleLogout = jest.fn();
 const initState = {
   rolesList,
@@ -78,7 +78,7 @@ const initState = {
   userActions,
   trackEvent,
   handleLogout,
-  trackMatomoLinkClicks,
+  trackLinkClicks,
   onclick
 };
 const middlewares = [thunk];

@@ -17,7 +17,7 @@ import Spinner from 'react-loader-spinner';
 import Typography from 'apollo-react/components/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import {useAnalytics} from "../../../../hooks" ;
 import { useWindowSize } from '../../../../hooks';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
@@ -189,7 +189,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const vTabUserPreference = useSelector(selectVTabUserPreference);
   const customTabs = useSelector(state => state.unitytab.allTabs);
   const dispatch = useDispatch();
-  const { trackEvent } = useMatomo();
+  const { trackEvent } = useAnalytics();
   const [panelRef, setPanelRef] = useState(null);
   const [windowWidth, windowHeight] = useWindowSize();
   const [newTab, setNewTab] = useState([]);

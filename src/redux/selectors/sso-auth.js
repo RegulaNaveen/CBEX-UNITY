@@ -11,6 +11,8 @@ export const getUserEmail = (auth: Map): string => auth.get('email');
 
 export const getUserRole = (auth: Map): string => auth.get('role');
 
+export const getUseracknowledged = (auth: Map): boolean => auth.get('acknowledged');
+
 export const getUserData = (auth: Map): Map => {
   const role = auth.get('role');
   const email = auth.get('email');

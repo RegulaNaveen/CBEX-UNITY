@@ -360,122 +360,131 @@ const EmailTemplates = () => {
   };
 
   const handleSendEmailClick = async row => {
-    let EmailTemplateTORolesAnswer = [];
-    let EmailTemplateCCRoleAnswer = [];
-    let tempQuestion = [];
-    let ProposalTeamQuestion = allSections.filter(
-      item => item.get('sectionName') === 'Proposal Team'
-    );
-    ProposalTeamQuestion = ProposalTeamQuestion.getIn([
-      'Proposal Team',
-      'questions'
-    ]);
-    ProposalTeamQuestion = ProposalTeamQuestion?.toJS() || {};
-    for (const key in ProposalTeamQuestion) {
-      tempQuestion.push(ProposalTeamQuestion[key]);
-    }
-    const { RecipientRuleToAnswer, RecipientRuleCCAnswer } =
-      processRecipientRule(row?.EmailTemplateRecipientRule, proposalQuestions);
+    try {
+      let EmailTemplateTORolesAnswer = [];
+      let EmailTemplateCCRoleAnswer = [];
+      let tempQuestion = [];
+      let ProposalTeamQuestion = allSections.filter(
+        item => item.get('sectionName') === 'Proposal Team'
+      );
+      ProposalTeamQuestion = ProposalTeamQuestion.getIn([
+        'Proposal Team',
+        'questions'
+      ]);
+      ProposalTeamQuestion = ProposalTeamQuestion?.toJS() || {};
+      for (const key in ProposalTeamQuestion) {
+        tempQuestion.push(ProposalTeamQuestion[key]);
+      }
+      const {
+        RecipientRuleToAnswer,
+        RecipientRuleCCAnswer
+      } = processRecipientRule(
+        row?.EmailTemplateRecipientRule,
+        proposalQuestions
+      );
 
-    if (RecipientRuleToAnswer && RecipientRuleToAnswer.length) {
-      RecipientRuleToAnswer.forEach(value => {
-        if (value && value.Type === 'Email') {
-          EmailTemplateTORolesAnswer.push(value.Value);
-        }
-        if (value.Type === 'Role') {
-          const roleResult = processRole(value, tempQuestion);
-          EmailTemplateTORolesAnswer.push(...roleResult);
-        }
-        if (value.Type === 'EmailGroup') {
-          const groupResult = processGroup(value, tempQuestion);
-          EmailTemplateTORolesAnswer.push(...groupResult);
-        }
-      });
-    }
-    if (RecipientRuleCCAnswer && RecipientRuleCCAnswer.length) {
-      RecipientRuleCCAnswer.forEach(value => {
-        if (value && value.Type === 'Email') {
-          EmailTemplateCCRoleAnswer.push(value.Value);
-        }
-        if (value.Type === 'Role') {
-          const roleResult = processRole(value, tempQuestion);
-          EmailTemplateCCRoleAnswer.push(...roleResult);
-        }
-        if (value.Type === 'EmailGroup') {
-          const groupResult = processGroup(value, tempQuestion);
-          EmailTemplateCCRoleAnswer.push(...groupResult);
-        }
-      });
-    }
+      if (RecipientRuleToAnswer && RecipientRuleToAnswer.length) {
+        RecipientRuleToAnswer.forEach(value => {
+          if (value && value.Type === 'Email') {
+            EmailTemplateTORolesAnswer.push(value.Value);
+          }
+          if (value.Type === 'Role') {
+            const roleResult = processRole(value, tempQuestion);
+            EmailTemplateTORolesAnswer.push(...roleResult);
+          }
+          if (value.Type === 'EmailGroup') {
+            const groupResult = processGroup(value, tempQuestion);
+            EmailTemplateTORolesAnswer.push(...groupResult);
+          }
+        });
+      }
+      if (RecipientRuleCCAnswer && RecipientRuleCCAnswer.length) {
+        RecipientRuleCCAnswer.forEach(value => {
+          if (value && value.Type === 'Email') {
+            EmailTemplateCCRoleAnswer.push(value.Value);
+          }
+          if (value.Type === 'Role') {
+            const roleResult = processRole(value, tempQuestion);
+            EmailTemplateCCRoleAnswer.push(...roleResult);
+          }
+          if (value.Type === 'EmailGroup') {
+            const groupResult = processGroup(value, tempQuestion);
+            EmailTemplateCCRoleAnswer.push(...groupResult);
+          }
+        });
+      }
 
-    if (row?.EmailTemplateTO && row?.EmailTemplateTO?.length) {
-      row.EmailTemplateTO.forEach(value => {
-        if (value && value.Type === 'Email') {
-          EmailTemplateTORolesAnswer.push(value.Value);
-        }
-        if (value.Type === 'Role') {
-          const roleResult = processRole(value, tempQuestion);
-          EmailTemplateTORolesAnswer.push(...roleResult);
-        }
-        if (value.Type === 'EmailGroup') {
-          const groupResult = processGroup(value, tempQuestion);
-          EmailTemplateTORolesAnswer.push(...groupResult);
-        }
-      });
-    }
-    if (row?.EmailTemplateCC && row?.EmailTemplateCC?.length) {
-      row.EmailTemplateCC.forEach(value => {
-        if (value && value.Type === 'Email') {
-          EmailTemplateCCRoleAnswer.push(value.Value);
-        }
-        if (value.Type === 'Role') {
-          const result = processRole(value, tempQuestion);
-          EmailTemplateCCRoleAnswer.push(...result);
-        }
-        if (value.Type === 'EmailGroup') {
-          const groupResult = processGroup(value, tempQuestion);
-          EmailTemplateCCRoleAnswer.push(...groupResult);
-        }
-      });
-    }
-    EmailTemplateTORolesAnswer = [...new Set(EmailTemplateTORolesAnswer)];
-    EmailTemplateCCRoleAnswer = [...new Set(EmailTemplateCCRoleAnswer)];
+      if (row?.EmailTemplateTO && row?.EmailTemplateTO?.length) {
+        row.EmailTemplateTO.forEach(value => {
+          if (value && value.Type === 'Email') {
+            EmailTemplateTORolesAnswer.push(value.Value);
+          }
+          if (value.Type === 'Role') {
+            const roleResult = processRole(value, tempQuestion);
+            EmailTemplateTORolesAnswer.push(...roleResult);
+          }
+          if (value.Type === 'EmailGroup') {
+            const groupResult = processGroup(value, tempQuestion);
+            EmailTemplateTORolesAnswer.push(...groupResult);
+          }
+        });
+      }
+      if (row?.EmailTemplateCC && row?.EmailTemplateCC?.length) {
+        row.EmailTemplateCC.forEach(value => {
+          if (value && value.Type === 'Email') {
+            EmailTemplateCCRoleAnswer.push(value.Value);
+          }
+          if (value.Type === 'Role') {
+            const result = processRole(value, tempQuestion);
+            EmailTemplateCCRoleAnswer.push(...result);
+          }
+          if (value.Type === 'EmailGroup') {
+            const groupResult = processGroup(value, tempQuestion);
+            EmailTemplateCCRoleAnswer.push(...groupResult);
+          }
+        });
+      }
+      EmailTemplateTORolesAnswer = [...new Set(EmailTemplateTORolesAnswer)];
+      EmailTemplateCCRoleAnswer = [...new Set(EmailTemplateCCRoleAnswer)];
 
-    const placeholderData = {
-      proposalDetail,
-      proposalUsers:
-        isMap(opportunityData) &&
-        opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
-      proposalQuestions
-    };
-    const subject = row?.EmailTemplateSubject || '';
-    const updatedSubject = updateEventSubjectBody(
-      subject,
-      placeholderData,
-      'subject'
-    );
-    const subjectStr = encodeURIComponent(
-      updatedSubject.replace(new RegExp('\\n', 'g'), ' ')
-    );
-    const updatedBody = updateEventSubjectBody(
-      row.EmailTemplateBody,
-      placeholderData,
-      'body'
-    );
-    if (updatedBody) {
-      const blob = new Blob([updatedBody], { type: 'text/html' });
-      const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
-      await navigator.clipboard.write([clipboardItem]);
-    }
+      const placeholderData = {
+        proposalDetail,
+        proposalUsers:
+          isMap(opportunityData) &&
+          opportunityData?.toJS()[`${proposalId}`]?.proposalUsers,
+        proposalQuestions
+      };
+      const subject = row?.EmailTemplateSubject || '';
+      const updatedSubject = updateEventSubjectBody(
+        subject,
+        placeholderData,
+        'subject'
+      );
+      const subjectStr = encodeURIComponent(
+        updatedSubject.replace(new RegExp('\\n', 'g'), ' ')
+      );
+      const updatedBody = updateEventSubjectBody(
+        row.EmailTemplateBody,
+        placeholderData,
+        'body'
+      );
+      if (updatedBody) {
+        const blob = new Blob([updatedBody], { type: 'text/html' });
+        const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+        await navigator.clipboard.write([clipboardItem]);
+      }
 
-    window.open(
-      generateEmailTemplateEmail(
-        subjectStr,
-        EmailTemplateTORolesAnswer,
-        EmailTemplateCCRoleAnswer,
-        updatedBody
-      )
-    );
+      window.open(
+        generateEmailTemplateEmail(
+          subjectStr,
+          EmailTemplateTORolesAnswer,
+          EmailTemplateCCRoleAnswer,
+          updatedBody
+        )
+      );
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   const getQuestion = questionId => {
@@ -505,32 +514,40 @@ const EmailTemplates = () => {
               );
             }
           case ANSWER_TYPES.DATE:
-            return (
-              <div className="recipient-answers">
-                <p>{getQuestion(item.QuestionId)}</p>
-                <ul>
-                  <li>{item.RecipientRuleAnswer}</li>
-                </ul>
-              </div>
-            );
+            if (!getQuestion(item.QuestionId)) {
+              return;
+            } else {
+              return (
+                <div className="recipient-answers">
+                  <p>{getQuestion(item.QuestionId)}</p>
+                  <ul>
+                    <li>{item.RecipientRuleAnswer}</li>
+                  </ul>
+                </div>
+              );
+            }
           case ANSWER_TYPES.CHECKBOX:
           case ANSWER_TYPES.SELECT:
           case ANSWER_TYPES.SELECT_LOOKUP:
           case ANSWER_TYPES.RADIO:
           case ANSWER_TYPES.MULTI_SELECT:
           case ANSWER_TYPES.MULTI_SELECT_LOOKUP:
-            return (
-              <div className="recipient-answers">
-                <p>{getQuestion(item.QuestionId)}</p>
-                <div>
-                  <ul>
-                    {item.RecipientRuleAnswer.map(answer => {
-                      return <li>{answer.Value}</li>;
-                    })}
-                  </ul>
+            if (!getQuestion(item.QuestionId)) {
+              return;
+            } else {
+              return (
+                <div className="recipient-answers">
+                  <p>{getQuestion(item.QuestionId)}</p>
+                  <div>
+                    <ul>
+                      {item.RecipientRuleAnswer.map(answer => {
+                        return <li>{answer.Value}</li>;
+                      })}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            }
           default:
             return;
         }

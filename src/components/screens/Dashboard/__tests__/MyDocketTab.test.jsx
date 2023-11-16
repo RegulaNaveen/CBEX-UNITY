@@ -180,6 +180,8 @@ describe('testing my docket tab', () => {
     );
     const moreButton = screen.getByText('More');
     fireEvent.click(moreButton);
+    const pastButton = screen.getByRole('menuitem', { name: /past \(16\)/i });
+    fireEvent.click(pastButton);
     expect(container).toBeInTheDocument();
   });
 

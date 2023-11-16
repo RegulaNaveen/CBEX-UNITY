@@ -13,7 +13,7 @@ import {
   isProposalLoading
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import UnityFooter from '../../common/Footer';
 import { OPPORTUNITY, DASHBOARD } from '../../../routes';
 
@@ -86,4 +86,4 @@ export default compose(
   connect(mapStateToProps, {
     getProposalInfo: getProposalByID
   })
-)(MatomoHOC(Proposal));
+)(AnalyticsHOC(Proposal));

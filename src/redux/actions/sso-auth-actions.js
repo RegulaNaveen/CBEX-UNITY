@@ -3,6 +3,7 @@ import type { Dispatch, ThunkAction } from './action-types';
 import {
   onLoginRequest,
   onChangeUserRole,
+  onUserAcknowledge,
   getUsers,
   getOppPrefs
 } from '../../api/sso-auth';
@@ -17,7 +18,9 @@ const {
   ON_USER_LOGOUT,
   ERROR_ON_USER_LOGIN,
   ON_CHANGE_ROLE,
+  ON_USER_ACKNOWLEDGE,
   ERROR_ON_CHANGE_ROLE,
+  ERROR_ON_USER_ACKNOWLEDGE,
   ON_REFRESH_USER_DATA,
   ON_GET_LOOKUP_USERS,
   ERROR_ON_GET_LOOKUP_USERS,
@@ -69,6 +72,25 @@ export const onSetUserRole = (role: string): ThunkAction<string, Object> => {
   };
 };
 
+export const onSetUserAcknowledge = (): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    const accessToken = localStorage.getItem('access_token');
+    const idToken = localStorage.getItem('id_token');
+
+    try {
+      if (accessToken && idToken) {
+        const { data } = await onUserAcknowledge(accessToken, idToken);
+        dispatch({
+          type: ON_USER_ACKNOWLEDGE,
+          payload: { acknowledgement: data.acknowledgement }
+        });
+      }
+    } catch (error) {
+      dispatch({ type: ERROR_ON_USER_ACKNOWLEDGE, payload: { error } });
+    }
+  };
+};
+
 export const getAllUsers = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<Object, Object>) => {
     const idToken = localStorage.getItem('id_token') || '';
@@ -109,7 +131,7 @@ export const fetchUserOpportunityPrefs = () => {
             if (pref.favourite_updated_date) {
               userFavouritesUpdatedDateMap.push(
                 {
-                  'opportunity number': pref.opp_number, 
+                  'opportunity number': pref.opp_number,
                   'updated date': pref.favourite_updated_date
                 }
               );
@@ -178,7 +200,7 @@ export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, prop
       if (favourite) {
         favourites.push(oppNumber);
         favouritesUpdatedDate.unshift({
-          'opportunity number': oppNumber, 
+          'opportunity number': oppNumber,
           'updated date': favouriteUpdatedDate
         });
       } else {
@@ -190,8 +212,8 @@ export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, prop
       favourites = favourites.filter((item, index) => favourites.indexOf(item) === index);
       favouritesUpdatedDate = favouritesUpdatedDate.filter((value, index, self) =>
                                 index === self.findIndex((t) => (
-                                  t["opportunity number"] === value["opportunity number"] 
-                                  && t["updated date"] === value["updated date"]
+                                    t["opportunity number"] === value["opportunity number"] 
+                                    && t["updated date"] === value["updated date"]
                                 )));
       dispatch({
         type: SET_USER_FAVOURITES,

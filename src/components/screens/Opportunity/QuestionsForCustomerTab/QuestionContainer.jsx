@@ -134,6 +134,7 @@ const QuestionContainer = ({
           <div className="delete-btn">
             <div>
               <Trash
+                data-testid="delete-question"
                 className="icon-color"
                 style={{
                   cursor: checkDisableFlag() ? 'not-allowed' : 'pointer'

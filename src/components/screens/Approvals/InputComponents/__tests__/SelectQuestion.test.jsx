@@ -29,7 +29,7 @@ describe('SelectQuestion', () => {
       questionLockWrapper: jest.fn(),
       questionUnlockWrapper: jest.fn()
     },
-    trackMatomoEventSubmitAnswer: jest.fn(),
+    trackEventSubmitAnswer: jest.fn(),
     checkDisableFlag: jest.fn(() => false)
   };
 
