@@ -63,7 +63,7 @@ import {
 import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   createMatomoObj,
   getCountriesNameForCode,
@@ -202,7 +202,7 @@ class Questions extends Component {
     // on Edit question
     if (prevProps.editQuestionsData.size === 0 && editQuestionsData.size > 0) {
       this.setState({ showModal: true });
-      this.trackMatomoEventToggleQModal(true);
+      this.trackEventToggleQModal(true);
     }
 
     // bid change check start
@@ -275,7 +275,7 @@ class Questions extends Component {
   handleIsCheckedAll = () => {
     const { allSectionsExpanded, expandAllSections } = this.props;
     expandAllSections(!allSectionsExpanded);
-    this.trackMatomoEventForCheckBoxes('Expand All');
+    this.trackEventForCheckBoxes('Expand All');
   };
 
   handleFilterClick() {
@@ -313,7 +313,7 @@ class Questions extends Component {
     this.setState({ currentsection: value, showModal: true });
   };
 
-  trackMatomoEventForCheckBoxes = item => {
+  trackEventForCheckBoxes = item => {
     const {
       userActions,
       eventCategories,
@@ -333,7 +333,7 @@ class Questions extends Component {
     });
   };
 
-  trackMatomoEvent = ({ action }) => {
+  trackEvent = ({ action }) => {
     const { proposalDetail, trackEvent, eventCategories } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
@@ -347,10 +347,10 @@ class Questions extends Component {
     });
   };
 
-  trackMatomoEventSidebarToggle = action => {
+  trackEventSidebarToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const { userActions } = this.props;
-    this.trackMatomoEvent({
+    this.trackEvent({
       action: `Blade: ${userActions.click} On Blade To ${openOrclose} Sidebar`
     });
   };
@@ -362,10 +362,10 @@ class Questions extends Component {
     this.setTabFromQuestionNotes(0, '', true);
     handleOpenClose(!isOpen);
     if (isOpen) this.setState({ activeTabIndex: 0 });
-    this.trackMatomoEventSidebarToggle(!isOpen);
+    this.trackEventSidebarToggle(!isOpen);
   };
 
-  trackMatomoEventToggleQModal = action => {
+  trackEventToggleQModal = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
       userActions,
@@ -385,7 +385,7 @@ class Questions extends Component {
     });
   };
 
-  trackMatomoEventRefreshInfo = () => {
+  trackEventRefreshInfo = () => {
     const {
       userActions,
       eventCategories,
@@ -408,13 +408,13 @@ class Questions extends Component {
     const { getProposalInfoUpdated, getBidList } = this.props;
     const currentbid = getBidList.filter(v => v.isCurrent === true);
     getProposalInfoUpdated(currentbid[0].bidId);
-    this.trackMatomoEventRefreshInfo();
+    this.trackEventRefreshInfo();
   };
 
   onClose = () => {
     const { showModal } = this.state;
     if (showModal) this.setState({ showModal: false });
-    this.trackMatomoEventToggleQModal(!showModal);
+    this.trackEventToggleQModal(!showModal);
   };
 
   closeAnswerHistoryModal = () => {
@@ -663,7 +663,7 @@ class Questions extends Component {
                     role="presentation"
                     onClick={() => {
                       this.setState({ currentsection: '', showModal: true });
-                      this.trackMatomoEventToggleQModal(true);
+                      this.trackEventToggleQModal(true);
                     }}
                   >
                     <Add className="tasksList-add-icon" />
@@ -727,7 +727,7 @@ class Questions extends Component {
             }}
             AddNewQuestion={() => {
               this.setState({ showModal: true });
-              this.trackMatomoEventToggleQModal(true);
+              this.trackEventToggleQModal(true);
             }}
             RefreshProposal={this.getProposalInfoUpdated}
             // eslint-disable-next-line react/destructuring-assignment
@@ -803,4 +803,4 @@ export default compose(
     fetchUserTagFlagInQuestion,
     getPriceModeler: getPriceModelerData
   })
-)(MatomoHOC(Questions));
+)(AnalyticsHOC(Questions));

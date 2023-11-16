@@ -18,7 +18,7 @@ import {
   getUserRole
 } from '../../../SessionHandler';
 import { Pencil, Globe, ReportIssue } from '../../svg';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 
 type Props = {
   rolesList: Array<string>,
@@ -67,10 +67,10 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     changeUserRole(value);
 
     this.setState({ roleName: value });
-    this.trackMatomoRoleChange(value);
+    this.trackRoleChange(value);
   };
 
-  trackMatomoLinkClicks = (link: string) => {
+  trackLinkClicks = (link: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
@@ -78,7 +78,7 @@ export class ToolbarMenuComponent extends PureComponent<Props, State> {
     });
   };
 
-  trackMatomoRoleChange = (role: string) => {
+  trackRoleChange = (role: string) => {
     const { userActions, eventCategories, trackEvent } = this.props;
     trackEvent({
       category: eventCategories.tb,
@@ -214,5 +214,5 @@ export default withRouter(
     getRolesInfoF: getRolesInfo,
     logoutUser: logout,
     changeUserRole: onSetUserRole
-  })(MatomoHOC(ToolbarMenuComponent))
+  })(AnalyticsHOC(ToolbarMenuComponent))
 );

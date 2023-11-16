@@ -28,7 +28,7 @@ import {
   setProposalAnswerData
 } from '../../../redux/actions/proposal-actions';
 import { SocketContext } from '../../../context/SocketContext';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { getLastAnswer } from '../../screens/Approvals/utils';
 
@@ -1245,4 +1245,4 @@ const MemoizedAnswerHistory = React.memo(AnswerHistory);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MatomoHOC(withIdleStateDetection(MemoizedAnswerHistory)));
+)(AnalyticsHOC(withIdleStateDetection(MemoizedAnswerHistory)));

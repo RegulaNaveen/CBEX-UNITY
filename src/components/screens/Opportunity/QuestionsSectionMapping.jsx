@@ -122,6 +122,7 @@ const QuestionsSectionMapping = ({
     const sectionOrder = section.get('sectionOrder');
 
     const questions = section.get('questions');
+   
     const isVisible = Object.values(sectionData.questions).some(
       val => val.questionApproval === false
     );

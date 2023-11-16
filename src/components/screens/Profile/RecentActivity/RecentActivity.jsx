@@ -18,7 +18,7 @@ import {
   getUnreadNotifications
 } from '../../../../redux/selectors';
 import RecentNoNotification from './RecentNoNotification';
-import MatomoHOC from '../../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../../HOC/AnalyticsHOC';
 import * as notificationActions from '../../../../redux/actions/notification-actions';
 import ListItem from '../../../views/Notification/ListItem';
 
@@ -222,4 +222,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MatomoHOC(RecentActivity));
+)(AnalyticsHOC(RecentActivity));

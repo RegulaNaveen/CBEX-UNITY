@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import deviceParser from 'ua-parser-js';
 import Toolbar from '../views/toolbar';
-import MatomoHOC from './MatomoHOC';
+import AnalyticsHOC from './AnalyticsHOC';
 import { getProposalDetails } from '../../redux/selectors';
 // Fallback UI Component
 function ErrorFallback({ error, resetErrorBoundary }) {
@@ -53,7 +53,7 @@ async function getPublicIP() {
 const ErrorBoundaryComponent = ({ children, eventCategories, trackEvent }) => {
   const date = new Date();
   const proposalDetail = useSelector(state => getProposalDetails(state));
-  const trackMatomoEventErrorHandler = error => {
+  const trackEventErrorHandler = error => {
     getPublicIP()
       .then(ipAddress => {
         trackEvent({
@@ -85,7 +85,7 @@ const ErrorBoundaryComponent = ({ children, eventCategories, trackEvent }) => {
       });
   };
   const errorHandler = error => {
-    trackMatomoEventErrorHandler(error);
+    trackEventErrorHandler(error);
   };
   return (
     <>
@@ -101,4 +101,4 @@ const ErrorBoundaryComponent = ({ children, eventCategories, trackEvent }) => {
     </>
   );
 };
-export default MatomoHOC(ErrorBoundaryComponent);
+export default AnalyticsHOC(ErrorBoundaryComponent);

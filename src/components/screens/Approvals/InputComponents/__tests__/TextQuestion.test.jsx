@@ -15,14 +15,14 @@ describe('TextQuestion', () => {
     questionLockWrapper: jest.fn(),
     questionUnlockWrapper: jest.fn()
   };
-  const trackMatomoEventSubmitAnswer = jest.fn();
+  const trackEventSubmitAnswer = jest.fn();
   const checkDisableFlag = jest.fn().mockReturnValue(false);
   const initState = {
     question,
     lastAnswer,
     userData,
     socketContext,
-    trackMatomoEventSubmitAnswer,
+    trackEventSubmitAnswer,
     checkDisableFlag
   };
   const middlewares = [thunk];
