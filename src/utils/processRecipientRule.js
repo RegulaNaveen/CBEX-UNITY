@@ -155,7 +155,6 @@ const processStatement = (
   recipientRuleAnswer
 ) => {
   try {
-    // console.log(questionAnswer, filter, operator, type, recipientRuleAnswer);
     switch (type) {
       case 'text':
         return processTextOrNumberOrDate(
@@ -429,7 +428,7 @@ const processQuestion = (data, proposalQuestion) => {
     return value.questionId === data.QuestionId;
   });
   if (answer) {
-    const lastAnswer = answer?.answers[answer?.answers.length - 1];
+    const lastAnswer = answer?.answers[answer?.answers?.length - 1] || '';
     const results = processCondition(
       String(lastAnswer?.answer).trim(),
       data.RecipientRuleFilter,
@@ -470,7 +469,7 @@ const processRecipientRule = (
   ) {
     const RecipientRuleGroups = EmailTemplateRecipientRule.RecipientRuleGroups;
     if (RecipientRuleGroups && RecipientRuleGroups.length > 0) {
-      RecipientRuleGroups.forEach(value => {
+      RecipientRuleGroups?.forEach(value => {
         const RecipientRules = value.RecipientRules;
         const mainCondition = value.RecipientRuleGroupOperator;
         const result = processContainer(
@@ -478,14 +477,11 @@ const processRecipientRule = (
           mainCondition,
           proposalQuestions
         );
-        console.log(result, value);
+        const emailTo = value?.RecipientRuleToAnswer || [];
+        const emailCc = value?.RecipientRuleCCAnswer || [];
         if (result) {
-          finalResults.RecipientRuleToAnswer.push(
-            ...value.RecipientRuleToAnswer
-          );
-          finalResults.RecipientRuleCCAnswer.push(
-            ...value.RecipientRuleCCAnswer
-          );
+          finalResults.RecipientRuleToAnswer.push(...emailTo);
+          finalResults.RecipientRuleCCAnswer.push(...emailCc);
         }
       });
     }
