@@ -514,32 +514,40 @@ const EmailTemplates = () => {
               );
             }
           case ANSWER_TYPES.DATE:
-            return (
-              <div className="recipient-answers">
-                <p>{getQuestion(item.QuestionId)}</p>
-                <ul>
-                  <li>{item.RecipientRuleAnswer}</li>
-                </ul>
-              </div>
-            );
+            if (!getQuestion(item.QuestionId)) {
+              return;
+            } else {
+              return (
+                <div className="recipient-answers">
+                  <p>{getQuestion(item.QuestionId)}</p>
+                  <ul>
+                    <li>{item.RecipientRuleAnswer}</li>
+                  </ul>
+                </div>
+              );
+            }
           case ANSWER_TYPES.CHECKBOX:
           case ANSWER_TYPES.SELECT:
           case ANSWER_TYPES.SELECT_LOOKUP:
           case ANSWER_TYPES.RADIO:
           case ANSWER_TYPES.MULTI_SELECT:
           case ANSWER_TYPES.MULTI_SELECT_LOOKUP:
-            return (
-              <div className="recipient-answers">
-                <p>{getQuestion(item.QuestionId)}</p>
-                <div>
-                  <ul>
-                    {item.RecipientRuleAnswer.map(answer => {
-                      return <li>{answer.Value}</li>;
-                    })}
-                  </ul>
+            if (!getQuestion(item.QuestionId)) {
+              return;
+            } else {
+              return (
+                <div className="recipient-answers">
+                  <p>{getQuestion(item.QuestionId)}</p>
+                  <div>
+                    <ul>
+                      {item.RecipientRuleAnswer.map(answer => {
+                        return <li>{answer.Value}</li>;
+                      })}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            }
           default:
             return;
         }
