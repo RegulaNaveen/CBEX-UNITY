@@ -156,6 +156,8 @@ switch (environment) {
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://za42jrafie.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://b4ituaasif.execute-api.us-east-1.amazonaws.com';
     break;
   case 'L4':
     // L4 Data
