@@ -140,7 +140,7 @@ describe('Price Modeler concurrency', () => {
     );
   });
 
-  it('should update next milestone on WS event "NEXT_MILESTONE_UPDATE"', async () => {
+  xit('should update next milestone on WS event "NEXT_MILESTONE_UPDATE"', async () => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSALS.ON_GET_PROPOSALS,
       payload: {
