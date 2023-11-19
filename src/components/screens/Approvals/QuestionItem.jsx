@@ -464,9 +464,9 @@ const QuestionItem = ({
               <Grid item xs={10} className="ques-title-cover">
                 <span
                   ref={questionTextRef}
-                  className="question-label-container"
+                  //className="question-label-container"
                 >
-                  <div className="question-label-inner">
+                  
                     <Grid
                       item
                       xs={10}
@@ -526,10 +526,6 @@ const QuestionItem = ({
                     >
                       {renderQuestionHint()}
                     </Grid>
-                  </div>
-                  <div className="milestone-chip">
-                    {/* {renderTags(question.milestoneNew)} */}
-                  </div>
                 </span>
               </Grid>
               {locked ? (
