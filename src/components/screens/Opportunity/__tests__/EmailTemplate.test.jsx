@@ -26,72 +26,121 @@ const initState = {
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore(initState);
+
 describe('Email Template component', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   test('Email Template render component', async () => {
+    initState.emailTemplates.isLoadingEmailTemplates = false;
+    initState.search.searchResults = [
+      {
+        tab: 0,
+        searchIndex: 'c0244c07-1167-4a72-808c-aa5da980cfd2',
+        inputText: 'Test Tooltip',
+        vTab: 4,
+        startIndex: 0,
+        endIndex: 12,
+        matchIndex: 0,
+        tabName: 'Strategy Development',
+        sectionName: null
+      }
+    ];
+    initState.search.autoNavigatedToCurrentResult = false;
+    initState.search.currentResultIndex = 0;
     const { container, getAllByText } = await render(
       <Provider store={store}>
-        <EmailTemplates {...initState} />
+        <EmailTemplates />
       </Provider>
     );
     expect(container).toBeInTheDocument();
     expect(await getAllByText(/Email Templates/i)?.[0]).toBeInTheDocument();
   });
 
-  test('Email Template on load', async () => {
+  test('should check useEffect with autoNavigatedToCurrentResult is false and searchResults as true', async () => {
     initState.emailTemplates.isLoadingEmailTemplates = false;
+    initState.search.searchResults = [
+      {
+        tab: 0,
+        searchIndex: 'c0244c07-1167-4a72-808c-aa5da980cfd2',
+        inputText: 'Test Tooltip',
+        vTab: 4,
+        startIndex: 0,
+        endIndex: 12,
+        matchIndex: 0,
+        tabName: 'Strategy Development',
+        sectionName: null
+      }
+    ];
+    initState.search.autoNavigatedToCurrentResult = false;
+    initState.search.currentResultIndex = 0;
     const { container } = render(
       <Provider store={store}>
-        <EmailTemplates {...initState} />
+        <EmailTemplates />
       </Provider>
     );
     expect(container).toBeInTheDocument();
   });
 
-  test.skip('Email Template click on Email Button', async () => {
-    initState.emailTemplates.isLoadingEmailTemplates = true;
-    window.ClipboardItem = jest.fn();
-    Object.assign(navigator, {
-      clipboard: {
-        write: () => {}
-      }
-    });
-    jest.spyOn(navigator.clipboard, 'write');
-    const { container, getByText, getByTestId } = await render(
+  test('Email Template on load', async () => {
+    const { container } = render(
       <Provider store={store}>
-        <EmailTemplates {...initState} />
+        <EmailTemplates />
       </Provider>
     );
     expect(container).toBeInTheDocument();
-    const btn = await getByText(/concurrency/i);
-    expect(btn).toBeInTheDocument();
-    if (btn) {
-      fireEvent.click(getByTestId('expand-cell'));
-      fireEvent.click(btn);
-    }
-    const paramtr = await getByText(/Parameters/i);
-    expect(paramtr).toBeInTheDocument();
-    expect(await getByText(/sushil.munda@iqvia.com/i)).toBeInTheDocument();
-    expect(await getByText(/Connected Devices/i)).toBeInTheDocument();
-    const email = await getByTestId('email-btn');
-    if (email) {
-      fireEvent.click(email);
-    }
-    const tooltip = await getByTestId('tooltip-btn');
-    if (tooltip) {
-      fireEvent.click(tooltip);
-    }
+    const expandButton = screen.getAllByTestId('expand-cell');
+    fireEvent.click(expandButton[0]);
+
+    const emailButton = screen.getAllByTestId('email-btn');
+    fireEvent.click(emailButton[0]);
   });
-  test('Email Template empty', async () => {
+
+  test('Email Template on load else condition', async () => {
+    initState.emailTemplates.isLoadingEmailTemplates = false;
+    initState.search.searchResults = [];
+    initState.search.autoNavigatedToCurrentResult = true;
+    initState.search.currentResultIndex = -1;
+    const { container } = render(
+      <Provider store={store}>
+        <EmailTemplates />
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
+    const expandButton = screen.getAllByTestId('expand-cell');
+    fireEvent.click(expandButton[0]);
+    const emailButton = screen.getAllByTestId('email-btn');
+    fireEvent.click(emailButton[0]);
+  });
+
+  test('should check isLoadingEmailTemplates false condition', async () => {
     initState.emailTemplates.isLoadingEmailTemplates = false;
     initState.emailTemplates.emailTemplatesList = [];
     const { container, getByText } = await render(
       <Provider store={store}>
-        <EmailTemplates {...initState} />
+        <EmailTemplates />
       </Provider>
     );
     expect(container).toBeInTheDocument();
     expect(
       getByText(/No Email Templates available for this Opportunity Type/i)
     ).toBeInTheDocument();
+  });
+
+  test('should check isLoadingEmailTemplates true condition', async () => {
+    initState.emailTemplates.isLoadingEmailTemplates = true;
+    initState.emailTemplates.emailTemplatesList = [];
+    const { container, getByText } = await render(
+      <Provider store={store}>
+        <EmailTemplates />
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
   });
 });
