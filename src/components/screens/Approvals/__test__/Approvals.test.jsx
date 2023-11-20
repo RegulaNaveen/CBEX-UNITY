@@ -25,13 +25,72 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const lookUpOptions = Map(sfOptions);
 const proposal = Map(lookUpOptions);
-const initialState = { proposal };
+const socketContext = {
+  questionLockWrapper: jest.fn(),
+  questionUnlockWrapper: jest.fn()
+};
+const initialState = { proposal ,socketContext};
 const store = mockStore(initialState);
 const mockDispatch = store.dispatch;
 store.dispatch = jest.fn(mockDispatch);
 
 describe('Snapshot Test Approval Input Components', () => {
   beforeEach(() => {});
+  it('renders DateQuestion without crashing', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'date'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
+    const wrapper = shallow(
+      <Provider store={store}>
+        <DateQuestion {...props} />
+      </Provider>
+    );
+    expect(wrapper.exists()).toBe(true);
+  });
+
+
+  it('renders RadioQuestion without crashing', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'radio'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
+    const wrapper = shallow(
+      <Provider store={store}>
+        <RadioQuestion {...props} />
+      </Provider>
+    );
+    expect(wrapper.exists()).toBe(true);
+  });
+  it('renders SelectQuestion without crashing', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'select-lookup'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer, checkDisableFlag: jest.fn() };
+    const wrapper = shallow(
+      <Provider store={store}>
+        <SelectQuestion {...props} />
+      </Provider>
+    );
+    expect(wrapper.exists()).toBe(true);
+  });
+  it('renders MultiSelectQuestion without crashing', () => {
+    const question = dummyQuestions.find(
+      item => item.answerConfiguration.type === 'picklist-lookup'
+    );
+    const lastAnswer = getLastAnswer(question);
+    const props = { question, lastAnswer };
+    const wrapper = shallow(
+      <Provider store={store}>
+        <MultiSelectQuestion {...props} />
+      </Provider>
+    );
+    expect(wrapper.exists()).toBe(true);
+  });
+
   test('Test DateQuestion', () => {
     const question = dummyQuestions.find(
       item => item.answerConfiguration.type === 'date'
