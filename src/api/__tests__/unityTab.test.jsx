@@ -26,5 +26,4 @@ describe('unity api functions', () => {
       'Unauthorized access'
     ]);
   });
-  
 });
