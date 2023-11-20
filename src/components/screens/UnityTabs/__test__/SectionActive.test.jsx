@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import SectionActive from '../SectionActive';
 import thunk from 'redux-thunk';
+import { BrowserRouter, Router } from 'react-router-dom';
+import { cleanup, render, screen } from '@testing-library/react';
 
 describe('SectionActive component', () => {
   const props = {
