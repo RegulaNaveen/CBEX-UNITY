@@ -44,6 +44,8 @@ switch (environment) {
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://1qq7rwcx08.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://t1vwbpgywc.execute-api.us-east-1.amazonaws.com';
     break;
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
