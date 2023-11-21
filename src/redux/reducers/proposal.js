@@ -1563,7 +1563,21 @@ const updateDashboardDetail = (state, action) => {
       currentProposal === data?.data?.proposalId
     ) {
       proposalDetail.Customer = data?.data?.proposalDetails.Customer;
-      return state.set('proposalDetails', { ...proposalDetail });
+      if (data?.data?.proposalDetails['Bid due date']) {
+        proposalDetail['Bid due date'] =
+          data.data.proposalDetails['Bid due date'];
+      }
+      return state
+        .set('proposalDetails', { ...proposalDetail })
+        .setIn(
+          [
+            'opportunityData',
+            data.data.proposalId,
+            'proposal',
+            'proposalDetails'
+          ],
+          proposalDetail
+        );
     }
 
     return state;
