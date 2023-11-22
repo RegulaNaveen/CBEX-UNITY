@@ -24,4 +24,13 @@ describe('SectionActive component', () => {
     );
     expect(wrapper.exists()).toBe(true);
   });
+  it('check filter on when isShowFilter is true ', async () => {
+    const wrapper = shallow(
+      <Provider store={store}>
+        <SectionActive isCurrent={true} />
+      </Provider>
+    );
+    expect(wrapper).toBeDefined();
+    await expect(screen.findByText(/ Add New Question/i)).toBeTruthy();
+  });
 });
