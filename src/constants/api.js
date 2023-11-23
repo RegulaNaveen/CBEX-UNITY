@@ -33,7 +33,7 @@ switch (environment) {
       'https://umbpe2tva5.execute-api.us-east-1.amazonaws.com/uat';
     PROPOSAL_API_KEY = 'e4e3BACQBxaTdmYdIGKG58BDF7RHXoloCGNlqcIe';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://9l688o9r93.execute-api.us-east-1.amazonaws.com/uat';
+      'https://q4gnro2y0a.execute-api.us-east-1.amazonaws.com/uat';
     COGNITO_HOST = 'https://uat-unity.auth.us-east-1.amazoncognito.com';
     // AUTH_KEY = '';
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';

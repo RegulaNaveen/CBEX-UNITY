@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import SectionActive from '../SectionActive';
 import thunk from 'redux-thunk';
+import { BrowserRouter, Router } from 'react-router-dom';
+import { cleanup, render, screen } from '@testing-library/react';
 
 describe('SectionActive component', () => {
   const props = {
@@ -21,5 +23,14 @@ describe('SectionActive component', () => {
       </Provider>
     );
     expect(wrapper.exists()).toBe(true);
+  });
+  it('check filter on when isShowFilter is true ', async () => {
+    const wrapper = shallow(
+      <Provider store={store}>
+        <SectionActive isCurrent={true} />
+      </Provider>
+    );
+    expect(wrapper).toBeDefined();
+    await expect(screen.findByText(/ Add New Question/i)).toBeTruthy();
   });
 });
