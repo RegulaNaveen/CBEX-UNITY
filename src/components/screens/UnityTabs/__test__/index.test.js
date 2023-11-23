@@ -35,4 +35,16 @@ describe('Unity Section Component', () => {
     expect(iconButton).toBeInTheDocument();
     fireEvent.click(iconButton);
   });
+
+  it('check filter on when isShowFilter is true ', async () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <UnityTabIndex isShowFilters={true} />
+        </Provider>
+      </BrowserRouter>
+    );
+    expect(container).toBeInTheDocument();
+    await expect(screen.findByText(/ Filters/i)).toBeTruthy();
+  });
 });
