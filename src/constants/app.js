@@ -107,6 +107,13 @@ const BID_TYPES = {
   Clinical_Bid: 'Bid'
 };
 
+const SECTIONS = {
+  KEY_MILESTONES_AND_DELIVERABLE_TIMELINES:
+    'Key Milestones & Deliverable Timelines',
+  PROPOSAL_TEAM: 'Proposal Team',
+  QUESTIONS_FOR_CUSTOMER_LEFT_PANEL: 'Questions_for_the_Customer_left_panel'
+};
+
 const REFRESH_WEBSOCKET_CONNECTION = 60000; // 1 minute
 export const QUESTION_UNLOCK_TIMEOUT = 90 * 1000; // 90 seconds (1.5minutes)
 export const PROPOSAL_TEAM_USER_MATCH_REGEXP = /([a-zA-Z0-9\W]*\w)(\(.*\))/; // matches proposal team individual user
@@ -115,6 +122,20 @@ export const RTE_DATA_ATTR_REGEXP = /data-[a-zA-Z0-9-]*=\"[a-zA-Z0-9-]*\"/g; // 
 export const NOTEPAD_UI_ID = Symbol('NOTEPAD');
 export const DEFAULT_TABS_LEN = 4;
 
+const EMAIL_TEMPLATES = {
+  EMAIL_TEMPLATES_TITLE: 'Email Templates',
+  EMAILS_AND_ROLES_IN_THIS_GROUP: 'Emails and Roles in this Group',
+  EMAILS_IN_THIS_ROLE: 'Emails in this role',
+  EMAIL_TEXT:
+    'Here are the answers to question that will determine your email content',
+  INTERNAL_REQUESTED_SERVICES: 'Internal Requested Services',
+  NOEMAIL_TEMPLATES_AVAIABLE_TEXT:
+    'No Email Templates available for this Opportunity Type.',
+  TO: 'To',
+  CC: 'CC',
+  PARAMETERS: 'Parameters'
+};
+
 export {
   DEFAULT,
   PROPOSAL,
@@ -122,5 +143,7 @@ export {
   PROFILE,
   APPROVALS,
   SEARCH,
-  BID_TYPES
+  BID_TYPES,
+  EMAIL_TEMPLATES,
+  SECTIONS
 };

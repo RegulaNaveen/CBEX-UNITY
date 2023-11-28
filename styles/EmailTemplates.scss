@@ -1,0 +1,119 @@
+.email-template-panel {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  .MuiPaper-root {
+    height: 100%;
+    & > div {
+      &:first-child {
+        height: 100%;
+      }
+    }
+    table {
+      height: calc(100% - 80px);
+      overflow: auto;
+      tbody {
+        tr {
+          border-bottom: 1px solid #ededed !important;
+          td {
+            padding: 10px 4px;
+            font-size: 14px;
+            &.MuiTableCell-body {
+              padding: 10px 0px 10px 0;
+            }
+            &::before {
+              height: 0 !important;
+            }
+            .MuiCollapse-entered {
+              background: white;
+              border: 1px solid #d9d9d9;
+              border-radius: 4px;
+            }
+            &:nth-child(2) {
+              .activeRow {
+                font-weight: bold;
+                color: #444444;
+              }
+            }
+            &:last-child {
+              padding-left: 10px;
+              padding-right: 10px;
+              div:not(.activeRow) {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+              }
+            }
+            &:has(.search-highlight) {
+              background-color: #0557d559 !important;
+            }
+            .search-highlight {
+              background-color: transparent !important;
+            }
+          }
+          .detailed-row {
+            padding: 10px 10px 10px 14px;
+            color: #444444;
+          }
+          p {
+            margin-bottom: 6px;
+          }
+          &:last-child {
+            height: 0 !important;
+
+            td {
+              padding: 0;
+            }
+          }
+        }
+        .detailed-row {
+          .email-button {
+            text-align: right;
+            margin-top: 20px;
+          }
+        }
+      }
+      tfoot {
+        display: none;
+      }
+    }
+    .MuiToolbar-root {
+      h3 {
+        font-size: 20px;
+        line-height: 1.04;
+        font-weight: 600;
+      }
+    }
+  }
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    table {
+      pointer-events: none;
+    }
+    .MuiPaper-rounded {
+      .MuiToolbar-gutters {
+        div {
+          &:nth-child(2) {
+            cursor: not-allowed;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
+  .recipient-answers {
+    font-size: 14px;
+    padding: 8px 0;
+    ul {
+      margin-left: 30px;
+    }
+  }
+}

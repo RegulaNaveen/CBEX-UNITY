@@ -24,7 +24,9 @@ import {
   updateNextMilestone,
   updateDashboardProposal,
   updateCustomNameAction,
-  updateOpportunityDashboardProposal
+  updateOpportunityDashboardProposal,
+  deleteProposalCustomTabQuestionFromSocket,
+  deleteApprovalCustomTabCustomQuestionFromSocketAction
 } from '../redux/actions/proposal-actions';
 import {
   updateDashboardBid,
@@ -360,6 +362,57 @@ const SocketContextProvider = props => {
     }
   };
 
+  const customQuestionDelete = (questionId, sectionName, tabId, ws) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_DELETE',
+            data: {
+              questionId,
+              sectionName,
+              tabId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log('customQuestionDelete', error);
+    }
+  };
+
+  const approvalCustomQuestionDelete = (
+    questionId,
+    sectionName,
+    approvalSectionName,
+    ws
+  ) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'QUESTION',
+          body: {
+            event: 'QUESTION_DELETE',
+            data: {
+              questionId,
+              sectionName,
+              approvalSectionName
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log('customQuestionDelete', error);
+    }
+  };
+
   /**
    *  Question unLock
    */
@@ -488,7 +541,9 @@ const SocketContextProvider = props => {
           updateCustomNameAction,
           syncdashboard,
           syncBidDashboard,
-          updateDetailPage
+          updateDetailPage,
+          deleteCustomTabCustomQuestionFromSocket,
+          deleteApprovalCustomTabCustomQuestionFromSocket
         } = props;
 
         // On Message Recieve
@@ -569,11 +624,33 @@ const SocketContextProvider = props => {
               break;
 
             case 'QUESTION_DELETE':
-              if (data.data.questionId) {
+              if (
+                data?.data?.questionId &&
+                !data?.data?.tabId &&
+                !data?.data?.approvalSectionName
+              ) {
                 deleteProposalQuestionFromSocket(data.data.questionId);
               }
-              break;
 
+              if (data?.data?.questionId && data?.data?.tabId) {
+                deleteCustomTabCustomQuestionFromSocket(
+                  data.data.questionId,
+                  data.data.sectionName,
+                  data.data.tabId
+                );
+              }
+              if (
+                data?.data?.questionId &&
+                !data?.data?.tabId &&
+                data?.data?.approvalSectionName
+              ) {
+                deleteApprovalCustomTabCustomQuestionFromSocket(
+                  data.data.questionId,
+                  data.data.sectionName,
+                  data?.data?.approvalSectionName
+                );
+              }
+              break;
             case 'ADD_QUESTION':
               if (data.data.questionData) {
                 setProposalQuestionFromSocket(data.data.questionData);
@@ -847,6 +924,27 @@ const SocketContextProvider = props => {
     waitForSocketConnectionMinInterval(() => questionDelete(questionId, null));
   };
 
+  const customQuestionDeleteWrapper = (questionId, sectionName, tabId) => {
+    waitForSocketConnectionMinInterval(() =>
+      customQuestionDelete(questionId, sectionName, tabId, null)
+    );
+  };
+
+  const ApprovalCustomQuestionDeleteWrapper = (
+    questionId,
+    sectionName,
+    approvalSectionName
+  ) => {
+    waitForSocketConnectionMinInterval(() =>
+      approvalCustomQuestionDelete(
+        questionId,
+        sectionName,
+        approvalSectionName,
+        null
+      )
+    );
+  };
+
   const naQuestionUpdateWrapper = (questionId, status) => {
     waitForSocketConnectionMinInterval(() =>
       naQuestionUpdate(questionId, status, null)
@@ -933,6 +1031,7 @@ const SocketContextProvider = props => {
         naQuestionUpdateWrapper,
         questionTextUpdateWrapper,
         questionDeleteWrapper,
+        customQuestionDeleteWrapper,
         addQuestionWrapper,
         approvalSectionDuplicatingWrapper,
         approvalSectionDuplicatedWrapper,
@@ -940,7 +1039,8 @@ const SocketContextProvider = props => {
         approvalSectionDeletedWrapper,
         updateFavouriteWrapper,
         updateCustomNameWrapper,
-        updateDashboardSFValueWrapper
+        updateDashboardSFValueWrapper,
+        ApprovalCustomQuestionDeleteWrapper
       }}
     >
       {props.children}
@@ -980,7 +1080,9 @@ const mapDispatchToProps = {
   updateCustomNameAction,
   syncBidDashboard: updateDashboardBid,
   syncdashboard: syncDashboardOpportunity,
-  updateDetailPage: updateOpportunityDashboardProposal
+  updateDetailPage: updateOpportunityDashboardProposal,
+  deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
 };
 
 export default connect(

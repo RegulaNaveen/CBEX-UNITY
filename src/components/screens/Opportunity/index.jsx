@@ -42,7 +42,7 @@ import {
   getStatusOfNewBid
 } from '../../../redux/selectors';
 import Toolbar from '../../views/toolbar';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import UnityFooter from '../../common/Footer';
 import UnityGrid from '../../common/atoms/inputs/Grid';
 import UnityTab from '../../common/atoms/inputs/Tab';
@@ -66,6 +66,7 @@ import {
   clearSearchAction,
   closeSearchAction
 } from '../../../redux/actions/search-actions';
+import { fetchEmailTemplates } from '../../../redux/actions/emailTemplate-actions';
 
 type State = {
   selectedView: string
@@ -108,7 +109,6 @@ type Props = {
 
 export class Opportunity extends Component<Props, State> {
   static contextType = SocketContext;
-
   constructor(props: Object) {
     super(props);
     this.state = {
@@ -136,7 +136,8 @@ export class Opportunity extends Component<Props, State> {
       ProposalLoading,
       getIntegrationsData,
       updateProposalDetail,
-      history
+      history,
+      fetchEmailTemplates
     } = this.props;
     ProposalLoading();
     const winLocationSearch = window.location.search;
@@ -144,6 +145,19 @@ export class Opportunity extends Component<Props, State> {
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
     const bidType = queryparams.get('bidType') || 'Clinical_Bid';
+    
+    if (!queryparams.get('bidType')) {
+      queryparams.set('bidType', 'Clinical_Bid');
+      history.push({
+        search: queryparams.toString()
+      });
+    } else {
+      queryparams.set('bidType', queryparams.get('bidType'));
+      history.push({
+        search: queryparams.toString()
+      });
+    }
+
     const flagValue = await launchDarkly(Object.values(featureFlags), false);
     if (flagValue) setEventFlg(flagValue);
     if (notificationId) {
@@ -156,6 +170,7 @@ export class Opportunity extends Component<Props, State> {
     getSFNonEditabelInfoField();
     getOpportunityInfo(params.id, bidNumber, bidType, history);
     getIntegrationsData();
+    fetchEmailTemplates();
     const proposalId = selectedBid.get('id', '');
     localStorage.setItem('proposalId', proposalId);
     if ((this.props && location && location?.pathname) !== UBUILD) {
@@ -235,7 +250,7 @@ export class Opportunity extends Component<Props, State> {
     this.setState({ windowSize });
   };
 
-  trackMatomoEventTabs = tab => {
+  trackEventTabs = tab => {
     const {
       eventCategories,
       userActions,
@@ -260,7 +275,7 @@ export class Opportunity extends Component<Props, State> {
 
   onChangeProposalView = (selectedView: string) => {
     this.setState({ selectedView });
-    this.trackMatomoEventTabs(selectedView);
+    this.trackEventTabs(selectedView);
   };
 
   handleEditCustomName = () => {
@@ -434,6 +449,7 @@ export default compose(
     saverecentoppactivity: saveRecentOppActivity,
     toggleEditCustomNameModal,
     onEditCustomName,
-    updateProposalDetailFromWebSocket
+    updateProposalDetailFromWebSocket,
+    fetchEmailTemplates
   })
-)(MatomoHOC(Opportunity));
+)(AnalyticsHOC(Opportunity));

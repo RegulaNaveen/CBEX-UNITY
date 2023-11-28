@@ -136,7 +136,11 @@ const {
 
 const { ON_GET_PROPOSALS, ON_GET_FAVOURITE } = REDUX_TYPES.PROPOSALS;
 const { SET_CUSTOM_NAME_MAP } = REDUX_TYPES.SSO_AUTH;
-
+const {
+  SET_APPROVAL_QUESTION_APPROVALS_TAB,
+  UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+  DELETE_APPROVAL_QUESTION_CUSTOM_TAB
+} = REDUX_TYPES.APPROVALS;
 /**
  * Updates bidNo Query param without page reload
  */
@@ -661,6 +665,18 @@ export const setProposalQuestionFromSocket = (
     });
     try {
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: questionData });
+      if (questionData && questionData?.section?.tabID) {
+        dispatch({
+          type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: questionData
+        });
+      }
+      if (questionData && questionData?.section?.approvalSectionName) {
+        dispatch({
+          type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
+          payload: questionData
+        });
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -962,8 +978,10 @@ function applyMilestoneFilter(questions, flags, milestone) {
   if (milestone) {
     filteredQuestions = fromJS(filteredQuestions)
       .filter(question => {
-        const questionMilestone = question.get('milestone');
-        return questionMilestone === milestone;
+        const questionMilestone = question.get('milestoneNew').toJS();
+        return questionMilestone
+          .map(milestone => milestone.Name)
+          .includes(milestone);
       })
       .toJS();
   }
@@ -1306,6 +1324,18 @@ export const editProposalQuestionfromSocket = (
     try {
       const data = questionData;
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+      if (data && data?.section?.tabID) {
+        dispatch({
+          type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
+          payload: data
+        });
+      }
+      if (data && data?.section?.approvalSectionName) {
+        dispatch({
+          type: UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+          payload: data
+        });
+      }
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -1324,7 +1354,6 @@ export const deleteProposalQuestion = (
     });
     try {
       const data = await deleteProposalQuestionData(proposalId, questionId);
-
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
       if (socketContext) await socketContext?.questionDeleteWrapper(questionId);
     } catch (err) {
@@ -1343,6 +1372,57 @@ export const deleteProposalQuestionFromSocket = (
     });
     try {
       dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const deleteProposalCustomTabQuestionFromSocket = (
+  questionId: string,
+  sectionName,
+  tabId
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+      dispatch({
+        type: UNITY_TABS.DELETE_CUSTOM_QUESTION_CUSTOM_TAB,
+        payload: {
+          questionId: questionId,
+          approvalSectionName: sectionName,
+          sectionName: tabId
+        }
+      });
+    } catch (err) {
+      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
+    }
+  };
+};
+
+export const deleteApprovalCustomTabCustomQuestionFromSocketAction = (
+  questionId: string,
+  sectionName,
+  approvalSectionName
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+    try {
+      dispatch({ type: PROPOSAL_DELETE_QUESTION, payload: questionId });
+      dispatch({
+        type: DELETE_APPROVAL_QUESTION_CUSTOM_TAB,
+        payload: {
+          questionId: questionId,
+          approvalSectionName: approvalSectionName
+        }
+      });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
@@ -1378,7 +1458,9 @@ export const getOpportunity = (
             (proposal.proposal.bidType || 'Clinical_Bid') !==
             'Early_Engagement_Bid'
         );
-        allProposals[0].isCurrent = true;
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
       }
       const proposal = allProposals.find(
         thisProposal =>

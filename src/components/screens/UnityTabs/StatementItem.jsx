@@ -17,7 +17,7 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
 import { EditorState } from 'apollo-react/node_modules/draft-js';
 import QuestionLabel from './QuestionLabel';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getUnityTabQuestionLoading,
   getPanelStatus
@@ -28,6 +28,7 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import ChipView from '../../common/Chip/ChipView';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 const StatementItem = ({
   questionId = '',
@@ -35,7 +36,8 @@ const StatementItem = ({
   disabled,
   eventCategories,
   trackEvent,
-  updateQuestionVisibility
+  updateQuestionVisibility,
+  questionJSON
 }) => {
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
@@ -47,8 +49,11 @@ const StatementItem = ({
   const isShowQuestion = shouldShowQuestion(question, unityTabFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef();
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -74,25 +79,39 @@ const StatementItem = ({
       }
     }
   }, [questionTextRef.current, currentSearchResult, questionId]);
+  const resize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
 
   const renderTags = () => {
-    const { milestone, milestoneNew } = question;
-    const lastAnswer = getLastAnswer(question);
-    const lastAns = isString(lastAnswer) ? lastAnswer : '';
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview unity-tab-chip">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAns} />
-          ) : null}
-        </div>
-      );
+    const { milestoneNew } = question;
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview unity-tab-chip">
-        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
-      </div>
-    );
   };
 
   const renderQuestionHint = () => {
@@ -212,9 +231,18 @@ const StatementItem = ({
                 <div className="question-label-container">
                   <div className="question-label-inner">
                     <div ref={questionTextRef} className="question-title-txt">
-                      <QuestionLabel
-                        questionLabel={question?.questionText || ''}
-                      />
+                      {questionJSON ? (
+                        <RichTextEditor
+                          style={{ minHeight: '0px' }}
+                          variant="view"
+                          defaultValue={JSON.parse(questionJSON)}
+                          ref={questionTextRef1}
+                        />
+                      ) : (
+                        <Typography className="ques-title">
+                          {question.questionText}
+                        </Typography>
+                      )}
                     </div>
 
                     <div className="question-hint">{renderQuestionHint()}</div>
@@ -258,4 +286,4 @@ StatementItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(StatementItem);
+export default AnalyticsHOC(StatementItem);

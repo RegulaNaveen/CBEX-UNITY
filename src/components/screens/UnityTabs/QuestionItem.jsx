@@ -25,13 +25,14 @@ import { getCountriesNameForCode } from '../../../utils/utils';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid,
   getUnityTabQuestionLoading,
   getPanelStatus
 } from '../../../redux/selectors/proposal';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
@@ -52,6 +53,8 @@ import MultiSelectQuestion from '../Approvals/InputComponents/MultiSelectQuestio
 import YesNoQuestion from '../Approvals/InputComponents/YesNoQuestion';
 import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
+import Tooltip from 'apollo-react/components/Tooltip';
+import { Edit } from '../../svg';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -74,13 +77,15 @@ const QuestionItem = ({
   disabled,
   eventCategories,
   trackEvent,
-  updateQuestionVisibility
+  updateQuestionVisibility,
+  tabId
 }) => {
   const [locked, setLocked] = useState(false);
   const question = useSelector(getQuestion(questionId));
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
   ).toJS();
+
   const oppdata = useSelector(state => getOpportunityData(state));
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
@@ -92,8 +97,28 @@ const QuestionItem = ({
   const [iconColor, seticonColor] = useState('#00c221');
   const [changeIcon, setchangeIcon] = useState('');
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
+
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -101,6 +126,17 @@ const QuestionItem = ({
   }, [unityTabFilters]);
 
   useEffect(() => {
+    if (
+      question?.answers &&
+      Array.isArray(question?.answers) &&
+      !question?.answers.length
+    ) {
+      setshowLastAnswer(false);
+    } else {
+      const lastAnswerVisibility = String(question?.answers?.answer)?.trim()
+        ?.length;
+      setshowLastAnswer(lastAnswerVisibility ? true : false);
+    }
     if (question && question.questionLockInfo) {
       setLocked(true);
     } else {
@@ -186,7 +222,6 @@ const QuestionItem = ({
       // END of copied Logic
       return questionMap;
     } catch (error) {
-      console.error(error);
       return questionMap;
     }
   };
@@ -195,7 +230,7 @@ const QuestionItem = ({
     return <div>Question type not found</div>;
   };
 
-  const trackMatomoEventSubmitAnswer = answer => {
+  const trackEventSubmitAnswer = answer => {
     const {
       section,
       questionText,
@@ -250,14 +285,14 @@ const QuestionItem = ({
       disabled,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer,
+      trackEventSubmitAnswer,
       checkDisableFlag
     };
     if (
       inputProps.lastAnswer &&
       inputProps.lastAnswer.userName === 'UnityPredictedAnswer'
     ) {
-      trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
+      trackEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
       return (
@@ -365,23 +400,18 @@ const QuestionItem = ({
   };
 
   const renderTags = () => {
-    const { milestone, milestoneNew } = question;
-    const lastAnswer = getLastAnswer(question);
-    const lastAns = isString(lastAnswer) ? lastAnswer : '';
-    if (milestoneNew && !isEmpty(milestoneNew)) {
-      return (
-        <div className="chipview unity-tab-chip">
-          {milestoneNew ? (
-            <ChipView label={milestoneNew} answer={lastAns} />
-          ) : null}
-        </div>
-      );
+    const { milestoneNew } = question;
+    if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+      return milestoneNew.map(({ Name, Color }) => (
+        <Tooltip title={Name} placement="top">
+          <div className="tag">
+            <span className="tag-box" style={{ backgroundColor: Color }}></span>
+          </div>
+        </Tooltip>
+      ));
+    } else {
+      return null;
     }
-    return (
-      <div className="chipview unity-tab-chip">
-        {milestone ? <ChipView label={milestone} answer={lastAns} /> : null}
-      </div>
-    );
   };
 
   const renderQuestionHint = () => {
@@ -525,7 +555,7 @@ const QuestionItem = ({
     );
     if (
       typeof currentSFanswer !== 'undefined' &&
-      _.isEmpty(currentSFanswer) !== true
+      isEmpty(currentSFanswer) !== true
     ) {
       checkSfAnswer = currentSFanswer.toJS().value;
     }
@@ -607,7 +637,7 @@ const QuestionItem = ({
     );
   };
 
-  const trackMatomoEventLauncher = data => {
+  const trackEventLauncher = data => {
     trackEvent({
       category: eventCategories.pd(proposalDetail),
       action: `Unity Tab: Event Launcher: ${question.questionText}`,
@@ -662,6 +692,8 @@ const QuestionItem = ({
                   <div className="question-label-inner">
                     <div ref={questionTextRef} className="question-title-txt">
                       <QuestionLabel
+                        ref={questionTextRef1}
+                        questionJSON={question?.questionJSON}
                         questionLabel={question?.questionText || ''}
                       />
                       {!isEmpty(question?.questionLockInfo) &&
@@ -676,11 +708,36 @@ const QuestionItem = ({
                         questionData={Map(question)}
                         proposalDetail={proposalDetail}
                         eventCategories={eventCategories}
-                        trackMatomoEventLauncher={c =>
-                          trackMatomoEventLauncher(c)
-                        }
+                        trackEventLauncher={c => trackEventLauncher(c)}
                       />
                     )}
+                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
+                      <div className="question-edit">
+                        <span
+                          aria-hidden="true"
+                          onClick={() => {
+                            dispatch(
+                              setEditQuestionData({
+                                questionText: question.questionText,
+                                questionHTML: question.questionHTML,
+                                questionJSON: question.questionJSON,
+                                questionHintJSON: question.questionHintJSON,
+                                section: question.section.sectionName,
+                                tabId: tabId,
+                                answerType: question.answerConfiguration.type,
+                                roleNames: question.roleNames,
+                                questionId: question.questionId,
+                                tabFlag: 'customTab',
+                                questionAnswered: showLastAnswer
+                              })
+                            );
+                          }}
+                        >
+                          <Edit className="edit-icon" />
+                        </span>
+                      </div>
+                    )}
+
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
                   <div className="milestone-chip">{renderTags()}</div>
@@ -741,4 +798,4 @@ QuestionItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(QuestionItem);
+export default AnalyticsHOC(QuestionItem);

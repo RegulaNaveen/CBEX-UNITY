@@ -11,6 +11,7 @@ import CollapsibleList from '../../common/CollapsibleList';
 import { SocketContext } from '../../../context/SocketContext';
 import { QuestionsRefContext } from './Questions';
 import { selectSections } from '../../../redux/selectors';
+import { SECTIONS } from '../../../constants/app';
 
 const NUM_PER_PAGE = 2;
 
@@ -121,8 +122,9 @@ const QuestionsSectionMapping = ({
     const sectionOrder = section.get('sectionOrder');
 
     const questions = section.get('questions');
+
     const isVisible = Object.values(sectionData.questions).some(
-      val => val.questionApproval === false
+      val => val.questionApproval === false && !val.section.approvalSectionName
     );
     if (isVisible) {
       showSection = true;
@@ -130,7 +132,11 @@ const QuestionsSectionMapping = ({
       showSection = false;
     }
 
-    if (sectionName !== 'Proposal Team')
+    if (
+      sectionName !== SECTIONS.KEY_MILESTONES_AND_DELIVERABLE_TIMELINES &&
+      sectionName !== SECTIONS.PROPOSAL_TEAM &&
+      sectionName !== SECTIONS.QUESTIONS_FOR_CUSTOMER_LEFT_PANEL
+    )
       return (
         <QuestionsRefContext.Consumer key={sectionName}>
           {questionsRef => {
@@ -181,9 +187,9 @@ const QuestionsSectionMapping = ({
       allSections.valueSeq().map((section, indx) => {
         if (
           section.get('sectionName') !==
-            'Questions_for_the_Customer_left_panel' &&
+            SECTIONS.QUESTIONS_FOR_CUSTOMER_LEFT_PANEL &&
           section.get('sectionName').trim() !==
-            'Key Milestones & Deliverable Timelines'
+            SECTIONS.KEY_MILESTONES_AND_DELIVERABLE_TIMELINES
         )
           return renderAllSection(section, indx);
       })

@@ -29,7 +29,7 @@ import ProposalTeamQuestion from './InputComponents/ProposalTeamQuestion';
 import { getUserName, getUserEmail, getUserId } from '../../../SessionHandler';
 import { SocketContext } from '../../../context/SocketContext';
 import SFAnswerValidationWrapper from '../../common/SFAnswerValidationWrapper';
-import MatomoHOC from '../../HOC/MatomoHOC';
+import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import {
   getOpportunityData,
   getSelectedBid
@@ -41,6 +41,9 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
+import Tooltip from 'apollo-react/components/Tooltip';
+import { Edit } from '../../svg';
+import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -80,9 +83,32 @@ const QuestionItem = ({
   const isShowQuestion = shouldShowQuestion(question, approvalFilters, flags);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const questionTextRef = useRef(null);
+  const questionTextRef1 = useRef(null);
   const questionTextRef2 = useRef(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [screenWidth, setScreenWidth] = useState('');
+  const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
+
+  const resize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', resize); // doubt -Akash
+
+    resize();
+    setTimeout(() => {
+      // updating question text with decorators
+      if (questionTextRef1.current !== null) {
+        const { editorState } = questionTextRef1.current.state;
+        const newEditorState = EditorState.set(editorState, {
+          decorator: compositeDecorator
+        });
+        questionTextRef1.current.setState({ editorState: newEditorState });
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
     if (
@@ -95,7 +121,6 @@ const QuestionItem = ({
       setLocked(false);
     }
   }, [isQuesFreezed, activeQuestionInfo]);
-
   useEffect(() => {
     if (currentSearchResult !== null && questionTextRef.current !== null) {
       if (currentSearchResult.searchIndex === highlightQuestionId) {
@@ -132,6 +157,19 @@ const QuestionItem = ({
     email: getUserEmail(),
     role: getUserId()
   });
+
+  const checkLastAnswerOfQuestionVisibility = answers => {
+    if (answers && Array.isArray(answers) && !answers.length) {
+      return false;
+    } else {
+      const lastAnswerVisibility = String(answers?.answer)?.trim()?.length;
+      if (lastAnswerVisibility) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
 
   const prepareAnswerHistoryData = questionData => {
     let questionMap = fromJS(questionData);
@@ -174,7 +212,7 @@ const QuestionItem = ({
     return <div>Question type not found</div>;
   };
 
-  const trackMatomoEventSubmitAnswer = answer => {
+  const trackEventSubmitAnswer = answer => {
     const {
       section,
       questionText,
@@ -218,14 +256,14 @@ const QuestionItem = ({
       disabled,
       userData: getUserData(),
       socketContext,
-      trackMatomoEventSubmitAnswer,
+      trackEventSubmitAnswer,
       checkDisableFlag
     };
     if (
       inputProps.lastAnswer &&
       inputProps.lastAnswer.userName === 'UnityPredictedAnswer'
     ) {
-      trackMatomoEventSubmitAnswer(inputProps.lastAnswer.answer);
+      trackEventSubmitAnswer(inputProps.lastAnswer.answer);
     }
     if (question?.section?.sectionName === 'Proposal Team') {
       return <ProposalTeamQuestion {...inputProps} />;
@@ -344,56 +382,70 @@ const QuestionItem = ({
     if (questionHint) {
       return (
         <div className="question-hint" style={{ paddingLeft: '10px' }}>
-            <IconButton
-              data-testid="approval-icon-button" 
-              color="primary"
-              size="small"
-              className="question-tooltip-icon" 
-              onClick={(e) => setAnchorEl(e.currentTarget)}
-            >
-              <InfoIcon style={{ fontSize: '16px' }} />
-            </IconButton>
-            <Popover
-              data-testid="popover-approval"
-              className="popover-approval"
-              open={!!anchorEl}
-              anchorEl={anchorEl}
-              onClose={() => setAnchorEl(null)}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              PaperProps={{
-                style: { 
-                  borderColor: '#e9e9e9', 
-                  boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)', 
-                  padding: 10,
-                  maxInlineSize: '300px',
-                },
-              }}
-            >
-              <Typography>{
-                questionHintJSON ? (
-                  <RichTextEditor
-                    variant="view"
-                    defaultValue={JSON.parse(questionHintJSON)}
-                    ref={handleHintRef}
-                  />
-                ) : (
-                  <div>{questionHint}</div>
-                )
+          <IconButton
+            data-testid="approval-icon-button"
+            color="primary"
+            size="small"
+            className="question-tooltip-icon"
+            onClick={e => setAnchorEl(e.currentTarget)}
+          >
+            <InfoIcon style={{ fontSize: '16px' }} />
+          </IconButton>
+          <Popover
+            data-testid="popover-approval"
+            className="popover-approval"
+            open={!!anchorEl}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center'
+            }}
+            PaperProps={{
+              style: {
+                borderColor: '#e9e9e9',
+                boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
+                padding: 10,
+                maxInlineSize: '300px'
               }
-              </Typography>
-            </Popover>
+            }}
+          >
+            <Typography>
+              {questionHintJSON ? (
+                <RichTextEditor
+                  variant="view"
+                  defaultValue={JSON.parse(questionHintJSON)}
+                  ref={handleHintRef}
+                />
+              ) : (
+                <div>{questionHint}</div>
+              )}
+            </Typography>
+          </Popover>
         </div>
       );
     }
     return null;
   };
+
+  //this function is used to show tags in the approvals tab
+  // const renderTags = milestoneNew => {
+  //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
+  //     return milestoneNew.map(({ Name, Color }) => (
+  //       <Tooltip title={Name} placement="top">
+  //         <div className="tag">
+  //           <span className="tag-box" style={{ backgroundColor: Color }}></span>
+  //         </div>
+  //       </Tooltip>
+  //     ));
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   const questionRender = useMemo(
     () =>
@@ -410,31 +462,71 @@ const QuestionItem = ({
           >
             <Grid container>
               <Grid item xs={10} className="ques-title-cover">
-                <span ref={questionTextRef}>
-                  <Grid
-                    item
-                    xs={10}
-                    style={{
-                      display: 'flex',
-                      float: 'left',
-                      paddingTop: '4px'
-                    }}
-                  >
-                    <QuestionLabel
-                      questionLabel={question?.questionText || ''}
-                    />   
-                  </Grid>
-                  <Grid
-                    item
-                    xs={2}
-                    style={{
-                      display: 'flex',
-                      float: 'left'
-                    }}
-                  >
-                    {renderQuestionHint()}
-                  </Grid>
-                </span>      
+                <span
+                  ref={questionTextRef}
+                  //className="question-label-container"
+                >
+                  
+                    <Grid
+                      item
+                      xs={10}
+                      style={{
+                        display: 'flex',
+                        float: 'left',
+                        paddingTop: '4px'
+                      }}
+                    >
+                      <QuestionLabel
+                        questionLabel={question?.questionText || ''}
+                      />
+                      {question.isCustomQuestion &&
+                        selectedBid.isCurrent &&
+                        !isQuesFreezed && (
+                          <div
+                            className="question-edit"
+                            style={{ 'margin-left': '10px' }}
+                          >
+                            <span
+                              aria-hidden="true"
+                              onClick={() => {
+                                dispatch(
+                                  setEditQuestionData({
+                                    questionText: question?.questionText,
+                                    questionHTML: question?.questionHTML,
+                                    questionJSON: question?.questionJSON,
+                                    questionHintJSON:
+                                      question?.questionHintJSON,
+                                    section:
+                                      question?.section.approvalSectionName,
+                                    answerType:
+                                      question?.answerConfiguration.type,
+                                    roleNames: question?.roleNames,
+                                    questionId: question?.questionId,
+                                    tabFlag: 'Approvals',
+                                    direction: 'left',
+                                    questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                      question?.answers
+                                    )
+                                  })
+                                );
+                              }}
+                            >
+                              <Edit className="edit-icon" />
+                            </span>
+                          </div>
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2}
+                      style={{
+                        display: 'flex',
+                        float: 'left'
+                      }}
+                    >
+                      {renderQuestionHint()}
+                    </Grid>
+                </span>
               </Grid>
               {locked ? (
                 <Grid item xs={12}>
@@ -520,4 +612,4 @@ QuestionItem.propTypes = {
   updateQuestionVisibility: PropTypes.func
 };
 
-export default MatomoHOC(QuestionItem);
+export default AnalyticsHOC(QuestionItem);

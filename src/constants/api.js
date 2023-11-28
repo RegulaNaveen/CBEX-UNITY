@@ -23,6 +23,7 @@ let SF_HOST_URL = '';
 let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
 let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
+let ANALYTICS_API_URL = '';
 
 switch (environment) {
   case 'UAT':
@@ -32,7 +33,7 @@ switch (environment) {
       'https://umbpe2tva5.execute-api.us-east-1.amazonaws.com/uat';
     PROPOSAL_API_KEY = 'e4e3BACQBxaTdmYdIGKG58BDF7RHXoloCGNlqcIe';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://9l688o9r93.execute-api.us-east-1.amazonaws.com/uat';
+      'https://q4gnro2y0a.execute-api.us-east-1.amazonaws.com/uat';
     COGNITO_HOST = 'https://uat-unity.auth.us-east-1.amazoncognito.com';
     // AUTH_KEY = '';
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
@@ -43,6 +44,8 @@ switch (environment) {
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://1qq7rwcx08.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://t1vwbpgywc.execute-api.us-east-1.amazonaws.com';
     break;
   case 'DEV2':
     PROPOSAL_API_ENDPOINT =
@@ -122,7 +125,7 @@ switch (environment) {
       'https://8qm2fg3fx4.execute-api.us-east-1.amazonaws.com/prod';
     PROPOSAL_API_KEY = 'EWK61xXYCM9ofFmBOcOPR4xxxObhZxtwanqD3RHV';
     NORMAL_AUTH_API_ENDPOINT =
-      'https://sljfl1jmnc.execute-api.us-east-1.amazonaws.com/prod';
+      'https://s9j2gvwlk2.execute-api.us-east-1.amazonaws.com/prod';
     COGNITO_HOST = 'https://prod-unity.auth.us-east-1.amazoncognito.com';
     // AUTH_KEY = '';
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
@@ -134,6 +137,8 @@ switch (environment) {
     NOTES_SOCKET_URL =
       'wss://0kmubx9x18.execute-api.us-east-1.amazonaws.com/production';
     LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445d';
+    ANALYTICS_API_URL =
+      'https://3runl1h5nf.execute-api.us-east-1.amazonaws.com';
     break;
   case 'QA':
     // UDEV Data
@@ -153,6 +158,8 @@ switch (environment) {
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://za42jrafie.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://b4ituaasif.execute-api.us-east-1.amazonaws.com';
     break;
   case 'L4':
     // L4 Data
@@ -172,6 +179,8 @@ switch (environment) {
       'wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://gni5ivpjhh.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://1cg9b1a39f.execute-api.us-east-1.amazonaws.com';
     break;
   case 'DEV':
     // DEV Data
@@ -194,6 +203,8 @@ switch (environment) {
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
     break;
   default:
     // DEV Data
@@ -213,6 +224,8 @@ switch (environment) {
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
     NOTES_SOCKET_URL =
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
+    ANALYTICS_API_URL =
+      'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
     break;
 }
 
@@ -224,6 +237,7 @@ const AUTH_API_ENDPOINT = `${COGNITO_HOST}/oauth2/token`;
 const AUTH_API_URL = `${NORMAL_AUTH_API_ENDPOINT}/api/auth`;
 const ROLE_ENDPOINT = `${AUTH_API_URL}/changerole`;
 const VALIDATE_TOKEN = `${AUTH_API_URL}/validate-token`;
+const ACKNOWLEDGE_ENDPOINT = `${AUTH_API_URL}/acknowledgement`;
 
 const AUTH = {
   COGNITO_HOST,
@@ -232,6 +246,7 @@ const AUTH = {
   CLIENT_ID,
   REDIRECTION_URL,
   ROLE_ENDPOINT,
+  ACKNOWLEDGE_ENDPOINT,
   NORMAL_AUTH_API_ENDPOINT,
   AUTH_API_URL,
   VALIDATE_TOKEN
@@ -276,6 +291,7 @@ const PROPOSAL = {
 const NOTEPAD_API_URL = `${PROPOSAL_API_ENDPOINT}/api/notes`;
 const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
+const EMAILTEMPLATES_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals/emailTemplates`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
@@ -289,7 +305,14 @@ const NOTIFICATION = {
   NOTIFICATION_API_URL
 };
 
+const EMAILTEMPLATES = {
+  EMAILTEMPLATES_API_URL
+};
+
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
+const CUSTOM_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/custom-question`;
+const CUSTOM_QUESTIONS_DELETE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/delete-custom-question`;
+const ANALYTICS_URL = `${ANALYTICS_API_URL}/track`;
 
 export {
   AUTH,
@@ -303,5 +326,9 @@ export {
   NOTIFICATION,
   NOTES_SOCKET_URL,
   LAUNCH_DARKLY_CLIENT_ID,
-  APPROVALS_URL
+  APPROVALS_URL,
+  CUSTOM_QUESTIONS_API_URL,
+  CUSTOM_QUESTIONS_DELETE_API_URL,
+  ANALYTICS_URL,
+  EMAILTEMPLATES
 };

@@ -23,7 +23,7 @@ const TextQuestion = ({
   disabled,
   userData,
   socketContext,
-  trackMatomoEventSubmitAnswer,
+  trackEventSubmitAnswer,
   checkDisableFlag
 }) => {
   const dispatch = useDispatch();
@@ -64,7 +64,7 @@ const TextQuestion = ({
         )
       );
       questionUnlockWrapper(question?.questionId);
-      trackMatomoEventSubmitAnswer(editorData.text);
+      trackEventSubmitAnswer(editorData.text);
     } catch (error) {
       console.error(error);
       questionUnlockWrapper(question?.questionId);
@@ -141,7 +141,7 @@ TextQuestion.propTypes = {
   disabled: PropTypes.any,
   userData: PropTypes.any.isRequired,
   socketContext: PropTypes.object.isRequired,
-  trackMatomoEventSubmitAnswer: PropTypes.func.isRequired
+  trackEventSubmitAnswer: PropTypes.func.isRequired
 };
 
 export default TextQuestion;

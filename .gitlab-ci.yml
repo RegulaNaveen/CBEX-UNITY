@@ -20,9 +20,10 @@ include:
 #- deployqa
 
 stages:
-  - prebuild
+  #- prebuild
   #- sonar #sonar report
   - test
+  - sonar
   - blackduckscan
   - builddev
   - deploydev
@@ -45,7 +46,7 @@ stages:
   - deploystack
 
 sonar:
-  stage: prebuild
+  stage: sonar
   image: sonarsource/sonar-scanner-cli:4.5
   # needs:
   #   - test
@@ -70,7 +71,7 @@ sonar:
     - merge_requests
 
 test:
-  stage: prebuild
+  stage: test
   image: node:18
   except:
     - qa
@@ -209,6 +210,7 @@ buildl4:
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $prod_build >> build.env
+    - set
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - npm cache clean --force
@@ -238,7 +240,10 @@ deployl4:
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    - export Prod_Account_ID=$Prod_Account_ID
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -506,7 +511,7 @@ pafexecution_uat:
     ENV_NAME: uat
   trigger:
     project: 'CBEx/unity/Unity-QA'
-    branch: Unity_QA_Testing
+    branch: uat
     strategy: depend
 
 pafexecution_prod:
@@ -525,7 +530,7 @@ pafexecution_prod:
     ENV_NAME: prod
   trigger:
     project: 'CBEx/unity/Unity-QA'
-    branch: Unity_QA_Testing
+    branch: prd
     strategy: depend
 
 .deploystack:

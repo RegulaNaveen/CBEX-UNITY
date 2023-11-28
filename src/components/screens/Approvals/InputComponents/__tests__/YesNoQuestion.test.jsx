@@ -18,7 +18,7 @@ describe('YesNoQuestion component', () => {
     questionLockWrapper: jest.fn(),
     questionUnlockWrapper: jest.fn()
   };
-  const mockTrackMatomoEventSubmitAnswer = jest.fn();
+  const mockTrackEventSubmitAnswer = jest.fn();
   const mockCheckDisableFlag = jest.fn();
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('YesNoQuestion component', () => {
         lastAnswer={mockLastAnswer}
         userData={mockUserData}
         socketContext={mockSocketContext}
-        trackMatomoEventSubmitAnswer={mockTrackMatomoEventSubmitAnswer}
+        trackEventSubmitAnswer={mockTrackEventSubmitAnswer}
         checkDisableFlag={mockCheckDisableFlag}
       />
     );

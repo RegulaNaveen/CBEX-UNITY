@@ -85,7 +85,7 @@
     }
 
     .MuiBox-root {
-      padding: 10px 8px !important;
+      padding: 10px 8px;
       margin-top: 1.25rem;
 
       &:first-child {
@@ -241,4 +241,59 @@
 
 .approvals-warning-modal {
   max-width: 342px;
+}
+
+.all-approvals-container {
+  margin: 2px 0px !important;
+  .RichEditor-editor {
+    line-height: 1.2;
+    .public-DraftStyleDefault-block {
+      margin: 0 !important;
+    }
+  }
+  .MuiBox-root {
+    padding: 2px 2px !important;
+    margin-top: 0px !important;
+  }
+}
+
+.question-label-container {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  width: 100%;
+  transition: width 0.2s;
+  .question-label-inner {
+    flex-basis: auto;
+    flex-grow: 1;
+    display: flex;
+    .milestone-chip {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-basis: auto;
+      flex-grow: 1;
+      padding-left: 0.25rem;
+      flex-wrap: wrap;
+
+      .tag {
+        display: inline;
+        .tag-box {
+          display: inline-block !important;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    .chipview {
+      z-index: 1;
+      position: relative;
+    }
+  }
+}
+.approval-text-question .RichEditor-editor .public-DraftStyleDefault-block {
+  font-family: 'ProximaNova-Regular';
+  color: #000000;
 }

@@ -5977,7 +5977,7 @@
         },
         "questionText": "Indication",
         "answerConfiguration": {
-          "type": "picklist-lookup",
+          "type": "text",
           "options": []
         },
         "roleNames": ["Business Developer"],
@@ -5987,9 +5987,9 @@
             "userName": "AnswerPulledFromSalesforce",
             "userRole": "AnswerPulledFromSalesforce",
             "date": "2023-01-12T09:04:56.720Z",
-            "answer": ["Cardiovascular Disease"],
+            "answer": ["qweq"],
             "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
-            "formattedAnswer": ["Cardiovascular Disease"],
+            "formattedAnswer": ["qweq"],
             "updatedInPG": false
           },
           {
@@ -5997,9 +5997,9 @@
             "userName": "AnswerPulledFromSalesforce",
             "userRole": "AnswerPulledFromSalesforce",
             "date": "2023-01-13T09:12:32.087Z",
-            "answer": ["Cardiovascular Disease"],
+            "answer": ["qweq"],
             "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
-            "formattedAnswer": ["Cardiovascular Disease"],
+            "formattedAnswer": ["qweq"],
             "updatedInPG": false
           }
         ],
@@ -18973,7 +18973,7 @@
             },
             "questionText": "Indication",
             "answerConfiguration": {
-              "type": "picklist-lookup",
+              "type": "text",
               "options": []
             },
             "roleNames": ["Business Developer"],
@@ -18983,9 +18983,9 @@
                 "userName": "AnswerPulledFromSalesforce",
                 "userRole": "AnswerPulledFromSalesforce",
                 "date": "2023-01-12T09:04:56.720Z",
-                "answer": ["Cardiovascular Disease"],
+                "answer": ["qweq"],
                 "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
-                "formattedAnswer": ["Cardiovascular Disease"],
+                "formattedAnswer": ["qweq"],
                 "updatedInPG": false
               },
               {
@@ -18993,9 +18993,9 @@
                 "userName": "AnswerPulledFromSalesforce",
                 "userRole": "AnswerPulledFromSalesforce",
                 "date": "2023-01-13T09:12:32.087Z",
-                "answer": ["Cardiovascular Disease"],
+                "answer": ["qweq"],
                 "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
-                "formattedAnswer": ["Cardiovascular Disease"],
+                "formattedAnswer": ["qweq"],
                 "updatedInPG": false
               }
             ],
@@ -27236,5 +27236,483 @@
       }
     },
     "isSetQuestionLoading": false
+  },
+  "emailTemplates": {
+    "emailTemplatesList": [
+      {
+        "EmailTemplateRecipientRule": {
+          "RecipientRuleGroups": [
+            {
+              "RecipientRuleCCGroupFilter": "Not Equal",
+              "RecipientRuleGroupOperator": "AND",
+              "RecipientRuleGroupName": "System Generated",
+              "RecipientRuleToGroupFilter": "Equal",
+              "RecipientRuleCCAnswer": [
+                {
+                  "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+                  "Type": "Role"
+                },
+                {
+                  "GroupName": "testing",
+                  "Value": "70206655-7db6-4fc4-8c75-2bcaa3cf2c1d",
+                  "Type": "EmailGroup",
+                  "GroupValues": [
+                    {
+                      "Value": "varsha.ajetrao@imshealth.com",
+                      "Type": "Email"
+                    },
+                    {
+                      "Value": "shubhangi.prasad@159solutions.com",
+                      "Type": "Email"
+                    },
+                    {
+                      "Value": "Proposal Team-X6F",
+                      "Type": "Role"
+                    }
+                  ]
+                },
+                {
+                  "Value": "akash.aggarwal@iqvia.com",
+                  "Type": "Email"
+                }
+              ],
+              "RecipientRules": [
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "multi-select",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Yes - blinded",
+                      "Id": "53f276de-70e1-49d6-87ac-d49f51010cda"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "number",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Not Equal",
+                  "RecipientRuleAnswer": ["213"]
+                },
+                {
+                  "RecipientRuleOperator": "",
+                  "RecipientRuleAnswerType": "date",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": "11/17/2023"
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "checkbox",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Blinded",
+                      "Id": "fd319132-da08-4d7f-8064-2cba253e73b3"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "select",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Poor",
+                      "Id": "119f600b-7e93-4920-bbbd-9d662f727bc0"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "select-lookup",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "High",
+                      "Id": "e1b9cb34-d138-4f03-82f4-2438df1e0c38"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "yes-no",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": ["Yes"]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "text",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": ["qweq"]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "radio",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "ATP with MSA",
+                      "Id": "fb4f3c5b-087b-4d6a-9725-3a220bbe8507"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "multi-select-lookup",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Yes",
+                      "Id": "86990b17-c725-4e72-b653-57c6a5d21bdf"
+                    }
+                  ]
+                }
+              ],
+              "RecipientRuleToAnswer": [
+                {
+                  "Value": "sushil.munda@iqvia.com",
+                  "Type": "Email"
+                },
+                {
+                  "GroupName": "test-varsha",
+                  "Value": "1adf0e4c-cd66-4363-96fe-b14ba28a83ca",
+                  "Type": "EmailGroup",
+                  "GroupValues": [
+                    {
+                      "Value": "varsha.kumari2@iqvia.com",
+                      "Type": "Email"
+                    },
+                    {
+                      "Value": "Proposal Team-X6F",
+                      "Type": "Role"
+                    }
+                  ]
+                },
+                {
+                  "Value": "Proposal Team-X6F",
+                  "Type": "Role"
+                }
+              ]
+            },
+            {
+              "RecipientRuleToGroupFilter": "Equal",
+              "RecipientRuleGroupOperator": "AND",
+              "RecipientRuleGroupName": "System Generated",
+              "RecipientRules": [
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "text",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": ["sri", "sush"]
+                }
+              ],
+              "RecipientRuleToAnswer": [
+                {
+                  "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+                  "Type": "Role"
+                }
+              ]
+            }
+          ],
+          "RecipientRuleGroupOperator": "AND"
+        },
+        "EmailTemplateName": "Test Tooltip",
+        "EmailTemplateDescription": "Test Tooltip desc",
+        "EmailTemplateTORoles": [
+          {
+            "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+            "Type": "Role"
+          },
+          {
+            "Value": "d6e78b28-4192-4fc9-9ea9-41bc04ef3c95",
+            "Type": "EmailGroup"
+          }
+        ],
+        "EmailTemplateCC": [
+          {
+            "Value": "mallireddygari.reddy@iqvia.com",
+            "Type": "Email"
+          },
+          {
+            "Value": "custom@iqvia.com",
+            "Type": "Email"
+          },
+          {
+            "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+            "Type": "Role"
+          },
+          {
+            "Value": "d6e78b28-4192-4fc9-9ea9-41bc04ef3c95",
+            "Type": "EmailGroup",
+            "GroupName": "t7",
+            "GroupValues": [
+              {
+                "Type": "Email",
+                "Value": "kunal.nigam@iqvia.com"
+              }
+            ]
+          },
+          {
+            "Value": "Proposal Team-W1D",
+            "Type": "Role"
+          }
+        ],
+        "EmailTemplateBody": "<ul><li><p>The <em>IF...</em> functionality as seen on the current Business Rules should look and work exactly as per Business Rules. (to allow a condition to be configured based upon any existing Question and Question type). The current Business Rules functionality allows for multiple IF's, we will have this same functionality for Recipient Rules.&nbsp;&nbsp;</p></li></ul>",
+        "EmailTemplateSubject": "Unlike Business Rules, there will be no Ranking. All individual Recipient Rules will be run for the template in question, whether email addresses are added to the 'TO' and/or 'CC' or not.",
+        "EmailTemplateId": "c0244c07-1167-4a72-808c-aa5da980cfd2",
+        "EmailTemplateTO": [
+          {
+            "Value": "mallireddygari.reddy@iqvia.com",
+            "Type": "Email"
+          },
+          {
+            "Value": "custom@iqvia.com",
+            "Type": "Email"
+          },
+          {
+            "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+            "Type": "Role"
+          },
+          {
+            "Value": "d6e78b28-4192-4fc9-9ea9-41bc04ef3c95",
+            "Type": "EmailGroup",
+            "GroupName": "t7",
+            "GroupValues": [
+              {
+                "Type": "Email",
+                "Value": "kunal.nigam@iqvia.com"
+              }
+            ]
+          },
+          {
+            "Value": "Proposal Team-W1D",
+            "Type": "Role"
+          }
+        ],
+        "EmailTemplateOpportunityTypes": "Default Type,Non-Core Clinical Studies,Opportunity Launch Call (Pilot)",
+        "EmailTemplateCCRoles": [
+          {
+            "Value": "Proposal Team-W1D",
+            "Type": "Role"
+          },
+          {
+            "Value": "a6222a21-c142-4768-a63c-b95b24d72a20",
+            "Type": "EmailGroup"
+          }
+        ]
+      },
+      {
+        "EmailTemplateRecipientRule": {
+          "RecipientRuleGroups": [
+            {
+              "RecipientRuleCCGroupFilter": "Not Equal",
+              "RecipientRuleGroupOperator": "AND",
+              "RecipientRuleGroupName": "System Generated",
+              "RecipientRuleToGroupFilter": "Equal",
+              "RecipientRuleCCAnswer": [
+                {
+                  "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+                  "Type": "Role"
+                },
+                {
+                  "GroupName": "testing",
+                  "Value": "70206655-7db6-4fc4-8c75-2bcaa3cf2c1d",
+                  "Type": "EmailGroup",
+                  "GroupValues": [
+                    {
+                      "Value": "varsha.ajetrao@imshealth.com",
+                      "Type": "Email"
+                    },
+                    {
+                      "Value": "shubhangi.prasad@159solutions.com",
+                      "Type": "Email"
+                    },
+                    {
+                      "Value": "Proposal Team-X6F",
+                      "Type": "Role"
+                    }
+                  ]
+                },
+                {
+                  "Value": "akash.aggarwal@iqvia.com",
+                  "Type": "Email"
+                }
+              ],
+              "RecipientRules": [
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "multi-select",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Yes - blinded",
+                      "Id": "53f276de-70e1-49d6-87ac-d49f51010cda"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "number",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Not Equal",
+                  "RecipientRuleAnswer": ["213"]
+                },
+                {
+                  "RecipientRuleOperator": "",
+                  "RecipientRuleAnswerType": "date",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": "11/17/2023"
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "checkbox",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Blinded",
+                      "Id": "fd319132-da08-4d7f-8064-2cba253e73b3"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "select",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Poor",
+                      "Id": "119f600b-7e93-4920-bbbd-9d662f727bc0"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "select-lookup",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "High",
+                      "Id": "e1b9cb34-d138-4f03-82f4-2438df1e0c38"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "yes-no",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": ["Yes"]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "text",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": ["qweq"]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "radio",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "ATP with MSA",
+                      "Id": "fb4f3c5b-087b-4d6a-9725-3a220bbe8507"
+                    }
+                  ]
+                },
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "multi-select-lookup",
+                  "QuestionId": "123",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": [
+                    {
+                      "Value": "Yes",
+                      "Id": "86990b17-c725-4e72-b653-57c6a5d21bdf"
+                    }
+                  ]
+                }
+              ],
+              "RecipientRuleToAnswer": [
+                {
+                  "Value": "sushil.munda@iqvia.com",
+                  "Type": "Email"
+                },
+                {
+                  "GroupName": "test-varsha",
+                  "Value": "1adf0e4c-cd66-4363-96fe-b14ba28a83ca",
+                  "Type": "EmailGroup",
+                  "GroupValues": [
+                    {
+                      "Value": "varsha.kumari2@iqvia.com",
+                      "Type": "Email"
+                    },
+                    {
+                      "Value": "Proposal Team-X6F",
+                      "Type": "Role"
+                    }
+                  ]
+                },
+                {
+                  "Value": "Proposal Team-X6F",
+                  "Type": "Role"
+                }
+              ]
+            },
+            {
+              "RecipientRuleToGroupFilter": "Equal",
+              "RecipientRuleGroupOperator": "AND",
+              "RecipientRuleGroupName": "System Generated",
+              "RecipientRules": [
+                {
+                  "RecipientRuleOperator": "Or",
+                  "RecipientRuleAnswerType": "text",
+                  "QuestionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+                  "RecipientRuleFilter": "Equal",
+                  "RecipientRuleAnswer": ["sri", "sush"]
+                }
+              ],
+              "RecipientRuleToAnswer": [
+                {
+                  "Value": "6fc957d5-081b-4299-846f-ffcb34d8ebd4",
+                  "Type": "Role"
+                }
+              ]
+            }
+          ],
+          "RecipientRuleGroupOperator": "AND"
+        },
+        "EmailTemplateName": "Test Tooltip",
+        "EmailTemplateDescription": "Test Tooltip desc",
+        "EmailTemplateTORoles": [],
+        "EmailTemplateCC": [],
+        "EmailTemplateBody": "<ul><li><p>The <em>IF...</em> functionality as seen on the current Business Rules should look and work exactly as per Business Rules. (to allow a condition to be configured based upon any existing Question and Question type). The current Business Rules functionality allows for multiple IF's, we will have this same functionality for Recipient Rules.&nbsp;&nbsp;</p></li></ul>",
+        "EmailTemplateSubject": "Unlike Business Rules, there will be no Ranking. All individual Recipient Rules will be run for the template in question, whether email addresses are added to the 'TO' and/or 'CC' or not.",
+        "EmailTemplateId": "c0244c07-1167-4a72-808c-aa5da980cfd2",
+        "EmailTemplateTO": [],
+        "EmailTemplateOpportunityTypes": "Default Type,Non-Core Clinical Studies,Opportunity Launch Call (Pilot)",
+        "EmailTemplateCCRoles": []
+      }
+    ],
+    "fetchEmailTemplatesErrorMsg": "",
+    "isLoadingEmailTemplates": false
   }
 }

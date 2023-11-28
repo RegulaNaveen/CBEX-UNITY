@@ -86,7 +86,9 @@ const {
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_PROPOSAL_DETAIL_SF,
   UPDATE_DASHBOARD_OPPORTUNITY,
-  CHANGE_BID_LOADER
+  CHANGE_BID_LOADER,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION,
+  PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD
 } = REDUX_TYPES.PROPOSAL;
 
 const CLASS_QUES_FIL_R1_C1 = 'questions-filter__row1-col1';
@@ -400,11 +402,12 @@ const setOpportunityInfo = (state, action) => {
     let milestoneGroup = fromJS({});
     milestones.forEach(milestone => {
       milestoneGroup = milestoneGroup.set(
-        milestone,
+        milestone.Name,
         Map({
           checked: false,
-          label: milestone,
-          className: CLASS_QUES_FIL_ITEM
+          label: milestone.Name,
+          className: CLASS_QUES_FIL_ITEM,
+          color: milestone.Color
         })
       );
     });
@@ -472,11 +475,12 @@ const onChangeBid = (state: Map, action: Object): Map => {
     let milestoneGroup = fromJS({});
     milestones.forEach(milestone => {
       milestoneGroup = milestoneGroup.set(
-        milestone,
+        milestone.Name,
         Map({
           checked: false,
-          label: milestone,
-          className: CLASS_QUES_FIL_ITEM
+          label: milestone.Name,
+          className: CLASS_QUES_FIL_ITEM,
+          color: milestone.Color
         })
       );
     });
@@ -584,11 +588,12 @@ const addNewBid = (state: Map, action: Object): Map => {
   let milestoneGroup = fromJS({});
   milestones.forEach(milestone => {
     milestoneGroup = milestoneGroup.set(
-      milestone,
+      milestone.Name,
       Map({
         checked: false,
-        label: milestone,
-        className: CLASS_QUES_FIL_ITEM
+        label: milestone.Name,
+        className: CLASS_QUES_FIL_ITEM,
+        color: milestone.Color
       })
     );
   });
@@ -1012,6 +1017,7 @@ const onQuestionSectionError = (state: Map, action: Object): Map => {
 
 const onAnswerTypesLoaded = (state: Map, action: Object): Map => {
   const answertypes = action.payload;
+  console.log('answer types are', answertypes);
   return state
     .set('proposalAnswerTypes', answertypes)
     .set('isAnswerTypesLoading', false);
@@ -1042,6 +1048,35 @@ const onRolesLoading = (state: Map): Map => {
 const onRolesError = (state: Map, action: Object): Map => {
   const { payload } = action;
   return state.set('rolesError', payload).set('isRolesLoading', false);
+};
+
+const onSetCustomTabQuestion = (state: Map, action: Object): Map => {
+  const data = action.payload;
+  const updatedProposalQuestions = state.get('proposalQuestions');
+  const isQuestionExist = updatedProposalQuestions.find(
+    item => item?.questionId === data?.questionId
+  );
+  if (isQuestionExist) {
+    return;
+  }
+
+  updatedProposalQuestions.push(data);
+
+  let questionsFilter = state.get('questionsFilter');
+  const filterQuestionsVal = getQuestionsFilterApplied(
+    updatedProposalQuestions,
+    questionsFilter,
+    state.get('eventflag')
+  );
+  let selectedBidId = state.getIn(['selectedBid', 'id']);
+
+  return state
+    .set('proposalQuestions', cloneDeep(updatedProposalQuestions))
+    .set('filteredProposalQuestions', cloneDeep(filterQuestionsVal))
+    .setIn(
+      ['opportunityData', selectedBidId, 'proposalQuestions'],
+      cloneDeep(updatedProposalQuestions)
+    );
 };
 
 const onSetQuestion = (state: Map, action: Object): Map => {
@@ -1528,7 +1563,21 @@ const updateDashboardDetail = (state, action) => {
       currentProposal === data?.data?.proposalId
     ) {
       proposalDetail.Customer = data?.data?.proposalDetails.Customer;
-      return state.set('proposalDetails', { ...proposalDetail });
+      if (data?.data?.proposalDetails['Bid due date']) {
+        proposalDetail['Bid due date'] =
+          data.data.proposalDetails['Bid due date'];
+      }
+      return state
+        .set('proposalDetails', { ...proposalDetail })
+        .setIn(
+          [
+            'opportunityData',
+            data.data.proposalId,
+            'proposal',
+            'proposalDetails'
+          ],
+          proposalDetail
+        );
     }
 
     return state;
@@ -1559,6 +1608,12 @@ const actionMap = {
   [ROLES_LOADING]: onRolesLoading,
   [ROLES_ERROR]: onRolesError,
   [PROPOSAL_SET_QUESTION]: onSetQuestion,
+  [PROPOSAL_CUSTOM_TAB_SET_QUESTION]: onSetCustomTabQuestion,
+  [PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD]: (state, { payload }) => {
+    return state
+      .set('setQuestionData', payload)
+      .set('isSetQuestionLoading', false);
+  },
   [PROPOSAL_SET_QUESTION_LOADING]: onSetQuestionLoading,
   [PROPOSAL_SET_QUESTION_ERROR]: onSetQuestionError,
   [PROPOSAL_BOX_ID_LOADING]: onGettingProposalBoxId,
