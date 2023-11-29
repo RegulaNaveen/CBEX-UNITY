@@ -23,7 +23,15 @@ import { autoNavigationCompletedAction } from '../../../redux/actions/search-act
 
 export const ApprovalContext = createContext();
 
-const Section = ({ sectionId, title, testVisibility, keyForward }) => {
+const Section = ({
+  sectionId,
+  title,
+  testVisibility,
+  keyForward,
+  isExpandAll,
+  handleChange
+}) => {
+  console.log('isExpandAll', isExpandAll, handleChange);
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
   const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
@@ -48,6 +56,11 @@ const Section = ({ sectionId, title, testVisibility, keyForward }) => {
   const questions = useSelector(getProposalQuestions);
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
+
+  const handleAccordionChange = () => {
+    setExpanded(prev => !prev);
+    handleChange(sectionId);
+  };
 
   useEffect(() => {
     setSectionVisibility(shouldShowSection(sectionId, flags));
@@ -110,7 +123,14 @@ const Section = ({ sectionId, title, testVisibility, keyForward }) => {
         setExpanded(shouldExpand);
       }
     }
-  }, [currentSearchResult, sectionId, dispatch, approval, expanded]);
+  }, [
+    currentSearchResult,
+    sectionId,
+    dispatch,
+    approval,
+    expanded,
+    isExpandAll
+  ]);
 
   useEffect(() => {
     if (!approvalDeleting && !approvalDuplicating) {
@@ -131,8 +151,8 @@ const Section = ({ sectionId, title, testVisibility, keyForward }) => {
         >
           <CustomAccordion
             className="accordion-container"
-            expanded={expanded}
-            onChange={() => setExpanded(prev => !prev)}
+            expanded={isExpandAll || expanded} // Use isExpandAll instead of the local state
+            onChange={handleAccordionChange}
             style={style}
           >
             <CustomAccordionSummary>
