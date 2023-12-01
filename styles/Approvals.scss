@@ -170,6 +170,9 @@
   }
 
   .filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
     .filter-btn {
       display: flex;
       justify-content: end;
