@@ -153,7 +153,7 @@ const CustomTabs = ({ tabId, key }) => {
                   sectionId={tabs.UnityTabSectionId}
                   title={tabs.UnityTabSectionTitle}
                   tabId={tabId}
-                  isExpandAll={expandAll[index]} // Pass the expanded state for each section
+                  isExpandAll={expandAll[index]}
                   handleChange={handleChange(index)}
                 />
               );

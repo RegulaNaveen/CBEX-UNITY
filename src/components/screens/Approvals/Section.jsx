@@ -31,7 +31,6 @@ const Section = ({
   isExpandAll,
   handleChange
 }) => {
-  console.log('isExpandAll', isExpandAll, handleChange);
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
   const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
@@ -151,7 +150,7 @@ const Section = ({
         >
           <CustomAccordion
             className="accordion-container"
-            expanded={isExpandAll || expanded} // Use isExpandAll instead of the local state
+            expanded={isExpandAll || expanded}
             onChange={handleAccordionChange}
             style={style}
           >

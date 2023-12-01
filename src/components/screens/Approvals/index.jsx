@@ -35,7 +35,6 @@ const Approvals = () => {
   const approvalSectionTitles = approvals.map(
     item => item.ApprovalSectionTitle
   );
-
   const panels = approvalSectionTitles;
   const questions = useSelector(getProposalQuestions);
   const [isShowFilters, setIsShowFilters] = useState(false);
@@ -55,7 +54,6 @@ const Approvals = () => {
   const dispatch = useDispatch();
   const socketContext = useContext(SocketContext);
   const allOpen = expandAll.every(exp => exp);
-  console.log('expandAll', expandAll);
 
   const handleExpandAllChange = () => {
     setExpandAll(oldPanels => oldPanels.map(() => !allOpen));
@@ -192,7 +190,7 @@ const Approvals = () => {
               keyForward={approval.key}
               sectionId={approval.ApprovalSectionId}
               title={approval.ApprovalSectionTitle}
-              isExpandAll={expandAll[index]} // Pass the expanded state for each section
+              isExpandAll={expandAll[index]}
               handleChange={handleChange(index)}
             />
           ))
