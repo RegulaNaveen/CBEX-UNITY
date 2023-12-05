@@ -39,9 +39,7 @@ const BidHistory = () => {
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
-
   const currentWidget = useSelector(selectCurrentWidget);
-
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
 
@@ -177,7 +175,11 @@ const BidHistory = () => {
                             <div>
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
-                                : item.bidName}
+                                : item.bidName.startsWith('Post Award')
+                                  ? `Post Award ${item.bidNo}`
+                                  : item.bidName.startsWith('RFI')
+                                    ? `RFI ${item.bidNo}`
+                                    : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'

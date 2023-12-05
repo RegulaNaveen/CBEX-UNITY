@@ -104,6 +104,8 @@ const SEARCH = {
 
 const BID_TYPES = {
   Early_Engagement_Bid: 'Early Engagement',
+  Post_Award_Bid: 'Post Award',
+  RFI_Request: 'RFI Request',
   Clinical_Bid: 'Bid'
 };
 
