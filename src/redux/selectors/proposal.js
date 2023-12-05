@@ -355,7 +355,6 @@ export const getPanelStatus = createSelector(selectProposal, proposal =>
 export const getfetchAllFlags = createSelector(selectProposal, proposal =>
   proposal?.get('eventflag')
 );
-
 export const getBidList = createSelector(
   getfetchAllFlags,
   getOpportunityData,
@@ -364,11 +363,18 @@ export const getBidList = createSelector(
       let bidList = [];
       opportunity.valueSeq().forEach(item => {
         if (
-          (!flags['earlyEngagementInBidHistory'] &&
+          ((!flags['earlyEngagementInBidHistory'] &&
             item.getIn(['proposal', 'bidType']) !== 'Early_Engagement_Bid') ||
-          flags['earlyEngagementInBidHistory']
+            flags['earlyEngagementInBidHistory']) &&
+          ((!flags['postAwardInBidHistory'] &&
+            item.getIn(['proposal', 'bidType']) !== 'Post_Award_Bid') ||
+            flags['postAwardInBidHistory']) &&
+          ((!flags['RFIInBidHistory'] &&
+            item.getIn(['proposal', 'bidType']) !== 'RFI_Request') ||
+            flags['RFIInBidHistory'])
         ) {
           bidList.push({
+            isEditable: item.get('isEditable'),
             bidDueDate: item.getIn([
               'proposal',
               'proposalDetails',
@@ -398,7 +404,6 @@ export const getBidList = createSelector(
           });
         }
       });
-
       bidList = orderBy(bidList, ['bidDate'], ['desc']);
       return bidList;
     } else return [];

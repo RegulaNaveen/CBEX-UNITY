@@ -122,7 +122,7 @@ export const setUnityQuestion = (
             payload: data
           });
         }
-        if (socketContext) await socketContext?.addQuestionWrapper(data);
+        if (socketContext) await socketContext?.addQuestionWrapper(data, proposalId);
         return data;
       }
     } catch (err) {
@@ -162,7 +162,7 @@ export const editUnityQuestion = (
           payload: data
         });
       }
-      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      if (socketContext) await socketContext?.questionTextUpdateWrapper(data, proposalId);
       return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
@@ -198,7 +198,8 @@ export const deleteUnityQuestion = (
           await socketContext?.customQuestionDeleteWrapper(
             questionData.questionId,
             questionData.sectionName,
-            questionData.tabId
+            questionData.tabId,
+            questionData.proposalId
           );
       } else {
         dispatch({

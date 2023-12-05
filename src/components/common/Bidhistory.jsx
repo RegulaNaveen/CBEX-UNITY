@@ -34,13 +34,12 @@ const BidHistory = () => {
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const bidType = selectedBid.get('bidType');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
-
   const currentWidget = useSelector(selectCurrentWidget);
-
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
 
@@ -176,7 +175,11 @@ const BidHistory = () => {
                             <div>
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
-                                : item.bidName}
+                                : item.bidName.startsWith('Post Award')
+                                  ? `Post Award ${item.bidNo}`
+                                  : item.bidName.startsWith('RFI')
+                                    ? `RFI ${item.bidNo}`
+                                    : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'
@@ -225,7 +228,7 @@ const BidHistory = () => {
                 <div className="bid-history-pricemodeler-content">
                   <>
                     {(showBidCostDetail ||
-                      !isCurrentBid ||
+                      !isEditableBid ||
                       bidVal ||
                       currentWidget.currentWidget === 'BidCostDetail') &&
                     bidCostDetailFlag ? (

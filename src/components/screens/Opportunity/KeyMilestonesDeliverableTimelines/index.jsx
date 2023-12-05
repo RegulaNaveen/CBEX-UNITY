@@ -34,6 +34,7 @@ const KeyMilestoneDeliverableTimelines = () => {
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditableBid');
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
   );
@@ -225,7 +226,7 @@ const KeyMilestoneDeliverableTimelines = () => {
             style={{ borderBottom: 'none' }}
             onClick={() => setShowModal(true)}
             size="small"
-            disabled={!isCurrentBid}
+            disabled={!isEditableBid}
           >
             <Plus
               className="plus-icon-add-new-question"
