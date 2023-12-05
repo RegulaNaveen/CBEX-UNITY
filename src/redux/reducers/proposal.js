@@ -145,7 +145,7 @@ const INITIAL_STATE: Map = fromJS({
       },
       showInactiveQuestions: {
         checked: false,
-        label: 'Include N/A Questions',
+        label: 'Include Not Applicable Questions',
         className: 'questions-filter__row3-col1'
       },
       logic: 'OR'
@@ -342,8 +342,10 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${proposal?.proposal?.proposalDetails
-            ?.earlyEngagementDevelopmentPlan || ''}`
+          `${
+            proposal?.proposal?.proposalDetails
+              ?.earlyEngagementDevelopmentPlan || ''
+          }`
         )
         .set(
           'questionTemplateVersionNumber',
@@ -448,6 +450,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
   let selectedBid = Map({
     id: payload.bid.bidId,
     isCurrent: payload.bid.isCurrent,
+    isEditable: payload.bid.isEditable,
     pertinentDetails: payload.bid.pertinentDetails,
     bidType: bidType || '',
     earlyEngagementDevelopmentPlan:
@@ -646,9 +649,9 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
   } = action;
 
   const selectedBidId = state.getIn(['selectedBid', 'id']);
-  const isCurrent = state.getIn(['selectedBid', 'isCurrent']);
 
-  if (!isCurrent) {
+  const isCurrentProposal = data && data[data.length - 1];
+  if (isCurrentProposal?.proposalId !== selectedBidId) {
     return state;
   }
 
@@ -1595,7 +1598,8 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
+    onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1684,7 +1688,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

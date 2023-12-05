@@ -374,6 +374,7 @@ export const getBidList = createSelector(
             flags['RFIInBidHistory'])
         ) {
           bidList.push({
+            isEditable: item.get('isEditable'),
             bidDueDate: item.getIn([
               'proposal',
               'proposalDetails',

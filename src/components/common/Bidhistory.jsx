@@ -34,6 +34,7 @@ const BidHistory = () => {
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const bidType = selectedBid.get('bidType');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
@@ -227,7 +228,7 @@ const BidHistory = () => {
                 <div className="bid-history-pricemodeler-content">
                   <>
                     {(showBidCostDetail ||
-                      !isCurrentBid ||
+                      !isEditableBid ||
                       bidVal ||
                       currentWidget.currentWidget === 'BidCostDetail') &&
                     bidCostDetailFlag ? (

@@ -620,7 +620,21 @@ class Questions extends Component {
                     }}
                   >
                     <Typography variant="body2">
-                      {showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                      {showNaCheckbox ? (
+                        <>
+                          Select N/A checkbox next to questions to hide from the
+                          standard view. <br />
+                          To see questions marked as N/A (Not Applicable), go to
+                          Filter and select “Include Not Applicable Questions."
+                        </>
+                      ) : (
+                        <>
+                          Questions identified as N/A (Not Applicable) are
+                          hidden from the standard view. <br />
+                          To see questions marked as Not Applicable, go to
+                          Filter and select “Include Not Applicable Questions."
+                        </>
+                      )}
                     </Typography>
                   </Popover>
                 </>
