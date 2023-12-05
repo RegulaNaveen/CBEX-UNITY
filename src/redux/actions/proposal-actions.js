@@ -1,5 +1,5 @@
 // @flow
-import { isEmpty, cloneDeep, uniqBy } from 'lodash';
+import { isEmpty, cloneDeep, uniqBy, orderBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
 import type { Dispatch, ThunkAction } from './action-types';
@@ -39,7 +39,11 @@ import {
   getFavouriteProposals,
   getfetchUserTagFlag
 } from '../selectors';
-import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
+import {
+  getSelectedBid,
+  getUniqueMilestones,
+  getOpportunityData
+} from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
@@ -49,6 +53,7 @@ import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import featureFlags from '../../constants/featureFlags';
+import proposal from '../reducers/proposal';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -1586,6 +1591,22 @@ export const getOpportunity = (
   };
 };
 
+const checkIsEditableTrue = (selectedBid, allProposals) => {
+  const bidList = Object.groupBy(allProposals, item =>
+    item.proposal.bidType ? item.proposal.bidType : 'Clinical_Bid'
+  );
+  const selectedBidType = selectedBid.bidType || 'Clinical_Bid';
+  if (bidList[selectedBidType] && bidList[selectedBidType].length > 0) {
+    if (
+      bidList[selectedBidType][0].proposal.proposalDetails.bidNo ==
+      selectedBid.bidNo
+    ) {
+      return true;
+    } else return false;
+  }
+  return true;
+};
+
 export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
@@ -1611,6 +1632,8 @@ export const changeBid = (bid, viewType) => {
 
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
+    const OppoData = getOpportunityData(getState()).toJS();
+    const allProposals = Object.values(OppoData);
     dispatch({ type: CHANGE_BID_LOADER, payload: true });
     if (selectedBid.bidName !== bid?.bidName) {
       dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
@@ -1625,7 +1648,10 @@ export const changeBid = (bid, viewType) => {
       type: CHANGE_BID,
       payload: {
         proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
-        bid
+        bid: {
+          ...bid,
+          isEditable: checkIsEditableTrue(bid, allProposals)
+        }
       }
     });
     dispatch({
