@@ -53,7 +53,7 @@ let conditionBlankPredicted;
 let indexNo;
 let questionIdentifier;
 let bidNo = '';
-let isCurrentBid = '';
+let isEditableBid = '';
 
 function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
   let finalAnswer = '';
@@ -161,13 +161,13 @@ class AnswerHistory extends Component<Props> {
     const proposalID = selectedBid?.toJS()?.id;
     bidNo = opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
       .bidNo;
-    isCurrentBid =
+    isEditableBid =
       opportunityData?.get(proposalID)?.toJS().isCurrent === true
         ? opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
             .bidNo
         : 'NA';
     if (
-      isCurrentBid === bidNo &&
+      isEditableBid === bidNo &&
       lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
       questionLockWrapper(questionIdentifier);
@@ -640,7 +640,7 @@ class AnswerHistory extends Component<Props> {
         bidNo = opportunityData.get(proposalId).toJS().proposal.proposalDetails
           .bidNo;
         bidType = getBidTypeFromProposalId(proposalId, getOpportunityData);
-        isCurrentBid =
+        isEditableBid =
           opportunityData.get(proposalId).toJS().isCurrent === true
             ? opportunityData.get(proposalId).toJS().proposal.proposalDetails
                 .bidNo
@@ -1115,7 +1115,7 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
-              isCurrentBid === bidNo &&
+              isEditableBid === bidNo &&
               lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
                 <div className="answer-meta-buttons">

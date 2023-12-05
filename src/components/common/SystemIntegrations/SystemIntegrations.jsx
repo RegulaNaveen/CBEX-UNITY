@@ -35,7 +35,7 @@ const SystemIntegrations = ({
   lastAnswer,
   loading,
   changeIcon,
-  isCurrentBid,
+  isEditableBid,
   hasDifferentSFanswer,
   isNotepadOpen,
   disabled,
@@ -612,7 +612,7 @@ const SystemIntegrations = ({
       item
       xs={gridColRatio[1]}
       className={`actions-grid-item ${
-        hasDifferentSFanswer && isCurrentBid
+        hasDifferentSFanswer && isEditableBid
           ? 'validation-wrapper-integration'
           : 'no-integration'
       }`}

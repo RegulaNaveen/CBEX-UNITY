@@ -145,7 +145,7 @@ const INITIAL_STATE: Map = fromJS({
       },
       showInactiveQuestions: {
         checked: false,
-        label: 'Include N/A Questions',
+        label: 'Include Not Applicable Questions',
         className: 'questions-filter__row3-col1'
       },
       logic: 'OR'
@@ -448,6 +448,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
   let selectedBid = Map({
     id: payload.bid.bidId,
     isCurrent: payload.bid.isCurrent,
+    isEditable: payload.bid.isEditable,
     pertinentDetails: payload.bid.pertinentDetails,
     bidType: bidType || '',
     earlyEngagementDevelopmentPlan:

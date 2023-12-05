@@ -170,6 +170,18 @@
   }
 
   .filter-container {
+    .expand-all {
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: row;
+      .tasksList-expand-all-icon {
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+        margin-right: 106px;
+        padding-right: 15px;
+      }
+    }
     .filter-btn {
       display: flex;
       justify-content: end;
