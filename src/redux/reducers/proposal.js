@@ -448,6 +448,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
   let selectedBid = Map({
     id: payload.bid.bidId,
     isCurrent: payload.bid.isCurrent,
+    isEditable: payload.bid.isEditable,
     pertinentDetails: payload.bid.pertinentDetails,
     bidType: bidType || '',
     earlyEngagementDevelopmentPlan:
