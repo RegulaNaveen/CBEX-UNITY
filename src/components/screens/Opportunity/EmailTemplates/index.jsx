@@ -52,7 +52,7 @@ const EmailTemplates = () => {
     state.proposal.get('selectedBid')
   )?.toJS();
   const isCurrentBid = selectedBid.get('isCurrent');
-  const isEditableBid = selectedBid.get('isEditableBid');
+  const isEditableBid = selectedBid.get('isEditable');
   const sections = useSelector(selectSections);
   const allSections = sections || [];
   const proposalDetail = useSelector(getProposalDetails);
