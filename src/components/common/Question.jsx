@@ -811,7 +811,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const { selectedRow } = this.state;
     const isCurrentBid = selectedBid.get('isCurrent');
-
+    const isEditableBid = selectedBid.get('isEditable');
     const optionsYN = ['Yes', 'No'];
     const answer = lastAnswer && lastAnswer?.get('answer');
 
@@ -824,7 +824,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       return (
         checkNonEditableFields(noneditableField, sfField, sfObject) ||
-        !isCurrentBid
+        !isEditableBid
       );
     };
     const checkDisableFlag = () => {
@@ -833,7 +833,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       return (
         checkNonEditableFields(noneditableField, sfField, sfObject) ||
-        !isCurrentBid
+        !isEditableBid
       );
     };
     // onFocus for question concurrency
@@ -864,7 +864,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
-          hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+          hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
           sfObject={sfObject}
         >
           <span
@@ -1037,7 +1037,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1067,7 +1067,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1099,7 +1099,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'y/n':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1139,7 +1139,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'select':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1181,7 +1181,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'date':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1222,7 +1222,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case ANSWER_TYPES.PICKLIST:
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1258,7 +1258,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'multi-select-lookup':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1306,7 +1306,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1352,7 +1352,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case ANSWER_TYPES.RADIO:
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1395,7 +1395,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case ANSWER_TYPES.CHECKBOX:
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1644,7 +1644,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         answerDate = 'Not Answered';
       }
     }
-    const isCurrentBid = selectedBid.get('isCurrent');
+    const isEditableBid = selectedBid.get('isEditable');
     const {
       selectedRow,
       iconColor,
@@ -1709,7 +1709,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
 
                 {/* Edit Question Icon */}
-                {isCustomQuestion && isCurrentBid && (
+                {isCustomQuestion && isEditableBid && (
                   <div className="question-edit">
                     <span
                       aria-hidden="true"
@@ -1841,7 +1841,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             showNaCheckbox={showNaCheckbox}
             isNotepadOpen={isNotepadOpen}
             changeIcon={changeIcon}
-            isCurrentBid={isCurrentBid}
+            isEditableBid={isEditableBid}
             sfObject={sfObject}
             answer={answerValue}
             answerText={answerText}

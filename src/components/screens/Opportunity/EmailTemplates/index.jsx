@@ -52,6 +52,7 @@ const EmailTemplates = () => {
     state.proposal.get('selectedBid')
   )?.toJS();
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditableBid');
   const sections = useSelector(selectSections);
   const allSections = sections || [];
   const proposalDetail = useSelector(getProposalDetails);
@@ -191,20 +192,20 @@ const EmailTemplates = () => {
       accessor: 'EmailTemplateName',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: isCurrentBid
+      filterFunction: isEditableBid
         ? createStringSearchFilter('EmailTemplateName')
         : null,
-      filterComponent: isCurrentBid ? TextFieldFilter : null
+      filterComponent: isEditableBid ? TextFieldFilter : null
     },
     {
       header: 'Summary',
       accessor: 'EmailTemplateDescription',
       customCell: Cell,
       sortFunction: compareStrings,
-      filterFunction: isCurrentBid
+      filterFunction: isEditableBid
         ? createStringSearchFilter('EmailTemplateDescription')
         : null,
-      filterComponent: isCurrentBid ? TextFieldFilter : null
+      filterComponent: isEditableBid ? TextFieldFilter : null
     }
   ];
 
@@ -646,7 +647,7 @@ const EmailTemplates = () => {
       <div id="email-template-tab">
         <div
           className={
-            !isCurrentBid
+            !isEditableBid
               ? 'email-template-panel disabled'
               : 'email-template-panel'
           }

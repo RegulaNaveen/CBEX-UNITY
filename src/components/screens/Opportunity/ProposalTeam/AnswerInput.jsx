@@ -99,6 +99,7 @@ const AnswerInput = props => {
   const userData = useSelector(state => getUserData(state));
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const socketContext = useContext(SocketContext);
   const [selectedRow, setSelectedRow] = useState(false);
 
@@ -166,11 +167,11 @@ const AnswerInput = props => {
   const integrationLocked = isQuestionLockedByOther() ? true : false;
 
   const checkDisableFlag = () => {
-    if (isQuestionLockedByOther() || !isCurrentBid) return true;
+    if (isQuestionLockedByOther() || !isEditableBid) return true;
     if (NaLoading) return true;
     return (
       checkNonEditableFields(noneditableField, sficon, sfObject) ||
-      !isCurrentBid
+      !isEditableBid
     );
   };
 
@@ -588,7 +589,7 @@ const AnswerInput = props => {
               <Grid item xs={10}>
                 <SFAnswerValidationWrapper
                   style={{ paddingLeft: '40px' }}
-                  hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+                  hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
                   sfObject={sfObject}
                 >
                   <span
@@ -628,7 +629,7 @@ const AnswerInput = props => {
             {answerConfiguration?.type === 'number' && (
               <Grid item xs={10}>
                 <SFAnswerValidationWrapper
-                  hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+                  hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
                   sfObject={sfObject}
                 >
                   <span
@@ -669,7 +670,7 @@ const AnswerInput = props => {
             {answerConfiguration?.type === 'date' && (
               <Grid item xs={10}>
                 <SFAnswerValidationWrapper
-                  hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+                  hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
                   sfObject={sfObject}
                 >
                   <span
@@ -727,7 +728,7 @@ const AnswerInput = props => {
                 showNaCheckbox={showNaCheckbox}
                 isNotepadOpen={isNotepadOpen}
                 changeIcon={changeIcon}
-                isCurrentBid={isCurrentBid}
+                isEditableBid={isEditableBid}
                 sfObject={sfObject}
                 handleVerifyPredictedAnsClick={predictedAnswer =>
                   handleVerifyPredictedAnsClick(predictedAnswer)
