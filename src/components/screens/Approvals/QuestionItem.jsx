@@ -46,19 +46,15 @@ import { Edit } from '../../svg';
 import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  SelectQuestion
-);
-const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  MultiSelectQuestion
-);
-const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
-  YesNoQuestion
-);
+const SelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(SelectQuestion);
+const MultiSelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(MultiSelectQuestion);
+const YesNoQuestionWithIdleStateDetection =
+  withIdleStateDetection(YesNoQuestion);
 
-const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestion
-);
+const CheckBoxQuestionWithIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestion);
 
 const QuestionItem = ({
   questionId = '',
@@ -101,7 +97,7 @@ const QuestionItem = ({
     setTimeout(() => {
       // updating question text with decorators
       if (questionTextRef1.current !== null) {
-        const { editorState } = questionTextRef1.current.state;
+        const editorState = questionTextRef1?.current?.state?.editorState;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
         });
@@ -466,66 +462,65 @@ const QuestionItem = ({
                   ref={questionTextRef}
                   //className="question-label-container"
                 >
-                  
-                    <Grid
-                      item
-                      xs={10}
-                      style={{
-                        display: 'flex',
-                        float: 'left',
-                        paddingTop: '4px'
-                      }}
-                    >
-                      <QuestionLabel
-                        questionLabel={question?.questionText || ''}
-                      />
-                      {question.isCustomQuestion &&
-                        selectedBid.isCurrent &&
-                        !isQuesFreezed && (
-                          <div
-                            className="question-edit"
-                            style={{ 'margin-left': '10px' }}
-                          >
-                            <span
-                              aria-hidden="true"
-                              onClick={() => {
-                                dispatch(
-                                  setEditQuestionData({
-                                    questionText: question?.questionText,
-                                    questionHTML: question?.questionHTML,
-                                    questionJSON: question?.questionJSON,
-                                    questionHintJSON:
-                                      question?.questionHintJSON,
-                                    section:
-                                      question?.section.approvalSectionName,
-                                    answerType:
-                                      question?.answerConfiguration.type,
-                                    roleNames: question?.roleNames,
-                                    questionId: question?.questionId,
-                                    tabFlag: 'Approvals',
-                                    direction: 'left',
-                                    questionAnswered: checkLastAnswerOfQuestionVisibility(
+                  <Grid
+                    item
+                    xs={10}
+                    style={{
+                      display: 'flex',
+                      float: 'left',
+                      paddingTop: '4px'
+                    }}
+                  >
+                    <QuestionLabel
+                      questionLabel={question?.questionText || ''}
+                    />
+                    {question.isCustomQuestion &&
+                      selectedBid.isCurrent &&
+                      !isQuesFreezed && (
+                        <div
+                          className="question-edit"
+                          style={{ 'margin-left': '10px' }}
+                        >
+                          <span
+                            aria-hidden="true"
+                            onClick={() => {
+                              dispatch(
+                                setEditQuestionData({
+                                  questionText: question?.questionText,
+                                  questionHTML: question?.questionHTML,
+                                  questionJSON: question?.questionJSON,
+                                  questionHintJSON: question?.questionHintJSON,
+                                  section:
+                                    question?.section.approvalSectionName,
+                                  answerType:
+                                    question?.answerConfiguration.type,
+                                  roleNames: question?.roleNames,
+                                  questionId: question?.questionId,
+                                  tabFlag: 'Approvals',
+                                  direction: 'left',
+                                  questionAnswered:
+                                    checkLastAnswerOfQuestionVisibility(
                                       question?.answers
                                     )
-                                  })
-                                );
-                              }}
-                            >
-                              <Edit className="edit-icon" />
-                            </span>
-                          </div>
-                        )}
-                    </Grid>
-                    <Grid
-                      item
-                      xs={2}
-                      style={{
-                        display: 'flex',
-                        float: 'left'
-                      }}
-                    >
-                      {renderQuestionHint()}
-                    </Grid>
+                                })
+                              );
+                            }}
+                          >
+                            <Edit className="edit-icon" />
+                          </span>
+                        </div>
+                      )}
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    style={{
+                      display: 'flex',
+                      float: 'left'
+                    }}
+                  >
+                    {renderQuestionHint()}
+                  </Grid>
                 </span>
               </Grid>
               {locked ? (
