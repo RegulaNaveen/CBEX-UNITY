@@ -145,7 +145,7 @@ const INITIAL_STATE: Map = fromJS({
       },
       showInactiveQuestions: {
         checked: false,
-        label: 'Include N/A Questions',
+        label: 'Include Not Applicable Questions',
         className: 'questions-filter__row3-col1'
       },
       logic: 'OR'
