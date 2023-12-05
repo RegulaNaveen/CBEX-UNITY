@@ -369,6 +369,7 @@ export const getBidList = createSelector(
           flags['earlyEngagementInBidHistory']
         ) {
           bidList.push({
+            isEditable: item.get('isEditable'),
             bidDueDate: item.getIn([
               'proposal',
               'proposalDetails',
