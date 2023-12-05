@@ -1591,14 +1591,10 @@ export const getOpportunity = (
   };
 };
 
-const checkIsCurrentTrue = (selectedBid, allProposals) => {
+const checkIsEditableTrue = (selectedBid, allProposals) => {
   const bidList = Object.groupBy(allProposals, item =>
     item.proposal.bidType ? item.proposal.bidType : 'Clinical_Bid'
   );
-  //proposalDate means created date order it by latest
-  // const bidList = orderBy(group, ['proposalDate'], ['asc']);
-  // console.log('bidList', bidList);
-
   const selectedBidType = selectedBid.bidType || 'Clinical_Bid';
   if (bidList[selectedBidType] && bidList[selectedBidType].length > 0) {
     if (
@@ -1654,7 +1650,7 @@ export const changeBid = (bid, viewType) => {
         proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
         bid: {
           ...bid,
-          isEditable: checkIsCurrentTrue(bid, allProposals)
+          isEditable: checkIsEditableTrue(bid, allProposals)
         }
       }
     });
