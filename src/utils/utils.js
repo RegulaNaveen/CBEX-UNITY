@@ -78,8 +78,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-        : name?.trim();
+          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+          : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -197,8 +197,9 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ? relevantQuestions
         ?.map(
           q =>
-            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
-              ''} \r\n`
+            `${q.questionText ?? ''} \r\n${
+              q.answers?.slice(-1)[0]?.answer ?? ''
+            } \r\n`
         )
         .join('')
     : `<ul>${relevantQuestions
@@ -279,7 +280,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function(data) {
+  lobMapping.forEach(function (data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
@@ -550,8 +551,13 @@ const getBidNameByType = bidType => {
   let bidName = '';
   if (!isEmpty(BID_TYPES[bidType])) {
     bidName = BID_TYPES[bidType];
+    console.log('bidName', bidName);
     if (bidName === 'Early Engagement') {
       bidName = 'Early Engagement ';
+    } else if (bidName === 'Post Award') {
+      bidName = 'Post Award ';
+    } else if (bidName === 'RFI Request') {
+      bidName = 'RFI ';
     }
   } else {
     bidName = 'Bid';
