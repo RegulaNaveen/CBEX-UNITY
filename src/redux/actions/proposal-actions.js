@@ -1472,7 +1472,8 @@ export const getOpportunity = (
     const flags = getfetchUserTagFlag(getState());
     const earlyEngagmentBidHistoryFlag =
       flags[featureFlags.EARLY_ENGAGEMENT_BID_HISTORY];
-
+    const postAwardBidHistoryFlag = flags[featureFlags.POST_AWARD_BID_HISTORY];
+    const rfiRequestFlag = flags[featureFlags.RFI_BID_HISTORY];
     try {
       let allProposals = await getAllProposals(id);
       if (earlyEngagmentBidHistoryFlag === false) {
@@ -1485,6 +1486,26 @@ export const getOpportunity = (
           allProposals[0].isCurrent = true;
         }
       }
+      if (postAwardBidHistoryFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !== 'Post_Award_Bid'
+        );
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
+      }
+
+      if (rfiRequestFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !== 'RFI_Request'
+        );
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
+      }
+
       const proposal = allProposals.find(
         thisProposal =>
           thisProposal.proposal.proposalDetails.bidNo === bidNo &&
