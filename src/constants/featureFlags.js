@@ -12,5 +12,7 @@ export default {
   BID_COST_DETAILS: 'bidCostDetail',
   FAVOURITE_FLAG: 'favouriteFlag',
   CUSTOM_NAME_FLAG: 'customOpportunityNameFlag',
-  EARLY_ENGAGEMENT_BID_HISTORY: 'earlyEngagementInBidHistory'
+  EARLY_ENGAGEMENT_BID_HISTORY: 'earlyEngagementInBidHistory',
+  POST_AWARD_BID_HISTORY: 'postAwardInBidHistory',
+  RFI_BID_HISTORY: 'RFIInBidHistory'
 };
