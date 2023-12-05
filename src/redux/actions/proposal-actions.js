@@ -49,7 +49,6 @@ import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import featureFlags from '../../constants/featureFlags';
-
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
   PROPOSAL_INFO,
@@ -1449,7 +1448,8 @@ export const getOpportunity = (
     const flags = getfetchUserTagFlag(getState());
     const earlyEngagmentBidHistoryFlag =
       flags[featureFlags.EARLY_ENGAGEMENT_BID_HISTORY];
-
+    const postAwardBidHistoryFlag = flags[featureFlags.POST_AWARD_BID_HISTORY];
+    const rfiRequestFlag = flags[featureFlags.RFI_BID_HISTORY];
     try {
       let allProposals = await getAllProposals(id);
       if (earlyEngagmentBidHistoryFlag === false) {
@@ -1462,6 +1462,26 @@ export const getOpportunity = (
           allProposals[0].isCurrent = true;
         }
       }
+      if (postAwardBidHistoryFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !== 'Post_Award_Bid'
+        );
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
+      }
+
+      if (rfiRequestFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !== 'RFI_Request'
+        );
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
+      }
+
       const proposal = allProposals.find(
         thisProposal =>
           thisProposal.proposal.proposalDetails.bidNo === bidNo &&
@@ -1802,45 +1822,39 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB = (
-  proposalId,
-  email,
-  sectionOrder,
-  sectionName
-) => async () => {
-  try {
-    // Api Response
-    const response = await deleteProposalUser(proposalId, {
-      email,
-      section: { sectionOrder, sectionName }
-    });
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-  } catch (error) {
-    // Error
-    console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const deleteProposalUserFromDB =
+  (proposalId, email, sectionOrder, sectionName) => async () => {
+    try {
+      // Api Response
+      const response = await deleteProposalUser(proposalId, {
+        email,
+        section: { sectionOrder, sectionName }
+      });
+      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+    } catch (error) {
+      // Error
+      console.log(error.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory = (
-  proposalId: string,
-  questionId: string
-) => async () => {
-  try {
-    // Api Response
-    const response = await getProposalAnswer(proposalId, questionId);
-    return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const getProposalAnswerHistory =
+  (proposalId: string, questionId: string) => async () => {
+    try {
+      // Api Response
+      const response = await getProposalAnswer(proposalId, questionId);
+      return { status: true, title: DEFAULT.SUCCESS, data: response };
+    } catch (error) {
+      // Error
+      console.log(error?.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Set Flag for Event Launcher
