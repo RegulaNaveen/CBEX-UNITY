@@ -105,7 +105,6 @@ function VerticalTabsCollapsiblePanel({
     onTabClick(newActiveTab);
   }
   const renderTab = () => {
-    console.log(tabArr);
     const tabs = tabArr.map((v, vIdx) => {
       if (
         v['showQuestionsForCustomerTab'] !== undefined &&
