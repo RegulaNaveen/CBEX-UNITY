@@ -1,5 +1,5 @@
 // @flow
-import _, { isEqual, cloneDeep } from 'lodash';
+import _, { isEqual, cloneDeep, groupBy, orderBy } from 'lodash';
 import { Map, fromJS, OrderedMap, setIn } from 'immutable'; // NOSONAR
 import { REDUX_TYPES } from '../../constants';
 import type { ApiAction } from '../actions/action-types';
@@ -236,7 +236,8 @@ const onProsalInfoLoaded = (state: Map, action: Object): Map => {
     proposal: proposal,
     proposalQuestions: proposalQuestions,
     proposalUsers: [],
-    isCurrent: true
+    isCurrent: true,
+    isEditable: true
   };
   NewopportunityData = NewopportunityData.set(
     proposal.proposalId,
@@ -327,6 +328,22 @@ const setOpportunityInfo = (state, action) => {
   const currentbidNo = searchParams.get('bidNo');
   const currentbidType = searchParams.get('bidType');
   const latestProposal = payload.find(proposal => proposal.isCurrent === true);
+  const recentProposalsByType = Object.entries(
+    groupBy(
+      orderBy(
+        payload.map(proposalInfo => ({
+          ...cloneDeep(proposalInfo),
+          proposal: {
+            ...cloneDeep(proposalInfo.proposal),
+            bidType: proposalInfo.proposal.bidType || 'Clinical_Bid'
+          }
+        })),
+        ['proposal.proposalDate'],
+        ['desc']
+      ),
+      'proposal.bidType'
+    )
+  ).map(([bidType, proposals]) => proposals[0].proposal.proposalId);
   payload.forEach(proposal => {
     if (
       proposal?.proposal?.proposalDetails?.bidNo == currentbidNo &&
@@ -342,10 +359,8 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${
-            proposal?.proposal?.proposalDetails
-              ?.earlyEngagementDevelopmentPlan || ''
-          }`
+          `${proposal?.proposal?.proposalDetails
+            ?.earlyEngagementDevelopmentPlan || ''}`
         )
         .set(
           'questionTemplateVersionNumber',
@@ -367,6 +382,10 @@ const setOpportunityInfo = (state, action) => {
           proposal?.proposal?.proposalDetails?.bidNo ===
             latestProposal?.proposal?.proposalDetails?.bidNo &&
             proposal?.proposal?.bidType === latestProposal?.proposal?.bidType
+        )
+        .set(
+          'isEditable',
+          recentProposalsByType.includes(proposal?.proposal?.proposalId)
         )
         .set('bidStatus', proposal.proposal['inProgress'] || false)
         .set('agreementId', proposal.proposal['agreementId'] || '')
@@ -530,6 +549,7 @@ const addNewBid = (state: Map, action: Object): Map => {
     proposalQuestions: data.proposalQuestions,
     proposalUsers: data.proposalUsers,
     isCurrent: data.isCurrent,
+    isEditable: true, // new bid is editable
     inProgress: data.proposal['inProgress']
   };
 
@@ -572,6 +592,7 @@ const addNewBid = (state: Map, action: Object): Map => {
       data.proposal.opportunityOverview['OpportunityStatus'] || ''
     )
     .set('isCurrent', true)
+    .set('isEditable', true) // new bid is editable
     .set('bidStatus', data.proposal['inProgress'] || false)
     .set('pertinentDetails', data.proposal.proposalDetails.pertinentDetails)
     .set('nextMilestone', data.proposal['nextMilestone'] || '');
@@ -1598,8 +1619,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
-    onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1688,7 +1708,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

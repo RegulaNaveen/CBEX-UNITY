@@ -7,6 +7,7 @@
     "id": "13e4cf2c-9c53-4f23-9977-b511b8dbe3c8",
     "isApprovalCountPresent": true,
     "isCurrent": true,
+    "isEditable": true,
     "opportunityId": "0060100000AYLyyAAH",
     "opportunityType": "Default Type",
     "pertinentDetails": "dawdawd",
@@ -169,7 +170,7 @@
       "modified": "2023-11-11T10:32:39.577Z"
     }
   ],
-  "isCurrentBid": true,
+  "isEditableBid": true,
   "userData": {
     "name": "Sushil Munda",
     "email": "sushil.munda@iqvia.com",
