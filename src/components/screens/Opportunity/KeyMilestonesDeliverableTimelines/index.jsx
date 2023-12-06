@@ -34,7 +34,7 @@ const KeyMilestoneDeliverableTimelines = () => {
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
-  const isEditableBid = selectedBid.get('isEditableBid');
+  const isEditableBid = selectedBid.get('isEditable');
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
   );
