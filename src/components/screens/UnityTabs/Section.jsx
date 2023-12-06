@@ -45,6 +45,10 @@ const Section = ({ sectionId, title, tabId, isExpandAll, handleChange }) => {
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setExpanded(isExpandAll);
+  }, [isExpandAll]);
+
   const handleAccordionChange = () => {
     setExpanded(prev => !prev);
     handleChange(sectionId);
