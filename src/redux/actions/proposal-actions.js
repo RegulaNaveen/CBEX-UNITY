@@ -1688,8 +1688,7 @@ export const changeBid = (bid, viewType) => {
       payload: {
         proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
         bid: {
-          ...bid,
-          isEditable: checkIsEditableTrue(bid, allProposals)
+          ...bid
         }
       }
     });
@@ -1867,39 +1866,45 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB =
-  (proposalId, email, sectionOrder, sectionName) => async () => {
-    try {
-      // Api Response
-      const response = await deleteProposalUser(proposalId, {
-        email,
-        section: { sectionOrder, sectionName }
-      });
-      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-    } catch (error) {
-      // Error
-      console.log(error.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const deleteProposalUserFromDB = (
+  proposalId,
+  email,
+  sectionOrder,
+  sectionName
+) => async () => {
+  try {
+    // Api Response
+    const response = await deleteProposalUser(proposalId, {
+      email,
+      section: { sectionOrder, sectionName }
+    });
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory =
-  (proposalId: string, questionId: string) => async () => {
-    try {
-      // Api Response
-      const response = await getProposalAnswer(proposalId, questionId);
-      return { status: true, title: DEFAULT.SUCCESS, data: response };
-    } catch (error) {
-      // Error
-      console.log(error?.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const getProposalAnswerHistory = (
+  proposalId: string,
+  questionId: string
+) => async () => {
+  try {
+    // Api Response
+    const response = await getProposalAnswer(proposalId, questionId);
+    return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Set Flag for Event Launcher

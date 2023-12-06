@@ -1,6 +1,6 @@
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
-import { last, uniq, orderBy, isEmpty } from 'lodash';
+import { last, uniq, orderBy, isEmpty, groupBy, cloneDeep } from 'lodash';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import { shouldInclude } from '../../components/views/export-component/word-template';
@@ -374,7 +374,6 @@ export const getBidList = createSelector(
             flags['RFIInBidHistory'])
         ) {
           bidList.push({
-            isEditable: item.get('isEditable'),
             bidDueDate: item.getIn([
               'proposal',
               'proposalDetails',
@@ -405,6 +404,13 @@ export const getBidList = createSelector(
         }
       });
       bidList = orderBy(bidList, ['bidDate'], ['desc']);
+      const recentBidsByTypes = Object.entries(groupBy(bidList, 'bidType')).map(
+        ([bidType, bids]) => bids[0].bidId
+      );
+      bidList = bidList.map(bid => ({
+        ...cloneDeep(bid),
+        isEditable: recentBidsByTypes.includes(bid.bidId)
+      }));
       return bidList;
     } else return [];
   }
