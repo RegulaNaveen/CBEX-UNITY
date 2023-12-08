@@ -27,7 +27,7 @@ const QuestionContainer = ({
   questionData,
   questionIndex,
   isCurrentBid,
-  isEditable,
+  isEditableBid,
   socketContext,
   newQuestionData,
   setLastSetQuestionData
@@ -66,7 +66,7 @@ const QuestionContainer = ({
   const checkDisableFlag = () => {
     if (
       isQuestionLockedByOther() ||
-      !isEditable ||
+      !isEditableBid ||
       !allFlags.isQuestionForCustomerEditable
     )
       return true;

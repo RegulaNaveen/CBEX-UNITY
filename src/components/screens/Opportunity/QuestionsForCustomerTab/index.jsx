@@ -26,7 +26,7 @@ function QuestionsForCustomer() {
 
   const [lastSetQuestionData, setLastSetQuestionData] = useState({});
   const isCurrentBid = selectedBid.get('isCurrent');
-  const isEditableBid = selectedBid.get('isEditableBid');
+  const isEditableBid = selectedBid.get('isEditable');
   const questionsList = useSelector(getProposalQuestions);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
