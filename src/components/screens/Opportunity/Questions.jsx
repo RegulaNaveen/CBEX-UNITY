@@ -583,7 +583,6 @@ class Questions extends Component {
                 <span style={{ padding: '10px' }}>Mark N/A</span>
                 <Switch
                   data-testid="mark-na-btn"
-                  style={{ marginRight: '-2px' }}
                   checked={showNaCheckbox}
                   onChange={this.handleOnChangeNaSwitch}
                   size="small"
@@ -669,7 +668,8 @@ class Questions extends Component {
                     <Refresh className="tasksList-add-icon" />
                   </div>
                 )}
-                {selectedBid.get('isCurrent') && (
+                {(selectedBid.get('isCurrent') ||
+                  selectedBid.get('isEditable')) && (
                   <div
                     data-testid="selectedbid-testid"
                     title="Add New Question"

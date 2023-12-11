@@ -551,7 +551,6 @@ const getBidNameByType = bidType => {
   let bidName = '';
   if (!isEmpty(BID_TYPES[bidType])) {
     bidName = BID_TYPES[bidType];
-    console.log('bidName', bidName);
     if (bidName === 'Early Engagement') {
       bidName = 'Early Engagement ';
     } else if (bidName === 'Post Award') {
