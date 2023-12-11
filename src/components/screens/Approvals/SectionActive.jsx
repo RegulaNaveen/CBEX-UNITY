@@ -21,7 +21,6 @@ const SectionActive = ({
   const { id: proposalId, isCurrent, isEditable } = useSelector(
     getSelectedBid
   )?.toJS();
-  console.log('isEditable', isEditable, isCurrent);
   const selectedBidIsCurrent = !!isCurrent || !!isEditable;
   const approvalFilters = useSelector(state => state.approvals.filters);
   const flags = useSelector(state => state.proposal.get('eventflag'));
