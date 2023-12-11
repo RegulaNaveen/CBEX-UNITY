@@ -36,7 +36,7 @@ const Timeline = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const bidList = useSelector(getBidList);
   const [currentBidDetails, setCurrentBidDetails] = useState({});
-  const { proposalDate, isCurrent } = selectedBid;
+  const { proposalDate, isCurrent, isEditable } = selectedBid;
   const [timelineEvents, setTimelineEvents] = useState([]);
   const [filteredSections, setFilteredSections] = useState(null);
   const [sections, setSections] = useState(Map());
@@ -150,7 +150,7 @@ const Timeline = () => {
           title: question.questionText,
           start: new Date(lastAnswer?.answer),
           end: new Date(lastAnswer?.answer),
-          isDraggable: isCurrent,
+          isDraggable: isEditable,
           color:
             lastAnswer?.user === 'UnityPredictedAnswer' ? '#0768FD' : '#00C221',
           question
@@ -243,7 +243,7 @@ const Timeline = () => {
                 proposalDate={proposalDate}
                 socketContext={socketContext}
                 userData={getUserData()}
-                isCurrent={isCurrent}
+                isCurrent={isEditable} // isCurrent prop of TimelineCalendar is used to check if the question can be draggable or not
                 currentBidDetails={currentBidDetails}
                 draggedQuestionData={draggedQuestionData}
                 setDraggedQuestionData={setDraggedQuestionData}

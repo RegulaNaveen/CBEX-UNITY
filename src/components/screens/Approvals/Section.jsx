@@ -157,6 +157,7 @@ const Section = ({
             expanded={isExpandAll || expanded}
             onChange={handleAccordionChange}
             style={style}
+            data-testid="accordion-test"
           >
             <CustomAccordionSummary>
               <p className="accordion-title" ref={sectionTitleRef}>
