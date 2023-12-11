@@ -25,9 +25,9 @@ const SectionActive = ({
 }) => {
   const allTab = useSelector(state => state.unitytab.allTabs);
   let tab = allTab[tabId];
-  const { isCurrent, isEditable } = useSelector(getSelectedBid)?.toJS();
+  const { isCurrent } = useSelector(getSelectedBid)?.toJS();
 
-  const selectedBidIsCurrent = !!isCurrent || !!isEditable;
+  const selectedBidIsCurrent = !!isCurrent;
   const [questionVisibility, setQuestionVisibility] = useState({});
   const [currentsection, setCurrentSection] = useState('');
   const [showModal, setShowModal] = useState(false);
