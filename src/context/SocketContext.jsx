@@ -714,7 +714,7 @@ const SocketContextProvider = props => {
             case 'NEXT_MILESTONE_UPDATE':
               console.log('socket data', data);
               const { nextMilestone } = data.data;
-              updateNextMilestoneAction(data.oppId, nextMilestone);
+              updateNextMilestoneAction(data.oppId, nextMilestone, data.data.proposalId);
               break;
 
             case 'CUSTOM_NAME_UPDATE':
