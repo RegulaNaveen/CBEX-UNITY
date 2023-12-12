@@ -1440,35 +1440,37 @@ const updateOportunityDetailData = (state, action) => {
   let opportunityData = state.get('opportunityData');
   let selectedbid = state.get('selectedBid');
   const updatedSelectedbid = selectedbid?.toJS();
-  let currentProposal = opportunityData.getIn([
+  let currentProposal = cloneDeep(
+    opportunityData.getIn([data?.proposalId, 'proposal'])
+  );
+  const currentProposalId = opportunityData.getIn([
     data?.proposalId,
     'proposal',
     'proposalId'
   ]);
-  const proposalDetail = state.get('proposalDetails');
+  const proposalDetail = cloneDeep(state.get('proposalDetails', {}));
   if (
     data &&
-    proposalDetail &&
     currentProposal &&
-    currentProposal == data?.proposalId &&
+    currentProposalId == data?.proposalId &&
     data.sfField
   ) {
-    if (updatedSelectedbid[mapper[data.questionSfField]]) {
+    if (
+      updatedSelectedbid.id === data?.proposalId &&
+      updatedSelectedbid[mapper[data.questionSfField]]
+    ) {
       updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
+      proposalDetail[mapper[data.sfField]] = data.answer;
     }
-    proposalDetail[mapper[data.sfField]] = data.answer;
+    currentProposal['proposalDetails'][mapper[data.sfField]] = data.answer;
     return state
       .set('selectedBid', Map(updatedSelectedbid))
       .set('proposalDetails', { ...proposalDetail })
-      .setIn(
-        ['opportunityData', data.proposalId, 'proposal', 'proposalDetails'],
-        proposalDetail
-      );
+      .setIn(['opportunityData', data.proposalId, 'proposal'], currentProposal);
   } else if (
     data &&
-    proposalDetail &&
     currentProposal &&
-    currentProposal == data?.proposalId &&
+    currentProposalId == data?.proposalId &&
     data?.questionSfField &&
     !(
       data.questionsfObject &&
@@ -1476,17 +1478,19 @@ const updateOportunityDetailData = (state, action) => {
       data.questionsfObject === 'Opportunity'
     )
   ) {
-    if (updatedSelectedbid[mapper[data.questionSfField]]) {
+    if (
+      updatedSelectedbid.id === data?.proposalId &&
+      updatedSelectedbid[mapper[data.questionSfField]]
+    ) {
       updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
+      proposalDetail[mapper[data.questionSfField]] = data.answer;
     }
-    proposalDetail[mapper[data.questionSfField]] = data.answer;
+    currentProposal['proposalDetails'][mapper[data.questionSfField]] =
+      data.answer;
     return state
       .set('selectedBid', Map(updatedSelectedbid))
       .set('proposalDetails', { ...proposalDetail })
-      .setIn(
-        ['opportunityData', data.proposalId, 'proposal', 'proposalDetails'],
-        proposalDetail
-      );
+      .setIn(['opportunityData', data.proposalId, 'proposal'], currentProposal);
   }
 
   return state;
@@ -1495,21 +1499,25 @@ const updateOportunityDetailData = (state, action) => {
 const updateProposalDetailSF = (state, action) => {
   const { data } = action.payload;
   let opportunityData = state.get('opportunityData');
-  let currentProposal = opportunityData.getIn([
+  let currentProposal = cloneDeep(
+    opportunityData.getIn([data?.proposalId, 'proposal'])
+  );
+  const currentProposalId = opportunityData.getIn([
     data?.proposalId,
     'proposal',
     'proposalId'
   ]);
-  let proposalDetail = state.get('proposalDetails');
+  let proposalDetail = cloneDeep(state.get('proposalDetails', {}));
   let selectedbid = state.get('selectedBid');
+  const selectedBidId = state.getIn(['selectedBid', 'id']);
   if (data && data.bidStatusKey && selectedbid) {
     const updatedSelectedbid = selectedbid?.toJS();
-    if (currentProposal && currentProposal === data?.proposalId) {
+    if (currentProposalId === data?.proposalId) {
       updatedSelectedbid.bidStopStatus = data.bidStopStatus;
     }
     return state.set('selectedBid', Map(updatedSelectedbid));
   } else if (data && data.earlyEngagementBid) {
-    if (currentProposal && currentProposal === data?.proposalId) {
+    if (currentProposalId === data?.proposalId) {
       proposalDetail.earlyEngagementDevelopmentPlan =
         data.proposalDetails.earlyEngagementDevelopmentPlan;
       const updatedSelectedbid = selectedbid?.toJS();
@@ -1530,7 +1538,7 @@ const updateProposalDetailSF = (state, action) => {
         );
     }
   } else {
-    if (currentProposal && currentProposal === data?.proposalId) {
+    if (selectedBidId === data?.proposalId) {
       proposalDetail = data.proposalDetails;
     }
   }
@@ -1575,33 +1583,37 @@ const updateDashboardDetail = (state, action) => {
   try {
     const data = action.payload;
     let opportunityData = state.get('opportunityData');
-    let currentProposal = opportunityData.getIn([
+    const selectedBidId = state.getIn(['selectedBid', 'id']);
+    let currentProposal = cloneDeep(
+      opportunityData.getIn([data?.data?.proposalId, 'proposal'])
+    );
+    const currentProposalId = opportunityData.getIn([
       data?.data?.proposalId,
       'proposal',
       'proposalId'
     ]);
-    let proposalDetail = state.get('proposalDetails');
-    if (
-      currentProposal &&
-      proposalDetail &&
-      currentProposal === data?.data?.proposalId
-    ) {
-      proposalDetail.Customer = data?.data?.proposalDetails.Customer;
-      if (data?.data?.proposalDetails['Bid due date']) {
-        proposalDetail['Bid due date'] =
-          data.data.proposalDetails['Bid due date'];
+    let proposalDetail = cloneDeep(state.get('proposalDetails', {}));
+    if (currentProposal && currentProposalId === data?.data?.proposalId) {
+      currentProposal['proposalDetails'].Customer =
+        data?.data?.proposalDetails.Customer;
+      if (selectedBidId === data?.data?.proposalId) {
+        proposalDetail.Customer = data?.data?.proposalDetails.Customer;
       }
-      return state
-        .set('proposalDetails', { ...proposalDetail })
-        .setIn(
-          [
-            'opportunityData',
-            data.data.proposalId,
-            'proposal',
-            'proposalDetails'
-          ],
-          proposalDetail
-        );
+      if (data?.data?.proposalDetails['Bid due date']) {
+        currentProposal['proposalDetails']['Bid due date'] =
+          data.data.proposalDetails['Bid due date'];
+        if (selectedBidId === data?.data?.proposalId) {
+          proposalDetail['Bid due date'] =
+            data.data.proposalDetails['Bid due date'];
+        }
+      }
+      if (selectedBidId === data?.data?.proposalId) {
+        state.set('proposalDetails', { ...proposalDetail });
+      }
+      return state.setIn(
+        ['opportunityData', data.data.proposalId, 'proposal'],
+        currentProposal
+      );
     }
 
     return state;
