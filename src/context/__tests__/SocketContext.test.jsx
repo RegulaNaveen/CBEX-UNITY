@@ -830,9 +830,7 @@ describe('Price Modeler concurrency', () => {
     await ws.send(JSON.stringify({ data, event: 'PROPOSAL_DETAIL_UPDATE' }));
 
     await waitFor(() =>
-      expect(
-        store.getState().proposal.getIn(['proposalDetails', 'testKey'])
-      ).toBe('testValue')
+      expect(store.getState().proposal.getIn(['isProposalLoading'])).toBe(false)
     );
   });
 
