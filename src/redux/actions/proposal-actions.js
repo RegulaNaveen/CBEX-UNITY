@@ -1866,45 +1866,39 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB = (
-  proposalId,
-  email,
-  sectionOrder,
-  sectionName
-) => async () => {
-  try {
-    // Api Response
-    const response = await deleteProposalUser(proposalId, {
-      email,
-      section: { sectionOrder, sectionName }
-    });
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-  } catch (error) {
-    // Error
-    console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const deleteProposalUserFromDB =
+  (proposalId, email, sectionOrder, sectionName) => async () => {
+    try {
+      // Api Response
+      const response = await deleteProposalUser(proposalId, {
+        email,
+        section: { sectionOrder, sectionName }
+      });
+      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+    } catch (error) {
+      // Error
+      console.log(error.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory = (
-  proposalId: string,
-  questionId: string
-) => async () => {
-  try {
-    // Api Response
-    const response = await getProposalAnswer(proposalId, questionId);
-    return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const getProposalAnswerHistory =
+  (proposalId: string, questionId: string) => async () => {
+    try {
+      // Api Response
+      const response = await getProposalAnswer(proposalId, questionId);
+      return { status: true, title: DEFAULT.SUCCESS, data: response };
+    } catch (error) {
+      // Error
+      console.log(error?.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Set Flag for Event Launcher
@@ -2054,36 +2048,39 @@ export const onSaveCustomName = (oppNo, customName) => {
   };
 };
 
-export const updateNextMilestone = (oppNumber, nextMilestone) => {
+export const updateNextMilestone = (oppNumber, nextMilestone, proposalId) => {
   return async (dispatch, getState) => {
-    try {
-      let proposals = getProposals(getState());
-      let proposalInfo = getProposalDetails(getState());
-      let proposalsFavourite = getFavouriteProposals(getState());
-      const proposalIndex = proposals.findIndex(
-        proposal => proposal['opportunity number'] === oppNumber
-      );
-      if (proposalIndex > -1) {
-        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
-        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
-      }
+    let selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
+      try {
+        let proposals = getProposals(getState());
+        let proposalInfo = getProposalDetails(getState());
+        let proposalsFavourite = getFavouriteProposals(getState());
+        const proposalIndex = proposals.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        if (proposalIndex > -1) {
+          proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+        }
 
-      const favouriteIndex = proposalsFavourite.findIndex(
-        proposal => proposal['opportunity number'] === oppNumber
-      );
-      if (favouriteIndex > -1) {
-        proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
-        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
-      }
+        const favouriteIndex = proposalsFavourite.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        if (favouriteIndex > -1) {
+          proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+        }
 
-      if (proposalInfo['CRM #'] === oppNumber) {
-        dispatch({
-          type: SET_NEXT_MILESTONE,
-          payload: nextMilestone
-        });
+        if (proposalInfo['CRM #'] === oppNumber) {
+          dispatch({
+            type: SET_NEXT_MILESTONE,
+            payload: nextMilestone
+          });
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   };
 };
