@@ -712,32 +712,34 @@ const QuestionItem = ({
                         trackEventLauncher={c => trackEventLauncher(c)}
                       />
                     )}
-                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
-                      <div className="question-edit">
-                        <span
-                          aria-hidden="true"
-                          onClick={() => {
-                            dispatch(
-                              setEditQuestionData({
-                                questionText: question.questionText,
-                                questionHTML: question.questionHTML,
-                                questionJSON: question.questionJSON,
-                                questionHintJSON: question.questionHintJSON,
-                                section: question.section.sectionName,
-                                tabId: tabId,
-                                answerType: question.answerConfiguration.type,
-                                roleNames: question.roleNames,
-                                questionId: question.questionId,
-                                tabFlag: 'customTab',
-                                questionAnswered: showLastAnswer
-                              })
-                            );
-                          }}
-                        >
-                          <Edit className="edit-icon" />
-                        </span>
-                      </div>
-                    )}
+                    {question.isCustomQuestion &&
+                      (selectedBid.get('isCurrent') ||
+                        selectedBid.get('isEditable')) && (
+                        <div className="question-edit">
+                          <span
+                            aria-hidden="true"
+                            onClick={() => {
+                              dispatch(
+                                setEditQuestionData({
+                                  questionText: question.questionText,
+                                  questionHTML: question.questionHTML,
+                                  questionJSON: question.questionJSON,
+                                  questionHintJSON: question.questionHintJSON,
+                                  section: question.section.sectionName,
+                                  tabId: tabId,
+                                  answerType: question.answerConfiguration.type,
+                                  roleNames: question.roleNames,
+                                  questionId: question.questionId,
+                                  tabFlag: 'customTab',
+                                  questionAnswered: showLastAnswer
+                                })
+                              );
+                            }}
+                          >
+                            <Edit className="edit-icon" />
+                          </span>
+                        </div>
+                      )}
 
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>
