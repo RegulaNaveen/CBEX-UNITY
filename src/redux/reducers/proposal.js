@@ -363,6 +363,18 @@ const setOpportunityInfo = (state, action) => {
             ?.earlyEngagementDevelopmentPlan || ''}`
         )
         .set(
+          'describeActivity',
+          `${proposal?.proposal?.proposalDetails?.describeActivity || ''}`
+        )
+        .set(
+          'typeOfActivity',
+          `${proposal?.proposal?.proposalDetails?.typeOfActivity || ''}`
+        )
+        .set(
+          'requestDetail',
+          `${proposal?.proposal?.proposalDetails?.requestDetail || ''}`
+        )
+        .set(
           'questionTemplateVersionNumber',
           proposal.proposal['questionTemplateVersionNumber'] || ''
         )
@@ -486,7 +498,9 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityId: proposalDetails['opportunityId'],
     proposalDate,
     typeOfWidget: payload.bid.typeOfWidget,
-    nextMilestone: payload.bid.nextMilestone || ''
+    nextMilestone: payload.bid.nextMilestone || '',
+    typeOfActivity: proposalDetails['typeOfActivity'],
+    describeActivity: proposalDetails['describeActivity']
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
@@ -1501,37 +1515,54 @@ const updateProposalDetailSF = (state, action) => {
     'proposalId'
   ]);
   let proposalDetail = state.get('proposalDetails');
-  let selectedbid = state.get('selectedBid');
-  if (data && data.bidStatusKey && selectedbid) {
-    const updatedSelectedbid = selectedbid?.toJS();
+  let selectedBid = state.get('selectedBid');
+
+  if (data && data.bidStatusKey && selectedBid) {
+    const updatedSelectedBid = selectedBid?.toJS();
     if (currentProposal && currentProposal === data?.proposalId) {
-      updatedSelectedbid.bidStopStatus = data.bidStopStatus;
+      updatedSelectedBid.bidStopStatus = data.bidStopStatus;
     }
-    return state.set('selectedBid', Map(updatedSelectedbid));
-  } else if (data && data.earlyEngagementBid) {
+
+    return state.set('selectedBid', Map(updatedSelectedBid));
+  } else if (
+    data &&
+    (data.earlyEngagementBid || data.postAwardBid || data.rfiBid)
+  ) {
     if (currentProposal && currentProposal === data?.proposalId) {
-      proposalDetail.earlyEngagementDevelopmentPlan =
+      proposalDetail = {
+        ...proposalDetail,
+        earlyEngagementDevelopmentPlan:
+          data.proposalDetails.earlyEngagementDevelopmentPlan,
+        describeActivity: data.proposalDetails.describeActivity,
+        requestDetail: data.proposalDetails.requestDetail,
+        typeOfActivity: data.proposalDetails.typeOfActivity
+      };
+
+      const updatedSelectedBid = selectedBid?.toJS();
+
+      updatedSelectedBid.earlyEngagementDevelopmentPlan =
         data.proposalDetails.earlyEngagementDevelopmentPlan;
-      const updatedSelectedbid = selectedbid?.toJS();
-      updatedSelectedbid.earlyEngagementDevelopmentPlan =
-        data.proposalDetails.earlyEngagementDevelopmentPlan;
+      updatedSelectedBid.describeActivity =
+        data.proposalDetails.describeActivity;
+      updatedSelectedBid.requestDetail = data.proposalDetails.requestDetail;
+      updatedSelectedBid.typeOfActivity = data.proposalDetails.typeOfActivity;
+
       return state
-        .set('selectedBid', Map(updatedSelectedbid))
+        .set('selectedBid', Map(updatedSelectedBid))
         .set('proposalDetails', proposalDetail)
-        .setIn(
-          [
-            'opportunityData',
-            data.proposalId,
-            'proposal',
-            'proposalDetails',
-            'earlyEngagementDevelopmentPlan'
-          ],
-          data?.proposalDetails?.earlyEngagementDevelopmentPlan || ''
+        .mergeDeepIn(
+          ['opportunityData', data.proposalId, 'proposal', 'proposalDetails'],
+          data.proposalDetails
         );
     }
   } else {
     if (currentProposal && currentProposal === data?.proposalId) {
-      proposalDetail = data.proposalDetails;
+      proposalDetail = {
+        ...proposalDetail,
+        describeActivity: data.proposalDetails.describeActivity,
+        requestDetail: data.proposalDetails.requestDetail,
+        typeOfActivity: data.proposalDetails.typeOfActivity
+      };
     }
   }
 
