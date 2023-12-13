@@ -668,7 +668,8 @@ class Questions extends Component {
                     <Refresh className="tasksList-add-icon" />
                   </div>
                 )}
-                {selectedBid.get('isCurrent') && (
+                {(selectedBid.get('isCurrent') ||
+                  selectedBid.get('isEditable')) && (
                   <div
                     data-testid="selectedbid-testid"
                     title="Add New Question"
