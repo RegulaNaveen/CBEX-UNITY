@@ -113,7 +113,7 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-left-ques`}
             />
           ))}
-        {isCurrent && (
+        {selectedBidIsCurrent && (
           <>
             <div className="add-question">
               <Link
