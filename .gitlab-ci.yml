@@ -110,7 +110,7 @@ dev:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
@@ -164,7 +164,7 @@ dev2:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
@@ -217,7 +217,7 @@ buildl4:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
@@ -271,7 +271,7 @@ demo:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
@@ -325,7 +325,7 @@ qa:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
@@ -378,7 +378,7 @@ uat:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
@@ -430,7 +430,7 @@ prod:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/. dist/
+    - cp -r public/* dist/
   artifacts:
     paths:
       - dist/
