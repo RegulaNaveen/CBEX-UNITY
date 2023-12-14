@@ -114,6 +114,7 @@ dev:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: dev
@@ -135,6 +136,7 @@ deploydev:
     - aws --version
     - source build.env
     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+    - aws s3 sync public/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -167,6 +169,7 @@ dev2:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: dev2
@@ -220,6 +223,7 @@ buildl4:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: l4
@@ -276,6 +280,7 @@ demo:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: demo
@@ -329,6 +334,7 @@ qa:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: qa
@@ -381,6 +387,7 @@ uat:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: uat
@@ -432,6 +439,7 @@ prod:
     paths:
       - dist/
       - build.env
+      - public/
   tags:
     - docker
   environment: prod
