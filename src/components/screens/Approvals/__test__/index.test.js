@@ -5,6 +5,8 @@ import { BrowserRouter, Router } from 'react-router-dom';
 import { mount } from 'enzyme';
 import { store } from '../../../../store';
 import ApprovalIndex from '../index';
+import { REDUX_TYPES } from '../../../../constants';
+
 describe('Approval Section Component', () => {
   let wrapper;
   beforeEach(() => {
@@ -24,6 +26,28 @@ describe('Approval Section Component', () => {
   });
 
   it('should check add new question on click event ', async () => {
+    window.history.pushState(
+      {},
+      '',
+      '/opportunities/UZA89257?bidNo=1&bidType=Clinical_Bid&viewType=questions'
+    );
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [
+        {
+          id: 1,
+          isCurrent: true,
+          proposal: {
+            bidType: 'Clinical_Bid',
+            proposalDetails: { bidNo: 1 },
+            opportunityOverview: {},
+            proposalDate: '',
+            typeOfWidget: '',
+            nextMilestone: ''
+          }
+        }
+      ]
+    });
     render(
       <BrowserRouter>
         <Provider store={store}>
