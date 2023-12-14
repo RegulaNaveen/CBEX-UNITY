@@ -110,13 +110,11 @@ dev:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
-    - cp -r public/ dist/
-
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-
   tags:
     - docker
   environment: dev
@@ -166,11 +164,11 @@ dev2:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-      - public/
   tags:
     - docker
   environment: dev2
@@ -214,17 +212,16 @@ buildl4:
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - cat $prod_build >> build.env
-    - set
     - cat devops/vars/${Environment}.env >> build.env
     - source build.env
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-      - public/
   tags:
     - docker
   environment: l4
@@ -245,10 +242,7 @@ deployl4:
     - if: $CI_PIPELINE_SOURCE == "pipelines"
   script:
     - source build.env
-    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-    - export Prod_Account_ID=$Prod_Account_ID
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
   tags:
     - docker
@@ -277,11 +271,11 @@ demo:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-      - public/
   tags:
     - docker
   environment: demo
@@ -331,11 +325,11 @@ qa:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-      - public/
   tags:
     - docker
   environment: qa
@@ -384,11 +378,11 @@ uat:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-      - public/
   tags:
     - docker
   environment: uat
@@ -436,11 +430,11 @@ prod:
     - npm cache clean --force
     - npm install --legacy-peer-deps
     - npm run build:$Environment
+    - cp -r public/. dist/
   artifacts:
     paths:
       - dist/
       - build.env
-      - public/
   tags:
     - docker
   environment: prod
