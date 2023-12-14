@@ -359,10 +359,20 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${
-            proposal?.proposal?.proposalDetails
-              ?.earlyEngagementDevelopmentPlan || ''
-          }`
+          `${proposal?.proposal?.proposalDetails
+            ?.earlyEngagementDevelopmentPlan || ''}`
+        )
+        .set(
+          'describeActivity',
+          `${proposal?.proposal?.proposalDetails?.describeActivity || ''}`
+        )
+        .set(
+          'typeOfActivity',
+          `${proposal?.proposal?.proposalDetails?.typeOfActivity || ''}`
+        )
+        .set(
+          'requestDetail',
+          `${proposal?.proposal?.proposalDetails?.requestDetail || ''}`
         )
         .set(
           'questionTemplateVersionNumber',
@@ -488,7 +498,9 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityId: proposalDetails['opportunityId'],
     proposalDate,
     typeOfWidget: payload.bid.typeOfWidget,
-    nextMilestone: payload.bid.nextMilestone || ''
+    nextMilestone: payload.bid.nextMilestone || '',
+    typeOfActivity: proposalDetails['typeOfActivity'],
+    describeActivity: proposalDetails['describeActivity']
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
@@ -1510,38 +1522,55 @@ const updateProposalDetailSF = (state, action) => {
     'proposalId'
   ]);
   let proposalDetail = cloneDeep(state.get('proposalDetails', {}));
-  let selectedbid = state.get('selectedBid');
+  let selectedBid = state.get('selectedBid');
   const selectedBidId = state.getIn(['selectedBid', 'id']);
-  if (data && data.bidStatusKey && selectedbid) {
-    const updatedSelectedbid = selectedbid?.toJS();
+
+  if (data && data.bidStatusKey && selectedBid) {
+    const updatedSelectedBid = selectedBid?.toJS();
     if (currentProposalId === data?.proposalId) {
-      updatedSelectedbid.bidStopStatus = data.bidStopStatus;
+      updatedSelectedBid.bidStopStatus = data.bidStopStatus;
     }
-    return state.set('selectedBid', Map(updatedSelectedbid));
-  } else if (data && data.earlyEngagementBid) {
+
+    return state.set('selectedBid', Map(updatedSelectedBid));
+  } else if (
+    data &&
+    (data.earlyEngagementBid || data.postAwardBid || data.rfiBid)
+  ) {
     if (currentProposalId === data?.proposalId) {
-      proposalDetail.earlyEngagementDevelopmentPlan =
+      proposalDetail = {
+        ...proposalDetail,
+        earlyEngagementDevelopmentPlan:
+          data.proposalDetails.earlyEngagementDevelopmentPlan,
+        describeActivity: data.proposalDetails.describeActivity,
+        requestDetail: data.proposalDetails.requestDetail,
+        typeOfActivity: data.proposalDetails.typeOfActivity
+      };
+
+      const updatedSelectedBid = selectedBid?.toJS();
+
+      updatedSelectedBid.earlyEngagementDevelopmentPlan =
         data.proposalDetails.earlyEngagementDevelopmentPlan;
-      const updatedSelectedbid = selectedbid?.toJS();
-      updatedSelectedbid.earlyEngagementDevelopmentPlan =
-        data.proposalDetails.earlyEngagementDevelopmentPlan;
+      updatedSelectedBid.describeActivity =
+        data.proposalDetails.describeActivity;
+      updatedSelectedBid.requestDetail = data.proposalDetails.requestDetail;
+      updatedSelectedBid.typeOfActivity = data.proposalDetails.typeOfActivity;
+
       return state
-        .set('selectedBid', Map(updatedSelectedbid))
+        .set('selectedBid', Map(updatedSelectedBid))
         .set('proposalDetails', proposalDetail)
-        .setIn(
-          [
-            'opportunityData',
-            data.proposalId,
-            'proposal',
-            'proposalDetails',
-            'earlyEngagementDevelopmentPlan'
-          ],
-          data?.proposalDetails?.earlyEngagementDevelopmentPlan || ''
+        .mergeDeepIn(
+          ['opportunityData', data.proposalId, 'proposal', 'proposalDetails'],
+          data.proposalDetails
         );
     }
   } else {
     if (selectedBidId === data?.proposalId) {
-      proposalDetail = data?.proposalDetails;
+      proposalDetail = {
+        ...proposalDetail,
+        describeActivity: data.proposalDetails.describeActivity,
+        requestDetail: data.proposalDetails.requestDetail,
+        typeOfActivity: data?.proposalDetails.typeOfActivity
+      };
     }
   }
 
@@ -1633,8 +1662,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
-    onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1723,7 +1751,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {
