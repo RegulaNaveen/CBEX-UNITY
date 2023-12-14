@@ -9,7 +9,7 @@ export default ({ icon, title, action, isActive = null }) => (
   >
     <svg className="remix">
       <use
-        xlinkHref={`${window.location.origin}/public/assets/symbol.svg#ri-${icon}`}
+        xlinkHref={`${window.location.origin}/assets/symbol.svg#ri-${icon}`}
       />
     </svg>
   </button>
