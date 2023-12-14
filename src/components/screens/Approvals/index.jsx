@@ -166,15 +166,17 @@ const Approvals = () => {
           </div>
         </div>
         <div className="filter-btn">
-          <div
-            data-testid="selectedbid-testid"
-            title="Add New Question"
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={() => onAddQuestion('left')}
-          >
-            <Add className="tasksList-add-icon add-icon-btn" />
-          </div>
+          {(selectedBid?.isCurrent || selectedBid?.isEditable) && (
+            <div
+              data-testid="selectedbid-testid"
+              title="Add New Question"
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={() => onAddQuestion('left')}
+            >
+              <Add className="tasksList-add-icon add-icon-btn" />
+            </div>
+          )}
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}

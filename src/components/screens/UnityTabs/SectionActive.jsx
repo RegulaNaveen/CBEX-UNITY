@@ -70,7 +70,7 @@ const SectionActive = ({
             />
           ))}
 
-        {isCurrent && (
+        {selectedBidIsCurrent && (
           <>
             <div className="add-question">
               <Link

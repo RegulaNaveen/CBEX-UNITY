@@ -170,6 +170,8 @@
   }
 
   .filter-container {
+    display: flex;
+    justify-content: flex-end;
     .expand-all {
       display: flex;
       justify-content: flex-end;
@@ -178,8 +180,8 @@
         display: flex;
         justify-content: flex-end;
         position: absolute;
-        margin-right: 106px;
-        padding-right: 15px;
+        // margin-right: 106px;
+        // padding-right: 15px;
       }
     }
     .filter-btn {

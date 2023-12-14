@@ -46,15 +46,19 @@ import { Edit } from '../../svg';
 import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(SelectQuestion);
-const MultiSelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(MultiSelectQuestion);
-const YesNoQuestionWithIdleStateDetection =
-  withIdleStateDetection(YesNoQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
 
-const CheckBoxQuestionWithIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestion);
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const QuestionItem = ({
   questionId = '',
@@ -475,7 +479,7 @@ const QuestionItem = ({
                       questionLabel={question?.questionText || ''}
                     />
                     {question.isCustomQuestion &&
-                      selectedBid.isCurrent &&
+                      (selectedBid.isCurrent || selectedBid.isEditable) &&
                       !isQuesFreezed && (
                         <div
                           className="question-edit"
@@ -498,10 +502,9 @@ const QuestionItem = ({
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
                                   direction: 'left',
-                                  questionAnswered:
-                                    checkLastAnswerOfQuestionVisibility(
-                                      question?.answers
-                                    )
+                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                    question?.answers
+                                  )
                                 })
                               );
                             }}

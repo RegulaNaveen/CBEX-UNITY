@@ -18,8 +18,10 @@ import { shouldShowSection } from './utils';
 import { Add, Refresh } from '../../svg';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
 import ApolloCheckbox from 'apollo-react/components/Checkbox';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 
 const CustomTabs = ({ tabId, key }) => {
+  const selectedBid = useSelector(getSelectedBid);
   const allTab = useSelector(state => state.unitytab.allTabs);
   const allQuestion = useSelector(state =>
     state.proposal.get('proposalQuestions')
@@ -129,15 +131,17 @@ const CustomTabs = ({ tabId, key }) => {
           </div>
         </div>
         <div className="filter-btn">
-          <div
-            data-testid="selectedbid-testid"
-            title="Add New Question"
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={onAddQuestion}
-          >
-            <Add className="tasksList-add-icon add-icon-btn" />
-          </div>
+          {(selectedBid.get('isCurrent') || selectedBid.get('isEditable')) && (
+            <div
+              data-testid="selectedbid-testid"
+              title="Add New Question"
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={onAddQuestion}
+            >
+              <Add className="tasksList-add-icon add-icon-btn" />
+            </div>
+          )}
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
