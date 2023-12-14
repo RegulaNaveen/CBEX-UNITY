@@ -109,7 +109,7 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "register-service-worker": "^1.7.2",
-    "remixicon": "^3.2.0",
+    "remixicon": "^3.7.0",
     "reselect": "^4.1.8",
     "rxjs": "^7.8.1",
     "sass-loader": "^13.2.2",
