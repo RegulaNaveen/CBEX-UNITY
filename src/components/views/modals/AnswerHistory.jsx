@@ -20,7 +20,8 @@ import {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  getBidTypeFromProposalId
+  getBidTypeFromProposalId,
+  getBidNameByType
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import {
@@ -155,6 +156,7 @@ class AnswerHistory extends Component<Props> {
       opportunityData,
       toggleWatch
     } = this.props;
+    console.log('this.props', this.props);
     const { lastAnswer } = this.state;
     const { questionLockWrapper } = this.context;
     const questionID = question?.toJS()?.questionId;
@@ -689,7 +691,7 @@ class AnswerHistory extends Component<Props> {
         answers.get(index).get('userName') !== 'AnswerPulledFromSalesforce' &&
         !isAnswerEmpty(answer) &&
         areBothAnswersSame(answer, nextAnswer);
-
+      
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
@@ -775,9 +777,11 @@ class AnswerHistory extends Component<Props> {
 
         if (isAcceptedCarryForwardedAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
+          
           if (
             cfProposalIdPrevAnswer &&
             opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
@@ -786,6 +790,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -803,8 +811,11 @@ class AnswerHistory extends Component<Props> {
                   Validated{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               )}
             </span>
@@ -813,6 +824,7 @@ class AnswerHistory extends Component<Props> {
 
         if (doesPicklistAcceptedCarryForwardAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
@@ -824,6 +836,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -841,8 +857,11 @@ class AnswerHistory extends Component<Props> {
                   Validated{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               )}
             </span>
@@ -851,6 +870,7 @@ class AnswerHistory extends Component<Props> {
 
         if (isRejectedCarryForwardedAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
@@ -862,6 +882,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -871,8 +895,11 @@ class AnswerHistory extends Component<Props> {
                   Rejected{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               }
             </span>
