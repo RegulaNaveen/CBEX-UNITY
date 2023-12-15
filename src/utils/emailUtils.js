@@ -220,11 +220,11 @@ export function generateApprovalEmailInfo(
     // find decision answer
     emailSubject = `${decisionAnswer ? decisionAnswer + ': ' : ''}${
       approvalSection.ApprovalSectionTitle
-    } for ${proposalDetails['Customer'] || ''} ${proposalDetails['Phase'] ||
-      ''} ${proposalDetails['Therapeutic area'] ||
-      ''} (Opportunity ${proposalDetails['CRM #'] || ''} Bid ${proposalDetails[
-      'bidNo'
-    ] || ''})`;
+    } for ${proposalDetails['Customer'] || ''} ${
+      proposalDetails['Phase'] || ''
+    } ${proposalDetails['Therapeutic area'] || ''} (Opportunity ${
+      proposalDetails['CRM #'] || ''
+    } Bid ${proposalDetails['bidNo'] || ''})`;
     emailBody = `<div id="approval-email-content">
     <p>Hello,</p>`;
     emailBody += `<p>Below is a summary of the ${
@@ -232,12 +232,15 @@ export function generateApprovalEmailInfo(
     }${decisionAnswer ? ' - ' + decisionAnswer : ''}:</p>`;
     emailBody += `<br/><table cellpadding="0" cellspacing="0" class="summary-table">
     <tbody>
-      <tr><td><p>Customer</p></td><td><p>${proposalDetails['Customer'] ||
-        ''}</p></td></tr>
-      <tr><td>Protocol Title</td><td>${proposalDetails['Product name'] ||
-        ''}</td></tr>
-      <tr><td>Indication</td><td>${proposalDetails['Verbatim indication'] ||
-        ''}</td></tr>
+      <tr><td><p>Customer</p></td><td><p>${
+        proposalDetails['Customer'] || ''
+      }</p></td></tr>
+      <tr><td>Protocol Title</td><td>${
+        proposalDetails['Product name'] || ''
+      }</td></tr>
+      <tr><td>Indication</td><td>${
+        proposalDetails['Verbatim indication'] || ''
+      }</td></tr>
       <tr><td>Phase</td><td>${proposalDetails['Phase'] || ''}</td></tr>
       <tr><td>Bid Number</td><td>${proposalDetails['bidNo'] || ''}</td></tr>
       <tr><td>Due Date</td><td>${
@@ -352,7 +355,7 @@ export function generateEmailTemplateEmail(
     ','
   )}?cc=${cc.join(',')}&subject=${subject}&body=${
     body
-      ? `Unity%20has%20copied%20the%20approval%20section%20details%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20the%20content%20to%20include%20it%20in%20your%20mail%20and%20share%20it%20with%20your%20team.`
+      ? `Unity%20has%20copied%20the%20configured%20email%20content%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20into%20the%20Body%20of%20this%20email.`
       : ''
   }&online=1`;
 }
