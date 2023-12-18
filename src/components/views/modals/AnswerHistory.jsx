@@ -156,7 +156,6 @@ class AnswerHistory extends Component<Props> {
       opportunityData,
       toggleWatch
     } = this.props;
-    console.log('this.props', this.props);
     const { lastAnswer } = this.state;
     const { questionLockWrapper } = this.context;
     const questionID = question?.toJS()?.questionId;

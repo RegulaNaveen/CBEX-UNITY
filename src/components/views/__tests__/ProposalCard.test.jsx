@@ -50,7 +50,10 @@ const props = {
   proposalId: '12345',
   approvalsCount: 3,
   isApprovalCountPresent: true,
-  proposalDetails: {}
+  proposalDetails: {},
+  bidNo: 1,
+  bidType: 'Clinical_Bid',
+  allFlags: { showTimelineFlag: true }
 };
 
 const ProposalCardWithRedux = ({ updateFavouriteWrapper, ...props }) => (
@@ -100,6 +103,27 @@ describe('ProposalCard component', () => {
     expect(getByText(props.protocolNumber)).toBeInTheDocument();
     expect(getByText(props.verbatimIndication)).toBeInTheDocument();
     expect(getByText(props.dueDate)).toBeInTheDocument();
+    expect(getByText('Bid 1')).toBeInTheDocument();
+  });
+
+  it('renders with correct content for Early_Engagement_Bid', async () => {
+    const newProps = { ...props, bidType: 'Early_Engagement_Bid' };
+    const { getByText } = render(<ProposalCardWithRedux {...newProps} />);
+
+    expect(getByText('Early Engagement 1')).toBeInTheDocument();
+  });
+
+  it('renders with correct content for Post_Award_Bid', async () => {
+    const newProps = { ...props, bidType: 'Post_Award_Bid' };
+    const { getByText } = render(<ProposalCardWithRedux {...newProps} />);
+
+    expect(getByText('Post Award 1')).toBeInTheDocument();
+  });
+
+  it('renders with correct content for RFI_Request', async () => {
+    const newProps = { ...props, bidType: 'RFI_Request', daysRemain: -1 };
+    const { getByText } = render(<ProposalCardWithRedux {...newProps} />);
+    expect(getByText('RFI 1')).toBeInTheDocument();
   });
 
   it('does not render the approvals count if it is not present', () => {
@@ -107,7 +131,6 @@ describe('ProposalCard component', () => {
     const { queryByText, debug } = render(
       <ProposalCardWithRedux {...newProps} />
     );
-    debug();
 
     expect(queryByText('3')).not.toBeInTheDocument();
   });
