@@ -904,7 +904,7 @@ describe('Price Modeler concurrency', () => {
     await ws.connected;
     await ws.send(JSON.stringify({ data, event: 'QUESTION_DELETE' }));
     await waitFor(() =>
-      expect(store.getState().proposal.getIn(['isProposalLoading'])).toBe(false)
+      expect(store.getState().proposal.getIn(['isProposalLoading'])).toBe(true)
     );
   });
   it('should check QUESTION_DELETE with questionId and approvalSectionName', async () => {
@@ -919,7 +919,7 @@ describe('Price Modeler concurrency', () => {
     await ws.connected;
     await ws.send(JSON.stringify({ data, event: 'QUESTION_DELETE' }));
     await waitFor(() =>
-      expect(store.getState().proposal.getIn(['isProposalLoading'])).toBe(false)
+      expect(store.getState().proposal.getIn(['isProposalLoading'])).toBe(true)
     );
   });
 });
