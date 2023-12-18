@@ -37,6 +37,7 @@ const data = [
     'bid due date': '2022-01-01',
     'opportunity status': 'Active',
     bidNo: 1,
+    bidType: 'Clinical_Bid',
     isFavourite: false,
     nextMilestone: 'Milestone 1',
     unknown: '',
@@ -50,6 +51,7 @@ const data = [
     isFavourite: false,
     nextMilestone: 'Milestone 2',
     bidNo: 2,
+    bidType: 'Early_Engagement_Bid',
     proposalId: 'id2'
   }
 ];
@@ -211,7 +213,6 @@ describe('TableView component', () => {
       expect(container.querySelector('.edit-icon-button')).toBeInTheDocument()
     );
     userEvent.click(container.querySelector('.edit-icon-button'));
-    debug(container, 50000);
     await waitFor(() =>
       expect(queryByTestId('edit-name-modal')).toBeInTheDocument()
     );

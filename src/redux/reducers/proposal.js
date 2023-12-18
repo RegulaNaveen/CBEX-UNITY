@@ -359,8 +359,10 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${proposal?.proposal?.proposalDetails
-            ?.earlyEngagementDevelopmentPlan || ''}`
+          `${
+            proposal?.proposal?.proposalDetails
+              ?.earlyEngagementDevelopmentPlan || ''
+          }`
         )
         .set(
           'describeActivity',
@@ -1453,6 +1455,7 @@ const updateOportunityDetailData = (state, action) => {
   const mapper = OpportunitySFUpDATE;
   let opportunityData = state.get('opportunityData');
   let selectedbid = state.get('selectedBid');
+  let isEditable = state.get('isEditable');
   const updatedSelectedbid = selectedbid?.toJS();
   let currentProposal = cloneDeep(
     opportunityData.getIn([data?.proposalId, 'proposal'])
@@ -1471,7 +1474,8 @@ const updateOportunityDetailData = (state, action) => {
   ) {
     if (
       updatedSelectedbid.id === data?.proposalId &&
-      updatedSelectedbid[mapper[data.questionSfField]]
+      updatedSelectedbid[mapper[data.questionSfField]] &&
+      isEditable
     ) {
       updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
       proposalDetail[mapper[data.sfField]] = data.answer;
@@ -1494,7 +1498,8 @@ const updateOportunityDetailData = (state, action) => {
   ) {
     if (
       updatedSelectedbid.id === data?.proposalId &&
-      updatedSelectedbid[mapper[data.questionSfField]]
+      updatedSelectedbid[mapper[data.questionSfField]] &&
+      isEditable
     ) {
       updatedSelectedbid[mapper[data.questionSfField]] = data.answer;
       proposalDetail[mapper[data.questionSfField]] = data.answer;
@@ -1524,8 +1529,8 @@ const updateProposalDetailSF = (state, action) => {
   let proposalDetail = cloneDeep(state.get('proposalDetails', {}));
   let selectedBid = state.get('selectedBid');
   const selectedBidId = state.getIn(['selectedBid', 'id']);
-
-  if (data && data.bidStatusKey && selectedBid) {
+  const isEditable = state.getIn(['selectedBid', 'isEditable']);
+  if (data && data.bidStatusKey && selectedBid && isEditable) {
     const updatedSelectedBid = selectedBid?.toJS();
     if (currentProposalId === data?.proposalId) {
       updatedSelectedBid.bidStopStatus = data.bidStopStatus;
@@ -1564,7 +1569,7 @@ const updateProposalDetailSF = (state, action) => {
         );
     }
   } else {
-    if (selectedBidId === data?.proposalId) {
+    if (selectedBidId === data?.proposalId && isEditable) {
       proposalDetail = {
         ...proposalDetail,
         describeActivity: data.proposalDetails.describeActivity,
@@ -1615,6 +1620,7 @@ const updateDashboardDetail = (state, action) => {
     const data = action.payload;
     let opportunityData = state.get('opportunityData');
     const selectedBidId = state.getIn(['selectedBid', 'id']);
+    const isEditable = state.getIn(['selectedBid', 'isEditable']);
     let currentProposal = cloneDeep(
       opportunityData.getIn([data?.data?.proposalId, 'proposal'])
     );
@@ -1624,21 +1630,25 @@ const updateDashboardDetail = (state, action) => {
       'proposalId'
     ]);
     let proposalDetail = cloneDeep(state.get('proposalDetails', {}));
-    if (currentProposal && currentProposalId === data?.data?.proposalId) {
+    if (
+      currentProposal &&
+      currentProposalId === data?.data?.proposalId &&
+      isEditable
+    ) {
       currentProposal['proposalDetails'].Customer =
         data?.data?.proposalDetails.Customer;
-      if (selectedBidId === data?.data?.proposalId) {
+      if (selectedBidId === data?.data?.proposalId && isEditable) {
         proposalDetail.Customer = data?.data?.proposalDetails.Customer;
       }
-      if (data?.data?.proposalDetails['Bid due date']) {
+      if (data?.data?.proposalDetails['Bid due date'] && isEditable) {
         currentProposal['proposalDetails']['Bid due date'] =
           data.data.proposalDetails['Bid due date'];
-        if (selectedBidId === data?.data?.proposalId) {
+        if (selectedBidId === data?.data?.proposalId && isEditable) {
           proposalDetail['Bid due date'] =
             data.data.proposalDetails['Bid due date'];
         }
       }
-      if (selectedBidId === data?.data?.proposalId) {
+      if (selectedBidId === data?.data?.proposalId && isEditable) {
         state.set('proposalDetails', { ...proposalDetail });
       }
       return state.setIn(
@@ -1662,7 +1672,8 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
+    onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1751,7 +1762,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

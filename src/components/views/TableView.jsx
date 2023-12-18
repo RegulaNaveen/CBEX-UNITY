@@ -26,6 +26,7 @@ import Grid from 'apollo-react/components/Grid';
 import Paper from 'apollo-react/components/Paper';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { getNextMilestone } from '../../utils/utils';
+import { getBidType } from './ProposalCard';
 
 type Props = {
   data: Array<Object>,
@@ -304,20 +305,11 @@ const TableView = ({ data, hideStatus }: Props) => {
               );
             case 'bidNo':
               const bidNumber = row[BIDNUM_COLUMN];
-              const isEarlyEngagementBid =
-                row.bidType === 'Early_Engagement_Bid';
-
-              const tooltipTitle = isEarlyEngagementBid
-                ? `Early Engagement ${bidNumber}`
-                : `Bid ${bidNumber}`;
+              const bidContent = `${getBidType(row.bidType)} ${bidNumber}`;
               return (
                 <div key={uuidv4()} className="cell">
-                  <Tooltip title={tooltipTitle} placement="top">
-                    <p>
-                      {isEarlyEngagementBid
-                        ? `Early Engagement ${bidNumber}`
-                        : `Bid ${bidNumber}`}
-                    </p>
+                  <Tooltip title={bidContent} placement="top">
+                    <p>{bidContent}</p>
                   </Tooltip>
                 </div>
               );

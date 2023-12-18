@@ -142,4 +142,26 @@ describe('<Grid /> unit tests', () => {
     );
     expect(queryByText('New Custom Name')).toBeNull();
   });
+
+  it('should show bid no', async () => {
+    const { getByText } = render(
+      <GridWithRedux
+        updateFavouriteWrapper={jest.fn()}
+        data={{ bidNo: 1, bidType: 'Clinical_bid' }}
+        favourite={false}
+      />
+    );
+    expect(getByText('1')).toBeInTheDocument();
+  });
+
+  it('should show post award no', async () => {
+    const { getByText } = render(
+      <GridWithRedux
+        updateFavouriteWrapper={jest.fn()}
+        data={{ bidNo: 1, bidType: 'Post_Award_Bid' }}
+        favourite={false}
+      />
+    );
+    expect(getByText('Post Award 1')).toBeInTheDocument();
+  });
 });
