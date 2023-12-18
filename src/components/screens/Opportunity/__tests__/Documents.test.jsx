@@ -101,7 +101,6 @@ describe('Documents component render', () => {
         </Provider>
       </BrowserRouter>
     );
-    screen.debug();
     expect(
       getByText(/No documents available for this proposal/i)
     ).toBeInTheDocument();
