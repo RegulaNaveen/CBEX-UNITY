@@ -51,6 +51,21 @@ type Props = {
   nextMilestone: string
 };
 
+export const getBidType = bidType => {
+  if (
+    bidType === 'Early_Engagement_Bid' ||
+    bidType === 'Bid Early_Engagement_Bid'
+  ) {
+    return 'Early Engagement';
+  } else if (bidType === 'RFI_Request' || bidType === 'Bid RFI_Request') {
+    return 'RFI';
+  } else if (bidType === 'Post_Award_Bid' || bidType === 'Bid Post_Award_Bid') {
+    return 'Post Award';
+  } else {
+    return 'Bid';
+  }
+};
+
 const ProposalCard = ({
   title,
   opportunityName,
@@ -224,11 +239,9 @@ const ProposalCard = ({
           <span>
             <b>Current Bid:</b>
           </span>
-          {bidType === 'Early_Engagement_Bid' ? (
-            <span>Early Engagement {bidNo}</span>
-          ) : (
-            <span className={checkNoDataClass(bidNo)}>Bid {bidNo}</span>
-          )}
+          <span className={checkNoDataClass(bidNo)}>
+            {getBidType(bidType)} {bidNo}
+          </span>
         </div>
         <div className={CLASS_SECTION_DATA}>
           <span>
