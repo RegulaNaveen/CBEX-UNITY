@@ -16,6 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import featureFlags from '../../../../constants/featureFlags';
 import { SocketContext } from '../../../../context/SocketContext';
 import { saveRecentOppActivity } from '../../../../api/proposals';
+import { getBidType } from '../../../views/ProposalCard';
 
 const styles = { padding: 10 };
 const containerStyle = {
@@ -101,7 +102,7 @@ const loadSidebar = props => {
     bidType,
     opportunityId
   } = data;
-    const placeholder = 'No data';
+  const placeholder = 'No data';
   const date = bidDueDate && parseMomentDate(bidDueDate);
   const daysRemain = getRemainingDays(date);
   const redirect = () => {
@@ -492,9 +493,7 @@ const loadSidebar = props => {
             Bid #
           </Typography>
           <Typography variant="body2" className="boldtext">
-            {bidType === 'Early_Engagement_Bid' 
-              || bidType === 'Bid Early_Engagement_Bid' 
-              ? 'Early Engagement  ' : ''}
+            {getBidType(bidType) === 'Bid' ? '' : getBidType(bidType)}{' '}
             {bidNo || placeholder}
           </Typography>
         </Paper>

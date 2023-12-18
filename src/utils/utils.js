@@ -78,8 +78,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-          : name?.trim();
+        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+        : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -555,7 +555,7 @@ const getBidNameByType = bidType => {
       bidName = 'Early Engagement ';
     } else if (bidName === 'Post Award') {
       bidName = 'Post Award ';
-    } else if (bidName === 'RFI Request') {
+    } else if (bidName === 'RFI') {
       bidName = 'RFI ';
     }
   } else {
