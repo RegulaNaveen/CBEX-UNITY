@@ -20,7 +20,8 @@ import {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  getBidTypeFromProposalId
+  getBidTypeFromProposalId,
+  getBidNameByType
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import {
@@ -159,8 +160,8 @@ class AnswerHistory extends Component<Props> {
     const { questionLockWrapper } = this.context;
     const questionID = question?.toJS()?.questionId;
     const proposalID = selectedBid?.toJS()?.id;
-    bidNo = opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
-      .bidNo;
+    bidNo = opportunityData?.get(proposalID)?.toJS().proposal
+      .proposalDetails.bidNo;
     isEditableBid =
       opportunityData?.get(proposalID)?.toJS().isCurrent === true
         ? opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
@@ -213,13 +214,8 @@ class AnswerHistory extends Component<Props> {
   }
 
   handleVerifyPredictedAnsClick = predictedAnswer => {
-    const {
-      trackEvent,
-      eventCategories,
-      events,
-      opportunityData,
-      tab
-    } = this.props;
+    const { trackEvent, eventCategories, events, opportunityData, tab } =
+      this.props;
     const { question } = this.state;
     const questionType = question.getIn(['answerConfiguration', 'type']);
     const answers = question.get('answers').reverse();
@@ -637,8 +633,8 @@ class AnswerHistory extends Component<Props> {
         opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails
           ?.bidNo
       ) {
-        bidNo = opportunityData.get(proposalId).toJS().proposal.proposalDetails
-          .bidNo;
+        bidNo = opportunityData.get(proposalId).toJS().proposal
+          .proposalDetails.bidNo;
         bidType = getBidTypeFromProposalId(proposalId, getOpportunityData);
         isEditableBid =
           opportunityData.get(proposalId).toJS().isCurrent === true
@@ -689,7 +685,7 @@ class AnswerHistory extends Component<Props> {
         answers.get(index).get('userName') !== 'AnswerPulledFromSalesforce' &&
         !isAnswerEmpty(answer) &&
         areBothAnswersSame(answer, nextAnswer);
-
+      
       const isRejectedCarryForwardedAnswer =
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'CarryForwardAnswer' &&
@@ -707,12 +703,7 @@ class AnswerHistory extends Component<Props> {
           .get(index + 1)
           .get('answer')
           .toJS()
-          .join(',') ===
-          answers
-            .get(index)
-            .get('answer')
-            .toJS()
-            .join(',');
+          .join(',') === answers.get(index).get('answer').toJS().join(',');
 
       const doesPicklistAcceptedCarryForwardAnswer =
         (questionType === ANSWER_TYPES.PICKLIST ||
@@ -724,12 +715,7 @@ class AnswerHistory extends Component<Props> {
           .get(index + 1)
           .get('answer')
           .toJS()
-          .join(',') ===
-          answers
-            .get(index)
-            .get('answer')
-            .toJS()
-            .join(',');
+          .join(',') === answers.get(index).get('answer').toJS().join(',');
 
       const userInitials = getUserInitials(userName, cfBidNo);
       const parsedDate = parseMomentDate(date);
@@ -775,9 +761,11 @@ class AnswerHistory extends Component<Props> {
 
         if (isAcceptedCarryForwardedAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
+          
           if (
             cfProposalIdPrevAnswer &&
             opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
@@ -786,6 +774,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -803,8 +795,11 @@ class AnswerHistory extends Component<Props> {
                   Validated{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               )}
             </span>
@@ -813,6 +808,7 @@ class AnswerHistory extends Component<Props> {
 
         if (doesPicklistAcceptedCarryForwardAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
@@ -824,6 +820,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -841,8 +841,11 @@ class AnswerHistory extends Component<Props> {
                   Validated{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               )}
             </span>
@@ -851,6 +854,7 @@ class AnswerHistory extends Component<Props> {
 
         if (isRejectedCarryForwardedAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
@@ -862,6 +866,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -871,8 +879,11 @@ class AnswerHistory extends Component<Props> {
                   Rejected{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               }
             </span>
@@ -949,8 +960,8 @@ class AnswerHistory extends Component<Props> {
                 answer === 'N/A'
                   ? 'N/A'
                   : answer === ''
-                  ? ''
-                  : parseMomentDate(answer)
+                    ? ''
+                    : parseMomentDate(answer)
               ),
               styleClass
             );
@@ -967,8 +978,8 @@ class AnswerHistory extends Component<Props> {
                   nextAnswer === 'N/A'
                     ? 'N/A'
                     : answer === ''
-                    ? ''
-                    : parseMomentDate(nextAnswer)
+                      ? ''
+                      : parseMomentDate(nextAnswer)
                 ),
                 'removed'
               );
@@ -1035,16 +1046,14 @@ class AnswerHistory extends Component<Props> {
             return combinedAnswer() || renderWord(answer, '');
           }
           if (questionType === 'date') {
-            answer = String(answer)
-              .trimStart()
-              .trimEnd();
+            answer = String(answer).trimStart().trimEnd();
             if (!String(answer).length) {
               return renderWord(
                 nextAnswer === 'N/A'
                   ? 'N/A'
                   : nextAnswer === ''
-                  ? ''
-                  : parseMomentDate(nextAnswer),
+                    ? ''
+                    : parseMomentDate(nextAnswer),
                 'removed'
               );
             }
@@ -1139,7 +1148,7 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
-              selectedBid.get('isCurrent', false) &&
+              (selectedBid.get('isCurrent', false) || isEditableBid) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
               !isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (

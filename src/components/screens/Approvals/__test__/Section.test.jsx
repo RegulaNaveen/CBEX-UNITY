@@ -348,8 +348,6 @@ describe('Section Component', () => {
         </SocketContext.Provider>
       </Provider>
     );
-
-    screen.debug(undefined, Infinity);
     const accordion = getAllByRole(
       'button',
       { hidden: true },
