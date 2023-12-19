@@ -11,5 +11,6 @@ const ANSWER_TYPES = {
   CHECKBOX: 'checkbox',
   MULTI_SELECT: 'multi-select',
   MULTI_SELECT_LOOKUP: 'multi-select-lookup',
+  TABLE: 'table'
 };
 export default ANSWER_TYPES;

@@ -1,0 +1,24 @@
+#table-question-answer {
+  height: 38px;
+  .table-answer {
+    height: 38px;
+    border: 1px solid #d9d9d9;
+    border-radius: 0.25rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    &:hover {
+      border: 1px solid #40a9ff;
+      cursor: pointer;
+    }
+    .table-icon {
+      margin-left: 0.5rem;
+      color: #595959;
+    }
+    .label {
+      margin-left: 0.5rem;
+      color: #999999;
+    }
+  }
+}
