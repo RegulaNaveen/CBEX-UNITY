@@ -81,6 +81,7 @@ import {
   selectQuery
 } from '../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
+import { TableAnswer } from './atoms/TableAnswer';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -1437,6 +1438,36 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   blurSpan={blurState}
                 />
               </div>
+            </span>
+          </SFAnswerValidationWrapper>
+        );
+      case ANSWER_TYPES.TABLE:
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
+            sfObject={sfObject}
+          >
+            <span
+              id="table-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex'
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
+              </span>
+              <TableAnswer
+                {...this.props}
+                tableConfiguration={JSON.parse(this.props.tableConfiguration)}
+              />
             </span>
           </SFAnswerValidationWrapper>
         );
