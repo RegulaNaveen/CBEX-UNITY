@@ -34,3 +34,44 @@
   opacity: 0.66;
   background-size: cover;
 }
+
+.table-answer-modal {
+  width: 95%;
+  max-width: 95%;
+  height: 95%;
+  max-height: 95%;
+  .table-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  thead {
+    th {
+      padding: 0.5rem 1rem;
+      &:not(:last-child) {
+        border-right: 1px solid #e9e9e9;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        &:first-child {
+          background-color: #f8f9fb;
+        }
+        &:not(:last-child) {
+          border-right: 1px solid #e9e9e9;
+        }
+      }
+      border-bottom: 1px solid #e9e9e9 !important;
+    }
+  }
+  .table-cell {
+    min-width: 100px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0.5rem 0.75rem;
+  }
+}
