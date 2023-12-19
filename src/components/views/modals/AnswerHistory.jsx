@@ -1122,7 +1122,8 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
-              (selectedBid.get('isCurrent', false) || isEditableBid) &&
+              (selectedBid.get('isCurrent', false) ||
+                selectedBid.get('isEditable')) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
               !isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (
