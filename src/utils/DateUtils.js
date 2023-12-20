@@ -32,7 +32,9 @@ export const getRemainingDays = (date: string): number | string => {
 };
 
 export const parseMomentDate = (date: Date | string) => {
-  return !date || date === ' ' ? date : moment(date).format('D-MMM-yyyy');
+  return !date || date === ' '
+    ? date
+    : moment(new Date(date)).format('D-MMM-yyyy');
 };
 
 export const formatTheDate = (date: Date | string) => {

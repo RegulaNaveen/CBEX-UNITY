@@ -17,7 +17,7 @@
     "build:uat": "webpack --env API_ENV=UAT --mode production ",
     "build:prod": "webpack --env API_ENV=PROD --mode production ",
     "coverage": "yarn test -- --env=jsdom --coverage --watchAll=false --timeout=3000",
-    "test": "jest",
+    "test": "jest --forceExit",
     "clear_jest": "jest  --clearCache",
     "lint:fix": "eslint --ext .js,.jsx src test --fix",
     "flow:chk": "yarn run flow",
