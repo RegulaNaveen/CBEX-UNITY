@@ -34,6 +34,8 @@ const BidHistory = () => {
   const dispatch = useDispatch();
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
+  const typeOfActivity = selectedBid.get('typeOfActivity');
+  const typeOfActivityValues = typeOfActivity?.split(';')?.join(', ');
   const isCurrentBid = selectedBid.get('isCurrent');
   const isEditableBid = selectedBid.get('isEditable');
   const bidType = selectedBid.get('bidType');
@@ -212,8 +214,8 @@ const BidHistory = () => {
                     {bidType && bidType.includes('Early_Engagement_Bid')
                       ? 'Early Engagement Development Plan'
                       : bidType && bidType.includes('Post_Award_Bid')
-                      ? 'Post Award Details'
-                      : bidType && bidType.includes(' RFI_Request')
+                      ? ''
+                      : bidType && bidType.includes('RFI_Request')
                       ? ''
                       : 'Pertinent Details / Specific Rebid Request'}
                   </p>
@@ -229,7 +231,7 @@ const BidHistory = () => {
                         Type of Activity
                       </p>
                       <div className="pertinent-details-section">
-                        <p>{selectedBid.get('typeOfActivity')}</p>
+                        <p>{typeOfActivityValues}</p>
                       </div>
                     </div>
                   ) : bidType &&
@@ -242,15 +244,18 @@ const BidHistory = () => {
                   ) : bidType &&
                     bidType.includes('RFI_Request' || 'Bid RFI_Request') ? (
                     <div>
-                      <p className="pertinent-details-title">RFI Description</p>
+                      <p className="pertinent-details-title req-detail-title">
+                        Request Detail
+                      </p>
                       <div className="rfi-textfield-container">
                         <TextField
                           placeholder="Describe details"
                           sizeAdjustable
-                          minWidth={176}
-                          minHeight={74}
+                          maxWidth={500}
+                          maxHeight={150}
                           fullWidth
                           value={selectedBid.get('requestDetail')}
+                          InputProps={{ readOnly: true }}
                         />
                       </div>
                     </div>
