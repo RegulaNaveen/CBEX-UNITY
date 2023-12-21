@@ -33,40 +33,54 @@ function TableControls({
   useEffect(() => {
     const newMenuItems = [];
     if (tableConfiguration) {
-      if (tableConfiguration.canAddColumn) {
+      if (tableConfiguration.canAddColumn && columns.length < 20) {
         newMenuItems.push({
           text: 'Add Column',
           onClick: handleAddColumnClick
         });
       }
-      if (tableConfiguration.canAddRow) {
+      if (tableConfiguration.canAddRow && rows.length < 30) {
         newMenuItems.push({
           text: 'Add Row',
           onClick: handleAddRowClick
         });
       }
-      newMenuItems.push({
-        text: 'Edit Columns',
-        onClick: handleEditColumns
-      });
-      newMenuItems.push({
-        text: 'Edit Rows',
-        onClick: handleEditRows
-      });
+      if (tableConfiguration.canEditColumn || tableConfiguration.canAddColumn) {
+        newMenuItems.push({
+          text: 'Edit Columns',
+          onClick: handleEditColumns
+        });
+      }
+      if (tableConfiguration.canEditRow || tableConfiguration.canAddRow) {
+        newMenuItems.push({
+          text: 'Edit Rows',
+          onClick: handleEditRows
+        });
+      }
     }
 
     setMenuItems(newMenuItems);
-  }, [tableConfiguration]);
+  }, [rows, columns, tableConfiguration]);
 
   function handleDragEnd(result) {
     if (!result.destination) {
       return;
     }
 
+    let nonEditablesCount = 0;
+
+    if (editing === 'columns') {
+      nonEditablesCount = editingValues.filter(
+        val => val.accessor === 'header' || !val.canEdit
+      ).length;
+    } else {
+      nonEditablesCount = editingValues.filter(val => !val.canEdit).length;
+    }
+
     const items = reorder(
       editingValues,
-      result.source.index,
-      result.destination.index
+      result.source.index + nonEditablesCount,
+      result.destination.index + nonEditablesCount
     );
 
     setEditingValues(items);
@@ -88,16 +102,18 @@ function TableControls({
   function handleEditColumns() {
     toggleEditing('columns');
     setEditingValues(
-      columns
-        .map((column, index) => ({ ...column, index, hidden: false }))
-        .filter(column => column.accessor !== 'header')
+      columns.map((column, index) => ({
+        ...column,
+        index,
+        hidden: !!column.hidden
+      }))
     );
   }
 
   function handleEditRows() {
     toggleEditing('rows');
     setEditingValues(
-      rows.map((row, index) => ({ ...row, index, hidden: false }))
+      rows.map((row, index) => ({ ...row, index, hidden: !!row.hidden }))
     );
   }
 
@@ -120,9 +136,6 @@ function TableControls({
   function handleApplyClick() {
     const valueType = editing === 'columns' ? 'column' : 'row';
     const editedValues = cloneDeep(editingValues);
-    if (valueType === 'column') {
-      editedValues.unshift(columns[0]);
-    }
     onEdit(valueType, editedValues);
     setEditing(null);
     setEditingValues([]);
@@ -156,46 +169,57 @@ function TableControls({
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {editingValues.map((item, index) => (
-                    <Draggable
-                      key={`drag${index}`}
-                      draggableId={`drag${index}`}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
+                  {editingValues
+                    .filter(val => {
+                      if (editing === 'columns') {
+                        return val.accessor !== 'header' && val.canEdit;
+                      }
+                      return val.canEdit;
+                    })
+                    .map((item, index) => (
+                      <Draggable
+                        key={`drag${index}`}
+                        draggableId={`drag${index}`}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
                           <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              width: '100%',
-                              paddingBottom: '1rem',
-                              maxHeight: '250px'
-                            }}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
                           >
-                            <DragIcon fontSize="small" />
-                            <p
+                            <div
                               style={{
-                                flexGrow: 1,
-                                maxWidth: '100px',
-                                marginRight: '1rem'
+                                display: 'flex',
+                                alignItems: 'center',
+                                width: '100%',
+                                paddingBottom: '1rem',
+                                maxHeight: '250px'
                               }}
                             >
-                              {item.headerTitle}
-                            </p>
-                            <Checkbox
-                              checked={!item.hidden}
-                              onChange={() => handleCheckboxChange(item.index)}
-                            />
+                              <DragIcon fontSize="small" />
+                              <p
+                                style={{
+                                  flexGrow: 1,
+                                  maxWidth: '100px',
+                                  marginRight: '1rem'
+                                }}
+                              >
+                                {editing === 'columns'
+                                  ? item.headerTitle
+                                  : item.header}
+                              </p>
+                              <Checkbox
+                                checked={!item.hidden}
+                                onChange={() =>
+                                  handleCheckboxChange(item.index)
+                                }
+                              />
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
+                        )}
+                      </Draggable>
+                    ))}
                 </div>
               )}
             </Droppable>
