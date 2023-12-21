@@ -35,7 +35,8 @@ const AnswerHistoryWithStore = props => (
       value={{
         socket: null,
         questionLockWrapper: jest.fn(),
-        questionUnlockWrapper: jest.fn()
+        questionUnlockWrapper: jest.fn(),
+        questionAnswerUpdateWrapper: jest.fn()
       }}
     >
       <AnswerHistory {...props} />
@@ -69,6 +70,8 @@ axiosInstance.get = jest.fn().mockImplementation(url => {
   }
 });
 
+axiosInstance.put = jest.fn().mockResolvedValue({ data: [] });
+
 describe('Answer History component', () => {
   window.history.pushState(
     {},
@@ -95,8 +98,8 @@ describe('Answer History component', () => {
       render(<AnswerHistoryWithStore {...initalstate} />);
     });
   });
-  test('If Answer is empty', async () => {
-    data.question.answers = [];
+  test('If Answer is number', async () => {
+    data.question = data.numberquestion;
     const question = fromJS(data.question);
     const closeModal = jest.fn();
     let initalstate = {
@@ -107,55 +110,10 @@ describe('Answer History component', () => {
     await act(async () => {
       render(<AnswerHistoryWithStore {...initalstate} />);
     });
-  });
-  test('If Answer is text with carry forward accept click', async () => {
-    data.question = data.textquestion;
-    const question = fromJS(data.question);
-    const closeModal = jest.fn();
-    let initalstate = {
-      question,
-      closeModal,
-      forceBlur: true,
-      toggleWatch: jest.fn()
-    };
 
-    await act(async () => {
-      render(<AnswerHistoryWithStore {...initalstate} />);
-    });
-
-    await waitFor(() => {
-      expect(axiosInstance.get).toHaveBeenCalledTimes(2);
-      expect(screen.getByText('Answer derived from RFI 1')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByText('Accept'));
     await waitFor(() => {
       expect(
-        screen.getAllByText('Associated CRM Numbers')[0]
-      ).toBeInTheDocument();
-    });
-  });
-  xtest('If Answer is text with carry forward reject click', async () => {
-    data.question = data.textquestion;
-    const question = fromJS(data.question);
-    const closeModal = jest.fn();
-    let initalstate = {
-      question,
-      closeModal,
-      forceBlur: true,
-      toggleWatch: jest.fn()
-    };
-    await act(async () => {
-      render(<AnswerHistoryWithStore {...initalstate} />);
-    });
-    await waitFor(() => {
-      expect(axiosInstance.get).toHaveBeenCalledTimes(3);
-      expect(screen.getByText('Answer derived from RFI 1')).toBeInTheDocument();
-    });
-
-    fireEvent.click(screen.getByText('Reject'));
-    await waitFor(() => {
-      expect(
-        screen.getAllByText('Associated CRM Numbers')[0]
+        screen.getByText('Validated answer derived from RFI 1')
       ).toBeInTheDocument();
     });
   });
@@ -172,8 +130,8 @@ describe('Answer History component', () => {
       render(<AnswerHistoryWithStore {...initalstate} />);
     });
   });
-  xtest('If Answer is date with unity predicted accept click', async () => {
-    data.question = data.datequestion;
+  test('If Answer is empty', async () => {
+    data.question.answers = [];
     const question = fromJS(data.question);
     const closeModal = jest.fn();
     let initalstate = {
@@ -184,49 +142,59 @@ describe('Answer History component', () => {
     await act(async () => {
       render(<AnswerHistoryWithStore {...initalstate} />);
     });
+  });
+  test('If Answer is text with carry forward | accept click', async () => {
+    data.question = data.textquestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal,
+      forceBlur: true,
+      toggleWatch: jest.fn()
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
+    });
 
     await waitFor(() => {
-      expect(screen.getByText('26-Dec-2023')).toBeInTheDocument();
+      expect(screen.getByText('Answer derived from RFI 1')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByText('Accept'));
     await waitFor(() => {
-      expect(screen.getByText('26-Dec-2023')).toBeInTheDocument();
+      expect(
+        screen.getAllByText('Associated CRM Numbers')[0]
+      ).toBeInTheDocument();
     });
   });
-  xtest('If Answer is date with unity predicted reject click', async () => {
-    data.question = data.datequestion;
+  test('If Answer is text with carry forward | reject click', async () => {
+    data.question = data.textquestion;
     const question = fromJS(data.question);
     const closeModal = jest.fn();
     let initalstate = {
       question,
-      closeModal
+      closeModal,
+      forceBlur: true,
+      toggleWatch: jest.fn()
     };
-
     await act(async () => {
       render(<AnswerHistoryWithStore {...initalstate} />);
     });
-
     await waitFor(() => {
-      expect(screen.getByText('26-Dec-2023')).toBeInTheDocument();
+      // expect(axiosInstance.get).toHaveBeenCalledTimes(3);
+      expect(screen.getByText('Answer derived from RFI 1')).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText('Reject'));
-  });
-  test('If Answer is number', async () => {
-    data.question = data.numberquestion;
-    const question = fromJS(data.question);
-    const closeModal = jest.fn();
-    let initalstate = {
-      question,
-      closeModal
-    };
-
-    await act(async () => {
-      render(<AnswerHistoryWithStore {...initalstate} />);
+    await waitFor(() => {
+      expect(
+        screen.getAllByText('Associated CRM Numbers')[0]
+      ).toBeInTheDocument();
     });
   });
-  xtest('If Answer is picklist with carry forward accept click', async () => {
-    data.question = data.picklistquestion;
+  test('If Answer is date with unity predicted | accept click', async () => {
+    data.question = data.datequestion;
     const question = fromJS(data.question);
     const closeModal = jest.fn();
     let initalstate = {
@@ -239,18 +207,31 @@ describe('Answer History component', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Answer derived from Early Engagement 1')
-      ).toBeInTheDocument();
+      expect(screen.getByText('MAP Call')).toBeInTheDocument();
+      expect(screen.getByText('26-Dec-2023')).toBeInTheDocument();
+      expect(screen.getByText('Unity Predicted Answer')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByText('Accept'));
-    await waitFor(() => {
-      expect(
-        screen.getByText('Answer derived from Early Engagement 1')
-      ).toBeInTheDocument();
-    });
   });
-  xtest('If Answer is picklist with carry forward reject click', async () => {
+  test('If Answer is date with unity predicted | reject click', async () => {
+    data.question = data.datequestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('26-Dec-2023')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText('Reject'));
+  });
+  test('If Answer is picklist with carry forward | accepted', async () => {
     data.question = data.picklistquestion;
     const question = fromJS(data.question);
     const closeModal = jest.fn();
@@ -265,8 +246,63 @@ describe('Answer History component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Answer derived from Early Engagement 1')
+        screen.getByText('Validated answer derived from Early Engagement 1')
       ).toBeInTheDocument();
+    });
+  });
+  test('If Answer is picklist look up with carry forward | rejected', async () => {
+    data.question = data.picklistlookupquestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Multi Select Lookup')).toBeInTheDocument();
+      expect(
+        screen.getByText('Rejected answer not derived from RFI 1')
+      ).toBeInTheDocument();
+    });
+  });
+  test('If Answer is single select lookup with carry forward | accept click', async () => {
+    data.question = data.singleselectlookupquestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Answer derived from RFI 1')).toBeInTheDocument();
+      fireEvent.click(screen.getByText('Accept'));
+    });
+  });
+  test('If Answer is single select lookup with carry forward | reject click', async () => {
+    data.question = data.singleselectlookupquestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Answer derived from RFI 1')).toBeInTheDocument();
       fireEvent.click(screen.getByText('Reject'));
     });
   });

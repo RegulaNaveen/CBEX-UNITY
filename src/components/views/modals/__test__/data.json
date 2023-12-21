@@ -234,121 +234,80 @@
     }
   },
   "numberquestion": {
-    "questionId": "Pricing-W9S",
+    "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+    "questionId": "231be643-6814-4059-93bf-c9fb21b658f6",
     "section": {
-      "sectionOrder": 7,
-      "sectionName": "Pricing"
+      "sectionOrder": 22,
+      "sectionName": "All Answer Type"
     },
-    "sfField": "n/a",
-    "questionOrder": 1,
-    "locked": true,
-    "lineOfBusiness": "Core Clinical,IQVIA Biotech",
-    "proposalId": "61682ae3-b186-4200-8bc5-68c1770d7e6b",
-    "roleNames": [
-      "Strategy Call - APAC",
-      "Business Developer - APAC",
-      "Business Developer"
-    ],
-    "visible": true,
-    "sfObject": "n/a",
-    "questionText": "What is the customer's price point, if known?",
-    "answers": [
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:04:09.384Z",
-        "answer": "70"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:06:04.370Z",
-        "answer": "6"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:24:26.239Z",
-        "answer": " "
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:36:32.768Z",
-        "answer": "10"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:40:13.050Z",
-        "answer": "11"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:42:18.104Z",
-        "answer": "15"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:43:40.923Z",
-        "answer": "30"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:44:43.001Z",
-        "answer": "20"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:46:18.492Z",
-        "answer": "55"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T06:49:16.713Z",
-        "answer": "40"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T10:39:27.044Z",
-        "answer": "50"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T10:43:03.043Z",
-        "answer": "60"
-      },
-      {
-        "user": "shahrukh.khan2@iqvia.com",
-        "userName": "Shahrukh Khan",
-        "userRole": "BAM",
-        "date": "2021-12-09T10:43:29.375Z",
-        "answer": "12"
-      }
-    ],
+    "questionText": "Number",
     "answerConfiguration": {
       "type": "number",
       "options": []
-    }
+    },
+    "roleNames": ["BD Leadership"],
+    "answers": [
+      {
+        "proposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed",
+        "questionId": "231be643-6814-4059-93bf-c9fb21b658f6",
+        "answer": "11",
+        "formattedAnswer": null,
+        "date": "2023-12-19T09:14:20.971Z",
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Therapeutic Strategy Lead",
+        "created_by": "1138123",
+        "updated_by": "1138123",
+        "created_date": "2023-12-19T09:14:21.392Z",
+        "updated_date": "2023-12-19T09:14:21.392Z",
+        "updatedInPG": true,
+        "cfProposalId": null
+      },
+      {
+        "user": "CarryForwardAnswer",
+        "userName": "CarryForwardAnswer",
+        "userRole": "CarryForwardAnswer",
+        "date": "2023-12-19T09:31:17.924Z",
+        "answer": "11",
+        "formattedAnswer": "null",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": false,
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
+      },
+      {
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Therapeutic Strategy Lead",
+        "date": "2023-12-21T14:56:36.094Z",
+        "answer": "11",
+        "formattedAnswer": "null",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": true,
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
+      }
+    ],
+    "questionOrder": 4,
+    "visible": true,
+    "locked": true,
+    "sfObject": "n/a",
+    "sfField": "n/a",
+    "milestoneNew": [],
+    "opportunityType": "Default Type,Core Opportunity Launch Call (AMR/EMEA)",
+    "hasDifferentSFanswer": false,
+    "isCustomQuestion": false,
+    "questionJSON": "{\"blocks\":[{\"key\":\"5q8o5\",\"text\":\"Number\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+    "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"f6tt2\" data-offset-key=\"5q8o5-0-0\"><div data-offset-key=\"5q8o5-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"5q8o5-0-0\"><span data-text=\"true\">Number</span></span></div></div></div>",
+    "questionHintJSON": "",
+    "questionHintHTML": "",
+    "active": true,
+    "integration": "",
+    "events": "",
+    "notApplicable": false,
+    "questionApproval": false,
+    "bidAnswerCopy": true,
+    "questionTableConfig": "{}",
+    "latestAnsweredBidNo": null,
+    "bidType": "Clinical_Bid"
   },
   "datequestion": {
     "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
@@ -446,6 +405,15 @@
         "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
         "updatedInPG": false,
         "cfProposalId": "44c27f42-a125-4dd8-ab6c-cd81db224c61"
+      },
+      {
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Therapeutic Strategy Lead",
+        "date": "2023-12-21T10:27:43.611Z",
+        "answer": ["Client Meeting Support"],
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": false
       }
     ],
     "questionOrder": 1,
@@ -483,6 +451,138 @@
     "questionTableConfig": "{}",
     "latestAnsweredBidNo": 1,
     "bidType": "Early_Engagement_Bid"
+  },
+  "picklistlookupquestion": {
+    "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+    "questionId": "dfe3b7fc-56ae-43ef-bdcc-36ef3a0a17fa",
+    "section": {
+      "sectionOrder": 22,
+      "sectionName": "All Answer Type"
+    },
+    "questionText": "Multi Select Lookup",
+    "answerConfiguration": {
+      "type": "picklist-lookup",
+      "options": ["Yes", "No", "Not Sure", "Not Applicable"]
+    },
+    "roleNames": ["Business Account Manager"],
+    "answers": [
+      {
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Therapeutic Strategy Lead",
+        "date": "2023-12-19T09:14:42.955Z",
+        "answer": ["Yes", "Not Sure"],
+        "proposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed",
+        "updatedInPG": false
+      },
+      {
+        "user": "CarryForwardAnswer",
+        "userName": "CarryForwardAnswer",
+        "userRole": "CarryForwardAnswer",
+        "date": "2023-12-19T09:31:17.925Z",
+        "answer": ["Yes", "Not Sure"],
+        "formattedAnswer": "",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": false,
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
+      },
+      {
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Therapeutic Strategy Lead",
+        "date": "2023-12-21T15:25:23.777Z",
+        "answer": [],
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": false
+      }
+    ],
+    "questionOrder": 8,
+    "visible": true,
+    "locked": false,
+    "sfObject": "n/a",
+    "sfField": "n/a",
+    "milestoneNew": [],
+    "opportunityType": "Default Type,Core Opportunity Launch Call (AMR/EMEA)",
+    "hasDifferentSFanswer": false,
+    "isCustomQuestion": false,
+    "questionJSON": "{\"blocks\":[{\"key\":\"4285c\",\"text\":\"Multi Select Lookup\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+    "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"9148l\" data-offset-key=\"4285c-0-0\"><div data-offset-key=\"4285c-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"4285c-0-0\"><span data-text=\"true\">Multi Select Lookup</span></span></div></div></div>",
+    "questionHintJSON": "",
+    "questionHintHTML": "",
+    "active": true,
+    "integration": "",
+    "events": "",
+    "notApplicable": false,
+    "questionApproval": false,
+    "bidAnswerCopy": true,
+    "questionTableConfig": "{}",
+    "latestAnsweredBidNo": 1,
+    "bidType": "RFI_Request"
+  },
+  "singleselectlookupquestion": {
+    "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+    "questionId": "918e86dc-b8d1-4d78-8cc2-b1cc81102d0d",
+    "section": {
+      "sectionOrder": 22,
+      "sectionName": "All Answer Type"
+    },
+    "questionText": "Single Select Lookup",
+    "answerConfiguration": {
+      "type": "select-lookup",
+      "options": ["High", "Medium", "Low", "Not Applicable"]
+    },
+    "roleNames": ["BD Leadership"],
+    "answers": [
+      {
+        "proposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed",
+        "questionId": "918e86dc-b8d1-4d78-8cc2-b1cc81102d0d",
+        "answer": "Medium",
+        "formattedAnswer": null,
+        "date": "2023-12-19T09:14:31.192Z",
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Therapeutic Strategy Lead",
+        "created_by": "1138123",
+        "updated_by": "1138123",
+        "created_date": "2023-12-19T09:14:31.627Z",
+        "updated_date": "2023-12-19T09:14:31.627Z",
+        "updatedInPG": true,
+        "cfProposalId": null
+      },
+      {
+        "user": "CarryForwardAnswer",
+        "userName": "CarryForwardAnswer",
+        "userRole": "CarryForwardAnswer",
+        "date": "2023-12-19T09:31:17.925Z",
+        "answer": "Medium",
+        "formattedAnswer": "null",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": false,
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
+      }
+    ],
+    "questionOrder": 7,
+    "visible": true,
+    "locked": false,
+    "sfObject": "n/a",
+    "sfField": "n/a",
+    "milestoneNew": [],
+    "opportunityType": "Default Type,Core Opportunity Launch Call (AMR/EMEA)",
+    "hasDifferentSFanswer": false,
+    "isCustomQuestion": false,
+    "questionJSON": "{\"blocks\":[{\"key\":\"26nd8\",\"text\":\"Single Select Lookup\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+    "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"3df0k\" data-offset-key=\"26nd8-0-0\"><div data-offset-key=\"26nd8-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"26nd8-0-0\"><span data-text=\"true\">Single Select Lookup</span></span></div></div></div>",
+    "questionHintJSON": "",
+    "questionHintHTML": "",
+    "active": true,
+    "integration": "",
+    "events": "",
+    "notApplicable": false,
+    "questionApproval": false,
+    "bidAnswerCopy": true,
+    "questionTableConfig": "{}",
+    "latestAnsweredBidNo": 1,
+    "bidType": "RFI_Request"
   },
   "opportunityData": [
     {
