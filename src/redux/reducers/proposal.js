@@ -684,9 +684,9 @@ const onProposalAnswer = (state: Map, action: Object): Map => {
   } = action;
 
   const selectedBidId = state.getIn(['selectedBid', 'id']);
-
-  const isCurrentProposal = data && data[data.length - 1];
-  if (isCurrentProposal?.proposalId !== selectedBidId) {
+  const isCurrent = state.getIn(['selectedBid', 'isCurrent']);
+  const isEditable = state.getIn(['selectedBid', 'isEditable']);
+  if (!(isCurrent || isEditable)) {
     return state;
   }
 
