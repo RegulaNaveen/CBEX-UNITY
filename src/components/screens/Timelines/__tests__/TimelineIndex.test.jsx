@@ -13,9 +13,9 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 
 import { store } from '../../../../store';
-import mockData from '../../../views/modals/__test__/data.json';
 import calenderData from './mockData/timelineCalender.json';
 import Timeline from '../index';
+import mockData from '../../../screens/Opportunity/__tests__/mockdata/question.json';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 const formatName = (name, count) => `${name} ID ${count}`;
