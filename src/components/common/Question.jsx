@@ -6,7 +6,16 @@
 import React, { createRef } from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
+import {
+  isObject,
+  isEqual,
+  isEmpty,
+  xor,
+  has,
+  isString,
+  merge,
+  cloneDeep
+} from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
@@ -82,6 +91,7 @@ import {
 } from '../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
 import { TableAnswer } from './atoms/TableAnswer';
+import { diffArrays } from 'diff';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -380,6 +390,48 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.context.questionUnlockWrapper(questionId);
 
     this.trackEventSubmitAnswer(textValue);
+    this.setSelectRow(false);
+  };
+
+  handleTableValueChange = (newValue, lastAnswer) => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    let lastAnswerValue;
+    if (lastAnswer && lastAnswer.get('answer')) {
+      lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
+      // compare prev and next answers and do a save
+
+      const rowsDiff = diffArrays(lastAnswerValue.rows, newValue.rows, {
+        comparator: isEqual
+      });
+      const columnsDiff = diffArrays(
+        lastAnswerValue.columns,
+        newValue.columns,
+        {
+          comparator: isEqual
+        }
+      );
+      if (
+        rowsDiff.some(row => row.added || row.removed) ||
+        columnsDiff.some(column => column.added || column.removed)
+      ) {
+        setProposalAnswer(
+          this.context,
+          proposalId,
+          questionId,
+          JSON.stringify(newValue),
+          userData
+        );
+      }
+    } else {
+      // it's a new answer
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        JSON.stringify({ ...newValue }), // stringified value
+        userData
+      );
+    }
     this.setSelectRow(false);
   };
 
@@ -793,7 +845,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map
+    lastAnswer: Map,
+    answered
   ) => {
     const {
       sectionName,
@@ -858,8 +911,61 @@ export class TaskRow extends React.PureComponent<Props, State> {
     const focusState = this.state.focusedSpan;
     const blurState = this.state.blurredSpan;
     if (answer) {
-      if (isObject(answer)) answerValueComplex = answer.toJS();
-      else answerValue = answer.toString();
+      if (type === ANSWER_TYPES.TABLE) {
+        // parse JSON from lastAnswer
+        const tableConfigJSON = JSON.parse(this.props.tableConfiguration);
+        // manipulate for testing purpose
+        tableConfigJSON.canAddColumn = false;
+        tableConfigJSON.canAddRow = true;
+        tableConfigJSON.canEditColumn = true;
+        tableConfigJSON.canEditRow = false;
+        // console.log('Table config', tableConfigJSON);
+        try {
+          const noConfigTableAnswer = JSON.parse(answer);
+          answerValue = merge(tableConfigJSON, noConfigTableAnswer);
+          const defaultColumnsLength = tableConfigJSON.columns.length;
+          const defaultRowsLength = tableConfigJSON.rows.length;
+
+          answerValue.columns = cloneDeep(answerValue.columns).map(
+            (column, colIndex) => ({
+              ...column,
+              canEdit:
+                colIndex <= defaultColumnsLength - 1
+                  ? answerValue.canEditColumn
+                  : column.canEdit
+            })
+          );
+          answerValue.rows = cloneDeep(answerValue.rows).map(
+            (row, rowIndex) => ({
+              ...row,
+              canEdit:
+                rowIndex <= defaultRowsLength - 1
+                  ? answerValue.canEditRow
+                  : row.canEdit
+            })
+          );
+        } catch (e) {
+          // if any error in parsing JSON, set answer to default table configuration
+          console.error('Error parsing table answer', e);
+          answerValue = tableConfigJSON;
+        }
+        // console.log('answerValue', answerValue);
+      } else {
+        if (isObject(answer)) answerValueComplex = answer.toJS();
+        else answerValue = answer.toString();
+      }
+    } else {
+      if (type === ANSWER_TYPES.TABLE) {
+        answerValue = JSON.parse(this.props.tableConfiguration);
+        answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
+          ...column,
+          canEdit: answerValue.canEditColumn
+        }));
+        answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
+          ...row,
+          canEdit: answerValue.canEditRow
+        }));
+      }
     }
 
     if (sectionName === 'Proposal Team') {
@@ -1443,33 +1549,37 @@ export class TaskRow extends React.PureComponent<Props, State> {
         );
       case ANSWER_TYPES.TABLE:
         return (
-          <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
-            sfObject={sfObject}
+          // Commented out SF intregration for Table answer type
+          // <SFAnswerValidationWrapper
+          //   hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
+          //   sfObject={sfObject}
+          // >
+          <span
+            id="table-question-answer"
+            tabIndex={-1}
+            onBlur={() => {
+              concurrencyBlurHandler();
+            }}
+            style={
+              `${this.props.showNaCheckbox}`
+                ? {
+                    display: 'flex'
+                  }
+                : ''
+            }
           >
-            <span
-              id="table-question-answer"
-              tabIndex={-1}
-              onBlur={() => {
-                concurrencyBlurHandler();
-              }}
-              style={
-                `${this.props.showNaCheckbox}`
-                  ? {
-                      display: 'flex'
-                    }
-                  : ''
-              }
-            >
-              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
-              </span>
-              <TableAnswer
-                {...this.props}
-                tableConfiguration={JSON.parse(this.props.tableConfiguration)}
-              />
+            <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+              {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
             </span>
-          </SFAnswerValidationWrapper>
+            <TableAnswer
+              {...this.props}
+              answered={answered}
+              lastAnswer={lastAnswer}
+              tableConfiguration={answerValue}
+              onChange={this.handleTableValueChange}
+            />
+          </span>
+          // </SFAnswerValidationWrapper>
         );
       default:
         return <div id="no-configuration">Click to answer</div>;
@@ -1845,9 +1955,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     answerConfiguration.get('type'),
                     answerConfiguration.get('options'),
                     answers,
-                    lastAnswer
+                    lastAnswer,
+                    this.isAnswered(lastAnswer, isAnswerPredicted)
                   )
-                : this.renderAnswer('', [], [], undefined)}
+                : this.renderAnswer('', [], [], undefined, false)}
             </div>
           </Grid>
 
@@ -1884,6 +1995,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             latestAnsweredBidNo={latestAnsweredBidNo}
             questionId={qId}
             questionDataDestinations={this.props.questionDataDestinations}
+            answerConfiguration={answerConfiguration}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&

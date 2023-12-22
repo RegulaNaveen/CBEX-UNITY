@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import TextField from 'apollo-react/components/TextField';
 
-function TableCell({ row, row: { rowIndex, editRow }, column, type }) {
+function TableCell({ row, row: { rowIndex, editRow, canEdit }, column, type }) {
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -25,20 +25,35 @@ function TableCell({ row, row: { rowIndex, editRow }, column, type }) {
   switch (type) {
     case 'text':
     default:
+      if (column.accessor === 'header') {
+        return (
+          <div className="table-cell">
+            {canEdit ? (
+              <TextField
+                margin="none"
+                value={value}
+                onChange={handleValueChange}
+                onBlur={handleInputBlur}
+                InputProps={{ maxLength: 100 }}
+                error={value.length === 0}
+                helperText={value.length === 0 ? 'Please add a name' : ''}
+              />
+            ) : (
+              <Typography variant="bodyDefault" gutterBottom noWrap>
+                {value}
+              </Typography>
+            )}
+          </div>
+        );
+      }
       return (
         <div className="table-cell">
-          {column.accessor === 'header' ? (
-            <Typography variant="bodyDefault" gutterBottom noWrap>
-              {value}
-            </Typography>
-          ) : (
-            <TextField
-              margin="none"
-              value={value}
-              onChange={handleValueChange}
-              onBlur={handleInputBlur}
-            />
-          )}
+          <TextField
+            margin="none"
+            value={value}
+            onChange={handleValueChange}
+            onBlur={handleInputBlur}
+          />
         </div>
       );
   }
