@@ -64,7 +64,10 @@ export const OpportunitySFUpDATE = {
   Drug_Product_Name__c: 'Product name',
   Verbatim_Indication_Term__c: 'Verbatim indication',
   StageName: 'Opportunity status',
-  Early_Engagement_Development_Plan__c: 'earlyEngagementDevelopmentPlan'
+  Early_Engagement_Development_Plan__c: 'earlyEngagementDevelopmentPlan',
+  Describe_Activity__c: 'describeActivity',
+  Type_of_Activity__c: 'typeOfActivity',
+  Request_Detail__c: 'requestDetail'
 };
 
 const PROFILE = {

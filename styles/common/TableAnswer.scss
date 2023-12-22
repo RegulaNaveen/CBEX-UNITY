@@ -20,5 +20,13 @@
       margin-left: 0.5rem;
       color: #999999;
     }
+    &.answered {
+      .table-icon {
+        color: #0768fd;
+      }
+      .label {
+        color: #0768fd;
+      }
+    }
   }
 }
