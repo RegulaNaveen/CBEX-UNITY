@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import TableIcon from '../../../svg/Table';
 import Typography from 'apollo-react/components/Typography';
+import classNames from 'classnames';
 import Modal from 'apollo-react/components/Modal';
 import ApolloTable from 'apollo-react/components/Table';
 import IconButton from 'apollo-react/components/IconButton';
@@ -84,7 +85,7 @@ function Title({ questionText, questionHint, questionHintJSON }) {
   );
 }
 
-function Header({ index, title, onTitleChange }) {
+function Header({ index, title, onTitleChange, canEdit }) {
   const [currentTitle, setCurrentTitle] = useState(title);
 
   const handleValueChange = useCallback(event => {
@@ -102,7 +103,7 @@ function Header({ index, title, onTitleChange }) {
     return <p></p>;
   }
 
-  return (
+  return canEdit ? (
     <TextField
       margin="none"
       value={currentTitle}
@@ -112,6 +113,8 @@ function Header({ index, title, onTitleChange }) {
       error={currentTitle.length === 0}
       helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
     />
+  ) : (
+    <p>{currentTitle}</p>
   );
 }
 
@@ -120,7 +123,11 @@ function TableAnswer({
   tableConfiguration,
   questionHint,
   questionHintJSON,
-  section
+  section,
+  answers,
+  answered,
+  lastAnswer,
+  onChange
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
@@ -129,8 +136,8 @@ function TableAnswer({
   const tableRef = useRef(null);
 
   function onHeaderTitleChange(index, title) {
-    setColumns(columns =>
-      columns.map((column, i) =>
+    setColumns(cols =>
+      cols.map((column, i) =>
         i === index ? { ...column, headerTitle: title } : column
       )
     );
@@ -148,8 +155,10 @@ function TableAnswer({
           index={nextColumnsWithExtra.length}
           title=""
           onTitleChange={onHeaderTitleChange}
+          canEdit={true}
         />
       ),
+      canEdit: true,
       headerTitle: ''
     };
 
@@ -178,7 +187,8 @@ function TableAnswer({
           return acc;
         },
         {
-          header: ``
+          header: ``,
+          canEdit: true
         }
       )
     );
@@ -196,7 +206,11 @@ function TableAnswer({
 
   useEffect(() => {
     if (Array.isArray(tableConfiguration.rows)) {
-      setRows(tableConfiguration.rows);
+      setRows(
+        tableConfiguration.rows.map(row => ({
+          ...row
+        }))
+      );
     }
     if (Array.isArray(tableConfiguration.columns)) {
       setColumns(
@@ -208,13 +222,14 @@ function TableAnswer({
               index={index}
               title={column.header}
               onTitleChange={onHeaderTitleChange}
+              canEdit={column.canEdit}
             />
           ),
           headerTitle: column.header
         }))
       );
     }
-  }, [tableConfiguration]);
+  }, [showModal, tableConfiguration]);
 
   const toggleModal = useCallback(show => {
     setShowModal(show);
@@ -230,7 +245,21 @@ function TableAnswer({
   }, []);
 
   function handleSaveClick() {
-    console.log('Save action clicked', rows, columns);
+    const newColumns = [];
+    cloneDeep(columns).forEach(column => {
+      delete column.header;
+      column.header = column.headerTitle;
+      delete column.customCell;
+      delete column.headerTitle;
+      newColumns.push(column);
+    });
+    if (
+      rows.some(row => !row.header) ||
+      newColumns.some((column, colIndex) => colIndex > 0 && !column.header)
+    ) {
+      return;
+    }
+    onChange({ rows, columns: newColumns }, lastAnswer);
     toggleModal(false);
   }
 
@@ -245,10 +274,19 @@ function TableAnswer({
 
   return (
     <React.Fragment>
-      <div className="table-answer" onClick={() => toggleModal(!showModal)}>
-        <TableIcon className="table-icon" color={'#595959'} />
+      <div
+        className={classNames({
+          'table-answer': true,
+          answered: answered
+        })}
+        onClick={() => toggleModal(!showModal)}
+      >
+        <TableIcon
+          className="table-icon"
+          color={answered ? '#0768fd' : '#595959'}
+        />
         <Typography className="label" variant="body1">
-          Add Table
+          {answered ? 'Edit' : 'Add'} Table Data
         </Typography>
       </div>
       <Modal
@@ -268,7 +306,10 @@ function TableAnswer({
         id="table-answer-modal"
         buttonProps={[
           { label: 'Cancel', onClick: () => toggleModal(false) },
-          { label: 'Save', onClick: handleSaveClick }
+          {
+            label: 'Save',
+            onClick: () => handleSaveClick()
+          }
         ]}
       >
         <TableControls
