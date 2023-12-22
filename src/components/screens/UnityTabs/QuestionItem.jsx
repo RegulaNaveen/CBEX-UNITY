@@ -32,7 +32,10 @@ import {
   getUnityTabQuestionLoading,
   getPanelStatus
 } from '../../../redux/selectors/proposal';
-import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
+import {
+  setEditQuestionData,
+  setProposalAnswerData
+} from '../../../redux/actions/proposal-actions';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
@@ -55,6 +58,7 @@ import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
+import { TableAnswer } from '../../common/atoms/TableAnswer';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -275,10 +279,86 @@ const QuestionItem = ({
     );
   };
 
+  async function handleTableValueChange(newValue, lastAnswer) {
+    const { proposalId, questionId } = question;
+    let lastAnswerValue;
+    if (lastAnswer && lastAnswer.get('answer')) {
+      lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
+      // compare prev and next answers and do a save
+
+      const rowsDiff = diffArrays(lastAnswerValue.rows, newValue.rows, {
+        comparator: isEqual
+      });
+      const columnsDiff = diffArrays(
+        lastAnswerValue.columns,
+        newValue.columns,
+        {
+          comparator: isEqual
+        }
+      );
+      if (
+        rowsDiff.some(row => row.added || row.removed) ||
+        columnsDiff.some(column => column.added || column.removed)
+      ) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            JSON.stringify(newValue),
+            getUserData()
+          )
+        );
+      }
+    } else {
+      // it's a new answer
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          JSON.stringify({ ...newValue }), // stringified value
+          getUserData()
+        )
+      );
+    }
+  }
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const lastAnswerMap = Map(lastAnswer);
+    let isAnswerPredicted = false;
+    let answerDate = 'Not Answered';
+
+    if (lastAnswerMap) {
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('date') &&
+        lastAnswerMap.get('date').length
+      ) {
+        answerDate = parseMomentDate(lastAnswerMap.get('date'));
+      }
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('userName') &&
+        lastAnswerMap.get('userName').length &&
+        lastAnswerMap.get('userName') === 'UnityPredictedAnswer'
+      ) {
+        isAnswerPredicted = true;
+        answerDate = 'Not Answered';
+      }
+    }
 
     const checkDisableFlag = () => locked;
+    const {
+      questionText,
+      questionTableConfig: tableConfiguration,
+      questionHint,
+      questionHintJSON,
+      section,
+      answers,
+      questionId
+    } = question;
     const inputProps = {
       question,
       lastAnswer,
@@ -392,6 +472,22 @@ const QuestionItem = ({
           >
             <CheckBoxQuestionWithIdleStateDetection {...inputProps} />
           </SFAnswerValidationWrapper>
+        );
+      }
+      case ANSWER_TYPES.TABLE: {
+        return (
+          <TableAnswer
+            {...inputProps}
+            questionText={questionText}
+            tableConfiguration={tableConfiguration}
+            questionHint={questionHint}
+            questionHintJSON={questionHintJSON}
+            section={Map(section)}
+            answers={answers}
+            answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
+            lastAnswer={lastAnswerMap}
+            onChange={handleTableValueChange}
+          />
         );
       }
       default:
@@ -634,6 +730,7 @@ const QuestionItem = ({
         bidType={bidType}
         latestAnsweredBidNo={latestAnsweredBidNo}
         questionDataDestinations={questionDataDestinations}
+        answerConfiguration={Map(question.answerConfiguration)}
       />
     );
   };
