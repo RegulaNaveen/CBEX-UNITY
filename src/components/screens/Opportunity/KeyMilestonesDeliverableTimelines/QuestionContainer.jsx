@@ -41,7 +41,8 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
     bidAnswerCopy,
     bidType,
     latestAnsweredBidNo,
-    questionDataDestinations
+    questionDataDestinations,
+    questionTableConfig
   } = item;
 
   return (
@@ -88,6 +89,7 @@ const QuestionContainer = ({ item, setQuestionToDisplayHistory }) => {
         bidType={bidType}
         latestAnsweredBidNo={latestAnsweredBidNo}
         questionDataDestinations={questionDataDestinations}
+        tableConfiguration={questionTableConfig}
       />
     </div>
   );
