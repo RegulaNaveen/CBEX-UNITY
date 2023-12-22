@@ -914,12 +914,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (type === ANSWER_TYPES.TABLE) {
         // parse JSON from lastAnswer
         const tableConfigJSON = JSON.parse(this.props.tableConfiguration);
-        // manipulate for testing purpose
-        tableConfigJSON.canAddColumn = false;
-        tableConfigJSON.canAddRow = true;
-        tableConfigJSON.canEditColumn = true;
-        tableConfigJSON.canEditRow = false;
-        // console.log('Table config', tableConfigJSON);
         try {
           const noConfigTableAnswer = JSON.parse(answer);
           answerValue = merge(tableConfigJSON, noConfigTableAnswer);
@@ -949,7 +943,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
           console.error('Error parsing table answer', e);
           answerValue = tableConfigJSON;
         }
-        // console.log('answerValue', answerValue);
       } else {
         if (isObject(answer)) answerValueComplex = answer.toJS();
         else answerValue = answer.toString();
