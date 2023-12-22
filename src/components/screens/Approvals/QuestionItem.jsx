@@ -16,6 +16,7 @@ import CalendarIcon from './CalendarIcon';
 import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+import { parseMomentDate } from '../../../utils/DateUtils';
 import { getCountriesNameForCode } from '../../../utils/utils';
 import TextQuestion from './InputComponents/TextQuestion';
 import NumberQuestion from './InputComponents/NumberQuestion';
@@ -43,18 +44,26 @@ import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
-import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
+import {
+  setEditQuestionData,
+  setProposalAnswerData
+} from '../../../redux/actions/proposal-actions';
+import { TableAnswer } from '../../common/atoms/TableAnswer';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(SelectQuestion);
-const MultiSelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(MultiSelectQuestion);
-const YesNoQuestionWithIdleStateDetection =
-  withIdleStateDetection(YesNoQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
 
-const CheckBoxQuestionWithIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestion);
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const QuestionItem = ({
   questionId = '',
@@ -242,10 +251,86 @@ const QuestionItem = ({
     });
   };
 
+  async function handleTableValueChange(newValue, lastAnswer) {
+    const { proposalId, questionId } = question;
+    let lastAnswerValue;
+    if (lastAnswer && lastAnswer.get('answer')) {
+      lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
+      // compare prev and next answers and do a save
+
+      const rowsDiff = diffArrays(lastAnswerValue.rows, newValue.rows, {
+        comparator: isEqual
+      });
+      const columnsDiff = diffArrays(
+        lastAnswerValue.columns,
+        newValue.columns,
+        {
+          comparator: isEqual
+        }
+      );
+      if (
+        rowsDiff.some(row => row.added || row.removed) ||
+        columnsDiff.some(column => column.added || column.removed)
+      ) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            JSON.stringify(newValue),
+            getUserData()
+          )
+        );
+      }
+    } else {
+      // it's a new answer
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          JSON.stringify({ ...newValue }), // stringified value
+          getUserData()
+        )
+      );
+    }
+  }
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const lastAnswerMap = Map(lastAnswer);
+    let isAnswerPredicted = false;
+    let answerDate = 'Not Answered';
+
+    if (lastAnswerMap) {
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('date') &&
+        lastAnswerMap.get('date').length
+      ) {
+        answerDate = parseMomentDate(lastAnswerMap.get('date'));
+      }
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('userName') &&
+        lastAnswerMap.get('userName').length &&
+        lastAnswerMap.get('userName') === 'UnityPredictedAnswer'
+      ) {
+        isAnswerPredicted = true;
+        answerDate = 'Not Answered';
+      }
+    }
 
     const checkDisableFlag = () => locked;
+    const {
+      questionText,
+      questionTableConfig: tableConfiguration,
+      questionHint,
+      questionHintJSON,
+      section,
+      answers,
+      questionId
+    } = question;
     const inputProps = {
       question,
       lastAnswer,
@@ -354,6 +439,22 @@ const QuestionItem = ({
           </SFAnswerValidationWrapper>
         );
       }
+      case ANSWER_TYPES.TABLE: {
+        return (
+          <TableAnswer
+            {...inputProps}
+            questionText={questionText}
+            tableConfiguration={tableConfiguration}
+            questionHint={questionHint}
+            questionHintJSON={questionHintJSON}
+            section={Map(section)}
+            answers={answers}
+            answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
+            lastAnswer={lastAnswerMap}
+            onChange={handleTableValueChange}
+          />
+        );
+      }
       default:
         return <FallbackComponent />;
     }
@@ -428,6 +529,22 @@ const QuestionItem = ({
     return null;
   };
 
+  const isAnswered = (answer, isAnswerPredicted) => {
+    if (isAnswerPredicted) return false;
+    if (answer && answer.get && answer.get('answer')) {
+      if (List.isList(answer.get('answer'))) {
+        return Boolean(answer.get('answer').size);
+      }
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
+    }
+    return false;
+  };
+
   //this function is used to show tags in the approvals tab
   // const renderTags = milestoneNew => {
   //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
@@ -498,10 +615,9 @@ const QuestionItem = ({
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
                                   direction: 'left',
-                                  questionAnswered:
-                                    checkLastAnswerOfQuestionVisibility(
-                                      question?.answers
-                                    )
+                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                    question?.answers
+                                  )
                                 })
                               );
                             }}
@@ -539,6 +655,7 @@ const QuestionItem = ({
                   onClick={() => {
                     setIsShowHistory(true);
                   }}
+                  disabled={question.answerConfiguration.type === 'table'}
                 >
                   <CalendarIcon question={question} />
                 </IconButton>
