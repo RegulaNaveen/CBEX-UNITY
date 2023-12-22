@@ -16,7 +16,6 @@ const SwitchItem = ({
   const question = isQuesFreezed
     ? archivedQuestion
     : useSelector(getQuestion(questionId));
-  console.log('question is', question);
   return question?.answerConfiguration?.type === 'statement' ? (
     <StatementItem
       questionId={questionId}

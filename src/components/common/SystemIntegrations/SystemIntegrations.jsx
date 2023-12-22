@@ -22,6 +22,7 @@ import {
 } from '../../svg';
 import classNames from 'classnames';
 import { BID_TYPES } from '../../../constants/app';
+import ANSWER_TYPES from '../../../constants/answerTypes';
 
 const SystemIntegrations = ({
   checkSfAnswer,
@@ -44,7 +45,8 @@ const SystemIntegrations = ({
   bidType,
   latestAnsweredBidNo = null,
   questionId,
-  questionDataDestinations
+  questionDataDestinations,
+  answerConfiguration
 }) => {
   const answer = answers.reverse();
   // console.log('answer', answer.toJS());
@@ -331,6 +333,10 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
+    if (answerConfiguration.get('type') === ANSWER_TYPES.TABLE)
+      return (
+        <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
+      );
     // calculate to show carry forward indication icon only if flag is enabled
     if (canShowCarryForwardIndication && answers.size > 0) {
       let latestAnswer = null;
@@ -624,8 +630,10 @@ const SystemIntegrations = ({
         }}
       >
         <div style={{ display: 'flex', flexBasis: '24px', height: '24px' }}>
-          {SalesForceCondition()}
-          {QvidianValidation()}
+          {answerConfiguration.get('type') !== ANSWER_TYPES.TABLE &&
+            SalesForceCondition()}
+          {answerConfiguration.get('type') !== ANSWER_TYPES.TABLE &&
+            QvidianValidation()}
           {CalendarCondition()}
         </div>
         <div style={{ display: 'flex', height: '24px', width: '24px' }}>
