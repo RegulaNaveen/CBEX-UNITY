@@ -275,6 +275,7 @@ function TableAnswer({
   return (
     <React.Fragment>
       <div
+        data-testid="togglebtn"
         className={classNames({
           'table-answer': true,
           answered: answered
@@ -290,6 +291,7 @@ function TableAnswer({
         </Typography>
       </div>
       <Modal
+        data-testid="myModel"
         disableBackdropClick
         open={showModal}
         variant="default"
@@ -313,6 +315,7 @@ function TableAnswer({
         ]}
       >
         <TableControls
+          data-testid="editTable"
           columns={columns}
           rows={rows}
           onAddColumnClick={handleAddColumnClick}
