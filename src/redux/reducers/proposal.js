@@ -359,8 +359,10 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${proposal?.proposal?.proposalDetails
-            ?.earlyEngagementDevelopmentPlan || ''}`
+          `${
+            proposal?.proposal?.proposalDetails
+              ?.earlyEngagementDevelopmentPlan || ''
+          }`
         )
         .set(
           'describeActivity',
@@ -1524,7 +1526,7 @@ const updateProposalDetailSF = (state, action) => {
     'proposal',
     'proposalId'
   ]);
-  let proposalDetail = cloneDeep(state.get('proposalDetails', {}));
+  let proposalDetail = cloneDeep(data?.proposalDetails);
   let selectedBid = state.get('selectedBid');
   const selectedBidId = state.getIn(['selectedBid', 'id']);
   const isEditable = state.getIn(['selectedBid', 'isEditable']);
@@ -1649,10 +1651,12 @@ const updateDashboardDetail = (state, action) => {
       if (selectedBidId === data?.data?.proposalId && isEditable) {
         state.set('proposalDetails', { ...proposalDetail });
       }
-      return state.setIn(
-        ['opportunityData', data.data.proposalId, 'proposal'],
-        currentProposal
-      );
+      return state
+        .setIn(
+          ['opportunityData', data.data.proposalId, 'proposal'],
+          currentProposal
+        )
+        .set('proposalDetails', { ...proposalDetail });
     }
 
     return state;
@@ -1670,7 +1674,8 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
+    onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1759,7 +1764,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {
