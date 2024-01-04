@@ -59,6 +59,8 @@ import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuest
 import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
 import { TableAnswer } from '../../common/atoms/TableAnswer';
+import { cloneDeep, isEqual, merge } from 'lodash';
+import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -475,11 +477,67 @@ const QuestionItem = ({
         );
       }
       case ANSWER_TYPES.TABLE: {
+        let jsonTableConfig = {};
+
+        if (lastAnswer.answer) {
+          // parse JSON from lastAnswer
+          const tableConfigJSON = JSON.parse(tableConfiguration);
+          try {
+            const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
+            jsonTableConfig = merge(tableConfigJSON, noConfigTableAnswer);
+            const defaultColumnsLength = tableConfigJSON.columns.length;
+            const defaultRowsLength = tableConfigJSON.rows.length;
+
+            if (Array.isArray(jsonTableConfig.columns)) {
+              jsonTableConfig.columns = cloneDeep(jsonTableConfig.columns).map(
+                (column, colIndex) => ({
+                  ...column,
+                  canEdit:
+                    colIndex <= defaultColumnsLength - 1
+                      ? jsonTableConfig.canEditColumn
+                      : column.canEdit
+                })
+              );
+            }
+            if (Array.isArray(jsonTableConfig.rows)) {
+              jsonTableConfig.rows = cloneDeep(jsonTableConfig.rows).map(
+                (row, rowIndex) => ({
+                  ...row,
+                  canEdit:
+                    rowIndex <= defaultRowsLength - 1
+                      ? jsonTableConfig.canEditRow
+                      : row.canEdit
+                })
+              );
+            }
+          } catch (e) {
+            // if any error in parsing JSON, set answer to default table configuration
+            console.error('Error parsing table answer', e);
+            jsonTableConfig = tableConfigJSON;
+          }
+        } else {
+          jsonTableConfig = JSON.parse(tableConfiguration);
+          if (Array.isArray(jsonTableConfig.columns)) {
+            jsonTableConfig.columns = cloneDeep(jsonTableConfig.columns).map(
+              column => ({
+                ...column,
+                canEdit: jsonTableConfig.canEditColumn
+              })
+            );
+          }
+          if (Array.isArray(jsonTableConfig.rows)) {
+            jsonTableConfig.rows = cloneDeep(jsonTableConfig.rows).map(row => ({
+              ...row,
+              canEdit: jsonTableConfig.canEditRow
+            }));
+          }
+        }
+
         return (
           <TableAnswer
             {...inputProps}
             questionText={questionText}
-            tableConfiguration={tableConfiguration}
+            tableConfiguration={jsonTableConfig}
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
             section={Map(section)}
