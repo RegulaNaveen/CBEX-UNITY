@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function TablePreview({ columns, rows }) {
   return (
-    <div style={{ 'overflow-x': 'auto' }}>
+    <div className="custom-answer-table-container">
       <table className="custom-answer-table">
         <thead>
           <tr>

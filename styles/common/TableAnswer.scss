@@ -64,3 +64,51 @@
     background-color: #dedede;
   }
 }
+
+.custom-answer-table-container {
+  overflow: auto;
+  width: 100%;
+  max-height: 150px;
+  border: 1px solid #ddd;
+}
+
+.custom-answer-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.custom-answer-table th,
+.custom-answer-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+.custom-answer-table-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 5px;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-thumb:hover {
+  background: #c1a9a9;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-button {
+  display: none;
+}
+
+.custom-answer-table th {
+  position: sticky;
+  top: 0;
+  background-color: #f1f1f1;
+  z-index: 1;
+}
