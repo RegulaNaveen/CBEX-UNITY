@@ -920,24 +920,28 @@ export class TaskRow extends React.PureComponent<Props, State> {
           const defaultColumnsLength = tableConfigJSON.columns.length;
           const defaultRowsLength = tableConfigJSON.rows.length;
 
-          answerValue.columns = cloneDeep(answerValue.columns).map(
-            (column, colIndex) => ({
-              ...column,
-              canEdit:
-                colIndex <= defaultColumnsLength - 1
-                  ? answerValue.canEditColumn
-                  : column.canEdit
-            })
-          );
-          answerValue.rows = cloneDeep(answerValue.rows).map(
-            (row, rowIndex) => ({
-              ...row,
-              canEdit:
-                rowIndex <= defaultRowsLength - 1
-                  ? answerValue.canEditRow
-                  : row.canEdit
-            })
-          );
+          if (Array.isArray(answerValue.columns)) {
+            answerValue.columns = cloneDeep(answerValue.columns).map(
+              (column, colIndex) => ({
+                ...column,
+                canEdit:
+                  colIndex <= defaultColumnsLength - 1
+                    ? answerValue.canEditColumn
+                    : column.canEdit
+              })
+            );
+          }
+          if (Array.isArray(answerValue.rows)) {
+            answerValue.rows = cloneDeep(answerValue.rows).map(
+              (row, rowIndex) => ({
+                ...row,
+                canEdit:
+                  rowIndex <= defaultRowsLength - 1
+                    ? answerValue.canEditRow
+                    : row.canEdit
+              })
+            );
+          }
         } catch (e) {
           // if any error in parsing JSON, set answer to default table configuration
           console.error('Error parsing table answer', e);
@@ -950,14 +954,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
     } else {
       if (type === ANSWER_TYPES.TABLE) {
         answerValue = JSON.parse(this.props.tableConfiguration);
-        answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
-          ...column,
-          canEdit: answerValue.canEditColumn
-        }));
-        answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
-          ...row,
-          canEdit: answerValue.canEditRow
-        }));
+        if (Array.isArray(answerValue.columns)) {
+          answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
+            ...column,
+            canEdit: answerValue.canEditColumn
+          }));
+        }
+        if (Array.isArray(answerValue.rows)) {
+          answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
+            ...row,
+            canEdit: answerValue.canEditRow
+          }));
+        }
       }
     }
 
@@ -1570,6 +1578,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               lastAnswer={lastAnswer}
               tableConfiguration={answerValue}
               onChange={this.handleTableValueChange}
+              disabled={checkDisableFlag() || isNotApplicable}
             />
           </span>
           // </SFAnswerValidationWrapper>
