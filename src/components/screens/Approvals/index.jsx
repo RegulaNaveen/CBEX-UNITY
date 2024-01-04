@@ -155,7 +155,13 @@ const Approvals = () => {
         <BidHistory data-testid="bid-history" />
       </ViewAboveVerticalTabs>
 
-      <div className="filter-container">
+      <div
+        className={` ${
+          !selectedBid?.isCurrent && !selectedBid?.isEditable
+            ? 'add-btn-container'
+            : 'filter-container'
+        }`}
+      >
         <div className="expand-all">
           <div className="tasksList-expand-all-icon">
             <ApolloCheckbox

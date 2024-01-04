@@ -44,7 +44,7 @@ describe('Test cases for tableAnswer', () => {
     const { getByTestId, queryByText } = render(<TableAnswersWithStore />);
     const togglemodel = getByTestId('togglebtn');
     fireEvent.click(togglemodel);
-    const savebutton = getByTestId('myModel');
+    const savebutton = getByTestId('tableAnswer-modal');
     expect(savebutton).toBeInTheDocument();
     expect(queryByText('Save')).toBeInTheDocument();
     fireEvent.click(queryByText('Save'));

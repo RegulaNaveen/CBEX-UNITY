@@ -142,7 +142,8 @@ const KeyMilestoneDeliverableTimelines = () => {
           bidAnswerCopy: KeyMilestoneData.bidAnswerCopy,
           bidType: KeyMilestoneData.bidType,
           latestAnsweredBidNo: KeyMilestoneData.latestAnsweredBidNo,
-          questionDataDestinations: questionDataDestinations
+          questionDataDestinations: questionDataDestinations,
+          questionTableConfig: KeyMilestoneData.questionTableConfig
         });
       }
     });
