@@ -30,3 +30,34 @@
     }
   }
 }
+
+.custom-answer-table {
+  width: 800px;
+  margin: 0 auto;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #4b6c96;
+  border-collapse: collapse;
+  &:hover {
+    border: 1px solid #40a9ff;
+    cursor: pointer;
+  }
+
+  td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+  }
+  th {
+    white-space: nowrap;
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #dedede;
+  }
+}

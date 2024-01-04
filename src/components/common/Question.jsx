@@ -94,17 +94,15 @@ import { TableAnswer } from './atoms/TableAnswer';
 import { diffArrays } from 'diff';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
-const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
-  QuestionDatePicker
-);
+const QuestionDatePickerWithIdleStateDetection =
+  withIdleStateDetection(QuestionDatePicker);
 const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
 const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
 const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
-const CheckBoxQuestionsIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestions
-);
+const CheckBoxQuestionsIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestions);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -960,6 +958,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         }));
       }
     }
+    console.log('answerValue', answerValue);
 
     if (sectionName === 'Proposal Team') {
       return (
@@ -1121,10 +1120,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (this.quesTextInnerLeftRef.current) {
           // Change title style for richEdit icon
-          const {
-            style: quesTitleLStyle,
-            firstChild
-          } = this.quesTextInnerLeftRef.current;
+          const { style: quesTitleLStyle, firstChild } =
+            this.quesTextInnerLeftRef.current;
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
@@ -1546,32 +1543,65 @@ export class TaskRow extends React.PureComponent<Props, State> {
           // <SFAnswerValidationWrapper
           //   hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
           //   sfObject={sfObject}
-          // >
-          <span
-            id="table-question-answer"
-            tabIndex={-1}
-            onBlur={() => {
-              concurrencyBlurHandler();
-            }}
-            style={
-              `${this.props.showNaCheckbox}`
-                ? {
-                    display: 'flex'
-                  }
-                : ''
-            }
-          >
-            <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-              {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
+          //
+          <>
+            <span
+              id="table-question-answer"
+              tabIndex={-1}
+              onBlur={() => {
+                concurrencyBlurHandler();
+              }}
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex'
+                    }
+                  : ''
+              }
+            >
+              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+                {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
+              </span>
+              <TableAnswer
+                {...this.props}
+                answered={answered}
+                lastAnswer={lastAnswer}
+                tableConfiguration={answerValue}
+                onChange={this.handleTableValueChange}
+              />
             </span>
-            <TableAnswer
-              {...this.props}
-              answered={answered}
-              lastAnswer={lastAnswer}
-              tableConfiguration={answerValue}
-              onChange={this.handleTableValueChange}
-            />
-          </span>
+            <div style={{ 'overflow-x': 'auto' }}>
+              <table className="custom-answer-table">
+                <thead>
+                  <tr>
+                    {answerValue.columns.length > 0 &&
+                      answerValue.columns.map(column => (
+                        <th>{column.header}</th>
+                      ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {answerValue.rows.map(row => (
+                    <>
+                      <tr>
+                        <td>{row.header}</td>{' '}
+                        {answerValue.columns.map(
+                          column =>
+                            column.accessor !== 'header' && (
+                              <td>
+                                {row[column.accessor]
+                                  ? row[column.accessor]
+                                  : ''}
+                              </td>
+                            )
+                        )}
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
           // </SFAnswerValidationWrapper>
         );
       default:
@@ -1599,12 +1629,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
