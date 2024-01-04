@@ -77,6 +77,16 @@ const GenerateDocs = () => {
         bidType === 'Bid Early_Engagement_Bid'
       ) {
         fileName = `Unity Export_${proposalDetails['CRM #']}_Early Engagement ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      } else if (
+        bidType === 'Post_Award_Bid' ||
+        bidType === 'Bid Post_Award_Bid'
+      ) {
+        fileName = `Unity Export_${proposalDetails['CRM #']}_Post Award ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
+      } else if (
+        bidType === 'RFI_Request' ||
+        bidType === 'Bid RFI_Request_Bid'
+      ) {
+        fileName = `Unity Export_${proposalDetails['CRM #']}_RFI ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       } else {
         fileName = `Unity Export_${proposalDetails['CRM #']}_Bid ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       }
