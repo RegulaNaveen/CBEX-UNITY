@@ -13,6 +13,7 @@ import TableCell from './TableCell';
 import { cloneDeep } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
+import TablePreview from './TablePreview';
 
 function Title({ questionText, questionHint, questionHintJSON }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -274,20 +275,23 @@ function TableAnswer({
 
   return (
     <React.Fragment>
-      <div
-        className={classNames({
-          'table-answer': true,
-          answered: answered
-        })}
-        onClick={() => toggleModal(!showModal)}
-      >
-        <TableIcon
-          className="table-icon"
-          color={answered ? '#0768fd' : '#595959'}
-        />
-        <Typography className="label" variant="body1">
-          {answered ? 'Edit' : 'Add'} Table Data
-        </Typography>
+      <div className="table-answer-container">
+        <div
+          className={classNames({
+            'table-answer': true,
+            answered: answered
+          })}
+          onClick={() => toggleModal(!showModal)}
+        >
+          <TableIcon
+            className="table-icon"
+            color={answered ? '#0768fd' : '#595959'}
+          />
+          <Typography className="label" variant="body1">
+            {answered ? 'Edit' : 'Add'} Table Data
+          </Typography>
+        </div>
+        <TablePreview rows={rows} columns={columns} />
       </div>
       <Modal
         disableBackdropClick
