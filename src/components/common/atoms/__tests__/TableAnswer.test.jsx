@@ -41,9 +41,10 @@ describe('Test cases for tableAnswer', () => {
   });
 
   it('Table answer should show modal', () => {
-    const { getByTestId, queryByText } = render(<TableAnswersWithStore />);
-    const togglemodel = getByTestId('togglebtn');
-    fireEvent.click(togglemodel);
+    const { getByTestId, queryByText, container } = render(
+      <TableAnswersWithStore />
+    );
+    fireEvent.click(container.querySelector('.table-answer'));
     const savebutton = getByTestId('tableAnswer-modal');
     expect(savebutton).toBeInTheDocument();
     expect(queryByText('Save')).toBeInTheDocument();
