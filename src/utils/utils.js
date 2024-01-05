@@ -96,7 +96,6 @@ const getFullProposalTeamString = (updateField, questions) => {
 const getTableAnswer = tableAnswer => {
   if (tableAnswer) {
     let formattedTableAnswer = tableAnswer;
-    console.log('formattedTableAnswer', formattedTableAnswer);
     if (isString(tableAnswer)) {
       try {
         formattedTableAnswer = JSON.parse(tableAnswer);
