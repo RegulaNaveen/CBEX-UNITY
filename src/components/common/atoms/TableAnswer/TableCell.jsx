@@ -2,8 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import TextField from 'apollo-react/components/TextField';
 
-function TableCell({ row, row: { rowIndex, editRow, canEdit }, column, type }) {
-  const [value, setValue] = useState('');
+function TableCell({
+  row,
+  row: { rowIndex, editRow, canEdit },
+  column,
+  type,
+  disabled
+}) {
+  const [value, setValue] = useState(row[column.accessor] || '');
 
   useEffect(() => {
     if (column.accessor && row[column.accessor]) {
@@ -28,15 +34,16 @@ function TableCell({ row, row: { rowIndex, editRow, canEdit }, column, type }) {
       if (column.accessor === 'header') {
         return (
           <div className="table-cell">
-            {canEdit ? (
+            {canEdit && !disabled ? (
               <TextField
                 margin="none"
                 value={value}
                 onChange={handleValueChange}
                 onBlur={handleInputBlur}
-                InputProps={{ maxLength: 100 }}
+                InputProps={{ inputProps: { maxLength: 100 } }}
                 error={value.length === 0}
                 helperText={value.length === 0 ? 'Please add a name' : ''}
+                fullWidth
               />
             ) : (
               <Typography variant="bodyDefault" gutterBottom noWrap>
@@ -53,6 +60,8 @@ function TableCell({ row, row: { rowIndex, editRow, canEdit }, column, type }) {
             value={value}
             onChange={handleValueChange}
             onBlur={handleInputBlur}
+            fullWidth
+            disabled={disabled}
           />
         </div>
       );

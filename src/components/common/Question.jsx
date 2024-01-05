@@ -94,17 +94,15 @@ import { TableAnswer } from './atoms/TableAnswer';
 import { diffArrays } from 'diff';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
-const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
-  QuestionDatePicker
-);
+const QuestionDatePickerWithIdleStateDetection =
+  withIdleStateDetection(QuestionDatePicker);
 const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
 const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
 const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
-const CheckBoxQuestionsIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestions
-);
+const CheckBoxQuestionsIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestions);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -920,24 +918,28 @@ export class TaskRow extends React.PureComponent<Props, State> {
           const defaultColumnsLength = tableConfigJSON.columns.length;
           const defaultRowsLength = tableConfigJSON.rows.length;
 
-          answerValue.columns = cloneDeep(answerValue.columns).map(
-            (column, colIndex) => ({
-              ...column,
-              canEdit:
-                colIndex <= defaultColumnsLength - 1
-                  ? answerValue.canEditColumn
-                  : column.canEdit
-            })
-          );
-          answerValue.rows = cloneDeep(answerValue.rows).map(
-            (row, rowIndex) => ({
-              ...row,
-              canEdit:
-                rowIndex <= defaultRowsLength - 1
-                  ? answerValue.canEditRow
-                  : row.canEdit
-            })
-          );
+          if (Array.isArray(answerValue.columns)) {
+            answerValue.columns = cloneDeep(answerValue.columns).map(
+              (column, colIndex) => ({
+                ...column,
+                canEdit:
+                  colIndex <= defaultColumnsLength - 1
+                    ? answerValue.canEditColumn
+                    : column.canEdit
+              })
+            );
+          }
+          if (Array.isArray(answerValue.rows)) {
+            answerValue.rows = cloneDeep(answerValue.rows).map(
+              (row, rowIndex) => ({
+                ...row,
+                canEdit:
+                  rowIndex <= defaultRowsLength - 1
+                    ? answerValue.canEditRow
+                    : row.canEdit
+              })
+            );
+          }
         } catch (e) {
           // if any error in parsing JSON, set answer to default table configuration
           console.error('Error parsing table answer', e);
@@ -950,14 +952,18 @@ export class TaskRow extends React.PureComponent<Props, State> {
     } else {
       if (type === ANSWER_TYPES.TABLE) {
         answerValue = JSON.parse(this.props.tableConfiguration);
-        answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
-          ...column,
-          canEdit: answerValue.canEditColumn
-        }));
-        answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
-          ...row,
-          canEdit: answerValue.canEditRow
-        }));
+        if (Array.isArray(answerValue.columns)) {
+          answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
+            ...column,
+            canEdit: answerValue.canEditColumn
+          }));
+        }
+        if (Array.isArray(answerValue.rows)) {
+          answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
+            ...row,
+            canEdit: answerValue.canEditRow
+          }));
+        }
       }
     }
     console.log('answerValue', answerValue);
@@ -1122,10 +1128,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (this.quesTextInnerLeftRef.current) {
           // Change title style for richEdit icon
-          const {
-            style: quesTitleLStyle,
-            firstChild
-          } = this.quesTextInnerLeftRef.current;
+          const { style: quesTitleLStyle, firstChild } =
+            this.quesTextInnerLeftRef.current;
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
@@ -1572,9 +1576,11 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 lastAnswer={lastAnswer}
                 tableConfiguration={answerValue}
                 onChange={this.handleTableValueChange}
+                disabled={checkDisableFlag() || isNotApplicable}
               />
             </span>
           </>
+
           // </SFAnswerValidationWrapper>
         );
       default:
@@ -1602,12 +1608,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };

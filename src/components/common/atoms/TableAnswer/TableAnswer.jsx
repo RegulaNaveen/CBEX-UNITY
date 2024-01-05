@@ -33,7 +33,7 @@ function Title({ questionText, questionHint, questionHintJSON }) {
 
   return (
     <div style={{ display: 'flex' }}>
-      <Typography variant="h6">{questionText + questionText}</Typography>
+      <Typography variant="h6">{questionText}</Typography>
       {questionHint && (
         <div className="question-hint">
           <IconButton
@@ -86,7 +86,7 @@ function Title({ questionText, questionHint, questionHintJSON }) {
   );
 }
 
-function Header({ index, title, onTitleChange, canEdit }) {
+function Header({ index, title, onTitleChange, canEdit, disabled }) {
   const [currentTitle, setCurrentTitle] = useState(title);
 
   const handleValueChange = useCallback(event => {
@@ -104,18 +104,23 @@ function Header({ index, title, onTitleChange, canEdit }) {
     return <p></p>;
   }
 
-  return canEdit ? (
+  return canEdit && !disabled ? (
     <TextField
       margin="none"
       value={currentTitle}
       onChange={handleValueChange}
       onBlur={handleInputBlur}
-      InputProps={{ maxLength: 100 }}
+      InputProps={{ inputProps: { maxLength: 100 } }}
       error={currentTitle.length === 0}
       helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+      fullWidth
     />
   ) : (
-    <p>{currentTitle}</p>
+    <Tooltip title={currentTitle}>
+      <Typography variant="bodyDefault" gutterBottom noWrap>
+        {currentTitle}
+      </Typography>
+    </Tooltip>
   );
 }
 
@@ -124,11 +129,12 @@ function TableAnswer({
   tableConfiguration,
   questionHint,
   questionHintJSON,
-  section,
+  sectionName,
   answers,
   answered,
   lastAnswer,
-  onChange
+  onChange,
+  disabled
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
@@ -149,14 +155,14 @@ function TableAnswer({
 
     const newColumn = {
       accessor: `column-${nextColumnsWithExtra.length}`,
-      width: 100,
-      customCell: cellProps => <TableCell {...cellProps} />,
+      customCell: cellProps => <TableCell {...cellProps} disabled={disabled} />,
       header: (
         <Header
           index={nextColumnsWithExtra.length}
           title=""
           onTitleChange={onHeaderTitleChange}
           canEdit={true}
+          disabled={disabled}
         />
       ),
       canEdit: true,
@@ -217,13 +223,16 @@ function TableAnswer({
       setColumns(
         tableConfiguration.columns.map((column, index) => ({
           ...column,
-          customCell: cellProps => <TableCell {...cellProps} />,
+          customCell: cellProps => (
+            <TableCell {...cellProps} disabled={disabled} />
+          ),
           header: (
             <Header
               index={index}
               title={column.header}
               onTitleChange={onHeaderTitleChange}
               canEdit={column.canEdit}
+              disabled={disabled}
             />
           ),
           headerTitle: column.header
@@ -265,7 +274,6 @@ function TableAnswer({
   }
 
   function handleEdit(valueType, values) {
-    console.log('handleEdit', valueType, values);
     if (valueType === 'column') {
       setColumns(values);
     } else {
@@ -294,6 +302,7 @@ function TableAnswer({
         <TablePreview rows={rows} columns={columns} />
       </div>
       <Modal
+        data-testid="tableAnswer-modal"
         disableBackdropClick
         open={showModal}
         variant="default"
@@ -305,7 +314,7 @@ function TableAnswer({
             questionHintJSON={questionHintJSON}
           />
         }
-        subtitle={section.get('sectionName')}
+        subtitle={sectionName}
         className={'table-answer-modal'}
         id="table-answer-modal"
         buttonProps={[
@@ -316,14 +325,17 @@ function TableAnswer({
           }
         ]}
       >
-        <TableControls
-          columns={columns}
-          rows={rows}
-          onAddColumnClick={handleAddColumnClick}
-          onAddRowClick={handleAddRowClick}
-          onEdit={handleEdit}
-          tableConfiguration={tableConfiguration}
-        />
+        {!disabled ? (
+          <TableControls
+            data-testid="editTable"
+            columns={columns}
+            rows={rows}
+            onAddColumnClick={handleAddColumnClick}
+            onAddRowClick={handleAddRowClick}
+            onEdit={handleEdit}
+            tableConfiguration={tableConfiguration}
+          />
+        ) : null}
         <ApolloTable
           rows={rows
             .map((row, rowIndex) => ({

@@ -35,7 +35,16 @@ const BidHistory = () => {
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
   const typeOfActivity = selectedBid.get('typeOfActivity');
-  const typeOfActivityValues = typeOfActivity?.split(';')?.join(', ');
+  let typeOfActivityValues = '';
+
+  if (typeOfActivity) {
+    if (typeof typeOfActivity === 'string') {
+      typeOfActivityValues = typeOfActivity.split(';').join(', ');
+    } else if (Array.isArray(typeOfActivity)) {
+      typeOfActivityValues = typeOfActivity?.join(', ');
+    }
+  }
+
   const isCurrentBid = selectedBid.get('isCurrent');
   const isEditableBid = selectedBid.get('isEditable');
   const bidType = selectedBid.get('bidType');

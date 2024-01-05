@@ -45,7 +45,6 @@
   border-collapse: collapse;
   &:hover {
     border: 1px solid #40a9ff;
-    cursor: pointer;
   }
 
   td {
@@ -55,13 +54,17 @@
     border-color: #666666;
     background-color: #ffffff;
   }
-  th {
-    white-space: nowrap;
-    border-width: 1px;
-    padding: 8px;
-    border-style: solid;
-    border-color: #666666;
-    background-color: #dedede;
+  .label {
+    margin-left: 0.5rem;
+    color: #999999;
+  }
+  &.answered:not(.disabled) {
+    .table-icon {
+      color: #0768fd;
+    }
+    .label {
+      color: #0768fd;
+    }
   }
 }
 
