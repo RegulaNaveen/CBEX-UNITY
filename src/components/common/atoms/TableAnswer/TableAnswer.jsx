@@ -14,6 +14,7 @@ import { cloneDeep } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
 import TablePreview from './TablePreview';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 function Title({ questionText, questionHint, questionHintJSON }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -299,7 +300,9 @@ function TableAnswer({
             {answered ? 'Edit' : 'Add'} Table Data
           </Typography>
         </div>
-        <TablePreview rows={rows} columns={columns} />
+        {rows.length > 0 && columns.length > 0 && (
+          <TablePreview rows={rows} columns={columns} />
+        )}
       </div>
       <Modal
         data-testid="tableAnswer-modal"
