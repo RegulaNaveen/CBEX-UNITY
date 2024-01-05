@@ -344,6 +344,9 @@ function TableAnswer({
           hidePagination
           defaultPageSize={'All'}
           ref={tableRef}
+          classes={{
+            root: 'answer-table'
+          }}
         />
       </Modal>
     </React.Fragment>

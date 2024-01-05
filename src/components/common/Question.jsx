@@ -916,9 +916,9 @@ export class TaskRow extends React.PureComponent<Props, State> {
         const tableConfigJSON = JSON.parse(this.props.tableConfiguration);
         try {
           const noConfigTableAnswer = JSON.parse(answer);
-          answerValue = merge(tableConfigJSON, noConfigTableAnswer);
           const defaultColumnsLength = tableConfigJSON.columns.length;
           const defaultRowsLength = tableConfigJSON.rows.length;
+          answerValue = merge(tableConfigJSON, noConfigTableAnswer);
 
           if (Array.isArray(answerValue.columns)) {
             answerValue.columns = cloneDeep(answerValue.columns).map(
