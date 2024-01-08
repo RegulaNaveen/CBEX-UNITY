@@ -8,7 +8,10 @@ import {
   getOppPrefs
 } from '../../api/sso-auth';
 import { REDUX_TYPES } from '../../constants';
-import { selectFavourites, selectFavouritesUpdatedDateMap } from '../selectors/sso-auth';
+import {
+  selectFavourites,
+  selectFavouritesUpdatedDateMap
+} from '../selectors/sso-auth';
 import { updateProposal } from './proposals-actions';
 import { getProposalDetails, getProposals } from '../selectors';
 import { cloneDeep } from 'lodash';
@@ -44,12 +47,12 @@ export const loginUser = (code: string): ThunkAction<string, Object> => {
     }
   };
 };
-
-export const onUserLogout = (): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({ type: ON_USER_LOGOUT, payload: {} });
-  };
-};
+// commented unused code
+// export const onUserLogout = (): ThunkAction<string, Object> => {
+//   return async (dispatch: Dispatch<string, Object>) => {
+//     dispatch({ type: ON_USER_LOGOUT, payload: {} });
+//   };
+// };
 
 export const onRefreshUserData = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) =>
@@ -129,12 +132,10 @@ export const fetchUserOpportunityPrefs = () => {
             userFavourites.add(pref.opp_number);
 
             if (pref.favourite_updated_date) {
-              userFavouritesUpdatedDateMap.push(
-                {
-                  'opportunity number': pref.opp_number,
-                  'updated date': pref.favourite_updated_date
-                }
-              );
+              userFavouritesUpdatedDateMap.push({
+                'opportunity number': pref.opp_number,
+                'updated date': pref.favourite_updated_date
+              });
             }
           }
           if (pref.custom_header_tab) {
@@ -191,12 +192,19 @@ export const fetchUserOpportunityPrefs = () => {
   };
 };
 
-export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, proposalDetails) => {
+export const updateFavourite = (
+  oppNumber,
+  favourite,
+  favouriteUpdatedDate,
+  proposalDetails
+) => {
   return async (dispatch, getState) => {
     try {
       let favourites = selectFavourites(getState()).toJS();
       let proposalInfo = getProposalDetails(getState());
-      let favouritesUpdatedDate = selectFavouritesUpdatedDateMap(getState()).toJS();
+      let favouritesUpdatedDate = selectFavouritesUpdatedDateMap(
+        getState()
+      ).toJS();
       if (favourite) {
         favourites.push(oppNumber);
         favouritesUpdatedDate.unshift({
@@ -205,16 +213,23 @@ export const updateFavourite = (oppNumber, favourite, favouriteUpdatedDate, prop
         });
       } else {
         favourites = favourites.filter(fav => fav !== oppNumber);
-        favouritesUpdatedDate = favouritesUpdatedDate.filter(fav => 
-                                  fav['opportunity number'] !== oppNumber);
+        favouritesUpdatedDate = favouritesUpdatedDate.filter(
+          fav => fav['opportunity number'] !== oppNumber
+        );
       }
 
-      favourites = favourites.filter((item, index) => favourites.indexOf(item) === index);
-      favouritesUpdatedDate = favouritesUpdatedDate.filter((value, index, self) =>
-                                index === self.findIndex((t) => (
-                                    t["opportunity number"] === value["opportunity number"] 
-                                    && t["updated date"] === value["updated date"]
-                                )));
+      favourites = favourites.filter(
+        (item, index) => favourites.indexOf(item) === index
+      );
+      favouritesUpdatedDate = favouritesUpdatedDate.filter(
+        (value, index, self) =>
+          index ===
+          self.findIndex(
+            t =>
+              t['opportunity number'] === value['opportunity number'] &&
+              t['updated date'] === value['updated date']
+          )
+      );
       dispatch({
         type: SET_USER_FAVOURITES,
         payload: favourites

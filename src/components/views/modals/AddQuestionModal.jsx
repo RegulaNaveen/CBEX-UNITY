@@ -178,6 +178,10 @@ export class AddQuestionModal extends PureComponent<Props, State> {
           }
         });
     }
+    console.log('sectionOrderInfoUnity', sectionOrderInfoUnity);
+    console.log('sectionApproval', sectionApproval);
+    console.log('sectionUnity', sectionUnity);
+    console.log('sectionOrderInfoApproval', sectionOrderInfoApproval);
 
     this.setState({
       unityAllTabSection: sectionUnity,
@@ -186,7 +190,6 @@ export class AddQuestionModal extends PureComponent<Props, State> {
       approvalAllSectionOrderInfo: sectionOrderInfoApproval
     });
   }
-
   componentDidUpdate() {
     this.calculateHeight();
   }
@@ -224,10 +227,8 @@ export class AddQuestionModal extends PureComponent<Props, State> {
     let tabFlag = this.props.tabFlag;
     let tabId = this.props.tabId;
     const { sectionsOrderInfo, editQuestionsData } = this.props;
-    const {
-      unityAllSectionOrderInfo,
-      approvalAllSectionOrderInfo
-    } = this.state;
+    const { unityAllSectionOrderInfo, approvalAllSectionOrderInfo } =
+      this.state;
     const isEditMode = editQuestionsData.size > 0 || false;
     if (isEditMode) {
       tabFlag = editQuestionsData.get('tabFlag');
@@ -640,6 +641,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
             <div className="modal-segment">
               <Dropdown
                 id="dd-team-member"
+                data-testid="dd-team-member"
                 placeholder="Select"
                 items={filteredSectionNames}
                 selectedValue={
@@ -678,6 +680,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                         id="delete-button"
                         onClick={this.onDelete}
                         disabled={isQuestionAnswered}
+                        data-testid="delete-button"
                       >
                         {isQuestionAnswered ? (
                           <Tooltip
@@ -718,6 +721,7 @@ export class AddQuestionModal extends PureComponent<Props, State> {
                       this.setState({ error: [] });
                       onClose();
                     }}
+                    data-testid="cancel-button"
                   >
                     Cancel
                   </PrimaryButton>

@@ -36,7 +36,7 @@ export function getProposalTeamUsers(questions = []) {
   return Array.from(answers);
 }
 
-function handleHyperlinks(answer, config) {
+export function handleHyperlinks(answer, config) {
   try {
     if (answer === 'N/A' && config && config.type === 'date') return 'N/A';
 
@@ -57,7 +57,7 @@ function handleHyperlinks(answer, config) {
   return answer;
 }
 
-function formatProposalTeamAnswers(answer) {
+export function formatProposalTeamAnswers(answer) {
   let formattedAnswer = '';
   if (answer.length > 0) {
     formattedAnswer = answer
@@ -220,11 +220,11 @@ export function generateApprovalEmailInfo(
     // find decision answer
     emailSubject = `${decisionAnswer ? decisionAnswer + ': ' : ''}${
       approvalSection.ApprovalSectionTitle
-    } for ${proposalDetails['Customer'] || ''} ${proposalDetails['Phase'] ||
-      ''} ${proposalDetails['Therapeutic area'] ||
-      ''} (Opportunity ${proposalDetails['CRM #'] || ''} Bid ${proposalDetails[
-      'bidNo'
-    ] || ''})`;
+    } for ${proposalDetails['Customer'] || ''} ${
+      proposalDetails['Phase'] || ''
+    } ${proposalDetails['Therapeutic area'] || ''} (Opportunity ${
+      proposalDetails['CRM #'] || ''
+    } Bid ${proposalDetails['bidNo'] || ''})`;
     emailBody = `<div id="approval-email-content">
     <p>Hello,</p>`;
     emailBody += `<p>Below is a summary of the ${
@@ -232,12 +232,15 @@ export function generateApprovalEmailInfo(
     }${decisionAnswer ? ' - ' + decisionAnswer : ''}:</p>`;
     emailBody += `<br/><table cellpadding="0" cellspacing="0" class="summary-table">
     <tbody>
-      <tr><td><p>Customer</p></td><td><p>${proposalDetails['Customer'] ||
-        ''}</p></td></tr>
-      <tr><td>Protocol Title</td><td>${proposalDetails['Product name'] ||
-        ''}</td></tr>
-      <tr><td>Indication</td><td>${proposalDetails['Verbatim indication'] ||
-        ''}</td></tr>
+      <tr><td><p>Customer</p></td><td><p>${
+        proposalDetails['Customer'] || ''
+      }</p></td></tr>
+      <tr><td>Protocol Title</td><td>${
+        proposalDetails['Product name'] || ''
+      }</td></tr>
+      <tr><td>Indication</td><td>${
+        proposalDetails['Verbatim indication'] || ''
+      }</td></tr>
       <tr><td>Phase</td><td>${proposalDetails['Phase'] || ''}</td></tr>
       <tr><td>Bid Number</td><td>${proposalDetails['bidNo'] || ''}</td></tr>
       <tr><td>Due Date</td><td>${

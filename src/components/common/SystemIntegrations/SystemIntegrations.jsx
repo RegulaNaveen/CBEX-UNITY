@@ -51,10 +51,8 @@ const SystemIntegrations = ({
   const answer = answers.reverse();
   // console.log('answer', answer.toJS());
   const [latestSfAnswer, setLatestSfAnswer] = useState(false);
-  const [
-    canShowCarryForwardIndication,
-    setCanShowCarryForwardIndication
-  ] = useState(false);
+  const [canShowCarryForwardIndication, setCanShowCarryForwardIndication] =
+    useState(false);
   const [dataDestinations, setDataDestinations] = useState(undefined);
 
   useEffect(() => {
@@ -249,10 +247,7 @@ const SystemIntegrations = ({
       );
     }
     if (dataDestinations?.length > 0) {
-      return lastAnswer
-        ?.toJS()
-        .answer?.toString()
-        .trim().length > 0 ? (
+      return lastAnswer?.toJS().answer?.toString().trim().length > 0 ? (
         <Tooltip
           variant="light"
           title={
@@ -398,10 +393,7 @@ const SystemIntegrations = ({
     }
 
     if (
-      lastAnswer
-        ?.toJS()
-        .answer?.toString()
-        .trim().length < 1 &&
+      lastAnswer?.toJS().answer?.toString().trim().length < 1 &&
       answer?.get(1)?.get('userName') === 'UnityPredictedAnswer' &&
       !loading
     ) {
@@ -433,10 +425,7 @@ const SystemIntegrations = ({
 
     if (
       (answerdate === 'Not Answered' && !isAnswerPredicted) ||
-      (lastAnswer
-        ?.toJS()
-        .answer?.toString()
-        .trim().length < 1 &&
+      (lastAnswer?.toJS().answer?.toString().trim().length < 1 &&
         answer?.get(1)?.get('userName') === 'UnityPredictedAnswer')
     ) {
       return (
@@ -489,6 +478,7 @@ const SystemIntegrations = ({
               tabIndex={-1}
             >
               <CalendarCheck
+                data-testid="calendar"
                 fontSize="22px"
                 style={{ color: '#015ff1' }}
                 className="integration-icon"
@@ -523,6 +513,7 @@ const SystemIntegrations = ({
           tabIndex={-1}
         >
           <CalendarCheck
+            data-testid="calendar"
             className="answered2 integration-icon"
             style={{ marginLeft: '0px', color: '#00c221' }}
           />
@@ -561,10 +552,7 @@ const SystemIntegrations = ({
       );
     }
     if (
-      lastAnswer
-        ?.toJS()
-        .answer?.toString()
-        .trim().length < 1 &&
+      lastAnswer?.toJS().answer?.toString().trim().length < 1 &&
       answer?.get(1)?.get('userName') !== 'UnityPredictedAnswer'
     ) {
       return (
@@ -606,6 +594,7 @@ const SystemIntegrations = ({
         tabIndex={-1}
       >
         <CalendarCheck
+          data-testid="calendar"
           className="answered1 integration-icon"
           style={{ marginLeft: '0px', color: '#00c221' }}
         />

@@ -1,9 +1,13 @@
 import {
+  formatProposalTeamAnswers,
   generateApprovalEmailInfo,
   generateApprovalEmailURL,
-  getProposalTeamUsers
+  generateEmailTemplateEmail,
+  getProposalTeamUsers,
+  handleHyperlinks
 } from '../emailUtils';
 import '@testing-library/jest-dom/extend-expect';
+import moment from 'moment';
 
 describe('emailUtils getProposalTeamUsers unit tests', () => {
   it('getProposalTeamUsers should return empty array on no input', () => {
@@ -582,5 +586,79 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
       []
     );
     expect(result.subject).toMatch(/Decision answer/);
+  });
+
+  it('should generate the correct email template', () => {
+    const subject = 'Test Subject';
+    const to = ['test1@example.com', 'test2@example.com'];
+    const cc = ['test3@example.com'];
+    const body = 'Test Body';
+    const result = generateEmailTemplateEmail(subject, to, cc, body);
+    const expected =
+      `https://outlook.office.com/?path=/mail/action/compose&to=${to.join(
+        ','
+      )}` +
+      `?cc=${cc.join(
+        ','
+      )}&subject=${subject}&body=Unity%20has%20copied%20the%20approval%20section%20details%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20the%20content%20to%20include%20it%20in%20your%20mail%20and%20share%20it%20with%20your%20team.&online=1`;
+
+    expect(result).toEqual(expected);
+  });
+  it('should return N/A for N/A answer and date type config', () => {
+    const answer = 'N/A';
+    const config = { type: 'date' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual('N/A');
+  });
+
+  it('should format date for valid date answer and date type config', () => {
+    const answer = '2022-01-01';
+    const config = { type: 'date' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual(moment(answer).format('DD-MMM-YYYY'));
+  });
+
+  it('should return empty string for invalid date answer and date type config', () => {
+    const answer = 'invalid date';
+    const config = { type: 'date' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual('');
+  });
+
+  it('should return string answer for non-date type config', () => {
+    const answer = 'test';
+    const config = { type: 'text' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual(answer);
+  });
+
+  it('should return undefined answer as is', () => {
+    const answer = undefined;
+    const config = { type: 'text' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual(answer);
+  });
+  it('should format the proposal team answers correctly', () => {
+    const answer = 'JohnDoe,JaneDoe'; // adjust this input as needed
+    const PROPOSAL_TEAM_USER_MATCH_REGEXP = /(\w+)(\d+)/; // replace with the actual regular expression
+
+    const result = formatProposalTeamAnswers(answer);
+    const expected = answer
+      .split(',')
+      .map(user => {
+        const userMatchFound = user.match(PROPOSAL_TEAM_USER_MATCH_REGEXP);
+        if (userMatchFound !== null) {
+          return `${userMatchFound[1]} ${userMatchFound[2]}`;
+        }
+        return user;
+      })
+      .join(', ');
+
+    expect(result).toEqual(expected);
   });
 });
