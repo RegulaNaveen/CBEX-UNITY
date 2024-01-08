@@ -149,7 +149,7 @@ const {
 /**
  * Updates bidNo Query param without page reload
  */
-const updateBidNoQueryparam = bidNo => {
+export const updateBidNoQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
@@ -162,7 +162,7 @@ const updateBidNoQueryparam = bidNo => {
   }
 };
 
-const updateBidTypeQueryparam = bidNo => {
+export const updateBidTypeQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
@@ -1116,7 +1116,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
     });
-
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
 
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
@@ -1630,7 +1629,7 @@ export const getOpportunity = (
   };
 };
 
-const checkIsEditableTrue = (selectedBid, allProposals) => {
+export const checkIsEditableTrue = (selectedBid, allProposals) => {
   const bidList = Object.groupBy(allProposals, item =>
     item.proposal.bidType ? item.proposal.bidType : 'Clinical_Bid'
   );

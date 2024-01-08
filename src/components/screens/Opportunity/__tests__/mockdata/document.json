@@ -32806,5 +32806,19 @@
     "uploadingNote": false,
     "uploadNoteErrorMsg": "",
     "notepadMode": "notepad_mode_default"
+  },
+  "search": {
+    "query": "",
+    "isOpen": false,
+    "currentResultIndex": -1,
+    "prevResult": null,
+    "totalResultsFound": 0,
+    "searching": false,
+    "searchResults": [],
+    "autoNavigatedToCurrentResult": true,
+    "clearInputFlag": false,
+    "showModal": false,
+    "modalTitle": "",
+    "modalContent": ""
   }
 }
