@@ -11,16 +11,16 @@ export const parseDate = (date: string, format: string) => {
 
 export const formatDate = (date: Date, format: string) =>
   dateFnsFormat(date, format, {});
+// commented unused code
+// export const remainingDays = (date: string): number | string => {
+//   if (!date) return '-';
 
-export const remainingDays = (date: string): number | string => {
-  if (!date) return '-';
+//   const eventdate = moment(date, 'D-MMM-yyyy');
+//   const todaysdate = moment();
+//   const daysRemaing = eventdate.diff(todaysdate, 'days') + 1;
 
-  const eventdate = moment(date, 'D-MMM-yyyy');
-  const todaysdate = moment();
-  const daysRemaing = eventdate.diff(todaysdate, 'days') + 1;
-
-  return daysRemaing < 0 ? 0 : daysRemaing;
-};
+//   return daysRemaing < 0 ? 0 : daysRemaing;
+// };
 
 export const getRemainingDays = (date: string): number | string => {
   if (!date) return '-';

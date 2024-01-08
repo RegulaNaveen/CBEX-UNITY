@@ -336,21 +336,21 @@ export const getOpportunityInfo = async (id: string): Promise<Object> => {
       });
   });
 };
-
-export const getProposalCount = async (id: string): Promise<Object> => {
-  return new Promise((resolve, reject) => {
-    axiosInstance
-      .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`, {
-        headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
-      })
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-};
+// commented unused code
+// export const getProposalCount = async (id: string): Promise<Object> => {
+//   return new Promise((resolve, reject) => {
+//     axiosInstance
+//       .get(`${PROPOSAL_API_URL}/opportunity/${id}/count`, {
+//         headers: { 'x-api-key': API_KEY, 'x-access-token': getAccessToken() }
+//       })
+//       .then(response => {
+//         resolve(response.data);
+//       })
+//       .catch(err => {
+//         reject(err);
+//       });
+//   });
+// };
 
 export const getAllProposals = async (id: string): Promise<Object> => {
   return new Promise((resolve, reject) => {
