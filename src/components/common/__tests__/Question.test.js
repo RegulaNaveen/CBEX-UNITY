@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { List, Map, OrderedMap } from 'immutable';
 
 import { store } from '../../../store';
@@ -108,5 +108,26 @@ describe('test for question component', () => {
     const tooltipButton = getByTestId('question-tooltip-button');
     fireEvent.click(tooltipButton);
     expect(getByTestId('question-popover')).toBeInTheDocument();
+  });
+
+  test('renders question text correctly', () => {
+    render(
+      <Provider store={store}>
+        <Question {...defaultProps} />
+      </Provider>
+    );
+    const questionTextElement = screen.getByText('Indication');
+    expect(questionTextElement).toBeInTheDocument();
+  });
+
+  test('renders milestone tags correctly', () => {
+    const mockPropsWithMilestone = { ...defaultProps };
+    const { container } = render(
+      <Provider store={store}>
+        <Question {...mockPropsWithMilestone} />
+      </Provider>
+    );
+    const milestoneTags = container.getElementsByClassName('tag');
+    expect(milestoneTags).toHaveLength(1);
   });
 });
