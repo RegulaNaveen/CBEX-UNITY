@@ -246,7 +246,6 @@ function TableAnswer({
   }, []);
 
   const editRow = useCallback((rowIndex, key, value) => {
-    console.log('rowIndex', rowIndex, key, value);
     setRows(rows =>
       rows.map((row, index) =>
         index === rowIndex ? { ...row, [key]: value } : row
@@ -317,9 +316,14 @@ function TableAnswer({
         className={'table-answer-modal'}
         id="table-answer-modal"
         buttonProps={[
-          { label: 'Cancel', onClick: () => toggleModal(false) },
+          {
+            label: 'Cancel',
+            'data-testid': 'cancelButton',
+            onClick: () => toggleModal(false)
+          },
           {
             label: 'Save',
+            'data-testid': 'saveButton',
             onClick: () => handleSaveClick()
           }
         ]}
