@@ -53,9 +53,15 @@ const ListItem = ({
         return oppNoAsHyperlink(word);
       }
       if (
-        word === 'Early' &&
-        arr[index + 1] === 'Engagement' &&
+       ( word === 'Early' &&
+       arr[index + 1] === 'Engagement' &&
+       arr[index - 1] === oppNo) || 
+       (
+        word === 'Post' &&
+        arr[index + 1] === 'Award' &&
         arr[index - 1] === oppNo
+       ) ||
+       word === 'RFI' 
       ) {
         return oppNoAsHyperlink(word);
       }
@@ -65,7 +71,7 @@ const ListItem = ({
       if (word === `${bidNo}` && arr[index - 1] === 'Engagement') {
         return oppNoAsHyperlink(word);
       }
-      if (word === `${bidNo}.` && arr[index - 1] === 'Engagement') {
+      if (word === `${bidNo}:` && arr[index - 1] === 'Engagement') {
         return oppNoAsHyperlink(word);
       }
       if (word === 'Bid' && arr[index - 1] === oppNo) {
@@ -74,6 +80,28 @@ const ListItem = ({
       if (arr[index - 1] === 'Bid' && arr[index - 2] === oppNo) {
         return oppNoAsHyperlink(word);
       }
+     
+
+      if (word === 'Award' && arr[index - 1] === 'Post') {
+        return oppNoAsHyperlink(word);
+      }
+
+      if (word === `${bidNo}` && arr[index - 1] === 'Award') {
+        return oppNoAsHyperlink(word);
+      }
+
+      if (word === `${bidNo}:` && arr[index - 1] === 'Award') {
+        return oppNoAsHyperlink(word);
+      }
+
+      if (word === `${bidNo}` && arr[index - 1] === 'RFI') {
+        return oppNoAsHyperlink(word);
+      }
+
+      if (word === `${bidNo}:` && arr[index - 1] === 'RFI') {
+        return oppNoAsHyperlink(word);
+      }
+
       return word;
     });
     dataArr.unshift('<div>');
