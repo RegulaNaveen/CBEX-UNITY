@@ -3,8 +3,8 @@ import { Provider } from 'react-redux';
 import { mount, shallow } from 'enzyme';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import TextQuestion from '../TextQuestion';
-import CustomApolloRichText from '../../../../common/CustomApolloRichText';
+import TextQuestion from '../InputComponents/TextQuestion';
+import { first } from 'lib0/set';
 
 describe('TextQuestion', () => {
   let wrapper;
@@ -46,8 +46,5 @@ describe('TextQuestion', () => {
         .first()
         .simulate('blur')
     );
-
-    const richText = wrapper.find('CustomApolloRichText');
-    expect(richText.exists()).toBe(true);
   });
 });

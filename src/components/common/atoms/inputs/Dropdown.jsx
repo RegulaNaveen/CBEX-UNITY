@@ -140,12 +140,8 @@ class Dropdown extends PureComponent<Props, State> {
   };
 
   handleFocusIn = () => {
-    const {
-      setSelectRow,
-      lockQuestionOnFocus,
-      toggleWatch,
-      questionId
-    } = this.props;
+    const { setSelectRow, lockQuestionOnFocus, toggleWatch, questionId } =
+      this.props;
     this.setState({ isFocused: true });
     if (setSelectRow) setSelectRow(true);
     if (lockQuestionOnFocus) {
@@ -245,17 +241,8 @@ class Dropdown extends PureComponent<Props, State> {
 
   render() {
     const { isCollapsed, selectedValue, focusedValue } = this.state;
-    const {
-      placeholder,
-      id,
-      items,
-      title,
-      value,
-      withReset,
-      error,
-      disabled
-    } = this.props;
-
+    const { placeholder, id, items, title, value, withReset, error, disabled } =
+      this.props;
     return (
       <>
         {title && <p className="dd-title">{title}</p>}
@@ -269,8 +256,8 @@ class Dropdown extends PureComponent<Props, State> {
                     ? 'dd-header-error dd-header-error-disabled'
                     : 'dd-header-error'
                   : disabled
-                  ? 'dd-header dd-header-disabled'
-                  : 'dd-header'
+                    ? 'dd-header dd-header-disabled'
+                    : 'dd-header'
               }
               ref={this.ref}
               role="presentation"
@@ -291,6 +278,7 @@ class Dropdown extends PureComponent<Props, State> {
                 {items &&
                   items.map(item => (
                     <DropdownItem
+                      data-testid="dd-list"
                       onClick={this.handleClick}
                       item={item}
                       key={item}
