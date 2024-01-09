@@ -93,6 +93,9 @@ const ListItem = ({
       if (word === `${bidNo}:` && arr[index - 1] === 'Award') {
         return oppNoAsHyperlink(word);
       }
+      if (word === `${bidNo}.` && arr[index - 1] === 'Award') {
+        return oppNoAsHyperlink(word);
+      }
 
       if (word === `${bidNo}` && arr[index - 1] === 'RFI') {
         return oppNoAsHyperlink(word);
@@ -101,7 +104,9 @@ const ListItem = ({
       if (word === `${bidNo}:` && arr[index - 1] === 'RFI') {
         return oppNoAsHyperlink(word);
       }
-
+      if (word === `${bidNo}.` && arr[index - 1] === 'RFI') {
+        return oppNoAsHyperlink(word);
+      }
       return word;
     });
     dataArr.unshift('<div>');
