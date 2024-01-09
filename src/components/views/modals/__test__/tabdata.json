@@ -1,0 +1,387 @@
+{
+  "approvals": {
+    "fetching": false,
+    "allApprovals": [
+      {
+        "ApprovalSectionTitle": "Strategy Approvals",
+        "ApprovalSectionRightQuestions": [
+          "86ba5974-f4b1-4598-90ae-a1b476fac829",
+          "10c7fa62-63e1-40c1-9995-3b3a5cd1be33",
+          "4aa99116-ddd6-4e26-98dc-c2b8a3a5ea21",
+          "8daca6cc-2c99-4571-ae6d-470f0e7068b5",
+          "a932540b-b6ec-4182-82fb-aae5b7e0d027"
+        ],
+        "ApprovalSectionId": "211b13ca-7576-40c5-8e74-442870fb4f98",
+        "ApprovalSectionOrder": 1,
+        "ApprovalSectionLeftQuestions": [
+          "8d41dd0f-3140-412c-9fd8-a17116d30800",
+          "Proposal Team-O0Z",
+          "e8fd9762-e57f-4822-9f5b-4f94d9d48e92",
+          "722f9c3c-5538-4b64-bda5-76604d61da46",
+          "a959f372-8fe5-4064-a7d1-e2c6a0ff06f1",
+          "3106acc8-d688-465f-907c-13d890870b43"
+        ],
+        "ArchivedData": [],
+        "key": "211b13ca-7576-40c5-8e74-442870fb4f98-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test 156890",
+        "ApprovalSectionRightQuestions": [
+          "9a8c020c-0e54-412c-af8d-88650e48d5c6"
+        ],
+        "ApprovalSectionId": "406f9e91-c6b2-47ed-99ca-52ecdf866396",
+        "ApprovalSectionOrder": 2,
+        "ApprovalSectionLeftQuestions": [],
+        "ArchivedData": [],
+        "key": "406f9e91-c6b2-47ed-99ca-52ecdf866396-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test 66678",
+        "ApprovalSectionRightQuestions": ["Proposal Team-Z5P"],
+        "ApprovalSectionId": "d3c62d16-2023-47d9-9ab2-a436cab8be1a",
+        "ApprovalSectionOrder": 3,
+        "ApprovalSectionLeftQuestions": [
+          "Key stakeholders-Y0L",
+          "Proposal Team-P0X"
+        ],
+        "ArchivedData": [],
+        "key": "d3c62d16-2023-47d9-9ab2-a436cab8be1a-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "New Section _Updated",
+        "ApprovalSectionRightQuestions": ["Opportunity Overview-H1X"],
+        "ApprovalSectionId": "b3be3225-4a4e-4393-82a6-c59a29de51f3",
+        "ApprovalSectionOrder": 5,
+        "ApprovalSectionLeftQuestions": [
+          "Opportunity Overview-Z4X",
+          "9a8c020c-0e54-412c-af8d-88650e48d5c6"
+        ],
+        "ArchivedData": [],
+        "key": "b3be3225-4a4e-4393-82a6-c59a29de51f3-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test 123",
+        "ApprovalSectionRightQuestions": [
+          "Win Strategy-AB9",
+          "11f85cab-9163-45c6-86d7-72ae59dc601e",
+          "c46b37e1-33a2-430f-af91-f074208247ac",
+          "86ba5974-f4b1-4598-90ae-a1b476fac829",
+          "0859813c-0ff6-41f7-b2d8-d275d335f486"
+        ],
+        "ApprovalSectionId": "2574ac8c-b6f6-43ee-9777-d9d1a7866114",
+        "ApprovalSectionOrder": 8,
+        "ApprovalSectionLeftQuestions": [
+          "Win Strategy-U9B",
+          "12622ae6-5def-4959-8893-b8535062560b",
+          "a656ddee-4592-47d1-8712-7b79d0ceba05",
+          "60aa9b44-5c16-452d-ae88-8ce7935fabb1",
+          "Award Timelines-N3X"
+        ],
+        "ArchivedData": [],
+        "key": "2574ac8c-b6f6-43ee-9777-d9d1a7866114-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "new section 122",
+        "ApprovalSectionRightQuestions": [
+          "Key stakeholders-Y0L",
+          "e8fd9762-e57f-4822-9f5b-4f94d9d48e92"
+        ],
+        "ApprovalSectionId": "9cb6136d-9720-48fc-9a56-a7984be55658",
+        "ApprovalSectionOrder": 9,
+        "ApprovalSectionLeftQuestions": [
+          "Opportunity Overview-M9D",
+          "Opportunity Overview-H1X"
+        ],
+        "ArchivedData": [],
+        "key": "9cb6136d-9720-48fc-9a56-a7984be55658-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test_4447",
+        "ApprovalSectionRightQuestions": [
+          "944c7148-545a-4ab8-ba39-3b71c6f463b3",
+          "c9b640d1-ffe2-4f66-b7c4-5369a2393e78",
+          "949ccde4-a09b-4c15-877b-0dfebe17cdc0"
+        ],
+        "ApprovalSectionId": "fcd9df2b-5d54-4995-a6c6-f02468eac09a",
+        "ApprovalSectionOrder": 10,
+        "ApprovalSectionLeftQuestions": [
+          "76aced19-0af2-46a0-b468-f30d05d7ba59",
+          "Country Strategy-H7V",
+          "6213a4bf-de31-4fa0-a80a-97bf72d058f4"
+        ],
+        "ArchivedData": [],
+        "key": "fcd9df2b-5d54-4995-a6c6-f02468eac09a-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-1",
+        "ApprovalSectionRightQuestions": [
+          "a9538c9b-304f-4960-8224-a92093d27a3d",
+          "Opportunity Overview-T1U",
+          "Opportunity Overview-I7N"
+        ],
+        "ApprovalSectionId": "37679102-c990-4b86-b31a-0ca431db59ea",
+        "ApprovalSectionOrder": 11,
+        "ApprovalSectionLeftQuestions": [
+          "Core Information-R4P",
+          "737196b5-ba97-4096-a3a6-2b4d9b7babd9",
+          "Opportunity Overview-D3B"
+        ],
+        "ArchivedData": [],
+        "key": "37679102-c990-4b86-b31a-0ca431db59ea-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-2",
+        "ApprovalSectionRightQuestions": [
+          "Win Strategy-U9B",
+          "Win Strategy-AR2",
+          "cccd3f9b-ec6e-449e-9174-c573fbef8158"
+        ],
+        "ApprovalSectionId": "f1387683-db60-4a4c-9c35-ec0c01a5e22d",
+        "ApprovalSectionOrder": 12,
+        "ApprovalSectionLeftQuestions": [
+          "a932540b-b6ec-4182-82fb-aae5b7e0d027",
+          "2a30b4ac-354e-4168-987a-aa4b70910b77",
+          "7ba722f4-8822-4e64-8086-acc8dbc746ab"
+        ],
+        "ArchivedData": [],
+        "key": "f1387683-db60-4a4c-9c35-ec0c01a5e22d-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-3",
+        "ApprovalSectionRightQuestions": [
+          "Services-P6I",
+          "8e89a496-c3c5-47ce-b193-b7406fbf9ae1",
+          "Opportunity Overview-R5U"
+        ],
+        "ApprovalSectionId": "bb7e3395-c6dc-4a7e-a3ad-a6c50be4d0c2",
+        "ApprovalSectionOrder": 13,
+        "ApprovalSectionLeftQuestions": [
+          "Services-T7E",
+          "Pricing-C8T",
+          "Opportunity Overview-R4U"
+        ],
+        "ArchivedData": [],
+        "key": "bb7e3395-c6dc-4a7e-a3ad-a6c50be4d0c2-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-4",
+        "ApprovalSectionRightQuestions": [
+          "5fc6f56c-e748-4008-bbae-c608670a8810",
+          "0c7c273a-4442-494b-8302-bc21f014ab9d",
+          "6252734c-9e1b-496f-ab1e-8e010844ee3a",
+          "e0ec3346-4363-4323-92ed-20f148514dab"
+        ],
+        "ApprovalSectionId": "7d6fafcd-29dc-4b3a-92f9-0b0ee247f2e7",
+        "ApprovalSectionOrder": 14,
+        "ApprovalSectionLeftQuestions": [
+          "c46b37e1-33a2-430f-af91-f074208247ac",
+          "0314bfcc-357d-4231-8be4-1ca2461317c5",
+          "8eaa464b-eb2a-4d3f-9dd8-5f27b9c0c0bc",
+          "969e5c16-b77f-4331-bc24-67a60dca8403"
+        ],
+        "ArchivedData": [],
+        "key": "7d6fafcd-29dc-4b3a-92f9-0b0ee247f2e7-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-5",
+        "ApprovalSectionRightQuestions": [
+          "201cc28e-b774-4b81-829f-8e9ac7cb19a5",
+          "90bc4699-e83f-4693-867d-8bff2c08a4c6",
+          "918e86dc-b8d1-4d78-8cc2-b1cc81102d0d"
+        ],
+        "ApprovalSectionId": "f60eb2da-70a7-41e5-9fb3-37e02a6194d5",
+        "ApprovalSectionOrder": 15,
+        "ApprovalSectionLeftQuestions": [
+          "8e89a496-c3c5-47ce-b193-b7406fbf9ae1",
+          "8ae5c1e8-5c02-4eb2-a9ea-e2f54593f2e3",
+          "231be643-6814-4059-93bf-c9fb21b658f6"
+        ],
+        "ArchivedData": [],
+        "key": "f60eb2da-70a7-41e5-9fb3-37e02a6194d5-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-6",
+        "ApprovalSectionRightQuestions": [
+          "5258e656-e695-492c-a01a-d3ccd7480bfe",
+          "21664eb6-a924-4dad-a49b-cbcb9cad5bd9",
+          "944c7148-545a-4ab8-ba39-3b71c6f463b3"
+        ],
+        "ApprovalSectionId": "ed1d577d-2dfe-4ddd-93d6-8f1b4b7a9047",
+        "ApprovalSectionOrder": 16,
+        "ApprovalSectionLeftQuestions": [
+          "8d41dd0f-3140-412c-9fd8-a17116d30800",
+          "bfaeb699-ad10-4d68-acdb-2195f58d2ed2",
+          "b15d1e1f-9bea-447a-afb8-fcdabcfad75e"
+        ],
+        "ArchivedData": [],
+        "key": "ed1d577d-2dfe-4ddd-93d6-8f1b4b7a9047-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "Test-7",
+        "ApprovalSectionRightQuestions": [
+          "Award Timelines-Z4C",
+          "Core Information-H8O",
+          "Core Information-B4S"
+        ],
+        "ApprovalSectionId": "44439c34-aff1-484b-b324-47918a9e0dcc",
+        "ApprovalSectionOrder": 17,
+        "ApprovalSectionLeftQuestions": [
+          "Award Timelines-Y8U",
+          "Key Budget Specs-AB1",
+          "b4737fd2-9d1c-4ba9-bd02-b75cfcfbcb4a"
+        ],
+        "ArchivedData": [],
+        "key": "44439c34-aff1-484b-b324-47918a9e0dcc-1704545492927"
+      },
+      {
+        "ApprovalSectionTitle": "TestCRMEE",
+        "ApprovalSectionRightQuestions": [
+          "6939d6ed-4590-4e35-90a9-ebfb89d52f75",
+          "86ab41b4-8451-4e6c-93c6-b6b09aa47bac"
+        ],
+        "ApprovalSectionId": "20ca3c51-1238-4067-bf0c-43ad3f2baa5f",
+        "ApprovalSectionOrder": 18,
+        "ApprovalSectionLeftQuestions": [
+          "cb44f794-0a0d-49d5-93ee-8d0a1de80a2e",
+          "091831ad-3dd6-4e54-a1b1-a39ce5717431"
+        ],
+        "ArchivedData": [],
+        "key": "20ca3c51-1238-4067-bf0c-43ad3f2baa5f-1704545492927"
+      }
+    ],
+    "canSendEmail": false,
+    "filters": [
+      {
+        "name": "answered",
+        "displayName": "Answered",
+        "group": "answer",
+        "value": false
+      },
+      {
+        "name": "unanswered",
+        "displayName": "Unanswered",
+        "group": "answer",
+        "value": false
+      },
+      {
+        "name": "verificationRequired",
+        "displayName": "Verification Required",
+        "group": "verification",
+        "value": false
+      },
+      {
+        "name": "responsible",
+        "displayName": "Responsible",
+        "group": "roles",
+        "value": false
+      },
+      {
+        "name": "informed",
+        "displayName": "Informed",
+        "group": "roles",
+        "value": false
+      },
+      {
+        "displayName": "Text",
+        "group": "milestone",
+        "name": "text",
+        "color": "#830065",
+        "value": false
+      },
+      {
+        "displayName": "abc",
+        "group": "milestone",
+        "name": "abc",
+        "color": "#df216d",
+        "value": false
+      }
+    ]
+  },
+  "unitytab": {
+    "fetching": false,
+    "allTabs": {
+      "04bb872c-9d48-4514-be16-fba5eb7fd789": [
+        {
+          "UnityTabSectionOrder": 2,
+          "UnityTabSectionId": "591d76f3-382a-4f6f-ac5b-9f29309711d6",
+          "UnityTabSectionQuestions": [
+            "4aa99116-ddd6-4e26-98dc-c2b8a3a5ea21",
+            "a3091fa4-1322-4de9-840c-f989934ce94b",
+            "76aced19-0af2-46a0-b468-f30d05d7ba59"
+          ],
+          "UnityTabSectionTitle": "testcc",
+          "TabID": "04bb872c-9d48-4514-be16-fba5eb7fd789",
+          "UnityTabOrder": 3,
+          "UnityTabId": "04bb872c-9d48-4514-be16-fba5eb7fd789",
+          "UnityTabTitle": "tesqacs34567"
+        },
+        {
+          "UnityTabSectionOrder": 1,
+          "UnityTabSectionId": "9d00cf52-a2e5-4f05-b80c-f02cd439abba",
+          "UnityTabSectionQuestions": [
+            "3106acc8-d688-465f-907c-13d890870b43",
+            "Proposal Team-P0X",
+            "722f9c3c-5538-4b64-bda5-76604d61da46",
+            "Key stakeholders-Y0L",
+            "Opportunity Overview-H1X",
+            "06820d9a-602f-4402-85a7-f4d496fde054"
+          ],
+          "UnityTabSectionTitle": "Hellooo",
+          "TabID": "04bb872c-9d48-4514-be16-fba5eb7fd789",
+          "UnityTabOrder": 3,
+          "UnityTabId": "04bb872c-9d48-4514-be16-fba5eb7fd789",
+          "UnityTabTitle": "tesqacs34567"
+        }
+      ]
+    },
+    "canSendEmail": false,
+    "tabRefresh": "Refresh1704545491886",
+    "isSetQuestionLoading": false,
+    "filters": [
+      {
+        "name": "answered",
+        "displayName": "Answered",
+        "group": "answer",
+        "value": false
+      },
+      {
+        "name": "unanswered",
+        "displayName": "Unanswered",
+        "group": "answer",
+        "value": false
+      },
+      {
+        "name": "verificationRequired",
+        "displayName": "Verification Required",
+        "group": "verification",
+        "value": false
+      },
+      {
+        "name": "responsible",
+        "displayName": "Responsible",
+        "group": "roles",
+        "value": false
+      },
+      {
+        "name": "informed",
+        "displayName": "Informed",
+        "group": "roles",
+        "value": false
+      },
+      {
+        "displayName": "Text",
+        "group": "milestone",
+        "name": "text",
+        "color": "#830065",
+        "value": false
+      },
+      {
+        "displayName": "abc",
+        "group": "milestone",
+        "name": "abc",
+        "color": "#df216d",
+        "value": false
+      }
+    ]
+  }
+}
