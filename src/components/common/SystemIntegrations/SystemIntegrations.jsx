@@ -328,10 +328,6 @@ const SystemIntegrations = ({
   };
 
   const CalendarCondition = () => {
-    if (answerConfiguration.get('type') === ANSWER_TYPES.TABLE)
-      return (
-        <Calendar style={{ color: '#b7b7b7' }} className="integration-icon" />
-      );
     // calculate to show carry forward indication icon only if flag is enabled
     if (canShowCarryForwardIndication && answers.size > 0) {
       let latestAnswer = null;

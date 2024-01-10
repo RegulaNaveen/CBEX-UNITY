@@ -306,5 +306,26 @@ describe('Answer History component', () => {
       fireEvent.click(screen.getByText('Reject'));
     });
   });
+
+  test('for table answer type', async () => {
+    data.question = data.tablequestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Dates and Times are per the server (EST)')
+      ).toBeInTheDocument();
+      // fireEvent.click(screen.getByText('Reject'));
+    });
+  });
   afterAll(cleanup);
 });
