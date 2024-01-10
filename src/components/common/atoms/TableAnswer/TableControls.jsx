@@ -148,7 +148,12 @@ function TableControls({
   return (
     <React.Fragment>
       <div className="table-controls">
-        <IconMenuButton menuItems={menuItems} size="small" ref={menuRef}>
+        <IconMenuButton
+          data-testid="settingsMenuButton"
+          menuItems={menuItems}
+          size="small"
+          ref={menuRef}
+        >
           <CogIcon />
         </IconMenuButton>
       </div>

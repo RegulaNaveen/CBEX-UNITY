@@ -359,10 +359,8 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${
-            proposal?.proposal?.proposalDetails
-              ?.earlyEngagementDevelopmentPlan || ''
-          }`
+          `${proposal?.proposal?.proposalDetails
+            ?.earlyEngagementDevelopmentPlan || ''}`
         )
         .set(
           'describeActivity',
@@ -502,7 +500,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     typeOfWidget: payload.bid.typeOfWidget,
     nextMilestone: payload.bid.nextMilestone || '',
     typeOfActivity: proposalDetails['typeOfActivity'],
-    describeActivity: proposalDetails['describeActivity']
+    describeActivity: proposalDetails['describeActivity'],
+    requestDetail: proposalDetails['requestDetail']
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
@@ -1573,7 +1572,7 @@ const updateProposalDetailSF = (state, action) => {
       proposalDetail = {
         ...proposalDetail,
         describeActivity: data.proposalDetails.describeActivity,
-        requestDetail: data.proposalDetails.requestDetail,
+        requestDetail: data?.proposalDetails.requestDetail,
         typeOfActivity: data?.proposalDetails.typeOfActivity
       };
     }
@@ -1674,8 +1673,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
-    onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1764,7 +1762,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

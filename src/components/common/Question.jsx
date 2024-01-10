@@ -94,17 +94,16 @@ import { TableAnswer } from './atoms/TableAnswer';
 import { diffArrays } from 'diff';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
-const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
-  QuestionDatePicker
-);
+const QuestionDatePickerWithIdleStateDetection =
+  withIdleStateDetection(QuestionDatePicker);
 const MultiSelectWithIdleStateDetection = withIdleStateDetection(Multiselect);
 const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
   AutoCompleteWithAddOption
 );
 const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
-const CheckBoxQuestionsIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestions
-);
+const CheckBoxQuestionsIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestions);
+const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -910,15 +909,24 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const focusState = this.state.focusedSpan;
     const blurState = this.state.blurredSpan;
-    if (answer) {
-      if (type === ANSWER_TYPES.TABLE) {
+
+    if (type === ANSWER_TYPES.TABLE) {
+      let tableConfigJSON = {
+        columns: [],
+        rows: []
+      };
+      try {
         // parse JSON from lastAnswer
-        const tableConfigJSON = JSON.parse(this.props.tableConfiguration);
+        tableConfigJSON = JSON.parse(this.props.tableConfiguration);
+      } catch (e) {
+        console.error('Error parsing table configuration', e);
+      }
+      if (answer) {
         try {
           const noConfigTableAnswer = JSON.parse(answer);
-          answerValue = merge(tableConfigJSON, noConfigTableAnswer);
           const defaultColumnsLength = tableConfigJSON.columns.length;
           const defaultRowsLength = tableConfigJSON.rows.length;
+          answerValue = merge(tableConfigJSON, noConfigTableAnswer);
 
           if (Array.isArray(answerValue.columns)) {
             answerValue.columns = cloneDeep(answerValue.columns).map(
@@ -948,26 +956,23 @@ export class TaskRow extends React.PureComponent<Props, State> {
           answerValue = tableConfigJSON;
         }
       } else {
+        answerValue = cloneDeep(tableConfigJSON);
+        answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
+          ...column,
+          canEdit: answerValue.canEditColumn
+        }));
+        answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
+          ...row,
+          canEdit: answerValue.canEditRow
+        }));
+      }
+    } else {
+      if (answer) {
         if (isObject(answer)) answerValueComplex = answer.toJS();
         else answerValue = answer.toString();
       }
-    } else {
-      if (type === ANSWER_TYPES.TABLE) {
-        answerValue = JSON.parse(this.props.tableConfiguration);
-        if (Array.isArray(answerValue.columns)) {
-          answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
-            ...column,
-            canEdit: answerValue.canEditColumn
-          }));
-        }
-        if (Array.isArray(answerValue.rows)) {
-          answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
-            ...row,
-            canEdit: answerValue.canEditRow
-          }));
-        }
-      }
     }
+    console.log('answerValue', answerValue);
 
     if (sectionName === 'Proposal Team') {
       return (
@@ -1003,7 +1008,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 }}
                 onBlur={() => {
                   this.context.questionUnlockWrapper(this.props.questionId);
-
                   this.setSelectRow(false);
                 }}
                 onChange={this.handlePropsalChange}
@@ -1129,10 +1133,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         if (this.quesTextInnerLeftRef.current) {
           // Change title style for richEdit icon
-          const {
-            style: quesTitleLStyle,
-            firstChild
-          } = this.quesTextInnerLeftRef.current;
+          const { style: quesTitleLStyle, firstChild } =
+            this.quesTextInnerLeftRef.current;
           quesTitleLStyle.minHeight = 'auto';
           firstChild.style.maxWidth = 'none';
         }
@@ -1558,9 +1560,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
           <span
             id="table-question-answer"
             tabIndex={-1}
-            onBlur={() => {
-              concurrencyBlurHandler();
-            }}
             style={
               `${this.props.showNaCheckbox}`
                 ? {
@@ -1572,13 +1571,21 @@ export class TaskRow extends React.PureComponent<Props, State> {
             <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
               {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
             </span>
-            <TableAnswer
+            <TableAnswerWithIdleStateDetection
               {...this.props}
               answered={answered}
               lastAnswer={lastAnswer}
               tableConfiguration={answerValue}
               onChange={this.handleTableValueChange}
               disabled={checkDisableFlag() || isNotApplicable}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
             />
           </span>
           // </SFAnswerValidationWrapper>
@@ -1608,12 +1615,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
