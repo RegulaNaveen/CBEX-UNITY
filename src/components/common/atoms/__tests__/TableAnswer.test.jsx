@@ -8,11 +8,16 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import TableAnswer from '../TableAnswer/TableAnswer';
+import { store } from '../../../../store';
+import { Provider } from 'react-redux';
 
 describe('TableAnswer Component', () => {
-  const renderTableAnswer = props => {
-    return render(<TableAnswer {...props} />);
-  };
+  const renderTableAnswer = props =>
+    render(
+      <Provider store={store}>
+        <TableAnswer {...props} />
+      </Provider>
+    );
 
   it('renders without crashing', () => {
     const props = {

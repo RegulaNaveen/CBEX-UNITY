@@ -13,6 +13,7 @@ import TableCell from './TableCell';
 import { cloneDeep } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
+import TablePreview from './TablePreview';
 import Tooltip from 'apollo-react/components/Tooltip';
 
 function Title({ questionText, questionHint, questionHintJSON }) {
@@ -300,33 +301,38 @@ function TableAnswer({
 
   return (
     <React.Fragment>
-      <div
-        data-testid="togglebtn"
-        className={classNames({
-          'table-answer': true,
-          answered: answered,
-          disabled: disabled
-        })}
-        onClick={() => {
-          if (!disabled) {
-            toggleModal(!showModal);
-          }
-          if (!showModal) {
-            if (toggleWatch) toggleWatch(true);
-            if (onFocus) onFocus();
-          } else {
-            if (toggleWatch) toggleWatch(false);
-            if (onBlur) onBlur();
-          }
-        }}
-      >
-        <TableIcon
-          className="table-icon"
-          color={answered && !disabled ? '#0768fd' : '#595959'}
-        />
-        <Typography className="label" variant="body1">
-          {answered ? 'Edit' : 'Add'} Table Data
-        </Typography>
+      <div className="table-answer-container">
+        <div
+          data-testid="togglebtn"
+          className={classNames({
+            'table-answer': true,
+            answered: answered,
+            disabled: disabled
+          })}
+          onClick={() => {
+            if (!disabled) {
+              toggleModal(!showModal);
+            }
+            if (!showModal) {
+              if (toggleWatch) toggleWatch(true);
+              if (onFocus) onFocus();
+            } else {
+              if (toggleWatch) toggleWatch(false);
+              if (onBlur) onBlur();
+            }
+          }}
+        >
+          <TableIcon
+            className="table-icon"
+            color={answered && !disabled ? '#0768fd' : '#595959'}
+          />
+          <Typography className="label" variant="body1">
+            {answered ? 'Edit' : 'Add'} Table Data
+          </Typography>
+        </div>
+        {rows.length > 0 && columns.length > 0 && (
+          <TablePreview rows={rows} columns={columns} />
+        )}
       </div>
       <Modal
         data-testid="tableAnswer-modal"
