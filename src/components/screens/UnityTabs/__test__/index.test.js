@@ -130,7 +130,7 @@ describe('Unity Section Component', () => {
     await expect(screen.findByText(/ Filters/i)).toBeTruthy();
   });
 
-  it('test unity tab index', async () => {
+  test('test unity tab index', async () => {
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
       questionUnlockWrapper: jest.fn()
@@ -147,6 +147,7 @@ describe('Unity Section Component', () => {
             <UnityTabIndex
               isShowFilters={true}
               tabId="04bb872c-9d48-4514-be16-fba5eb7fd789"
+              socketContext={socketContextObj}
             />
           </SocketContext.Provider>
         </Provider>
