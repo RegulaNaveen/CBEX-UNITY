@@ -134,7 +134,12 @@ function TableAnswer({
   answered,
   lastAnswer,
   onChange,
-  disabled
+  disabled,
+  forceBlur,
+  onCascadeChange,
+  toggleWatch,
+  onFocus,
+  onBlur
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
@@ -178,6 +183,7 @@ function TableAnswer({
         inline: 'end'
       });
     }, 700);
+    if (onCascadeChange) onCascadeChange();
   }
 
   function handleAddRowClick() {
@@ -195,7 +201,8 @@ function TableAnswer({
         },
         {
           header: ``,
-          canEdit: true
+          canEdit: true,
+          rowId: `row-${nextRowsWithExtra.length}`
         }
       )
     );
@@ -209,6 +216,7 @@ function TableAnswer({
         block: 'end'
       });
     }, 700);
+    if (onCascadeChange) onCascadeChange();
   }
 
   useEffect(() => {
@@ -241,6 +249,14 @@ function TableAnswer({
     }
   }, [showModal, tableConfiguration]);
 
+  useEffect(() => {
+    if (forceBlur === true) {
+      handleSaveClick();
+      if (toggleWatch) toggleWatch(false);
+      if (onBlur) onBlur();
+    }
+  }, [forceBlur]);
+
   const toggleModal = useCallback(show => {
     setShowModal(show);
   }, []);
@@ -251,6 +267,7 @@ function TableAnswer({
         index === rowIndex ? { ...row, [key]: value } : row
       )
     );
+    if (onCascadeChange) onCascadeChange();
   }, []);
 
   function handleSaveClick() {
@@ -278,6 +295,7 @@ function TableAnswer({
     } else {
       setRows(values);
     }
+    if (onCascadeChange) onCascadeChange();
   }
 
   return (
@@ -289,7 +307,18 @@ function TableAnswer({
           answered: answered,
           disabled: disabled
         })}
-        onClick={() => !disabled && toggleModal(!showModal)}
+        onClick={() => {
+          if (!disabled) {
+            toggleModal(!showModal);
+          }
+          if (!showModal) {
+            if (toggleWatch) toggleWatch(true);
+            if (onFocus) onFocus();
+          } else {
+            if (toggleWatch) toggleWatch(false);
+            if (onBlur) onBlur();
+          }
+        }}
       >
         <TableIcon
           className="table-icon"

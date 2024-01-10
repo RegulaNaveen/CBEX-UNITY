@@ -63,19 +63,15 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  SelectQuestion
-);
-const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  MultiSelectQuestion
-);
-const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
-  YesNoQuestion
-);
+const SelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(SelectQuestion);
+const MultiSelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(MultiSelectQuestion);
+const YesNoQuestionWithIdleStateDetection =
+  withIdleStateDetection(YesNoQuestion);
 
-const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestion
-);
+const CheckBoxQuestionWithIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestion);
 
 const QuestionItem = ({
   questionId = '',
@@ -91,7 +87,6 @@ const QuestionItem = ({
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
   ).toJS();
-
   const oppdata = useSelector(state => getOpportunityData(state));
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
@@ -197,6 +192,7 @@ const QuestionItem = ({
   });
 
   const prepareAnswerHistoryData = questionData => {
+    console.log('questionData', questionData);
     let questionMap = fromJS(questionData);
     try {
       // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
@@ -330,6 +326,7 @@ const QuestionItem = ({
     const lastAnswer = getLastAnswer(question);
     const lastAnswerMap = Map(lastAnswer);
     let isAnswerPredicted = false;
+
     let answerDate = 'Not Answered';
 
     if (lastAnswerMap) {
@@ -592,6 +589,7 @@ const QuestionItem = ({
             color="primary"
             size="small"
             className="question-tooltip-icon"
+            data-testid="question-tooltip-icon"
             onClick={e => setAnchorEl(e.currentTarget)}
           >
             <InfoIcon className="info-icon" style={{ fontSize: '16px' }} />
@@ -646,12 +644,7 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
