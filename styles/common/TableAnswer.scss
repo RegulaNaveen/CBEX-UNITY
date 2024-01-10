@@ -33,3 +33,38 @@
     }
   }
 }
+
+.answer-history-table-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 8px;
+  .header {
+    p {
+      margin-bottom: 8px;
+    }
+  }
+  .table-change-item {
+    margin-top: 16px;
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+    .meta-info {
+      color: #df216d;
+    }
+    .changeset-wrapper {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      .changeset {
+        .table-change-list-item {
+          display: inline-block;
+          width: 100%;
+          .removed {
+            text-decoration: line-through;
+          }
+        }
+      }
+    }
+  }
+}
