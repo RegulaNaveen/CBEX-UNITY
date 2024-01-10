@@ -7,10 +7,10 @@ describe('CustomAccordion', () => {
     const wrapper = shallow(<CustomAccordion />);
     expect(wrapper.exists()).toBe(true);
   });
-});
 
-it('should render children', () => {
-  const children = <div>Test Children</div>;
-  const wrapper = shallow(<CustomAccordion>{children}</CustomAccordion>);
-  expect(wrapper.contains(children)).toBe(true);
+  it('should render children', () => {
+    const children = <div>Test Children</div>;
+    const wrapper = shallow(<CustomAccordion>{children}</CustomAccordion>);
+    expect(wrapper.contains(children)).toBe(true);
+  });
 });

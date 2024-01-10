@@ -13,14 +13,14 @@ export const selectNotes = state => {
 export const selectIsFetchingNotes = state => {
   return selectNotepad(state).get('fetchingNotes');
 };
-
-export const selectIsNotesFetched = state => {
-  return selectNotepad(state).get('isNotesFetched');
-};
-
-export const selectIsNotesWebSocketExists = state => {
-  return selectNotepad(state).get('isNotesWebSocketExists');
-};
+// commented unused code
+// export const selectIsNotesFetched = state => {
+//   return selectNotepad(state).get('isNotesFetched');
+// };
+// commented unused code
+// export const selectIsNotesWebSocketExists = state => {
+//   return selectNotepad(state).get('isNotesWebSocketExists');
+// };
 
 export const selectIsAddingNote = state => {
   return selectNotepad(state).get('uploadingNote');

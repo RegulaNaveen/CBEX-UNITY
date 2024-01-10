@@ -23,15 +23,15 @@ const INITIAL_LIST_TITLE = {
   patients: 'Total Patients',
   regions: 'Regions'
 };
-
-export const INITIAL_LIST_VAL = {
-  cost: '',
-  therapeutic: '',
-  sites: '',
-  phase: '',
-  patients: '',
-  regions: ''
-};
+// commented unused code
+// export const INITIAL_LIST_VAL = {
+//   cost: '',
+//   therapeutic: '',
+//   sites: '',
+//   phase: '',
+//   patients: '',
+//   regions: ''
+// };
 
 // TODO
 // Fixed in a hurry, Need to add a loader on price modeler data load

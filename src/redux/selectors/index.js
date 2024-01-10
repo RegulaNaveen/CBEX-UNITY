@@ -170,14 +170,15 @@ export const selectIsQuestionsFilterEnabled = state =>
 export const selectProposalQuestions = state =>
   proposalSelectors.selectProposalQuestions(state);
 
-export const getQuestion = questionId => state =>
-  proposalSelectors
+export const getQuestion = questionId => state => {
+  return proposalSelectors
     .selectProposalQuestions(state)
     .find(i => i.questionId === questionId);
+};
 
 export const selectSections = state => proposalSelectors.selectSections(state);
-export const getAllUnityTab = state => state.unitytab.allTabs ;
-export const getAllApprovalTab = state => state.approvals.allApprovals ;
+export const getAllUnityTab = state => state.unitytab.allTabs;
+export const getAllApprovalTab = state => state.approvals.allApprovals;
 
 export const selectFilteredSections = state =>
   proposalSelectors.selectFilteredSections(state);

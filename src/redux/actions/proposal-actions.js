@@ -149,7 +149,7 @@ const {
 /**
  * Updates bidNo Query param without page reload
  */
-const updateBidNoQueryparam = bidNo => {
+export const updateBidNoQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
@@ -162,7 +162,7 @@ const updateBidNoQueryparam = bidNo => {
   }
 };
 
-const updateBidTypeQueryparam = bidNo => {
+export const updateBidTypeQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
@@ -292,17 +292,17 @@ export const getPriceModelerData = proposalId => {
     }
   };
 };
-
-export const getBidCostData = proposalId => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    try {
-      const response = await bidCostApi(proposalId);
-      dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
+// commented unused code
+// export const getBidCostData = proposalId => {
+//   return async (dispatch: Dispatch<string, Object>) => {
+//     try {
+//       const response = await bidCostApi(proposalId);
+//       dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+// };
 
 export const setApprovalQuestionLoading = (questionId, value) => {
   return async (dispatch: Dispatch<string, Object>) => {
@@ -482,45 +482,45 @@ export const setProposalAnswerDatafromSocket = (
     }
   };
 };
+// commented unused code
+// export const setProposalQuestionfromSocket = (
+//   questionId: string,
+//   data: any
+// ): ThunkAction<string, Object> => {
+//   return async (dispatch: Dispatch<string, Object>, getState) => {
+//     dispatch({
+//       type: PROPOSAL_ANSWER_LOADING,
+//       payload: { questionId, loading: true }
+//     });
+//     const questionsFilter = getQuestionsFilters(getState());
 
-export const setProposalQuestionfromSocket = (
-  questionId: string,
-  data: any
-): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
-    });
-    const questionsFilter = getQuestionsFilters(getState());
+//     try {
+//       dispatch({
+//         type: PROPOSAL_ANSWER,
+//         payload: {
+//           data: Array.isArray(data.answers) ? data.answers : data,
+//           questionId,
+//           hasDifferentSFanswer: data.hasDifferentSFanswer || false
+//         }
+//       });
 
-    try {
-      dispatch({
-        type: PROPOSAL_ANSWER,
-        payload: {
-          data: Array.isArray(data.answers) ? data.answers : data,
-          questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
-        }
-      });
-
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
-      dispatch({
-        type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: false }
-      });
-    } catch (err) {
-      console.log('error occurred ', err);
-      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
-    }
-  };
-};
+//       const { modifiedQuestions } = data;
+//       if (!isEmpty(modifiedQuestions)) {
+//         modifiedQuestions.forEach(question => {
+//           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+//         });
+//       }
+//       dispatch(onQuestionsFilterApplied(questionsFilter));
+//       dispatch({
+//         type: PROPOSAL_ANSWER_LOADING,
+//         payload: { questionId, loading: false }
+//       });
+//     } catch (err) {
+//       console.log('error occurred ', err);
+//       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+//     }
+//   };
+// };
 
 export const updateAnswerFromWebSocket = (
   data = {}
@@ -1116,7 +1116,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
     });
-
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
 
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
@@ -1630,7 +1629,7 @@ export const getOpportunity = (
   };
 };
 
-const checkIsEditableTrue = (selectedBid, allProposals) => {
+export const checkIsEditableTrue = (selectedBid, allProposals) => {
   const bidList = Object.groupBy(allProposals, item =>
     item.proposal.bidType ? item.proposal.bidType : 'Clinical_Bid'
   );
@@ -1812,16 +1811,17 @@ export const activateProposalLoading = () => {
 };
 
 /**
+ * commented unused code
  * Deactivate Proposal Loading - Action
  */
-export const deactivateProposalLoading = () => {
-  return async dispatch => {
-    dispatch({
-      type: PROPOSAL_INFO_ERROR,
-      payload: undefined
-    });
-  };
-};
+// export const deactivateProposalLoading = () => {
+//   return async dispatch => {
+//     dispatch({
+//       type: PROPOSAL_INFO_ERROR,
+//       payload: undefined
+//     });
+//   };
+// };
 
 /**
  * Fetch All Opportunity Type
@@ -1866,39 +1866,45 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB =
-  (proposalId, email, sectionOrder, sectionName) => async () => {
-    try {
-      // Api Response
-      const response = await deleteProposalUser(proposalId, {
-        email,
-        section: { sectionOrder, sectionName }
-      });
-      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-    } catch (error) {
-      // Error
-      console.log(error.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const deleteProposalUserFromDB = (
+  proposalId,
+  email,
+  sectionOrder,
+  sectionName
+) => async () => {
+  try {
+    // Api Response
+    const response = await deleteProposalUser(proposalId, {
+      email,
+      section: { sectionOrder, sectionName }
+    });
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory =
-  (proposalId: string, questionId: string) => async () => {
-    try {
-      // Api Response
-      const response = await getProposalAnswer(proposalId, questionId);
-      return { status: true, title: DEFAULT.SUCCESS, data: response };
-    } catch (error) {
-      // Error
-      console.log(error?.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const getProposalAnswerHistory = (
+  proposalId: string,
+  questionId: string
+) => async () => {
+  try {
+    // Api Response
+    const response = await getProposalAnswer(proposalId, questionId);
+    return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Set Flag for Event Launcher
