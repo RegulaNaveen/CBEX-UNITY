@@ -1,37 +1,119 @@
 #table-question-answer {
-  height: 38px;
+  gap: 6px;
 }
-.table-answer {
-  height: 38px;
-  border: 1px solid #d9d9d9;
-  border-radius: 0.25rem;
+.table-answer-container {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  &.disabled {
-    cursor: not-allowed;
-  }
-  &:hover:not(.disabled) {
-    border: 1px solid #40a9ff;
-    cursor: pointer;
-  }
-  .table-icon {
-    margin-left: 0.5rem;
-    color: #595959;
-  }
-  .label {
-    margin-left: 0.5rem;
-    color: #999999;
-  }
-  &.answered:not(.disabled) {
+  .table-answer {
+    height: 38px;
+    border: 1px solid #d9d9d9;
+    border-radius: 0.25rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    &:hover {
+      border: 1px solid #40a9ff;
+      cursor: pointer;
+    }
     .table-icon {
-      color: #0768fd;
+      margin-left: 0.5rem;
+      color: #595959;
     }
     .label {
-      color: #0768fd;
+      margin-left: 0.5rem;
+      color: #999999;
+    }
+    &.answered {
+      .table-icon {
+        color: #0768fd;
+      }
+      .label {
+        color: #0768fd;
+      }
     }
   }
+}
+
+.custom-answer-table {
+  td {
+    background-color: #ffffff;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+  }
+  td:first-child {
+    font-weight: 600;
+    line-height: 16px;
+  }
+  th {
+    background-color: #f6f7fb;
+    align-items: center;
+    padding-left: 16px;
+    gap: 4px;
+    flex: 1 0 0;
+    font-weight: 600;
+    line-height: 16px;
+  }
+  th:first-child,
+  td:first-child {
+    min-width: 50px;
+  }
+}
+
+.custom-answer-table-container {
+  width: 100%;
+  overflow-x: auto;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.custom-answer-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.custom-answer-table th,
+.custom-answer-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-family: Proxima Nova;
+  font-size: 13px;
+  font-style: normal;
+  min-width: 50px;
+}
+
+.custom-answer-table-container::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 5px;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.custom-answer-table-container::-webkit-scrollbar-button {
+  display: none;
+}
+
+.custom-answer-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.blankRow {
+  text-align: center !important;
 }
 
 .answer-history-table-card {
