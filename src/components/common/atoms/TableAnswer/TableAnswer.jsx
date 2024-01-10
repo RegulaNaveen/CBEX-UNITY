@@ -135,7 +135,12 @@ function TableAnswer({
   answered,
   lastAnswer,
   onChange,
-  disabled
+  disabled,
+  forceBlur,
+  onCascadeChange,
+  toggleWatch,
+  onFocus,
+  onBlur
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
@@ -179,6 +184,7 @@ function TableAnswer({
         inline: 'end'
       });
     }, 700);
+    if (onCascadeChange) onCascadeChange();
   }
 
   function handleAddRowClick() {
@@ -196,7 +202,8 @@ function TableAnswer({
         },
         {
           header: ``,
-          canEdit: true
+          canEdit: true,
+          rowId: `row-${nextRowsWithExtra.length}`
         }
       )
     );
@@ -210,6 +217,7 @@ function TableAnswer({
         block: 'end'
       });
     }, 700);
+    if (onCascadeChange) onCascadeChange();
   }
 
   useEffect(() => {
@@ -242,17 +250,25 @@ function TableAnswer({
     }
   }, [showModal, tableConfiguration]);
 
+  useEffect(() => {
+    if (forceBlur === true) {
+      handleSaveClick();
+      if (toggleWatch) toggleWatch(false);
+      if (onBlur) onBlur();
+    }
+  }, [forceBlur]);
+
   const toggleModal = useCallback(show => {
     setShowModal(show);
   }, []);
 
   const editRow = useCallback((rowIndex, key, value) => {
-    console.log('rowIndex', rowIndex, key, value);
     setRows(rows =>
       rows.map((row, index) =>
         index === rowIndex ? { ...row, [key]: value } : row
       )
     );
+    if (onCascadeChange) onCascadeChange();
   }, []);
 
   function handleSaveClick() {
@@ -280,21 +296,35 @@ function TableAnswer({
     } else {
       setRows(values);
     }
+    if (onCascadeChange) onCascadeChange();
   }
 
   return (
     <React.Fragment>
       <div className="table-answer-container">
         <div
+          data-testid="togglebtn"
           className={classNames({
             'table-answer': true,
-            answered: answered
+            answered: answered,
+            disabled: disabled
           })}
-          onClick={() => toggleModal(!showModal)}
+          onClick={() => {
+            if (!disabled) {
+              toggleModal(!showModal);
+            }
+            if (!showModal) {
+              if (toggleWatch) toggleWatch(true);
+              if (onFocus) onFocus();
+            } else {
+              if (toggleWatch) toggleWatch(false);
+              if (onBlur) onBlur();
+            }
+          }}
         >
           <TableIcon
             className="table-icon"
-            color={answered ? '#0768fd' : '#595959'}
+            color={answered && !disabled ? '#0768fd' : '#595959'}
           />
           <Typography className="label" variant="body1">
             {answered ? 'Edit' : 'Add'} Table Data
@@ -321,9 +351,14 @@ function TableAnswer({
         className={'table-answer-modal'}
         id="table-answer-modal"
         buttonProps={[
-          { label: 'Cancel', onClick: () => toggleModal(false) },
+          {
+            label: 'Cancel',
+            'data-testid': 'cancelButton',
+            onClick: () => toggleModal(false)
+          },
           {
             label: 'Save',
+            'data-testid': 'saveButton',
             onClick: () => handleSaveClick()
           }
         ]}

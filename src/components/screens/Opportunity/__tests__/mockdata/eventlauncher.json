@@ -5977,7 +5977,7 @@
         },
         "questionText": "Indication",
         "answerConfiguration": {
-          "type": "text",
+          "type": "table",
           "options": []
         },
         "roleNames": ["Business Developer"],
@@ -5987,7 +5987,45 @@
             "userName": "AnswerPulledFromSalesforce",
             "userRole": "AnswerPulledFromSalesforce",
             "date": "2023-01-12T09:04:56.720Z",
-            "answer": ["qweq"],
+            "answer": {
+              "rows": [
+                {
+                  "test": "1",
+                  "header": "1",
+                  "rowId": 0,
+                  "canEdit": true,
+                  "hidden": false
+                },
+                {
+                  "header": "2",
+                  "canEdit": true,
+                  "test": "2",
+                  "hidden": false
+                },
+                { "header": "3", "canEdit": true, "test": "3", "hidden": false }
+              ],
+              "columns": [
+                {
+                  "accessor": "header",
+                  "frozen": true,
+                  "hidden": false,
+                  "locked": false,
+                  "type": "text",
+                  "alwaysVisible": false,
+                  "canEdit": false
+                },
+                {
+                  "hidden": true,
+                  "alwaysVisible": false,
+                  "accessor": "test",
+                  "frozen": false,
+                  "locked": false,
+                  "type": "text",
+                  "canEdit": false,
+                  "header": "test"
+                }
+              ]
+            },
             "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
             "formattedAnswer": ["qweq"],
             "updatedInPG": false

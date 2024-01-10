@@ -103,6 +103,7 @@ const AutoCompleteWithAddOptionWithIdleStateDetection = withIdleStateDetection(
 const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
 const CheckBoxQuestionsIdleStateDetection =
   withIdleStateDetection(CheckBoxQuestions);
+const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -908,10 +909,19 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const focusState = this.state.focusedSpan;
     const blurState = this.state.blurredSpan;
-    if (answer) {
-      if (type === ANSWER_TYPES.TABLE) {
+
+    if (type === ANSWER_TYPES.TABLE) {
+      let tableConfigJSON = {
+        columns: [],
+        rows: []
+      };
+      try {
         // parse JSON from lastAnswer
-        const tableConfigJSON = JSON.parse(this.props.tableConfiguration);
+        tableConfigJSON = JSON.parse(this.props.tableConfiguration);
+      } catch (e) {
+        console.error('Error parsing table configuration', e);
+      }
+      if (answer) {
         try {
           const noConfigTableAnswer = JSON.parse(answer);
           answerValue = merge(tableConfigJSON, noConfigTableAnswer);
@@ -946,24 +956,20 @@ export class TaskRow extends React.PureComponent<Props, State> {
           answerValue = tableConfigJSON;
         }
       } else {
-        if (isObject(answer)) answerValueComplex = answer.toJS();
-        else answerValue = answer.toString();
+        answerValue = cloneDeep(tableConfigJSON);
+        answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
+          ...column,
+          canEdit: answerValue.canEditColumn
+        }));
+        answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
+          ...row,
+          canEdit: answerValue.canEditRow
+        }));
       }
     } else {
-      if (type === ANSWER_TYPES.TABLE) {
-        answerValue = JSON.parse(this.props.tableConfiguration);
-        if (Array.isArray(answerValue.columns)) {
-          answerValue.columns = cloneDeep(answerValue.columns).map(column => ({
-            ...column,
-            canEdit: answerValue.canEditColumn
-          }));
-        }
-        if (Array.isArray(answerValue.rows)) {
-          answerValue.rows = cloneDeep(answerValue.rows).map(row => ({
-            ...row,
-            canEdit: answerValue.canEditRow
-          }));
-        }
+      if (answer) {
+        if (isObject(answer)) answerValueComplex = answer.toJS();
+        else answerValue = answer.toString();
       }
     }
     console.log('answerValue', answerValue);
@@ -1002,7 +1008,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 }}
                 onBlur={() => {
                   this.context.questionUnlockWrapper(this.props.questionId);
-
                   this.setSelectRow(false);
                 }}
                 onChange={this.handlePropsalChange}
@@ -1551,36 +1556,38 @@ export class TaskRow extends React.PureComponent<Props, State> {
           // <SFAnswerValidationWrapper
           //   hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
           //   sfObject={sfObject}
-          //
-          <>
-            <span
-              id="table-question-answer"
-              tabIndex={-1}
-              onBlur={() => {
-                concurrencyBlurHandler();
-              }}
-              style={
-                `${this.props.showNaCheckbox}`
-                  ? {
-                      display: 'flex'
-                    }
-                  : ''
-              }
-            >
-              <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
-                {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
-              </span>
-              <TableAnswer
-                {...this.props}
-                answered={answered}
-                lastAnswer={lastAnswer}
-                tableConfiguration={answerValue}
-                onChange={this.handleTableValueChange}
-                disabled={checkDisableFlag() || isNotApplicable}
-              />
+          // >
+          <span
+            id="table-question-answer"
+            tabIndex={-1}
+            style={
+              `${this.props.showNaCheckbox}`
+                ? {
+                    display: 'flex'
+                  }
+                : ''
+            }
+          >
+            <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+              {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
             </span>
-          </>
-
+            <TableAnswerWithIdleStateDetection
+              {...this.props}
+              answered={answered}
+              lastAnswer={lastAnswer}
+              tableConfiguration={answerValue}
+              onChange={this.handleTableValueChange}
+              disabled={checkDisableFlag() || isNotApplicable}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
+            />
+          </span>
           // </SFAnswerValidationWrapper>
         );
       default:
