@@ -14,6 +14,8 @@ import { cloneDeep } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
 import Tooltip from 'apollo-react/components/Tooltip';
+import { DEFAULT, TABLEANSWER } from '../../../../constants/app';
+import CustomModal from '../../CustomModal';
 
 function Title({ questionText, questionHint, questionHintJSON }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -86,8 +88,18 @@ function Title({ questionText, questionHint, questionHintJSON }) {
   );
 }
 
-function Header({ index, title, onTitleChange, canEdit, disabled }) {
+function Header({
+  index,
+  title,
+  onTitleChange,
+  canEdit,
+  disabled,
+  setSaveDisable,
+  allExpanded
+}) {
   const [currentTitle, setCurrentTitle] = useState(title);
+
+  const columnRef = useRef(null);
 
   const handleValueChange = useCallback(event => {
     setCurrentTitle(event.target.value);
@@ -96,6 +108,9 @@ function Header({ index, title, onTitleChange, canEdit, disabled }) {
   const handleInputBlur = useCallback(
     e => {
       onTitleChange(index, currentTitle);
+      if (currentTitle.length === 0) {
+        setSaveDisable(true);
+      }
     },
     [currentTitle]
   );
@@ -105,16 +120,28 @@ function Header({ index, title, onTitleChange, canEdit, disabled }) {
   }
 
   return canEdit && !disabled ? (
-    <TextField
-      margin="none"
-      value={currentTitle}
-      onChange={handleValueChange}
-      onBlur={handleInputBlur}
-      InputProps={{ inputProps: { maxLength: 100 } }}
-      error={currentTitle.length === 0}
-      helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
-      fullWidth
-    />
+    <Tooltip
+      title={
+        allExpanded ||
+        columnRef?.current?.lastChild?.children[0]?.scrollWidth <=
+          columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
+          ? ''
+          : currentTitle
+      }
+    >
+      <TextField
+        ref={columnRef}
+        margin="none"
+        value={currentTitle}
+        multiline={allExpanded}
+        onChange={handleValueChange}
+        onBlur={handleInputBlur}
+        InputProps={{ inputProps: { maxLength: 1000 } }}
+        error={currentTitle.length === 0}
+        helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+        fullWidth
+      />
+    </Tooltip>
   ) : (
     <Tooltip title={currentTitle}>
       <Typography variant="bodyDefault" gutterBottom noWrap>
@@ -139,13 +166,22 @@ function TableAnswer({
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [warning, setWarning] = useState(false);
+  const [warningTitle, setWarningTitle] = useState('');
+  const [warningText, setWarningText] = useState('');
+  const [saveDisable, setSaveDisable] = useState(true);
+  const [allExpanded, setAllExpanded] = useState(false);
+
+  function handleExpandAll(expanded) {
+    setAllExpanded(expanded);
+  }
 
   const tableRef = useRef(null);
 
   function onHeaderTitleChange(index, title) {
     setColumns(cols =>
       cols.map((column, i) =>
-        i === index ? { ...column, headerTitle: title } : column
+        i === index ? { ...column, headerTitle: title.trim() } : column
       )
     );
   }
@@ -155,7 +191,13 @@ function TableAnswer({
 
     const newColumn = {
       accessor: `column-${nextColumnsWithExtra.length}`,
-      customCell: cellProps => <TableCell {...cellProps} disabled={disabled} />,
+      customCell: cellProps => (
+        <TableCell
+          {...cellProps}
+          disabled={disabled}
+          setSaveDisable={setSaveDisable}
+        />
+      ),
       header: (
         <Header
           index={nextColumnsWithExtra.length}
@@ -163,6 +205,7 @@ function TableAnswer({
           onTitleChange={onHeaderTitleChange}
           canEdit={true}
           disabled={disabled}
+          allExpanded={allExpanded}
         />
       ),
       canEdit: true,
@@ -224,7 +267,11 @@ function TableAnswer({
         tableConfiguration.columns.map((column, index) => ({
           ...column,
           customCell: cellProps => (
-            <TableCell {...cellProps} disabled={disabled} />
+            <TableCell
+              {...cellProps}
+              disabled={disabled}
+              setSaveDisable={setSaveDisable}
+            />
           ),
           header: (
             <Header
@@ -233,29 +280,78 @@ function TableAnswer({
               onTitleChange={onHeaderTitleChange}
               canEdit={column.canEdit}
               disabled={disabled}
+              setSaveDisable={setSaveDisable}
+              allExpanded={allExpanded}
             />
           ),
           headerTitle: column.header
         }))
       );
     }
-  }, [showModal, tableConfiguration]);
+  }, [showModal, tableConfiguration, allExpanded]);
+
+  function duplicateCheck(rows, columns) {
+    const duplicateRows = rows.filter(
+      (value, index) => rows.indexOf(value) !== index
+    );
+    const duplicateColumns = columns.filter(
+      (value, index) => columns.indexOf(value) !== index
+    );
+    if (duplicateRows.length > 0 || duplicateColumns.length > 0) {
+      setWarning(true);
+      setWarningTitle('Alert');
+      setWarningText(
+        duplicateRows.length > 0 && duplicateColumns.length > 0
+          ? `${TABLEANSWER.DUPLICATE_ROWS} ${duplicateRows.join(', ')}
+              ${TABLEANSWER.DUPLICATE_COLUMNS} ${duplicateColumns.join(', ')}`
+          : duplicateRows.length > 0
+          ? `${TABLEANSWER.DUPLICATE_ROWS} ${duplicateRows.join(', ')}`
+          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${duplicateColumns.join(', ')}`
+      );
+    }
+  }
+
+  useEffect(() => {
+    if (rows.length > 0 || columns.length > 0) {
+      const rowHeaders = rows.map(row => row.header);
+      const columnHeaders = columns.map(column => column.headerTitle);
+      const colDiff = diffArrays(
+        tableConfiguration.columns.map(column => column.header),
+        columns.map(column => column.headerTitle)
+      );
+      const rowDiff = tableConfiguration.columns.map(
+        column =>
+          diffArrays(
+            tableConfiguration.rows.map(row => row[column.accessor]),
+            rows.map(row => row[column.accessor])
+          ).length > 1
+      );
+      if (columnHeaders.includes('') || rowHeaders.includes('')) {
+        setSaveDisable(true);
+      } else if (colDiff.length > 1 || rowDiff.includes(true)) {
+        setSaveDisable(false);
+      } else {
+        setSaveDisable(true);
+      }
+    }
+  }, [rows, columns]);
 
   const toggleModal = useCallback(show => {
     setShowModal(show);
   }, []);
 
   const editRow = useCallback((rowIndex, key, value) => {
-    console.log('rowIndex', rowIndex, key, value);
     setRows(rows =>
       rows.map((row, index) =>
-        index === rowIndex ? { ...row, [key]: value } : row
+        index === rowIndex ? { ...row, [key]: value.trim() } : row
       )
     );
   }, []);
 
   function handleSaveClick() {
     const newColumns = [];
+    const rowHeaders = rows.map(row => row.header);
+    const columnHeaders = columns.map(column => column.headerTitle);
     cloneDeep(columns).forEach(column => {
       delete column.header;
       column.header = column.headerTitle;
@@ -271,6 +367,7 @@ function TableAnswer({
     }
     onChange({ rows, columns: newColumns }, lastAnswer);
     toggleModal(false);
+    duplicateCheck(rowHeaders, columnHeaders);
   }
 
   function handleEdit(valueType, values) {
@@ -294,10 +391,10 @@ function TableAnswer({
       >
         <TableIcon
           className="table-icon"
-          color={answered && !disabled ? '#0768fd' : '#595959'}
+          color={answered && !disabled ? '#0768fd' : '#0768fd'}
         />
         <Typography className="label" variant="body1">
-          {answered ? 'Edit' : 'Add'} Table Data
+          Edit Table Data
         </Typography>
       </div>
       <Modal
@@ -320,7 +417,8 @@ function TableAnswer({
           { label: 'Cancel', onClick: () => toggleModal(false) },
           {
             label: 'Save',
-            onClick: () => handleSaveClick()
+            onClick: () => handleSaveClick(),
+            disabled: saveDisable
           }
         ]}
       >
@@ -333,6 +431,8 @@ function TableAnswer({
             onAddRowClick={handleAddRowClick}
             onEdit={handleEdit}
             tableConfiguration={tableConfiguration}
+            allExpanded={allExpanded}
+            onExpandAll={handleExpandAll}
           />
         ) : null}
         <ApolloTable
@@ -340,15 +440,31 @@ function TableAnswer({
             .map((row, rowIndex) => ({
               ...row,
               rowIndex,
-              editRow
+              editRow,
+              allExpanded
             }))
             .filter(row => !row.hidden)}
-          columns={columns}
+          columns={columns.map(column => ({
+            ...column,
+            fixedWidth: false
+          }))}
           hidePagination
           defaultPageSize={'All'}
           ref={tableRef}
         />
       </Modal>
+      {warning && (
+        <CustomModal
+          open={warning}
+          title={warningTitle}
+          message={warningText}
+          variant="error"
+          onClose={() => setWarning(false)}
+          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
+          id="error"
+          modalStyle={{ maxWidth: 342 }}
+        />
+      )}
     </React.Fragment>
   );
 }

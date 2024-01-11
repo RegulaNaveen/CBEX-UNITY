@@ -38,6 +38,11 @@ const PROPOSAL = {
   ATTENDEES: 'Attendees'
 };
 
+const TABLEANSWER = {
+  DUPLICATE_ROWS: 'Two or more rows have the same name:',
+  DUPLICATE_COLUMNS: 'Two or more columns have the same name:'
+};
+
 export const DashboardSFUpDATE = {
   Phase_P__c: 'phase',
   Name: 'customer',
@@ -150,5 +155,6 @@ export {
   SEARCH,
   BID_TYPES,
   EMAIL_TEMPLATES,
-  SECTIONS
+  SECTIONS,
+  TABLEANSWER
 };
