@@ -17,11 +17,12 @@
     }
     .table-icon {
       margin-left: 0.5rem;
-      color: #595959;
+      color: #0768fd;
     }
     .label {
       margin-left: 0.5rem;
-      color: #999999;
+      color: #0768fd;
+      text-decoration: underline;
     }
     &.answered {
       .table-icon {
@@ -29,6 +30,7 @@
       }
       .label {
         color: #0768fd;
+        text-decoration: underline;
       }
     }
   }

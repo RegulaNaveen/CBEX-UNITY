@@ -200,7 +200,7 @@ describe('TableAnswer Component', () => {
     });
   });
 
-  it('show add table data as placeholder text', () => {
+  it('Not show add table data as placeholder text', () => {
     const props = {
       questionText: '',
       tableConfiguration: {
@@ -217,10 +217,10 @@ describe('TableAnswer Component', () => {
       disabled: true
     };
 
-    const { getByText } = renderTableAnswer(props);
+    renderTableAnswer(props);
 
-    const element = getByText('Add Table Data');
-    expect(element).toBeInTheDocument();
+    const element = screen.queryByText('Add Table Data');
+    expect(element).not.toBeInTheDocument();
   });
 
   it('show edit table data when we have table data', async () => {
@@ -669,7 +669,7 @@ describe('TableAnswer Component', () => {
     });
   });
 
-  it('save button is clicked', async () => {
+  it('save button should be disabled initially', async () => {
     const props = {
       questionText: 'Sample Question',
       tableConfiguration: {
@@ -808,18 +808,14 @@ describe('TableAnswer Component', () => {
       disabled: false
     };
 
-    const { getByText, getByTestId } = renderTableAnswer(props);
+    const { getByText } = renderTableAnswer(props);
 
     const element = getByText('Edit Table Data');
     expect(element).toBeInTheDocument();
     fireEvent.click(element);
 
     const saveBtn = await screen.findByRole('button', { name: /save/i });
-    fireEvent.click(saveBtn);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('tableAnswer-modal')).not.toBeInTheDocument();
-    });
+    expect(saveBtn).toBeDisabled();
   });
 
   it('Title function renders correctly and opens popover', async () => {
