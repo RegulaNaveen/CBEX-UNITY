@@ -13,6 +13,7 @@ import TableCell from './TableCell';
 import { cloneDeep } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
+import TablePreview from './TablePreview';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { DEFAULT, TABLEANSWER } from '../../../../constants/app';
 import CustomModal from '../../CustomModal';
@@ -161,7 +162,12 @@ function TableAnswer({
   answered,
   lastAnswer,
   onChange,
-  disabled
+  disabled,
+  forceBlur,
+  onCascadeChange,
+  toggleWatch,
+  onFocus,
+  onBlur
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
@@ -221,6 +227,7 @@ function TableAnswer({
         inline: 'end'
       });
     }, 700);
+    if (onCascadeChange) onCascadeChange();
   }
 
   function handleAddRowClick() {
@@ -238,7 +245,8 @@ function TableAnswer({
         },
         {
           header: ``,
-          canEdit: true
+          canEdit: true,
+          rowId: `row-${nextRowsWithExtra.length}`
         }
       )
     );
@@ -252,6 +260,7 @@ function TableAnswer({
         block: 'end'
       });
     }, 700);
+    if (onCascadeChange) onCascadeChange();
   }
 
   useEffect(() => {
@@ -336,6 +345,14 @@ function TableAnswer({
     }
   }, [rows, columns]);
 
+  useEffect(() => {
+    if (forceBlur === true) {
+      handleSaveClick();
+      if (toggleWatch) toggleWatch(false);
+      if (onBlur) onBlur();
+    }
+  }, [forceBlur]);
+
   const toggleModal = useCallback(show => {
     setShowModal(show);
   }, []);
@@ -346,6 +363,7 @@ function TableAnswer({
         index === rowIndex ? { ...row, [key]: value.trim() } : row
       )
     );
+    if (onCascadeChange) onCascadeChange();
   }, []);
 
   function handleSaveClick() {
@@ -376,26 +394,43 @@ function TableAnswer({
     } else {
       setRows(values);
     }
+    if (onCascadeChange) onCascadeChange();
   }
 
   return (
     <React.Fragment>
-      <div
-        data-testid="togglebtn"
-        className={classNames({
-          'table-answer': true,
-          answered: answered,
-          disabled: disabled
-        })}
-        onClick={() => !disabled && toggleModal(!showModal)}
-      >
-        <TableIcon
-          className="table-icon"
-          color={answered && !disabled ? '#0768fd' : '#0768fd'}
-        />
-        <Typography className="label" variant="body1">
-          Edit Table Data
-        </Typography>
+      <div className="table-answer-container">
+        <div
+          data-testid="togglebtn"
+          className={classNames({
+            'table-answer': true,
+            answered: answered,
+            disabled: disabled
+          })}
+          onClick={() => {
+            if (!disabled) {
+              toggleModal(!showModal);
+            }
+            if (!showModal) {
+              if (toggleWatch) toggleWatch(true);
+              if (onFocus) onFocus();
+            } else {
+              if (toggleWatch) toggleWatch(false);
+              if (onBlur) onBlur();
+            }
+          }}
+        >
+          <TableIcon
+            className="table-icon"
+            color={answered && !disabled ? '#0768fd' : '#0768fd'}
+          />
+          <Typography className="label" variant="body1">
+            Edit Table Data
+          </Typography>
+        </div>
+        {rows.length > 0 && columns.length > 0 && (
+          <TablePreview rows={rows} columns={columns} />
+        )}
       </div>
       <Modal
         data-testid="tableAnswer-modal"
@@ -414,9 +449,14 @@ function TableAnswer({
         className={'table-answer-modal'}
         id="table-answer-modal"
         buttonProps={[
-          { label: 'Cancel', onClick: () => toggleModal(false) },
+          {
+            label: 'Cancel',
+            'data-testid': 'cancelButton',
+            onClick: () => toggleModal(false)
+          },
           {
             label: 'Save',
+            'data-testid': 'saveButton',
             onClick: () => handleSaveClick(),
             disabled: saveDisable
           }
@@ -451,6 +491,9 @@ function TableAnswer({
           hidePagination
           defaultPageSize={'All'}
           ref={tableRef}
+          classes={{
+            root: 'answer-table'
+          }}
         />
       </Modal>
       {warning && (

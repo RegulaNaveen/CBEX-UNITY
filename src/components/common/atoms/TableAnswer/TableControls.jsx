@@ -155,7 +155,12 @@ function TableControls({
           checked={allExpanded}
           onChange={() => onExpandAll(!allExpanded)}
         />
-        <IconMenuButton menuItems={menuItems} size="small" ref={menuRef}>
+        <IconMenuButton
+          data-testid="settingsMenuButton"
+          menuItems={menuItems}
+          size="small"
+          ref={menuRef}
+        >
           <CogIcon />
         </IconMenuButton>
       </div>

@@ -584,6 +584,73 @@
     "latestAnsweredBidNo": 1,
     "bidType": "RFI_Request"
   },
+  "tablequestion": {
+    "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+    "questionId": "918e86dc-b8d1-4d78-8cc2-b1cc81102d0d",
+    "section": {
+      "sectionOrder": 22,
+      "sectionName": "All Answer Type"
+    },
+    "questionText": "Table answer type",
+    "answerConfiguration": {
+      "type": "table"
+    },
+    "questionTableConfig": "{\"rows\":[],\"columns\":[{ \"header\": \"\", \"accessor\": \"header\", \"canAddColumn\": true, \"canEditColumn\": true, \"canAddRow\": true, \"canEditRow\": true }]}",
+    "roleNames": ["BD Leadership"],
+    "answers": [
+      {
+        "questionId": "test-que-id",
+        "userName": "Keerthiprasath Chandran",
+        "answer": "{\"rows\":[],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\", \"hidden\": false}]}"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "Keerthiprasath Chandran",
+        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\", \"hidden\": false }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1 changed\",\"accessor\":\"column-1\", \"hidden\": true}]}"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "CarryForwardAnswer",
+        "answer": "{\"rows\":[{ \"header\": \"row 2\", \"column-1\": \"test changed\", \"hidden\": true },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "Keerthiprasath Chandran",
+        "answer": "{\"rows\":[],\"columns\":[{\"header\":\"Col 1\",\"accessor\":\"column-1\"}, { \"header\": \"\", \"accessor\": \"header\" }]}"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "CarryForwardAnswer",
+        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\" },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "Keerthiprasath Chandran",
+        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\" },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}"
+      }
+    ],
+    "questionOrder": 7,
+    "visible": true,
+    "locked": false,
+    "sfObject": "n/a",
+    "sfField": "n/a",
+    "milestoneNew": [],
+    "opportunityType": "Default Type,Core Opportunity Launch Call (AMR/EMEA)",
+    "hasDifferentSFanswer": false,
+    "isCustomQuestion": false,
+    "questionJSON": "{\"blocks\":[{\"key\":\"26nd8\",\"text\":\"Single Select Lookup\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+    "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"3df0k\" data-offset-key=\"26nd8-0-0\"><div data-offset-key=\"26nd8-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"26nd8-0-0\"><span data-text=\"true\">Single Select Lookup</span></span></div></div></div>",
+    "questionHintJSON": "",
+    "questionHintHTML": "",
+    "active": true,
+    "integration": "",
+    "events": "",
+    "notApplicable": false,
+    "questionApproval": false,
+    "bidAnswerCopy": true,
+    "latestAnsweredBidNo": 1,
+    "bidType": "RFI_Request"
+  },
   "opportunityData": [
     {
       "proposal": {
