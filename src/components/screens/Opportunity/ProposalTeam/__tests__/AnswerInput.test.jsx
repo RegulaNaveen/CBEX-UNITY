@@ -1,29 +1,12 @@
 import React from 'react';
-import sinon from 'sinon';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import AnswerInput from '../AnswerInput';
-import configureMockStore from 'redux-mock-store';
 import { store } from '../../../../../store';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
 import { SocketContext } from '../../../../../context/SocketContext';
-import {
-  isSetQuestionLoading,
-  getSelectedBid,
-  getnoneditableField,
-  getIntegrations,
-  getShowNaCheckbox,
-  getUserData
-} from 'c:/Users/u1167299/project/unity-app-frontend/src/redux/selectors/proposal';
-import {
-  sfOptions,
-  dummyQuestions
-} from '../../../../../../src/components/screens/Approvals/__test__/data';
 import * as Redux from 'react-redux';
-import { act } from 'react-dom/test-utils';
-import mockData from '../../__tests__/mockdata/QuestionContainer.json';
 import { setSession } from '../../../../../SessionHandler';
-import SystemIntegrations from '../../../../common/SystemIntegrations/SystemIntegrations';
+//import SystemIntegrations from '../../../../common/SystemIntegrations/SystemIntegrations';
 
 jest.mock('react-redux', () => {
   return {
@@ -32,16 +15,16 @@ jest.mock('react-redux', () => {
   };
 });
 
-let answerMap = new Map([
-  ['questionId', 123],
-  [
-    'answer',
-    new Map([
-      ['a', 'abc'],
-      ['x', new Map([['answer', 'abc']])]
-    ])
-  ]
-]);
+// let answerMap = new Map([
+//   ['questionId', 123],
+//   [
+//     'answer',
+//     new Map([
+//       ['a', 'abc'],
+//       ['x', new Map([['answer', 'abc']])]
+//     ])
+//   ]
+// ]);
 
 const props = {
   isNotepadOpen: false,
