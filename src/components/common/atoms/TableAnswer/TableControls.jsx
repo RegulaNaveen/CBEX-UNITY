@@ -22,7 +22,9 @@ function TableControls({
   rows,
   onAddColumnClick,
   onAddRowClick,
-  onEdit
+  onEdit,
+  allExpanded,
+  onExpandAll
 }) {
   const [editing, setEditing] = useState(null);
   const [editingValues, setEditingValues] = useState([]);
@@ -148,6 +150,11 @@ function TableControls({
   return (
     <React.Fragment>
       <div className="table-controls">
+        <Checkbox
+          label="Expand all"
+          checked={allExpanded}
+          onChange={() => onExpandAll(!allExpanded)}
+        />
         <IconMenuButton
           data-testid="settingsMenuButton"
           menuItems={menuItems}
