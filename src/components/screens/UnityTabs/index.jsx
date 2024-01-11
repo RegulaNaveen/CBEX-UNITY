@@ -131,6 +131,7 @@ const CustomTabs = ({ tabId, key }) => {
           <div className="tasksList-expand-all-icon">
             <ApolloCheckbox
               label="Expand All"
+              data-testid="expand-all"
               checked={expandAll.every(exp => exp)}
               onChange={handleExpandAllChange}
             />
