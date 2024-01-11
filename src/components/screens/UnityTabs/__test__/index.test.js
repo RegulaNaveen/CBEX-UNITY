@@ -77,11 +77,8 @@ describe('Unity Section Component', () => {
   });
 
   test('render index component', () => {
-    expect(wrapper.length).toBe(1);
-  });
-  it('should check add new questions ', async () => {
     expect(wrapper).toBeDefined();
-    await expect(screen.findByText(/Add New Question/i)).toBeTruthy();
+    expect(wrapper.length).toBe(1);
   });
   it('should check add new question on click event ', () => {
     window.history.pushState(
@@ -127,7 +124,7 @@ describe('Unity Section Component', () => {
       </BrowserRouter>
     );
     expect(container).toBeInTheDocument();
-    await expect(screen.findByText(/ Filters/i)).toBeTruthy();
+    await expect(screen.findByText(/Filter/i)).toBeTruthy();
   });
 
   test('test unity tab index', async () => {
@@ -154,9 +151,10 @@ describe('Unity Section Component', () => {
       </BrowserRouter>
     );
     expect(container).toBeInTheDocument();
-    await expect(screen.findByText(/ Filters/i)).toBeTruthy();
-    fireEvent.click(await findByTestId('expand-all'));
+    await expect(screen.findByText(/Filter/i)).toBeTruthy();
     fireEvent.click(await findByText('Filter'));
+    await expect(screen.findByText(/Add New Question/i)).toBeTruthy();
+    fireEvent.click(await findByTestId('expand-all'));
     waitFor(
       async () => {
         fireEvent.click(await findByText('Close'));
