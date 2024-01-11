@@ -32,7 +32,10 @@ import {
   getUnityTabQuestionLoading,
   getPanelStatus
 } from '../../../redux/selectors/proposal';
-import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
+import {
+  setEditQuestionData,
+  setProposalAnswerData
+} from '../../../redux/actions/proposal-actions';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
@@ -55,21 +58,20 @@ import CheckBoxQuestion from '../Approvals/InputComponents/CheckBoxQuestion';
 import ProposalTeamQuestion from '../Approvals/InputComponents/ProposalTeamQuestion';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
+import { TableAnswer } from '../../common/atoms/TableAnswer';
+import { cloneDeep, isEqual, merge } from 'lodash';
+import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  SelectQuestion
-);
-const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  MultiSelectQuestion
-);
-const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
-  YesNoQuestion
-);
+const SelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(SelectQuestion);
+const MultiSelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(MultiSelectQuestion);
+const YesNoQuestionWithIdleStateDetection =
+  withIdleStateDetection(YesNoQuestion);
 
-const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestion
-);
+const CheckBoxQuestionWithIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestion);
 
 const QuestionItem = ({
   questionId = '',
@@ -85,7 +87,6 @@ const QuestionItem = ({
   const unityTabQuestionLoading = useSelector(
     getUnityTabQuestionLoading
   ).toJS();
-
   const oppdata = useSelector(state => getOpportunityData(state));
   const panelStatus = useSelector(state => getPanelStatus(state));
   const integrationsData = useSelector(state => getIntegrations(state));
@@ -191,6 +192,7 @@ const QuestionItem = ({
   });
 
   const prepareAnswerHistoryData = questionData => {
+    console.log('questionData', questionData);
     let questionMap = fromJS(questionData);
     try {
       // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx
@@ -275,10 +277,87 @@ const QuestionItem = ({
     );
   };
 
+  async function handleTableValueChange(newValue, lastAnswer) {
+    const { proposalId, questionId } = question;
+    let lastAnswerValue;
+    if (lastAnswer && lastAnswer.get('answer')) {
+      lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
+      // compare prev and next answers and do a save
+
+      const rowsDiff = diffArrays(lastAnswerValue.rows, newValue.rows, {
+        comparator: isEqual
+      });
+      const columnsDiff = diffArrays(
+        lastAnswerValue.columns,
+        newValue.columns,
+        {
+          comparator: isEqual
+        }
+      );
+      if (
+        rowsDiff.some(row => row.added || row.removed) ||
+        columnsDiff.some(column => column.added || column.removed)
+      ) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            JSON.stringify(newValue),
+            getUserData()
+          )
+        );
+      }
+    } else {
+      // it's a new answer
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          JSON.stringify({ ...newValue }), // stringified value
+          getUserData()
+        )
+      );
+    }
+  }
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const lastAnswerMap = Map(lastAnswer);
+    let isAnswerPredicted = false;
+
+    let answerDate = 'Not Answered';
+
+    if (lastAnswerMap) {
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('date') &&
+        lastAnswerMap.get('date').length
+      ) {
+        answerDate = parseMomentDate(lastAnswerMap.get('date'));
+      }
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('userName') &&
+        lastAnswerMap.get('userName').length &&
+        lastAnswerMap.get('userName') === 'UnityPredictedAnswer'
+      ) {
+        isAnswerPredicted = true;
+        answerDate = 'Not Answered';
+      }
+    }
 
     const checkDisableFlag = () => locked;
+    const {
+      questionText,
+      questionTableConfig: tableConfiguration,
+      questionHint,
+      questionHintJSON,
+      section,
+      answers,
+      questionId
+    } = question;
     const inputProps = {
       question,
       lastAnswer,
@@ -394,6 +473,78 @@ const QuestionItem = ({
           </SFAnswerValidationWrapper>
         );
       }
+      case ANSWER_TYPES.TABLE: {
+        let jsonTableConfig = {};
+
+        if (lastAnswer.answer) {
+          // parse JSON from lastAnswer
+          const tableConfigJSON = JSON.parse(tableConfiguration);
+          try {
+            const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
+            jsonTableConfig = merge(tableConfigJSON, noConfigTableAnswer);
+            const defaultColumnsLength = tableConfigJSON.columns.length;
+            const defaultRowsLength = tableConfigJSON.rows.length;
+
+            if (Array.isArray(jsonTableConfig.columns)) {
+              jsonTableConfig.columns = cloneDeep(jsonTableConfig.columns).map(
+                (column, colIndex) => ({
+                  ...column,
+                  canEdit:
+                    colIndex <= defaultColumnsLength - 1
+                      ? jsonTableConfig.canEditColumn
+                      : column.canEdit
+                })
+              );
+            }
+            if (Array.isArray(jsonTableConfig.rows)) {
+              jsonTableConfig.rows = cloneDeep(jsonTableConfig.rows).map(
+                (row, rowIndex) => ({
+                  ...row,
+                  canEdit:
+                    rowIndex <= defaultRowsLength - 1
+                      ? jsonTableConfig.canEditRow
+                      : row.canEdit
+                })
+              );
+            }
+          } catch (e) {
+            // if any error in parsing JSON, set answer to default table configuration
+            console.error('Error parsing table answer', e);
+            jsonTableConfig = tableConfigJSON;
+          }
+        } else {
+          jsonTableConfig = JSON.parse(tableConfiguration);
+          if (Array.isArray(jsonTableConfig.columns)) {
+            jsonTableConfig.columns = cloneDeep(jsonTableConfig.columns).map(
+              column => ({
+                ...column,
+                canEdit: jsonTableConfig.canEditColumn
+              })
+            );
+          }
+          if (Array.isArray(jsonTableConfig.rows)) {
+            jsonTableConfig.rows = cloneDeep(jsonTableConfig.rows).map(row => ({
+              ...row,
+              canEdit: jsonTableConfig.canEditRow
+            }));
+          }
+        }
+
+        return (
+          <TableAnswer
+            {...inputProps}
+            questionText={questionText}
+            tableConfiguration={jsonTableConfig}
+            questionHint={questionHint}
+            questionHintJSON={questionHintJSON}
+            section={Map(section)}
+            answers={answers}
+            answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
+            lastAnswer={lastAnswerMap}
+            onChange={handleTableValueChange}
+          />
+        );
+      }
       default:
         return <FallbackComponent />;
     }
@@ -438,6 +589,7 @@ const QuestionItem = ({
             color="primary"
             size="small"
             className="question-tooltip-icon"
+            data-testid="question-tooltip-icon"
             onClick={e => setAnchorEl(e.currentTarget)}
           >
             <InfoIcon className="info-icon" style={{ fontSize: '16px' }} />
@@ -492,12 +644,7 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
@@ -539,6 +686,7 @@ const QuestionItem = ({
     const currentBidID = selectedBid?.id;
     const oppordata = oppdata.toJS();
     const isCurrentBid = selectedBid.get('isCurrent');
+    const isEditableBid = selectedBid.get('isEditable');
     const deploymentDate = '2022-08-05';
     const proposalTimeStamp = oppordata[currentBidID]?.proposal?.proposalDate;
     const proposalCreationDate = proposalTimeStamp
@@ -624,7 +772,7 @@ const QuestionItem = ({
         showNaCheckbox={false}
         isNotepadOpen={false}
         changeIcon={changeIcon}
-        isCurrentBid={isCurrentBid}
+        isEditableBid={isEditableBid}
         sfObject={sfObject}
         answerText={answerText}
         hasDifferentSFanswer={hasDifferentSFanswer}
@@ -633,6 +781,7 @@ const QuestionItem = ({
         bidType={bidType}
         latestAnsweredBidNo={latestAnsweredBidNo}
         questionDataDestinations={questionDataDestinations}
+        answerConfiguration={Map(question.answerConfiguration)}
       />
     );
   };
@@ -711,32 +860,34 @@ const QuestionItem = ({
                         trackEventLauncher={c => trackEventLauncher(c)}
                       />
                     )}
-                    {question.isCustomQuestion && selectedBid.get('isCurrent') && (
-                      <div className="question-edit">
-                        <span
-                          aria-hidden="true"
-                          onClick={() => {
-                            dispatch(
-                              setEditQuestionData({
-                                questionText: question.questionText,
-                                questionHTML: question.questionHTML,
-                                questionJSON: question.questionJSON,
-                                questionHintJSON: question.questionHintJSON,
-                                section: question.section.sectionName,
-                                tabId: tabId,
-                                answerType: question.answerConfiguration.type,
-                                roleNames: question.roleNames,
-                                questionId: question.questionId,
-                                tabFlag: 'customTab',
-                                questionAnswered: showLastAnswer
-                              })
-                            );
-                          }}
-                        >
-                          <Edit className="edit-icon" />
-                        </span>
-                      </div>
-                    )}
+                    {question.isCustomQuestion &&
+                      (selectedBid.get('isCurrent') ||
+                        selectedBid.get('isEditable')) && (
+                        <div className="question-edit">
+                          <span
+                            aria-hidden="true"
+                            onClick={() => {
+                              dispatch(
+                                setEditQuestionData({
+                                  questionText: question.questionText,
+                                  questionHTML: question.questionHTML,
+                                  questionJSON: question.questionJSON,
+                                  questionHintJSON: question.questionHintJSON,
+                                  section: question.section.sectionName,
+                                  tabId: tabId,
+                                  answerType: question.answerConfiguration.type,
+                                  roleNames: question.roleNames,
+                                  questionId: question.questionId,
+                                  tabFlag: 'customTab',
+                                  questionAnswered: showLastAnswer
+                                })
+                              );
+                            }}
+                          >
+                            <Edit className="edit-icon" />
+                          </span>
+                        </div>
+                      )}
 
                     <div className="question-hint">{renderQuestionHint()}</div>
                   </div>

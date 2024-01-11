@@ -14,23 +14,24 @@ const CollapsibleQuestionMapping = ({
 }) => {
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   return questions.valueSeq().map(questionConfig => {
-    let section =  questionConfig.get('section') ;
-    const { sectionName,approvalSectionName} = section.toJS();
-    let visible = "" ;
-    if(sectionName === "Approvals"){
-       visible =
-      questionConfig.get('visible', true) && !approvalSectionName && 
-      (questionConfig.get('active', true) ||
-        questionConfig.get('isCustomQuestion', true)) &&
-      (!questionConfig.get('notApplicable') || isQuestionsFiltersEnabled) &&
-      !questionConfig.get('questionApproval', false); // Check should the question be visible only in the approval section
-    }else{
-     visible =
-    questionConfig.get('visible', true) && 
-    (questionConfig.get('active', true) ||
-      questionConfig.get('isCustomQuestion', true)) &&
-    (!questionConfig.get('notApplicable') || isQuestionsFiltersEnabled) &&
-    !questionConfig.get('questionApproval', false); // Check should the question be visible only in the approval section
+    let section = questionConfig.get('section');
+    const { sectionName, approvalSectionName } = section.toJS();
+    let visible = '';
+    if (sectionName === 'Approvals') {
+      visible =
+        questionConfig.get('visible', true) &&
+        !approvalSectionName &&
+        (questionConfig.get('active', true) ||
+          questionConfig.get('isCustomQuestion', true)) &&
+        (!questionConfig.get('notApplicable') || isQuestionsFiltersEnabled) &&
+        !questionConfig.get('questionApproval', false); // Check should the question be visible only in the approval section
+    } else {
+      visible =
+        questionConfig.get('visible', true) &&
+        (questionConfig.get('active', true) ||
+          questionConfig.get('isCustomQuestion', true)) &&
+        (!questionConfig.get('notApplicable') || isQuestionsFiltersEnabled) &&
+        !questionConfig.get('questionApproval', false); // Check should the question be visible only in the approval section
     }
     let answerType = questionConfig.get('answerConfiguration').get('type');
     switch (answerType) {
@@ -55,7 +56,6 @@ const CollapsibleQuestionMapping = ({
       default:
         return (
           (visible || typeof visible === 'undefined') && (
-
             <Question
               questionData={questionConfig}
               key={questionConfig.get('questionId')}
@@ -98,6 +98,7 @@ const CollapsibleQuestionMapping = ({
               questionDataDestinations={questionConfig.get(
                 'questionDataDestinations'
               )}
+              tableConfiguration={questionConfig.get('questionTableConfig')}
             />
           )
         );

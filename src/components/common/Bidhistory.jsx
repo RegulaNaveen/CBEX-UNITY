@@ -18,6 +18,7 @@ import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
+import TextField from 'apollo-react/components/TextField';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -33,14 +34,24 @@ const BidHistory = () => {
   const dispatch = useDispatch();
   const bidList = useSelector(getBidList);
   const selectedBid = useSelector(getSelectedBid);
+  const typeOfActivity = selectedBid.get('typeOfActivity');
+  let typeOfActivityValues = '';
+
+  if (typeOfActivity) {
+    if (typeof typeOfActivity === 'string') {
+      typeOfActivityValues = typeOfActivity.split(';').join(', ');
+    } else if (Array.isArray(typeOfActivity)) {
+      typeOfActivityValues = typeOfActivity?.join(', ');
+    }
+  }
+
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const bidType = selectedBid.get('bidType');
   const isQuestionAnswered = useSelector(getIsQuestionAnswered);
   const flags = useSelector(getfetchUserTagFlag);
   const bidCostDetailFlag = flags.bidCostDetail;
-
   const currentWidget = useSelector(selectCurrentWidget);
-
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
 
@@ -176,6 +187,10 @@ const BidHistory = () => {
                             <div>
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
+                                : item.bidName.startsWith('Post Award')
+                                ? `Post Award ${item.bidNo}`
+                                : item.bidName.startsWith('RFI')
+                                ? `RFI ${item.bidNo}`
                                 : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
@@ -207,25 +222,67 @@ const BidHistory = () => {
                   <p className="pertinent-details-title">
                     {bidType && bidType.includes('Early_Engagement_Bid')
                       ? 'Early Engagement Development Plan'
+                      : bidType && bidType.includes('Post_Award_Bid')
+                      ? ''
+                      : bidType && bidType.includes('RFI_Request')
+                      ? ''
                       : 'Pertinent Details / Specific Rebid Request'}
                   </p>
-                  <div className="pertinent-details-section">
-                    <p>
-                      {bidType && bidType.includes('Early_Engagement_Bid')
-                        ? selectedBid.get('earlyEngagementDevelopmentPlan')
-                        : selectedBid.get('pertinentDetails')}
-                    </p>
-                  </div>
+                  {bidType && bidType.includes('Post_Award_Bid') ? (
+                    <div>
+                      <p className="pertinent-details-title">
+                        Describe Activity
+                      </p>
+                      <div className="pertinent-details-section">
+                        <p>{selectedBid.get('describeActivity')}</p>
+                      </div>
+                      <p className="pertinent-details-title">
+                        Type of Activity
+                      </p>
+                      <div className="pertinent-details-section">
+                        <p>{typeOfActivityValues}</p>
+                      </div>
+                    </div>
+                  ) : bidType &&
+                    bidType.includes(
+                      'Early_Engagement_Bid' || 'Bid Early_Engagement_Bid'
+                    ) ? (
+                    <div className="pertinent-details-section">
+                      <p>{selectedBid.get('earlyEngagementDevelopmentPlan')}</p>
+                    </div>
+                  ) : bidType &&
+                    bidType.includes('RFI_Request' || 'Bid RFI_Request') ? (
+                    <div>
+                      <p className="pertinent-details-title req-detail-title">
+                        Request Detail
+                      </p>
+                      <div className="rfi-textfield-container">
+                        <TextField
+                          placeholder="Describe details"
+                          sizeAdjustable
+                          maxWidth={500}
+                          maxHeight={150}
+                          fullWidth
+                          value={selectedBid.get('requestDetail')}
+                          InputProps={{ readOnly: true }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="pertinent-details-section">
+                      <p>{selectedBid.get('pertinentDetails')}</p>
+                    </div>
+                  )}
                   <p className="helper-text">
-                    This text was provided by Salesforce user when latest bid
-                    was created
+                    This text was provided by Salesforce user when the latest
+                    bid was created
                   </p>
                 </div>
 
                 <div className="bid-history-pricemodeler-content">
                   <>
                     {(showBidCostDetail ||
-                      !isCurrentBid ||
+                      !isEditableBid ||
                       bidVal ||
                       currentWidget.currentWidget === 'BidCostDetail') &&
                     bidCostDetailFlag ? (

@@ -16,6 +16,7 @@ import CalendarIcon from './CalendarIcon';
 import QuestionLabel from './QuestionLabel';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import ANSWER_TYPES from '../../../constants/answerTypes';
+import { parseMomentDate } from '../../../utils/DateUtils';
 import { getCountriesNameForCode } from '../../../utils/utils';
 import TextQuestion from './InputComponents/TextQuestion';
 import NumberQuestion from './InputComponents/NumberQuestion';
@@ -43,7 +44,13 @@ import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
-import { setEditQuestionData } from '../../../redux/actions/proposal-actions';
+import {
+  setEditQuestionData,
+  setProposalAnswerData
+} from '../../../redux/actions/proposal-actions';
+import { TableAnswer } from '../../common/atoms/TableAnswer';
+import { cloneDeep, isEqual, merge } from 'lodash';
+import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
 const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
@@ -101,7 +108,7 @@ const QuestionItem = ({
     setTimeout(() => {
       // updating question text with decorators
       if (questionTextRef1.current !== null) {
-        const { editorState } = questionTextRef1.current.state;
+        const editorState = questionTextRef1?.current?.state?.editorState;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
         });
@@ -246,10 +253,86 @@ const QuestionItem = ({
     });
   };
 
+  async function handleTableValueChange(newValue, lastAnswer) {
+    const { proposalId, questionId } = question;
+    let lastAnswerValue;
+    if (lastAnswer && lastAnswer.get('answer')) {
+      lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
+      // compare prev and next answers and do a save
+
+      const rowsDiff = diffArrays(lastAnswerValue.rows, newValue.rows, {
+        comparator: isEqual
+      });
+      const columnsDiff = diffArrays(
+        lastAnswerValue.columns,
+        newValue.columns,
+        {
+          comparator: isEqual
+        }
+      );
+      if (
+        rowsDiff.some(row => row.added || row.removed) ||
+        columnsDiff.some(column => column.added || column.removed)
+      ) {
+        await dispatch(
+          setProposalAnswerData(
+            socketContext,
+            proposalId,
+            questionId,
+            JSON.stringify(newValue),
+            getUserData()
+          )
+        );
+      }
+    } else {
+      // it's a new answer
+      await dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          JSON.stringify({ ...newValue }), // stringified value
+          getUserData()
+        )
+      );
+    }
+  }
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
+    const lastAnswerMap = Map(lastAnswer);
+    let isAnswerPredicted = false;
+    let answerDate = 'Not Answered';
+
+    if (lastAnswerMap) {
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('date') &&
+        lastAnswerMap.get('date').length
+      ) {
+        answerDate = parseMomentDate(lastAnswerMap.get('date'));
+      }
+      if (
+        lastAnswerMap.get &&
+        lastAnswerMap.get('userName') &&
+        lastAnswerMap.get('userName').length &&
+        lastAnswerMap.get('userName') === 'UnityPredictedAnswer'
+      ) {
+        isAnswerPredicted = true;
+        answerDate = 'Not Answered';
+      }
+    }
 
     const checkDisableFlag = () => locked;
+    const {
+      questionText,
+      questionTableConfig: tableConfiguration,
+      questionHint,
+      questionHintJSON,
+      section,
+      answers,
+      questionId
+    } = question;
     const inputProps = {
       question,
       lastAnswer,
@@ -358,6 +441,77 @@ const QuestionItem = ({
           </SFAnswerValidationWrapper>
         );
       }
+      case ANSWER_TYPES.TABLE: {
+        let jsonTableConfig = {};
+
+        if (lastAnswer.answer) {
+          // parse JSON from lastAnswer
+          const tableConfigJSON = JSON.parse(tableConfiguration);
+          try {
+            const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
+            jsonTableConfig = merge(tableConfigJSON, noConfigTableAnswer);
+            const defaultColumnsLength = tableConfigJSON.columns.length;
+            const defaultRowsLength = tableConfigJSON.rows.length;
+
+            if (Array.isArray(jsonTableConfig.columns)) {
+              jsonTableConfig.columns = cloneDeep(jsonTableConfig.columns).map(
+                (column, colIndex) => ({
+                  ...column,
+                  canEdit:
+                    colIndex <= defaultColumnsLength - 1
+                      ? jsonTableConfig.canEditColumn
+                      : column.canEdit
+                })
+              );
+            }
+            if (Array.isArray(jsonTableConfig.rows)) {
+              jsonTableConfig.rows = cloneDeep(jsonTableConfig.rows).map(
+                (row, rowIndex) => ({
+                  ...row,
+                  canEdit:
+                    rowIndex <= defaultRowsLength - 1
+                      ? jsonTableConfig.canEditRow
+                      : row.canEdit
+                })
+              );
+            }
+          } catch (e) {
+            // if any error in parsing JSON, set answer to default table configuration
+            console.error('Error parsing table answer', e);
+            jsonTableConfig = tableConfigJSON;
+          }
+        } else {
+          jsonTableConfig = JSON.parse(tableConfiguration);
+          if (Array.isArray(jsonTableConfig.columns)) {
+            jsonTableConfig.columns = cloneDeep(jsonTableConfig.columns).map(
+              column => ({
+                ...column,
+                canEdit: jsonTableConfig.canEditColumn
+              })
+            );
+          }
+          if (Array.isArray(jsonTableConfig.rows)) {
+            jsonTableConfig.rows = cloneDeep(jsonTableConfig.rows).map(row => ({
+              ...row,
+              canEdit: jsonTableConfig.canEditRow
+            }));
+          }
+        }
+        return (
+          <TableAnswer
+            {...inputProps}
+            questionText={questionText}
+            tableConfiguration={jsonTableConfig}
+            questionHint={questionHint}
+            questionHintJSON={questionHintJSON}
+            section={Map(section)}
+            answers={answers}
+            answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
+            lastAnswer={lastAnswerMap}
+            onChange={handleTableValueChange}
+          />
+        );
+      }
       default:
         return <FallbackComponent />;
     }
@@ -432,6 +586,22 @@ const QuestionItem = ({
     return null;
   };
 
+  const isAnswered = (answer, isAnswerPredicted) => {
+    if (isAnswerPredicted) return false;
+    if (answer && answer.get && answer.get('answer')) {
+      if (List.isList(answer.get('answer'))) {
+        return Boolean(answer.get('answer').size);
+      }
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
+    }
+    return false;
+  };
+
   //this function is used to show tags in the approvals tab
   // const renderTags = milestoneNew => {
   //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
@@ -466,66 +636,64 @@ const QuestionItem = ({
                   ref={questionTextRef}
                   //className="question-label-container"
                 >
-                  
-                    <Grid
-                      item
-                      xs={10}
-                      style={{
-                        display: 'flex',
-                        float: 'left',
-                        paddingTop: '4px'
-                      }}
-                    >
-                      <QuestionLabel
-                        questionLabel={question?.questionText || ''}
-                      />
-                      {question.isCustomQuestion &&
-                        selectedBid.isCurrent &&
-                        !isQuesFreezed && (
-                          <div
-                            className="question-edit"
-                            style={{ 'margin-left': '10px' }}
+                  <Grid
+                    item
+                    xs={10}
+                    style={{
+                      display: 'flex',
+                      float: 'left',
+                      paddingTop: '4px'
+                    }}
+                  >
+                    <QuestionLabel
+                      questionLabel={question?.questionText || ''}
+                    />
+                    {question.isCustomQuestion &&
+                      (selectedBid.isCurrent || selectedBid.isEditable) &&
+                      !isQuesFreezed && (
+                        <div
+                          className="question-edit"
+                          style={{ 'margin-left': '10px' }}
+                        >
+                          <span
+                            aria-hidden="true"
+                            onClick={() => {
+                              dispatch(
+                                setEditQuestionData({
+                                  questionText: question?.questionText,
+                                  questionHTML: question?.questionHTML,
+                                  questionJSON: question?.questionJSON,
+                                  questionHintJSON: question?.questionHintJSON,
+                                  section:
+                                    question?.section.approvalSectionName,
+                                  answerType:
+                                    question?.answerConfiguration.type,
+                                  roleNames: question?.roleNames,
+                                  questionId: question?.questionId,
+                                  tabFlag: 'Approvals',
+                                  direction: 'left',
+                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                    question?.answers
+                                  )
+                                })
+                              );
+                            }}
                           >
-                            <span
-                              aria-hidden="true"
-                              onClick={() => {
-                                dispatch(
-                                  setEditQuestionData({
-                                    questionText: question?.questionText,
-                                    questionHTML: question?.questionHTML,
-                                    questionJSON: question?.questionJSON,
-                                    questionHintJSON:
-                                      question?.questionHintJSON,
-                                    section:
-                                      question?.section.approvalSectionName,
-                                    answerType:
-                                      question?.answerConfiguration.type,
-                                    roleNames: question?.roleNames,
-                                    questionId: question?.questionId,
-                                    tabFlag: 'Approvals',
-                                    direction: 'left',
-                                    questionAnswered: checkLastAnswerOfQuestionVisibility(
-                                      question?.answers
-                                    )
-                                  })
-                                );
-                              }}
-                            >
-                              <Edit className="edit-icon" />
-                            </span>
-                          </div>
-                        )}
-                    </Grid>
-                    <Grid
-                      item
-                      xs={2}
-                      style={{
-                        display: 'flex',
-                        float: 'left'
-                      }}
-                    >
-                      {renderQuestionHint()}
-                    </Grid>
+                            <Edit className="edit-icon" />
+                          </span>
+                        </div>
+                      )}
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    style={{
+                      display: 'flex',
+                      float: 'left'
+                    }}
+                  >
+                    {renderQuestionHint()}
+                  </Grid>
                 </span>
               </Grid>
               {locked ? (
@@ -544,6 +712,7 @@ const QuestionItem = ({
                   onClick={() => {
                     setIsShowHistory(true);
                   }}
+                  disabled={question.answerConfiguration.type === 'table'}
                 >
                   <CalendarIcon question={question} />
                 </IconButton>

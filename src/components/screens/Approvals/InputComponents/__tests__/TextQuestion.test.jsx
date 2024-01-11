@@ -1,9 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import TextQuestion from '../TextQuestion';
+import CustomApolloRichText from '../../../../common/CustomApolloRichText';
 
 describe('TextQuestion', () => {
   let wrapper;
@@ -30,7 +31,7 @@ describe('TextQuestion', () => {
   const store = mockStore(initState);
 
   beforeEach(() => {
-    wrapper = shallow(
+    wrapper = mount(
       <Provider store={store}>
         <TextQuestion {...initState} />
       </Provider>
@@ -39,5 +40,14 @@ describe('TextQuestion', () => {
 
   it('should render without crashing', () => {
     expect(wrapper.exists()).toBe(true);
+    expect(
+      wrapper
+        .find('.approval-text-question')
+        .first()
+        .simulate('blur')
+    );
+
+    const richText = wrapper.find('CustomApolloRichText');
+    expect(richText.exists()).toBe(true);
   });
 });

@@ -5,8 +5,17 @@ import { connect } from 'react-redux';
 import { Map, fromJS, List } from 'immutable'; // NOSONAR
 import { v4 as uuidv4 } from 'uuid';
 import randomColor from 'randomcolor';
-import { isEmpty, isString, unionBy, isObject } from 'lodash';
-import { diffWordsWithSpace } from 'diff';
+import {
+  isEmpty,
+  isString,
+  unionBy,
+  isObject,
+  groupBy,
+  isEqual,
+  cloneDeep,
+  omit
+} from 'lodash';
+import { diffArrays, diffWordsWithSpace } from 'diff';
 import Loader from 'apollo-react/components/Loader';
 import {
   getProposalTeamAssignedRoles,
@@ -20,7 +29,8 @@ import {
   rearrangeDiff,
   getUserInitials,
   getUserName,
-  getBidTypeFromProposalId
+  getBidTypeFromProposalId,
+  getBidNameByType
 } from '../../../utils/utils';
 import ANSWER_TYPES from '../../../constants/answerTypes';
 import {
@@ -31,6 +41,165 @@ import { SocketContext } from '../../../context/SocketContext';
 import AnalyticsHOC from '../../HOC/AnalyticsHOC';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { getLastAnswer } from '../../screens/Approvals/utils';
+import moment from 'moment';
+import Divider from 'apollo-react/components/Divider';
+import Typography from 'apollo-react/components/Typography';
+
+function DateTimeInfoLabel() {
+  return (
+    <p style={{ fontWeight: '400' }}>
+      Dates and Times are per the server (EST)
+    </p>
+  );
+}
+
+function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
+  if (cfaAccepted) {
+    return (
+      <Typography variant="bodyDefault" className="table-change-list-item">
+        Accepted Carry Forwarded answer.
+      </Typography>
+    );
+  }
+  if (cfaRejected) {
+    return (
+      <Typography variant="bodyDefault" className="table-change-list-item">
+        Rejected Carry Forwarded answer.
+      </Typography>
+    );
+  }
+  return (
+    <>
+      {columns
+        .filter(
+          col =>
+            col.reordered || col.added || col.titleChanged || col.hiddenChanged
+        )
+        .map(col => {
+          if (col.added) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                Added new column '{col.header}'.
+              </Typography>
+            );
+          }
+          if (col.reordered) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                Changed Order of '{col.header}' from {col.oldOrderIndex} to{' '}
+                {col.newOrderIndex}.
+              </Typography>
+            );
+          }
+          if (col.titleChanged) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                Update Column Title{' '}
+                <span className="removed">'{col.oldTitle}'</span> to{' '}
+                {col.newTitle}.
+              </Typography>
+            );
+          }
+          if (col.hiddenChanged) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                {col.hidden
+                  ? `Column '${col.oldTitle}' made hidden.`
+                  : `Column '${col.oldTitle}' made shown.`}
+              </Typography>
+            );
+          }
+        })}
+      {rows
+        .filter(
+          row =>
+            row.reordered ||
+            row.added ||
+            row.titleChanged ||
+            row.hiddenChanged ||
+            row.cellsEdited
+        )
+        .map(row => {
+          if (row.added) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                Added new row '{row.header}'.
+              </Typography>
+            );
+          }
+          if (row.reordered) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                Changed Order of '{row.header}' from {row.oldOrderIndex} to{' '}
+                {row.newOrderIndex}.
+              </Typography>
+            );
+          }
+          if (row.titleChanged) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                Update Row Title{' '}
+                <span className="removed">'{row.oldTitle}'</span> to{' '}
+                {row.newTitle}.
+              </Typography>
+            );
+          }
+          if (row.hiddenChanged) {
+            return (
+              <Typography
+                variant="bodyDefault"
+                className="table-change-list-item"
+              >
+                {row.hidden
+                  ? `Column '${row.oldTitle}' made hidden.`
+                  : `Column '${row.oldTitle}' made shown.`}
+              </Typography>
+            );
+          }
+          if (row.cellsEdited) {
+            return (
+              <>
+                {row.editedCells.map(cell => {
+                  return (
+                    <Typography
+                      variant="bodyDefault"
+                      className="table-change-list-item"
+                    >
+                      Update cell content{' '}
+                      <span className="removed">'{cell.prevContent}'</span> to '
+                      {cell.content}
+                      '.
+                    </Typography>
+                  );
+                })}
+              </>
+            );
+          }
+        })}
+    </>
+  );
+}
 
 type Props = {
   question: Map,
@@ -53,7 +222,7 @@ let conditionBlankPredicted;
 let indexNo;
 let questionIdentifier;
 let bidNo = '';
-let isCurrentBid = '';
+let isEditableBid = '';
 
 function handleUserMentionInAnswer(formattedAnswer = null, answer = '') {
   let finalAnswer = '';
@@ -119,7 +288,7 @@ function areBothAnswersSame(answer1, answer2) {
   } else if (typeof answer1 === 'string') {
     return answer1.trim() === answer2.trim();
   }
-  return answer1 === answer2;
+  return isEqual(answer1, answer2);
 }
 
 function isAnswerEmpty(answer) {
@@ -161,13 +330,13 @@ class AnswerHistory extends Component<Props> {
     const proposalID = selectedBid?.toJS()?.id;
     bidNo = opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
       .bidNo;
-    isCurrentBid =
+    isEditableBid =
       opportunityData?.get(proposalID)?.toJS().isCurrent === true
         ? opportunityData?.get(proposalID)?.toJS().proposal.proposalDetails
             .bidNo
         : 'NA';
     if (
-      isCurrentBid === bidNo &&
+      isEditableBid === bidNo &&
       lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
       questionLockWrapper(questionIdentifier);
@@ -400,7 +569,8 @@ class AnswerHistory extends Component<Props> {
     if (
       answerType === ANSWER_TYPES.PICKLIST ||
       answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
-      answerType === ANSWER_TYPES.CHECKBOX
+      answerType === ANSWER_TYPES.CHECKBOX ||
+      answerType === ANSWER_TYPES.TABLE
     ) {
       setProposalAnswer(
         this.context,
@@ -483,8 +653,17 @@ class AnswerHistory extends Component<Props> {
       opportunityData.get(proposalId)?.toJS()?.proposal?.proposalDetails;
     const { setProposalAnswer } = this.props;
     const answerType = questionType;
+    if (answerType === ANSWER_TYPES.TABLE) {
+      setProposalAnswer(
+        this.context,
+        selectedBid.get('id'),
+        questionId,
+        question.get('questionTableConfig'),
+        userData
+      );
+    }
     // picklist value should not be converted to string while saving
-    if (
+    else if (
       answerType === ANSWER_TYPES.PICKLIST ||
       answerType === ANSWER_TYPES.PICKLIST_LOOKUP ||
       answerType === ANSWER_TYPES.CHECKBOX
@@ -590,6 +769,10 @@ class AnswerHistory extends Component<Props> {
     const sectionName = question.getIn(['section', 'sectionName']);
     let answers = question.get('answers').reverse();
     const questionId = answers.get('questionId');
+    let questionTableConfig = {};
+    if (questionType === ANSWER_TYPES.TABLE) {
+      questionTableConfig = JSON.parse(question.get('questionTableConfig'));
+    }
     if (questionId) answers = question.getIn(['answers', 'answers']).reverse();
     if (answers.isEmpty()) return this.renderAnswerResponsables();
     const questions = question.reverse();
@@ -610,7 +793,253 @@ class AnswerHistory extends Component<Props> {
       if (conditionBlankPredicted) {
         answers = answers.delete(index).delete(index);
       }
+      _answer = _answer.set('currentIndex', index);
+      if (index === answers.size - 1) {
+        answers = answers.set(index, _answer.set('nextIndex', -1));
+      } else {
+        answers = answers.set(index, _answer.set('nextIndex', index + 1));
+      }
     });
+
+    if (questionType === ANSWER_TYPES.TABLE) {
+      // group answers by date
+      const groupedAnswersByDate = answers.groupBy(answer =>
+        moment(answer.get('date')).format('DD MMM YYYY')
+      );
+
+      return Object.entries(groupedAnswersByDate.toJS()).map(
+        ([date, answersForADate]) => {
+          return (
+            <div className="answer-history-table-card">
+              <div className="header">
+                <Typography>{date}</Typography>
+              </div>
+              <Divider />
+              <div className="body">
+                {answersForADate.map((_answer, index) => {
+                  const cfProposalId = _answer.cfProposalId;
+                  const userName = !['CarryForwardAnswer'].includes(
+                    _answer.userName
+                  )
+                    ? _answer.userName || ''
+                    : '';
+                  const momentDateTime = moment(_answer.date);
+                  const answer = JSON.parse(_answer.answer);
+                  const nextAnswer =
+                    _answer.nextIndex === -1
+                      ? questionTableConfig
+                      : JSON.parse(
+                          answers.get(_answer.nextIndex).get('answer')
+                        );
+                  const cfaAnswer = cloneDeep(answer);
+                  const cfaNextAnswer = cloneDeep(nextAnswer);
+
+                  cfaAnswer.rows = answer.rows.map(row => {
+                    delete row.index;
+                    return row;
+                  });
+
+                  cfaAnswer.columns = answer.columns.map(column => {
+                    delete column.index;
+                    return column;
+                  });
+
+                  cfaNextAnswer.rows = answer.rows.map(row => {
+                    delete row.index;
+                    return row;
+                  });
+
+                  cfaNextAnswer.columns = answer.columns.map(column => {
+                    delete column.index;
+                    return column;
+                  });
+
+                  const cfaAccepted =
+                    answers.get(_answer.nextIndex) &&
+                    answers.get(_answer.nextIndex).get('userName') ===
+                      'CarryForwardAnswer' &&
+                    answers.get(index).get('userName') !==
+                      'AnswerPulledFromSalesforce' &&
+                    areBothAnswersSame(cfaAnswer, cfaNextAnswer);
+
+                  const cfaRejected =
+                    answers.get(_answer.nextIndex) &&
+                    answers.get(_answer.nextIndex).get('userName') ===
+                      'CarryForwardAnswer' &&
+                    answers.get(index).get('userName') !==
+                      'AnswerPulledFromSalesforce' &&
+                    areBothAnswersSame(
+                      {
+                        rows: cfaAnswer.rows,
+                        columns: cfaAnswer.columns
+                      },
+                      {
+                        rows: questionTableConfig.rows,
+                        columns: questionTableConfig.columns
+                      }
+                    );
+
+                  const nextColumnsMap = nextAnswer.columns.reduce(
+                    (acc, col, index) => {
+                      acc[col.accessor] = col;
+                      acc[col.accessor].index = index;
+                      return acc;
+                    },
+                    {}
+                  );
+                  const nextRowsMap = nextAnswer.rows.reduce(
+                    (acc, row, index) => {
+                      acc[row.rowId] = row;
+                      acc[row.rowId].index = index;
+                      return acc;
+                    },
+                    {}
+                  );
+
+                  const nonDeletedColumnAccessors = [];
+
+                  const columns = answer.columns.map((col, index) => {
+                    let updatedCol = cloneDeep(col);
+                    if (nextColumnsMap[col.accessor]) {
+                      nonDeletedColumnAccessors.push(col.accessor);
+                      // check if column is reordered
+                      if (nextColumnsMap[col.accessor].index !== index) {
+                        updatedCol.reordered = true;
+                        updatedCol.oldOrderIndex =
+                          nextColumnsMap[col.accessor].index;
+                        updatedCol.newOrderIndex = index;
+                      }
+                      // check if column title is changed
+                      if (nextColumnsMap[col.accessor].header !== col.header) {
+                        updatedCol.titleChanged = true;
+                        updatedCol.oldTitle =
+                          nextColumnsMap[col.accessor].header;
+                        updatedCol.newTitle = col.header;
+                      }
+                      // check if column is hidden or shown
+                      if (nextColumnsMap[col.accessor].hidden !== col.hidden) {
+                        updatedCol.hiddenChanged = true;
+                      }
+                    } else {
+                      updatedCol.added = true;
+                    }
+                    return updatedCol;
+                  });
+
+                  const rows = answer.rows.map((row, index) => {
+                    const updatedRow = cloneDeep(row);
+                    updatedRow.editedCells = [];
+                    const nextRow = nextRowsMap[row.rowId];
+                    if (nextRowsMap[row.rowId]) {
+                      // check if row is reordered
+                      if (nextRowsMap[row.rowId].index !== index) {
+                        updatedRow.reordered = true;
+                        updatedRow.oldOrderIndex = nextRowsMap[row.rowId].index;
+                        updatedRow.newOrderIndex = index;
+                      }
+                      // check if any cell is updated
+                      Object.keys(row).forEach(accessor => {
+                        if (
+                          accessor !== 'rowId' &&
+                          accessor !== 'canEdit' &&
+                          accessor !== 'hidden' &&
+                          accessor !== 'header' &&
+                          row[accessor] !== '' &&
+                          nextRow[accessor] !== row[accessor]
+                        ) {
+                          updatedRow.cellsEdited = true;
+                          updatedRow.editedCells.push({
+                            content: row[accessor],
+                            prevContent: nextRow[accessor]
+                          });
+                        }
+                      });
+                      // check if row title is changed
+                      if (nextRow.header !== row.header) {
+                        updatedRow.titleChanged = true;
+                        updatedRow.oldTitle = nextRow.header;
+                        updatedRow.newTitle = row.header;
+                      }
+                      // check if row is hidden or shown
+                      if (nextRow.hidden !== row.hidden) {
+                        updatedRow.hiddenChanged = true;
+                      }
+                    } else {
+                      updatedRow.added = true;
+                    }
+                    return updatedRow;
+                  });
+
+                  // const deletedColumns = Object.keys(nextColumnsMap).filter(
+                  //   accessor => !nonDeletedColumnAccessors.includes(accessor)
+                  // );
+
+                  return (
+                    <div className="table-change-item">
+                      <Typography className="meta-info">
+                        {[
+                          userName,
+                          ' ',
+                          momentDateTime.format('DD MMM YYYY'),
+                          ' ',
+                          'at',
+                          ' ',
+                          momentDateTime.format('hh:mma')
+                        ]}
+                      </Typography>
+                      <div className="changeset-wrapper">
+                        <div className="changeset">
+                          <ChangeSets
+                            cfaAccepted={cfaAccepted}
+                            cfaRejected={cfaRejected}
+                            columns={columns}
+                            rows={rows}
+                          />
+                        </div>
+                        <div className="actions">
+                          {_answer.currentIndex === 0 &&
+                          !isQuesFreezed &&
+                          (selectedBid.get('isCurrent', false) ||
+                            selectedBid.get('isEditable')) &&
+                          lastAnswer?.userName === 'CarryForwardAnswer' &&
+                          _answer.userName === 'CarryForwardAnswer' ? (
+                            <div className="answer-meta-buttons">
+                              <button
+                                size="small"
+                                type="button"
+                                className="answer-history-reject"
+                                onClick={() =>
+                                  this.onRejectCarryForwardAnswer()
+                                }
+                              >
+                                Reject
+                              </button>
+                              <button
+                                size="small"
+                                type="button"
+                                className="answer-history-accept"
+                                onClick={() =>
+                                  this.onAcceptCarryForwardAnswer(
+                                    Map(_answer),
+                                    cfProposalId
+                                  )
+                                }
+                              >
+                                Accept
+                              </button>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+      );
+    }
 
     return answers.map((_answer, index) => {
       const userName = _answer.get('userName') || 'Default User';
@@ -640,7 +1069,7 @@ class AnswerHistory extends Component<Props> {
         bidNo = opportunityData.get(proposalId).toJS().proposal.proposalDetails
           .bidNo;
         bidType = getBidTypeFromProposalId(proposalId, getOpportunityData);
-        isCurrentBid =
+        isEditableBid =
           opportunityData.get(proposalId).toJS().isCurrent === true
             ? opportunityData.get(proposalId).toJS().proposal.proposalDetails
                 .bidNo
@@ -679,7 +1108,7 @@ class AnswerHistory extends Component<Props> {
         questionType !== ANSWER_TYPES.PICKLIST_LOOKUP &&
         answers.get(index + 1) &&
         answers.get(index + 1).get('userName') === 'UnityPredictedAnswer' &&
-        answer === nextAnswer;
+        isEqual(answer, nextAnswer);
 
       const isAcceptedCarryForwardedAnswer =
         questionType !== ANSWER_TYPES.PICKLIST &&
@@ -775,9 +1204,11 @@ class AnswerHistory extends Component<Props> {
 
         if (isAcceptedCarryForwardedAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
+
           if (
             cfProposalIdPrevAnswer &&
             opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
@@ -786,6 +1217,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -803,8 +1238,11 @@ class AnswerHistory extends Component<Props> {
                   Validated{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               )}
             </span>
@@ -813,6 +1251,7 @@ class AnswerHistory extends Component<Props> {
 
         if (doesPicklistAcceptedCarryForwardAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
@@ -824,6 +1263,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -841,8 +1284,11 @@ class AnswerHistory extends Component<Props> {
                   Validated{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               )}
             </span>
@@ -851,6 +1297,7 @@ class AnswerHistory extends Component<Props> {
 
         if (isRejectedCarryForwardedAnswer) {
           let cfBidNoPrevAnswer = null;
+          let cfBidTypePrevAnswer = null;
           const cfProposalIdPrevAnswer = answers
             .get(index + 1)
             .get('cfProposalId');
@@ -862,6 +1309,10 @@ class AnswerHistory extends Component<Props> {
             cfBidNoPrevAnswer = opportunityData
               .get(cfProposalIdPrevAnswer)
               .toJS().proposal.proposalDetails.bidNo;
+            cfBidTypePrevAnswer = getBidNameByType(
+              opportunityData.get(cfProposalIdPrevAnswer).toJS().proposal
+                .bidType
+            );
           }
 
           return (
@@ -871,8 +1322,11 @@ class AnswerHistory extends Component<Props> {
                   Rejected{' '}
                   {getUserName(
                     'CarryForwardAnswer',
-                    cfBidNoPrevAnswer
-                  ).toLowerCase()}
+                    cfBidNoPrevAnswer,
+                    isAnswerEmpty(answer),
+                    bidType,
+                    cfBidTypePrevAnswer
+                  ).replace('Answer', 'answer')}
                 </b>
               }
             </span>
@@ -1115,7 +1569,7 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
-              isCurrentBid === bidNo &&
+              isEditableBid === bidNo &&
               lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
                 <div className="answer-meta-buttons">
@@ -1139,7 +1593,8 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
-              selectedBid.get('isCurrent', false) &&
+              (selectedBid.get('isCurrent', false) ||
+                selectedBid.get('isEditable')) &&
               lastAnswer?.userName === 'CarryForwardAnswer' &&
               !isAnswerEmpty(answer) &&
               userName === 'CarryForwardAnswer' ? (
@@ -1193,6 +1648,7 @@ class AnswerHistory extends Component<Props> {
     const { question, loading } = this.state;
     const answers = question.get('answers');
     const questionTitle = question.get('questionText');
+    const answerType = question.getIn(['answerConfiguration', 'type']);
     return (
       <section
         id="answer-history-modal"
@@ -1215,6 +1671,7 @@ class AnswerHistory extends Component<Props> {
                 {answers.isEmpty() && !loading ? 'Responsible' : 'History'}
               </h1>
               <p>{questionTitle}</p>
+              {answerType === ANSWER_TYPES.TABLE ? <DateTimeInfoLabel /> : null}
             </div>
             <button type="button" onClick={this.closeModalWindow}>
               <Close />

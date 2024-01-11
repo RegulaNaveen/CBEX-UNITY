@@ -297,13 +297,45 @@ function getHeaderInfoRows(details) {
       html += `<div class="resp-table-row">`;
       html += `<div class="table-header-cell">${headFields[key]}</div>`;
       html += `<div class="table-header-cell">${
-        key == 'bidNo' &&
-        details &&
-        (details?.bidType === 'Early_Engagement_Bid' ||
-          details?.bidType === 'Bid Early_Engagement_Bid')
-          ? `Early Engagement ${value.toString()}`
+        key == 'bidNo' && details
+          ? (() => {
+              if (
+                details?.bidType === 'Early_Engagement_Bid' ||
+                details?.bidType === 'Bid Early_Engagement_Bid'
+              ) {
+                {
+                  return (
+                    `Early Engagement ${value.toString()}` || value.toString()
+                  );
+                }
+              } else if (
+                details?.bidType === 'Post_Award_Bid' ||
+                details?.bidType === 'Bid Post_Award_Bid'
+              ) {
+                {
+                  return `Post Award ${value.toString()}` || value.toString();
+                }
+              } else if (
+                details?.bidType === 'RFI_Request' ||
+                details?.bidType === 'Bid RFI_Request_Bid'
+              ) {
+                {
+                  return `RFI ${value.toString()}` || value.toString();
+                }
+              } else if (
+                details?.bidType === 'Clinical_Bid' ||
+                details?.bidType === 'Bid Clinical_Bid'
+              ) {
+                {
+                  return `Bid ${value.toString()}` || value.toString();
+                }
+              } else {
+                return 'catch all';
+              }
+            })()
           : value.toString()
-      }</div>`;
+      }
+      </div>`;
       html += `</div>`;
     }
   } catch (error) {

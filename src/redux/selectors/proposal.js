@@ -1,6 +1,6 @@
 // @flow
 import { Map, fromJS } from 'immutable'; // NOSONAR
-import { last, uniq, orderBy, isEmpty } from 'lodash';
+import { last, uniq, orderBy, isEmpty, groupBy, cloneDeep } from 'lodash';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import { shouldInclude } from '../../components/views/export-component/word-template';
@@ -355,7 +355,6 @@ export const getPanelStatus = createSelector(selectProposal, proposal =>
 export const getfetchAllFlags = createSelector(selectProposal, proposal =>
   proposal?.get('eventflag')
 );
-
 export const getBidList = createSelector(
   getfetchAllFlags,
   getOpportunityData,
@@ -364,9 +363,15 @@ export const getBidList = createSelector(
       let bidList = [];
       opportunity.valueSeq().forEach(item => {
         if (
-          (!flags['earlyEngagementInBidHistory'] &&
+          ((!flags['earlyEngagementInBidHistory'] &&
             item.getIn(['proposal', 'bidType']) !== 'Early_Engagement_Bid') ||
-          flags['earlyEngagementInBidHistory']
+            flags['earlyEngagementInBidHistory']) &&
+          ((!flags['postAwardInBidHistory'] &&
+            item.getIn(['proposal', 'bidType']) !== 'Post_Award_Bid') ||
+            flags['postAwardInBidHistory']) &&
+          ((!flags['RFIInBidHistory'] &&
+            item.getIn(['proposal', 'bidType']) !== 'RFI_Request') ||
+            flags['RFIInBidHistory'])
         ) {
           bidList.push({
             bidDueDate: item.getIn([
@@ -391,6 +396,17 @@ export const getBidList = createSelector(
               'proposalDetails',
               'earlyEngagementDevelopmentPlan'
             ]),
+            describeActivity:
+              item.getIn(['proposal', 'proposalDetails', 'describeActivity']) ||
+              '',
+            typeOfActivity:
+              item.getIn(['proposal', 'proposalDetails', 'typeOfActivity']) ||
+              '',
+            requestDetail: item.getIn([
+              'proposal',
+              'proposalDetails',
+              'requestDetail'
+            ]),
             bidNo: String(
               item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
             ),
@@ -398,8 +414,14 @@ export const getBidList = createSelector(
           });
         }
       });
-
       bidList = orderBy(bidList, ['bidDate'], ['desc']);
+      const recentBidsByTypes = Object.entries(groupBy(bidList, 'bidType')).map(
+        ([bidType, bids]) => bids[0].bidId
+      );
+      bidList = bidList.map(bid => ({
+        ...cloneDeep(bid),
+        isEditable: recentBidsByTypes.includes(bid.bidId)
+      }));
       return bidList;
     } else return [];
   }

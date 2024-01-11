@@ -60,13 +60,13 @@ const StatementItem = ({
   };
 
   useEffect(() => {
-    window.addEventListener('resize', resize); 
+    window.addEventListener('resize', resize);
 
     resize();
     setTimeout(() => {
       // updating question text with decorators
       if (questionTextRef1.current !== null) {
-        const { editorState } = questionTextRef1.current.state;
+        const editorState = questionTextRef1?.current?.state?.editorState;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
         });

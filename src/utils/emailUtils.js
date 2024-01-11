@@ -36,7 +36,7 @@ export function getProposalTeamUsers(questions = []) {
   return Array.from(answers);
 }
 
-function handleHyperlinks(answer, config) {
+export function handleHyperlinks(answer, config) {
   try {
     if (answer === 'N/A' && config && config.type === 'date') return 'N/A';
 
@@ -57,7 +57,7 @@ function handleHyperlinks(answer, config) {
   return answer;
 }
 
-function formatProposalTeamAnswers(answer) {
+export function formatProposalTeamAnswers(answer) {
   let formattedAnswer = '';
   if (answer.length > 0) {
     formattedAnswer = answer

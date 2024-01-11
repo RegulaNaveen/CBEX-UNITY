@@ -34,6 +34,7 @@ const KeyMilestoneDeliverableTimelines = () => {
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const [selectedQuestionForHistory, setSelectedQuestionForHistory] = useState(
     ''
   );
@@ -141,7 +142,8 @@ const KeyMilestoneDeliverableTimelines = () => {
           bidAnswerCopy: KeyMilestoneData.bidAnswerCopy,
           bidType: KeyMilestoneData.bidType,
           latestAnsweredBidNo: KeyMilestoneData.latestAnsweredBidNo,
-          questionDataDestinations: questionDataDestinations
+          questionDataDestinations: questionDataDestinations,
+          questionTableConfig: KeyMilestoneData.questionTableConfig
         });
       }
     });
@@ -225,7 +227,7 @@ const KeyMilestoneDeliverableTimelines = () => {
             style={{ borderBottom: 'none' }}
             onClick={() => setShowModal(true)}
             size="small"
-            disabled={!isCurrentBid}
+            disabled={!isEditableBid}
           >
             <Plus
               className="plus-icon-add-new-question"

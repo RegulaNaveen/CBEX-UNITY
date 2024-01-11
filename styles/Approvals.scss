@@ -169,7 +169,20 @@
     }
   }
 
-  .filter-container {
+  .filter-container,
+  .add-btn-container {
+    .expand-all {
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: row;
+      .tasksList-expand-all-icon {
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+        margin-right: 106px; /* Default margin for .filter-container */
+        padding-right: 10px;
+      }
+    }
     .filter-btn {
       display: flex;
       justify-content: end;
@@ -187,6 +200,14 @@
           min-width: 0;
           margin-right: 7px;
         }
+      }
+    }
+  }
+
+  .add-btn-container {
+    .expand-all {
+      .tasksList-expand-all-icon {
+        margin-right: 75px;
       }
     }
   }

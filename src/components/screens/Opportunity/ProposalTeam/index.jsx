@@ -32,6 +32,7 @@ function ProposalTeam() {
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const selectedBid = useSelector(getSelectedBid);
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const isQuestionsFiltersEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const filteredSections = useSelector(selectFilteredSections);
   const sections = useSelector(selectSections);
@@ -280,7 +281,7 @@ function ProposalTeam() {
             style={{ borderBottom: 'none' }}
             onClick={() => setShowModal(true)}
             size="small"
-            disabled={!isCurrentBid}
+            disabled={!isEditableBid}
           >
             <Plus
               className="plus-icon-add-new-question"

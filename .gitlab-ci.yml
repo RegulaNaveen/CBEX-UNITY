@@ -476,7 +476,7 @@ pafexecution_l4:
     ENV_NAME: l4
   trigger:
     project: 'CBEx/unity/Unity-QA'
-    branch: Unity_QA_Testing
+    branch: preprod
     strategy: depend
 
 pafexecution_svt:

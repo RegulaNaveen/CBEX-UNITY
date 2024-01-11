@@ -19,7 +19,7 @@ import { autoNavigationCompletedAction } from '../../../redux/actions/search-act
 
 export const UnityTabContext = createContext();
 
-const Section = ({ sectionId, title, tabId }) => {
+const Section = ({ sectionId, title, tabId, isExpandAll, handleChange }) => {
   const [expanded, setExpanded] = useState(false);
   const [sectionLoading, setSectionLoading] = useState(false);
   const [isAllActiveDisplayed, setIsAllActiveDisplayed] = useState(true);
@@ -30,7 +30,7 @@ const Section = ({ sectionId, title, tabId }) => {
     }
   };
   const unityTabSection = useSelector(state => state.unitytab.allTabs);
- 
+
   const tabSection = unityTabSection[tabId].find(
     i => i.UnityTabSectionId === sectionId
   );
@@ -44,6 +44,15 @@ const Section = ({ sectionId, title, tabId }) => {
   const questions = useSelector(getProposalQuestions);
   const sectionTitleRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setExpanded(isExpandAll);
+  }, [isExpandAll]);
+
+  const handleAccordionChange = () => {
+    setExpanded(prev => !prev);
+    handleChange(sectionId);
+  };
 
   useEffect(() => {
     const result = shouldShowSection(sectionId, tabId, flags);
@@ -92,9 +101,9 @@ const Section = ({ sectionId, title, tabId }) => {
         >
           <CustomAccordion
             className="accordion-container"
-            expanded={expanded}
-            onChange={() => setExpanded(prev => !prev)}
+            expanded={isExpandAll || expanded}
             style={style}
+            onChange={handleAccordionChange}
           >
             <CustomAccordionSummary>
               <p className="accordion-title" ref={sectionTitleRef}>

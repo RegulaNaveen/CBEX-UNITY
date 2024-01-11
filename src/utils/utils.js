@@ -93,12 +93,93 @@ const getFullProposalTeamString = (updateField, questions) => {
   return result;
 };
 
+const getTableAnswer = tableAnswer => {
+  if (tableAnswer) {
+    let formattedTableAnswer = tableAnswer;
+    if (isString(tableAnswer)) {
+      try {
+        formattedTableAnswer = JSON.parse(tableAnswer);
+        const tableAnswerString = `
+        <div style='width: 100%;
+        overflow: auto;
+        overflow: auto;
+        max-width: 1100px;
+        margin: auto;'>
+        <table 
+        style='width:100%; 
+        border-collapse: collapse;
+        margin-top: 20px; 
+        border: 1px solid #e9e9e9;
+        table-layout: fixed;'>
+        <thead>
+        <tr style='border-bottom: 1px solid #e9e9e9;
+            background-color: #f8f9fb;'>
+        ${formattedTableAnswer?.columns.map(
+          column =>
+            !column?.hidden &&
+            `<th style='width: 200px;
+          padding: 10px 0px 10px 10px;
+          text-align: left;
+          font-size: 16px;
+          border-bottom: 1px solid #e9e9e9;
+          border-right: 1px solid #e9e9e9;
+          background-color: #f8f9fb;'>${
+            column?.header ? column?.header : ''
+          }</th>`
+        )}
+        </tr>
+        </thead>
+        <tbody>
+        ${formattedTableAnswer?.rows.map(
+          row =>
+            `<tr>
+            ${
+              !row?.hidden &&
+              `<td  style='width: 200px;
+            padding: 10px 0px 10px 10px;
+            text-align: left;
+            font-size: 16px;
+            border-bottom: 1px solid #e9e9e9;
+            border-right: 1px solid #e9e9e9;
+            background-color: #f8f9fb;'>${row?.header}</td>`
+            }
+            ${formattedTableAnswer.columns.map(
+              column =>
+                column?.accessor !== 'header' &&
+                !row?.hidden &&
+                `<td style='width:200px;
+              padding: 10px 0px 10px 10px;
+              text-align: left;
+              font-size: 16px;
+              border-bottom: 1px solid #e9e9e9;
+              border-right: 1px solid #e9e9e9;'>${
+                row[column?.accessor] ? row[column?.accessor] : '-'
+              }</td>`
+            )}
+            </tr>`
+        )}
+        </tbody>
+        </table></div><br/>`;
+        const tableData = tableAnswerString.replace(/,/g, '');
+        return tableData.replace(/false/g, '');
+      } catch {
+        return '';
+      }
+    }
+  }
+  return '';
+};
+
 const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
   switch (answerConfiguration?.type) {
     case ANSWER_TYPES.TEXT: {
       return updateField === 'body'
         ? getAnswer(answers)
         : answers?.slice(-1)[0]?.answer ?? '';
+    }
+    case ANSWER_TYPES.TABLE: {
+      const tableAnswer = getAnswer(answers);
+      return getTableAnswer(tableAnswer);
     }
     default:
       return answers?.slice(-1)[0]?.answer?.toString() ?? '';
@@ -197,8 +278,9 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ? relevantQuestions
         ?.map(
           q =>
-            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
-              ''} \r\n`
+            `${q.questionText ?? ''} \r\n${
+              q.answers?.slice(-1)[0]?.answer ?? ''
+            } \r\n`
         )
         .join('')
     : `<ul>${relevantQuestions
@@ -279,7 +361,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function(data) {
+  lobMapping.forEach(function (data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
@@ -552,6 +634,10 @@ const getBidNameByType = bidType => {
     bidName = BID_TYPES[bidType];
     if (bidName === 'Early Engagement') {
       bidName = 'Early Engagement ';
+    } else if (bidName === 'Post Award') {
+      bidName = 'Post Award ';
+    } else if (bidName === 'RFI') {
+      bidName = 'RFI ';
     }
   } else {
     bidName = 'Bid';

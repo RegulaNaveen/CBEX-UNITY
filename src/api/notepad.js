@@ -84,22 +84,22 @@ export function updateNoteApi(proposalID, note) {
       .catch(err => reject(err));
   });
 }
+// commented unused code
+// export function getMentions(proposalID) {
+//   const config = {
+//     headers: {
+//       'x-api-key': API_KEY,
+//       'x-access-token': getAccessToken()
+//     }
+//   };
 
-export function getMentions(proposalID) {
-  const config = {
-    headers: {
-      'x-api-key': API_KEY,
-      'x-access-token': getAccessToken()
-    }
-  };
-
-  return new Promise((resolve, reject) => {
-    axiosInstance
-      .get(`${NOTEPAD_API_URL}/v2/${proposalID}/mentions`, config)
-      .then(response => resolve(response.data))
-      .catch(err => reject(err));
-  });
-}
+//   return new Promise((resolve, reject) => {
+//     axiosInstance
+//       .get(`${NOTEPAD_API_URL}/v2/${proposalID}/mentions`, config)
+//       .then(response => resolve(response.data))
+//       .catch(err => reject(err));
+//   });
+// }
 
 export function updateMentions(proposalID, email: string, emp_id: string) {
   const config = {

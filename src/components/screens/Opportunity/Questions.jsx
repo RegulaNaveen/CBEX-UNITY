@@ -583,7 +583,6 @@ class Questions extends Component {
                 <span style={{ padding: '10px' }}>Mark N/A</span>
                 <Switch
                   data-testid="mark-na-btn"
-                  style={{ marginRight: '-2px' }}
                   checked={showNaCheckbox}
                   onChange={this.handleOnChangeNaSwitch}
                   size="small"
@@ -620,7 +619,21 @@ class Questions extends Component {
                     }}
                   >
                     <Typography variant="body2">
-                      {showNaCheckbox ? 'NA ON' : 'NA OFF'}
+                      {showNaCheckbox ? (
+                        <>
+                          Select N/A checkbox next to questions to hide from the
+                          standard view. <br />
+                          To see questions marked as N/A (Not Applicable), go to
+                          Filter and select “Include Not Applicable Questions."
+                        </>
+                      ) : (
+                        <>
+                          Questions identified as N/A (Not Applicable) are
+                          hidden from the standard view. <br />
+                          To see questions marked as Not Applicable, go to
+                          Filter and select “Include Not Applicable Questions."
+                        </>
+                      )}
                     </Typography>
                   </Popover>
                 </>
@@ -655,7 +668,8 @@ class Questions extends Component {
                     <Refresh className="tasksList-add-icon" />
                   </div>
                 )}
-                {selectedBid.get('isCurrent') && (
+                {(selectedBid.get('isCurrent') ||
+                  selectedBid.get('isEditable')) && (
                   <div
                     data-testid="selectedbid-testid"
                     title="Add New Question"

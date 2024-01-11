@@ -294,9 +294,11 @@ class Sidebar extends Component<Props, State> {
                 <PlusIcon
                   data-testid="sidebar-panel-testid"
                   style={{
-                    backgroundColor: selectedBid.get('isCurrent')
-                      ? neptunePrimaryDark
-                      : neutral7,
+                    backgroundColor:
+                      selectedBid.get('isCurrent') ||
+                      selectedBid.get('isEditable')
+                        ? neptunePrimaryDark
+                        : neutral7,
                     width: 20,
                     height: 20,
                     borderRadius: '50%',
@@ -304,7 +306,11 @@ class Sidebar extends Component<Props, State> {
                     padding: 3,
                     margin: 3,
                     cursor: 'pointer',
-                    pointerEvents: selectedBid.get('isCurrent') ? '' : 'none'
+                    pointerEvents:
+                      selectedBid.get('isCurrent') ||
+                      selectedBid.get('isEditable')
+                        ? ''
+                        : 'none'
                   }}
                   onClick={e => {
                     const { onAddQuestion } = this.props;

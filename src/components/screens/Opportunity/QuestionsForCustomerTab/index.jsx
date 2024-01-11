@@ -26,6 +26,7 @@ function QuestionsForCustomer() {
 
   const [lastSetQuestionData, setLastSetQuestionData] = useState({});
   const isCurrentBid = selectedBid.get('isCurrent');
+  const isEditableBid = selectedBid.get('isEditable');
   const questionsList = useSelector(getProposalQuestions);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
 
@@ -254,7 +255,7 @@ function QuestionsForCustomer() {
                     deleteQuestionHandler={deleteQuestionHandler}
                     questionData={questionData}
                     questionIndex={index + 1}
-                    isCurrentBid={isCurrentBid}
+                    isEditableBid={isEditableBid}
                     showScroll={showScroll}
                     socketContext={socketContext}
                     newQuestionData={lastSetQuestionData?.questionId}
@@ -296,7 +297,7 @@ function QuestionsForCustomer() {
               onMouseDown={addQuestionHandler}
               onKeyDown={event => event.key === 'Enter' && addQuestionHandler()}
               disabled={
-                !isCurrentBid ||
+                !isEditableBid ||
                 !allFlags.isQuestionForCustomerEditable ||
                 showAddQuestionLoader
               }

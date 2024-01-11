@@ -1,6 +1,6 @@
 {
   "name": "gbo-efficiencies-frontend",
-  "version": "4.11.1",
+  "version": "4.12.0",
   "description": "GBO Efficiencies Frontend App",
   "main": "index.js",
   "scripts": {
@@ -92,6 +92,7 @@
     "querystring-es3": "^0.2.1",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-big-calendar": "^1.6.9",
     "react-day-picker": "^7.4.5",
     "react-dom": "^18.2.0",

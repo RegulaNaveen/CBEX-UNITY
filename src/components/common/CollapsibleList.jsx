@@ -377,7 +377,8 @@ class CollapsibleList extends Component<Props, State> {
             </Suspense>
 
             {/* Add New Question Button */}
-            {selectedBid.get('isCurrent') && (
+            {(selectedBid.get('isCurrent') ||
+              selectedBid.get('isEditable')) && (
               <div className="add-question">
                 <Link
                   style={{ borderBottom: 'none' }}

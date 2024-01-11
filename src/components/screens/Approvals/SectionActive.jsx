@@ -18,8 +18,10 @@ const SectionActive = ({
   ApprovalSectionRightQuestions: rightQues = [],
   setIsAllActiveDisplayed
 }) => {
-  const { id: proposalId, isCurrent } = useSelector(getSelectedBid)?.toJS();
-  const selectedBidIsCurrent = !!isCurrent;
+  const { id: proposalId, isCurrent, isEditable } = useSelector(
+    getSelectedBid
+  )?.toJS();
+  const selectedBidIsCurrent = !!isCurrent || !!isEditable;
   const approvalFilters = useSelector(state => state.approvals.filters);
   const flags = useSelector(state => state.proposal.get('eventflag'));
   const questions = useSelector(getProposalQuestions);
@@ -111,7 +113,7 @@ const SectionActive = ({
               highlightQuestionId={`${item}-approval-${ApprovalSectionId}-left-ques`}
             />
           ))}
-        {isCurrent && (
+        {selectedBidIsCurrent && (
           <>
             <div className="add-question">
               <Link
