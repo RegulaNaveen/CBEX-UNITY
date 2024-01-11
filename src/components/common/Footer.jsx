@@ -71,7 +71,11 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    */
   useEffect(() => {
     if (switchTempStatus === 'success') {
-      dispatch(getOpportunity(opportunityId)).then(() => {
+      const winLocationSearch = window.location.search;
+      const queryparams = new URLSearchParams(winLocationSearch);
+      const bidNumber = queryparams.get('bidNo');
+      const bidType = queryparams.get('bidType') || 'Clinical_Bid';
+      dispatch(getOpportunity(opportunityId, bidNumber, bidType)).then(() => {
         dispatch(updateSwitchInProgress(false));
         setAlertModal(true);
         dispatch(updateSwitchTempStatusFromWebSocket(false));
