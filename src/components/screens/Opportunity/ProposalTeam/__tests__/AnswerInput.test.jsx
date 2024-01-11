@@ -132,7 +132,6 @@ describe('AnswerInput', () => {
       'test@example.com',
       'Test User'
     );
-    screen.debug();
     const { container, getByTestId } = render(<AnswerInputWithStore />);
     //const inputElement = getByTestId('answer-input');
   });
