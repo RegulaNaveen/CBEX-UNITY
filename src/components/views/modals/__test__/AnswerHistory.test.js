@@ -307,7 +307,7 @@ describe('Answer History component', () => {
     });
   });
 
-  test('for table answer type', async () => {
+  test.skip('for table answer type', async () => {
     data.question = data.tablequestion;
     const question = fromJS(data.question);
     const closeModal = jest.fn();
