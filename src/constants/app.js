@@ -38,6 +38,11 @@ const PROPOSAL = {
   ATTENDEES: 'Attendees'
 };
 
+const TABLEANSWER = {
+  DUPLICATE_ROWS: 'Two or more rows have the same name:',
+  DUPLICATE_COLUMNS: 'Two or more columns have the same name:'
+};
+
 export const DashboardSFUpDATE = {
   Phase_P__c: 'phase',
   Name: 'customer',
@@ -132,7 +137,7 @@ const EMAIL_TEMPLATES = {
   EMAILS_AND_ROLES_IN_THIS_GROUP: 'Emails and Roles in this Group',
   EMAILS_IN_THIS_ROLE: 'Emails in this role',
   EMAIL_TEXT:
-    'Here are the answers to question that will determine your email content',
+    'Here are the answers to questions that will determine your email content',
   INTERNAL_REQUESTED_SERVICES: 'Internal Requested Services',
   NOEMAIL_TEMPLATES_AVAIABLE_TEXT:
     'No Email Templates available for this Opportunity Type.',
@@ -150,5 +155,6 @@ export {
   SEARCH,
   BID_TYPES,
   EMAIL_TEMPLATES,
-  SECTIONS
+  SECTIONS,
+  TABLEANSWER
 };

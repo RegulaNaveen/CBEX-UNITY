@@ -61,6 +61,12 @@
       &:not(:last-child) {
         border-right: 1px solid #e9e9e9;
       }
+      .MuiInputBase-input {
+        text-overflow: ellipsis;
+        font-weight: 600;
+        font-size: 14px;
+        height: 32px;
+      }
     }
   }
   tbody {
@@ -91,5 +97,15 @@
     align-items: center;
     justify-content: flex-start;
     margin: 0.5rem 0.75rem;
+    .MuiInputBase-input {
+      font-size: 14px;
+      height: 32px;
+      text-overflow: ellipsis;
+    }
+    .row-header {
+      .MuiInputBase-input {
+        font-weight: 600;
+      }
+    }
   }
 }
