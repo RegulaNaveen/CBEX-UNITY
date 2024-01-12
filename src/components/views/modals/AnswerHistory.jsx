@@ -75,7 +75,7 @@ function ChangeSets({
   if (cfaAccepted) {
     return (
       <Typography variant="bodyDefault" className="table-change-list-item">
-        Table derived from {cfBidType} {cfBidNo}.
+        Accepted Table derived from {cfBidType} {cfBidNo}.
       </Typography>
     );
   }
@@ -110,8 +110,7 @@ function ChangeSets({
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Changed Order of '{col.header}' from {col.oldOrderIndex} to{' '}
-                {col.newOrderIndex}.
+                Column '{col.header}' position was changed.
               </Typography>
             );
           }
@@ -121,7 +120,7 @@ function ChangeSets({
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Update Column Title{' '}
+                Update Column Title from{' '}
                 <span className={classNames({ removed: col.oldTitle })}>
                   '{col.oldTitle}'
                 </span>{' '}
@@ -136,8 +135,8 @@ function ChangeSets({
                 className="table-change-list-item"
               >
                 {col.hidden
-                  ? `Column '${col.oldTitle}' made hidden.`
-                  : `Column '${col.oldTitle}' made shown.`}
+                  ? `Column '${col.header}' is now hidden.`
+                  : `Column '${col.header}' is now shown.`}
               </Typography>
             );
           }
@@ -168,8 +167,7 @@ function ChangeSets({
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Changed Order of '{row.header}' from {row.oldOrderIndex} to{' '}
-                {row.newOrderIndex}.
+                Row '{row.header}' position was changed.
               </Typography>
             );
           }
@@ -179,7 +177,7 @@ function ChangeSets({
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Update Row Title{' '}
+                Update Row Title from{' '}
                 <span className={classNames({ removed: row.oldTitle })}>
                   '{row.oldTitle}'
                 </span>{' '}
@@ -194,8 +192,8 @@ function ChangeSets({
                 className="table-change-list-item"
               >
                 {row.hidden
-                  ? `Column '${row.oldTitle}' made hidden.`
-                  : `Column '${row.oldTitle}' made shown.`}
+                  ? `Row '${row.header}' is now hidden.`
+                  : `Row '${row.header}' is now shown.`}
               </Typography>
             );
           }
@@ -208,7 +206,7 @@ function ChangeSets({
                       variant="bodyDefault"
                       className="table-change-list-item"
                     >
-                      Update cell content{' '}
+                      Update cell content from{' '}
                       <span
                         className={classNames({ removed: cell.prevContent })}
                       >
@@ -873,19 +871,101 @@ class AnswerHistory extends Component<Props> {
                       getOpportunityData
                     );
                   }
+
+                  if (
+                    opportunityData.get(_answer.proposalId).toJS().proposal
+                      .proposalDetails?.bidNo
+                  ) {
+                    bidNo = opportunityData.get(_answer.proposalId).toJS()
+                      .proposal.proposalDetails?.bidNo;
+                    bidType = getBidTypeFromProposalId(
+                      _answer.proposalId,
+                      getOpportunityData
+                    );
+                  }
+
                   const userName = !['CarryForwardAnswer'].includes(
                     _answer.userName
                   )
                     ? _answer.userName || ''
                     : '';
                   const momentDateTime = moment(_answer.date);
-                  const answer = JSON.parse(_answer.answer);
+                  const answer =
+                    _answer.answer === 'N/A'
+                      ? 'N/A'
+                      : JSON.parse(_answer.answer);
                   const nextAnswer =
                     _answer.nextIndex === -1
                       ? questionTableConfig
+                      : answers.get(_answer.nextIndex).get('answer') === 'N/A'
+                      ? 'N/A'
                       : JSON.parse(
                           answers.get(_answer.nextIndex).get('answer')
                         );
+
+                  // handle N/A answer history items
+                  if (answer === 'N/A') {
+                    return (
+                      <div className="table-change-item">
+                        <Typography className="meta-info">
+                          {[
+                            userName,
+                            ' ',
+                            momentDateTime.format('DD MMM YYYY'),
+                            ' ',
+                            'at',
+                            ' ',
+                            momentDateTime.format('hh:mma'),
+                            ' ',
+                            bidType,
+                            ' ',
+                            bidNo
+                          ]}
+                        </Typography>
+                        <div className="changeset-wrapper">
+                          <div className="changeset">
+                            <Typography
+                              variant="bodyDefault"
+                              className="table-change-list-item"
+                            >
+                              Answer was marked as N/A.
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  } else if (nextAnswer === 'N/A') {
+                    return (
+                      <div className="table-change-item">
+                        <Typography className="meta-info">
+                          {[
+                            userName,
+                            ' ',
+                            momentDateTime.format('DD MMM YYYY'),
+                            ' ',
+                            'at',
+                            ' ',
+                            momentDateTime.format('hh:mma'),
+                            ' ',
+                            bidType,
+                            ' ',
+                            bidNo
+                          ]}
+                        </Typography>
+                        <div className="changeset-wrapper">
+                          <div className="changeset">
+                            <Typography
+                              variant="bodyDefault"
+                              className="table-change-list-item"
+                            >
+                              Answer was unmarked as N/A.
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   const cfaAnswer = cloneDeep(answer);
                   const cfaNextAnswer = cloneDeep(nextAnswer);
 
@@ -1041,7 +1121,11 @@ class AnswerHistory extends Component<Props> {
                           ' ',
                           'at',
                           ' ',
-                          momentDateTime.format('hh:mma')
+                          momentDateTime.format('hh:mma'),
+                          ' ',
+                          bidType,
+                          ' ',
+                          bidNo
                         ]}
                       </Typography>
                       <div className="changeset-wrapper">

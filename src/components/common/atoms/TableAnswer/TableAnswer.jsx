@@ -427,6 +427,8 @@ function TableAnswer({
   }, []);
 
   function handleSaveClick() {
+    if (toggleWatch) toggleWatch(false);
+    toggleModal(false);
     const newColumns = [];
     const rowHeaders = rows.map(row => row.header);
     const columnHeaders = columns.map(column => column.headerTitle);
@@ -444,7 +446,6 @@ function TableAnswer({
       return;
     }
     onChange({ rows, columns: newColumns }, lastAnswer);
-    toggleModal(false);
     duplicateCheck(rowHeaders, columnHeaders);
   }
 
@@ -482,7 +483,7 @@ function TableAnswer({
         >
           <TableIcon
             className="table-icon"
-            color={answered && !disabled ? '#0768fd' : '#0768fd'}
+            color={answered && !disabled ? '#0768fd' : '#595959'}
           />
           <Typography className="label" variant="body1">
             Edit Table Data
