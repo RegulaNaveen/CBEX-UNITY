@@ -44,6 +44,7 @@ import { getLastAnswer } from '../../screens/Approvals/utils';
 import moment from 'moment';
 import Divider from 'apollo-react/components/Divider';
 import Typography from 'apollo-react/components/Typography';
+import classNames from 'classnames';
 
 function DateTimeInfoLabel() {
   return (
@@ -53,18 +54,35 @@ function DateTimeInfoLabel() {
   );
 }
 
-function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
+function ChangeSets({
+  isCFA,
+  cfaAccepted,
+  cfaRejected,
+  columns,
+  rows,
+  cfBidNo,
+  cfBidType,
+  bidNo,
+  bidType
+}) {
+  if (isCFA) {
+    return (
+      <Typography variant="bodyDefault" className="table-change-list-item">
+        Table derived from {cfBidType} {cfBidNo}.
+      </Typography>
+    );
+  }
   if (cfaAccepted) {
     return (
       <Typography variant="bodyDefault" className="table-change-list-item">
-        Accepted Carry Forwarded answer.
+        Table derived from {cfBidType} {cfBidNo}.
       </Typography>
     );
   }
   if (cfaRejected) {
     return (
       <Typography variant="bodyDefault" className="table-change-list-item">
-        Rejected Carry Forwarded answer.
+        Rejected Table not derived from {cfBidType} {cfBidNo}.
       </Typography>
     );
   }
@@ -104,8 +122,10 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 className="table-change-list-item"
               >
                 Update Column Title{' '}
-                <span className="removed">'{col.oldTitle}'</span> to{' '}
-                {col.newTitle}.
+                <span className={classNames({ removed: col.oldTitle })}>
+                  '{col.oldTitle}'
+                </span>{' '}
+                to {col.newTitle}.
               </Typography>
             );
           }
@@ -160,8 +180,10 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 className="table-change-list-item"
               >
                 Update Row Title{' '}
-                <span className="removed">'{row.oldTitle}'</span> to{' '}
-                {row.newTitle}.
+                <span className={classNames({ removed: row.oldTitle })}>
+                  '{row.oldTitle}'
+                </span>{' '}
+                to {row.newTitle}.
               </Typography>
             );
           }
@@ -187,8 +209,12 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                       className="table-change-list-item"
                     >
                       Update cell content{' '}
-                      <span className="removed">'{cell.prevContent}'</span> to '
-                      {cell.content}
+                      <span
+                        className={classNames({ removed: cell.prevContent })}
+                      >
+                        '{cell.prevContent}'
+                      </span>{' '}
+                      to '{cell.content}
                       '.
                     </Typography>
                   );
@@ -814,10 +840,39 @@ class AnswerHistory extends Component<Props> {
               <div className="header">
                 <Typography>{date}</Typography>
               </div>
-              <Divider />
+              <Divider className="no-margin-divider" />
               <div className="body">
                 {answersForADate.map((_answer, index) => {
                   const cfProposalId = _answer.cfProposalId;
+                  const getOpportunityData = opportunityData.toJS();
+                  let cfBidNo = null;
+                  let bidNo = null;
+                  let bidType = null;
+                  let cfBidType = null;
+                  if (
+                    cfProposalId &&
+                    opportunityData.get(cfProposalId).toJS().proposal
+                      .proposalDetails?.bidNo
+                  ) {
+                    cfBidNo = opportunityData.get(cfProposalId).toJS().proposal
+                      .proposalDetails.bidNo;
+                    cfBidType = getBidTypeFromProposalId(
+                      cfProposalId,
+                      getOpportunityData
+                    );
+                  } else if (
+                    answers.get(_answer.nextIndex) &&
+                    answers.get(_answer.nextIndex).get('userName') ===
+                      'CarryForwardAnswer'
+                  ) {
+                    cfBidNo = opportunityData
+                      .get(answers.get(_answer.nextIndex).get('cfProposalId'))
+                      .toJS().proposal.proposalDetails.bidNo;
+                    cfBidType = getBidTypeFromProposalId(
+                      answers.get(_answer.nextIndex).get('cfProposalId'),
+                      getOpportunityData
+                    );
+                  }
                   const userName = !['CarryForwardAnswer'].includes(
                     _answer.userName
                   )
@@ -878,6 +933,8 @@ class AnswerHistory extends Component<Props> {
                         columns: questionTableConfig.columns
                       }
                     );
+
+                  const isCFA = _answer.userName === 'CarryForwardAnswer';
 
                   const nextColumnsMap = nextAnswer.columns.reduce(
                     (acc, col, index) => {
@@ -994,6 +1051,11 @@ class AnswerHistory extends Component<Props> {
                             cfaRejected={cfaRejected}
                             columns={columns}
                             rows={rows}
+                            isCFA={isCFA}
+                            cfBidNo={cfBidNo}
+                            cfBidType={cfBidType}
+                            bidNo={bidNo}
+                            bidType={bidType}
                           />
                         </div>
                         <div className="actions">

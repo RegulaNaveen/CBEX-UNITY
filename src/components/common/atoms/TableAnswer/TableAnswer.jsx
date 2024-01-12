@@ -195,6 +195,33 @@ function TableAnswer({
   function handleAddColumnClick() {
     let nextColumnsWithExtra = cloneDeep(columns);
 
+    if (nextColumnsWithExtra.length === 0) {
+      nextColumnsWithExtra.push({
+        header: ``,
+        accessor: `header`,
+        alwaysVisible: true,
+        customCell: cellProps => (
+          <TableCell
+            {...cellProps}
+            disabled={disabled}
+            setSaveDisable={setSaveDisable}
+          />
+        ),
+        header: (
+          <Header
+            index={nextColumnsWithExtra.length}
+            title=""
+            onTitleChange={onHeaderTitleChange}
+            canEdit={true}
+            disabled={disabled}
+            allExpanded={allExpanded}
+          />
+        ),
+        canEdit: true,
+        headerTitle: ''
+      });
+    }
+
     const newColumn = {
       accessor: `column-${nextColumnsWithExtra.length}`,
       customCell: cellProps => (
@@ -235,6 +262,33 @@ function TableAnswer({
 
     let nextColumnsWithExtra = cloneDeep(columns);
 
+    if (nextColumnsWithExtra.length === 0) {
+      nextColumnsWithExtra.push({
+        header: ``,
+        accessor: `header`,
+        alwaysVisible: true,
+        customCell: cellProps => (
+          <TableCell
+            {...cellProps}
+            disabled={disabled}
+            setSaveDisable={setSaveDisable}
+          />
+        ),
+        header: (
+          <Header
+            index={nextColumnsWithExtra.length}
+            title=""
+            onTitleChange={onHeaderTitleChange}
+            canEdit={true}
+            disabled={disabled}
+            allExpanded={allExpanded}
+          />
+        ),
+        canEdit: true,
+        headerTitle: ''
+      });
+    }
+
     nextRowsWithExtra.push(
       columns.reduce(
         (acc, column) => {
@@ -261,6 +315,12 @@ function TableAnswer({
       });
     }, 700);
     if (onCascadeChange) onCascadeChange();
+  }
+
+  function handleModalClose() {
+    if (toggleWatch) toggleWatch(false);
+    if (onBlur) onBlur();
+    toggleModal(false);
   }
 
   useEffect(() => {
@@ -410,13 +470,13 @@ function TableAnswer({
           onClick={() => {
             if (!disabled) {
               toggleModal(!showModal);
-            }
-            if (!showModal) {
-              if (toggleWatch) toggleWatch(true);
-              if (onFocus) onFocus();
-            } else {
-              if (toggleWatch) toggleWatch(false);
-              if (onBlur) onBlur();
+              if (!showModal) {
+                if (toggleWatch) toggleWatch(true);
+                if (onFocus) onFocus();
+              } else {
+                if (toggleWatch) toggleWatch(false);
+                if (onBlur) onBlur();
+              }
             }
           }}
         >
@@ -437,7 +497,7 @@ function TableAnswer({
         disableBackdropClick
         open={showModal}
         variant="default"
-        onClose={() => toggleModal(false)}
+        onClose={() => handleModalClose()}
         title={
           <Title
             questionText={questionText}
@@ -452,7 +512,7 @@ function TableAnswer({
           {
             label: 'Cancel',
             'data-testid': 'cancelButton',
-            onClick: () => toggleModal(false)
+            onClick: () => handleModalClose()
           },
           {
             label: 'Save',

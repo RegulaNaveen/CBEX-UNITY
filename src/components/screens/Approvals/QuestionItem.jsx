@@ -712,7 +712,6 @@ const QuestionItem = ({
                   onClick={() => {
                     setIsShowHistory(true);
                   }}
-                  disabled={question.answerConfiguration.type === 'table'}
                 >
                   <CalendarIcon question={question} />
                 </IconButton>
