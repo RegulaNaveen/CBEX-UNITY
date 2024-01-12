@@ -354,10 +354,13 @@ export const setPriceModelerRecalculationStatusAction = (
  * @param {costUpdate} Object
  */
 export const updatePriceModelerEstimateAction = (costUpdate = {}) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const selectedBid = getSelectedBid(getState()).toJS();
     try {
       if (!isEmpty(costUpdate)) {
-        dispatch({ type: PRICE_MODELER_UPDATE, payload: costUpdate });
+        if (selectedBid?.id === costUpdate?.ProposalId) {
+          dispatch({ type: PRICE_MODELER_UPDATE, payload: costUpdate });
+        }
       }
       dispatch(setPriceModelerRecalculationStatusAction(false));
     } catch (error) {
@@ -526,38 +529,40 @@ export const updateAnswerFromWebSocket = (
   data = {}
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    const { questionId } = data;
+    const { questionId, proposalId } = data;
     let questionsFilter = getQuestionsFilters(getState());
-
-    try {
-      if (Array.isArray(data.answers)) {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data: data.answers,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
-      } else {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
+    const selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
+      try {
+        if (Array.isArray(data.answers)) {
+          dispatch({
+            type: PROPOSAL_ANSWER,
+            payload: {
+              data: data.answers,
+              questionId,
+              hasDifferentSFanswer: data.hasDifferentSFanswer || false
+            }
+          });
+        } else {
+          dispatch({
+            type: PROPOSAL_ANSWER,
+            payload: {
+              data,
+              questionId,
+              hasDifferentSFanswer: data.hasDifferentSFanswer || false
+            }
+          });
+        }
+        const { modifiedQuestions } = data;
+        if (!isEmpty(modifiedQuestions)) {
+          modifiedQuestions.forEach(question => {
+            dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+          });
+        }
+        dispatch(onQuestionsFilterApplied(questionsFilter));
+      } catch (err) {
+        console.log('Error in updating answer from WS', err);
       }
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
-    } catch (err) {
-      console.log('Error in updating answer from WS', err);
     }
   };
 };
@@ -1866,45 +1871,39 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB = (
-  proposalId,
-  email,
-  sectionOrder,
-  sectionName
-) => async () => {
-  try {
-    // Api Response
-    const response = await deleteProposalUser(proposalId, {
-      email,
-      section: { sectionOrder, sectionName }
-    });
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-  } catch (error) {
-    // Error
-    console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const deleteProposalUserFromDB =
+  (proposalId, email, sectionOrder, sectionName) => async () => {
+    try {
+      // Api Response
+      const response = await deleteProposalUser(proposalId, {
+        email,
+        section: { sectionOrder, sectionName }
+      });
+      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+    } catch (error) {
+      // Error
+      console.log(error.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory = (
-  proposalId: string,
-  questionId: string
-) => async () => {
-  try {
-    // Api Response
-    const response = await getProposalAnswer(proposalId, questionId);
-    return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const getProposalAnswerHistory =
+  (proposalId: string, questionId: string) => async () => {
+    try {
+      // Api Response
+      const response = await getProposalAnswer(proposalId, questionId);
+      return { status: true, title: DEFAULT.SUCCESS, data: response };
+    } catch (error) {
+      // Error
+      console.log(error?.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Set Flag for Event Launcher

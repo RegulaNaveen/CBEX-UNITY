@@ -137,7 +137,7 @@ const EMAIL_TEMPLATES = {
   EMAILS_AND_ROLES_IN_THIS_GROUP: 'Emails and Roles in this Group',
   EMAILS_IN_THIS_ROLE: 'Emails in this role',
   EMAIL_TEXT:
-    'Here are the answers to question that will determine your email content',
+    'Here are the answers to questions that will determine your email content',
   INTERNAL_REQUESTED_SERVICES: 'Internal Requested Services',
   NOEMAIL_TEMPLATES_AVAIABLE_TEXT:
     'No Email Templates available for this Opportunity Type.',
