@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import TextField from 'apollo-react/components/TextField';
+import Tooltip from 'apollo-react/components/Tooltip';
 
 function TableCell({
   row,
@@ -46,9 +47,11 @@ function TableCell({
                 fullWidth
               />
             ) : (
-              <Typography variant="bodyDefault" gutterBottom noWrap>
-                {value}
-              </Typography>
+              <Tooltip title={value}>
+                <Typography variant="bodyDefault" gutterBottom noWrap>
+                  {value}
+                </Typography>
+              </Tooltip>
             )}
           </div>
         );
