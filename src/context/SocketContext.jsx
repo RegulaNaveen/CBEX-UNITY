@@ -44,6 +44,7 @@ import {
   onApprovalSectionDeletingAction
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
+import { getSelectedBid } from '../redux/selectors';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -546,7 +547,8 @@ const SocketContextProvider = props => {
           syncBidDashboard,
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
-          deleteApprovalCustomTabCustomQuestionFromSocket
+          deleteApprovalCustomTabCustomQuestionFromSocket,
+          selectedBid
         } = props;
 
         // On Message Recieve
@@ -683,7 +685,10 @@ const SocketContextProvider = props => {
               break;
 
             case 'COST_ESTIMATE_CALCULATING':
-              setPriceModelerRecalculationStatus(true);
+              const currentBidID = selectedBid.toJS().id;
+              if(data?.data?.proposalId === currentBidID){
+                setPriceModelerRecalculationStatus(true);
+              }
               break;
             case 'COST_ESTIMATE_UPDATE':
               updatePriceModelerEstimate(data.data);
@@ -1052,7 +1057,9 @@ const SocketContextProvider = props => {
   );
 };
 
-const mapStateToProps = (state: Map) => ({});
+const mapStateToProps = (state: Map) => ({
+  selectedBid: getSelectedBid(state)
+});
 
 const mapDispatchToProps = {
   addNewBid: UpdateNewBid,

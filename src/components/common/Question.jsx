@@ -972,7 +972,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
         else answerValue = answer.toString();
       }
     }
-    console.log('answerValue', answerValue);
 
     if (sectionName === 'Proposal Team') {
       return (

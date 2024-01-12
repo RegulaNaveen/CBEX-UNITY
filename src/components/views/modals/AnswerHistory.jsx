@@ -44,6 +44,7 @@ import { getLastAnswer } from '../../screens/Approvals/utils';
 import moment from 'moment';
 import Divider from 'apollo-react/components/Divider';
 import Typography from 'apollo-react/components/Typography';
+import classNames from 'classnames';
 
 function DateTimeInfoLabel() {
   return (
@@ -53,18 +54,35 @@ function DateTimeInfoLabel() {
   );
 }
 
-function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
+function ChangeSets({
+  isCFA,
+  cfaAccepted,
+  cfaRejected,
+  columns,
+  rows,
+  cfBidNo,
+  cfBidType,
+  bidNo,
+  bidType
+}) {
+  if (isCFA) {
+    return (
+      <Typography variant="bodyDefault" className="table-change-list-item">
+        Table derived from {cfBidType} {cfBidNo}.
+      </Typography>
+    );
+  }
   if (cfaAccepted) {
     return (
       <Typography variant="bodyDefault" className="table-change-list-item">
-        Accepted Carry Forwarded answer.
+        Accepted Table derived from {cfBidType} {cfBidNo}.
       </Typography>
     );
   }
   if (cfaRejected) {
     return (
       <Typography variant="bodyDefault" className="table-change-list-item">
-        Rejected Carry Forwarded answer.
+        Rejected Table not derived from {cfBidType} {cfBidNo}.
       </Typography>
     );
   }
@@ -92,8 +110,7 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Changed Order of '{col.header}' from {col.oldOrderIndex} to{' '}
-                {col.newOrderIndex}.
+                Column '{col.header}' position was changed.
               </Typography>
             );
           }
@@ -103,9 +120,11 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Update Column Title{' '}
-                <span className="removed">'{col.oldTitle}'</span> to{' '}
-                {col.newTitle}.
+                Update Column Title from{' '}
+                <span className={classNames({ removed: col.oldTitle })}>
+                  '{col.oldTitle}'
+                </span>{' '}
+                to {col.newTitle}.
               </Typography>
             );
           }
@@ -116,8 +135,8 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 className="table-change-list-item"
               >
                 {col.hidden
-                  ? `Column '${col.oldTitle}' made hidden.`
-                  : `Column '${col.oldTitle}' made shown.`}
+                  ? `Column '${col.header}' is now hidden.`
+                  : `Column '${col.header}' is now shown.`}
               </Typography>
             );
           }
@@ -148,8 +167,7 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Changed Order of '{row.header}' from {row.oldOrderIndex} to{' '}
-                {row.newOrderIndex}.
+                Row '{row.header}' position was changed.
               </Typography>
             );
           }
@@ -159,9 +177,11 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
-                Update Row Title{' '}
-                <span className="removed">'{row.oldTitle}'</span> to{' '}
-                {row.newTitle}.
+                Update Row Title from{' '}
+                <span className={classNames({ removed: row.oldTitle })}>
+                  '{row.oldTitle}'
+                </span>{' '}
+                to {row.newTitle}.
               </Typography>
             );
           }
@@ -172,8 +192,8 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                 className="table-change-list-item"
               >
                 {row.hidden
-                  ? `Column '${row.oldTitle}' made hidden.`
-                  : `Column '${row.oldTitle}' made shown.`}
+                  ? `Row '${row.header}' is now hidden.`
+                  : `Row '${row.header}' is now shown.`}
               </Typography>
             );
           }
@@ -186,9 +206,13 @@ function ChangeSets({ cfaAccepted, cfaRejected, columns, rows }) {
                       variant="bodyDefault"
                       className="table-change-list-item"
                     >
-                      Update cell content{' '}
-                      <span className="removed">'{cell.prevContent}'</span> to '
-                      {cell.content}
+                      Update cell content from{' '}
+                      <span
+                        className={classNames({ removed: cell.prevContent })}
+                      >
+                        '{cell.prevContent}'
+                      </span>{' '}
+                      to '{cell.content}
                       '.
                     </Typography>
                   );
@@ -814,23 +838,134 @@ class AnswerHistory extends Component<Props> {
               <div className="header">
                 <Typography>{date}</Typography>
               </div>
-              <Divider />
+              <Divider className="no-margin-divider" />
               <div className="body">
                 {answersForADate.map((_answer, index) => {
                   const cfProposalId = _answer.cfProposalId;
+                  const getOpportunityData = opportunityData.toJS();
+                  let cfBidNo = null;
+                  let bidNo = null;
+                  let bidType = null;
+                  let cfBidType = null;
+                  if (
+                    cfProposalId &&
+                    opportunityData.get(cfProposalId).toJS().proposal
+                      .proposalDetails?.bidNo
+                  ) {
+                    cfBidNo = opportunityData.get(cfProposalId).toJS().proposal
+                      .proposalDetails.bidNo;
+                    cfBidType = getBidTypeFromProposalId(
+                      cfProposalId,
+                      getOpportunityData
+                    );
+                  } else if (
+                    answers.get(_answer.nextIndex) &&
+                    answers.get(_answer.nextIndex).get('userName') ===
+                      'CarryForwardAnswer'
+                  ) {
+                    cfBidNo = opportunityData
+                      .get(answers.get(_answer.nextIndex).get('cfProposalId'))
+                      .toJS().proposal.proposalDetails.bidNo;
+                    cfBidType = getBidTypeFromProposalId(
+                      answers.get(_answer.nextIndex).get('cfProposalId'),
+                      getOpportunityData
+                    );
+                  }
+
+                  if (
+                    opportunityData.get(_answer.proposalId).toJS().proposal
+                      .proposalDetails?.bidNo
+                  ) {
+                    bidNo = opportunityData.get(_answer.proposalId).toJS()
+                      .proposal.proposalDetails?.bidNo;
+                    bidType = getBidTypeFromProposalId(
+                      _answer.proposalId,
+                      getOpportunityData
+                    );
+                  }
+
                   const userName = !['CarryForwardAnswer'].includes(
                     _answer.userName
                   )
                     ? _answer.userName || ''
                     : '';
                   const momentDateTime = moment(_answer.date);
-                  const answer = JSON.parse(_answer.answer);
+                  const answer =
+                    _answer.answer === 'N/A'
+                      ? 'N/A'
+                      : JSON.parse(_answer.answer);
                   const nextAnswer =
                     _answer.nextIndex === -1
                       ? questionTableConfig
+                      : answers.get(_answer.nextIndex).get('answer') === 'N/A'
+                      ? 'N/A'
                       : JSON.parse(
                           answers.get(_answer.nextIndex).get('answer')
                         );
+
+                  // handle N/A answer history items
+                  if (answer === 'N/A') {
+                    return (
+                      <div className="table-change-item">
+                        <Typography className="meta-info">
+                          {[
+                            userName,
+                            ' ',
+                            momentDateTime.format('DD MMM YYYY'),
+                            ' ',
+                            'at',
+                            ' ',
+                            momentDateTime.format('hh:mma'),
+                            ' ',
+                            bidType,
+                            ' ',
+                            bidNo
+                          ]}
+                        </Typography>
+                        <div className="changeset-wrapper">
+                          <div className="changeset">
+                            <Typography
+                              variant="bodyDefault"
+                              className="table-change-list-item"
+                            >
+                              Answer was marked as N/A.
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  } else if (nextAnswer === 'N/A') {
+                    return (
+                      <div className="table-change-item">
+                        <Typography className="meta-info">
+                          {[
+                            userName,
+                            ' ',
+                            momentDateTime.format('DD MMM YYYY'),
+                            ' ',
+                            'at',
+                            ' ',
+                            momentDateTime.format('hh:mma'),
+                            ' ',
+                            bidType,
+                            ' ',
+                            bidNo
+                          ]}
+                        </Typography>
+                        <div className="changeset-wrapper">
+                          <div className="changeset">
+                            <Typography
+                              variant="bodyDefault"
+                              className="table-change-list-item"
+                            >
+                              Answer was unmarked as N/A.
+                            </Typography>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   const cfaAnswer = cloneDeep(answer);
                   const cfaNextAnswer = cloneDeep(nextAnswer);
 
@@ -878,6 +1013,8 @@ class AnswerHistory extends Component<Props> {
                         columns: questionTableConfig.columns
                       }
                     );
+
+                  const isCFA = _answer.userName === 'CarryForwardAnswer';
 
                   const nextColumnsMap = nextAnswer.columns.reduce(
                     (acc, col, index) => {
@@ -984,7 +1121,11 @@ class AnswerHistory extends Component<Props> {
                           ' ',
                           'at',
                           ' ',
-                          momentDateTime.format('hh:mma')
+                          momentDateTime.format('hh:mma'),
+                          ' ',
+                          bidType,
+                          ' ',
+                          bidNo
                         ]}
                       </Typography>
                       <div className="changeset-wrapper">
@@ -994,6 +1135,11 @@ class AnswerHistory extends Component<Props> {
                             cfaRejected={cfaRejected}
                             columns={columns}
                             rows={rows}
+                            isCFA={isCFA}
+                            cfBidNo={cfBidNo}
+                            cfBidType={cfBidType}
+                            bidNo={bidNo}
+                            bidType={bidType}
                           />
                         </div>
                         <div className="actions">
