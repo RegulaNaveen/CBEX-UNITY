@@ -63,15 +63,19 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(SelectQuestion);
-const MultiSelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(MultiSelectQuestion);
-const YesNoQuestionWithIdleStateDetection =
-  withIdleStateDetection(YesNoQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
 
-const CheckBoxQuestionWithIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestion);
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const QuestionItem = ({
   questionId = '',
@@ -538,6 +542,7 @@ const QuestionItem = ({
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
             section={Map(section)}
+            sectionName={section.sectionName}
             answers={answers}
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
             lastAnswer={lastAnswerMap}
@@ -644,7 +649,12 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(answer.get('answer').toString().trim());
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
     return false;
   };

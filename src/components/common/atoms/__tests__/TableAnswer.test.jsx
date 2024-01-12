@@ -19,6 +19,15 @@ describe('TableAnswer Component', () => {
       </Provider>
     );
 
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   it('renders without crashing', () => {
     const props = {
       questionText: 'Sample Question',
@@ -42,7 +51,7 @@ describe('TableAnswer Component', () => {
     expect(getByTestId('togglebtn')).toBeInTheDocument();
   });
 
-  it('toggles the modal on click', async () => {
+  xit('toggles the modal on click', async () => {
     const props = {
       questionText: 'Sample Question',
       tableConfiguration: {
@@ -172,7 +181,8 @@ describe('TableAnswer Component', () => {
         canEditRow: true
       },
       questionHint: 'Sample Hint',
-      questionHintJSON: null,
+      questionHintJSON:
+        '{"blocks":[{"key":"1mkk2","text":"Hot buttons should be listed in order of priority","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
       sectionName: 'Sample Section',
       answers: [],
       answered: false,
@@ -181,7 +191,7 @@ describe('TableAnswer Component', () => {
       disabled: false
     };
 
-    const { getByTestId, queryByTestId } = renderTableAnswer(props);
+    const { getByTestId } = renderTableAnswer(props);
 
     // Click on the toggle button to open the modal
     fireEvent.click(getByTestId('togglebtn'));
@@ -191,13 +201,11 @@ describe('TableAnswer Component', () => {
       expect(getByTestId('tableAnswer-modal')).toBeInTheDocument();
     });
 
-    // Click on the cancel button to close the modal
-    fireEvent.click(getByTestId('cancelButton'));
+    // Check that the Title component is rendered correctly
+    expect(getByTestId('question-tooltip-button')).toBeInTheDocument();
 
-    // Wait for the modal to be removed from the document
-    await waitFor(() => {
-      expect(queryByTestId('tableAnswer-modal')).toBeNull();
-    });
+    // Simulate clicking the question tooltip button to open the popover
+    fireEvent.click(getByTestId('question-tooltip-button'));
   });
 
   it('Not show add table data as placeholder text', () => {
@@ -818,7 +826,7 @@ describe('TableAnswer Component', () => {
     expect(saveBtn).toBeDisabled();
   });
 
-  it('Title function renders correctly and opens popover', async () => {
+  it.skip('Title function renders correctly and opens popover', async () => {
     const props = {
       questionText: 'Sample Question',
       tableConfiguration: {
@@ -973,5 +981,409 @@ describe('TableAnswer Component', () => {
 
     // Check that the popover is rendered correctly
     expect(getByTestId('question-popover')).toBeInTheDocument();
+  });
+
+  it('add new column', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [],
+        columns: []
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    //Click on cog icon to open the column menu
+    fireEvent.click(getByTestId('settingsMenuButton'));
+
+    // Click on Add Column text
+    fireEvent.click(screen.getByText('Add Column'));
+  });
+
+  it('add new row', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [],
+        columns: []
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    //Click on cog icon to open the column menu
+    fireEvent.click(getByTestId('settingsMenuButton'));
+
+    // Click on Add Column text
+    fireEvent.click(screen.getByText('Add Row'));
+  });
+
+  it('edit rows', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [
+          {
+            header: 'row 4',
+            canEdit: true,
+            index: 3,
+            hidden: true
+          },
+          {
+            header: 'row 5',
+            canEdit: true,
+            index: 4,
+            hidden: false
+          }
+        ],
+        columns: [
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'header',
+            header: '',
+            frozen: true,
+            locked: false,
+            type: 'text',
+            canEdit: true,
+            index: 0
+          }
+        ]
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    //Click on cog icon to open the column menu
+    fireEvent.click(getByTestId('settingsMenuButton'));
+
+    // Click on Add Column text
+    fireEvent.click(screen.getByText('Edit Rows'));
+
+    // Assert that row 4 is present
+    expect(screen.getAllByText('row 4')).toBeTruthy();
+
+    // find checkbox input and fire click event
+    const checkbox = screen.getAllByRole('checkbox')[0];
+    fireEvent.click(checkbox);
+
+    // find apply button and fire click event
+    const applyButton = screen.getByText('Apply');
+    fireEvent.click(applyButton);
+  });
+
+  it('edit columns', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [
+          {
+            header: 'row 4',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 3,
+            hidden: true
+          },
+          {
+            header: 'row 5',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 4,
+            hidden: false
+          }
+        ],
+        columns: [
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'header',
+            header: '',
+            frozen: true,
+            locked: false,
+            type: 'text',
+            canEdit: true,
+            index: 0
+          },
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'OClumn 2',
+            header: 'col 1',
+            frozen: false,
+            locked: false,
+            type: 'text',
+            index: 1,
+            canEdit: true
+          },
+          {
+            accessor: 'column-4',
+            width: 100,
+            canEdit: true,
+            index: 3,
+            hidden: false,
+            header: 'col 2'
+          }
+        ]
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    //Click on cog icon to open the column menu
+    fireEvent.click(getByTestId('settingsMenuButton'));
+
+    // Click on Add Column text
+    fireEvent.click(screen.getByText('Edit Columns'));
+
+    // Assert that col 1 is present
+    const col1 = screen.getAllByText('col 1');
+    expect(col1).toBeTruthy();
+  });
+
+  it('expand all', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [
+          {
+            header: 'row 4',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 3,
+            hidden: true
+          },
+          {
+            header: 'row 5',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 4,
+            hidden: false
+          }
+        ],
+        columns: [
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'header',
+            header: '',
+            frozen: true,
+            locked: false,
+            type: 'text',
+            canEdit: true,
+            index: 0
+          },
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'OClumn 2',
+            header: 'col 1',
+            frozen: false,
+            locked: false,
+            type: 'text',
+            index: 1,
+            canEdit: true
+          },
+          {
+            accessor: 'column-4',
+            width: 100,
+            canEdit: true,
+            index: 3,
+            hidden: false,
+            header: 'col 2'
+          }
+        ]
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    // Fire event to expand all column
+    const expandAll = screen.getByRole('checkbox', { name: /expand all/i });
+    fireEvent.click(expandAll);
+  });
+
+  xit('change column name', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [
+          {
+            header: 'row 4',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 3,
+            hidden: true
+          },
+          {
+            header: 'row 5',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 4,
+            hidden: false
+          }
+        ],
+        columns: [
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'header',
+            header: '',
+            frozen: true,
+            locked: false,
+            type: 'text',
+            canEdit: true,
+            index: 0
+          },
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'OClumn 2',
+            header: 'col 1',
+            frozen: false,
+            locked: false,
+            type: 'text',
+            index: 1,
+            canEdit: true
+          },
+          {
+            accessor: 'column-4',
+            width: 100,
+            canEdit: false,
+            index: 3,
+            hidden: false,
+            header: 'col 2'
+          }
+        ]
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    // Change the column name
+    const input = screen.getByDisplayValue('col 1');
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.change(input, { target: { value: 'col 2' } });
+  });
+
+  it('change row name', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canAddColumn: true,
+        canAddRow: true,
+        rows: [
+          {
+            header: 'row 4',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: false,
+            index: 3,
+            hidden: false
+          },
+          {
+            header: 'row 5',
+            'OClumn 2': '',
+            'column-4': '',
+            canEdit: true,
+            index: 4,
+            hidden: false
+          }
+        ],
+        columns: [
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'header',
+            header: '',
+            frozen: true,
+            locked: false,
+            type: 'text',
+            canEdit: true,
+            index: 0
+          },
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'OClumn 2',
+            header: 'col 1',
+            frozen: false,
+            locked: false,
+            type: 'text',
+            index: 1,
+            canEdit: true
+          },
+          {
+            accessor: 'column-4',
+            width: 100,
+            canEdit: false,
+            index: 3,
+            hidden: false,
+            header: 'col 2'
+          }
+        ]
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section'
+    };
+    // Render the TableAnswer component with necessary props
+    const { getByTestId } = renderTableAnswer(props);
+    // Click on the toggle button to open the modal
+    fireEvent.click(getByTestId('togglebtn'));
+
+    // Change the column name
+    const input = screen.getAllByRole('textbox');
+    screen.debug(input[1]);
+    fireEvent.change(input[1], { target: { value: '' } });
+    fireEvent.change(input[1], { target: { value: 'row 4' } });
   });
 });

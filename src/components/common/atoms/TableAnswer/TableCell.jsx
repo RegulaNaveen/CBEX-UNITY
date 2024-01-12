@@ -12,12 +12,21 @@ function TableCell({
   setSaveDisable
 }) {
   const [value, setValue] = useState(row[column.accessor] || '');
+  const [tooltipValue, setTooltipValue] = useState('');
 
   const rowRef = useRef(null);
 
   useEffect(() => {
     if (column.accessor && row[column.accessor]) {
       setValue(row[column.accessor]);
+    }
+    if (
+      rowRef?.current?.lastChild?.children[0]?.scrollWidth >
+      rowRef?.current?.lastChild?.children[0]?.clientWidth + 1
+    ) {
+      setTooltipValue(value);
+    } else {
+      setTooltipValue('');
     }
   }, [row, column]);
 
@@ -42,15 +51,7 @@ function TableCell({
         return (
           <div className="table-cell">
             {canEdit && !disabled ? (
-              <Tooltip
-                title={
-                  row.allExpanded ||
-                  rowRef?.current?.lastChild?.children[0]?.scrollWidth <=
-                    rowRef?.current?.lastChild?.children[0]?.clientWidth + 1
-                    ? ''
-                    : value
-                }
-              >
+              <Tooltip title={tooltipValue}>
                 <TextField
                   ref={rowRef}
                   className="row-header"
@@ -79,15 +80,7 @@ function TableCell({
       }
       return (
         <div className="table-cell">
-          <Tooltip
-            title={
-              row.allExpanded ||
-              rowRef?.current?.lastChild?.children[0]?.scrollWidth <=
-                rowRef?.current?.lastChild?.children[0]?.clientWidth + 1
-                ? ''
-                : value
-            }
-          >
+          <Tooltip title={tooltipValue}>
             <TextField
               ref={rowRef}
               margin="none"
