@@ -600,7 +600,7 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
       )}` +
       `?cc=${cc.join(
         ','
-      )}&subject=${subject}&body=Unity%20has%20copied%20the%20approval%20section%20details%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20the%20content%20to%20include%20it%20in%20your%20mail%20and%20share%20it%20with%20your%20team.&online=1`;
+      )}&subject=${subject}&body=Unity%20has%20copied%20the%20configured%20email%20content%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20into%20the%20Body%20of%20this%20email.&online=1`;
 
     expect(result).toEqual(expected);
   });
