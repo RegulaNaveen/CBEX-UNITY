@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import TextField from 'apollo-react/components/TextField';
-import Tooltip from 'apollo-react/components/Tooltip';
+// import Tooltip from 'apollo-react/components/Tooltip';
 
 function TableCell({
   row,
@@ -42,32 +42,32 @@ function TableCell({
         return (
           <div className="table-cell">
             {canEdit && !disabled ? (
-              <Tooltip
-                title={
-                  row.allExpanded ||
-                  rowRef?.current?.lastChild?.children[0]?.scrollWidth <=
-                    rowRef?.current?.lastChild?.children[0]?.clientWidth + 1
-                    ? ''
-                    : value
-                }
-              >
-                <TextField
-                  ref={rowRef}
-                  className="row-header"
-                  margin="none"
-                  value={value}
-                  multiline={row.allExpanded}
-                  onChange={handleValueChange}
-                  onBlur={handleInputBlur}
-                  InputProps={{
-                    inputProps: { maxLength: 1000 }
-                  }}
-                  error={value.length === 0}
-                  helperText={value.length === 0 ? 'Please add a name' : ''}
-                  fullWidth
-                />
-              </Tooltip>
+              // <Tooltip
+              //   title={
+              //     row.allExpanded ||
+              //     rowRef?.current?.lastChild?.children[0]?.scrollWidth <=
+              //       rowRef?.current?.lastChild?.children[0]?.clientWidth + 1
+              //       ? ''
+              //       : value
+              //   }
+              // >
+              <TextField
+                ref={rowRef}
+                className="row-header"
+                margin="none"
+                value={value}
+                multiline={row.allExpanded}
+                onChange={handleValueChange}
+                onBlur={handleInputBlur}
+                InputProps={{
+                  inputProps: { maxLength: 1000 }
+                }}
+                error={value.length === 0}
+                helperText={value.length === 0 ? 'Please add a name' : ''}
+                fullWidth
+              />
             ) : (
+              // </Tooltip>
               <Typography variant="bodyDefault" gutterBottom noWrap>
                 {value}
               </Typography>
@@ -77,7 +77,7 @@ function TableCell({
       }
       return (
         <div className="table-cell">
-          <Tooltip
+          {/* <Tooltip
             title={
               row.allExpanded ||
               rowRef?.current?.lastChild?.children[0]?.scrollWidth <=
@@ -85,19 +85,19 @@ function TableCell({
                 ? ''
                 : value
             }
-          >
-            <TextField
-              ref={rowRef}
-              margin="none"
-              value={value}
-              multiline={row.allExpanded}
-              onChange={handleValueChange}
-              onBlur={handleInputBlur}
-              fullWidth
-              disabled={disabled}
-              InputProps={{ inputProps: { maxLength: 1000 } }}
-            />
-          </Tooltip>
+          > */}
+          <TextField
+            ref={rowRef}
+            margin="none"
+            value={value}
+            multiline={row.allExpanded}
+            onChange={handleValueChange}
+            onBlur={handleInputBlur}
+            fullWidth
+            disabled={disabled}
+            InputProps={{ inputProps: { maxLength: 1000 } }}
+          />
+          {/* </Tooltip> */}
         </div>
       );
   }

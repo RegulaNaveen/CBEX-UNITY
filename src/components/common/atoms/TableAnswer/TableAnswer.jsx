@@ -121,29 +121,29 @@ function Header({
   }
 
   return canEdit && !disabled ? (
-    <Tooltip
-      title={
-        allExpanded ||
-        columnRef?.current?.lastChild?.children[0]?.scrollWidth <=
-          columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
-          ? ''
-          : currentTitle
-      }
-    >
-      <TextField
-        ref={columnRef}
-        margin="none"
-        value={currentTitle}
-        multiline={allExpanded}
-        onChange={handleValueChange}
-        onBlur={handleInputBlur}
-        InputProps={{ inputProps: { maxLength: 1000 } }}
-        error={currentTitle.length === 0}
-        helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
-        fullWidth
-      />
-    </Tooltip>
+    // <Tooltip
+    //   title={
+    //     allExpanded ||
+    //     columnRef?.current?.lastChild?.children[0]?.scrollWidth <=
+    //       columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
+    //       ? ''
+    //       : currentTitle
+    //   }
+    // >
+    <TextField
+      ref={columnRef}
+      margin="none"
+      value={currentTitle}
+      multiline={allExpanded}
+      onChange={handleValueChange}
+      onBlur={handleInputBlur}
+      InputProps={{ inputProps: { maxLength: 1000 } }}
+      error={currentTitle.length === 0}
+      helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+      fullWidth
+    />
   ) : (
+    // </Tooltip>
     <Tooltip title={currentTitle}>
       <Typography variant="bodyDefault" gutterBottom noWrap>
         {currentTitle}
@@ -297,7 +297,7 @@ function TableAnswer({
         }))
       );
     }
-  }, [showModal, tableConfiguration, allExpanded]);
+  }, [showModal, tableConfiguration]);
 
   function duplicateCheck(rows, columns) {
     const duplicateRows = rows.filter(
@@ -321,12 +321,43 @@ function TableAnswer({
   }
 
   useEffect(() => {
-    if (rows.length > 0 || columns.length > 0) {
+    setColumns(columns =>
+      columns.map((column, index) => ({
+        ...column,
+        header: (
+          <Header
+            index={index}
+            title={column.header}
+            onTitleChange={onHeaderTitleChange}
+            canEdit={column.canEdit}
+            disabled={disabled}
+            setSaveDisable={setSaveDisable}
+            allExpanded={allExpanded}
+          />
+        )
+      }))
+    );
+  }, [allExpanded]);
+
+  useEffect(() => {
+    if (rows.length > 0 && columns.length > 1) {
+      let rowEmptyCheck;
+      if (tableConfiguration.rows.length === 0) {
+        rowEmptyCheck = rows.map(row => row[columns[0].accessor]);
+      }
       const rowHeaders = rows.map(row => row.header);
       const columnHeaders = columns.map(column => column.headerTitle);
       const colDiff = diffArrays(
         tableConfiguration.columns.map(column => column.header),
         columns.map(column => column.headerTitle)
+      );
+      const colHiddenDiff = diffArrays(
+        tableConfiguration.columns.map(column => column.hidden),
+        columns.map(column => column.hidden)
+      );
+      const rowHiddenDiff = diffArrays(
+        tableConfiguration.rows.map(row => row.hidden),
+        rows.map(row => row.hidden)
       );
       const rowDiff = tableConfiguration.columns.map(
         column =>
@@ -335,9 +366,22 @@ function TableAnswer({
             rows.map(row => row[column.accessor])
           ).length > 1
       );
-      if (columnHeaders.includes('') || rowHeaders.includes('')) {
+      if (
+        columnHeaders.includes('', 1) ||
+        (rowEmptyCheck && rowEmptyCheck.includes('')) ||
+        (rowHeaders.includes('') &&
+          tableConfiguration.columns.length !== 0 &&
+          tableConfiguration.rows.length !== 0)
+      ) {
         setSaveDisable(true);
-      } else if (colDiff.length > 1 || rowDiff.includes(true)) {
+      } else if (
+        colDiff.length > 1 ||
+        rowDiff.includes(true) ||
+        colHiddenDiff.length > 1 ||
+        rowHiddenDiff.length > 1 ||
+        (tableConfiguration.columns.length === 0 &&
+          tableConfiguration.rows.length === 0)
+      ) {
         setSaveDisable(false);
       } else {
         setSaveDisable(true);
@@ -503,7 +547,7 @@ function TableAnswer({
           message={warningText}
           variant="error"
           onClose={() => setWarning(false)}
-          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
+          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.OK }]}
           id="error"
           modalStyle={{ maxWidth: 342 }}
         />

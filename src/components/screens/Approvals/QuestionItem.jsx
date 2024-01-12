@@ -505,6 +505,7 @@ const QuestionItem = ({
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
             section={Map(section)}
+            sectionName={section.sectionName}
             answers={answers}
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
             lastAnswer={lastAnswerMap}
