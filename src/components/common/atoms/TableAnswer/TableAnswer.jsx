@@ -99,8 +99,20 @@ function Header({
   allExpanded
 }) {
   const [currentTitle, setCurrentTitle] = useState(title);
+  const [tooltipValue, setTooltipValue] = useState('');
 
   const columnRef = useRef(null);
+
+  useEffect(() => {
+    if (
+      columnRef?.current?.lastChild?.children[0]?.scrollWidth >
+      columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
+    ) {
+      setTooltipValue(title);
+    } else {
+      setTooltipValue('');
+    }
+  }, [title]);
 
   const handleValueChange = useCallback(event => {
     setCurrentTitle(event.target.value);
@@ -112,6 +124,14 @@ function Header({
       if (currentTitle.length === 0) {
         setSaveDisable(true);
       }
+      if (
+        columnRef?.current?.lastChild?.children[0]?.scrollWidth >
+        columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
+      ) {
+        setTooltipValue(currentTitle);
+      } else {
+        setTooltipValue('');
+      }
     },
     [currentTitle]
   );
@@ -121,29 +141,21 @@ function Header({
   }
 
   return canEdit && !disabled ? (
-    // <Tooltip
-    //   title={
-    //     allExpanded ||
-    //     columnRef?.current?.lastChild?.children[0]?.scrollWidth <=
-    //       columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
-    //       ? ''
-    //       : currentTitle
-    //   }
-    // >
-    <TextField
-      ref={columnRef}
-      margin="none"
-      value={currentTitle}
-      multiline={allExpanded}
-      onChange={handleValueChange}
-      onBlur={handleInputBlur}
-      InputProps={{ inputProps: { maxLength: 1000 } }}
-      error={currentTitle.length === 0}
-      helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
-      fullWidth
-    />
+    <Tooltip title={tooltipValue}>
+      <TextField
+        ref={columnRef}
+        margin="none"
+        value={currentTitle}
+        multiline={allExpanded}
+        onChange={handleValueChange}
+        onBlur={handleInputBlur}
+        InputProps={{ inputProps: { maxLength: 1000 } }}
+        error={currentTitle.length === 0}
+        helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+        fullWidth
+      />
+    </Tooltip>
   ) : (
-    // </Tooltip>
     <Tooltip title={currentTitle}>
       <Typography variant="bodyDefault" gutterBottom noWrap>
         {currentTitle}
@@ -299,6 +311,15 @@ function TableAnswer({
     }
   }, [showModal, tableConfiguration]);
 
+  function removeDuplicates(array) {
+    return array.reduce((acc, current) => {
+      if (!acc.includes(current)) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+  }
+
   function duplicateCheck(rows, columns) {
     const duplicateRows = rows.filter(
       (value, index) => rows.indexOf(value) !== index
@@ -311,11 +332,19 @@ function TableAnswer({
       setWarningTitle('Alert');
       setWarningText(
         duplicateRows.length > 0 && duplicateColumns.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${duplicateRows.join(', ')}
-              ${TABLEANSWER.DUPLICATE_COLUMNS} ${duplicateColumns.join(', ')}`
+          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
+              duplicateRows
+            ).join(', ')}
+              ${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+              duplicateColumns
+            ).join(', ')}`
           : duplicateRows.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${duplicateRows.join(', ')}`
-          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${duplicateColumns.join(', ')}`
+          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
+              duplicateRows
+            ).join(', ')}`
+          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+              duplicateColumns
+            ).join(', ')}`
       );
     }
   }
