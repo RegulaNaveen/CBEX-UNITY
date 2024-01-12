@@ -68,9 +68,11 @@ function TableCell({
                 />
               </Tooltip>
             ) : (
-              <Typography variant="bodyDefault" gutterBottom noWrap>
-                {value}
-              </Typography>
+              <Tooltip title={value}>
+                <Typography variant="bodyDefault" gutterBottom noWrap>
+                  {value}
+                </Typography>
+              </Tooltip>
             )}
           </div>
         );
