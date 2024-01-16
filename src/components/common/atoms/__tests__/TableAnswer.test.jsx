@@ -668,10 +668,11 @@ describe('TableAnswer Component', () => {
     const element = getByText('Edit Table Data');
     expect(element).toBeInTheDocument();
     fireEvent.click(element);
-
-    const cancelBtn = await screen.findByRole('button', { name: /cancel/i });
-    fireEvent.click(cancelBtn);
-
+    await waitFor(async () => {
+      const cancelBtn = await screen.findByRole('button', { name: /cancel/i });
+      fireEvent.click(cancelBtn);  
+    },{timeout: 500});
+   
     await waitFor(() => {
       expect(screen.queryByTestId('tableAnswer-modal')).not.toBeInTheDocument();
     });
