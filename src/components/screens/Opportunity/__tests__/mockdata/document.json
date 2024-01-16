@@ -30,6 +30,7 @@
     "bidStatus": false,
     "pertinentDetails": "Testing",
     "isApprovalCountPresent": true,
+    "isEditable": true,
     "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
   },
   "boxLinks": {
@@ -81,6 +82,7 @@
       "isCurrent": true,
       "bidStatus": false,
       "pertinentDetails": "Testing",
+      "isEditable": true,
       "isApprovalCountPresent": true,
       "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
     },
@@ -19662,9 +19664,9 @@
       }
     ],
     "opportunityData": {
-      "86462966-7e94-4648-b1e7-fb908f48eaf0": {
+      "9aa9dfe2-1222-4dff-8977-f06f45656a4b": {
         "proposal": {
-          "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+          "proposalId": "9aa9dfe2-1222-4dff-8977-f06f45656a4b",
           "accountId": "0010100000K3Y1WAAV",
           "opportunityName": "QA Testing",
           "agreementId": "aM701000000CbmBCAS",
