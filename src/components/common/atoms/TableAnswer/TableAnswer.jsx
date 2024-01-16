@@ -396,15 +396,15 @@ function TableAnswer({
               duplicateRows
             ).join(', ')}
               ${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
+                duplicateColumns
+              ).join(', ')}`
           : duplicateRows.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
-              duplicateRows
-            ).join(', ')}`
-          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
+            ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
+                duplicateRows
+              ).join(', ')}`
+            : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+                duplicateColumns
+              ).join(', ')}`
       );
     }
   }
@@ -562,8 +562,10 @@ function TableAnswer({
             Edit Table Data
           </Typography>
         </div>
-        {rows.length > 0 && columns.length > 0 && (
+        {rows.length > 0 || columns.length > 0 ? (
           <TablePreview rows={rows} columns={columns} />
+        ) : (
+          ''
         )}
       </div>
       <Modal
