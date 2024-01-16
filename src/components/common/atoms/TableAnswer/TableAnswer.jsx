@@ -99,8 +99,20 @@ function Header({
   allExpanded
 }) {
   const [currentTitle, setCurrentTitle] = useState(title);
+  const [tooltipValue, setTooltipValue] = useState('');
 
   const columnRef = useRef(null);
+
+  useEffect(() => {
+    if (
+      columnRef?.current?.lastChild?.children[0]?.scrollWidth >
+      columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
+    ) {
+      setTooltipValue(title);
+    } else {
+      setTooltipValue('');
+    }
+  }, [title]);
 
   const handleValueChange = useCallback(event => {
     setCurrentTitle(event.target.value);
@@ -112,6 +124,14 @@ function Header({
       if (currentTitle.length === 0) {
         setSaveDisable(true);
       }
+      if (
+        columnRef?.current?.lastChild?.children[0]?.scrollWidth >
+        columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
+      ) {
+        setTooltipValue(currentTitle);
+      } else {
+        setTooltipValue('');
+      }
     },
     [currentTitle]
   );
@@ -121,15 +141,7 @@ function Header({
   }
 
   return canEdit && !disabled ? (
-    <Tooltip
-      title={
-        allExpanded ||
-        columnRef?.current?.lastChild?.children[0]?.scrollWidth <=
-          columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
-          ? ''
-          : currentTitle
-      }
-    >
+    <Tooltip title={tooltipValue}>
       <TextField
         ref={columnRef}
         margin="none"
@@ -195,6 +207,33 @@ function TableAnswer({
   function handleAddColumnClick() {
     let nextColumnsWithExtra = cloneDeep(columns);
 
+    if (nextColumnsWithExtra.length === 0) {
+      nextColumnsWithExtra.push({
+        header: ``,
+        accessor: `header`,
+        alwaysVisible: true,
+        customCell: cellProps => (
+          <TableCell
+            {...cellProps}
+            disabled={disabled}
+            setSaveDisable={setSaveDisable}
+          />
+        ),
+        header: (
+          <Header
+            index={nextColumnsWithExtra.length}
+            title=""
+            onTitleChange={onHeaderTitleChange}
+            canEdit={true}
+            disabled={disabled}
+            allExpanded={allExpanded}
+          />
+        ),
+        canEdit: true,
+        headerTitle: ''
+      });
+    }
+
     const newColumn = {
       accessor: `column-${nextColumnsWithExtra.length}`,
       customCell: cellProps => (
@@ -235,6 +274,33 @@ function TableAnswer({
 
     let nextColumnsWithExtra = cloneDeep(columns);
 
+    if (nextColumnsWithExtra.length === 0) {
+      nextColumnsWithExtra.push({
+        header: ``,
+        accessor: `header`,
+        alwaysVisible: true,
+        customCell: cellProps => (
+          <TableCell
+            {...cellProps}
+            disabled={disabled}
+            setSaveDisable={setSaveDisable}
+          />
+        ),
+        header: (
+          <Header
+            index={nextColumnsWithExtra.length}
+            title=""
+            onTitleChange={onHeaderTitleChange}
+            canEdit={true}
+            disabled={disabled}
+            allExpanded={allExpanded}
+          />
+        ),
+        canEdit: true,
+        headerTitle: ''
+      });
+    }
+
     nextRowsWithExtra.push(
       columns.reduce(
         (acc, column) => {
@@ -261,6 +327,12 @@ function TableAnswer({
       });
     }, 700);
     if (onCascadeChange) onCascadeChange();
+  }
+
+  function handleModalClose() {
+    if (toggleWatch) toggleWatch(false);
+    if (onBlur) onBlur();
+    toggleModal(false);
   }
 
   useEffect(() => {
@@ -297,7 +369,16 @@ function TableAnswer({
         }))
       );
     }
-  }, [showModal, tableConfiguration, allExpanded]);
+  }, [showModal, tableConfiguration]);
+
+  function removeDuplicates(array) {
+    return array.reduce((acc, current) => {
+      if (!acc.includes(current)) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+  }
 
   function duplicateCheck(rows, columns) {
     const duplicateRows = rows.filter(
@@ -311,22 +392,61 @@ function TableAnswer({
       setWarningTitle('Alert');
       setWarningText(
         duplicateRows.length > 0 && duplicateColumns.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${duplicateRows.join(', ')}
-              ${TABLEANSWER.DUPLICATE_COLUMNS} ${duplicateColumns.join(', ')}`
+          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
+              duplicateRows
+            ).join(', ')}
+              ${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+              duplicateColumns
+            ).join(', ')}`
           : duplicateRows.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${duplicateRows.join(', ')}`
-          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${duplicateColumns.join(', ')}`
+          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
+              duplicateRows
+            ).join(', ')}`
+          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+              duplicateColumns
+            ).join(', ')}`
       );
     }
   }
 
   useEffect(() => {
-    if (rows.length > 0 || columns.length > 0) {
+    setColumns(columns =>
+      columns.map((column, index) => ({
+        ...column,
+        header: (
+          <Header
+            index={index}
+            title={column.header}
+            onTitleChange={onHeaderTitleChange}
+            canEdit={column.canEdit}
+            disabled={disabled}
+            setSaveDisable={setSaveDisable}
+            allExpanded={allExpanded}
+          />
+        )
+      }))
+    );
+  }, [allExpanded]);
+
+  useEffect(() => {
+    if (rows.length > 0 && columns.length > 1) {
+      let rowEmptyCheck;
+      if (tableConfiguration.rows.length === 0) {
+        rowEmptyCheck = rows.map(row => row[columns[0].accessor]);
+      }
       const rowHeaders = rows.map(row => row.header);
       const columnHeaders = columns.map(column => column.headerTitle);
       const colDiff = diffArrays(
         tableConfiguration.columns.map(column => column.header),
         columns.map(column => column.headerTitle)
+      );
+      const colHiddenDiff = diffArrays(
+        tableConfiguration.columns.map(column => column.hidden),
+        columns.map(column => column.hidden)
+      );
+      const rowHiddenDiff = diffArrays(
+        tableConfiguration.rows.map(row => row.hidden),
+        rows.map(row => row.hidden)
       );
       const rowDiff = tableConfiguration.columns.map(
         column =>
@@ -335,9 +455,22 @@ function TableAnswer({
             rows.map(row => row[column.accessor])
           ).length > 1
       );
-      if (columnHeaders.includes('') || rowHeaders.includes('')) {
+      if (
+        columnHeaders.includes('', 1) ||
+        (rowEmptyCheck && rowEmptyCheck.includes('')) ||
+        (rowHeaders.includes('') &&
+          tableConfiguration.columns.length !== 0 &&
+          tableConfiguration.rows.length !== 0)
+      ) {
         setSaveDisable(true);
-      } else if (colDiff.length > 1 || rowDiff.includes(true)) {
+      } else if (
+        colDiff.length > 1 ||
+        rowDiff.includes(true) ||
+        colHiddenDiff.length > 1 ||
+        rowHiddenDiff.length > 1 ||
+        (tableConfiguration.columns.length === 0 &&
+          tableConfiguration.rows.length === 0)
+      ) {
         setSaveDisable(false);
       } else {
         setSaveDisable(true);
@@ -367,6 +500,8 @@ function TableAnswer({
   }, []);
 
   function handleSaveClick() {
+    if (toggleWatch) toggleWatch(false);
+    toggleModal(false);
     const newColumns = [];
     const rowHeaders = rows.map(row => row.header);
     const columnHeaders = columns.map(column => column.headerTitle);
@@ -384,7 +519,6 @@ function TableAnswer({
       return;
     }
     onChange({ rows, columns: newColumns }, lastAnswer);
-    toggleModal(false);
     duplicateCheck(rowHeaders, columnHeaders);
   }
 
@@ -410,19 +544,19 @@ function TableAnswer({
           onClick={() => {
             if (!disabled) {
               toggleModal(!showModal);
-            }
-            if (!showModal) {
-              if (toggleWatch) toggleWatch(true);
-              if (onFocus) onFocus();
-            } else {
-              if (toggleWatch) toggleWatch(false);
-              if (onBlur) onBlur();
+              if (!showModal) {
+                if (toggleWatch) toggleWatch(true);
+                if (onFocus) onFocus();
+              } else {
+                if (toggleWatch) toggleWatch(false);
+                if (onBlur) onBlur();
+              }
             }
           }}
         >
           <TableIcon
             className="table-icon"
-            color={answered && !disabled ? '#0768fd' : '#0768fd'}
+            color={answered && !disabled ? '#0768fd' : '#595959'}
           />
           <Typography className="label" variant="body1">
             Edit Table Data
@@ -437,7 +571,7 @@ function TableAnswer({
         disableBackdropClick
         open={showModal}
         variant="default"
-        onClose={() => toggleModal(false)}
+        onClose={() => handleModalClose()}
         title={
           <Title
             questionText={questionText}
@@ -452,7 +586,7 @@ function TableAnswer({
           {
             label: 'Cancel',
             'data-testid': 'cancelButton',
-            onClick: () => toggleModal(false)
+            onClick: () => handleModalClose()
           },
           {
             label: 'Save',
@@ -503,7 +637,7 @@ function TableAnswer({
           message={warningText}
           variant="error"
           onClose={() => setWarning(false)}
-          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.CLOSE }]}
+          buttonProps={[{ className: 'hidden' }, { label: DEFAULT.OK }]}
           id="error"
           modalStyle={{ maxWidth: 342 }}
         />

@@ -58,14 +58,6 @@ const CalendarIcon = ({ question }) => {
         latestAnswer === ' ';
       const isLatestAnswerCFA =
         answers[0] && answers[0]['userName'] === 'CarryForwardAnswer';
-      if (question.answerConfiguration.type === 'table') {
-        return (
-          <Calendar
-            data-testid="noanswers-icon"
-            style={{ color: color.unAnswered }}
-          />
-        );
-      }
       if (bidAnswerCopy && latestAnsweredBidNo !== null && isLatestAnswerCFA) {
         return (
           <Tooltip

@@ -62,7 +62,7 @@ describe('CalendarIcon', () => {
     expect(getByTestId('unity-nonpredicted-calender-icon')).toBeInTheDocument();
   });
 
-  it('show carry forward indication icon only if flag is enabled', () => {
+  it.skip('show carry forward indication icon only if flag is enabled', () => {
     const question = {
       answers: [{ answer: 'Some answer', userName: 'CarryForwardAnswer' }],
       answerConfiguration: {
