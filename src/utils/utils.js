@@ -34,31 +34,33 @@ function getCountryOptions() {
   return Object.values(CountryMap);
 }
 
-const getAnswer = ans => {
-  try {
-    const lastAnswer = ans[ans.length - 1];
-    let formattedAnswer;
-    if (lastAnswer?.formattedAnswer) {
-      if (isString(lastAnswer?.formattedAnswer)) {
-        try {
-          formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
-        } catch {
-          return (lastAnswer && lastAnswer.answer.toString()) || '';
+const getAnswer = (ans, type) => {
+  if (type === ANSWER_TYPES.TABLE && ans.length === 0) return ans;
+  else
+    try {
+      const lastAnswer = ans[ans.length - 1];
+      let formattedAnswer;
+      if (lastAnswer?.formattedAnswer) {
+        if (isString(lastAnswer?.formattedAnswer)) {
+          try {
+            formattedAnswer = JSON.parse(lastAnswer?.formattedAnswer);
+          } catch {
+            return (lastAnswer && lastAnswer.answer.toString()) || '';
+          }
+        } else formattedAnswer = lastAnswer?.formattedAnswer;
+        if (formattedAnswer?.htmlExport) {
+          return formattedAnswer.htmlExport;
         }
-      } else formattedAnswer = lastAnswer?.formattedAnswer;
-      if (formattedAnswer?.htmlExport) {
-        return formattedAnswer.htmlExport;
+        if (formattedAnswer?.html) {
+          return formattedAnswer?.html;
+        }
       }
-      if (formattedAnswer?.html) {
-        return formattedAnswer?.html;
-      }
-    }
 
-    return (lastAnswer && lastAnswer.answer.toString()) || '';
-  } catch (error) {
-    console.log(error);
-    return '';
-  }
+      return (lastAnswer && lastAnswer.answer.toString()) || '';
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
 };
 
 const getFullProposalTeamString = (updateField, questions) => {
@@ -93,75 +95,82 @@ const getFullProposalTeamString = (updateField, questions) => {
   return result;
 };
 
-const getTableAnswer = tableAnswer => {
-  if (tableAnswer) {
+const getTableView = tableConfig => {
+  const tableAnswerString = `
+  <div style='width: 100%;
+  overflow: auto;
+  overflow: auto;
+  max-width: 1100px;
+  margin: auto;'>
+  <table 
+  style='width:100%; 
+  border-collapse: collapse;
+  margin-top: 20px; 
+  border: 1px solid #e9e9e9;
+  table-layout: fixed;'>
+  <thead>
+  <tr style='border-bottom: 1px solid #e9e9e9;
+      background-color: #f8f9fb;'>
+  ${tableConfig?.columns.map(
+    column =>
+      !column?.hidden &&
+      `<th style='width: 200px;
+    padding: 10px 0px 10px 10px;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 1px solid #e9e9e9;
+    border-right: 1px solid #e9e9e9;
+    background-color: #f8f9fb;'>${column?.header ? column?.header : ''}</th>`
+  )}
+  </tr>
+  </thead>
+  <tbody>
+  ${tableConfig?.rows.map(
+    row =>
+      `<tr>
+      ${
+        !row?.hidden &&
+        `<td  style='width: 200px;
+      padding: 10px 0px 10px 10px;
+      text-align: left;
+      font-size: 16px;
+      border-bottom: 1px solid #e9e9e9;
+      border-right: 1px solid #e9e9e9;
+      background-color: #f8f9fb;'>${row?.header}</td>`
+      }
+      ${tableConfig.columns.map(
+        column =>
+          column?.accessor !== 'header' &&
+          !row?.hidden &&
+          `<td style='width:200px;
+        padding: 10px 0px 10px 10px;
+        text-align: left;
+        font-size: 16px;
+        border-bottom: 1px solid #e9e9e9;
+        border-right: 1px solid #e9e9e9;'>${
+          row[column?.accessor] ? row[column?.accessor] : ''
+        }</td>`
+      )}
+      </tr>`
+  )}
+  </tbody>
+  </table></div><br/>`;
+  const tableData = tableAnswerString.replace(/,/g, '');
+  return tableData.replace(/false/g, '');
+};
+
+const getTableAnswer = (tableAnswer, question) => {
+  if (isArray(tableAnswer) && tableAnswer.length === 0) {
+    if (isString(question?.questionTableConfig)) {
+      const tableConfig = JSON.parse(question?.questionTableConfig);
+      return getTableView(tableConfig);
+    }
+  } else {
     let formattedTableAnswer = tableAnswer;
     if (isString(tableAnswer)) {
       try {
         formattedTableAnswer = JSON.parse(tableAnswer);
-        const tableAnswerString = `
-        <div style='width: 100%;
-        overflow: auto;
-        overflow: auto;
-        max-width: 1100px;
-        margin: auto;'>
-        <table 
-        style='width:100%; 
-        border-collapse: collapse;
-        margin-top: 20px; 
-        border: 1px solid #e9e9e9;
-        table-layout: fixed;'>
-        <thead>
-        <tr style='border-bottom: 1px solid #e9e9e9;
-            background-color: #f8f9fb;'>
-        ${formattedTableAnswer?.columns.map(
-          column =>
-            !column?.hidden &&
-            `<th style='width: 200px;
-          padding: 10px 0px 10px 10px;
-          text-align: left;
-          font-size: 16px;
-          border-bottom: 1px solid #e9e9e9;
-          border-right: 1px solid #e9e9e9;
-          background-color: #f8f9fb;'>${
-            column?.header ? column?.header : ''
-          }</th>`
-        )}
-        </tr>
-        </thead>
-        <tbody>
-        ${formattedTableAnswer?.rows.map(
-          row =>
-            `<tr>
-            ${
-              !row?.hidden &&
-              `<td  style='width: 200px;
-            padding: 10px 0px 10px 10px;
-            text-align: left;
-            font-size: 16px;
-            border-bottom: 1px solid #e9e9e9;
-            border-right: 1px solid #e9e9e9;
-            background-color: #f8f9fb;'>${row?.header}</td>`
-            }
-            ${formattedTableAnswer.columns.map(
-              column =>
-                column?.accessor !== 'header' &&
-                !row?.hidden &&
-                `<td style='width:200px;
-              padding: 10px 0px 10px 10px;
-              text-align: left;
-              font-size: 16px;
-              border-bottom: 1px solid #e9e9e9;
-              border-right: 1px solid #e9e9e9;'>${
-                row[column?.accessor] ? row[column?.accessor] : '-'
-              }</td>`
-            )}
-            </tr>`
-        )}
-        </tbody>
-        </table></div><br/>`;
-        const tableData = tableAnswerString.replace(/,/g, '');
-        return tableData.replace(/false/g, '');
+        return getTableView(formattedTableAnswer);
       } catch {
         return '';
       }
@@ -170,16 +179,21 @@ const getTableAnswer = tableAnswer => {
   return '';
 };
 
-const handleAnswerTypes = (answerConfiguration, answers, updateField) => {
+const handleAnswerTypes = (
+  answerConfiguration,
+  answers,
+  updateField,
+  question
+) => {
   switch (answerConfiguration?.type) {
     case ANSWER_TYPES.TEXT: {
       return updateField === 'body'
-        ? getAnswer(answers)
+        ? getAnswer(answers, ANSWER_TYPES.TEXT)
         : answers?.slice(-1)[0]?.answer ?? '';
     }
     case ANSWER_TYPES.TABLE: {
-      const tableAnswer = getAnswer(answers);
-      return getTableAnswer(tableAnswer);
+      const tableAnswer = getAnswer(answers, ANSWER_TYPES.TABLE);
+      return getTableAnswer(tableAnswer, question);
     }
     default:
       return answers?.slice(-1)[0]?.answer?.toString() ?? '';
@@ -195,26 +209,29 @@ const replaceAnswerToQuestionsPlaceholders = (
   let answer;
   const relevantQuestions = questions?.filter(q => q.active);
 
-  relevantQuestions.forEach(
-    ({ questionText, questionId, answers, answerConfiguration }) => {
-      const regexPlaceholders = new RegExp(
-        `\\[${questionText
-          ?.toLowerCase()
-          ?.replace(/[^\w\s]/gi, '')
-          ?.replace(/\s+/g, '_')}:${questionId}\\]`,
-        'gi'
+  relevantQuestions.forEach(question => {
+    const { questionText, questionId, answers, answerConfiguration } = question;
+    const regexPlaceholders = new RegExp(
+      `\\[${questionText
+        ?.toLowerCase()
+        ?.replace(/[^\w\s]/gi, '')
+        ?.replace(/\s+/g, '_')}:${questionId}\\]`,
+      'gi'
+    );
+    if (answers) {
+      answer = handleAnswerTypes(
+        answerConfiguration,
+        answers,
+        updateField,
+        question
       );
 
-      if (answers?.length) {
-        answer = handleAnswerTypes(answerConfiguration, answers, updateField);
-
-        updatedEventBodyStr = updatedEventBodyStr.replace(
-          regexPlaceholders,
-          answer
-        );
-      }
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexPlaceholders,
+        answer
+      );
     }
-  );
+  });
 
   if (updateField === 'subject') {
     const regexDate = /\b\d{4}-\d{2}-\d{2}\b/g;
