@@ -142,7 +142,7 @@ const getTableView = tableConfig => {
         column =>
           column?.accessor !== 'header' &&
           !row?.hidden &&
-          `<td style='width:200px;
+          `<td style='width: 200px;
         padding: 10px 0px 10px 10px;
         text-align: left;
         font-size: 16px;
