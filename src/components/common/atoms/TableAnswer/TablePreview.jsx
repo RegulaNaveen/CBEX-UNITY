@@ -8,11 +8,21 @@ export default function TablePreview({ columns, rows }) {
 
   return (
     <div className="custom-answer-table-container">
-      <table className="custom-answer-table" id="table1">
+      <table className="custom-answer-table">
         <thead>
           <tr>
             {columns.length > 0 &&
-              columns.map(column => <th>{column.headerTitle}</th>)}
+              columns.map(column => (
+                <th>
+                  <Tooltip
+                    title={column.headerTitle}
+                    placement="top"
+                    id="table-tooltip"
+                  >
+                    <p>{column.headerTitle}</p>
+                  </Tooltip>
+                </th>
+              ))}
           </tr>
         </thead>
         <tbody>
@@ -24,23 +34,13 @@ export default function TablePreview({ columns, rows }) {
                     {row[column.accessor] ? (
                       <>
                         <td>
-                          {row[column.accessor].length < 30 ? (
-                            row[column.accessor]
-                          ) : (
-                            <>
-                              {!panelStatus ? (
-                                <Tooltip
-                                  title={row[column.accessor]}
-                                  placement="top"
-                                  id="table-tooltip"
-                                >
-                                  <p>{row[column.accessor].substring(0, 30)}</p>
-                                </Tooltip>
-                              ) : (
-                                <p> {row[column.accessor]}</p>
-                              )}
-                            </>
-                          )}
+                          <Tooltip
+                            title={row[column.accessor]}
+                            placement="top"
+                            id="table-tooltip"
+                          >
+                            <p>{row[column.accessor]}</p>
+                          </Tooltip>
                         </td>
                       </>
                     ) : (

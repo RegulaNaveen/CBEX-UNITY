@@ -317,7 +317,8 @@ function getHeaderInfoRows(details) {
                 }
               } else if (
                 details?.bidType === 'RFI_Request' ||
-                details?.bidType === 'Bid RFI_Request_Bid'
+                details?.bidType === 'Bid RFI_Request_Bid' ||
+                details?.bidType === 'Bid RFI_Request'
               ) {
                 {
                   return `RFI ${value.toString()}` || value.toString();

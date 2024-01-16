@@ -7,6 +7,7 @@ import tabdata from '../../../components/views/modals/__test__/tabdata.json';
 import cloneDeep from 'lodash/cloneDeep';
 import { Map } from 'immutable';
 import { store } from '../../../store';
+import * as proposalAction from '../../actions/proposal-actions';
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 const cloneData = cloneDeep(data);
@@ -15,7 +16,11 @@ cloneData.proposal.unityTabQuestionLoading = Map({
   questionId: '',
   value: false
 });
-cloneData.proposal.opportunityData = Map({});
+cloneData.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b'] =
+  Map(
+    cloneData.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b']
+  );
+cloneData.proposal.opportunityData = Map(cloneData.proposal.opportunityData);
 cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
 cloneData.proposal.editQuestionsData = Map({});
 cloneData.proposal.getAnswerTypesDataF = jest.fn();
@@ -1019,7 +1024,7 @@ describe('proposal reducer', () => {
     expect(result.selectedBid).toEqual(expectedState);
   });
 
-  test('updateProposalDetail', () => {
+  test('updateProposalDetail PROPOSAL_DETAIL_UPDATE', () => {
     const action = {
       type: PROPOSAL.PROPOSAL_DETAIL_UPDATE,
       payload: {
@@ -1068,5 +1073,570 @@ describe('proposal reducer', () => {
     let result = proposalReducer(initialState.proposal, action);
     result = result.toJS();
     expect(result.proposalDetails).toEqual(expectedState);
+  });
+  test('updateProposalDetail socket data', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_DASHBOARD_OPPORTUNITY,
+      payload: {
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+        data: {
+          proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+          proposalDetails: {
+            Customer: 'Sapthmi M Shetty_5',
+            'CRM #': 'JAB53166',
+            'Bid due date': '2024-01-19',
+            'Line of business': 'Connected Devices',
+            'Is this IQVIA Biotech': 'Yes',
+            Phase: 'Phase 2b',
+            'Verbatim indication': 'test24',
+            'Therapeutic area': 'Oncology',
+            'Protocol number': '',
+            'Product name': 'druggsa',
+            IsFsp: 'No',
+            opportunityId: '0067A00000DMzxgQAD',
+            BoxId: '',
+            pertinentDetails: null,
+            earlyEngagementDevelopmentPlan: '',
+            typeOfActivity: 'Post Award - Non-compete strategy development',
+            describeActivity: 'Testt',
+            requestDetail: '',
+            bidNo: 1,
+            bidType: 'Post_Award_Bid'
+          }
+        }
+      }
+    };
+    const expectedState = {
+      Customer: 'Test_V',
+      'CRM #': 'UZA89103',
+      'Bid due date': '2023-01-31',
+      'Line of business': 'Clinical',
+      'Is this IQVIA Biotech': 'Yes',
+      Phase: 'Phase 1',
+      'Verbatim indication': 'QA testing',
+      'Therapeutic area': 'Cardiology',
+      'Protocol number': '12345678',
+      'Product name': '32456789',
+      BoxId: '186605979335',
+      IsFsp: 'No',
+      pertinentDetails: 'Testing',
+      opportunityId: '0060100000BAJ0tAAH',
+      bidNo: 1
+    };
+    let result = proposalReducer(initialState.proposal, action);
+    result = result.toJS();
+    expect(result.proposalDetails).toEqual(expectedState);
+  });
+
+  test('updateProposalDetail PROPOSAL_DETAIL_UPDATE', () => {
+    const action = {
+      type: PROPOSAL.PROPOSAL_DETAIL_UPDATE,
+      payload: {
+        proposalDetails: {
+          Customer: 'Sapthmi M Shetty_5',
+          'CRM #': 'JAB53166',
+          'Bid due date': '2024-01-19',
+          'Line of business': 'Connected Devices',
+          'Is this IQVIA Biotech': 'Yes',
+          Phase: 'Phase 2b',
+          'Verbatim indication': 'test24',
+          'Therapeutic area': 'Oncology',
+          'Protocol number': '',
+          'Product name': 'druggsa',
+          IsFsp: 'No',
+          opportunityId: '0067A00000DMzxgQAD',
+          BoxId: '',
+          pertinentDetails: null,
+          earlyEngagementDevelopmentPlan: '',
+          typeOfActivity: 'Post Award - Non-compete strategy development',
+          describeActivity: 'Testt',
+          requestDetail: '',
+          bidNo: 1,
+          bidType: 'Post_Award_Bid'
+        },
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b'
+      }
+    };
+    const expectedState = {
+      Customer: 'Test_V',
+      'CRM #': 'UZA89103',
+      'Bid due date': '2023-01-31',
+      'Line of business': 'Clinical',
+      'Is this IQVIA Biotech': 'Yes',
+      Phase: 'Phase 1',
+      'Verbatim indication': 'QA testing',
+      'Therapeutic area': 'Cardiology',
+      'Protocol number': '12345678',
+      'Product name': '32456789',
+      BoxId: '186605979335',
+      IsFsp: 'No',
+      pertinentDetails: 'Testing',
+      opportunityId: '0060100000BAJ0tAAH',
+      bidNo: 1
+    };
+    let result = proposalReducer(initialState.proposal, action);
+    result = result.toJS();
+    expect(result.proposalDetails).toEqual(expectedState);
+  });
+  test('updateProposalDetailSF UPDATE_PROPOSAL_DETAIL_SF socket data', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_PROPOSAL_DETAIL_SF,
+      payload: {
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+        data: {
+          proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+          proposalDetails: {
+            Customer: 'Sapthmi M Shetty_5',
+            'CRM #': 'JAB53166',
+            'Bid due date': '2024-01-19',
+            'Line of business': 'Connected Devices',
+            'Is this IQVIA Biotech': 'Yes',
+            Phase: 'Phase 2b',
+            'Verbatim indication': 'test24',
+            'Therapeutic area': 'Oncology',
+            'Protocol number': '',
+            'Product name': 'druggsa',
+            IsFsp: 'No',
+            opportunityId: '0067A00000DMzxgQAD',
+            BoxId: '',
+            pertinentDetails: null,
+            earlyEngagementDevelopmentPlan: '',
+            typeOfActivity: 'Post Award - Non-compete strategy development',
+            describeActivity: 'Testt',
+            requestDetail: '',
+            bidNo: 1,
+            bidType: 'Post_Award_Bid'
+          },
+          bidStatusKey: true,
+          bidStopStatus: true
+        }
+      }
+    };
+    const expectedState = {
+      Customer: 'Test_V',
+      'CRM #': 'UZA89103',
+      'Bid due date': '2023-01-31',
+      'Line of business': 'Clinical',
+      'Is this IQVIA Biotech': 'Yes',
+      Phase: 'Phase 1',
+      'Verbatim indication': 'QA testing',
+      'Therapeutic area': 'Cardiology',
+      'Protocol number': '12345678',
+      'Product name': '32456789',
+      BoxId: '186605979335',
+      IsFsp: 'No',
+      pertinentDetails: 'Testing',
+      opportunityId: '0060100000BAJ0tAAH',
+      bidNo: 1
+    };
+    let result = proposalReducer(initialState.proposal, action);
+    result = result.toJS();
+    expect(result.proposalDetails).toEqual(expectedState);
+  });
+  test('updateProposalDetailSF early engagement UPDATE_PROPOSAL_DETAIL_SF socket data', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_PROPOSAL_DETAIL_SF,
+      payload: {
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+        data: {
+          proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+          proposalDetails: {
+            Customer: 'Sapthmi M Shetty_5',
+            'CRM #': 'JAB53166',
+            'Bid due date': '2024-01-19',
+            'Line of business': 'Connected Devices',
+            'Is this IQVIA Biotech': 'Yes',
+            Phase: 'Phase 2b',
+            'Verbatim indication': 'test24',
+            'Therapeutic area': 'Oncology',
+            'Protocol number': '',
+            'Product name': 'druggsa',
+            IsFsp: 'No',
+            opportunityId: '0067A00000DMzxgQAD',
+            BoxId: '',
+            pertinentDetails: null,
+            earlyEngagementDevelopmentPlan: '',
+            typeOfActivity: 'Post Award - Non-compete strategy development',
+            describeActivity: 'Testt',
+            requestDetail: '',
+            bidNo: 1,
+            bidType: 'Post_Award_Bid'
+          },
+          earlyEngagementBid: true
+        }
+      }
+    };
+    const expectedState = {
+      Customer: 'Test_V',
+      'CRM #': 'UZA89103',
+      'Bid due date': '2023-01-31',
+      'Line of business': 'Clinical',
+      'Is this IQVIA Biotech': 'Yes',
+      Phase: 'Phase 1',
+      'Verbatim indication': 'QA testing',
+      'Therapeutic area': 'Cardiology',
+      'Protocol number': '12345678',
+      'Product name': '32456789',
+      BoxId: '186605979335',
+      IsFsp: 'No',
+      pertinentDetails: 'Testing',
+      opportunityId: '0060100000BAJ0tAAH',
+      bidNo: 1,
+      earlyEngagementDevelopmentPlan: '',
+      describeActivity: 'Testt',
+      requestDetail: '',
+      typeOfActivity: 'Post Award - Non-compete strategy development'
+    };
+    let result = proposalReducer(initialState.proposal, action);
+    result = result.toJS();
+    expect(result.proposalDetails).toEqual(expectedState);
+  });
+
+  test('updateOportunityDetailData  early engagement UPDATE_PROPOSAL_DETAIL_SF socket data', () => {
+    const action = {
+      type: PROPOSAL.DASHBOARD_PROPOSAL_DETAIL,
+      payload: {
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+        data: {
+          proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+          proposalDetails: {
+            Customer: 'Sapthmi M Shetty_5',
+            'CRM #': 'JAB53166',
+            'Bid due date': '2024-01-19',
+            'Line of business': 'Connected Devices',
+            'Is this IQVIA Biotech': 'Yes',
+            Phase: 'Phase 2b',
+            'Verbatim indication': 'test24',
+            'Therapeutic area': 'Oncology',
+            'Protocol number': '',
+            'Product name': 'druggsa',
+            IsFsp: 'No',
+            opportunityId: '0067A00000DMzxgQAD',
+            BoxId: '',
+            pertinentDetails: null,
+            earlyEngagementDevelopmentPlan: '',
+            typeOfActivity: 'Post Award - Non-compete strategy development',
+            describeActivity: 'Testt',
+            requestDetail: '',
+            bidNo: 1,
+            bidType: 'Post_Award_Bid'
+          },
+          sfField: true,
+          questionSfField: 'Name',
+          questionsfObject: 'Opportunity'
+        }
+      }
+    };
+    const expectedState = {
+      Customer: 'Test_V',
+      'CRM #': 'UZA89103',
+      'Bid due date': '2023-01-31',
+      'Line of business': 'Clinical',
+      'Is this IQVIA Biotech': 'Yes',
+      Phase: 'Phase 1',
+      'Verbatim indication': 'QA testing',
+      'Therapeutic area': 'Cardiology',
+      'Protocol number': '12345678',
+      'Product name': '32456789',
+      BoxId: '186605979335',
+      IsFsp: 'No',
+      pertinentDetails: 'Testing',
+      opportunityId: '0060100000BAJ0tAAH',
+      bidNo: 1
+    };
+    let result = proposalReducer(initialState.proposal, action);
+    result = result.toJS();
+    expect(result.proposalDetails).toEqual(expectedState);
+  });
+
+  test('CHANGE_BID_LOADER', () => {
+    const action = {
+      type: PROPOSAL.CHANGE_BID_LOADER,
+      payload: false
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('INTEGRATIONS_INFO', () => {
+    const action = {
+      type: PROPOSAL.INTEGRATIONS_INFO,
+      payload: {}
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD', () => {
+    const action = {
+      type: PROPOSAL.PROPOSAL_CUSTOM_TAB_SET_QUESTION_LOAD,
+      payload: Map(cloneData.proposal.editQuestionsData)
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onGettingProposalBoxId', () => {
+    const action = {
+      type: PROPOSAL.PROPOSAL_BOX_ID_LOADING
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onGetProposalBoxId', () => {
+    const action = {
+      type: PROPOSAL.PROPOSAL_BOX_ID_LOADING,
+      payload: {
+        boxId: 'xyzabc'
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onGetProposalBoxId', () => {
+    const action = {
+      type: PROPOSAL.PROPOSAL_BOX_ID,
+      payload: {
+        boxId: 'xyzabc'
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('fetchBoxAdditionalLink', () => {
+    const action = {
+      type: PROPOSAL.BOX_ADDITIONAL_LINK,
+      payload: {
+        boxlink: 'xyzabc'
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('onGettingBoxIdError', () => {
+    const action = {
+      type: PROPOSAL.PROPOSAL_BOX_ID_ERROR,
+      payload: {
+        error: {
+          message: 'wrong boxid'
+        }
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onGettingfetchBoxAdditionalLinkError ', () => {
+    const action = {
+      type: PROPOSAL.BOX_ADDITIONAL_LINK_ERROR,
+      payload: {
+        error: {
+          message: 'wrong boxid'
+        }
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onSetQuestion ', () => {
+    jest
+      .spyOn(proposalAction, 'getQuestionsFilterApplied')
+      .mockReturnValue(cloneData.proposal.proposalQuestions);
+    const action = {
+      type: PROPOSAL.PROPOSAL_SET_QUESTION,
+      payload: {
+        questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9'
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('updateQuestionLockByUser ', () => {
+    const localStorageMock = (function () {
+      let store = {
+        userEmail: 'abc@yopmail.com'
+      };
+
+      return {
+        getItem(key) {
+          return store[key];
+        },
+
+        setItem(key, value) {
+          store[key] = value;
+        },
+
+        clear() {
+          store = {};
+        },
+
+        removeItem(key) {
+          delete store[key];
+        },
+
+        getAll() {
+          return store;
+        }
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+    const action = {
+      type: PROPOSAL.QUESTION_LOCK_BY_USER,
+      payload: {
+        data: {
+          questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+          proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+          userEmail: 'testuser@iqvia.com',
+          userId: '109689',
+          userName: 'Test User'
+        }
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('updateQuestionUnlockByUser ', () => {
+    const action = {
+      type: PROPOSAL.QUESTION_UNLOCK_BY_USER,
+      payload: {
+        data: {
+          questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+          proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+          userEmail: 'rahul.tiwari@iqvia.com',
+          userId: '109689',
+          userName: 'Test User'
+        },
+        clientQuestionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9'
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('questionLockDetails ', () => {
+    const localStorageMock = (function () {
+      let store = {
+        userEmail: 'abc@yopmail.com'
+      };
+
+      return {
+        getItem(key) {
+          return store[key];
+        },
+
+        setItem(key, value) {
+          store[key] = value;
+        },
+
+        clear() {
+          store = {};
+        },
+
+        removeItem(key) {
+          delete store[key];
+        },
+
+        getAll() {
+          return store;
+        }
+      };
+    })();
+
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+    const action = {
+      type: PROPOSAL.QUESTION_LOCK_DETAILS_ALL,
+      payload: {
+        data: [
+          {
+            questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+            proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+            userEmail: 'testuser@iqvia.com',
+            userId: '109689',
+            userName: 'Test User'
+          }
+        ]
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('onUpdateModifiedQuestion', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_MODIFIED_QUESTION,
+      payload: {
+        question: [
+          {
+            questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9'
+          }
+        ]
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onErrorUpdateNotApplicable', () => {
+    const action = {
+      type: PROPOSAL.ERROR_UPDATE_NOT_APPLICABLE,
+      payload: {
+        question: [
+          {
+            questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+            loading: true
+          }
+        ]
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onUpdateProposalNAQuestionDone', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_NOT_APPLICABLE_DONE,
+      payload: {
+        question: [
+          {
+            questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+            loading: false
+          }
+        ]
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onUpdateProposalNAQuestionFromSocketDone', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE,
+      payload: {
+        questionStatus: false,
+        questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+        loading: false
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('onProposalNAQuestionLoading', () => {
+    const action = {
+      type: PROPOSAL.UPDATE_NOT_APPLICABLE_PROGRESS,
+      payload: {
+        questionId: '7d082239-2d5b-48cb-ab92-32c26fc39be9',
+        loading: false
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+  test('addNewBid', () => {
+    const action = {
+      type: PROPOSAL.ADD_NEW_BID,
+      payload: {
+        proposal: {
+          inProgress: false,
+          proposalId: 'test',
+          opportunityType: 'Core Clinical',
+          bidStopStatus: false,
+          questionTemplateVersionNumber: 'v:1.0.2',
+          isApprovalCountPresent: 1,
+          nextMilestone: '',
+          customtab: [],
+          approvals: [],
+          opportunityOverview: {
+            OpportunityStatus: 'test'
+          },
+          proposalDetails: {
+            bidNo: 10,
+            pertinentDetails: ''
+          }
+        },
+        proposalQuestions: [],
+        proposalUsers: [],
+        isCurrent: true
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
   });
 });
