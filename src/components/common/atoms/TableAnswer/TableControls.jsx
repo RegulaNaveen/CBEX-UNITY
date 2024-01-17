@@ -167,13 +167,15 @@ function TableControls({
       <Popover
         open={editing}
         anchorEl={menuRef.current}
+        data-testid="popover"
         onClose={() => handlePopoverClose()}
         PaperProps={{
           style: {
             borderColor: '#e9e9e9',
             boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
             padding: 12
-          }
+          },
+          'data-testid': 'popoverTrigger'
         }}
       >
         <div style={{ height: '240px', overflow: 'auto' }}>
@@ -199,6 +201,7 @@ function TableControls({
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
+                            data-testid={`draggable-${index}`}
                           >
                             <div
                               style={{
@@ -223,6 +226,7 @@ function TableControls({
                               </p>
                               <Checkbox
                                 checked={!item.hidden}
+                                data-testid="checkboxChange"
                                 onChange={() =>
                                   handleCheckboxChange(item.index)
                                 }

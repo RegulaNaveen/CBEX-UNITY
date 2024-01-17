@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Typography from 'apollo-react/components/Typography';
 import TextField from 'apollo-react/components/TextField';
 import Tooltip from 'apollo-react/components/Tooltip';
+import classNames from 'classnames';
 
 function TableCell({
   row,
@@ -50,12 +51,17 @@ function TableCell({
     default:
       if (column.accessor === 'header') {
         return (
-          <div className="table-cell">
+          <div
+            className={classNames({
+              'table-cell': true,
+              'h-100': row.longestKey !== column.accessor
+            })}
+          >
             {canEdit && !disabled ? (
               <Tooltip title={tooltipValue} open={openTooltip}>
                 <TextField
                   ref={rowRef}
-                  className="row-header"
+                  className={'row-header'}
                   margin="none"
                   value={value}
                   multiline={row.allExpanded}
@@ -100,7 +106,12 @@ function TableCell({
         );
       }
       return (
-        <div className="table-cell">
+        <div
+          className={classNames({
+            'table-cell': true,
+            'h-100': row.longestKey !== column.accessor
+          })}
+        >
           <Tooltip title={tooltipValue} open={openTooltip}>
             <TextField
               ref={rowRef}

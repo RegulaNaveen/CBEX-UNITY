@@ -43,6 +43,9 @@
   .answer-table {
     height: calc(100% - 32px);
     overflow: auto;
+    .Table-tableWrapper-* {
+      overflow-x: unset !important;
+    }
   }
   .table-controls {
     display: flex;
@@ -73,6 +76,7 @@
   tbody {
     tr {
       td {
+        height: inherit;
         &:first-child {
           background-color: #f8f9fb;
           font-weight: 600;
@@ -93,12 +97,23 @@
     }
   }
   .table-cell {
+    height: 100%;
     min-width: 100px;
     min-height: 48px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin: 0.5rem 0.75rem;
+    .MuiFormControl-root,
+    .MuiInputBase-root,
+    .MuiInputBase-input {
+      height: 100%;
+    }
+    &.h-100 {
+      textarea {
+        height: 100% !important;
+      }
+    }
     .MuiInputBase-input {
       font-size: 14px;
       height: 32px;

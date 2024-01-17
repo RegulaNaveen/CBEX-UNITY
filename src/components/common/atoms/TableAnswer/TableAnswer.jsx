@@ -10,7 +10,7 @@ import Popover from 'apollo-react/components/Popover';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { diffArrays } from 'diff';
 import TableCell from './TableCell';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, maxBy } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
 import TablePreview from './TablePreview';
@@ -198,6 +198,7 @@ function TableAnswer({
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
+  const [rowsWithLongestKeys, setRowsWithLongestKeys] = useState([]);
   const [columns, setColumns] = useState([]);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -411,15 +412,15 @@ function TableAnswer({
               duplicateRows
             ).join(', ')}
               ${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
+                duplicateColumns
+              ).join(', ')}`
           : duplicateRows.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
-              duplicateRows
-            ).join(', ')}`
-          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
+            ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
+                duplicateRows
+              ).join(', ')}`
+            : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+                duplicateColumns
+              ).join(', ')}`
       );
     }
   }
@@ -493,6 +494,20 @@ function TableAnswer({
       } else {
         setSaveDisable(true);
       }
+      // calculate rows keys with longer text
+      let cloneRows = cloneDeep(rows);
+      cloneRows = cloneRows.map(row => {
+        const longestKey = maxBy(
+          Object.keys(row).filter(rowKey => typeof row[rowKey] === 'string'),
+          rowKey => row[rowKey].length
+        );
+
+        return {
+          ...row,
+          longestKey
+        };
+      });
+      setRowsWithLongestKeys(cloneRows);
     }
   }, [rows, columns]);
 
@@ -580,8 +595,10 @@ function TableAnswer({
             Edit Table Data
           </Typography>
         </div>
-        {rows.length > 0 && columns.length > 0 && (
+        {rows.length > 0 || columns.length > 0 ? (
           <TablePreview rows={rows} columns={columns} />
+        ) : (
+          ''
         )}
       </div>
       <Modal
@@ -628,7 +645,7 @@ function TableAnswer({
           />
         ) : null}
         <ApolloTable
-          rows={rows
+          rows={rowsWithLongestKeys
             .map((row, rowIndex) => ({
               ...row,
               rowIndex,
