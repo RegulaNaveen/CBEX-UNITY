@@ -80,8 +80,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-        : name?.trim();
+          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+          : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -312,6 +312,31 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
         .join('')}</ul>`;
 };
 
+const parseUrlText = (crm, url = '') => {
+  if (!url) {
+    const params = new URLSearchParams(window.location.search);
+    const bidType = params.get('bidType') || '';
+    const bidNo = params.get('bidNo') || '';
+    let newUrl = `Opportunity `;
+    if (BID_TYPES.EARLY_ENGAGEMENT === bidType) {
+      bidType = 'Early Engagement';
+    } else if (BID_TYPES.RFI_Request === bidType) {
+      bidType = 'RFI';
+    } else if (BID_TYPES.POST_AWARD === bidType) {
+      bidType = 'Post Award';
+    }
+
+    if (bidType) {
+      newUrl = newUrl + bidType;
+    }
+    if (bidNo) {
+      newUrl = newUrl + ' ' + bidNo;
+    }
+    return newUrl;
+  }
+  return url;
+};
+
 /**
  * @returns {string[]}
  */
@@ -330,7 +355,9 @@ function updateEventSubjectBody(
     '[bid_no]': proposalDetail['bidNo'],
     '[unity_link]':
       updateField === 'body'
-        ? `<a href=${window.location.href}>${window.location.href}</a>`
+        ? `<a href=${window.location.href}>${parseUrlText(
+            proposalDetail['CRM #']
+          )}</a>`
         : `${window.location.href}`,
     '[todays_date]': `${formatTheDate(new Date())}`,
     '[full_proposal_team]': getFullProposalTeamString(
