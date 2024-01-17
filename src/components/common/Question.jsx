@@ -959,7 +959,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         }
       } else {
         answerValue = cloneDeep(tableConfigJSON);
-        answerValue.columns = answerValue?.column
+        answerValue.columns = answerValue?.columns
           ? cloneDeep(answerValue.columns).map(column => ({
               ...column,
               canEdit: answerValue.canEditColumn
