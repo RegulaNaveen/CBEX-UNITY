@@ -121,8 +121,13 @@ function ChangeSets({
                 className="table-change-list-item"
               >
                 Update Column Title from{' '}
-                <span className={classNames({ removed: col.oldTitle })}>
-                  '{col.oldTitle}'
+                <span
+                  className={classNames({
+                    removed: col.oldTitle,
+                    blank: !col.oldTitle
+                  })}
+                >
+                  {col.oldTitle ? `'${col.oldTitle}'` : 'blank'}
                 </span>{' '}
                 to {col.newTitle}.
               </Typography>
@@ -178,8 +183,13 @@ function ChangeSets({
                 className="table-change-list-item"
               >
                 Update Row Title from{' '}
-                <span className={classNames({ removed: row.oldTitle })}>
-                  '{row.oldTitle}'
+                <span
+                  className={classNames({
+                    removed: row.oldTitle,
+                    blank: !row.oldTitle
+                  })}
+                >
+                  {row.oldTitle ? `'${row.oldTitle}'` : 'blank'}
                 </span>{' '}
                 to {row.newTitle}.
               </Typography>
@@ -208,9 +218,12 @@ function ChangeSets({
                     >
                       Update cell content from{' '}
                       <span
-                        className={classNames({ removed: cell.prevContent })}
+                        className={classNames({
+                          removed: cell.prevContent,
+                          blank: !cell.prevContent
+                        })}
                       >
-                        '{cell.prevContent}'
+                        {cell.prevContent ? `'${cell.prevContent}'` : 'blank'}
                       </span>{' '}
                       to '{cell.content}
                       '.

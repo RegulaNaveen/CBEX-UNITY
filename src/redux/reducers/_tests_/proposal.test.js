@@ -1639,4 +1639,126 @@ describe('proposal reducer', () => {
     };
     expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
   });
+
+  test('onChangeBid', () => {
+    const action = {
+      type: PROPOSAL.CHANGE_BID,
+      payload: {
+        proposalDetails: {
+          proposal: {
+            agreementId: 'test',
+            accountId: 'test',
+            proposalDetails: {
+              bidNo: 10,
+              pertinentDetails: '',
+              earlyEngagementDevelopmentPlan: 'test',
+              typeOfActivity: 'test',
+              describeActivity: 'test',
+              requestDetail: 'test'
+            },
+            opportunityType: 'Test',
+            opportunityName: 'Test',
+            opportunityOverview: {
+              OpportunityStatus: 'test'
+            },
+            questionTemplateVersionNumber: 'v:1.0.2',
+            bidStopStatus: false,
+            isApprovalCountPresent: true,
+            proposalDate: new Date(),
+            bidType: 'Core_Clinical'
+          },
+          proposalQuestions: [],
+          proposalUsers: []
+        },
+        bid: {
+          isCurrent: false,
+          isEditable: true,
+          pertinentDetails: 'test',
+          bidName: 'test',
+          typeOfWidget: 'test',
+          nextMilestone: '',
+          bidId: 'test'
+        }
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('updateOportunityDetailData UPDATE_PROPOSAL_DETAIL_SF socket data', () => {
+    const action = {
+      type: PROPOSAL.DASHBOARD_PROPOSAL_DETAIL,
+      payload: {
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+        data: {
+          proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+          proposalDetails: {
+            Customer: 'Sapthmi M Shetty_5',
+            'CRM #': 'JAB53166',
+            'Bid due date': '2024-01-19',
+            'Line of business': 'Connected Devices',
+            'Is this IQVIA Biotech': 'Yes',
+            Phase: 'Phase 2b',
+            'Verbatim indication': 'test24',
+            'Therapeutic area': 'Oncology',
+            'Protocol number': '',
+            'Product name': 'druggsa',
+            IsFsp: 'No',
+            opportunityId: '0067A00000DMzxgQAD',
+            BoxId: '',
+            pertinentDetails: null,
+            earlyEngagementDevelopmentPlan: '',
+            typeOfActivity: 'Post Award - Non-compete strategy development',
+            describeActivity: 'Testt',
+            requestDetail: '',
+            bidNo: 1,
+            bidType: 'Post_Award_Bid'
+          },
+          sfField: 'Type_of_Activity__c',
+          questionSfField: 'Type_of_Activity__c'
+        }
+      }
+    };
+    const expectedState = {
+      Customer: 'Test_V',
+      'CRM #': 'UZA89103',
+      'Bid due date': '2023-01-31',
+      'Line of business': 'Clinical',
+      'Is this IQVIA Biotech': 'Yes',
+      Phase: 'Phase 1',
+      'Verbatim indication': 'QA testing',
+      'Therapeutic area': 'Cardiology',
+      'Protocol number': '12345678',
+      'Product name': '32456789',
+      BoxId: '186605979335',
+      IsFsp: 'No',
+      pertinentDetails: 'Testing',
+      opportunityId: '0060100000BAJ0tAAH',
+      bidNo: 1
+    };
+    const newState = cloneDeep(data);
+    newState.proposal.unityTabQuestionLoading = Map({
+      questionId: '',
+      value: false
+    });
+    newState.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b'] =
+      Map(
+        newState.proposal.opportunityData[
+          '9aa9dfe2-1222-4dff-8977-f06f45656a4b'
+        ]
+      );
+    newState.proposal.opportunityData = Map(newState.proposal.opportunityData);
+    newState.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
+    newState.proposal.editQuestionsData = Map({});
+    newState.proposal.getAnswerTypesDataF = jest.fn();
+    newState.proposal.getRolesInfoF = jest.fn();
+    let selectBid = newState.proposal.selectedBid;
+    selectBid.id = '9aa9dfe2-1222-4dff-8977-f06f45656a4b';
+    newState.proposal.selectedBid = Map(selectBid);
+    newState.proposal.questionsFilter = Map(newState.proposal.questionsFilter);
+
+    let result = proposalReducer(Map(newState.proposal), action);
+
+    result = result.toJS();
+    expect(result.proposalDetails).toEqual(expectedState);
+  });
 });

@@ -8,7 +8,7 @@ import { isEmpty, xor, isString, has, isObject } from 'lodash';
 import { List, fromJS } from 'immutable';
 import classNames from 'classnames';
 import AddQuestionModalComponent from '../../../views/modals/AddQuestionModal';
-import AnswerInput from './AnswerInput';
+
 import Question from '../../../common/Question';
 import {
   selectSections,
