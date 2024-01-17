@@ -77,6 +77,8 @@ const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
   CheckBoxQuestion
 );
 
+const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
+
 const QuestionItem = ({
   questionId = '',
   UnityTabSectionTitle = '',
@@ -182,6 +184,7 @@ const QuestionItem = ({
   }, []);
 
   const socketContext = useContext(SocketContext);
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const [isShowHistory, setIsShowHistory] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid);
@@ -535,7 +538,7 @@ const QuestionItem = ({
         }
 
         return (
-          <TableAnswer
+          <TableAnswerWithIdleStateDetection
             {...inputProps}
             questionText={questionText}
             tableConfiguration={jsonTableConfig}
@@ -547,6 +550,11 @@ const QuestionItem = ({
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
             lastAnswer={lastAnswerMap}
             onChange={handleTableValueChange}
+            disabled={checkDisableFlag()}
+            onFocus={() => {
+              questionLockWrapper(questionId);
+            }}
+            onBlur={() => questionUnlockWrapper(questionId)}
           />
         );
       }

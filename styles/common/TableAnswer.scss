@@ -1,5 +1,5 @@
 #table-question-answer {
-  gap: 6px;
+  gap: 0px;
 }
 .table-answer-container {
   width: 100%;
@@ -146,10 +146,16 @@
       justify-content: space-between;
       .changeset {
         .table-change-list-item {
+          color: #000000 !important;
           display: inline-block;
           width: 100%;
           .removed {
             text-decoration: line-through;
+          }
+          .blank {
+            font-style: italic;
+            font-family: 'Proxima Nova';
+            font-weight: 300;
           }
         }
       }

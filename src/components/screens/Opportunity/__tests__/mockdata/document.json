@@ -31,7 +31,8 @@
     "pertinentDetails": "Testing",
     "isApprovalCountPresent": true,
     "isEditable": true,
-    "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
+    "id": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+    "typeOfActivity": "test"
   },
   "boxLinks": {
     "data": [
@@ -84,7 +85,8 @@
       "pertinentDetails": "Testing",
       "isEditable": true,
       "isApprovalCountPresent": true,
-      "id": "86462966-7e94-4648-b1e7-fb908f48eaf0"
+      "id": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+      "typeOfActivity": "test"
     },
     "fetchingValidatedProposalData": false,
     "isProposalAnswerLoading": false,
