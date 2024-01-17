@@ -100,6 +100,7 @@ function Header({
 }) {
   const [currentTitle, setCurrentTitle] = useState(title);
   const [tooltipValue, setTooltipValue] = useState('');
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   const columnRef = useRef(null);
 
@@ -141,15 +142,29 @@ function Header({
   }
 
   return canEdit && !disabled ? (
-    <Tooltip title={tooltipValue}>
+    <Tooltip title={tooltipValue} open={openTooltip}>
       <TextField
         ref={columnRef}
         margin="none"
         value={currentTitle}
         multiline={allExpanded}
+        onMouseOver={() => {
+          if (columnRef.current.contains(document.activeElement)) {
+            setOpenTooltip(false);
+          } else setOpenTooltip(true);
+        }}
+        onMouseOut={() => {
+          setOpenTooltip(false);
+        }}
+        onFocus={e => {
+          setOpenTooltip(false);
+          setTimeout(() => {
+            columnRef.current.focus();
+          }, 100);
+        }}
         onChange={handleValueChange}
         onBlur={handleInputBlur}
-        InputProps={{ inputProps: { maxLength: 1000 } }}
+        InputProps={{ inputProps: { maxLength: 999 } }}
         error={currentTitle.length === 0}
         helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
         fullWidth
@@ -157,7 +172,7 @@ function Header({
     </Tooltip>
   ) : (
     <Tooltip title={currentTitle}>
-      <Typography variant="bodyDefault" gutterBottom noWrap>
+      <Typography variant="bodyDefault" gutterBottom noWrap emphasis="high">
         {currentTitle}
       </Typography>
     </Tooltip>
@@ -417,7 +432,7 @@ function TableAnswer({
         header: (
           <Header
             index={index}
-            title={column.header}
+            title={column.headerTitle}
             onTitleChange={onHeaderTitleChange}
             canEdit={column.canEdit}
             disabled={disabled}
@@ -430,10 +445,13 @@ function TableAnswer({
   }, [allExpanded]);
 
   useEffect(() => {
-    if (rows.length > 0 && columns.length > 1) {
+    if (rows.length > 0 || columns.length > 1) {
       let rowEmptyCheck;
-      if (tableConfiguration.rows.length === 0) {
-        rowEmptyCheck = rows.map(row => row[columns[0].accessor]);
+      if (
+        tableConfiguration.rows.length === 0 ||
+        tableConfiguration.columns.length === 0
+      ) {
+        rowEmptyCheck = rows.map(row => row[columns[0]?.accessor]);
       }
       const rowHeaders = rows.map(row => row.header);
       const columnHeaders = columns.map(column => column.headerTitle);
@@ -469,8 +487,8 @@ function TableAnswer({
         rowDiff.includes(true) ||
         colHiddenDiff.length > 1 ||
         rowHiddenDiff.length > 1 ||
-        (tableConfiguration.columns.length === 0 &&
-          tableConfiguration.rows.length === 0)
+        (tableConfiguration.columns.length === 0 && columns.length > 0) ||
+        (tableConfiguration.rows.length === 0 && rows.length > 0)
       ) {
         setSaveDisable(false);
       } else {

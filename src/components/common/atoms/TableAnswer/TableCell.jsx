@@ -14,6 +14,7 @@ function TableCell({
 }) {
   const [value, setValue] = useState(row[column.accessor] || '');
   const [tooltipValue, setTooltipValue] = useState('');
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   const rowRef = useRef(null);
 
@@ -57,17 +58,32 @@ function TableCell({
             })}
           >
             {canEdit && !disabled ? (
-              <Tooltip title={tooltipValue}>
+              <Tooltip title={tooltipValue} open={openTooltip}>
                 <TextField
                   ref={rowRef}
                   className={'row-header'}
                   margin="none"
                   value={value}
                   multiline={row.allExpanded}
+                  onMouseOver={() => {
+                    if (rowRef.current.contains(document.activeElement)) {
+                      setOpenTooltip(false);
+                    } else setOpenTooltip(true);
+                  }}
+                  onMouseOut={() => {
+                    setOpenTooltip(false);
+                  }}
+                  onFocus={e => {
+                    setOpenTooltip(false);
+                    setTimeout(() => {
+                      rowRef.current.focus();
+                    }, 100);
+                  }}
+                  onCh
                   onChange={handleValueChange}
                   onBlur={handleInputBlur}
                   InputProps={{
-                    inputProps: { maxLength: 1000 }
+                    inputProps: { maxLength: 999 }
                   }}
                   error={value.length === 0}
                   helperText={value.length === 0 ? 'Please add a name' : ''}
@@ -76,7 +92,12 @@ function TableCell({
               </Tooltip>
             ) : (
               <Tooltip title={value}>
-                <Typography variant="bodyDefault" gutterBottom noWrap>
+                <Typography
+                  variant="bodyDefault"
+                  gutterBottom
+                  noWrap
+                  emphasis="high"
+                >
                   {value}
                 </Typography>
               </Tooltip>
@@ -91,17 +112,31 @@ function TableCell({
             'h-100': row.longestKey !== column.accessor
           })}
         >
-          <Tooltip title={tooltipValue}>
+          <Tooltip title={tooltipValue} open={openTooltip}>
             <TextField
               ref={rowRef}
               margin="none"
               value={value}
               multiline={row.allExpanded}
+              onMouseOver={() => {
+                if (rowRef.current.contains(document.activeElement)) {
+                  setOpenTooltip(false);
+                } else setOpenTooltip(true);
+              }}
+              onMouseOut={() => {
+                setOpenTooltip(false);
+              }}
+              onFocus={e => {
+                setOpenTooltip(false);
+                setTimeout(() => {
+                  rowRef.current.focus();
+                }, 100);
+              }}
               onChange={handleValueChange}
               onBlur={handleInputBlur}
               fullWidth
               disabled={disabled}
-              InputProps={{ inputProps: { maxLength: 1000 } }}
+              InputProps={{ inputProps: { maxLength: 999 } }}
             />
           </Tooltip>
         </div>
