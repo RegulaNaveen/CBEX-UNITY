@@ -1,18 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Tooltip from 'apollo-react/components/Tooltip';
-import { useSelector } from 'react-redux';
-import { getPanelStatus } from '../../../../redux/selectors/proposal';
 
 export default function TablePreview({ columns, rows }) {
-  const panelStatus = useSelector(state => getPanelStatus(state));
+  var totalNotHiddenColumns = columns.filter(column => !column.hidden);
+  var totalNotHiddenRows = rows.filter(row => !row.hidden);
 
   return (
     <div className="custom-answer-table-container">
       <table className="custom-answer-table">
         <thead>
           <tr>
-            {columns.length > 0 &&
-              columns.map(column => (
+            {totalNotHiddenColumns.length > 1 &&
+              totalNotHiddenColumns.map(column => (
                 <th>
                   <Tooltip
                     title={column.headerTitle}
@@ -26,10 +25,10 @@ export default function TablePreview({ columns, rows }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map(row => (
+          {totalNotHiddenRows.map(row => (
             <>
               <tr>
-                {columns.map(column => (
+                {totalNotHiddenColumns.map(column => (
                   <>
                     {row[column.accessor] ? (
                       <>
