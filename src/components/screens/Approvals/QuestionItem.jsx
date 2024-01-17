@@ -647,7 +647,9 @@ const QuestionItem = ({
                     }}
                   >
                     <QuestionLabel
+                      questionJSON={question?.questionJSON || ''}
                       questionLabel={question?.questionText || ''}
+                      questionTextRef1={questionTextRef1}
                     />
                     {question.isCustomQuestion &&
                       (selectedBid.isCurrent || selectedBid.isEditable) &&
