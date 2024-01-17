@@ -35,13 +35,13 @@ function TableControls({
   useEffect(() => {
     const newMenuItems = [];
     if (tableConfiguration) {
-      if (tableConfiguration.canAddColumn && columns.length < 20) {
+      if (tableConfiguration.canAddColumn) {
         newMenuItems.push({
           text: 'Add Column',
           onClick: handleAddColumnClick
         });
       }
-      if (tableConfiguration.canAddRow && rows.length < 30) {
+      if (tableConfiguration.canAddRow) {
         newMenuItems.push({
           text: 'Add Row',
           onClick: handleAddRowClick
