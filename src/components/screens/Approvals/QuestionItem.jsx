@@ -67,6 +67,8 @@ const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
   CheckBoxQuestion
 );
 
+const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
+
 const QuestionItem = ({
   questionId = '',
   questionHint,
@@ -152,6 +154,8 @@ const QuestionItem = ({
   }, [approvalFilters]);
 
   const socketContext = useContext(SocketContext);
+
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const [isShowHistory, setIsShowHistory] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
@@ -498,7 +502,7 @@ const QuestionItem = ({
           }
         }
         return (
-          <TableAnswer
+          <TableAnswerWithIdleStateDetection
             {...inputProps}
             questionText={questionText}
             tableConfiguration={jsonTableConfig}
@@ -510,6 +514,11 @@ const QuestionItem = ({
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
             lastAnswer={lastAnswerMap}
             onChange={handleTableValueChange}
+            disabled={checkDisableFlag()}
+            onFocus={() => {
+              questionLockWrapper(questionId);
+            }}
+            onBlur={() => questionUnlockWrapper(questionId)}
           />
         );
       }
@@ -647,7 +656,9 @@ const QuestionItem = ({
                     }}
                   >
                     <QuestionLabel
+                      questionJSON={question?.questionJSON || ''}
                       questionLabel={question?.questionText || ''}
+                      questionTextRef1={questionTextRef1}
                     />
                     {question.isCustomQuestion &&
                       (selectedBid.isCurrent || selectedBid.isEditable) &&
