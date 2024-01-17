@@ -7,6 +7,7 @@ import { SocketContext } from '../../../../../context/SocketContext';
 import * as Redux from 'react-redux';
 import { setSession } from '../../../../../SessionHandler';
 //import SystemIntegrations from '../../../../common/SystemIntegrations/SystemIntegrations';
+//import SFAnswerValidationWrapper from '../../../../common/SFAnswerValidationWrapper'
 
 jest.mock('react-redux', () => {
   return {
@@ -34,7 +35,7 @@ const props = {
   proposalDetail: {},
   isNotApplicable: false,
   milestoneCond: false,
-  NaLoading: false,
+  NaLoading: true,
   sficon: false,
   currentSFAnswer: '',
   lastAns: 'green',
@@ -46,8 +47,8 @@ const props = {
   questionHint: '',
   questionHintJSON: {},
   questionHTML: '',
-  sectionName: '',
-  questionText: '',
+  sectionName: 'sectionName',
+  questionText: 'questionText',
   events: [],
   questionJSON: {},
   isCustomQuestion: false,
@@ -55,12 +56,15 @@ const props = {
   questionData: {
     questionLockInfo: {
       userInfo: 'test@example.com'
-    }
+    },
+    hasDifferentSFanswer: true
   },
   section: {},
   milestoneNew: {},
   allSections: [],
-  answerConfiguration: {},
+  answerConfiguration: {
+    type: 'text' || 'number' || 'date'
+  },
   roleNames: [],
   questionLockInfo: {},
   questionId: '123'
@@ -83,6 +87,9 @@ jest.mock(
   () => () => <p>SystemIntegrations</p>
 );
 
+jest.mock('../../../../common/SFAnswerValidationWrapper', () => () => (
+  <p>SFAnswerValidationWrapper</p>
+));
 describe('AnswerInput', () => {
   let myMap = new Map([
     ['isCurrent', true],
@@ -105,7 +112,8 @@ describe('AnswerInput', () => {
             questionId: '456'
           }
         ]
-      });
+      })
+      .mockReturnValueOnce(true);
     // Render the component
     setSession(
       'admin',
