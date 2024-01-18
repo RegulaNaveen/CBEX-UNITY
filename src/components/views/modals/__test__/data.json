@@ -90,7 +90,7 @@
         "created_date": "2023-12-12T06:33:50.007Z",
         "updated_date": "2023-12-12T06:33:50.007Z",
         "updatedInPG": true,
-        "cfProposalId": null
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
       },
       {
         "user": "CarryForwardAnswer",
@@ -117,7 +117,7 @@
         "created_date": "2023-12-14T09:19:55.144Z",
         "updated_date": "2023-12-14T09:19:55.144Z",
         "updatedInPG": true,
-        "cfProposalId": null
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
       },
       {
         "user": "CarryForwardAnswer",
@@ -261,7 +261,7 @@
         "created_date": "2023-12-19T09:14:21.392Z",
         "updated_date": "2023-12-19T09:14:21.392Z",
         "updatedInPG": true,
-        "cfProposalId": null
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
       },
       {
         "user": "CarryForwardAnswer",
@@ -547,7 +547,7 @@
         "created_date": "2023-12-19T09:14:31.627Z",
         "updated_date": "2023-12-19T09:14:31.627Z",
         "updatedInPG": true,
-        "cfProposalId": null
+        "cfProposalId": "aef89bf4-6a8c-4aa5-a4c1-fec2a89bd9ed"
       },
       {
         "user": "CarryForwardAnswer",
@@ -593,7 +593,8 @@
     },
     "questionText": "Table answer type",
     "answerConfiguration": {
-      "type": "table"
+      "type": "table",
+      "options": ["YES", "NO"]
     },
     "questionTableConfig": "{\"rows\":[],\"columns\":[{ \"header\": \"\", \"accessor\": \"header\", \"canAddColumn\": true, \"canEditColumn\": true, \"canAddRow\": true, \"canEditRow\": true }]}",
     "roleNames": ["BD Leadership"],
@@ -601,32 +602,38 @@
       {
         "questionId": "test-que-id",
         "userName": "Keerthiprasath Chandran",
-        "answer": "{\"rows\":[],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\", \"hidden\": false}]}"
+        "answer": "{\"rows\":[],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\", \"hidden\": false}]}",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b"
       },
       {
         "questionId": "test-que-id",
         "userName": "Keerthiprasath Chandran",
-        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\", \"hidden\": false }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1 changed\",\"accessor\":\"column-1\", \"hidden\": true}]}"
-      },
-      {
-        "questionId": "test-que-id",
-        "userName": "CarryForwardAnswer",
-        "answer": "{\"rows\":[{ \"header\": \"row 2\", \"column-1\": \"test changed\", \"hidden\": true },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}"
+        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\", \"hidden\": false }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1 changed\",\"accessor\":\"column-1\", \"hidden\": true}]}",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b"
       },
       {
         "questionId": "test-que-id",
         "userName": "Keerthiprasath Chandran",
-        "answer": "{\"rows\":[],\"columns\":[{\"header\":\"Col 1\",\"accessor\":\"column-1\"}, { \"header\": \"\", \"accessor\": \"header\" }]}"
-      },
-      {
-        "questionId": "test-que-id",
-        "userName": "CarryForwardAnswer",
-        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\" },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}"
+        "answer": "{\"rows\":[{ \"header\": \"row 2\", \"column-1\": \"test changed\", \"hidden\": true },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b"
       },
       {
         "questionId": "test-que-id",
         "userName": "Keerthiprasath Chandran",
-        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\" },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}"
+        "answer": "{\"rows\":[],\"columns\":[{\"header\":\"Col 1\",\"accessor\":\"column-1\"}, { \"header\": \"\", \"accessor\": \"header\" }]}",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "Keerthiprasath Chandran",
+        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\" },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b"
+      },
+      {
+        "questionId": "test-que-id",
+        "userName": "Keerthiprasath Chandran",
+        "answer": "{\"rows\":[{ \"header\": \"row 1\", \"column-1\": \"test\" },{ \"header\": \"row 2\", \"column-1\": \"test 2\" }],\"columns\":[{\"header\":\"\",\"accessor\":\"header\"},{\"header\":\"Col 1\",\"accessor\":\"column-1\"}]}",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b"
       }
     ],
     "questionOrder": 7,

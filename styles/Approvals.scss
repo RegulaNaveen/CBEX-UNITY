@@ -7,6 +7,23 @@
   .all-approvals-container {
     position: relative;
 
+    .MuiAccordionDetails-root {
+      #answer-history-modal {
+        .modal-content {
+          .modal-header {
+            .header-titles {
+              h1 {
+                color: #000000 !important;
+              }
+              p {
+                color: rgba($color: $black, $alpha: 0.8) !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .custom-autocomplete
       .a-MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'][class*='MuiOutlinedInput-marginDense'] {
       min-height: 40px;
