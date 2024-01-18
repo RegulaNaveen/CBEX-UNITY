@@ -488,7 +488,10 @@ const QuestionItem = ({
           const tableConfigJSON = JSON.parse(tableConfiguration);
           try {
             const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
-            jsonTableConfig = merge(tableConfigJSON, noConfigTableAnswer);
+            jsonTableConfig = merge(
+              cloneDeep(tableConfigJSON),
+              noConfigTableAnswer
+            );
             const defaultColumnsLength = tableConfigJSON.columns.length;
             const defaultRowsLength = tableConfigJSON.rows.length;
 
