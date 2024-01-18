@@ -524,7 +524,7 @@ describe('TableAnswer Component', () => {
     expect(getByTestId('saveButton')).toBeInTheDocument();
   });
 
-  it('cancel button is clicked', async () => {
+  test('cancel button is clicked', async () => {
     const props = {
       questionText: 'Sample Question',
       tableConfiguration: {
@@ -670,11 +670,14 @@ describe('TableAnswer Component', () => {
     fireEvent.click(element);
     await waitFor(async () => {
       const cancelBtn = await screen.findByRole('button', { name: /cancel/i });
-      fireEvent.click(cancelBtn);  
-    },{timeout: 500});
-   
-    await waitFor(() => {
-      expect(screen.queryByTestId('tableAnswer-modal')).not.toBeInTheDocument();
+      if (cancelBtn) {
+        fireEvent.click(cancelBtn);
+      }
+    });
+    await waitFor(async () => {
+      expect(
+        await screen.queryByTestId('tableAnswer-modal')
+      ).not.toBeInTheDocument();
     });
   });
 

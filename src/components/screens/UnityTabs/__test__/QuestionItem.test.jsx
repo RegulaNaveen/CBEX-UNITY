@@ -334,7 +334,14 @@ describe('testing question item component in custom tab', () => {
   test('render the component without crashing without props', async () => {
     const { container } = await render(
       <Provider store={store}>
-        <QuestionItem />
+        <SocketContext.Provider
+          value={{
+            questionLockWrapper: jest.fn(),
+            questionUnlockWrapper: jest.fn()
+          }}
+        >
+          <QuestionItem />
+        </SocketContext.Provider>
       </Provider>
     );
     expect(container).toBeInTheDocument();

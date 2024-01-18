@@ -22,11 +22,13 @@ import { SocketContext } from '../../../../context/SocketContext';
 import AnswerHistory from '../AnswerHistory';
 
 const question = fromJS(data.question);
+const opportunityData = fromJS(data.opportunityData);
 const closeModal = jest.fn();
 let initalstate = {
   question,
   closeModal,
-  isQuesFreezed: true
+  isQuesFreezed: true,
+  opportunityData
 };
 
 const AnswerHistoryWithStore = props => (
@@ -325,6 +327,20 @@ describe('Answer History component', () => {
         screen.getByText('Dates and Times are per the server (EST)')
       ).toBeInTheDocument();
       // fireEvent.click(screen.getByText('Reject'));
+    });
+  });
+
+  test('If Answer is Table Type is present with different User ', async () => {
+    data.question = data.tablequestion;
+    const question = fromJS(data.question);
+    const closeModal = jest.fn();
+    let initalstate = {
+      question,
+      closeModal
+    };
+
+    await act(async () => {
+      render(<AnswerHistoryWithStore {...initalstate} />);
     });
   });
   afterAll(cleanup);

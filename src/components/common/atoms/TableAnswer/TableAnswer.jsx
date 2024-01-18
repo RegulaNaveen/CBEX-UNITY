@@ -356,11 +356,11 @@ function TableAnswer({
     if (onCascadeChange) onCascadeChange();
   }
 
-  function handleModalClose() {
+  const handleModalClose = useCallback(() => {
     if (toggleWatch) toggleWatch(false);
     if (onBlur) onBlur();
     toggleModal(false);
-  }
+  }, [toggleWatch, onBlur]);
 
   useEffect(() => {
     if (Array.isArray(tableConfiguration.rows)) {
@@ -543,8 +543,9 @@ function TableAnswer({
     if (onCascadeChange) onCascadeChange();
   }, []);
 
-  function handleSaveClick() {
+  const handleSaveClick = useCallback(() => {
     if (toggleWatch) toggleWatch(false);
+    if (onBlur) onBlur();
     toggleModal(false);
     const newColumns = [];
     const rowHeaders = rows.map(row => row.header);
@@ -564,7 +565,7 @@ function TableAnswer({
     }
     onChange({ rows, columns: newColumns }, lastAnswer);
     duplicateCheck(rowHeaders, columnHeaders);
-  }
+  }, [toggleWatch, onBlur, rows, columns]);
 
   function handleEdit(valueType, values) {
     if (valueType === 'column') {
