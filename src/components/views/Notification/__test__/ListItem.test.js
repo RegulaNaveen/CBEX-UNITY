@@ -65,4 +65,44 @@ describe('ListItem component', () => {
     wrapper.find('EnvelopeButton').prop('onClick')();
     expect(store.dispatch).toHaveBeenCalledTimes(1);
   });
+  it('should render notification data for post award bid', () => {
+    wrapper = mount(
+      <Provider store={store}>
+        <ListItem
+          id="828aa8df-1dfb-449a-a486-663eb931f8b4"
+          url="/opportunities/JAB53164?notification_id=828aa8df-1dfb-449a-a486-663eb931f8b4&bidNo=10&bidType=Post_Award_Bid"
+          oppNo="JAB53164"
+          data="You’ve been assigned to Opportunity JAB53164 Post Award 10. View the opportunity overview and prepare for upcoming calls in Unity."
+          isSeen={false}
+          setSeenOne={notificationActions.setSeenOne}
+          createdAt="2024-01-17T09:14:47.808Z"
+          jsonBody={{
+            opportunityId: 'JAB53164',
+            bidNo: 10,
+            bidType: 'Post_Award_Bid'
+          }}
+        />
+      </Provider>
+    );
+    console.log(wrapper.debug());
+    expect(
+      wrapper
+        .find('.notification-content-data')
+        .text()
+        .includes(
+          'You’ve been assigned to Opportunity JAB53164 Post Award 10. View the opportunity overview and prepare for upcoming calls in Unity'
+        )
+    ).toBe(true);
+
+    const expectedLinks = [
+      '<a style="display: inline-block" href="http://localhost/opportunities/JAB53164?notification_id=828aa8df-1dfb-449a-a486-663eb931f8b4&amp;bidNo=10&amp;bidType=Post_Award_Bid">Opportunity</a>',
+      '<a style="display: inline-block" href="http://localhost/opportunities/JAB53164?notification_id=828aa8df-1dfb-449a-a486-663eb931f8b4&amp;bidNo=10&amp;bidType=Post_Award_Bid">JAB53164</a>',
+      '<a style="display: inline-block" href="http://localhost/opportunities/JAB53164?notification_id=828aa8df-1dfb-449a-a486-663eb931f8b4&amp;bidNo=10&amp;bidType=Post_Award_Bid">Post</a>',
+      '<a style="display: inline-block" href="http://localhost/opportunities/JAB53164?notification_id=828aa8df-1dfb-449a-a486-663eb931f8b4&amp;bidNo=10&amp;bidType=Post_Award_Bid">Award</a>',
+      '<a style="display: inline-block" href="http://localhost/opportunities/JAB53164?notification_id=828aa8df-1dfb-449a-a486-663eb931f8b4&amp;bidNo=10&amp;bidType=Post_Award_Bid">10.</a>'
+    ];
+    expectedLinks.forEach(link => {
+      expect(wrapper.html()).toContain(link);
+    });
+  });
 });
