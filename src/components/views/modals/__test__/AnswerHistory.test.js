@@ -330,7 +330,7 @@ describe('Answer History component', () => {
     });
   });
 
-  test('If Answer is Table type is present with different user', async () => {
+  test('If Answer is Table Type is present with different User ', async () => {
     data.question = data.tablequestion;
     const question = fromJS(data.question);
     const closeModal = jest.fn();
