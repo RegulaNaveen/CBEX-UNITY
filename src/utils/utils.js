@@ -80,8 +80,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-          : name?.trim();
+        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+        : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -95,7 +95,7 @@ const getFullProposalTeamString = (updateField, questions) => {
   return result;
 };
 
-const getTableView = tableConfig => {
+export const getTableView = tableConfig => {
   const tableAnswerString = `
   <div style='width: 100%;
   overflow: auto;
@@ -116,11 +116,12 @@ const getTableView = tableConfig => {
       !column?.hidden &&
       `<th style='width: 200px;
     padding: 10px 0px 10px 10px;
-    text-align: left;
+    text-align: left !important;
     font-size: 16px;
-    border-bottom: 1px solid #e9e9e9;
-    border-right: 1px solid #e9e9e9;
-    background-color: #f8f9fb;'>${column?.header ? column?.header : ''}</th>`
+    border: 1px solid #e9e9e9 !important;
+    background-color: #f8f9fb;color:#000000'>${
+      column?.header ? column?.header : ''
+    }</th>`
   )}
   </tr>
   </thead>
@@ -134,8 +135,8 @@ const getTableView = tableConfig => {
       padding: 10px 0px 10px 10px;
       text-align: left;
       font-size: 16px;
-      border-bottom: 1px solid #e9e9e9;
-      border-right: 1px solid #e9e9e9;
+      border: 1px solid #e9e9e9 !important;
+      border-right: 1px solid #e9e9e9 !important;
       background-color: #f8f9fb;'>${row?.header}</td>`
       }
       ${tableConfig.columns.map(
@@ -146,8 +147,8 @@ const getTableView = tableConfig => {
         padding: 10px 0px 10px 10px;
         text-align: left;
         font-size: 16px;
-        border-bottom: 1px solid #e9e9e9;
-        border-right: 1px solid #e9e9e9;'>${
+        border: 1px solid #e9e9e9 !important;
+        border-right: 1px solid #e9e9e9 !important;'>${
           row[column?.accessor] ? row[column?.accessor] : ''
         }</td>`
       )}
@@ -313,28 +314,32 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
 };
 
 const parseUrlText = (crm, url = '') => {
-  if (!url) {
+  try {
     const params = new URLSearchParams(window.location.search);
-    const bidType = params.get('bidType') || '';
+    let bidType = params.get('bidType') || '';
     const bidNo = params.get('bidNo') || '';
-    let newUrl = `Opportunity `;
-    if (BID_TYPES.EARLY_ENGAGEMENT === bidType) {
+    let newUrl = `Opportunity ${crm} `;
+    if (BID_TYPES[bidType] === BID_TYPES.Early_Engagement_Bid) {
       bidType = 'Early Engagement';
-    } else if (BID_TYPES.RFI_Request === bidType) {
+    } else if (BID_TYPES[bidType] === BID_TYPES.RFI_Request) {
       bidType = 'RFI';
-    } else if (BID_TYPES.POST_AWARD === bidType) {
+    } else if (BID_TYPES[bidType] === BID_TYPES.Post_Award_Bid) {
       bidType = 'Post Award';
+    } else if (BID_TYPES[bidType] === BID_TYPES.Clinical_Bid) {
+      bidType = '';
     }
+    console.log(BID_TYPES, bidType);
 
     if (bidType) {
       newUrl = newUrl + bidType;
     }
     if (bidNo) {
-      newUrl = newUrl + ' ' + bidNo;
+      newUrl = newUrl + ' Bid ' + bidNo;
     }
     return newUrl;
+  } catch (error) {
+    console.log('error', error);
   }
-  return url;
 };
 
 /**

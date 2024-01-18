@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo
+} from 'react';
 import TableIcon from '../../../svg/Table';
 import Typography from 'apollo-react/components/Typography';
 import classNames from 'classnames';
@@ -114,18 +120,20 @@ function Header({
     } else {
       setTooltipValue('');
     }
-  }, [title]);
+  }, [title, allExpanded]);
 
   const handleValueChange = useCallback(event => {
     setCurrentTitle(event.target.value);
+    if (event.target.value.length === 0) {
+      setSaveDisable(true);
+    } else {
+      setSaveDisable(false);
+    }
   }, []);
 
   const handleInputBlur = useCallback(
     e => {
       onTitleChange(index, currentTitle);
-      if (currentTitle.length === 0) {
-        setSaveDisable(true);
-      }
       if (
         columnRef?.current?.lastChild?.children[0]?.scrollWidth >
         columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
@@ -254,6 +262,7 @@ function TableAnswer({
             canEdit={true}
             disabled={disabled}
             allExpanded={allExpanded}
+            setSaveDisable={setSaveDisable}
           />
         ),
         canEdit: true,
@@ -278,6 +287,7 @@ function TableAnswer({
           canEdit={true}
           disabled={disabled}
           allExpanded={allExpanded}
+          setSaveDisable={setSaveDisable}
         />
       ),
       canEdit: true,
@@ -321,6 +331,7 @@ function TableAnswer({
             canEdit={true}
             disabled={disabled}
             allExpanded={allExpanded}
+            setSaveDisable={setSaveDisable}
           />
         ),
         canEdit: true,
@@ -590,6 +601,32 @@ function TableAnswer({
     if (onCascadeChange) onCascadeChange();
   }
 
+  const apolloTableRender = useMemo(
+    () => (
+      <ApolloTable
+        rows={rowsWithLongestKeys
+          .map((row, rowIndex) => ({
+            ...row,
+            rowIndex,
+            editRow,
+            allExpanded
+          }))
+          .filter(row => !row.hidden)}
+        columns={columnsWithLongest.map(column => ({
+          ...column,
+          fixedWidth: false
+        }))}
+        hidePagination
+        defaultPageSize={'All'}
+        ref={tableRef}
+        classes={{
+          root: 'answer-table'
+        }}
+      />
+    ),
+    [rowsWithLongestKeys, columnsWithLongest, allExpanded]
+  );
+
   return (
     <React.Fragment>
       <div className="table-answer-container">
@@ -670,26 +707,7 @@ function TableAnswer({
             onExpandAll={handleExpandAll}
           />
         ) : null}
-        <ApolloTable
-          rows={rowsWithLongestKeys
-            .map((row, rowIndex) => ({
-              ...row,
-              rowIndex,
-              editRow,
-              allExpanded
-            }))
-            .filter(row => !row.hidden)}
-          columns={columnsWithLongest.map(column => ({
-            ...column,
-            fixedWidth: false
-          }))}
-          hidePagination
-          defaultPageSize={'All'}
-          ref={tableRef}
-          classes={{
-            root: 'answer-table'
-          }}
-        />
+        {apolloTableRender}
       </Modal>
       {warning && (
         <CustomModal
