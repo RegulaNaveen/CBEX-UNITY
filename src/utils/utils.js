@@ -313,28 +313,32 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
 };
 
 const parseUrlText = (crm, url = '') => {
-  if (!url) {
+  try {
     const params = new URLSearchParams(window.location.search);
-    const bidType = params.get('bidType') || '';
+    let bidType = params.get('bidType') || '';
     const bidNo = params.get('bidNo') || '';
-    let newUrl = `Opportunity `;
-    if (BID_TYPES.EARLY_ENGAGEMENT === bidType) {
+    let newUrl = `Opportunity ${crm} `;
+    if (BID_TYPES[bidType] === BID_TYPES.Early_Engagement_Bid) {
       bidType = 'Early Engagement';
-    } else if (BID_TYPES.RFI_Request === bidType) {
+    } else if (BID_TYPES[bidType] === BID_TYPES.RFI_Request) {
       bidType = 'RFI';
-    } else if (BID_TYPES.POST_AWARD === bidType) {
+    } else if (BID_TYPES[bidType] === BID_TYPES.Post_Award_Bid) {
       bidType = 'Post Award';
+    } else if (BID_TYPES[bidType] === BID_TYPES.Clinical_Bid) {
+      bidType = '';
     }
+    console.log(BID_TYPES, bidType);
 
     if (bidType) {
       newUrl = newUrl + bidType;
     }
     if (bidNo) {
-      newUrl = newUrl + ' ' + bidNo;
+      newUrl = newUrl + ' Bid ' + bidNo;
     }
     return newUrl;
+  } catch (error) {
+    console.log('error', error);
   }
-  return url;
 };
 
 /**
