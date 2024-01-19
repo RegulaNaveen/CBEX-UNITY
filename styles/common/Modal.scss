@@ -43,7 +43,7 @@
   .answer-table {
     height: calc(100% - 32px);
     overflow: auto;
-    div[class*='Table-tableWrapper'] {
+    div:first-child {
       overflow-x: unset !important;
     }
   }

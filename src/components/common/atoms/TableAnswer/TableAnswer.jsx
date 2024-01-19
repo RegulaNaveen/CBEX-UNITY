@@ -105,6 +105,7 @@ function Header({
   allExpanded,
   isLongest
 }) {
+  console.log('Header', allExpanded);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [tooltipValue, setTooltipValue] = useState('');
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -461,26 +462,6 @@ function TableAnswer({
   }
 
   useEffect(() => {
-    setColumnsWithLongest(columns =>
-      columns.map((column, index) => ({
-        ...column,
-        header: (
-          <Header
-            index={index}
-            title={column.headerTitle}
-            onTitleChange={onHeaderTitleChange}
-            canEdit={column.canEdit}
-            disabled={disabled}
-            setSaveDisable={setSaveDisable}
-            allExpanded={allExpanded}
-            isLongest={column.isLongest}
-          />
-        )
-      }))
-    );
-  }, [allExpanded]);
-
-  useEffect(() => {
     if (rows.length > 0 || columns.length > 1) {
       let rowEmptyCheck;
       if (
@@ -556,9 +537,25 @@ function TableAnswer({
         cloneColumns[longesColIndex].isLongest = true;
       }
       setRowsWithLongestKeys(cloneRows);
-      setColumnsWithLongest(cloneColumns);
+      setColumnsWithLongest(
+        cloneColumns.map((column, index) => ({
+          ...column,
+          header: (
+            <Header
+              index={index}
+              title={column.headerTitle}
+              onTitleChange={onHeaderTitleChange}
+              canEdit={column.canEdit}
+              disabled={disabled}
+              setSaveDisable={setSaveDisable}
+              allExpanded={allExpanded}
+              isLongest={column.isLongest}
+            />
+          )
+        }))
+      );
     }
-  }, [rows, columns]);
+  }, [rows, columns, allExpanded]);
 
   useEffect(() => {
     if (forceBlur === true) {
