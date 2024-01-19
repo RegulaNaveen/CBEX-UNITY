@@ -109,6 +109,42 @@ const props = {
 };
 
 describe('testing question item component in approval', () => {
+  test('render the component without crashing without props', async () => {
+    const { container } = await render(
+      <Provider store={store}>
+        <SocketContext.Provider
+          value={{
+            questionLockWrapper: jest.fn(),
+            questionUnlockWrapper: jest.fn()
+          }}
+        >
+          <QuestionItem />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
+  });
+  test('render the component without crashing with props', async () => {
+    const { container, getByTestId } = await render(
+      <Provider store={store}>
+        <SocketContext.Provider
+          value={{
+            questionLockWrapper: jest.fn(),
+            questionUnlockWrapper: jest.fn()
+          }}
+        >
+          <QuestionItem {...props} />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
+    const iconButton = getByTestId('approval-icon-button');
+    expect(iconButton).toBeInTheDocument();
+
+    fireEvent.click(iconButton);
+    const popover = getByTestId('popover-approval');
+    expect(popover).toBeInTheDocument();
+  });
   test('Question Item component', async () => {
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
@@ -292,36 +328,5 @@ describe('testing question item component in approval', () => {
       },
       { timeout: 100 }
     );
-  });
-
-  test('render the component without crashing without props', async () => {
-    const { container } = await render(
-      <Provider store={store}>
-        <QuestionItem />
-      </Provider>
-    );
-    expect(container).toBeInTheDocument();
-  });
-
-  test('render the component without crashing with props', async () => {
-    const { container, getByTestId } = await render(
-      <Provider store={store}>
-        <SocketContext.Provider
-          value={{
-            questionLockWrapper: jest.fn(),
-            questionUnlockWrapper: jest.fn()
-          }}
-        >
-          <QuestionItem {...props} />
-        </SocketContext.Provider>
-      </Provider>
-    );
-    expect(container).toBeInTheDocument();
-    const iconButton = getByTestId('approval-icon-button');
-    expect(iconButton).toBeInTheDocument();
-
-    fireEvent.click(iconButton);
-    const popover = getByTestId('popover-approval');
-    expect(popover).toBeInTheDocument();
   });
 });
