@@ -413,7 +413,7 @@ const setOpportunityInfo = (state, action) => {
           proposal.proposal.proposalDetails.pertinentDetails
         )
         .set('proposalDate', proposal.proposal.proposalDate)
-        .set('typeOfWidget', proposal.proposal.typeOfWidget)
+        .set('typeOfWidget', proposal.proposal?.typeOfWidget || '')
         .set('nextMilestone', proposal.proposal.nextMilestone || '');
     }
     opportunityData = opportunityData.set(
@@ -499,7 +499,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     accountId: accountId || '',
     opportunityId: proposalDetails['opportunityId'],
     proposalDate,
-    typeOfWidget: payload.bid.typeOfWidget,
+    typeOfWidget: payload.bid?.typeOfWidget || '',
     nextMilestone: payload.bid.nextMilestone || '',
     typeOfActivity: proposalDetails['typeOfActivity'],
     describeActivity: proposalDetails['describeActivity'],
@@ -1588,16 +1588,17 @@ const updateProposalDetailSF = (state, action) => {
     opportunityData &&
     opportunityData.get(data?.proposalId)
   ) {
-    let currentDate = opportunityData.getIn([
-      data?.proposalId,
-      'proposal',
-      'proposalDetails',
-      'Bid due date'
-    ]);
+    let currentDate =
+      opportunityData.getIn([
+        data?.proposalId,
+        'proposal',
+        'proposalDetails',
+        'Bid due date'
+      ]) || '';
     if (currentDate) {
       currentDate = moment(currentDate).format('YYYY-MM-DD');
     }
-    const newDate = moment(data.proposalDetails['Bid due date']).format(
+    const newDate = moment(data.proposalDetails?.['Bid due date']).format(
       'YYYY-MM-DD'
     );
     if (currentDate !== newDate) {
@@ -1643,12 +1644,12 @@ const updateDashboardDetail = (state, action) => {
       if (selectedBidId === data?.data?.proposalId && isEditable) {
         proposalDetail.Customer = data?.data?.proposalDetails.Customer;
       }
-      if (data?.data?.proposalDetails['Bid due date'] && isEditable) {
-        currentProposal['proposalDetails']['Bid due date'] =
-          data.data.proposalDetails['Bid due date'];
+      if (data?.data?.proposalDetails?.['Bid due date'] && isEditable) {
+        currentProposal.proposalDetails['Bid due date'] =
+          data.data.proposalDetails?.['Bid due date'];
         if (selectedBidId === data?.data?.proposalId && isEditable) {
           proposalDetail['Bid due date'] =
-            data.data.proposalDetails['Bid due date'];
+            data.data.proposalDetails?.['Bid due date'];
         }
       }
       if (selectedBidId === data?.data?.proposalId && isEditable) {

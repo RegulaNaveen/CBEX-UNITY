@@ -1011,7 +1011,7 @@ describe('proposal reducer', () => {
       isCurrent: true,
       bidStopStatus: false,
       pertinentDetails: null,
-      typeOfWidget: undefined,
+      typeOfWidget: '',
       bidType: 'Post_Award_Bid',
       isApprovalCountPresent: true,
       describeActivity: 'Testt',
