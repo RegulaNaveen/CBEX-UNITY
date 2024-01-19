@@ -105,7 +105,7 @@ const updateDashboradBid = (state, action) => {
           ? data?.proposalDetails?.bidNo
           : parseInt(value['bidNo']);
         value['bid due date'] = moment(
-          data?.proposalDetails['Bid due date']
+          data?.proposalDetails?.['Bid due date']
         ).format('YYYY-MM-DD');
       }
       return value;
@@ -121,7 +121,7 @@ const updateDashboradBid = (state, action) => {
           ? data?.proposalDetails?.bidNo
           : parseInt(value['bidNo']);
         value['bid due date'] = moment(
-          data?.proposalDetails['Bid due date']
+          data?.proposalDetails?.['Bid due date']
         ).format('YYYY-MM-DD');
       }
       return value;
@@ -312,7 +312,7 @@ const actionMap = {
   [DASHBOARD_PROPOSAL_DETAIL]: updateBidStopStatus
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

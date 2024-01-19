@@ -80,8 +80,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-        : name?.trim();
+          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+          : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -137,7 +137,7 @@ export const getTableView = tableConfig => {
       font-size: 16px;
       border: 1px solid #e9e9e9 !important;
       border-right: 1px solid #e9e9e9 !important;
-      background-color: #f8f9fb;'>${row?.header}</td>`
+      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`
       }
       ${tableConfig.columns.map(
         column =>
@@ -326,7 +326,7 @@ const parseUrlText = (crm, url = '') => {
     } else if (BID_TYPES[bidType] === BID_TYPES.Post_Award_Bid) {
       bidType = 'Post Award';
     } else if (BID_TYPES[bidType] === BID_TYPES.Clinical_Bid) {
-      bidType = '';
+      bidType = 'Bid';
     }
     console.log(BID_TYPES, bidType);
 
@@ -334,7 +334,7 @@ const parseUrlText = (crm, url = '') => {
       newUrl = newUrl + bidType;
     }
     if (bidNo) {
-      newUrl = newUrl + ' Bid ' + bidNo;
+      newUrl = newUrl + ' ' + bidNo;
     }
     return newUrl;
   } catch (error) {
