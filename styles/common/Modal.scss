@@ -99,6 +99,7 @@
   .table-cell,
   .table-header {
     height: 100%;
+    width: inherit;
     min-width: 100px;
     min-height: 48px;
     display: flex;
@@ -124,6 +125,10 @@
       .MuiInputBase-input {
         font-weight: 600;
       }
+    }
+    .MuiTypography-root {
+      min-width: 100%;
+      max-width: 200px;
     }
   }
 }
