@@ -1652,12 +1652,18 @@ const updateDashboardDetail = (state, action) => {
         }
       }
       if (selectedBidId === data?.data?.proposalId && isEditable) {
-        state.set('proposalDetails', { ...proposalDetail });
+        return state
+          .set('proposalDetails', { ...proposalDetail })
+          .setIn(
+            ['opportunityData', data.data.proposalId, 'proposal'],
+            currentProposal
+          );
+      } else {
+        return state.setIn(
+          ['opportunityData', data.data.proposalId, 'proposal'],
+          currentProposal
+        );
       }
-      return state.setIn(
-        ['opportunityData', data.data.proposalId, 'proposal'],
-        currentProposal
-      );
     }
 
     return state;

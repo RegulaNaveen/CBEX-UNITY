@@ -102,7 +102,8 @@ function Header({
   canEdit,
   disabled,
   setSaveDisable,
-  allExpanded
+  allExpanded,
+  isLongest
 }) {
   const [currentTitle, setCurrentTitle] = useState(title);
   const [tooltipValue, setTooltipValue] = useState('');
@@ -149,41 +150,50 @@ function Header({
     return <p></p>;
   }
 
-  return canEdit && !disabled ? (
-    <Tooltip title={tooltipValue} open={openTooltip}>
-      <TextField
-        ref={columnRef}
-        margin="none"
-        value={currentTitle}
-        multiline={allExpanded}
-        onMouseOver={() => {
-          if (columnRef.current.contains(document.activeElement)) {
-            setOpenTooltip(false);
-          } else setOpenTooltip(true);
-        }}
-        onMouseOut={() => {
-          setOpenTooltip(false);
-        }}
-        onFocus={e => {
-          setOpenTooltip(false);
-          setTimeout(() => {
-            columnRef.current.focus();
-          }, 100);
-        }}
-        onChange={handleValueChange}
-        onBlur={handleInputBlur}
-        InputProps={{ inputProps: { maxLength: 999 } }}
-        error={currentTitle.length === 0}
-        helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
-        fullWidth
-      />
-    </Tooltip>
-  ) : (
-    <Tooltip title={currentTitle}>
-      <Typography variant="bodyDefault" gutterBottom noWrap emphasis="high">
-        {currentTitle}
-      </Typography>
-    </Tooltip>
+  return (
+    <div
+      className={classNames({
+        'table-header': true,
+        'h-100': !isLongest
+      })}
+    >
+      {canEdit && !disabled ? (
+        <Tooltip title={tooltipValue} open={openTooltip}>
+          <TextField
+            ref={columnRef}
+            margin="none"
+            value={currentTitle}
+            multiline={allExpanded}
+            onMouseOver={() => {
+              if (columnRef.current.contains(document.activeElement)) {
+                setOpenTooltip(false);
+              } else setOpenTooltip(true);
+            }}
+            onMouseOut={() => {
+              setOpenTooltip(false);
+            }}
+            onFocus={e => {
+              setOpenTooltip(false);
+              setTimeout(() => {
+                columnRef.current.focus();
+              }, 100);
+            }}
+            onChange={handleValueChange}
+            onBlur={handleInputBlur}
+            InputProps={{ inputProps: { maxLength: 999 } }}
+            error={currentTitle.length === 0}
+            helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+            fullWidth
+          />
+        </Tooltip>
+      ) : (
+        <Tooltip title={currentTitle}>
+          <Typography variant="bodyDefault" gutterBottom noWrap emphasis="high">
+            {currentTitle}
+          </Typography>
+        </Tooltip>
+      )}
+    </div>
   );
 }
 
@@ -207,6 +217,7 @@ function TableAnswer({
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
   const [rowsWithLongestKeys, setRowsWithLongestKeys] = useState([]);
+  const [columnsWithLongest, setColumnsWithLongest] = useState([]);
   const [columns, setColumns] = useState([]);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -437,7 +448,7 @@ function TableAnswer({
   }
 
   useEffect(() => {
-    setColumns(columns =>
+    setColumnsWithLongest(columns =>
       columns.map((column, index) => ({
         ...column,
         header: (
@@ -449,6 +460,7 @@ function TableAnswer({
             disabled={disabled}
             setSaveDisable={setSaveDisable}
             allExpanded={allExpanded}
+            isLongest={column.isLongest}
           />
         )
       }))
@@ -507,6 +519,7 @@ function TableAnswer({
       }
       // calculate rows keys with longer text
       let cloneRows = cloneDeep(rows);
+      let cloneColumns = cloneDeep(columns);
       cloneRows = cloneRows.map(row => {
         const longestKey = maxBy(
           Object.keys(row).filter(rowKey => typeof row[rowKey] === 'string'),
@@ -518,7 +531,19 @@ function TableAnswer({
           longestKey
         };
       });
+      if (cloneColumns.length > 0) {
+        let longesColIndex = 0;
+        let longestColHeader = cloneColumns[0].headerTitle;
+        cloneColumns.forEach((column, index) => {
+          if (column.headerTitle.length > longestColHeader.length) {
+            longesColIndex = index;
+            longestColHeader = column.headerTitle;
+          }
+        });
+        cloneColumns[longesColIndex].isLongest = true;
+      }
       setRowsWithLongestKeys(cloneRows);
+      setColumnsWithLongest(cloneColumns);
     }
   }, [rows, columns]);
 
@@ -587,7 +612,7 @@ function TableAnswer({
             allExpanded
           }))
           .filter(row => !row.hidden)}
-        columns={columns.map(column => ({
+        columns={columnsWithLongest.map(column => ({
           ...column,
           fixedWidth: false
         }))}
@@ -599,7 +624,7 @@ function TableAnswer({
         }}
       />
     ),
-    [rowsWithLongestKeys, columns, allExpanded]
+    [rowsWithLongestKeys, columnsWithLongest, allExpanded]
   );
 
   return (
