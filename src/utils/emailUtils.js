@@ -245,11 +245,13 @@ export function generateApprovalEmailInfo(
       <tr><td>Phase</td><td>${proposalDetails['Phase'] || ''}</td></tr>
       <tr><td>Bid Number</td><td>${proposalDetails['bidNo'] || ''}</td></tr>
       <tr><td>Due Date</td><td>${
-        String(new Date(proposalDetails['Bid due date'] || '')).includes(
+        String(new Date(proposalDetails?.['Bid due date'] || '')).includes(
           'Invalid'
-        ) || !String(proposalDetails['Bid due date'] || '').length
+        ) || !String(proposalDetails?.['Bid due date'] || '').length
           ? ''
-          : moment(proposalDetails['Bid due date'] || '').format('DD-MMM-YYYY')
+          : moment(proposalDetails?.['Bid due date'] || '').format(
+              'DD-MMM-YYYY'
+            )
       }</td></tr>
     </tbody></table>`;
     emailBody += `<br/><table><thead>`;
