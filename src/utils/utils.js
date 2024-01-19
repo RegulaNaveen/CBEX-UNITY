@@ -137,7 +137,7 @@ export const getTableView = tableConfig => {
       font-size: 16px;
       border: 1px solid #e9e9e9 !important;
       border-right: 1px solid #e9e9e9 !important;
-      background-color: #f8f9fb;'>${row?.header}</td>`
+      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`
       }
       ${tableConfig.columns.map(
         column =>
