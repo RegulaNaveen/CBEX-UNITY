@@ -452,11 +452,15 @@ const QuestionItem = ({
           // parse JSON from lastAnswer
           const tableConfigJSON = JSON.parse(tableConfiguration);
           try {
-            const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
-            jsonTableConfig = merge(
-              cloneDeep(tableConfigJSON),
-              noConfigTableAnswer
-            );
+            if (lastAnswer.answer === ' ') {
+              jsonTableConfig = tableConfigJSON;
+            } else {
+              const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
+              jsonTableConfig = merge(
+                cloneDeep(tableConfigJSON),
+                noConfigTableAnswer
+              );
+            }
             const defaultColumnsLength = tableConfigJSON.columns.length;
             const defaultRowsLength = tableConfigJSON.rows.length;
 
