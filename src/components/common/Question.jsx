@@ -397,7 +397,12 @@ export class TaskRow extends React.PureComponent<Props, State> {
   handleTableValueChange = (newValue, lastAnswer) => {
     const { setProposalAnswer, proposalId, questionId, userData } = this.props;
     let lastAnswerValue;
-    if (lastAnswer && lastAnswer.get('answer')) {
+    if (
+      lastAnswer &&
+      lastAnswer.get('answer') &&
+      lastAnswer.get('answer') !== ' ' &&
+      lastAnswer.get('answer') !== 'N/A'
+    ) {
       lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
       // compare prev and next answers and do a save
 
@@ -637,7 +642,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context,
         proposalId,
         questionId,
-        lastAnswer?.answer || ' ',
+        lastAnswer?.answer === 'N/A' ? ' ' : lastAnswer?.answer || ' ',
         userData
       );
     }
@@ -927,7 +932,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         try {
           const defaultColumnsLength = tableConfigJSON.columns.length;
           const defaultRowsLength = tableConfigJSON.rows.length;
-          if (answer === ' ') {
+          if (answer === ' ' || answer === 'N/A') {
             answerValue = tableConfigJSON;
           } else {
             const noConfigTableAnswer = JSON.parse(answer);
