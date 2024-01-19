@@ -39,8 +39,8 @@ const PROPOSAL = {
 };
 
 const TABLEANSWER = {
-  DUPLICATE_ROWS: 'Two or more rows have the same name:',
-  DUPLICATE_COLUMNS: 'Two or more columns have the same name:'
+  DUPLICATE_ROWS: 'Two or more rows have the same name: ',
+  DUPLICATE_COLUMNS: 'Two or more columns have the same name: '
 };
 
 export const DashboardSFUpDATE = {

@@ -906,12 +906,16 @@ class AnswerHistory extends Component<Props> {
                   const answer =
                     _answer.answer === 'N/A'
                       ? 'N/A'
+                      : _answer.answer === ' '
+                      ? questionTableConfig
                       : JSON.parse(_answer.answer);
                   const nextAnswer =
                     _answer.nextIndex === -1
                       ? questionTableConfig
                       : answers.get(_answer.nextIndex).get('answer') === 'N/A'
                       ? 'N/A'
+                      : answers.get(_answer.nextIndex).get('answer') === ' '
+                      ? questionTableConfig
                       : JSON.parse(
                           answers.get(_answer.nextIndex).get('answer')
                         );
