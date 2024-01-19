@@ -1,7 +1,8 @@
 import { NOTEPAD_UI_ID } from '../../constants/app';
 import {
   extractTextFromProseMirrorJSON,
-  getSearchResults
+  getSearchResults,
+  searchInTab
 } from '../searchUtils';
 import mockData from './search_data.json';
 
@@ -176,5 +177,57 @@ describe.skip('searchUtils unit tests', () => {
       ' non-highlight in same line',
       'User name'
     ]);
+  });
+
+  ////************************************* */
+  test('test getSearchResults function ', async () => {
+    let queryStr = 'Test Question 1';
+    let searchResults = await getSearchResults(
+      queryStr,
+      mockData.query,
+      mockData.questions,
+      mockData.sections,
+      mockData.approvals,
+      mockData.notepadData,
+      mockData.activeTab,
+      mockData.isQuestionsFilterEnabled,
+      mockData.approvalFilters,
+      mockData.unityTabFilters,
+      mockData.questionsForCustomersEnabled,
+      mockData.allTabs,
+      mockData.filteredQuestionsMap,
+      mockData.sectionsUnfiltered,
+      mockData.allFlags,
+      mockData.emailTemplates
+    );
+
+    expect(searchResults).toBe(1);
+    expect(searchResults.results[0].searchIndex).toBe('Date');
+  });
+});
+
+describe('searchUtils unit tests cases', () => {
+  it('check function getSearchResults', async () => {
+    const {
+      query,
+      questions,
+      sections,
+      approvals,
+      notepadData,
+      activeTab,
+      isQuestionsFilterEnabled,
+      approvalFilters,
+      unityTabFilters,
+      questionsForCustomersEnabled,
+      allTabs,
+      filteredQuestionsMap,
+      sectionsUnfiltered,
+      allFlags,
+      emailTemplates
+    } = mockData;
+    const searchResults = await getSearchResults(mockData);
+
+    //expect(searchResults).toBe({ count: 0, results: ['Date'] });
+    //expect(searchResults.results[0]).toBe('Date');
   });
 });
