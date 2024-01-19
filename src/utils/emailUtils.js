@@ -6,6 +6,7 @@ import {
 } from '../constants/app';
 import { shouldShowQuestion } from '../components/screens/Approvals/utils';
 import { cloneDeep, isString, isEmpty } from 'lodash';
+import { getTableView } from './utils';
 
 export function getProposalTeamUsers(questions = []) {
   const answers = new Set();
@@ -266,6 +267,21 @@ export function generateApprovalEmailInfo(
         );
       } else {
         answerHTML = '';
+        if (
+          question?.answerConfiguration &&
+          question?.answerConfiguration?.type === 'table'
+        ) {
+          if (
+            question?.answers?.length === 0 ||
+            (question?.answers.length > 0 &&
+              question?.answers[question?.answers?.length - 1]?.answer === '')
+          ) {
+            if (isString(question?.questionTableConfig)) {
+              const tableConfig = JSON.parse(question?.questionTableConfig);
+              answerHTML = `<p>${getTableView(tableConfig)}</p>`;
+            }
+          }
+        }
         if (question?.answers[question?.answers?.length - 1]?.formattedAnswer) {
           const formattedAnswer =
             question.answers[question.answers.length - 1].formattedAnswer;
@@ -301,10 +317,24 @@ export function generateApprovalEmailInfo(
           }
         } else if (question?.answers[question?.answers?.length - 1]?.answer) {
           // Use the answer property as a regular string
-          answerHTML = `<p>${handleHyperlinks(
-            question.answers[question.answers.length - 1].answer,
-            question.answerConfiguration
-          )}</p>`;
+          if (
+            question?.answerConfiguration &&
+            question?.answerConfiguration?.type === 'table'
+          ) {
+            if (
+              isString(question?.answers[question?.answers?.length - 1]?.answer)
+            ) {
+              const tableConfig = JSON.parse(
+                question?.answers[question?.answers?.length - 1]?.answer
+              );
+              answerHTML = `<p>${getTableView(tableConfig)}</p>`;
+            }
+          } else {
+            answerHTML = `<p>${handleHyperlinks(
+              question?.answers[question?.answers?.length - 1].answer,
+              question?.answerConfiguration
+            )}</p>`;
+          }
         }
 
         answerHTML = answerHTML.replace(RTE_DATA_ATTR_REGEXP, '');

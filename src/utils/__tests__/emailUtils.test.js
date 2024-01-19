@@ -417,9 +417,68 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
         questionId: '0c391d22-8c40-4823-bd8e-9967802ee108',
         section: { sectionOrder: 40, sectionName: 'Different section' },
         questionText: 'Decision',
-        answerConfiguration: { type: 'text', options: [] },
+        answerConfiguration: { type: 'table', options: [] },
         roleNames: ['Core - Proposal Developer'],
-        answers: [{ answer: 'Decision answer' }],
+        answers: [
+          {
+            user: 'AnswerPulledFromSalesforce',
+            userName: 'AnswerPulledFromSalesforce',
+            userRole: 'AnswerPulledFromSalesforce',
+            date: '2023-01-12T09:04:56.720Z',
+            answer: {
+              rows: [
+                {
+                  test: '1',
+                  header: '1',
+                  rowId: 0,
+                  canEdit: true,
+                  hidden: false
+                },
+                {
+                  header: '2',
+                  canEdit: true,
+                  test: '2',
+                  hidden: false
+                },
+                { header: '3', canEdit: true, test: '3', hidden: false }
+              ],
+              columns: [
+                {
+                  accessor: 'header',
+                  frozen: true,
+                  hidden: false,
+                  locked: false,
+                  type: 'text',
+                  alwaysVisible: false,
+                  canEdit: false
+                },
+                {
+                  hidden: true,
+                  alwaysVisible: false,
+                  accessor: 'test',
+                  frozen: false,
+                  locked: false,
+                  type: 'text',
+                  canEdit: false,
+                  header: 'test'
+                }
+              ]
+            },
+            proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+            formattedAnswer: ['qweq'],
+            updatedInPG: false
+          },
+          {
+            user: 'AnswerPulledFromSalesforce',
+            userName: 'AnswerPulledFromSalesforce',
+            userRole: 'AnswerPulledFromSalesforce',
+            date: '2023-01-13T09:12:32.087Z',
+            answer: '',
+            proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+            formattedAnswer: ['qweq'],
+            updatedInPG: false
+          }
+        ],
         questionOrder: 29,
         visible: true,
         locked: false,
@@ -440,7 +499,9 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
         integration: '',
         events: '',
         notApplicable: false,
-        questionApproval: false
+        questionApproval: false,
+        questionTableConfig:
+          '{"canEditColumn":false,"canAddRow":true,"rows":[{"header":"tptabler1","tptablec3":"","tptablec1":"","rowId":0,"tptablec2":""},{"header":"tptabler2","tptablec3":"","tptablec1":"","rowId":1,"tptablec2":""},{"header":"tptabler3","tptablec3":"","tptablec1":"","rowId":2,"tptablec2":""}],"columns":[{"accessor":"header","frozen":true,"hidden":false,"locked":false,"type":"text","alwaysVisible":false},{"hidden":false,"alwaysVisible":false,"accessor":"tptablec1","header":"tptablec1","frozen":false,"locked":false,"type":"text"},{"hidden":false,"alwaysVisible":false,"accessor":"tptablec2","header":"tptablec2","frozen":false,"locked":false,"type":"text"},{"hidden":false,"alwaysVisible":false,"accessor":"tptablec3","header":"tptablec3","frozen":false,"locked":false,"type":"text"}],"canAddColumn":true,"canEditRow":false}'
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -585,7 +646,9 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
       {},
       []
     );
-    expect(result.subject).toMatch(/Decision answer/);
+    expect(result.subject).toMatch(
+      'Strategy Approval test 01 for    (Opportunity  Bid )'
+    );
   });
 
   it('should generate the correct email template', () => {
