@@ -5,10 +5,78 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import { store } from '../../../../store';
 import { SocketContext } from '../../../../context/SocketContext';
 import QuestionItem from '../QuestionItem';
+import thunk from 'redux-thunk';
+import cloneDeep from 'lodash/cloneDeep';
+import configureStore from 'redux-mock-store';
+import { Map, List, fromJS } from 'immutable';
+import * as data from '../../../screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../../views/modals/__test__/tabdata.json';
+const middlewares = [thunk];
+const mockStore = configureStore(middlewares);
+const cloneData = cloneDeep(data);
+const editquestion = Map({
+  questionId: 'e256f59e-08d7-4035-abc4-051346138a3d',
+  questionAnswered: false,
+  section: 'Program Details - COMING SOON',
+  questionJSON: '',
+  questionHTML: '',
+  roleNames: List(['BD Leadership']),
+  questionText: 'ADN1',
+  questionHintJSON: '',
+  answerType: 'number',
+  tabId: '04bb872c-9d48-4514-be16-fba5eb7fd789'
+});
+cloneData.proposal.unityTabQuestionLoading = Map({
+  questionId: '',
+  value: false
+});
+cloneData.proposal.opportunityData = Map({});
+cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
+cloneData.proposal.editQuestionsData = editquestion;
+cloneData.proposal.getAnswerTypesDataF = jest.fn();
+cloneData.proposal.getRolesInfoF = jest.fn();
+cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+const initialState = {
+  ssoAuth: Map(data.ssoAuth),
+  proposal: Map(cloneData.proposal),
+  selectedBid: Map(cloneData.selectedBid),
+  proposalQuestion: cloneData.proposal.proposalQuestions,
+  currentsection: '',
+  onClose: jest.fn(),
+  sidebar: Map({
+    isOpen: true
+  }),
+  notepad: {
+    proposalID: '',
+    notes: [],
+    fetchingNotes: false,
+    fetchNotesErrorMsg: '',
+    uploadingNote: false,
+    uploadNoteErrorMsg: '',
+    notepadMode: 'notepad_mode_default'
+  },
+  unitytab: tabdata.unitytab,
+  approvals: tabdata.approvals,
+  search: {
+    query: null,
+    isOpen: false,
+    currentResultIndex: -1,
+    prevResult: null,
+    totalResultsFound: 0,
+    searching: false,
+    searchResults: [],
+    autoNavigatedToCurrentResult: true,
+    clearInputFlag: false,
+    showModal: false,
+    modalTitle: '',
+    modalContent: ''
+  }
+};
+const mockstore = mockStore(initialState);
 
 const props = {
   questionId: '3065f3b8-2540-48f8-937f-cd6ae377426a',
@@ -56,7 +124,6 @@ describe('testing question item component in approval', () => {
     );
     expect(container).toBeInTheDocument();
   });
-
   test('render the component without crashing with props', async () => {
     const { container, getByTestId } = await render(
       <Provider store={store}>
@@ -77,5 +144,189 @@ describe('testing question item component in approval', () => {
     fireEvent.click(iconButton);
     const popover = getByTestId('popover-approval');
     expect(popover).toBeInTheDocument();
+  });
+  test('Question Item component', async () => {
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+    const { container } = await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
+  });
+
+  test('Question Item component failed answer type', async () => {
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+    const { container } = await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
+  });
+
+  test('Question Item component differ answer type', async () => {
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+    const { container } = await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'78d11922-bcc8-49b2-a5c2-089ec92f7f69'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'25f590c0-cb53-4b91-bd3c-e02898708a7f'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'78d11922-bcc8-49b2-a5c2-089ec92f7f69'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'a2e764e7-e068-470b-b5dd-8f0187eaac68'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'3065f3b8-2540-48f8-937f-cd6ae377426a'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+
+    expect(container).toBeInTheDocument();
+  });
+
+  test('Question Item component sf question ', async () => {
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+    const { getByText, getByTestId, container } = await render(
+      <Provider store={mockstore}>
+        <SocketContext.Provider value={mockSocket}>
+          <QuestionItem
+            questionId={'78d11922-bcc8-49b2-a5c2-089ec92f7f69'}
+            socketContext={socketContextObj}
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    expect(container).toBeInTheDocument();
+    // fireEvent.click(await screen.getByText('awdawd'));
+    waitFor(
+      async () => {
+        fireEvent.click(await getByText('test'));
+      },
+      { timeout: 100 }
+    );
+    waitFor(
+      async () => {
+        fireEvent.click(await getByTestId('calendar'));
+      },
+      { timeout: 100 }
+    );
   });
 });
