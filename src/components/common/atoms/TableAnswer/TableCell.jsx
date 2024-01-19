@@ -32,16 +32,18 @@ function TableCell({
     }
   }, [row, column]);
 
-  const handleValueChange = useCallback(event => {
+  const handleValueChange = useCallback((event, header) => {
     setValue(event.target.value);
+    if (event.target.value.length === 0 && header) {
+      setSaveDisable(true);
+    } else {
+      setSaveDisable(false);
+    }
   }, []);
 
   const handleInputBlur = useCallback(
     e => {
       editRow(rowIndex, column.accessor, value);
-      if (value.length === 0) {
-        setSaveDisable(true);
-      }
     },
     [value]
   );
@@ -76,11 +78,10 @@ function TableCell({
                   onFocus={e => {
                     setOpenTooltip(false);
                     setTimeout(() => {
-                      rowRef.current.focus();
+                      rowRef?.current?.focus();
                     }, 100);
                   }}
-                  onCh
-                  onChange={handleValueChange}
+                  onChange={e => handleValueChange(e, 'header')}
                   onBlur={handleInputBlur}
                   InputProps={{
                     inputProps: { maxLength: 999 }
@@ -129,7 +130,7 @@ function TableCell({
               onFocus={e => {
                 setOpenTooltip(false);
                 setTimeout(() => {
-                  rowRef.current.focus();
+                  rowRef?.current?.focus();
                 }, 100);
               }}
               onChange={handleValueChange}

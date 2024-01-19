@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo
+} from 'react';
 import TableIcon from '../../../svg/Table';
 import Typography from 'apollo-react/components/Typography';
 import classNames from 'classnames';
@@ -96,8 +102,10 @@ function Header({
   canEdit,
   disabled,
   setSaveDisable,
-  allExpanded
+  allExpanded,
+  isLongest
 }) {
+  console.log('Header', allExpanded);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [tooltipValue, setTooltipValue] = useState('');
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -113,18 +121,20 @@ function Header({
     } else {
       setTooltipValue('');
     }
-  }, [title]);
+  }, [title, allExpanded]);
 
   const handleValueChange = useCallback(event => {
     setCurrentTitle(event.target.value);
+    if (event.target.value.length === 0) {
+      setSaveDisable(true);
+    } else {
+      setSaveDisable(false);
+    }
   }, []);
 
   const handleInputBlur = useCallback(
     e => {
       onTitleChange(index, currentTitle);
-      if (currentTitle.length === 0) {
-        setSaveDisable(true);
-      }
       if (
         columnRef?.current?.lastChild?.children[0]?.scrollWidth >
         columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
@@ -141,41 +151,50 @@ function Header({
     return <p></p>;
   }
 
-  return canEdit && !disabled ? (
-    <Tooltip title={tooltipValue} open={openTooltip}>
-      <TextField
-        ref={columnRef}
-        margin="none"
-        value={currentTitle}
-        multiline={allExpanded}
-        onMouseOver={() => {
-          if (columnRef.current.contains(document.activeElement)) {
-            setOpenTooltip(false);
-          } else setOpenTooltip(true);
-        }}
-        onMouseOut={() => {
-          setOpenTooltip(false);
-        }}
-        onFocus={e => {
-          setOpenTooltip(false);
-          setTimeout(() => {
-            columnRef.current.focus();
-          }, 100);
-        }}
-        onChange={handleValueChange}
-        onBlur={handleInputBlur}
-        InputProps={{ inputProps: { maxLength: 999 } }}
-        error={currentTitle.length === 0}
-        helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
-        fullWidth
-      />
-    </Tooltip>
-  ) : (
-    <Tooltip title={currentTitle}>
-      <Typography variant="bodyDefault" gutterBottom noWrap emphasis="high">
-        {currentTitle}
-      </Typography>
-    </Tooltip>
+  return (
+    <div
+      className={classNames({
+        'table-header': true,
+        'h-100': !isLongest
+      })}
+    >
+      {canEdit && !disabled ? (
+        <Tooltip title={tooltipValue} open={openTooltip}>
+          <TextField
+            ref={columnRef}
+            margin="none"
+            value={currentTitle}
+            multiline={allExpanded}
+            onMouseOver={() => {
+              if (columnRef.current.contains(document.activeElement)) {
+                setOpenTooltip(false);
+              } else setOpenTooltip(true);
+            }}
+            onMouseOut={() => {
+              setOpenTooltip(false);
+            }}
+            onFocus={e => {
+              setOpenTooltip(false);
+              setTimeout(() => {
+                columnRef.current.focus();
+              }, 100);
+            }}
+            onChange={handleValueChange}
+            onBlur={handleInputBlur}
+            InputProps={{ inputProps: { maxLength: 999 } }}
+            error={currentTitle.length === 0}
+            helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+            fullWidth
+          />
+        </Tooltip>
+      ) : (
+        <Tooltip title={currentTitle}>
+          <Typography variant="bodyDefault" gutterBottom noWrap emphasis="high">
+            {currentTitle}
+          </Typography>
+        </Tooltip>
+      )}
+    </div>
   );
 }
 
@@ -199,6 +218,7 @@ function TableAnswer({
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
   const [rowsWithLongestKeys, setRowsWithLongestKeys] = useState([]);
+  const [columnsWithLongest, setColumnsWithLongest] = useState([]);
   const [columns, setColumns] = useState([]);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -243,6 +263,7 @@ function TableAnswer({
             canEdit={true}
             disabled={disabled}
             allExpanded={allExpanded}
+            setSaveDisable={setSaveDisable}
           />
         ),
         canEdit: true,
@@ -267,6 +288,7 @@ function TableAnswer({
           canEdit={true}
           disabled={disabled}
           allExpanded={allExpanded}
+          setSaveDisable={setSaveDisable}
         />
       ),
       canEdit: true,
@@ -310,6 +332,7 @@ function TableAnswer({
             canEdit={true}
             disabled={disabled}
             allExpanded={allExpanded}
+            setSaveDisable={setSaveDisable}
           />
         ),
         canEdit: true,
@@ -426,25 +449,6 @@ function TableAnswer({
   }
 
   useEffect(() => {
-    setColumns(columns =>
-      columns.map((column, index) => ({
-        ...column,
-        header: (
-          <Header
-            index={index}
-            title={column.headerTitle}
-            onTitleChange={onHeaderTitleChange}
-            canEdit={column.canEdit}
-            disabled={disabled}
-            setSaveDisable={setSaveDisable}
-            allExpanded={allExpanded}
-          />
-        )
-      }))
-    );
-  }, [allExpanded]);
-
-  useEffect(() => {
     if (rows.length > 0 || columns.length > 1) {
       let rowEmptyCheck;
       if (
@@ -496,6 +500,7 @@ function TableAnswer({
       }
       // calculate rows keys with longer text
       let cloneRows = cloneDeep(rows);
+      let cloneColumns = cloneDeep(columns);
       cloneRows = cloneRows.map(row => {
         const longestKey = maxBy(
           Object.keys(row).filter(rowKey => typeof row[rowKey] === 'string'),
@@ -507,9 +512,37 @@ function TableAnswer({
           longestKey
         };
       });
+      if (cloneColumns.length > 0) {
+        let longesColIndex = 0;
+        let longestColHeader = cloneColumns[0].headerTitle;
+        cloneColumns.forEach((column, index) => {
+          if (column.headerTitle.length > longestColHeader.length) {
+            longesColIndex = index;
+            longestColHeader = column.headerTitle;
+          }
+        });
+        cloneColumns[longesColIndex].isLongest = true;
+      }
       setRowsWithLongestKeys(cloneRows);
+      setColumnsWithLongest(
+        cloneColumns.map((column, index) => ({
+          ...column,
+          header: (
+            <Header
+              index={index}
+              title={column.headerTitle}
+              onTitleChange={onHeaderTitleChange}
+              canEdit={column.canEdit}
+              disabled={disabled}
+              setSaveDisable={setSaveDisable}
+              allExpanded={allExpanded}
+              isLongest={column.isLongest}
+            />
+          )
+        }))
+      );
     }
-  }, [rows, columns]);
+  }, [rows, columns, allExpanded]);
 
   useEffect(() => {
     if (forceBlur === true) {
@@ -564,6 +597,32 @@ function TableAnswer({
     }
     if (onCascadeChange) onCascadeChange();
   }
+
+  const apolloTableRender = useMemo(
+    () => (
+      <ApolloTable
+        rows={rowsWithLongestKeys
+          .map((row, rowIndex) => ({
+            ...row,
+            rowIndex,
+            editRow,
+            allExpanded
+          }))
+          .filter(row => !row.hidden)}
+        columns={columnsWithLongest.map(column => ({
+          ...column,
+          fixedWidth: false
+        }))}
+        hidePagination
+        defaultPageSize={'All'}
+        ref={tableRef}
+        classes={{
+          root: 'answer-table'
+        }}
+      />
+    ),
+    [rowsWithLongestKeys, columnsWithLongest, allExpanded]
+  );
 
   return (
     <React.Fragment>
@@ -645,26 +704,7 @@ function TableAnswer({
             onExpandAll={handleExpandAll}
           />
         ) : null}
-        <ApolloTable
-          rows={rowsWithLongestKeys
-            .map((row, rowIndex) => ({
-              ...row,
-              rowIndex,
-              editRow,
-              allExpanded
-            }))
-            .filter(row => !row.hidden)}
-          columns={columns.map(column => ({
-            ...column,
-            fixedWidth: false
-          }))}
-          hidePagination
-          defaultPageSize={'All'}
-          ref={tableRef}
-          classes={{
-            root: 'answer-table'
-          }}
-        />
+        {apolloTableRender}
       </Modal>
       {warning && (
         <CustomModal

@@ -1,43 +1,86 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import {
-  screen,
-  render,
-  fireEvent,
-  act,
-  waitFor
-} from '@testing-library/react';
+import { screen, render, fireEvent, waitFor } from '@testing-library/react';
+import { mount } from 'enzyme';
+import { BrowserRouter, Router } from 'react-router-dom';
+import { store } from '../../../../store';
 import ApprovalIndex from '../index';
-import { SocketContext } from '../../../../context/SocketContext';
-import { axiosInstance, store } from '../../../../store';
-import { MemoryRouter } from 'react-router-dom';
-import axiosMock from 'axios-mock-adapter';
 import { REDUX_TYPES } from '../../../../constants';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import * as data from '../../../screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../../views/modals/__test__/tabdata.json';
+import { SocketContext } from '../../../../context/SocketContext';
+import cloneDeep from 'lodash/cloneDeep';
+import { Map } from 'immutable';
+import * as utils from '../utils';
+const middlewares = [thunk];
+const mockStore = configureStore(middlewares);
+const cloneData = cloneDeep(data);
 
-describe('<approvalIndex />', () => {
-  let mock;
+cloneData.proposal.unityTabQuestionLoading = Map({
+  questionId: '',
+  value: false
+});
+cloneData.proposal.opportunityData = Map({});
+cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
+cloneData.proposal.editQuestionsData = Map({});
+cloneData.proposal.getAnswerTypesDataF = jest.fn();
+cloneData.proposal.getRolesInfoF = jest.fn();
+cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+const initialState = {
+  ssoAuth: Map(data.ssoAuth),
+  proposal: Map(cloneData.proposal),
+  selectedBid: Map(cloneData.selectedBid),
+  proposalQuestion: cloneData.proposal.proposalQuestions,
+  currentsection: '',
+  onClose: jest.fn(),
+  sidebar: Map({
+    isOpen: true
+  }),
+  notepad: {
+    proposalID: '',
+    notes: [],
+    fetchingNotes: false,
+    fetchNotesErrorMsg: '',
+    uploadingNote: false,
+    uploadNoteErrorMsg: '',
+    notepadMode: 'notepad_mode_default'
+  },
+  unitytab: tabdata.unitytab,
+  approvals: tabdata.approvals,
+  search: {
+    query: null,
+    isOpen: false,
+    currentResultIndex: -1,
+    prevResult: null,
+    totalResultsFound: 0,
+    searching: false,
+    searchResults: [],
+    autoNavigatedToCurrentResult: true,
+    clearInputFlag: false,
+    showModal: false,
+    modalTitle: '',
+    modalContent: ''
+  }
+};
+const sectionStore = mockStore(initialState);
 
+describe('Unity Section Component', () => {
+  let wrapper;
   beforeEach(() => {
-    mock = new axiosMock(axiosInstance);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-  it('to test expand all is rendered', () => {
-    render(
+    wrapper = mount(
       <Provider store={store}>
-        <SocketContext.Provider
-          value={{ questionLockDetailsWrapper: jest.fn() }}
-        >
-          <ApprovalIndex />
-        </SocketContext.Provider>
+        <ApprovalIndex />
       </Provider>
     );
-    expect(screen.getByText(/expand all/i)).toBeInTheDocument();
   });
 
-  it('to add new question button is rendered', () => {
+  test('render index component', () => {
+    expect(wrapper).toBeDefined();
+    expect(wrapper.length).toBe(1);
+  });
+  it('should check add new question on click event ', () => {
     window.history.pushState(
       {},
       '',
@@ -61,52 +104,81 @@ describe('<approvalIndex />', () => {
       ]
     });
     render(
-      <MemoryRouter>
+      <BrowserRouter>
         <Provider store={store}>
-          <SocketContext.Provider
-            value={{ questionLockDetailsWrapper: jest.fn() }}
-          >
-            <ApprovalIndex />
-          </SocketContext.Provider>
+          <ApprovalIndex />
         </Provider>
-      </MemoryRouter>
+      </BrowserRouter>
     );
-
-    const addNewQues = screen.getByRole('presentation');
-    expect(addNewQues).toBeInTheDocument();
-    fireEvent.click(addNewQues);
+    const iconButton = screen.getByTestId('selectedbid-testid');
+    expect(iconButton).toBeInTheDocument();
+    fireEvent.click(iconButton);
   });
 
-  it('check filter button is rendered', () => {
-    render(
-      <MemoryRouter>
+  it('check filter on when isShowFilter is true ', async () => {
+    const { container } = render(
+      <BrowserRouter>
         <Provider store={store}>
-          <SocketContext.Provider
-            value={{ questionLockDetailsWrapper: jest.fn() }}
-          >
-            <ApprovalIndex />
-          </SocketContext.Provider>
+          <ApprovalIndex isShowFilters={true} />
         </Provider>
-      </MemoryRouter>
+      </BrowserRouter>
     );
-    const filterBtn = screen.getByRole('button', { name: /filter/i });
-    expect(filterBtn).toBeInTheDocument();
-    fireEvent.click(filterBtn);
+    expect(container).toBeInTheDocument();
+    await expect(screen.findByText(/Filter/i)).toBeTruthy();
+    fireEvent.click(await screen.findByText('Filter'));
+    waitFor(
+      async () => {
+        fireEvent.click(await findByText('Close'));
+      },
+      { timeout: 1000 }
+    );
   });
 
-  it('no approval text is rendered', () => {
-    render(
-      <MemoryRouter>
+  it('check Expend All Button on click ', async () => {
+    const { container } = render(
+      <BrowserRouter>
         <Provider store={store}>
-          <SocketContext.Provider
-            value={{ questionLockDetailsWrapper: jest.fn() }}
-          >
-            <ApprovalIndex />
+          <ApprovalIndex />
+        </Provider>
+      </BrowserRouter>
+    );
+    expect(container).toBeInTheDocument();
+    await expect(screen.findByText(/Expand All/i)).toBeTruthy();
+    fireEvent.click(await screen.findByText('Expand All'));
+  });
+
+  test('test Approval tab index', async () => {
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+    jest.spyOn(utils, 'shouldShowSection').mockReturnValue(true);
+    const { container } = render(
+      <BrowserRouter>
+        <Provider store={sectionStore}>
+          <SocketContext.Provider value={mockSocket}>
+            <ApprovalIndex
+              isShowFilters={true}
+              socketContext={socketContextObj}
+            />
           </SocketContext.Provider>
         </Provider>
-      </MemoryRouter>
+      </BrowserRouter>
     );
-    const filterBtn = screen.getByTestId('No_approvals');
-    expect(filterBtn).toBeInTheDocument();
+    expect(container).toBeInTheDocument();
+    await expect(screen.findByText(/Filter/i)).toBeTruthy();
+    fireEvent.click(await screen.findByText('Filter'));
+    await expect(screen.findByText(/Add New Question/i)).toBeTruthy();
+
+    waitFor(
+      async () => {
+        fireEvent.click(await findByText('Close'));
+      },
+      { timeout: 1000 }
+    );
   });
 });
