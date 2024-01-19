@@ -303,6 +303,9 @@ function TableAnswer({
         behaviour: 'smooth',
         inline: 'end'
       });
+      const thead =
+        tableRef.current.horizontalScrollRef.current.lastChild.firstChild;
+      thead.firstChild.lastChild.firstChild.firstChild.children[1].firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
@@ -364,6 +367,14 @@ function TableAnswer({
         behaviour: 'smooth',
         block: 'end'
       });
+      const tBody =
+        tableRef.current.horizontalScrollRef.current.lastChild.lastChild;
+      if (tBody.lastChild.firstChild.firstChild)
+        tBody.lastChild.firstChild.firstChild.firstChild.children[1].firstChild.focus();
+      else
+        tBody.children[
+          tBody.children.length - 2
+        ].firstChild.firstChild.firstChild.children[1].firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
@@ -430,20 +441,22 @@ function TableAnswer({
       setWarning(true);
       setWarningTitle('Alert');
       setWarningText(
-        duplicateRows.length > 0 && duplicateColumns.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
-              duplicateRows
-            ).join(', ')}
-              ${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
-          : duplicateRows.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
-              duplicateRows
-            ).join(', ')}`
-          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
+        duplicateRows.length > 0 && duplicateColumns.length > 0 ? (
+          <Typography>
+            {TABLEANSWER.DUPLICATE_ROWS}{' '}
+            {removeDuplicates(duplicateRows).join(', ')}. <br />
+            {TABLEANSWER.DUPLICATE_COLUMNS}{' '}
+            {removeDuplicates(duplicateColumns).join(', ')}.
+          </Typography>
+        ) : duplicateRows.length > 0 ? (
+          `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(duplicateRows).join(
+            ', '
+          )}.`
+        ) : (
+          `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+            duplicateColumns
+          ).join(', ')}.`
+        )
       );
     }
   }
@@ -516,7 +529,7 @@ function TableAnswer({
         let longesColIndex = 0;
         let longestColHeader = cloneColumns[0].headerTitle;
         cloneColumns.forEach((column, index) => {
-          if (column.headerTitle.length > longestColHeader.length) {
+          if (column?.headerTitle?.length > longestColHeader?.length) {
             longesColIndex = index;
             longestColHeader = column.headerTitle;
           }
