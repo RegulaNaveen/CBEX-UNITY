@@ -188,10 +188,10 @@ const BidHistory = () => {
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
                                 : item.bidName.startsWith('Post Award')
-                                ? `Post Award ${item.bidNo}`
-                                : item.bidName.startsWith('RFI')
-                                ? `RFI ${item.bidNo}`
-                                : item.bidName}
+                                  ? `Post Award ${item.bidNo}`
+                                  : item.bidName.startsWith('RFI')
+                                    ? `RFI ${item.bidNo}`
+                                    : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'
@@ -223,10 +223,10 @@ const BidHistory = () => {
                     {bidType && bidType.includes('Early_Engagement_Bid')
                       ? 'Early Engagement Development Plan'
                       : bidType && bidType.includes('Post_Award_Bid')
-                      ? ''
-                      : bidType && bidType.includes('RFI_Request')
-                      ? ''
-                      : 'Pertinent Details / Specific Rebid Request'}
+                        ? ''
+                        : bidType && bidType.includes('RFI_Request')
+                          ? ''
+                          : 'Pertinent Details / Specific Rebid Request'}
                   </p>
                   {bidType && bidType.includes('Post_Award_Bid') ? (
                     <div>
