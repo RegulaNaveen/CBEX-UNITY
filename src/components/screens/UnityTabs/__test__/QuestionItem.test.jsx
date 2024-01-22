@@ -65,11 +65,46 @@ const initialState = {
   search: {
     query: null,
     isOpen: false,
-    currentResultIndex: -1,
+    currentResultIndex: 2,
     prevResult: null,
     totalResultsFound: 0,
     searching: false,
-    searchResults: [],
+    searchResults: [
+      {
+        tab: 2,
+        searchIndex: '76aced19-0af2-46a0-b468-f30d05d7ba59-archive-0-left-ques',
+        inputText: 'It will kick out at first',
+        vTab: null,
+        startIndex: 0,
+        endIndex: 25,
+        matchIndex: 0,
+        tabName: 'Approvals',
+        sectionName: 'Test_4447'
+      },
+      {
+        tab: 2,
+        searchIndex:
+          '76aced19-0af2-46a0-b468-f30d05d7ba59-approval-fcd9df2b-5d54-4995-a6c6-f02468eac09a-left-ques',
+        inputText: 'It will kick out at first',
+        vTab: null,
+        startIndex: 0,
+        endIndex: 25,
+        matchIndex: 0,
+        tabName: 'Approvals',
+        sectionName: 'Test_4447'
+      },
+      {
+        tab: 6,
+        searchIndex: '76aced19-0af2-46a0-b468-f30d05d7ba59',
+        inputText: 'It will kick out at first',
+        vTab: null,
+        startIndex: 0,
+        endIndex: 25,
+        matchIndex: 0,
+        tabName: 'tesqacs34567',
+        sectionName: 'testcc'
+      }
+    ],
     autoNavigatedToCurrentResult: true,
     clearInputFlag: false,
     showModal: false,
@@ -108,7 +143,35 @@ const props = {
     '3065f3b8-2540-48f8-937f-cd6ae377426a-approval-91ecf807-94cd-4fb2-86db-9dd16172a3c2-left-ques'
 };
 
+const socketContextObj = {
+  questionLockWrapper: jest.fn(),
+  questionUnlockWrapper: jest.fn()
+};
+const mockSocket = {
+  on: jest.fn(),
+  emit: jest.fn(),
+  ...socketContextObj
+};
+
+function renderComponent(props) {
+  return (
+    <Provider store={mockstore}>
+      <SocketContext.Provider value={mockSocket}>
+        <QuestionItem questionId={props.questionId} />
+      </SocketContext.Provider>
+    </Provider>
+  );
+}
+
 describe('testing question item component in custom tab', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
   test('Question Item component', async () => {
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
@@ -124,6 +187,7 @@ describe('testing question item component in custom tab', () => {
           <QuestionItem
             questionId={'76aced19-0af2-46a0-b468-f30d05d7ba59'}
             socketContext={socketContextObj}
+            UnityTabSectionTitle={'testcc'}
           />
         </SocketContext.Provider>
       </Provider>
@@ -172,7 +236,6 @@ describe('testing question item component in custom tab', () => {
         </SocketContext.Provider>
       </Provider>
     );
-
     await render(
       <Provider store={mockstore}>
         <SocketContext.Provider value={mockSocket}>
@@ -228,17 +291,6 @@ describe('testing question item component in custom tab', () => {
       <Provider store={mockstore}>
         <SocketContext.Provider value={mockSocket}>
           <QuestionItem
-            questionId={'f454d1e9-2049-4492-8478-80840c5dd1c6'}
-            socketContext={socketContextObj}
-          />
-        </SocketContext.Provider>
-      </Provider>
-    );
-
-    await render(
-      <Provider store={mockstore}>
-        <SocketContext.Provider value={mockSocket}>
-          <QuestionItem
             questionId={'4b770a63-f0be-438b-88e4-f5811d9f26c6'}
             socketContext={socketContextObj}
           />
@@ -280,19 +332,7 @@ describe('testing question item component in custom tab', () => {
       </Provider>
     );
     expect(container).toBeInTheDocument();
-    // fireEvent.click(await screen.getByText('awdawd'));
-    waitFor(
-      async () => {
-        fireEvent.click(await getByText('test'));
-      },
-      { timeout: 100 }
-    );
-    waitFor(
-      async () => {
-        fireEvent.click(await getByTestId('calendar'));
-      },
-      { timeout: 100 }
-    );
+    fireEvent.click(getByTestId('calendar'));
   });
 
   test('Question Item component sf question ', async () => {
@@ -316,19 +356,7 @@ describe('testing question item component in custom tab', () => {
       </Provider>
     );
     expect(container).toBeInTheDocument();
-    // fireEvent.click(await screen.getByText('awdawd'));
-    waitFor(
-      async () => {
-        fireEvent.click(await getByText('test'));
-      },
-      { timeout: 100 }
-    );
-    waitFor(
-      async () => {
-        fireEvent.click(await getByTestId('calendar'));
-      },
-      { timeout: 100 }
-    );
+    fireEvent.click(getByTestId('calendar'));
   });
 
   test('render the component without crashing without props', async () => {
@@ -361,5 +389,60 @@ describe('testing question item component in custom tab', () => {
       </Provider>
     );
     expect(container).toBeInTheDocument();
+  });
+
+  test('Error parsing table answer type', async () => {
+    // table answer type question
+    render(
+      renderComponent({
+        questionId: 'f454d1e9-2049-4492-8478-80840c5dd1c6'
+      })
+    );
+  });
+  test('render table answer type without error', async () => {
+    // table answer type question
+    render(
+      renderComponent({
+        questionId: '4f69f106-59d9-46e7-8421-de9f36be6492'
+      })
+    );
+    // get test id togglebtn and fire click event
+    fireEvent.click(screen.getByTestId('togglebtn'));
+    // get inputbox and fire change event
+    const textBox = screen.getAllByRole('textbox')[2];
+    fireEvent.change(textBox, {
+      target: { value: 'test' }
+    });
+    fireEvent.blur(textBox);
+    // get save button and fire click event
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+  });
+  test('render table answer type without last answer', async () => {
+    // table answer type question
+    render(
+      renderComponent({
+        questionId: '02b4cbf0-cc13-456c-a6d9-5a2b09d6f19c'
+      })
+    );
+    // get test id togglebtn and fire click event
+    fireEvent.click(screen.getByTestId('togglebtn'));
+    // get inputbox and fire change event
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'test' }
+    });
+    // get save button and fire click event
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+  });
+  test('render table answer type & check tooltip', async () => {
+    // table answer type question
+    render(
+      renderComponent({
+        questionId: '088e8e63-0a1a-4167-919e-bc0961954a43'
+      })
+    );
+    // get test id togglebtn and fire click event
+    fireEvent.click(screen.getByTestId('togglebtn'));
+    // get test id question-tooltip-icon and fire click event
+    fireEvent.click(screen.getByTestId('question-tooltip-icon'));
   });
 });

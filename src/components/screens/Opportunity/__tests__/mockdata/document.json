@@ -1415,7 +1415,7 @@
         "notApplicable": false,
         "questionApproval": false,
         "bidAnswerCopy": true,
-        "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"1\":\"\",\"2\":\"\",\"header\":\"3\",\"hidden\":true,\"rowId\":0},{\"1\":\"\",\"2\":\"\",\"header\":\"4\",\"hidden\":true,\"rowId\":1}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":true,\"alwaysVisible\":false,\"accessor\":\"1\",\"header\":\"1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":true,\"alwaysVisible\":false,\"accessor\":\"2\",\"header\":\"2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":false,\"canEditRow\":true}",
+        "questionTableConfig": "{\"canEditColumn\":true,\"canAddRow\":true,\"rows\":[{\"1\":\"\",\"2\":\"\",\"header\":\"3\",\"hidden\":true,\"rowId\":0},{\"1\":\"\",\"2\":\"\",\"header\":\"4\",\"hidden\":true,\"rowId\":1}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"1\",\"header\":\"1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":true,\"alwaysVisible\":false,\"accessor\":\"2\",\"header\":\"2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":false,\"canEditRow\":true}",
         "latestAnsweredBidNo": null,
         "bidType": "Post_Award_Bid"
       },
@@ -1712,9 +1712,10 @@
         "opportunityType": "Default Type,Non-Core Clinical Studies,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA)",
         "hasDifferentSFanswer": false,
         "isCustomQuestion": false,
+        "questionHint": "Hyperlink Font color",
         "questionJSON": "{\"blocks\":[{\"key\":\"77kb5\",\"text\":\"Latest table question\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
         "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"cv55e\" data-offset-key=\"77kb5-0-0\"><div data-offset-key=\"77kb5-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"77kb5-0-0\"><span data-text=\"true\">Latest table question</span></span></div></div></div>",
-        "questionHintJSON": "",
+        "questionHintJSON": "{\"blocks\":[{\"key\":\"andp9\",\"text\":\"Hyperlink Font color\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":10,\"length\":10,\"style\":\"color-#e20000\"}],\"entityRanges\":[{\"offset\":0,\"length\":9,\"key\":0}],\"data\":{}}],\"entityMap\":{\"0\":{\"type\":\"LINK\",\"mutability\":\"MUTABLE\",\"data\":{\"url\":\"https://dev-unity.dev.iqvia.app/ubuild\",\"target\":\"_blank\"}}}}",
         "questionHintHTML": "",
         "active": true,
         "integration": "",
@@ -19240,6 +19241,7 @@
           "sectionName": "SF New fields 411"
         },
         "questionText": "New Intervention Type",
+        "questionHint": "tooltip",
         "answerConfiguration": {
           "type": "table",
           "options": []
@@ -19313,6 +19315,52 @@
         "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"header\":\"r1\",\"c1\":\"\",\"rowId\":0}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"c1\",\"header\":\"c1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":false,\"canEditRow\":true}",
         "latestAnsweredBidNo": null,
         "bidType": "Post_Award_Bid"
+      },
+      {
+        "proposalId": "bad79e16-a295-4cc5-9b45-0ea712f44deb",
+        "questionId": "4f69f106-59d9-46e7-8421-de9f36be6492",
+        "section": {
+          "sectionOrder": 39,
+          "sectionName": "TestTable"
+        },
+        "questionText": "Testconcurrencyubuildunity",
+        "answerConfiguration": {
+          "type": "table",
+          "options": []
+        },
+        "roleNames": ["Feasibility"],
+        "answers": [
+          {
+            "user": "sushil.munda@iqvia.com",
+            "userName": "Sushil Munda",
+            "userRole": "Therapeutic Strategy Lead",
+            "date": "2024-01-18T11:11:20.815Z",
+            "answer": "{\"rows\":[{\"header\":\"test row1 There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.\",\"test col1\":\"\",\"rowId\":0,\"canEdit\":true}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"frozen\":true,\"locked\":false,\"type\":\"text\",\"canEdit\":true,\"header\":\"\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"test col1\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":true,\"header\":\"There are many variations of passages of Lorem Ipsum available, but the majority have suffered alter\"}]}",
+            "proposalId": "bad79e16-a295-4cc5-9b45-0ea712f44deb",
+            "updatedInPG": true
+          }
+        ],
+        "questionOrder": 6,
+        "visible": true,
+        "locked": false,
+        "sfObject": "n/a",
+        "sfField": "n/a",
+        "milestoneNew": [],
+        "opportunityType": "Default Type",
+        "hasDifferentSFanswer": false,
+        "isCustomQuestion": false,
+        "questionJSON": "{\"blocks\":[{\"key\":\"62r5v\",\"text\":\"Testconcurrencyubuildunity\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+        "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"1tem1\" data-offset-key=\"62r5v-0-0\"><div data-offset-key=\"62r5v-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"62r5v-0-0\"><span data-text=\"true\">Testconcurrencyubuildunity</span></span></div></div></div>",
+        "questionHintHTML": "",
+        "active": true,
+        "integration": "",
+        "events": "",
+        "notApplicable": false,
+        "questionApproval": false,
+        "bidAnswerCopy": true,
+        "questionTableConfig": "{\"canEditColumn\":true,\"canAddRow\":true,\"rows\":[{\"header\":\"test row1\",\"test col1\":\"\",\"rowId\":0}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"test col1\",\"header\":\"test col1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":true,\"canEditRow\":true}",
+        "latestAnsweredBidNo": null,
+        "bidType": "Clinical_Bid"
       },
       {
         "proposalId": "9aa9dfe2-1222-4dff-8977-f06f45656a4b",
