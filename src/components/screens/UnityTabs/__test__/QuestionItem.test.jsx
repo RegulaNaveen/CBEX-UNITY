@@ -5,7 +5,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { store } from '../../../../store';
 import { SocketContext } from '../../../../context/SocketContext';
 import QuestionItem from '../QuestionItem';
