@@ -22,7 +22,7 @@ include:
 stages:
   #- prebuild
   #- sonar #sonar report
-  #- test
+  - test
   - sonar
   - blackduckscan
   - builddev
@@ -70,27 +70,27 @@ sonar:
     - pushes
     - merge_requests
 
-# test:
-#   stage: test
-#   image: node:18
-#   except:
-#     - qa
-#     - uat
-#   script:
-#     #- yarn install #v1.22.5
-#     #- yarn test
-#     #- yarn coverage
-#     - npm install --legacy-peer-deps
-#     - npm run coverage
-#   artifacts:
-#     paths:
-#       - coverage/
-#   #allow_failure: false
-#   tags:
-#     - docker
-#   only:
-#     - pushes
-#     - merge_requests
+test:
+  stage: test
+  image: node:18
+  except:
+    - qa
+    - uat
+  script:
+    #- yarn install #v1.22.5
+    #- yarn test
+    #- yarn coverage
+    - npm install --legacy-peer-deps
+    - npm run coverage
+  artifacts:
+    paths:
+      - coverage/
+  #allow_failure: false
+  tags:
+    - docker
+  only:
+    - pushes
+    - merge_requests
 
 dev:
   stage: builddev
