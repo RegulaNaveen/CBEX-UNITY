@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  waitFor,
-  screen,
-  act
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import TableAnswer from '../TableAnswer/TableAnswer';
 import { store } from '../../../../store';
@@ -759,7 +753,7 @@ describe('TableAnswer Component', () => {
     expect(saveButton).toBeEnabled();
     fireEvent.click(saveButton);
     // Assert onChange is called
-    expect(props.onChange).toHaveBeenCalled();
+    await waitFor(() => expect(props.onChange).toHaveBeenCalled());
   });
 
   it('add new row', async () => {
@@ -1084,7 +1078,7 @@ describe('TableAnswer Component', () => {
     fireEvent.blur(input[3]);
     fireEvent.click(screen.getByText('Save'));
     // Assert alert modal will appear
-    expect(screen.getByText('Alert')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('Alert')).toBeInTheDocument());
   });
 
   it('change row name', async () => {
@@ -1160,7 +1154,7 @@ describe('TableAnswer Component', () => {
     fireEvent.blur(input[3]);
     fireEvent.click(screen.getByText('Save'));
     // Assert alert modal will appear
-    expect(screen.getByText('Alert')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('Alert')).toBeInTheDocument());
   });
 
   it('force blur', async () => {
