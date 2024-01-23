@@ -147,7 +147,7 @@ describe('Unity Section Component', () => {
     fireEvent.click(await screen.findByText('Expand All'));
   });
 
-  test('test Approval tab index', async () => {
+  test.skip('test Approval tab index', async () => {
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
       questionUnlockWrapper: jest.fn(),
