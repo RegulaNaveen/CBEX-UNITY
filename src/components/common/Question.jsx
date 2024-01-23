@@ -1501,6 +1501,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               </span>
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
+                data-testid="radio-answer"
                 items={finalOptions}
                 onClick={val => {
                   this.onClickChange(val, answerValue).then(dataResponse => {
@@ -2039,21 +2040,23 @@ export class TaskRow extends React.PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = (state: Object) => ({
-  userData: getUserData(state),
-  proposalDetail: getProposalDetails(state),
-  integrationsData: getIntegrations(state),
-  selectedBid: getSelectedBid(state),
-  oppdata: getOpportunityData(state),
-  noneditableField: getnoneditableField(state),
-  showNaCheckbox: getShowNaCheckbox(state),
-  canUserTagInQuestion: getCanUserTagInQuestion(state),
-  allFlags: getfetchAllFlags(state),
-  query: selectQuery(state),
-  currentSearchResult: selectCurrentSearchResult(state),
-  prevSearchResult: selectPrevSearchResult(state),
-  autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
-});
+const mapStateToProps = (state: Object) => {
+  return {
+    userData: getUserData(state),
+    proposalDetail: getProposalDetails(state),
+    integrationsData: getIntegrations(state),
+    selectedBid: getSelectedBid(state),
+    oppdata: getOpportunityData(state),
+    noneditableField: getnoneditableField(state),
+    showNaCheckbox: getShowNaCheckbox(state),
+    canUserTagInQuestion: getCanUserTagInQuestion(state),
+    allFlags: getfetchAllFlags(state),
+    query: selectQuery(state),
+    currentSearchResult: selectCurrentSearchResult(state),
+    prevSearchResult: selectPrevSearchResult(state),
+    autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
+  };
+};
 
 export default connect(mapStateToProps, {
   widgetUpdates: widgetUpdate,

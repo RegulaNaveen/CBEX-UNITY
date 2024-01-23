@@ -7,7 +7,7 @@ const CustomLoader = props => {
   const approvalQuestionLoading = useSelector(
     getApprovalQuestionLoading
   ).toJS();
-
+  console.log(approvalQuestionLoading);
   return (
     <span className="loader-cover">
       {approvalQuestionLoading.questionId === props.questionId &&
