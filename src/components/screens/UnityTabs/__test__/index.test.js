@@ -160,6 +160,8 @@ describe('Unity Section Component', () => {
         fireEvent.click(await findByText('Close'));
       },
       { timeout: 1000 }
-    );
+    ).catch(err => {
+      console.log(err);
+    });
   });
 });

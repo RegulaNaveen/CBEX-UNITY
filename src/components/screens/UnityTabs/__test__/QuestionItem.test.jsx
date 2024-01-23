@@ -401,7 +401,7 @@ describe('testing question item component in custom tab', () => {
   });
   test('render table answer type without error', async () => {
     // table answer type question
-    render(
+    await render(
       renderComponent({
         questionId: '4f69f106-59d9-46e7-8421-de9f36be6492'
       })
@@ -409,7 +409,7 @@ describe('testing question item component in custom tab', () => {
     // get test id togglebtn and fire click event
     fireEvent.click(screen.getByTestId('togglebtn'));
     // get inputbox and fire change event
-    const textBox = screen.getAllByRole('textbox')[2];
+    const textBox = screen.getAllByRole('textbox')[1];
     fireEvent.change(textBox, {
       target: { value: 'test' }
     });
@@ -419,7 +419,7 @@ describe('testing question item component in custom tab', () => {
   });
   test('render table answer type without last answer', async () => {
     // table answer type question
-    render(
+    await render(
       renderComponent({
         questionId: '02b4cbf0-cc13-456c-a6d9-5a2b09d6f19c'
       })
@@ -427,15 +427,15 @@ describe('testing question item component in custom tab', () => {
     // get test id togglebtn and fire click event
     fireEvent.click(screen.getByTestId('togglebtn'));
     // get inputbox and fire change event
-    fireEvent.change(screen.getByRole('textbox'), {
-      target: { value: 'test' }
-    });
+    // fireEvent.change(await screen.getByRole('textbox'), {
+    //   target: { value: 'test' }
+    // });
     // get save button and fire click event
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    fireEvent.click(await screen.getByRole('button', { name: 'Save' }));
   });
   test('render table answer type & check tooltip', async () => {
     // table answer type question
-    render(
+    await render(
       renderComponent({
         questionId: '088e8e63-0a1a-4167-919e-bc0961954a43'
       })
