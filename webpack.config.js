@@ -73,7 +73,12 @@ module.exports = env => {
       extensions: ['.js', '.jsx', '.mjs'],
       fallback: {
         querystring: require.resolve('querystring-es3'),
-        'react-error-overlay': '6.0.9'
+        'react-error-overlay': '6.0.9',
+        // FIXME: Added to fix react-pdf error occurred in build
+        fs: false,
+        os: false,
+        path: false,
+        url: false
       }
     },
     devServer: {
