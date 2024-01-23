@@ -53,19 +53,17 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  SelectQuestion
-);
-const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  MultiSelectQuestion
-);
-const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
-  YesNoQuestion
-);
+const SelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(SelectQuestion);
+const MultiSelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(MultiSelectQuestion);
+const YesNoQuestionWithIdleStateDetection =
+  withIdleStateDetection(YesNoQuestion);
 
-const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestion
-);
+const CheckBoxQuestionWithIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestion);
+
+const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
 const QuestionItem = ({
   questionId = '',
@@ -152,6 +150,8 @@ const QuestionItem = ({
   }, [approvalFilters]);
 
   const socketContext = useContext(SocketContext);
+
+  const { questionLockWrapper, questionUnlockWrapper } = socketContext;
   const [isShowHistory, setIsShowHistory] = useState(false);
 
   const selectedBid = useSelector(getSelectedBid)?.toJS();
@@ -256,7 +256,12 @@ const QuestionItem = ({
   async function handleTableValueChange(newValue, lastAnswer) {
     const { proposalId, questionId } = question;
     let lastAnswerValue;
-    if (lastAnswer && lastAnswer.get('answer')) {
+    if (
+      lastAnswer &&
+      lastAnswer.get('answer') &&
+      lastAnswer.get('answer') !== ' ' &&
+      lastAnswer.get('answer') !== 'N/A'
+    ) {
       lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
       // compare prev and next answers and do a save
 
@@ -448,8 +453,15 @@ const QuestionItem = ({
           // parse JSON from lastAnswer
           const tableConfigJSON = JSON.parse(tableConfiguration);
           try {
-            const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
-            jsonTableConfig = merge(tableConfigJSON, noConfigTableAnswer);
+            if (lastAnswer.answer === ' ' || lastAnswer.answer === 'N/A') {
+              jsonTableConfig = tableConfigJSON;
+            } else {
+              const noConfigTableAnswer = JSON.parse(lastAnswer.answer);
+              jsonTableConfig = merge(
+                cloneDeep(tableConfigJSON),
+                noConfigTableAnswer
+              );
+            }
             const defaultColumnsLength = tableConfigJSON.columns.length;
             const defaultRowsLength = tableConfigJSON.rows.length;
 
@@ -498,18 +510,23 @@ const QuestionItem = ({
           }
         }
         return (
-          <TableAnswer
+          <TableAnswerWithIdleStateDetection
             {...inputProps}
             questionText={questionText}
             tableConfiguration={jsonTableConfig}
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
             section={Map(section)}
-            sectionName={section.sectionName}
+            sectionName={approvalSectionTitle}
             answers={answers}
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
             lastAnswer={lastAnswerMap}
             onChange={handleTableValueChange}
+            disabled={checkDisableFlag()}
+            onFocus={() => {
+              questionLockWrapper(questionId);
+            }}
+            onBlur={() => questionUnlockWrapper(questionId)}
           />
         );
       }
@@ -593,12 +610,7 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
@@ -647,7 +659,9 @@ const QuestionItem = ({
                     }}
                   >
                     <QuestionLabel
+                      questionJSON={question?.questionJSON || ''}
                       questionLabel={question?.questionText || ''}
+                      questionTextRef1={questionTextRef1}
                     />
                     {question.isCustomQuestion &&
                       (selectedBid.isCurrent || selectedBid.isEditable) &&
@@ -658,6 +672,7 @@ const QuestionItem = ({
                         >
                           <span
                             aria-hidden="true"
+                            data-testid="question-edit"
                             onClick={() => {
                               dispatch(
                                 setEditQuestionData({
@@ -673,9 +688,10 @@ const QuestionItem = ({
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
                                   direction: 'left',
-                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
-                                    question?.answers
-                                  )
+                                  questionAnswered:
+                                    checkLastAnswerOfQuestionVisibility(
+                                      question?.answers
+                                    )
                                 })
                               );
                             }}
@@ -710,6 +726,7 @@ const QuestionItem = ({
               <Grid item xs={2} className="answer-actions">
                 <IconButton
                   size="small"
+                  data-testid="answer-actions"
                   onClick={() => {
                     setIsShowHistory(true);
                   }}

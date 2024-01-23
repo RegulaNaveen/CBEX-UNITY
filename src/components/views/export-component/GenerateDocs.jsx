@@ -84,7 +84,8 @@ const GenerateDocs = () => {
         fileName = `Unity Export_${proposalDetails['CRM #']}_Post Award ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       } else if (
         bidType === 'RFI_Request' ||
-        bidType === 'Bid RFI_Request_Bid'
+        bidType === 'Bid RFI_Request_Bid' ||
+        bidType === 'Bid RFI_Request'
       ) {
         fileName = `Unity Export_${proposalDetails['CRM #']}_RFI ${proposalDetails['bidNo']}_${proposalDetails['Customer']}`;
       } else {

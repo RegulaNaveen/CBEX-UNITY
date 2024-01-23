@@ -1,5 +1,5 @@
 import IconMenuButton from 'apollo-react/components/IconMenuButton';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import CogIcon from 'apollo-react-icons/Cog';
 import Popover from 'apollo-react/components/Popover';
@@ -35,13 +35,13 @@ function TableControls({
   useEffect(() => {
     const newMenuItems = [];
     if (tableConfiguration) {
-      if (tableConfiguration.canAddColumn && columns.length < 20) {
+      if (tableConfiguration.canAddColumn) {
         newMenuItems.push({
           text: 'Add Column',
           onClick: handleAddColumnClick
         });
       }
-      if (tableConfiguration.canAddRow && rows.length < 30) {
+      if (tableConfiguration.canAddRow) {
         newMenuItems.push({
           text: 'Add Row',
           onClick: handleAddRowClick
@@ -93,7 +93,6 @@ function TableControls({
   }
 
   function handleAddColumnClick(e) {
-    console.log('e', e);
     onAddColumnClick();
   }
 
@@ -143,9 +142,9 @@ function TableControls({
     setEditingValues([]);
   }
 
-  if (menuItems.length === 0) {
-    return null;
-  }
+  // if (menuItems.length === 0) {
+  //   return null;
+  // }
 
   return (
     <React.Fragment>
@@ -155,25 +154,33 @@ function TableControls({
           checked={allExpanded}
           onChange={() => onExpandAll(!allExpanded)}
         />
-        <IconMenuButton
-          data-testid="settingsMenuButton"
-          menuItems={menuItems}
-          size="small"
-          ref={menuRef}
-        >
-          <CogIcon />
-        </IconMenuButton>
+        {useMemo(
+          () =>
+            menuItems.length !== 0 ? (
+              <IconMenuButton
+                data-testid="settingsMenuButton"
+                menuItems={menuItems}
+                size="small"
+                ref={menuRef}
+              >
+                <CogIcon />
+              </IconMenuButton>
+            ) : null,
+          [menuItems]
+        )}
       </div>
       <Popover
         open={editing}
         anchorEl={menuRef.current}
+        data-testid="popover"
         onClose={() => handlePopoverClose()}
         PaperProps={{
           style: {
             borderColor: '#e9e9e9',
             boxShadow: '0 8px 20px 0 rgba(0, 0, 0, 0.08)',
             padding: 12
-          }
+          },
+          'data-testid': 'popoverTrigger'
         }}
       >
         <div style={{ height: '240px', overflow: 'auto' }}>
@@ -199,14 +206,15 @@ function TableControls({
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
+                            data-testid={`draggable-${index}`}
                           >
                             <div
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 width: '100%',
-                                paddingBottom: '1rem',
-                                maxHeight: '250px'
+                                paddingBottom: '1rem'
+                                // maxHeight: '250px'
                               }}
                             >
                               <DragIcon fontSize="small" />
@@ -214,7 +222,8 @@ function TableControls({
                                 style={{
                                   flexGrow: 1,
                                   maxWidth: '100px',
-                                  marginRight: '1rem'
+                                  marginRight: '1rem',
+                                  wordBreak: 'break-word'
                                 }}
                               >
                                 {editing === 'columns'
@@ -223,6 +232,7 @@ function TableControls({
                               </p>
                               <Checkbox
                                 checked={!item.hidden}
+                                data-testid="checkboxChange"
                                 onChange={() =>
                                   handleCheckboxChange(item.index)
                                 }

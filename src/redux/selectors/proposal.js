@@ -374,11 +374,8 @@ export const getBidList = createSelector(
             flags['RFIInBidHistory'])
         ) {
           bidList.push({
-            bidDueDate: item.getIn([
-              'proposal',
-              'proposalDetails',
-              'Bid due date'
-            ]),
+            bidDueDate:
+              item.getIn(['proposal', 'proposalDetails', 'Bid due date']) || '',
             bidDate: item.getIn(['proposal', 'proposalDate']),
             bidId: item.getIn(['proposal', 'proposalId']),
             isCurrent: item.get('isCurrent'),

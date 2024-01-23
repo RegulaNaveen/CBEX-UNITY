@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo
+} from 'react';
 import TableIcon from '../../../svg/Table';
 import Typography from 'apollo-react/components/Typography';
 import classNames from 'classnames';
@@ -10,7 +16,7 @@ import Popover from 'apollo-react/components/Popover';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { diffArrays } from 'diff';
 import TableCell from './TableCell';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, maxBy } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
 import TablePreview from './TablePreview';
@@ -96,10 +102,13 @@ function Header({
   canEdit,
   disabled,
   setSaveDisable,
-  allExpanded
+  allExpanded,
+  isLongest
 }) {
+  console.log('Header', allExpanded);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [tooltipValue, setTooltipValue] = useState('');
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   const columnRef = useRef(null);
 
@@ -112,18 +121,20 @@ function Header({
     } else {
       setTooltipValue('');
     }
-  }, [title]);
+  }, [title, allExpanded]);
 
   const handleValueChange = useCallback(event => {
     setCurrentTitle(event.target.value);
+    if (event.target.value.length === 0) {
+      setSaveDisable(true);
+    } else {
+      setSaveDisable(false);
+    }
   }, []);
 
   const handleInputBlur = useCallback(
     e => {
       onTitleChange(index, currentTitle);
-      if (currentTitle.length === 0) {
-        setSaveDisable(true);
-      }
       if (
         columnRef?.current?.lastChild?.children[0]?.scrollWidth >
         columnRef?.current?.lastChild?.children[0]?.clientWidth + 1
@@ -140,27 +151,50 @@ function Header({
     return <p></p>;
   }
 
-  return canEdit && !disabled ? (
-    <Tooltip title={tooltipValue}>
-      <TextField
-        ref={columnRef}
-        margin="none"
-        value={currentTitle}
-        multiline={allExpanded}
-        onChange={handleValueChange}
-        onBlur={handleInputBlur}
-        InputProps={{ inputProps: { maxLength: 1000 } }}
-        error={currentTitle.length === 0}
-        helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
-        fullWidth
-      />
-    </Tooltip>
-  ) : (
-    <Tooltip title={currentTitle}>
-      <Typography variant="bodyDefault" gutterBottom noWrap>
-        {currentTitle}
-      </Typography>
-    </Tooltip>
+  return (
+    <div
+      className={classNames({
+        'table-header': true,
+        'h-100': !isLongest
+      })}
+    >
+      {canEdit && !disabled ? (
+        <Tooltip title={tooltipValue} open={openTooltip}>
+          <TextField
+            ref={columnRef}
+            margin="none"
+            value={currentTitle}
+            multiline={allExpanded}
+            onMouseOver={() => {
+              if (columnRef.current.contains(document.activeElement)) {
+                setOpenTooltip(false);
+              } else setOpenTooltip(true);
+            }}
+            onMouseOut={() => {
+              setOpenTooltip(false);
+            }}
+            onFocus={e => {
+              setOpenTooltip(false);
+              setTimeout(() => {
+                columnRef.current.focus();
+              }, 100);
+            }}
+            onChange={handleValueChange}
+            onBlur={handleInputBlur}
+            InputProps={{ inputProps: { maxLength: 999 } }}
+            error={currentTitle.length === 0}
+            helperText={currentTitle.length === 0 ? 'Please add a name' : ''}
+            fullWidth
+          />
+        </Tooltip>
+      ) : (
+        <Tooltip title={currentTitle}>
+          <Typography variant="bodyDefault" gutterBottom noWrap emphasis="high">
+            {currentTitle}
+          </Typography>
+        </Tooltip>
+      )}
+    </div>
   );
 }
 
@@ -183,6 +217,8 @@ function TableAnswer({
 }) {
   const [showModal, setShowModal] = useState(false);
   const [rows, setRows] = useState([]);
+  const [rowsWithLongestKeys, setRowsWithLongestKeys] = useState([]);
+  const [columnsWithLongest, setColumnsWithLongest] = useState([]);
   const [columns, setColumns] = useState([]);
   const [warning, setWarning] = useState(false);
   const [warningTitle, setWarningTitle] = useState('');
@@ -227,6 +263,7 @@ function TableAnswer({
             canEdit={true}
             disabled={disabled}
             allExpanded={allExpanded}
+            setSaveDisable={setSaveDisable}
           />
         ),
         canEdit: true,
@@ -251,6 +288,7 @@ function TableAnswer({
           canEdit={true}
           disabled={disabled}
           allExpanded={allExpanded}
+          setSaveDisable={setSaveDisable}
         />
       ),
       canEdit: true,
@@ -261,10 +299,15 @@ function TableAnswer({
     setRows(rows.map(row => ({ ...row, [newColumn.accessor]: '' })));
 
     setTimeout(() => {
-      tableRef.current.horizontalScrollRef.current.children[0].scrollIntoView({
-        behaviour: 'smooth',
-        inline: 'end'
-      });
+      tableRef.current?.horizontalScrollRef.current?.children[0].scrollIntoView(
+        {
+          behaviour: 'smooth',
+          inline: 'end'
+        }
+      );
+      const thead =
+        tableRef.current?.horizontalScrollRef.current?.lastChild?.firstChild;
+      thead?.firstChild?.lastChild?.firstChild?.firstChild?.children[1]?.firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
@@ -294,6 +337,7 @@ function TableAnswer({
             canEdit={true}
             disabled={disabled}
             allExpanded={allExpanded}
+            setSaveDisable={setSaveDisable}
           />
         ),
         canEdit: true,
@@ -321,19 +365,29 @@ function TableAnswer({
     setRows([...nextRowsWithExtra]);
 
     setTimeout(() => {
-      tableRef.current.horizontalScrollRef.current.children[0].scrollIntoView({
-        behaviour: 'smooth',
-        block: 'end'
-      });
+      tableRef.current?.horizontalScrollRef.current?.children[0].scrollIntoView(
+        {
+          behaviour: 'smooth',
+          block: 'end'
+        }
+      );
+      const tBody =
+        tableRef.current?.horizontalScrollRef.current?.lastChild?.lastChild;
+      if (tBody?.lastChild?.firstChild?.firstChild)
+        tBody.lastChild.firstChild.firstChild?.firstChild?.children[1]?.firstChild.focus();
+      else
+        tBody?.children[
+          tBody?.children.length - 2
+        ].firstChild?.firstChild?.firstChild?.children[1]?.firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
 
-  function handleModalClose() {
+  const handleModalClose = useCallback(() => {
     if (toggleWatch) toggleWatch(false);
     if (onBlur) onBlur();
     toggleModal(false);
-  }
+  }, [toggleWatch, onBlur]);
 
   useEffect(() => {
     if (Array.isArray(tableConfiguration.rows)) {
@@ -391,48 +445,34 @@ function TableAnswer({
       setWarning(true);
       setWarningTitle('Alert');
       setWarningText(
-        duplicateRows.length > 0 && duplicateColumns.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
-              duplicateRows
-            ).join(', ')}
-              ${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
-          : duplicateRows.length > 0
-          ? `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(
-              duplicateRows
-            ).join(', ')}`
-          : `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
-              duplicateColumns
-            ).join(', ')}`
+        duplicateRows.length > 0 && duplicateColumns.length > 0 ? (
+          <Typography>
+            {TABLEANSWER.DUPLICATE_ROWS}{' '}
+            {removeDuplicates(duplicateRows).join(', ')}. <br />
+            {TABLEANSWER.DUPLICATE_COLUMNS}{' '}
+            {removeDuplicates(duplicateColumns).join(', ')}.
+          </Typography>
+        ) : duplicateRows.length > 0 ? (
+          `${TABLEANSWER.DUPLICATE_ROWS} ${removeDuplicates(duplicateRows).join(
+            ', '
+          )}.`
+        ) : (
+          `${TABLEANSWER.DUPLICATE_COLUMNS} ${removeDuplicates(
+            duplicateColumns
+          ).join(', ')}.`
+        )
       );
     }
   }
 
   useEffect(() => {
-    setColumns(columns =>
-      columns.map((column, index) => ({
-        ...column,
-        header: (
-          <Header
-            index={index}
-            title={column.header}
-            onTitleChange={onHeaderTitleChange}
-            canEdit={column.canEdit}
-            disabled={disabled}
-            setSaveDisable={setSaveDisable}
-            allExpanded={allExpanded}
-          />
-        )
-      }))
-    );
-  }, [allExpanded]);
-
-  useEffect(() => {
-    if (rows.length > 0 && columns.length > 1) {
+    if (rows.length > 0 || columns.length > 1) {
       let rowEmptyCheck;
-      if (tableConfiguration.rows.length === 0) {
-        rowEmptyCheck = rows.map(row => row[columns[0].accessor]);
+      if (
+        tableConfiguration.rows.length === 0 ||
+        tableConfiguration.columns.length === 0
+      ) {
+        rowEmptyCheck = rows.map(row => row[columns[0]?.accessor]);
       }
       const rowHeaders = rows.map(row => row.header);
       const columnHeaders = columns.map(column => column.headerTitle);
@@ -468,15 +508,58 @@ function TableAnswer({
         rowDiff.includes(true) ||
         colHiddenDiff.length > 1 ||
         rowHiddenDiff.length > 1 ||
-        (tableConfiguration.columns.length === 0 &&
-          tableConfiguration.rows.length === 0)
+        (tableConfiguration.columns.length === 0 && columns.length > 0) ||
+        (tableConfiguration.rows.length === 0 && rows.length > 0)
       ) {
         setSaveDisable(false);
       } else {
         setSaveDisable(true);
       }
+      // calculate rows keys with longer text
+      let cloneRows = cloneDeep(rows);
+      let cloneColumns = cloneDeep(columns);
+      cloneRows = cloneRows.map(row => {
+        const longestKey = maxBy(
+          Object.keys(row).filter(rowKey => typeof row[rowKey] === 'string'),
+          rowKey => row[rowKey].length
+        );
+
+        return {
+          ...row,
+          longestKey
+        };
+      });
+      if (cloneColumns.length > 0) {
+        let longesColIndex = 0;
+        let longestColHeader = cloneColumns[0].headerTitle;
+        cloneColumns.forEach((column, index) => {
+          if (column?.headerTitle?.length > longestColHeader?.length) {
+            longesColIndex = index;
+            longestColHeader = column.headerTitle;
+          }
+        });
+        cloneColumns[longesColIndex].isLongest = true;
+      }
+      setRowsWithLongestKeys(cloneRows);
+      setColumnsWithLongest(
+        cloneColumns.map((column, index) => ({
+          ...column,
+          header: (
+            <Header
+              index={index}
+              title={column.headerTitle}
+              onTitleChange={onHeaderTitleChange}
+              canEdit={column.canEdit}
+              disabled={disabled}
+              setSaveDisable={setSaveDisable}
+              allExpanded={allExpanded}
+              isLongest={column.isLongest}
+            />
+          )
+        }))
+      );
     }
-  }, [rows, columns]);
+  }, [rows, columns, allExpanded]);
 
   useEffect(() => {
     if (forceBlur === true) {
@@ -499,8 +582,9 @@ function TableAnswer({
     if (onCascadeChange) onCascadeChange();
   }, []);
 
-  function handleSaveClick() {
+  const handleSaveClick = useCallback(() => {
     if (toggleWatch) toggleWatch(false);
+    if (onBlur) onBlur();
     toggleModal(false);
     const newColumns = [];
     const rowHeaders = rows.map(row => row.header);
@@ -520,7 +604,7 @@ function TableAnswer({
     }
     onChange({ rows, columns: newColumns }, lastAnswer);
     duplicateCheck(rowHeaders, columnHeaders);
-  }
+  }, [toggleWatch, onBlur, rows, columns]);
 
   function handleEdit(valueType, values) {
     if (valueType === 'column') {
@@ -530,6 +614,32 @@ function TableAnswer({
     }
     if (onCascadeChange) onCascadeChange();
   }
+
+  const apolloTableRender = useMemo(
+    () => (
+      <ApolloTable
+        rows={rowsWithLongestKeys
+          .map((row, rowIndex) => ({
+            ...row,
+            rowIndex,
+            editRow,
+            allExpanded
+          }))
+          .filter(row => !row.hidden)}
+        columns={columnsWithLongest.map(column => ({
+          ...column,
+          fixedWidth: false
+        }))}
+        hidePagination
+        defaultPageSize={'All'}
+        ref={tableRef}
+        classes={{
+          root: 'answer-table'
+        }}
+      />
+    ),
+    [rowsWithLongestKeys, columnsWithLongest, allExpanded]
+  );
 
   return (
     <React.Fragment>
@@ -562,8 +672,10 @@ function TableAnswer({
             Edit Table Data
           </Typography>
         </div>
-        {rows.length > 0 && columns.length > 0 && (
+        {rows.length > 0 || columns.length > 0 ? (
           <TablePreview rows={rows} columns={columns} />
+        ) : (
+          ''
         )}
       </div>
       <Modal
@@ -609,26 +721,7 @@ function TableAnswer({
             onExpandAll={handleExpandAll}
           />
         ) : null}
-        <ApolloTable
-          rows={rows
-            .map((row, rowIndex) => ({
-              ...row,
-              rowIndex,
-              editRow,
-              allExpanded
-            }))
-            .filter(row => !row.hidden)}
-          columns={columns.map(column => ({
-            ...column,
-            fixedWidth: false
-          }))}
-          hidePagination
-          defaultPageSize={'All'}
-          ref={tableRef}
-          classes={{
-            root: 'answer-table'
-          }}
-        />
+        {apolloTableRender}
       </Modal>
       {warning && (
         <CustomModal

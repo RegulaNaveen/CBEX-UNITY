@@ -1,46 +1,45 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Tooltip from 'apollo-react/components/Tooltip';
-import { useSelector } from 'react-redux';
-import { getPanelStatus } from '../../../../redux/selectors/proposal';
 
 export default function TablePreview({ columns, rows }) {
-  const panelStatus = useSelector(state => getPanelStatus(state));
+  var totalNotHiddenColumns = columns.filter(column => !column.hidden);
+  var totalNotHiddenRows = rows.filter(row => !row.hidden);
 
   return (
     <div className="custom-answer-table-container">
-      <table className="custom-answer-table" id="table1">
+      <table className="custom-answer-table">
         <thead>
           <tr>
-            {columns.length > 0 &&
-              columns.map(column => <th>{column.headerTitle}</th>)}
+            {totalNotHiddenColumns.length > 1 &&
+              totalNotHiddenColumns.map(column => (
+                <th>
+                  <Tooltip
+                    title={column.headerTitle}
+                    placement="top"
+                    id="table-tooltip"
+                  >
+                    <p>{column.headerTitle}</p>
+                  </Tooltip>
+                </th>
+              ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map(row => (
+          {totalNotHiddenRows.map(row => (
             <>
               <tr>
-                {columns.map(column => (
+                {totalNotHiddenColumns.map(column => (
                   <>
                     {row[column.accessor] ? (
                       <>
                         <td>
-                          {row[column.accessor].length < 30 ? (
-                            row[column.accessor]
-                          ) : (
-                            <>
-                              {!panelStatus ? (
-                                <Tooltip
-                                  title={row[column.accessor]}
-                                  placement="top"
-                                  id="table-tooltip"
-                                >
-                                  <p>{row[column.accessor].substring(0, 30)}</p>
-                                </Tooltip>
-                              ) : (
-                                <p> {row[column.accessor]}</p>
-                              )}
-                            </>
-                          )}
+                          <Tooltip
+                            title={row[column.accessor]}
+                            placement="top"
+                            id="table-tooltip"
+                          >
+                            <p>{row[column.accessor]}</p>
+                          </Tooltip>
                         </td>
                       </>
                     ) : (

@@ -94,8 +94,9 @@ function ChangeSets({
             col.reordered || col.added || col.titleChanged || col.hiddenChanged
         )
         .map(col => {
+          const changes = [];
           if (col.added) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
@@ -105,7 +106,7 @@ function ChangeSets({
             );
           }
           if (col.reordered) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
@@ -115,21 +116,26 @@ function ChangeSets({
             );
           }
           if (col.titleChanged) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
                 Update Column Title from{' '}
-                <span className={classNames({ removed: col.oldTitle })}>
-                  '{col.oldTitle}'
+                <span
+                  className={classNames({
+                    removed: col.oldTitle,
+                    blank: !col.oldTitle
+                  })}
+                >
+                  {col.oldTitle ? `'${col.oldTitle}'` : 'blank'}
                 </span>{' '}
                 to {col.newTitle}.
               </Typography>
             );
           }
           if (col.hiddenChanged) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
@@ -140,6 +146,7 @@ function ChangeSets({
               </Typography>
             );
           }
+          return <>{changes}</>;
         })}
       {rows
         .filter(
@@ -151,8 +158,9 @@ function ChangeSets({
             row.cellsEdited
         )
         .map(row => {
+          const changes = [];
           if (row.added) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
@@ -162,7 +170,7 @@ function ChangeSets({
             );
           }
           if (row.reordered) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
@@ -172,21 +180,26 @@ function ChangeSets({
             );
           }
           if (row.titleChanged) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
               >
                 Update Row Title from{' '}
-                <span className={classNames({ removed: row.oldTitle })}>
-                  '{row.oldTitle}'
+                <span
+                  className={classNames({
+                    removed: row.oldTitle,
+                    blank: !row.oldTitle
+                  })}
+                >
+                  {row.oldTitle ? `'${row.oldTitle}'` : 'blank'}
                 </span>{' '}
                 to {row.newTitle}.
               </Typography>
             );
           }
           if (row.hiddenChanged) {
-            return (
+            changes.push(
               <Typography
                 variant="bodyDefault"
                 className="table-change-list-item"
@@ -198,7 +211,7 @@ function ChangeSets({
             );
           }
           if (row.cellsEdited) {
-            return (
+            changes.push(
               <>
                 {row.editedCells.map(cell => {
                   return (
@@ -208,9 +221,12 @@ function ChangeSets({
                     >
                       Update cell content from{' '}
                       <span
-                        className={classNames({ removed: cell.prevContent })}
+                        className={classNames({
+                          removed: cell.prevContent,
+                          blank: !cell.prevContent
+                        })}
                       >
-                        '{cell.prevContent}'
+                        {cell.prevContent ? `'${cell.prevContent}'` : 'blank'}
                       </span>{' '}
                       to '{cell.content}
                       '.
@@ -220,6 +236,7 @@ function ChangeSets({
               </>
             );
           }
+          return <>{changes}</>;
         })}
     </>
   );
@@ -893,12 +910,16 @@ class AnswerHistory extends Component<Props> {
                   const answer =
                     _answer.answer === 'N/A'
                       ? 'N/A'
+                      : _answer.answer === ' '
+                      ? questionTableConfig
                       : JSON.parse(_answer.answer);
                   const nextAnswer =
                     _answer.nextIndex === -1
                       ? questionTableConfig
                       : answers.get(_answer.nextIndex).get('answer') === 'N/A'
                       ? 'N/A'
+                      : answers.get(_answer.nextIndex).get('answer') === ' '
+                      ? questionTableConfig
                       : JSON.parse(
                           answers.get(_answer.nextIndex).get('answer')
                         );
@@ -979,12 +1000,12 @@ class AnswerHistory extends Component<Props> {
                     return column;
                   });
 
-                  cfaNextAnswer.rows = answer.rows.map(row => {
+                  cfaNextAnswer.rows = nextAnswer.rows.map(row => {
                     delete row.index;
                     return row;
                   });
 
-                  cfaNextAnswer.columns = answer.columns.map(column => {
+                  cfaNextAnswer.columns = nextAnswer.columns.map(column => {
                     delete column.index;
                     return column;
                   });
@@ -1066,31 +1087,14 @@ class AnswerHistory extends Component<Props> {
                   const rows = answer.rows.map((row, index) => {
                     const updatedRow = cloneDeep(row);
                     updatedRow.editedCells = [];
-                    const nextRow = nextRowsMap[row.rowId];
-                    if (nextRowsMap[row.rowId]) {
+                    const nextRow = nextRowsMap[row.rowId] || {};
+                    if (!isEmpty(nextRowsMap[row.rowId])) {
                       // check if row is reordered
                       if (nextRowsMap[row.rowId].index !== index) {
                         updatedRow.reordered = true;
                         updatedRow.oldOrderIndex = nextRowsMap[row.rowId].index;
                         updatedRow.newOrderIndex = index;
                       }
-                      // check if any cell is updated
-                      Object.keys(row).forEach(accessor => {
-                        if (
-                          accessor !== 'rowId' &&
-                          accessor !== 'canEdit' &&
-                          accessor !== 'hidden' &&
-                          accessor !== 'header' &&
-                          row[accessor] !== '' &&
-                          nextRow[accessor] !== row[accessor]
-                        ) {
-                          updatedRow.cellsEdited = true;
-                          updatedRow.editedCells.push({
-                            content: row[accessor],
-                            prevContent: nextRow[accessor]
-                          });
-                        }
-                      });
                       // check if row title is changed
                       if (nextRow.header !== row.header) {
                         updatedRow.titleChanged = true;
@@ -1104,6 +1108,23 @@ class AnswerHistory extends Component<Props> {
                     } else {
                       updatedRow.added = true;
                     }
+                    // check if any cell is updated
+                    Object.keys(row).forEach(accessor => {
+                      if (
+                        accessor !== 'rowId' &&
+                        accessor !== 'canEdit' &&
+                        accessor !== 'hidden' &&
+                        accessor !== 'header' &&
+                        row[accessor] !== '' &&
+                        nextRow[accessor] !== row[accessor]
+                      ) {
+                        updatedRow.cellsEdited = true;
+                        updatedRow.editedCells.push({
+                          content: row[accessor],
+                          prevContent: nextRow[accessor] || ''
+                        });
+                      }
+                    });
                     return updatedRow;
                   });
 

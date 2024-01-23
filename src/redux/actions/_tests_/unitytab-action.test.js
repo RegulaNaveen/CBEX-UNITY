@@ -578,7 +578,11 @@ describe('unitytab-actions test', () => {
     await store.dispatch(resetSingleTabFiltersAction());
   });
   test('editUnityQuestion', async () => {
+    const mockGetFavoritesOpportunity = jest
+      .spyOn(unitytabApi, 'editUnityQuestionData')
+      .mockResolvedValue({ data: data });
     await store.dispatch(editUnityQuestion('dawd', 'adwdawd', 'dawd', {}));
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(1);
   });
 
   test('editUnityQuestion customTab', async () => {

@@ -7,6 +7,23 @@
   .all-approvals-container {
     position: relative;
 
+    .MuiAccordionDetails-root {
+      #answer-history-modal {
+        .modal-content {
+          .modal-header {
+            .header-titles {
+              h1 {
+                color: #000000 !important;
+              }
+              p {
+                color: rgba($color: $black, $alpha: 0.8) !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .custom-autocomplete
       .a-MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'][class*='MuiOutlinedInput-marginDense'] {
       min-height: 40px;
@@ -80,6 +97,9 @@
         }
         .question-active {
           background-color: #0557d559;
+        }
+        .table-answer-container {
+          display: grid;
         }
       }
     }
@@ -270,6 +290,7 @@
     line-height: 1.2;
     .public-DraftStyleDefault-block {
       margin: 0 !important;
+      color: #000000;
     }
   }
   .MuiBox-root {

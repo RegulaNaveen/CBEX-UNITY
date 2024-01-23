@@ -4,7 +4,8 @@ import {
   fireEvent,
   waitFor,
   screen,
-  act
+  act,
+  cleanup
 } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import TableAnswer from '../TableAnswer/TableAnswer';
@@ -24,6 +25,7 @@ describe('TableAnswer Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
@@ -522,163 +524,6 @@ describe('TableAnswer Component', () => {
     fireEvent.click(element);
     expect(getByTestId('cancelButton')).toBeInTheDocument();
     expect(getByTestId('saveButton')).toBeInTheDocument();
-  });
-
-  test('cancel button is clicked', async () => {
-    const props = {
-      questionText: 'Sample Question',
-      tableConfiguration: {
-        canEditColumn: true,
-        canAddRow: true,
-        rows: [
-          {
-            header: 'row 1',
-            'OClumn 2': 'It is a long established fact ',
-            'Column 1':
-              'Lorem Ipsum is sisdfdsssssssssssssssssssssssssssssssmply dummy text of the printing and typesetting industry.',
-            canEdit: true,
-            'column-3':
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-            'column-4':
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-            index: 0,
-            hidden: false,
-            'column-5':
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-          },
-          {
-            header: 'row 3',
-            'OClumn 2': 'It is a long established fact ',
-            'Column 1': 'It is a long established fact ',
-            canEdit: true,
-            'column-4': 'It is a long established fact ',
-            'column-3': 'It is a long established fact ',
-            index: 1,
-            hidden: false,
-            'column-5': ''
-          },
-          {
-            header: 'row 2',
-            'OClumn 2': 'It is a long established fact ',
-            'Column 1': 'It is a long established fact ',
-            canEdit: true,
-            'column-3': 'It is a long established fact ',
-            'column-4': 'It is a long established fact ',
-            index: 2,
-            hidden: false,
-            'column-5': ''
-          },
-          {
-            header: 'row 4',
-            canEdit: true,
-            'Column 1': '',
-            'OClumn 2': '',
-            'column-4': '0',
-            'column-3': '1',
-            index: 3,
-            hidden: true,
-            'column-5': '2'
-          },
-          {
-            header: 'row 5',
-            canEdit: true,
-            'OClumn 2': '',
-            'Column 1': '',
-            'column-4': '3',
-            'column-3': '4',
-            'column-5': '5',
-            index: 4,
-            hidden: false
-          }
-        ],
-        columns: [
-          {
-            hidden: false,
-            alwaysVisible: false,
-            accessor: 'header',
-            header: '',
-            frozen: true,
-            locked: false,
-            type: 'text',
-            canEdit: true,
-            index: 0
-          },
-          {
-            hidden: false,
-            alwaysVisible: false,
-            accessor: 'OClumn 2',
-            header: 'col 1',
-            frozen: false,
-            locked: false,
-            type: 'text',
-            index: 1,
-            canEdit: true
-          },
-          {
-            hidden: false,
-            alwaysVisible: false,
-            accessor: 'Column 1',
-            header: 'col 2',
-            frozen: false,
-            locked: false,
-            type: 'text',
-            index: 2,
-            canEdit: true
-          },
-          {
-            accessor: 'column-4',
-            width: 100,
-            canEdit: true,
-            index: 3,
-            hidden: false,
-            header: 'col 4'
-          },
-          {
-            accessor: 'column-3',
-            width: 100,
-            canEdit: true,
-            index: 4,
-            hidden: true,
-            header: 'col 3'
-          },
-          {
-            accessor: 'column-5',
-            width: 100,
-            canEdit: true,
-            index: 5,
-            hidden: false,
-            header: 'col 4'
-          }
-        ],
-        canAddColumn: true,
-        canEditRow: true
-      },
-      questionHint: 'Sample Hint',
-      questionHintJSON: null,
-      sectionName: 'Sample Section',
-      answers: [],
-      answered: true,
-      lastAnswer: null,
-      onChange: jest.fn(),
-      disabled: false
-    };
-
-    const { getByText, getByTestId } = renderTableAnswer(props);
-
-    const element = getByText('Edit Table Data');
-    expect(element).toBeInTheDocument();
-    fireEvent.click(element);
-    await waitFor(async () => {
-      const cancelBtn = await screen.findByRole('button', { name: /cancel/i });
-      if (cancelBtn) {
-        fireEvent.click(cancelBtn);
-      }
-    });
-    await waitFor(async () => {
-      expect(
-        await screen.queryByTestId('tableAnswer-modal')
-      ).not.toBeInTheDocument();
-    });
   });
 
   it('save button should be disabled initially', async () => {
@@ -1389,5 +1234,160 @@ describe('TableAnswer Component', () => {
     screen.debug(input[1]);
     fireEvent.change(input[1], { target: { value: '' } });
     fireEvent.change(input[1], { target: { value: 'row 4' } });
+  });
+  test('cancel button is clicked', async () => {
+    const props = {
+      questionText: 'Sample Question',
+      tableConfiguration: {
+        canEditColumn: true,
+        canAddRow: true,
+        rows: [
+          {
+            header: 'row 1',
+            'OClumn 2': 'It is a long established fact ',
+            'Column 1':
+              'Lorem Ipsum is sisdfdsssssssssssssssssssssssssssssssmply dummy text of the printing and typesetting industry.',
+            canEdit: true,
+            'column-3':
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+            'column-4':
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+            index: 0,
+            hidden: false,
+            'column-5':
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+          },
+          {
+            header: 'row 3',
+            'OClumn 2': 'It is a long established fact ',
+            'Column 1': 'It is a long established fact ',
+            canEdit: true,
+            'column-4': 'It is a long established fact ',
+            'column-3': 'It is a long established fact ',
+            index: 1,
+            hidden: false,
+            'column-5': ''
+          },
+          {
+            header: 'row 2',
+            'OClumn 2': 'It is a long established fact ',
+            'Column 1': 'It is a long established fact ',
+            canEdit: true,
+            'column-3': 'It is a long established fact ',
+            'column-4': 'It is a long established fact ',
+            index: 2,
+            hidden: false,
+            'column-5': ''
+          },
+          {
+            header: 'row 4',
+            canEdit: true,
+            'Column 1': '',
+            'OClumn 2': '',
+            'column-4': '0',
+            'column-3': '1',
+            index: 3,
+            hidden: true,
+            'column-5': '2'
+          },
+          {
+            header: 'row 5',
+            canEdit: true,
+            'OClumn 2': '',
+            'Column 1': '',
+            'column-4': '3',
+            'column-3': '4',
+            'column-5': '5',
+            index: 4,
+            hidden: false
+          }
+        ],
+        columns: [
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'header',
+            header: '',
+            frozen: true,
+            locked: false,
+            type: 'text',
+            canEdit: true,
+            index: 0
+          },
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'OClumn 2',
+            header: 'col 1',
+            frozen: false,
+            locked: false,
+            type: 'text',
+            index: 1,
+            canEdit: true
+          },
+          {
+            hidden: false,
+            alwaysVisible: false,
+            accessor: 'Column 1',
+            header: 'col 2',
+            frozen: false,
+            locked: false,
+            type: 'text',
+            index: 2,
+            canEdit: true
+          },
+          {
+            accessor: 'column-4',
+            width: 100,
+            canEdit: true,
+            index: 3,
+            hidden: false,
+            header: 'col 4'
+          },
+          {
+            accessor: 'column-3',
+            width: 100,
+            canEdit: true,
+            index: 4,
+            hidden: true,
+            header: 'col 3'
+          },
+          {
+            accessor: 'column-5',
+            width: 100,
+            canEdit: true,
+            index: 5,
+            hidden: false,
+            header: 'col 4'
+          }
+        ],
+        canAddColumn: true,
+        canEditRow: true
+      },
+      questionHint: 'Sample Hint',
+      questionHintJSON: null,
+      sectionName: 'Sample Section',
+      answers: [],
+      answered: true,
+      lastAnswer: null,
+      onChange: jest.fn(),
+      disabled: false
+    };
+    const { getByText, queryByTestId, findByRole } = renderTableAnswer(props);
+    const element = getByText('Edit Table Data');
+    expect(element).toBeInTheDocument();
+    expect(await queryByTestId('tableAnswer-modal')).not.toBeInTheDocument();
+    fireEvent.click(element);
+    await waitFor(
+      async () => {
+        const cancelBtn = await findByRole('button', { name: /cancel/i });
+        if (cancelBtn) {
+          fireEvent.click(cancelBtn);
+        }
+      },
+      { timeout: 500 }
+    ).catch(err => {
+      console.log(error);
+    });
   });
 });

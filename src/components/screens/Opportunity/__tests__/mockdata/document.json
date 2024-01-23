@@ -1288,7 +1288,7 @@
     "showNaCheckbox": false,
     "approvalQuestionLoading": {
       "questionId": "",
-      "value": false
+      "value": true
     },
     "areAllSectionsExpanded": false,
     "bidCostDetails": {
@@ -1395,7 +1395,18 @@
           "options": []
         },
         "roleNames": ["Clinical DS&B"],
-        "answers": [],
+        "answers": [
+          {
+            "user": "UnityPredictedAnswer",
+            "userName": "UnityPredictedAnswer",
+            "userRole": "UnityPredictedAnswer",
+            "date": "2024-01-05T07:16:03.431Z",
+            "answer": " ",
+            "formattedAnswer": " ",
+            "proposalId": "9aa9dfe2-1222-4dff-8977-f06f45656a4b",
+            "updatedInPG": false
+          }
+        ],
         "questionOrder": 6,
         "visible": true,
         "locked": false,
@@ -1415,7 +1426,7 @@
         "notApplicable": false,
         "questionApproval": false,
         "bidAnswerCopy": true,
-        "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"1\":\"\",\"2\":\"\",\"header\":\"3\",\"hidden\":true,\"rowId\":0},{\"1\":\"\",\"2\":\"\",\"header\":\"4\",\"hidden\":true,\"rowId\":1}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":true,\"alwaysVisible\":false,\"accessor\":\"1\",\"header\":\"1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":true,\"alwaysVisible\":false,\"accessor\":\"2\",\"header\":\"2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":false,\"canEditRow\":true}",
+        "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"header\":\"ATCR1\",\"ATCC3\":\"\",\"ATCC2\":\"\",\"ATCC1\":\"\",\"rowId\":0},{\"header\":\"ATCR2\",\"ATCC3\":\"\",\"ATCC2\":\"\",\"ATCC1\":\"\",\"rowId\":1},{\"header\":\"ATCR3\",\"ATCC3\":\"\",\"ATCC2\":\"\",\"ATCC1\":\"\",\"rowId\":2}],\"columns\":[{\"accessor\":\"header\",\"frozen\":true,\"hidden\":false,\"locked\":false,\"type\":\"text\",\"alwaysVisible\":false},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"ATCC1\",\"header\":\"ATCC1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"ATCC2\",\"header\":\"ATCC2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"ATCC3\",\"header\":\"ATCC3\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":true,\"canEditRow\":false}",
         "latestAnsweredBidNo": null,
         "bidType": "Post_Award_Bid"
       },
@@ -19310,7 +19321,7 @@
         "notApplicable": false,
         "questionApproval": false,
         "bidAnswerCopy": true,
-        "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"header\":\"r1\",\"c1\":\"\",\"rowId\":0}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"c1\",\"header\":\"c1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":false,\"canEditRow\":true}",
+        "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"header\":\"ATCR1\",\"ATCC3\":\"\",\"ATCC2\":\"\",\"ATCC1\":\"\",\"rowId\":0},{\"header\":\"ATCR2\",\"ATCC3\":\"\",\"ATCC2\":\"\",\"ATCC1\":\"\",\"rowId\":1},{\"header\":\"ATCR3\",\"ATCC3\":\"\",\"ATCC2\":\"\",\"ATCC1\":\"\",\"rowId\":2}],\"columns\":[{\"accessor\":\"header\",\"frozen\":true,\"hidden\":false,\"locked\":false,\"type\":\"text\",\"alwaysVisible\":false},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"ATCC1\",\"header\":\"ATCC1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"ATCC2\",\"header\":\"ATCC2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"ATCC3\",\"header\":\"ATCC3\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":true,\"canEditRow\":false}",
         "latestAnsweredBidNo": null,
         "bidType": "Post_Award_Bid"
       },
