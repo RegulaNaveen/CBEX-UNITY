@@ -53,19 +53,15 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  SelectQuestion
-);
-const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  MultiSelectQuestion
-);
-const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
-  YesNoQuestion
-);
+const SelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(SelectQuestion);
+const MultiSelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(MultiSelectQuestion);
+const YesNoQuestionWithIdleStateDetection =
+  withIdleStateDetection(YesNoQuestion);
 
-const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestion
-);
+const CheckBoxQuestionWithIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestion);
 
 const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
@@ -614,12 +610,7 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
@@ -681,6 +672,7 @@ const QuestionItem = ({
                         >
                           <span
                             aria-hidden="true"
+                            data-testid="question-edit"
                             onClick={() => {
                               dispatch(
                                 setEditQuestionData({
@@ -696,9 +688,10 @@ const QuestionItem = ({
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
                                   direction: 'left',
-                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
-                                    question?.answers
-                                  )
+                                  questionAnswered:
+                                    checkLastAnswerOfQuestionVisibility(
+                                      question?.answers
+                                    )
                                 })
                               );
                             }}
@@ -733,6 +726,7 @@ const QuestionItem = ({
               <Grid item xs={2} className="answer-actions">
                 <IconButton
                   size="small"
+                  data-testid="answer-actions"
                   onClick={() => {
                     setIsShowHistory(true);
                   }}
