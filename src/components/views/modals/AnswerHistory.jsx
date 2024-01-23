@@ -1736,7 +1736,8 @@ class AnswerHistory extends Component<Props> {
               ) : null}
               {indexNo === 0 &&
               !isQuesFreezed &&
-              isEditableBid === bidNo &&
+              (selectedBid.get('isCurrent', false) ||
+                selectedBid.get('isEditable')) &&
               lastAnswer?.userName === 'UnityPredictedAnswer' &&
               userName === 'UnityPredictedAnswer' ? (
                 <div className="answer-meta-buttons">
