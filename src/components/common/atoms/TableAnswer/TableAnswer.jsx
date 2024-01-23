@@ -16,7 +16,7 @@ import Popover from 'apollo-react/components/Popover';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import { diffArrays } from 'diff';
 import TableCell from './TableCell';
-import { cloneDeep, maxBy } from 'lodash';
+import { cloneDeep, debounce, maxBy } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
 import TablePreview from './TablePreview';
@@ -579,9 +579,9 @@ function TableAnswer({
   }, []);
 
   const handleSaveClick = useCallback(() => {
+    toggleModal(false);
     if (toggleWatch) toggleWatch(false);
     if (onBlur) onBlur();
-    toggleModal(false);
     const newColumns = [];
     const rowHeaders = rows.map(row => row.header);
     const columnHeaders = columns.map(column => column.headerTitle);
@@ -601,6 +601,8 @@ function TableAnswer({
     onChange({ rows, columns: newColumns }, lastAnswer);
     duplicateCheck(rowHeaders, columnHeaders);
   }, [toggleWatch, onBlur, rows, columns]);
+
+  const debouncedSaveClick = debounce(handleSaveClick, 600);
 
   function handleEdit(valueType, values) {
     if (valueType === 'column') {
@@ -699,7 +701,7 @@ function TableAnswer({
           {
             label: 'Save',
             'data-testid': 'saveButton',
-            onClick: () => handleSaveClick(),
+            onClick: () => debouncedSaveClick(),
             disabled: saveDisable
           }
         ]}
