@@ -150,7 +150,8 @@ describe('Unity Section Component', () => {
   test('test Approval tab index', async () => {
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
-      questionUnlockWrapper: jest.fn()
+      questionUnlockWrapper: jest.fn(),
+      questionLockDetailsWrapper: jest.fn()
     };
     let mockSocket = {
       on: jest.fn(),

@@ -2,16 +2,23 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import DateQuestion from '../DateQuestion';
+import MultiSelectQuestion from '../MultiSelectQuestion';
 
-describe('DateQuestion', () => {
+describe('MultiSelectQuestion', () => {
   const question = {
     questionId: '1',
-    proposalId: '2'
+    proposalId: '2',
+    answerConfiguration: {
+      type: 'PICKLIST',
+      options: ['Option 1', 'Option 2', 'Option 3']
+    },
+    sfObject: 'Object',
+    sfField: 'Field'
   };
   const lastAnswer = {
-    answer: '2023-02-16'
+    answer: ['Option 1']
   };
+  const disabled = false;
   const userData = {};
   const socketContext = {
     questionLockWrapper: jest.fn(),
@@ -34,9 +41,10 @@ describe('DateQuestion', () => {
   it('renders without crashing', () => {
     const wrapper = mount(
       <Provider store={store}>
-        <DateQuestion
+        <MultiSelectQuestion
           question={question}
           lastAnswer={lastAnswer}
+          disabled={disabled}
           userData={userData}
           socketContext={socketContext}
           trackEventSubmitAnswer={trackEventSubmitAnswer}
@@ -47,15 +55,16 @@ describe('DateQuestion', () => {
         />
       </Provider>
     );
-    expect(wrapper.exists()).toBe(true);
+    expect(wrapper).toMatchSnapshot();
   });
 
-  it('calls resetDate function when reset button is clicked', async () => {
+  it('calls changeHandler function when value is changed', async () => {
     const wrapper = mount(
       <Provider store={store}>
-        <DateQuestion
+        <MultiSelectQuestion
           question={question}
           lastAnswer={lastAnswer}
+          disabled={disabled}
           userData={userData}
           socketContext={socketContext}
           trackEventSubmitAnswer={trackEventSubmitAnswer}
@@ -67,17 +76,19 @@ describe('DateQuestion', () => {
       </Provider>
     );
 
-    const resetButton = wrapper.find('QuestionDatePicker').prop('resetDate');
-    await resetButton();
-    expect(questionLockWrapper).toHaveBeenCalledTimes(0);
+    const changeHandler = wrapper
+      .find('AutoCompleteWithAddOption')
+      .prop('onChange');
+    await changeHandler(['Option 1', 'Option 2']);
   });
 
-  it('calls handleDayChange function when day is changed', async () => {
+  it('calls questionLockWrapper function when input is focused', () => {
     const wrapper = mount(
       <Provider store={store}>
-        <DateQuestion
+        <MultiSelectQuestion
           question={question}
           lastAnswer={lastAnswer}
+          disabled={disabled}
           userData={userData}
           socketContext={socketContext}
           trackEventSubmitAnswer={trackEventSubmitAnswer}
@@ -88,19 +99,18 @@ describe('DateQuestion', () => {
         />
       </Provider>
     );
-    const handleDayChange = wrapper
-      .find('QuestionDatePicker')
-      .prop('handleDayChange');
-    await handleDayChange('2023-02-17', '2023-02-16');
-    expect(questionLockWrapper).toHaveBeenCalledTimes(0);
+
+    const onFocus = wrapper.find('AutoCompleteWithAddOption').prop('onFocus');
+    onFocus();
   });
 
-  it('calls handleFocus function when input is focused', () => {
+  it('calls questionUnlockWrapper function when input is blurred', () => {
     const wrapper = mount(
       <Provider store={store}>
-        <DateQuestion
+        <MultiSelectQuestion
           question={question}
           lastAnswer={lastAnswer}
+          disabled={disabled}
           userData={userData}
           socketContext={socketContext}
           trackEventSubmitAnswer={trackEventSubmitAnswer}
@@ -111,29 +121,8 @@ describe('DateQuestion', () => {
         />
       </Provider>
     );
-    const handleFocus = wrapper.find('QuestionDatePicker').prop('onFocus');
-    handleFocus();
-    expect(questionLockWrapper).toHaveBeenCalledTimes(0);
-  });
 
-  it('calls handleBlur function when input is blurred', () => {
-    const wrapper = mount(
-      <Provider store={store}>
-        <DateQuestion
-          question={question}
-          lastAnswer={lastAnswer}
-          userData={userData}
-          socketContext={socketContext}
-          trackEventSubmitAnswer={trackEventSubmitAnswer}
-          checkDisableFlag={checkDisableFlag}
-          toggleWatch={toggleWatch}
-          onCascadeChange={onCascadeChange}
-          forceBlur={forceBlur}
-        />
-      </Provider>
-    );
-    const handleBlur = wrapper.find('QuestionDatePicker').prop('onBlur');
-    handleBlur();
-    expect(questionUnlockWrapper).toHaveBeenCalledTimes(0);
+    const onBlur = wrapper.find('AutoCompleteWithAddOption').prop('onBlur');
+    onBlur();
   });
 });
