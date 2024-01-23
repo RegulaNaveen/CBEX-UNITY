@@ -721,49 +721,49 @@ describe('searchUtils unit tests cases', () => {
     );
   });
 
-  // it('check approvals', () => {
-  //   const searchutl = require('../../components/screens/Approvals/utils');
-  //   jest.spyOn(searchutl, 'shouldShowSection').mockReturnValue(true);
-  //   jest.spyOn(searchutl, 'shouldShowQuestion').mockReturnValue(true);
-  //   const props = {
-  //     finalResult: {
-  //       count: 1,
-  //       results: [
-  //         {
-  //           tab: 0,
-  //           searchIndex: 'a9431c40-4dd9-44ea-b9e2-68fce5a1fef7',
-  //           inputText: 'MAP Call',
-  //           vTab: 3,
-  //           startIndex: 0,
-  //           endIndex: 3,
-  //           matchIndex: 0,
-  //           tabName: 'Strategy Development',
-  //           sectionName: null
-  //         }
-  //       ]
-  //     },
-  //     regexp: '/MAP/gi',
-  //     questionsMap: mockData.questions,
-  //     approvals: mockData.approvals,
-  //     approvalFilters: mockData.approvalFilters,
-  //     allFlags: mockData.allFlags
-  //   };
-  //   const {
-  //     finalResult,
-  //     regexp,
-  //     questionsMap,
-  //     approvals,
-  //     approvalFilters,
-  //     allFlags
-  //   } = props;
+  it('check approvals', () => {
+    const searchutl = require('../../components/screens/Approvals/utils');
+    jest.spyOn(searchutl, 'shouldShowSection').mockReturnValue(true);
+    jest.spyOn(searchutl, 'shouldShowQuestion').mockReturnValue(false);
+    const props = {
+      finalResult: {
+        count: 1,
+        results: [
+          {
+            tab: 0,
+            searchIndex: 'a9431c40-4dd9-44ea-b9e2-68fce5a1fef7',
+            inputText: 'MAP Call',
+            vTab: 3,
+            startIndex: 0,
+            endIndex: 3,
+            matchIndex: 0,
+            tabName: 'Strategy Development',
+            sectionName: null
+          }
+        ]
+      },
+      regexp: '/MAP/gi',
+      questionsMap: mockData.filteredQuestionsMap,
+      approvals: mockData.approvals,
+      approvalFilters: mockData.approvalFilters,
+      allFlags: mockData.allFlags
+    };
+    const {
+      finalResult,
+      regexp,
+      questionsMap,
+      approvals,
+      approvalFilters,
+      allFlags
+    } = props;
 
-  //   const result = searchInApprovals(
-  //     finalResult,
-  //     regexp,
-  //     questionsMap,
-  //     approvals,
-  //     approvalFilters,
-  //     allFlags
-  //   );
-  // });
+    const result = searchInApprovals(
+      finalResult,
+      regexp,
+      questionsMap,
+      approvals,
+      approvalFilters,
+      allFlags
+    );
+  });
 });
