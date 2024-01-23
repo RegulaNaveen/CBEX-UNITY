@@ -109,22 +109,6 @@ const QuestionItem = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [screenWidth, setScreenWidth] = useState('');
 
-  useEffect(() => {
-    window.addEventListener('resize', resize); // doubt -Akash
-
-    resize();
-    setTimeout(() => {
-      // updating question text with decorators
-      if (questionTextRef1.current !== null) {
-        const { editorState } = questionTextRef1.current.state;
-        const newEditorState = EditorState.set(editorState, {
-          decorator: compositeDecorator
-        });
-        questionTextRef1.current.setState({ editorState: newEditorState });
-      }
-    }, 100);
-  }, []);
-
   const [showLastAnswer, setshowLastAnswer] = useState(false);
   const dispatch = useDispatch();
 
@@ -199,7 +183,6 @@ const QuestionItem = ({
   });
 
   const prepareAnswerHistoryData = questionData => {
-    console.log('questionData', questionData);
     let questionMap = fromJS(questionData);
     try {
       // This Logic was copy pasted from src/components/screens/opportunity/Questions.jsx

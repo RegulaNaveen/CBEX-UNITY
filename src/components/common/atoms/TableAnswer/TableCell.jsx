@@ -63,6 +63,7 @@ function TableCell({
               <Tooltip title={tooltipValue} open={openTooltip}>
                 <TextField
                   ref={rowRef}
+                  data-testid="row-header"
                   className={'row-header'}
                   margin="none"
                   value={value}
@@ -118,6 +119,7 @@ function TableCell({
               ref={rowRef}
               margin="none"
               value={value}
+              data-testid="table-cell"
               multiline={row.allExpanded}
               onMouseOver={() => {
                 if (rowRef.current.contains(document.activeElement)) {
