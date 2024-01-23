@@ -929,7 +929,7 @@ describe('TableAnswer Component', () => {
     fireEvent.blur(input[3]);
     fireEvent.click(screen.getByText('Save'));
     // Assert alert modal will appear
-    expect(screen.getByText('Alert')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('Alert')).toBeInTheDocument());
   });
 
   it('change row name', async () => {
