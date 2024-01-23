@@ -1,9 +1,10 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import YesNoQuestion from '../YesNoQuestion';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 
 describe('YesNoQuestion component', () => {
-  let wrapper;
   const mockQuestion = {
     questionId: 1,
     questionText: 'Do you like pizza?'
@@ -20,9 +21,28 @@ describe('YesNoQuestion component', () => {
   };
   const mockTrackEventSubmitAnswer = jest.fn();
   const mockCheckDisableFlag = jest.fn();
-
+  let store;
+  const mockStore = configureStore([]);
   beforeEach(() => {
-    wrapper = shallow(
+    store = mockStore({});
+  });
+  it('renders without crashing', () => {
+    const component = mount(
+      <Provider store={store}>
+        <YesNoQuestion
+          question={mockQuestion}
+          lastAnswer={mockLastAnswer}
+          userData={mockUserData}
+          socketContext={mockSocketContext}
+          trackEventSubmitAnswer={mockTrackEventSubmitAnswer}
+          checkDisableFlag={mockCheckDisableFlag}
+        />
+      </Provider>
+    );
+    expect(component.exists()).toBe(true);
+  });
+  it('should check mount', () => {
+    mount(
       <YesNoQuestion
         question={mockQuestion}
         lastAnswer={mockLastAnswer}
@@ -32,9 +52,6 @@ describe('YesNoQuestion component', () => {
         checkDisableFlag={mockCheckDisableFlag}
       />
     );
-  });
-
-  it('renders without crashing', () => {
-    expect(wrapper.exists()).toBe(true);
+    expect(mockSocketContext.questionLockWrapper).toHaveBeenCalledTimes(0);
   });
 });

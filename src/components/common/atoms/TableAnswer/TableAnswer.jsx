@@ -14,28 +14,32 @@ import IconButton from 'apollo-react/components/IconButton';
 import InfoIcon from 'apollo-react-icons/Info';
 import Popover from 'apollo-react/components/Popover';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
+import { EditorState } from 'apollo-react/node_modules/draft-js';
 import { diffArrays } from 'diff';
 import TableCell from './TableCell';
-import { cloneDeep, maxBy } from 'lodash';
+import { cloneDeep, debounce, maxBy } from 'lodash';
 import TableControls from './TableControls';
 import TextField from 'apollo-react/components/TextField';
 import TablePreview from './TablePreview';
 import Tooltip from 'apollo-react/components/Tooltip';
 import { DEFAULT, TABLEANSWER } from '../../../../constants/app';
 import CustomModal from '../../CustomModal';
+import { compositeDecorator } from '../../CustomApolloRichText';
 
 function Title({ questionText, questionHint, questionHintJSON }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const richTextEditorRef = useRef(null);
 
   function handleQuestionHintRef(ref) {
+    richTextEditorRef.current = ref;
     setTimeout(() => {
       // updating question hint with decorators
-      if (ref.current !== null) {
-        const { editorState } = ref.current.state;
+      if (richTextEditorRef.current !== null) {
+        const { editorState } = richTextEditorRef.current.state;
         const newEditorState = EditorState.set(editorState, {
           decorator: compositeDecorator
         });
-        ref.current.setState({ editorState: newEditorState });
+        richTextEditorRef.current.setState({ editorState: newEditorState });
       }
     }, 700);
   }
@@ -105,7 +109,6 @@ function Header({
   allExpanded,
   isLongest
 }) {
-  console.log('Header', allExpanded);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [tooltipValue, setTooltipValue] = useState('');
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -161,6 +164,7 @@ function Header({
       {canEdit && !disabled ? (
         <Tooltip title={tooltipValue} open={openTooltip}>
           <TextField
+            data-testid="column-header"
             ref={columnRef}
             margin="none"
             value={currentTitle}
@@ -299,13 +303,15 @@ function TableAnswer({
     setRows(rows.map(row => ({ ...row, [newColumn.accessor]: '' })));
 
     setTimeout(() => {
-      tableRef.current.horizontalScrollRef.current.children[0].scrollIntoView({
-        behaviour: 'smooth',
-        inline: 'end'
-      });
+      tableRef.current?.horizontalScrollRef.current?.children[0].scrollIntoView(
+        {
+          behaviour: 'smooth',
+          inline: 'end'
+        }
+      );
       const thead =
-        tableRef.current.horizontalScrollRef.current.lastChild.firstChild;
-      thead.firstChild.lastChild.firstChild.firstChild.children[1].firstChild.focus();
+        tableRef.current?.horizontalScrollRef.current?.lastChild?.firstChild;
+      thead?.firstChild?.lastChild?.firstChild?.firstChild?.children[1]?.firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
@@ -363,18 +369,20 @@ function TableAnswer({
     setRows([...nextRowsWithExtra]);
 
     setTimeout(() => {
-      tableRef.current.horizontalScrollRef.current.children[0].scrollIntoView({
-        behaviour: 'smooth',
-        block: 'end'
-      });
+      tableRef.current?.horizontalScrollRef.current?.children[0].scrollIntoView(
+        {
+          behaviour: 'smooth',
+          block: 'end'
+        }
+      );
       const tBody =
-        tableRef.current.horizontalScrollRef.current.lastChild.lastChild;
-      if (tBody.lastChild.firstChild.firstChild)
-        tBody.lastChild.firstChild.firstChild.firstChild.children[1].firstChild.focus();
+        tableRef.current?.horizontalScrollRef.current?.lastChild?.lastChild;
+      if (tBody?.lastChild?.firstChild?.firstChild)
+        tBody.lastChild.firstChild.firstChild?.firstChild?.children[1]?.firstChild.focus();
       else
-        tBody.children[
-          tBody.children.length - 2
-        ].firstChild.firstChild.firstChild.children[1].firstChild.focus();
+        tBody?.children[
+          tBody?.children.length - 2
+        ].firstChild?.firstChild?.firstChild?.children[1]?.firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
@@ -579,9 +587,9 @@ function TableAnswer({
   }, []);
 
   const handleSaveClick = useCallback(() => {
+    toggleModal(false);
     if (toggleWatch) toggleWatch(false);
     if (onBlur) onBlur();
-    toggleModal(false);
     const newColumns = [];
     const rowHeaders = rows.map(row => row.header);
     const columnHeaders = columns.map(column => column.headerTitle);
@@ -601,6 +609,8 @@ function TableAnswer({
     onChange({ rows, columns: newColumns }, lastAnswer);
     duplicateCheck(rowHeaders, columnHeaders);
   }, [toggleWatch, onBlur, rows, columns]);
+
+  const debouncedSaveClick = debounce(handleSaveClick, 600);
 
   function handleEdit(valueType, values) {
     if (valueType === 'column') {
@@ -699,7 +709,7 @@ function TableAnswer({
           {
             label: 'Save',
             'data-testid': 'saveButton',
-            onClick: () => handleSaveClick(),
+            onClick: () => debouncedSaveClick(),
             disabled: saveDisable
           }
         ]}

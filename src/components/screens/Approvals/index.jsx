@@ -73,7 +73,7 @@ const Approvals = () => {
       dispatch(fetchApprovalSendEmailFlag(allFlags.approvalSendMailFlag));
     }
     setTimeout(() => {
-      socketContext.questionLockDetailsWrapper();
+      socketContext?.questionLockDetailsWrapper();
     }, 2000);
   }, []);
 

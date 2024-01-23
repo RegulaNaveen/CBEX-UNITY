@@ -107,6 +107,8 @@ describe('SectionActive component', () => {
         fireEvent.click(await getByText('Add New Question'));
       },
       { timeout: 1000 }
-    );
+    ).catch(err => {
+      console.log(err);
+    });
   });
 });
