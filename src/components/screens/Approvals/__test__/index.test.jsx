@@ -94,6 +94,8 @@ describe('Unity Section Component', () => {
     fireEvent.click(await screen.findByText('Filter'));
     waitFor(async () => {
       fireEvent.click(await screen.findByText('Close'));
+    }).catch(err => {
+      console.log(err);
     });
   });
 

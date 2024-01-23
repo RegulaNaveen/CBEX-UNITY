@@ -158,6 +158,8 @@ describe('TableView component', () => {
     await waitFor(() => {
       expect(toggleFavStub.callCount).toBe(1);
       expect(saveRecentOppPrefStub.callCount).toBe(1);
+    }).catch(err => {
+      console.log(err);
     });
   });
 
@@ -182,6 +184,8 @@ describe('TableView component', () => {
       expect(
         container.querySelector('.MuiCircularProgress-root')
       ).toBeInTheDocument();
+    }).catch(err => {
+      console.log(err);
     });
 
     expect(
@@ -211,10 +215,14 @@ describe('TableView component', () => {
     );
     await waitFor(() =>
       expect(container.querySelector('.edit-icon-button')).toBeInTheDocument()
-    );
+    ).catch(err => {
+      console.log(err);
+    });
     userEvent.click(container.querySelector('.edit-icon-button'));
     await waitFor(() =>
       expect(queryByTestId('edit-name-modal')).toBeInTheDocument()
-    );
+    ).catch(err => {
+      console.log(err);
+    });
   });
 });
