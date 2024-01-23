@@ -9,8 +9,8 @@ import CustomApolloRichText from '../../../../common/CustomApolloRichText';
 describe('TextQuestion', () => {
   let wrapper;
 
-  const question = { questionId: 1, text: 'What is your name?' };
-  const lastAnswer = { answer: 'John' };
+  const question = { questionId: 1, text: 'What is your name?', proposalId: 1 };
+  const lastAnswer = { answer: 'John', formattedAnswer: 'John' };
   const userData = { id: 1, name: 'Test User' };
   const socketContext = {
     questionLockWrapper: jest.fn(),
@@ -40,12 +40,7 @@ describe('TextQuestion', () => {
 
   it('should render without crashing', () => {
     expect(wrapper.exists()).toBe(true);
-    expect(
-      wrapper
-        .find('.approval-text-question')
-        .first()
-        .simulate('blur')
-    );
+    expect(wrapper.find('.approval-text-question').first().simulate('blur'));
 
     const richText = wrapper.find('CustomApolloRichText');
     expect(richText.exists()).toBe(true);
