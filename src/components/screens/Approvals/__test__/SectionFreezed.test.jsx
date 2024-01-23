@@ -38,7 +38,7 @@ describe('SectionFreezed', () => {
     expect(container).toBeInTheDocument();
   });
 
-  test('render the component without crashing with props 1', async () => {
+  test('check left question and right question', async () => {
     const { container, getByTestId } = await render(
       <Provider store={store}>
         <SocketContext.Provider
