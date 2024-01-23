@@ -5,7 +5,13 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render, cleanup, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  cleanup,
+  screen,
+  setup
+} from '@testing-library/react';
 import { store } from '../../../../store';
 import { SocketContext } from '../../../../context/SocketContext';
 import QuestionItem from '../QuestionItem';
@@ -675,8 +681,8 @@ describe('testing question item component in approval', () => {
         </SocketContext.Provider>
       </Provider>
     );
-
     fireEvent.click(await screen.findByText('New Intervention Type'));
+    fireEvent.click(await screen.findByText('Edit Table Data'));
   });
   test('Question Item custom question with answer', async () => {
     let proposalObj = cloneDeep(initialState.proposal);
@@ -753,5 +759,82 @@ describe('testing question item component in approval', () => {
     );
 
     fireEvent.click(await screen.findByText('Testing Table Row Col Hide'));
+  });
+  test('Question Item Table test with picklist answer', async () => {
+    let proposalObj = cloneDeep(initialState.proposal);
+    proposalObj = proposalObj.setIn(
+      ['approvalQuestionLoading', 'questionId'],
+      'Country Strategy-N9P'
+    );
+    initialState.proposal = proposalObj;
+    const updatedstore = mockStore(initialState);
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+
+    await render(
+      <Provider store={updatedstore}>
+        <SocketContext.Provider value={socketContextObj}>
+          <QuestionItem
+            questionId={'Country Strategy-N9P'}
+            isQuesFreezed={false}
+            socketContext={mockSocket}
+            disabled={false}
+            archivedQuestion={[]}
+            eventCategories={{ crmNo: 'test' }}
+            trackEvent={jest.fn()}
+            updateQuestionVisibility={jest.fn().mockReturnValue(true)}
+            highlightQuestionId="Country Strategy-N9P"
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+
+    fireEvent.click(
+      await screen.findByText('Which countries did the customer specify?')
+    );
+  });
+  test('Question Item empty type', async () => {
+    let proposalObj = cloneDeep(initialState.proposal);
+    proposalObj = proposalObj.setIn(
+      ['approvalQuestionLoading', 'questionId'],
+      '8b257b67-43cb-4d0f-95c0-55dd40755dbd'
+    );
+    initialState.proposal = proposalObj;
+    const updatedstore = mockStore(initialState);
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
+
+    await render(
+      <Provider store={updatedstore}>
+        <SocketContext.Provider value={socketContextObj}>
+          <QuestionItem
+            questionId={'8b257b67-43cb-4d0f-95c0-55dd40755dbd'}
+            isQuesFreezed={false}
+            socketContext={mockSocket}
+            disabled={false}
+            archivedQuestion={[]}
+            eventCategories={{ crmNo: 'test' }}
+            trackEvent={jest.fn()}
+            updateQuestionVisibility={jest.fn().mockReturnValue(true)}
+            highlightQuestionId="8b257b67-43cb-4d0f-95c0-55dd40755dbd"
+          />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    expect(
+      await screen.findByText('Question type not found')
+    ).toBeInTheDocument();
   });
 });

@@ -8875,7 +8875,7 @@
         },
         "questionText": " Type_of_Activity__c",
         "answerConfiguration": {
-          "type": "text",
+          "type": "",
           "options": []
         },
         "roleNames": ["Global Analytics"],
