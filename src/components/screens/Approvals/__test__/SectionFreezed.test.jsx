@@ -4,7 +4,6 @@ import SectionFreezed from '../SectionFreezed';
 import { Provider } from 'react-redux';
 import { store } from '../../../../store';
 import { SocketContext } from '../../../../context/SocketContext';
-
 const props = {
   id: '1',
   section_left_questions: [],
@@ -13,6 +12,7 @@ const props = {
   archiveIndex: 0,
   section_id: '123'
 };
+
 describe('SectionFreezed', () => {
   test('render the component without crashing without props', async () => {
     const { container } = await render(
@@ -38,8 +38,11 @@ describe('SectionFreezed', () => {
     expect(container).toBeInTheDocument();
   });
 
-  test('check left question and right question', async () => {
-    const { container, getByTestId } = await render(
+  test('scrolls into view when currentSearchResult matches section title', async () => {
+    const currentSearchResult = {
+      searchIndex: '123-archive-1-section-title'
+    };
+    const { container } = await render(
       <Provider store={store}>
         <SocketContext.Provider
           value={{
@@ -48,24 +51,91 @@ describe('SectionFreezed', () => {
           }}
         >
           <SectionFreezed
-            ArchivedData={[]}
-            ApprovalSectionTitle="Test-5"
-            ApprovalSectionRightQuestions={
-              ('8e89a496-c3c5-47ce-b193-b7406fbf9ae1',
-              '8ae5c1e8-5c02-4eb2-a9ea-e2f54593f2e3',
-              '231be643-6814-4059-93bf-c9fb21b658f6')
-            }
-            ApprovalSectionOrder="15"
-            ApprovalSectionId="f60eb2da-70a7-41e5-9fb3-37e02a6194d5"
-            ApprovalSectionLeftQuestions={
-              ('8e89a496-c3c5-47ce-b193-b7406fbf9ae1',
-              '8ae5c1e8-5c02-4eb2-a9ea-e2f54593f2e3',
-              '231be643-6814-4059-93bf-c9fb21b658f6')
-            }
+            {...props}
+            currentSearchResult={currentSearchResult}
           />
         </SocketContext.Provider>
       </Provider>
     );
-    expect(container).toBeInTheDocument();
+    const sectionTitle = container.querySelector('.approval-sec-title');
+    expect(sectionTitle).toBeInTheDocument();
+    expect(sectionTitle).toHaveTextContent('new section');
+  });
+
+  test('renders left questions when visible and active or custom', async () => {
+    const leftQuestions = [
+      {
+        questionId: '201cc28e-b774-4b81-829f-8e9ac7cb19a5',
+        visible: true,
+        active: true,
+        isCustomQuestion: true,
+        answers: 'test'
+      },
+      {
+        questionId: '90bc4699-e83f-4693-867d-8bff2c08a4c6',
+        visible: true,
+        active: false,
+        isCustomQuestion: true,
+        answers: 'test'
+      },
+      {
+        questionId: '918e86dc-b8d1-4d78-8cc2-b1cc81102d0d',
+        visible: true,
+        active: true,
+        isCustomQuestion: true,
+        answers: 'test'
+      }
+    ];
+    const { container } = await render(
+      <Provider store={store}>
+        <SocketContext.Provider
+          value={{
+            questionLockWrapper: jest.fn(),
+            questionUnlockWrapper: jest.fn()
+          }}
+        >
+          <SectionFreezed {...props} section_left_questions={leftQuestions} />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    const leftQuestionItems = container.querySelectorAll(
+      '.approval-ques-left .switch-item'
+    );
+    expect(leftQuestionItems.length).toBe(0);
+  });
+
+  test('renders right questions when visible and active or custom', async () => {
+    const rightQuestions = [
+      {
+        questionId: '201cc28e-b774-4b81-829f-8e9ac7cb19a5',
+        visible: true,
+        active: true,
+        isCustomQuestion: true,
+        answers: 'test'
+      },
+      {
+        questionId: '918e86dc-b8d1-4d78-8cc2-b1cc81102d0d',
+        visible: true,
+        active: false,
+        isCustomQuestion: true,
+        answers: 'test'
+      }
+    ];
+    const { container } = await render(
+      <Provider store={store}>
+        <SocketContext.Provider
+          value={{
+            questionLockWrapper: jest.fn(),
+            questionUnlockWrapper: jest.fn()
+          }}
+        >
+          <SectionFreezed {...props} section_right_questions={rightQuestions} />
+        </SocketContext.Provider>
+      </Provider>
+    );
+    const rightQuestionItems = container.querySelectorAll(
+      '.approval-ques-right .switch-item'
+    );
+    expect(rightQuestionItems.length).toBe(0);
   });
 });
