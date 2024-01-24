@@ -5,7 +5,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { store } from '../../../../store';
 import { SocketContext } from '../../../../context/SocketContext';
 import QuestionItem from '../QuestionItem';
@@ -318,7 +318,8 @@ describe('testing question item component in custom tab', () => {
     };
     let mockSocket = {
       on: jest.fn(),
-      emit: jest.fn()
+      emit: jest.fn(),
+      ...socketContextObj
     };
     const { getByText, getByTestId, container } = await render(
       <Provider store={mockstore}>
@@ -332,7 +333,19 @@ describe('testing question item component in custom tab', () => {
       </Provider>
     );
     expect(container).toBeInTheDocument();
-    fireEvent.click(getByTestId('calendar'));
+    const textbox = screen.getByRole('textbox');
+
+    fireEvent.click(textbox);
+    fireEvent.paste(textbox, {
+      clipboardData: {
+        getData: () => 'updated text'
+      }
+    });
+    fireEvent.blur(textbox);
+    await waitFor(() =>
+      expect(screen.getByText('updated texttest')).toBeInTheDocument()
+    );
+    // fireEvent.click(getByTestId('calendar'));
   });
 
   test('Question Item component sf question ', async () => {
