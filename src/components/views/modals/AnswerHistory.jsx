@@ -834,6 +834,9 @@ class AnswerHistory extends Component<Props> {
       if (conditionBlankPredicted) {
         answers = answers.delete(index).delete(index);
       }
+    });
+
+    answers.forEach((_answer, index) => {
       _answer = _answer.set('currentIndex', index);
       if (index === answers.size - 1) {
         answers = answers.set(index, _answer.set('nextIndex', -1));
@@ -841,6 +844,8 @@ class AnswerHistory extends Component<Props> {
         answers = answers.set(index, _answer.set('nextIndex', index + 1));
       }
     });
+
+    if (answers.isEmpty()) return this.renderAnswerResponsables();
 
     if (questionType === ANSWER_TYPES.TABLE) {
       // group answers by date
