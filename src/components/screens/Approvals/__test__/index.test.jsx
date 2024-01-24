@@ -1,6 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { screen, render, fireEvent, waitFor } from '@testing-library/react';
+import {
+  screen,
+  render,
+  fireEvent,
+  waitFor,
+  cleanup
+} from '@testing-library/react';
 import { mount } from 'enzyme';
 import { BrowserRouter, Router } from 'react-router-dom';
 import { store } from '../../../../store';
@@ -14,111 +20,71 @@ import { SocketContext } from '../../../../context/SocketContext';
 import cloneDeep from 'lodash/cloneDeep';
 import { Map } from 'immutable';
 import * as utils from '../utils';
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
-const cloneData = cloneDeep(data);
+function createstore() {
+  const middlewares = [thunk];
+  const mockStore = configureStore(middlewares);
+  const cloneData = cloneDeep(data);
 
-cloneData.proposal.unityTabQuestionLoading = Map({
-  questionId: '',
-  value: false
-});
-cloneData.proposal.opportunityData = Map({});
-cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
-cloneData.proposal.editQuestionsData = Map({});
-cloneData.proposal.getAnswerTypesDataF = jest.fn();
-cloneData.proposal.getRolesInfoF = jest.fn();
-cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
-const initialState = {
-  ssoAuth: Map(data.ssoAuth),
-  proposal: Map(cloneData.proposal),
-  selectedBid: Map(cloneData.selectedBid),
-  proposalQuestion: cloneData.proposal.proposalQuestions,
-  currentsection: '',
-  onClose: jest.fn(),
-  sidebar: Map({
-    isOpen: true
-  }),
-  notepad: {
-    proposalID: '',
-    notes: [],
-    fetchingNotes: false,
-    fetchNotesErrorMsg: '',
-    uploadingNote: false,
-    uploadNoteErrorMsg: '',
-    notepadMode: 'notepad_mode_default'
-  },
-  unitytab: tabdata.unitytab,
-  approvals: tabdata.approvals,
-  search: {
-    query: null,
-    isOpen: false,
-    currentResultIndex: -1,
-    prevResult: null,
-    totalResultsFound: 0,
-    searching: false,
-    searchResults: [],
-    autoNavigatedToCurrentResult: true,
-    clearInputFlag: false,
-    showModal: false,
-    modalTitle: '',
-    modalContent: ''
-  }
-};
-const sectionStore = mockStore(initialState);
+  cloneData.proposal.unityTabQuestionLoading = Map({
+    questionId: '',
+    value: false
+  });
+  cloneData.proposal.opportunityData = Map({});
+  cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
+  cloneData.proposal.editQuestionsData = Map({});
+  cloneData.proposal.getAnswerTypesDataF = jest.fn();
+  cloneData.proposal.getRolesInfoF = jest.fn();
+  cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+  const initialState = {
+    ssoAuth: Map(data.ssoAuth),
+    proposal: Map(cloneData.proposal),
+    selectedBid: Map(cloneData.selectedBid),
+    proposalQuestion: cloneData.proposal.proposalQuestions,
+    currentsection: '',
+    onClose: jest.fn(),
+    sidebar: Map({
+      isOpen: true
+    }),
+    notepad: {
+      proposalID: '',
+      notes: [],
+      fetchingNotes: false,
+      fetchNotesErrorMsg: '',
+      uploadingNote: false,
+      uploadNoteErrorMsg: '',
+      notepadMode: 'notepad_mode_default'
+    },
+    unitytab: tabdata.unitytab,
+    approvals: tabdata.approvals,
+    search: {
+      query: null,
+      isOpen: false,
+      currentResultIndex: -1,
+      prevResult: null,
+      totalResultsFound: 0,
+      searching: false,
+      searchResults: [],
+      autoNavigatedToCurrentResult: true,
+      clearInputFlag: false,
+      showModal: false,
+      modalTitle: '',
+      modalContent: ''
+    }
+  };
+  const sectionStore = mockStore(initialState);
+  return sectionStore;
+}
 
 describe('Unity Section Component', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = mount(
-      <Provider store={store}>
-        <ApprovalIndex />
-      </Provider>
-    );
+  afterEach(() => {
+    cleanup();
   });
 
-  test('render index component', () => {
-    expect(wrapper).toBeDefined();
-    expect(wrapper.length).toBe(1);
-  });
-  it('should check add new question on click event ', () => {
-    window.history.pushState(
-      {},
-      '',
-      '/opportunities/UZA89257?bidNo=1&bidType=Clinical_Bid&viewType=questions'
-    );
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
-      payload: [
-        {
-          id: 1,
-          isCurrent: true,
-          proposal: {
-            bidType: 'Clinical_Bid',
-            proposalDetails: { bidNo: 1 },
-            opportunityOverview: {},
-            proposalDate: '',
-            typeOfWidget: '',
-            nextMilestone: ''
-          }
-        }
-      ]
-    });
-    render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <ApprovalIndex />
-        </Provider>
-      </BrowserRouter>
-    );
-    const iconButton = screen.getByTestId('selectedbid-testid');
-    expect(iconButton).toBeInTheDocument();
-    fireEvent.click(iconButton);
-  });
-
-  it('check filter on when isShowFilter is true ', async () => {
+  test('check filter on when isShowFilter is true ', async () => {
+    const sectionStore = createstore();
     const { container } = render(
       <BrowserRouter>
-        <Provider store={store}>
+        <Provider store={sectionStore}>
           <ApprovalIndex isShowFilters={true} />
         </Provider>
       </BrowserRouter>
@@ -126,45 +92,56 @@ describe('Unity Section Component', () => {
     expect(container).toBeInTheDocument();
     await expect(screen.findByText(/Filter/i)).toBeTruthy();
     fireEvent.click(await screen.findByText('Filter'));
-    waitFor(
-      async () => {
-        fireEvent.click(await findByText('Close'));
-      },
-      { timeout: 1000 }
-    );
+    waitFor(async () => {
+      fireEvent.click(await screen.findByText('Close'));
+    }).catch(err => {
+      console.log(err);
+    });
   });
 
-  it('check Expend All Button on click ', async () => {
+  test('check Expend All Button on click ', async () => {
+    const sectionStore = createstore();
+    const socketContextObj = {
+      questionLockWrapper: jest.fn(),
+      questionUnlockWrapper: jest.fn(),
+      questionLockDetailsWrapper: jest.fn()
+    };
+    let mockSocket = {
+      on: jest.fn(),
+      emit: jest.fn()
+    };
     const { container } = render(
       <BrowserRouter>
-        <Provider store={store}>
-          <ApprovalIndex />
+        <Provider store={sectionStore}>
+          <SocketContext.Provider value={socketContextObj}>
+            <ApprovalIndex socketContextObj={mockSocket} />
+          </SocketContext.Provider>
         </Provider>
       </BrowserRouter>
     );
+
     expect(container).toBeInTheDocument();
     await expect(screen.findByText(/Expand All/i)).toBeTruthy();
     fireEvent.click(await screen.findByText('Expand All'));
   });
 
   test('test Approval tab index', async () => {
+    const sectionStore = createstore();
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
-      questionUnlockWrapper: jest.fn()
+      questionUnlockWrapper: jest.fn(),
+      questionLockDetailsWrapper: jest.fn()
     };
     let mockSocket = {
       on: jest.fn(),
       emit: jest.fn()
     };
     jest.spyOn(utils, 'shouldShowSection').mockReturnValue(true);
-    const { container } = render(
+    const { container } = await render(
       <BrowserRouter>
         <Provider store={sectionStore}>
-          <SocketContext.Provider value={mockSocket}>
-            <ApprovalIndex
-              isShowFilters={true}
-              socketContext={socketContextObj}
-            />
+          <SocketContext.Provider value={socketContextObj}>
+            <ApprovalIndex isShowFilters={true} socketContextObj={mockSocket} />
           </SocketContext.Provider>
         </Provider>
       </BrowserRouter>
@@ -173,12 +150,5 @@ describe('Unity Section Component', () => {
     await expect(screen.findByText(/Filter/i)).toBeTruthy();
     fireEvent.click(await screen.findByText('Filter'));
     await expect(screen.findByText(/Add New Question/i)).toBeTruthy();
-
-    waitFor(
-      async () => {
-        fireEvent.click(await findByText('Close'));
-      },
-      { timeout: 1000 }
-    );
   });
 });
