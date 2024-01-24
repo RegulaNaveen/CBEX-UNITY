@@ -116,10 +116,14 @@
         height: 100% !important;
       }
     }
-    .MuiInputBase-input {
-      font-size: 14px;
-      height: 32px;
-      text-overflow: ellipsis;
+    .MuiInputBase-root {
+      background: transparent;
+      .MuiInputBase-input {
+        font-size: 14px;
+        height: 32px;
+        text-overflow: ellipsis;
+        background: white;
+      }
     }
     .row-header {
       .MuiInputBase-input {
