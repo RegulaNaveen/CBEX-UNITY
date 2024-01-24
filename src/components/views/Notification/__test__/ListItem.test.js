@@ -105,4 +105,66 @@ describe('ListItem component', () => {
       expect(wrapper.html()).toContain(link);
     });
   });
+
+  it('should render notification data for rfi bid', () => {
+    wrapper = mount(
+      <Provider store={store}>
+        <ListItem
+          id="8e251519-422c-4a26-a166-9175898ff9d8"
+          url="/opportunities/LAB09021?notification_id=8e251519-422c-4a26-a166-9175898ff9d8&bidNo=4&bidType=RFI_Request"
+          oppNo="LAB09021"
+          data="You’ve been tagged in an answer to a question for Opportunity LAB09021 RFI 4. <br>Tagging_in_Answer"
+          isSeen={false}
+          setSeenOne={notificationActions.setSeenOne}
+          createdAt="2024-01-23T11:20:10.732Z "
+          jsonBody={{
+            opportunityId: 'LAB09021',
+            bidNo: 4,
+            bidType: 'RFI_Request',
+            questionText: 'Tagging_in_Answer',
+            questionAnswer: 'Varsha Kumari'
+          }}
+        />
+      </Provider>
+    );
+    console.log(wrapper.debug());
+    const text = wrapper.text();
+    expect(text).toContain('You’ve been tagged in an answer to a question for');
+    expect(text).toContain('Opportunity');
+    expect(text).toContain('LAB09021');
+    expect(text).toContain('RFI');
+    expect(text).toContain('4.');
+    expect(text).toContain('Tagging_in_Answer');
+  });
+
+  it('should render notification data for Early Engagement Bid', () => {
+    wrapper = mount(
+      <Provider store={store}>
+        <ListItem
+          id="8e251519-422c-4a26-a166-9175898ff9d8"
+          url="/opportunities/LAB09021?notification_id=8e251519-422c-4a26-a166-9175898ff9d8&bidNo=4&bidType=RFI_Request"
+          oppNo="LAB09021"
+          data="You’ve been tagged in an answer to a question for Opportunity LAB09021 Early Engagement 1. <br>Customer and Opportunity Overview"
+          isSeen={false}
+          setSeenOne={notificationActions.setSeenOne}
+          createdAt="2024-01-23T11:20:10.732Z "
+          jsonBody={{
+            opportunityId: 'LAB09021',
+            bidNo: 1,
+            bidType: 'Early_Engagement_Bid',
+            questionText: 'Engagement 1',
+            questionAnswer: 'Varsha Kumari'
+          }}
+        />
+      </Provider>
+    );
+
+    const text = wrapper.text();
+    expect(text).toContain('You’ve been tagged in an answer to a question for');
+    expect(text).toContain('Opportunity');
+    expect(text).toContain('LAB09021');
+    expect(text).toContain('Early');
+    expect(text).toContain('Engagement');
+    expect(text).toContain('1.');
+  });
 });
