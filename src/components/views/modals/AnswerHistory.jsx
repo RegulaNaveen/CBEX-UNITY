@@ -377,7 +377,7 @@ class AnswerHistory extends Component<Props> {
             .bidNo
         : 'NA';
     if (
-      (selectedBid.get('isCurrent', false) || selectedBid.get('isEditable')) &&
+      isEditableBid === bidNo &&
       lastAnswer?.userName === 'UnityPredictedAnswer'
     ) {
       questionLockWrapper(questionIdentifier);
