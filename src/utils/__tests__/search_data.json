@@ -306,7 +306,7 @@
   },
   "query": "Test",
   "notepadData": ["testing", "data", "notes"],
-  "activeTab": 0,
+  "activeTab": 3,
   "isQuestionsFilterEnabled": false,
   "approvalFilters": [
     {
@@ -961,6 +961,638 @@
       },
       "tabName": "new custom tab1",
       "tabOrder": 2
+    },
+    {
+      "tabId": "04bb872c-9d48-4514-be16-fba5eb7fd789",
+      "sections": {
+        "testcc": {
+          "sectionOrder": 2,
+          "sectionName": "testcc",
+          "sectionId": "591d76f3-382a-4f6f-ac5b-9f29309711d6",
+          "questions": {
+            "4aa99116-ddd6-4e26-98dc-c2b8a3a5ea21": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "4aa99116-ddd6-4e26-98dc-c2b8a3a5ea21",
+              "section": {
+                "sectionOrder": 20,
+                "sectionName": "Approvals"
+              },
+              "questionText": "Rich Text",
+              "answerConfiguration": {
+                "type": "statement",
+                "options": []
+              },
+              "roleNames": ["BD Leadership"],
+              "answers": [],
+              "questionOrder": 21,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [
+                {
+                  "Name": "abc",
+                  "Color": "#df216d"
+                },
+                {
+                  "Name": "Text",
+                  "Color": "#830065"
+                }
+              ],
+              "opportunityType": "Default Type,Non-Core Clinical Studies",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"2mre1\",\"text\":\"Rich Text\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":9,\"style\":\"fontFamily-Arial\"},{\"offset\":0,\"length\":9,\"style\":\"color-#9e54b0\"},{\"offset\":0,\"length\":9,\"style\":\"backgroundColor-#ff9300\"},{\"offset\":0,\"length\":9,\"style\":\"fontSize-16pt\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"3d397\" data-offset-key=\"2mre1-0-0\"><div data-offset-key=\"2mre1-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"2mre1-0-0\" style=\"font-family: Arial; color: rgb(158, 84, 176); background-color: rgb(255, 147, 0); font-size: 16pt;\"><span data-text=\"true\">Rich Text</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": true,
+              "bidAnswerCopy": false,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            },
+            "a3091fa4-1322-4de9-840c-f989934ce94b": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "a3091fa4-1322-4de9-840c-f989934ce94b",
+              "section": {
+                "sectionOrder": 21,
+                "sectionName": "Test_4566"
+              },
+              "questionText": " Record_Type__c",
+              "answerConfiguration": {
+                "type": "statement",
+                "options": []
+              },
+              "roleNames": ["Executive Oversight"],
+              "answers": [
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T12:18:36.365Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "00077774-de0f-49ab-967c-7cbea0911de9",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T12:30:19.506Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "f2d94c5d-74d4-45ae-a4d1-65491a5db79c",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T12:43:49.154Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "bc831d7f-76fc-4050-9739-f69480ea1633",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T13:02:06.912Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "b81ce817-100d-4479-a5c7-29c32572d97f",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T14:11:06.929Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "4e7704b8-632d-4c8d-9025-2b6169c4c7bd",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-09-05T09:29:12.693Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "41868e00-2f48-4652-84ed-453807de63e2",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-09-06T12:40:00.989Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "394cedb4-8f89-4ce3-aa06-992cc65d813c",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "CarryForwardAnswer",
+                  "userName": "CarryForwardAnswer",
+                  "userRole": "CarryForwardAnswer",
+                  "date": "2024-01-04T13:26:51.596Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+                  "updatedInPG": false,
+                  "cfProposalId": "394cedb4-8f89-4ce3-aa06-992cc65d813c"
+                }
+              ],
+              "questionOrder": 1,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [],
+              "opportunityType": "Default Type,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA),Ballpark OT",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"bdkok\",\"text\":\" Record_Type__c\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"74bh3\" data-offset-key=\"bdkok-0-0\"><div data-offset-key=\"bdkok-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bdkok-0-0\"><span data-text=\"true\"> Record_Type__c</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": false,
+              "bidAnswerCopy": true,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": 11,
+              "bidType": "Clinical_Bid"
+            },
+            "76aced19-0af2-46a0-b468-f30d05d7ba59": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "76aced19-0af2-46a0-b468-f30d05d7ba59",
+              "section": {
+                "sectionOrder": 23,
+                "sectionName": "Test_4447 updated"
+              },
+              "questionText": "It will kick out at first",
+              "answerConfiguration": {
+                "type": "date",
+                "options": []
+              },
+              "roleNames": ["Customer Accounts"],
+              "answers": [
+                {
+                  "user": "UnityPredictedAnswer",
+                  "userName": "UnityPredictedAnswer",
+                  "userRole": "UnityPredictedAnswer",
+                  "date": "2024-01-04T13:26:55.659Z",
+                  "answer": "24-Oct-2023",
+                  "formattedAnswer": "",
+                  "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+                  "updatedInPG": false
+                }
+              ],
+              "questionOrder": 3,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [],
+              "opportunityType": "Default Type,PILOT - DO NOT USE: PROGRAMS,IQB Template OT",
+              "businessRule": "{\"conditions\":[{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"CONDITION_TRUE\",\"fieldValue\":\"CONDITION_TRUE\",\"answerRelationship\":\"Or\",\"Operator\":\"Equal\"}],\"action\":[{\"fieldName\":\"76aced19-0af2-46a0-b468-f30d05d7ba59\",\"action\":\"CalculeteEventDate\",\"operator\":\"addition\",\"numberOfUnits\":4}]}]}",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"a9or4\",\"text\":\"It will kick out at first\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"5qppp\" data-offset-key=\"a9or4-0-0\"><div data-offset-key=\"a9or4-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"a9or4-0-0\"><span data-text=\"true\">It will kick out at first</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "{\"EventPlaceholderResolved\":true,\"EventSubject\":\"\",\"EventBody\":\"\",\"EventPrimaryCondition\":\"Bid History Creation\",\"ModifiedAt\":\"2023-09-01T11:22:58.895Z\",\"EntityType\":\"Events\",\"ModifiedBy\":\"Sushil Munda\",\"EventUnitType\":\"Business Days\",\"EventQuestionId\":\"76aced19-0af2-46a0-b468-f30d05d7ba59\",\"SK\":\"EVENTS#dc2dacd5-7eb0-4bc2-9075-e36f7cc20eea\",\"EventId\":\"dc2dacd5-7eb0-4bc2-9075-e36f7cc20eea\",\"EventNoOfUnits\":4,\"PK\":\"EVENTS#dc2dacd5-7eb0-4bc2-9075-e36f7cc20eea\",\"EventOperator\":\"addition\",\"CreatedAt\":\"2023-09-01T11:22:58.895Z\",\"questionId\":\"76aced19-0af2-46a0-b468-f30d05d7ba59\"}",
+              "notApplicable": false,
+              "questionApproval": true,
+              "bidAnswerCopy": true,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            }
+          }
+        },
+        "Hellooo": {
+          "sectionOrder": 1,
+          "sectionName": "Hellooo",
+          "sectionId": "9d00cf52-a2e5-4f05-b80c-f02cd439abba",
+          "questions": {
+            "3106acc8-d688-465f-907c-13d890870b43": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "3106acc8-d688-465f-907c-13d890870b43",
+              "section": {
+                "sectionOrder": 20,
+                "sectionName": "Approvals"
+              },
+              "questionText": "Test NEW ques",
+              "answerConfiguration": {
+                "type": "statement",
+                "options": []
+              },
+              "roleNames": ["BD Leadership"],
+              "answers": [],
+              "questionOrder": 20,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [
+                {
+                  "Name": "Text",
+                  "Color": "#830065"
+                }
+              ],
+              "opportunityType": "Default Type",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"3ujhc\",\"text\":\"Test NEW ques\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":13,\"style\":\"BOLD\"},{\"offset\":0,\"length\":13,\"style\":\"color-#00c221\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"f673d\" data-offset-key=\"3ujhc-0-0\"><div data-offset-key=\"3ujhc-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"3ujhc-0-0\" style=\"font-weight: bold; color: rgb(0, 194, 33);\"><span data-text=\"true\">Test NEW ques</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": true,
+              "bidAnswerCopy": false,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            },
+            "Key stakeholders-Y0L": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "Key stakeholders-Y0L",
+              "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+              },
+              "questionText": "Who is the decision maker in the customer's org? ak",
+              "answerConfiguration": {
+                "type": "text",
+                "options": []
+              },
+              "roleNames": ["Business Developer"],
+              "answers": [],
+              "questionOrder": 1,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [],
+              "interestedParties": "Therapeutic Analytics Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,Therapeutic Strategy Lead",
+              "opportunityType": "Default Type",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"sauv1\",\"text\":\"Who is the decision maker in the customer's org? ak\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":33,\"length\":18,\"style\":\"fontSize-12pt\"},{\"offset\":44,\"length\":7,\"style\":\"fontFamily-Proxima Nova\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8ujp6\" data-offset-key=\"sauv1-0-0\"><div data-offset-key=\"sauv1-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"sauv1-0-0\"><span data-text=\"true\">Who is the decision maker in the </span></span><span data-offset-key=\"sauv1-0-1\" style=\"font-size: 12pt;\"><span data-text=\"true\">customer's </span></span><span data-offset-key=\"sauv1-0-2\" style=\"font-size: 12pt; font-family: &quot;Proxima Nova&quot;;\"><span data-text=\"true\">org? ak</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": false,
+              "bidAnswerCopy": true,
+              "questionDataDestinations": "Test4577",
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            }
+          }
+        }
+      },
+      "tabName": "tesqacs34567",
+      "tabOrder": 3
+    },
+    {
+      "tabId": "04bb872c-9d48-4514-be16-fba5eb7fd789",
+      "sections": {
+        "testcc": {
+          "sectionOrder": 2,
+          "sectionName": "testcc",
+          "sectionId": "591d76f3-382a-4f6f-ac5b-9f29309711d6",
+          "questions": {
+            "4aa99116-ddd6-4e26-98dc-c2b8a3a5ea21": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "4aa99116-ddd6-4e26-98dc-c2b8a3a5ea21",
+              "section": {
+                "sectionOrder": 20,
+                "sectionName": "Approvals"
+              },
+              "questionText": "Rich Text",
+              "answerConfiguration": {
+                "type": "statement",
+                "options": []
+              },
+              "roleNames": ["BD Leadership"],
+              "answers": [],
+              "questionOrder": 21,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [
+                {
+                  "Name": "abc",
+                  "Color": "#df216d"
+                },
+                {
+                  "Name": "Text",
+                  "Color": "#830065"
+                }
+              ],
+              "opportunityType": "Default Type,Non-Core Clinical Studies",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"2mre1\",\"text\":\"Rich Text\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":9,\"style\":\"fontFamily-Arial\"},{\"offset\":0,\"length\":9,\"style\":\"color-#9e54b0\"},{\"offset\":0,\"length\":9,\"style\":\"backgroundColor-#ff9300\"},{\"offset\":0,\"length\":9,\"style\":\"fontSize-16pt\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"3d397\" data-offset-key=\"2mre1-0-0\"><div data-offset-key=\"2mre1-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"2mre1-0-0\" style=\"font-family: Arial; color: rgb(158, 84, 176); background-color: rgb(255, 147, 0); font-size: 16pt;\"><span data-text=\"true\">Rich Text</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": true,
+              "bidAnswerCopy": false,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            },
+            "a3091fa4-1322-4de9-840c-f989934ce94b": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "a3091fa4-1322-4de9-840c-f989934ce94b",
+              "section": {
+                "sectionOrder": 21,
+                "sectionName": "Test_4566"
+              },
+              "questionText": " Record_Type__c",
+              "answerConfiguration": {
+                "type": "statement",
+                "options": []
+              },
+              "roleNames": ["Executive Oversight"],
+              "answers": [
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T12:18:36.365Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "00077774-de0f-49ab-967c-7cbea0911de9",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T12:30:19.506Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "f2d94c5d-74d4-45ae-a4d1-65491a5db79c",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T12:43:49.154Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "bc831d7f-76fc-4050-9739-f69480ea1633",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T13:02:06.912Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "b81ce817-100d-4479-a5c7-29c32572d97f",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-08-02T14:11:06.929Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "4e7704b8-632d-4c8d-9025-2b6169c4c7bd",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-09-05T09:29:12.693Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "41868e00-2f48-4652-84ed-453807de63e2",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "AnswerPulledFromSalesforce",
+                  "userName": "AnswerPulledFromSalesforce",
+                  "userRole": "AnswerPulledFromSalesforce",
+                  "date": "2023-09-06T12:40:00.989Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "394cedb4-8f89-4ce3-aa06-992cc65d813c",
+                  "updatedInPG": false
+                },
+                {
+                  "user": "CarryForwardAnswer",
+                  "userName": "CarryForwardAnswer",
+                  "userRole": "CarryForwardAnswer",
+                  "date": "2024-01-04T13:26:51.596Z",
+                  "answer": "Clinical Bid",
+                  "formattedAnswer": "Clinical Bid",
+                  "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+                  "updatedInPG": false,
+                  "cfProposalId": "394cedb4-8f89-4ce3-aa06-992cc65d813c"
+                }
+              ],
+              "questionOrder": 1,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [],
+              "opportunityType": "Default Type,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA),Ballpark OT",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"bdkok\",\"text\":\" Record_Type__c\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"74bh3\" data-offset-key=\"bdkok-0-0\"><div data-offset-key=\"bdkok-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bdkok-0-0\"><span data-text=\"true\"> Record_Type__c</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": false,
+              "bidAnswerCopy": true,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": 11,
+              "bidType": "Clinical_Bid"
+            },
+            "76aced19-0af2-46a0-b468-f30d05d7ba59": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "76aced19-0af2-46a0-b468-f30d05d7ba59",
+              "section": {
+                "sectionOrder": 23,
+                "sectionName": "Test_4447 updated"
+              },
+              "questionText": "It will kick out at first",
+              "answerConfiguration": {
+                "type": "date",
+                "options": []
+              },
+              "roleNames": ["Customer Accounts"],
+              "answers": [
+                {
+                  "user": "UnityPredictedAnswer",
+                  "userName": "UnityPredictedAnswer",
+                  "userRole": "UnityPredictedAnswer",
+                  "date": "2024-01-04T13:26:55.659Z",
+                  "answer": "24-Oct-2023",
+                  "formattedAnswer": "",
+                  "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+                  "updatedInPG": false
+                }
+              ],
+              "questionOrder": 3,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [],
+              "opportunityType": "Default Type,PILOT - DO NOT USE: PROGRAMS,IQB Template OT",
+              "businessRule": "{\"conditions\":[{\"operator\":\"Or\",\"condition\":[{\"fieldName\":\"CONDITION_TRUE\",\"fieldValue\":\"CONDITION_TRUE\",\"answerRelationship\":\"Or\",\"Operator\":\"Equal\"}],\"action\":[{\"fieldName\":\"76aced19-0af2-46a0-b468-f30d05d7ba59\",\"action\":\"CalculeteEventDate\",\"operator\":\"addition\",\"numberOfUnits\":4}]}]}",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"a9or4\",\"text\":\"It will kick out at first\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"5qppp\" data-offset-key=\"a9or4-0-0\"><div data-offset-key=\"a9or4-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"a9or4-0-0\"><span data-text=\"true\">It will kick out at first</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "{\"EventPlaceholderResolved\":true,\"EventSubject\":\"\",\"EventBody\":\"\",\"EventPrimaryCondition\":\"Bid History Creation\",\"ModifiedAt\":\"2023-09-01T11:22:58.895Z\",\"EntityType\":\"Events\",\"ModifiedBy\":\"Sushil Munda\",\"EventUnitType\":\"Business Days\",\"EventQuestionId\":\"76aced19-0af2-46a0-b468-f30d05d7ba59\",\"SK\":\"EVENTS#dc2dacd5-7eb0-4bc2-9075-e36f7cc20eea\",\"EventId\":\"dc2dacd5-7eb0-4bc2-9075-e36f7cc20eea\",\"EventNoOfUnits\":4,\"PK\":\"EVENTS#dc2dacd5-7eb0-4bc2-9075-e36f7cc20eea\",\"EventOperator\":\"addition\",\"CreatedAt\":\"2023-09-01T11:22:58.895Z\",\"questionId\":\"76aced19-0af2-46a0-b468-f30d05d7ba59\"}",
+              "notApplicable": false,
+              "questionApproval": true,
+              "bidAnswerCopy": true,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            }
+          }
+        },
+        "Hellooo": {
+          "sectionOrder": 1,
+          "sectionName": "Hellooo",
+          "sectionId": "9d00cf52-a2e5-4f05-b80c-f02cd439abba",
+          "questions": {
+            "3106acc8-d688-465f-907c-13d890870b43": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "3106acc8-d688-465f-907c-13d890870b43",
+              "section": {
+                "sectionOrder": 20,
+                "sectionName": "Approvals"
+              },
+              "questionText": "Test NEW ques",
+              "answerConfiguration": {
+                "type": "statement",
+                "options": []
+              },
+              "roleNames": ["BD Leadership"],
+              "answers": [],
+              "questionOrder": 20,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [
+                {
+                  "Name": "Text",
+                  "Color": "#830065"
+                }
+              ],
+              "opportunityType": "Default Type",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"3ujhc\",\"text\":\"Test NEW ques\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":0,\"length\":13,\"style\":\"BOLD\"},{\"offset\":0,\"length\":13,\"style\":\"color-#00c221\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"f673d\" data-offset-key=\"3ujhc-0-0\"><div data-offset-key=\"3ujhc-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"3ujhc-0-0\" style=\"font-weight: bold; color: rgb(0, 194, 33);\"><span data-text=\"true\">Test NEW ques</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": true,
+              "bidAnswerCopy": false,
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            },
+            "Key stakeholders-Y0L": {
+              "proposalId": "58681191-9dce-4893-a3f1-6908a6bd66c5",
+              "questionId": "Key stakeholders-Y0L",
+              "section": {
+                "sectionOrder": 3,
+                "sectionName": "Opportunity Information from CRM (for Team review)"
+              },
+              "questionText": "Who is the decision maker in the customer's org? ak",
+              "answerConfiguration": {
+                "type": "text",
+                "options": []
+              },
+              "roleNames": ["Business Developer"],
+              "answers": [],
+              "questionOrder": 1,
+              "visible": true,
+              "locked": false,
+              "sfObject": "n/a",
+              "sfField": "n/a",
+              "milestoneNew": [],
+              "interestedParties": "Therapeutic Analytics Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,Therapeutic Strategy Lead",
+              "opportunityType": "Default Type",
+              "hasDifferentSFanswer": false,
+              "isCustomQuestion": false,
+              "questionJSON": "{\"blocks\":[{\"key\":\"sauv1\",\"text\":\"Who is the decision maker in the customer's org? ak\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[{\"offset\":33,\"length\":18,\"style\":\"fontSize-12pt\"},{\"offset\":44,\"length\":7,\"style\":\"fontFamily-Proxima Nova\"}],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+              "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8ujp6\" data-offset-key=\"sauv1-0-0\"><div data-offset-key=\"sauv1-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"sauv1-0-0\"><span data-text=\"true\">Who is the decision maker in the </span></span><span data-offset-key=\"sauv1-0-1\" style=\"font-size: 12pt;\"><span data-text=\"true\">customer's </span></span><span data-offset-key=\"sauv1-0-2\" style=\"font-size: 12pt; font-family: &quot;Proxima Nova&quot;;\"><span data-text=\"true\">org? ak</span></span></div></div></div>",
+              "questionHintJSON": "",
+              "questionHintHTML": "",
+              "active": true,
+              "integration": "",
+              "events": "",
+              "notApplicable": false,
+              "questionApproval": false,
+              "bidAnswerCopy": true,
+              "questionDataDestinations": "Test4577",
+              "questionTableConfig": "{}",
+              "latestAnsweredBidNo": null,
+              "bidType": "Clinical_Bid"
+            }
+          }
+        }
+      },
+      "tabName": "tesqacs34567",
+      "tabOrder": 3
     },
     {
       "tabId": "04bb872c-9d48-4514-be16-fba5eb7fd789",
