@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import NumberQuestion from '../NumberQuestion';
@@ -32,9 +32,8 @@ describe('NumberQuestion', () => {
     store = mockStore({});
   });
   it('renders without crashing', () => {
-    const wrapper = shallow(
+    const component = mount(
       <Provider store={store}>
-        {' '}
         <NumberQuestion
           question={mockQuestion}
           lastAnswer={mockLastAnswer}
@@ -45,6 +44,46 @@ describe('NumberQuestion', () => {
         />
       </Provider>
     );
-    expect(wrapper.exists()).toBe(true);
+    expect(component.exists()).toBe(true);
+  });
+
+  it('should check onfocus', () => {
+    const component = mount(
+      <Provider store={store}>
+        <NumberQuestion
+          question={mockQuestion}
+          lastAnswer={mockLastAnswer}
+          userData={mockUserData}
+          socketContext={mockSocketContext}
+          trackEventSubmitAnswer={mockTrackEventSubmitAnswer}
+          checkDisableFlag={mockCheckDisableFlag}
+        />
+      </Provider>
+    );
+    component.find('input').simulate('focus');
+    component.find('input').simulate('blur');
+    expect(mockSocketContext.questionLockWrapper).toHaveBeenCalled();
+    expect(mockSocketContext.questionUnlockWrapper).toHaveBeenCalled();
+  });
+  it('should check answer is empty', () => {
+    const mockLastAnswer = {
+      answer: ''
+    };
+    const component = mount(
+      <Provider store={store}>
+        <NumberQuestion
+          question={mockQuestion}
+          lastAnswer={mockLastAnswer}
+          userData={mockUserData}
+          socketContext={mockSocketContext}
+          trackEventSubmitAnswer={mockTrackEventSubmitAnswer}
+          checkDisableFlag={mockCheckDisableFlag}
+        />
+      </Provider>
+    );
+    component.find('input').simulate('focus');
+    component.find('input').simulate('blur');
+    expect(mockSocketContext.questionLockWrapper).toHaveBeenCalled();
+    expect(mockSocketContext.questionUnlockWrapper).toHaveBeenCalled();
   });
 });

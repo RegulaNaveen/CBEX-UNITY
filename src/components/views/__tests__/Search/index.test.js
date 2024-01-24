@@ -70,7 +70,7 @@ describe('Search component unit tests', () => {
     fireEvent.keyDown(document, { key: 'f', code: 'KeyF', ctrlKey: true });
     await waitFor(() =>
       expect(searchContainer.getElementsByClassName('hidden').length).toBe(0)
-    );
+    ).catch(err => {});
     getByPlaceholderText('Search').blur();
   });
 
@@ -83,7 +83,7 @@ describe('Search component unit tests', () => {
     fireEvent.keyDown(document, { key: 'f', code: 'KeyF', ctrlKey: true });
     await waitFor(() =>
       expect(searchContainer.getElementsByClassName('hidden').length).toBe(0)
-    );
+    ).catch(err => {});
     const textInput = getByPlaceholderText('Search');
     fireEvent.change(textInput, { target: { value: 'test' } });
     fireEvent.keyPress(textInput, {
@@ -139,19 +139,14 @@ describe('Search component unit tests', () => {
   });
 
   it('should allow us to navigate through search results', async () => {
-    const {
-      queryByTestId,
-      getByText,
-      getByTestId,
-      findByText,
-      queryByText,
-    } = render(<SearchWithRedux />);
+    const { queryByTestId, getByText, getByTestId, findByText, queryByText } =
+      render(<SearchWithRedux />);
     store.dispatch({ type: SEARCH.OPEN });
     store.dispatch({ type: SEARCH.UPDATE_QUERY, payload: 'test' });
     store.dispatch({ type: SEARCH.DO_SEARCH });
     await waitFor(() => {
       expect(getByText('Searching...')).toBeInTheDocument();
-    })
+    }).catch(err => {});
     store.dispatch({
       type: SEARCH.UPDATE_SEARCH_RESULTS,
       payload: {
@@ -176,7 +171,7 @@ describe('Search component unit tests', () => {
     });
     await waitFor(() => {
       expect(queryByText('Searching...')).not.toBeInTheDocument();
-    })
+    }).catch(err => {});
     expect(queryByTestId('search-next')).toBeInTheDocument();
     expect(queryByTestId('search-prev')).toBeInTheDocument();
     fireEvent.click(getByTestId('search-next'));

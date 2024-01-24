@@ -102,7 +102,7 @@
     "react-html-parser": "^2.0.2",
     "react-iframe": "^1.8.5",
     "react-loader-spinner": "^3.1.14",
-    "react-pdf-html": "^1.1.18",
+    "react-pdf-html": "1.1.18",
     "react-redux": "^8.0.5",
     "react-rendered-size": "^1.1.1",
     "react-router-dom": "^5.3.4",
@@ -213,5 +213,9 @@
   },
   "directories": {
     "test": "test"
+  },
+  "overrides": {
+    "@react-pdf/image": "2.2.3",
+    "@react-pdf/pdfkit": "3.0.4"
   }
 }

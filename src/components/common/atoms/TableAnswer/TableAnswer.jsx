@@ -303,13 +303,15 @@ function TableAnswer({
     setRows(rows.map(row => ({ ...row, [newColumn.accessor]: '' })));
 
     setTimeout(() => {
-      tableRef.current.horizontalScrollRef.current.children[0].scrollIntoView({
-        behaviour: 'smooth',
-        inline: 'end'
-      });
+      tableRef.current?.horizontalScrollRef.current?.children[0].scrollIntoView(
+        {
+          behaviour: 'smooth',
+          inline: 'end'
+        }
+      );
       const thead =
-        tableRef.current.horizontalScrollRef.current.lastChild.firstChild;
-      thead.firstChild.lastChild.firstChild.firstChild.children[1].firstChild.focus();
+        tableRef.current?.horizontalScrollRef.current?.lastChild?.firstChild;
+      thead?.firstChild?.lastChild?.firstChild?.firstChild?.children[1]?.firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }
@@ -367,18 +369,20 @@ function TableAnswer({
     setRows([...nextRowsWithExtra]);
 
     setTimeout(() => {
-      tableRef.current.horizontalScrollRef.current.children[0].scrollIntoView({
-        behaviour: 'smooth',
-        block: 'end'
-      });
+      tableRef.current?.horizontalScrollRef.current?.children[0].scrollIntoView(
+        {
+          behaviour: 'smooth',
+          block: 'end'
+        }
+      );
       const tBody =
-        tableRef.current.horizontalScrollRef.current.lastChild.lastChild;
-      if (tBody.lastChild.firstChild.firstChild)
-        tBody.lastChild.firstChild.firstChild.firstChild.children[1].firstChild.focus();
+        tableRef.current?.horizontalScrollRef.current?.lastChild?.lastChild;
+      if (tBody?.lastChild?.firstChild?.firstChild)
+        tBody.lastChild.firstChild.firstChild?.firstChild?.children[1]?.firstChild.focus();
       else
-        tBody.children[
-          tBody.children.length - 2
-        ].firstChild.firstChild.firstChild.children[1].firstChild.focus();
+        tBody?.children[
+          tBody?.children.length - 2
+        ].firstChild?.firstChild?.firstChild?.children[1]?.firstChild.focus();
     }, 700);
     if (onCascadeChange) onCascadeChange();
   }

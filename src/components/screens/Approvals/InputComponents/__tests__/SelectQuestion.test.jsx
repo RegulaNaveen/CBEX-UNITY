@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import SelectQuestion from '../SelectQuestion';
@@ -19,11 +19,13 @@ describe('SelectQuestion', () => {
           { label: 'Option 2', value: 'Option 2' }
         ]
       },
-      questionId: 1
+      questionId: 1,
+      proposalId: 1
     },
     lastAnswer: {
       answer: 'Option 1'
     },
+    disabled: false,
     userData: {},
     socketContext: {
       questionLockWrapper: jest.fn(),
@@ -33,19 +35,35 @@ describe('SelectQuestion', () => {
     checkDisableFlag: jest.fn(() => false)
   };
 
+  const mockSocketContext = {
+    questionLockWrapper: jest.fn(),
+    questionUnlockWrapper: jest.fn()
+  };
   const middlewares = [thunk];
   const mockStore = configureMockStore(middlewares);
-  const store = mockStore(props);
+  let store;
   beforeEach(() => {
-    wrapper = shallow(
+    store = mockStore(props);
+  });
+  it('should render component', () => {
+    const component = mount(
       <Provider store={store}>
         <SelectQuestion {...props} />
       </Provider>
     );
+    expect(component.exists()).toBe(true);
   });
 
-  it('should render without errors', () => {
-    // expect(wrapper.find('AutoCompleteWithAddOption').length).toBe(1);
-    expect(wrapper.exists()).toBe(true);
+  it('should check on focus', () => {
+    const component = mount(
+      <Provider store={store}>
+        <SelectQuestion {...props} />
+      </Provider>
+    );
+    component.find('textarea').first().simulate('focus');
+    component.find('textarea').first().simulate('blur');
+    component.find('textarea').first().simulate('change');
+    expect(mockSocketContext.questionLockWrapper).toHaveBeenCalledTimes(0);
+    expect(mockSocketContext.questionUnlockWrapper).toHaveBeenCalledTimes(0);
   });
 });
