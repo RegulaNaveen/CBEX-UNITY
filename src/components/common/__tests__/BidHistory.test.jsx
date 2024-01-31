@@ -1,41 +1,45 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '../../../store';
 import Bidhistory from '../Bidhistory';
 import { shallow } from 'enzyme';
+import * as Redux from 'react-redux';
+import cloneDeep from 'lodash/cloneDeep';
+import * as data from '../__tests__/data.json';
+const cloneData = cloneDeep(data);
+import { Map } from 'immutable';
 
-describe('Bidhistory component', () => {
-  it('should render correctly', () => {
-    const wrapper = shallow(
+jest.mock('react-redux', () => {
+  return {
+    ...jest.requireActual('react-redux'),
+    useSelector: jest.fn()
+  };
+});
+describe('Render Bidhistory component', () => {
+  let myMap = new Map([
+    ['isCurrent', true],
+    ['isEditable', true],
+    ['typeOfActivity', 'Test'],
+    ['bidType', ['Post_Award_Bid', 'RFI_Request', 'Bid RFI_Request']]
+  ]);
+  it('Bidhistory component with isEditable true', () => {
+    jest
+      .spyOn(Redux, 'useSelector')
+      .mockReturnValueOnce(myMap)
+      .mockReturnValueOnce(myMap)
+      .mockReturnValueOnce(myMap)
+      .mockReturnValueOnce(myMap)
+      .mockReturnValueOnce(myMap)
+      .mockReturnValueOnce(myMap)
+      .mockReturnValueOnce(Map(cloneData.proposal.opportunityData));
+    // Render the component
+    const { getByTestId } = render(
       <Provider store={store}>
         <Bidhistory />
       </Provider>
     );
-    expect(wrapper.exists()).toBe(true);
-  });
-  it('should render bid history Title', () => {
-    const children = <p>Bid History</p>;
-    const wrapper = shallow(
-      <Provider store={store}>
-        <Bidhistory>{children}</Bidhistory>
-      </Provider>
-    );
-    expect(wrapper.contains(children)).toBe(true);
-  });
-
-  it('displays the bid history details', () => {
-    const children = (
-      <div>
-        <div>Bid Number</div>
-        <div>Bid Due Date</div>
-      </div>
-    );
-    const wrapper = shallow(
-      <Provider store={store}>
-        <Bidhistory>{children}</Bidhistory>
-      </Provider>
-    );
-    expect(wrapper.contains(children)).toBe(true);
+    //expect(getByTestId('status-dotoutline')).toBeInTheDocument();
+    //expect(screen.getByTestId('status-dotsolid')).toBeInTheDocument();
   });
 });

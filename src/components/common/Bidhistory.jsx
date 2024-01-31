@@ -189,12 +189,14 @@ const BidHistory = () => {
                             <div>
                               {item.isEditable === true ? (
                                 <StatusDotOutline
+                                  data-testid="status-dotoutline"
                                   className="statusdotoutline"
                                   fontSize="extraSmall"
                                   style={{ color: 'blue', marginRight: '2px' }}
                                 />
                               ) : (
                                 <StatusDotSolid
+                                  className="status-dotsolid"
                                   fontSize="extraSmall"
                                   style={{ marginRight: '2px' }}
                                 />
