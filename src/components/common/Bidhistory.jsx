@@ -186,7 +186,7 @@ const BidHistory = () => {
                       ${isQuestionAnswered ? 'bid-switching-not-allowed' : ''}`}
                             key={item.bidId}
                           >
-                            <div>
+                            <div style={{ display: 'inline-flex' }}>
                               {item.isEditable === true ? (
                                 <StatusDotOutline
                                   data-testid="status-dotoutline"
