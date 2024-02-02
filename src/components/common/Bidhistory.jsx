@@ -19,6 +19,8 @@ import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
 import TextField from 'apollo-react/components/TextField';
+import StatusDotOutline from 'apollo-react-icons/StatusDotOutline';
+import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -184,14 +186,28 @@ const BidHistory = () => {
                       ${isQuestionAnswered ? 'bid-switching-not-allowed' : ''}`}
                             key={item.bidId}
                           >
-                            <div>
+                            <div style={{ display: 'inline-flex' }}>
+                              {item.isEditable === true ? (
+                                <StatusDotOutline
+                                  data-testid="status-dotoutline"
+                                  className="statusdotoutline"
+                                  fontSize="extraSmall"
+                                  style={{ color: 'blue', marginRight: '2px' }}
+                                />
+                              ) : (
+                                <StatusDotSolid
+                                  className="status-dotsolid"
+                                  fontSize="extraSmall"
+                                  style={{ marginRight: '2px' }}
+                                />
+                              )}
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
                                 : item.bidName.startsWith('Post Award')
-                                  ? `Post Award ${item.bidNo}`
-                                  : item.bidName.startsWith('RFI')
-                                    ? `RFI ${item.bidNo}`
-                                    : item.bidName}
+                                ? `Post Award ${item.bidNo}`
+                                : item.bidName.startsWith('RFI')
+                                ? `RFI ${item.bidNo}`
+                                : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'
@@ -223,10 +239,10 @@ const BidHistory = () => {
                     {bidType && bidType.includes('Early_Engagement_Bid')
                       ? 'Early Engagement Development Plan'
                       : bidType && bidType.includes('Post_Award_Bid')
-                        ? ''
-                        : bidType && bidType.includes('RFI_Request')
-                          ? ''
-                          : 'Pertinent Details / Specific Rebid Request'}
+                      ? ''
+                      : bidType && bidType.includes('RFI_Request')
+                      ? ''
+                      : 'Pertinent Details / Specific Rebid Request'}
                   </p>
                   {bidType && bidType.includes('Post_Award_Bid') ? (
                     <div>
