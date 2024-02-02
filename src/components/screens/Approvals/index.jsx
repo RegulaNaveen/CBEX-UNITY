@@ -13,8 +13,10 @@ import {
 } from '../../../redux/actions/approval-actions';
 import {
   getSelectedBid,
-  getProposalQuestions
+  getProposalQuestions,
+  selectAreAllSectionsExpanded
 } from '../../../redux/selectors/proposal';
+import { expandAllSectionsAction } from '../../../redux/actions/proposal-actions';
 import Section from './Section';
 import BidHistory from '../../common/Bidhistory';
 import { DEFAULT } from '../../../constants/app';
@@ -25,10 +27,15 @@ import ViewAboveVerticalTabs from '../../views/ViewAboveVerticalTabs';
 import { SocketContext } from '../../../context/SocketContext';
 import { Add, Refresh } from '../../svg';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
+import ApolloCheckbox from 'apollo-react/components/Checkbox';
 
 const Approvals = () => {
   const approvals = useSelector(state => state.approvals.allApprovals);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const approvalSectionTitles = approvals.map(
+    item => item.ApprovalSectionTitle
+  );
+  const panels = approvalSectionTitles;
   const questions = useSelector(getProposalQuestions);
   const [isShowFilters, setIsShowFilters] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -37,10 +44,28 @@ const Approvals = () => {
   const [direction, setDirection] = useState();
   const [warningTitle, setWarningTitle] = useState('');
   const [warningText, setWarningText] = useState('');
+  const [expandAll, setExpandAll] = useState(() =>
+    Array.from({ length: panels.length }, () => false)
+  );
+
   const selectedBid = useSelector(getSelectedBid)?.toJS();
+  const allSectionsExpanded = useSelector(selectAreAllSectionsExpanded);
   const memoizeBid = useMemo(() => selectedBid, [selectedBid?.id]);
   const dispatch = useDispatch();
   const socketContext = useContext(SocketContext);
+  const allOpen = expandAll.every(exp => exp);
+
+  const handleExpandAllChange = () => {
+    setExpandAll(oldPanels => oldPanels.map(() => !allOpen));
+  };
+
+  const handleChange = panelIndex => () => {
+    setExpandAll(oldPanels => {
+      const newPanels = [...oldPanels];
+      newPanels[panelIndex] = !newPanels[panelIndex];
+      return newPanels;
+    });
+  };
 
   // get email flag status on mount
   useEffect(() => {
@@ -48,7 +73,7 @@ const Approvals = () => {
       dispatch(fetchApprovalSendEmailFlag(allFlags.approvalSendMailFlag));
     }
     setTimeout(() => {
-      socketContext.questionLockDetailsWrapper();
+      socketContext?.questionLockDetailsWrapper();
     }, 2000);
   }, []);
 
@@ -130,17 +155,34 @@ const Approvals = () => {
         <BidHistory data-testid="bid-history" />
       </ViewAboveVerticalTabs>
 
-      <div className="filter-container">
-        <div className="filter-btn">
-          <div
-            data-testid="selectedbid-testid"
-            title="Add New Question"
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={() => onAddQuestion('left')}
-          >
-            <Add className="tasksList-add-icon add-icon-btn" />
+      <div
+        className={` ${
+          !selectedBid?.isCurrent && !selectedBid?.isEditable
+            ? 'add-btn-container'
+            : 'filter-container'
+        }`}
+      >
+        <div className="expand-all">
+          <div className="tasksList-expand-all-icon">
+            <ApolloCheckbox
+              label="Expand All"
+              checked={expandAll.every(exp => exp)}
+              onChange={handleExpandAllChange}
+            />
           </div>
+        </div>
+        <div className="filter-btn">
+          {(selectedBid?.isCurrent || selectedBid?.isEditable) && (
+            <div
+              data-testid="selectedbid-testid"
+              title="Add New Question"
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={() => onAddQuestion('left')}
+            >
+              <Add className="tasksList-add-icon add-icon-btn" />
+            </div>
+          )}
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
@@ -151,11 +193,13 @@ const Approvals = () => {
         {loading && <Loader isInner />}
 
         {!isEmpty(approvals) ? (
-          approvals.map(approval => (
+          approvals.map((approval, index) => (
             <Section
               keyForward={approval.key}
               sectionId={approval.ApprovalSectionId}
               title={approval.ApprovalSectionTitle}
+              isExpandAll={expandAll[index]}
+              handleChange={handleChange(index)}
             />
           ))
         ) : (

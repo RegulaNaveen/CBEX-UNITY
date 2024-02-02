@@ -44,6 +44,7 @@ import {
   onApprovalSectionDeletingAction
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
+import { getSelectedBid } from '../redux/selectors';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -163,7 +164,7 @@ const SocketContextProvider = props => {
   /**
    *  Question answerUpdate
    */
-  const questionAnswerUpdate = (questionId, answer, ws) => {
+  const questionAnswerUpdate = (questionId, answer, ws, proposalId) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -175,7 +176,8 @@ const SocketContextProvider = props => {
             event: 'QUESTION_ANSWER_UPDATE',
             data: {
               latestAnswer: answer,
-              questionId
+              questionId,
+              proposalId
             }
           }
         })
@@ -299,7 +301,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const addQuestion = (questionData, ws) => {
+  const addQuestion = (questionData, ws, proposalId) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -310,7 +312,8 @@ const SocketContextProvider = props => {
           body: {
             event: 'ADD_QUESTION',
             data: {
-              questionData
+              questionData,
+              proposalId
             }
           }
         })
@@ -320,7 +323,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const questionTextUpdate = (questionData, ws) => {
+  const questionTextUpdate = (questionData, ws, proposalId) => {
     try {
       if (!ws) {
         ws = socket.current;
@@ -331,7 +334,8 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_TEXT_UPDATE',
             data: {
-              questionData
+              questionData,
+              proposalId
             }
           }
         })
@@ -352,7 +356,7 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_DELETE',
             data: {
-              questionId
+              questionId              
             }
           }
         })
@@ -543,7 +547,8 @@ const SocketContextProvider = props => {
           syncBidDashboard,
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
-          deleteApprovalCustomTabCustomQuestionFromSocket
+          deleteApprovalCustomTabCustomQuestionFromSocket,
+          selectedBid
         } = props;
 
         // On Message Recieve
@@ -604,7 +609,8 @@ const SocketContextProvider = props => {
                   : data.data.latestAnswer.questionId;
                 setProposalAnswerDatafromSocket(
                   questionId,
-                  data.data.latestAnswer
+                  data.data.latestAnswer,
+                  data.data.proposalId
                 );
               }
               break;
@@ -619,7 +625,7 @@ const SocketContextProvider = props => {
               break;
             case 'QUESTION_TEXT_UPDATE':
               if (data.data.questionData) {
-                editProposalQuestionfromSocket(data.data.questionData);
+                editProposalQuestionfromSocket(data.data.questionData, data.data.proposalId);
               }
               break;
 
@@ -653,7 +659,7 @@ const SocketContextProvider = props => {
               break;
             case 'ADD_QUESTION':
               if (data.data.questionData) {
-                setProposalQuestionFromSocket(data.data.questionData);
+                setProposalQuestionFromSocket(data.data.questionData, data.data.proposalId);
               }
               break;
 
@@ -679,7 +685,10 @@ const SocketContextProvider = props => {
               break;
 
             case 'COST_ESTIMATE_CALCULATING':
-              setPriceModelerRecalculationStatus(true);
+              const currentBidID = selectedBid.toJS().id;
+              if(data?.data?.proposalId === currentBidID){
+                setPriceModelerRecalculationStatus(true);
+              }
               break;
             case 'COST_ESTIMATE_UPDATE':
               updatePriceModelerEstimate(data.data);
@@ -710,7 +719,7 @@ const SocketContextProvider = props => {
             case 'NEXT_MILESTONE_UPDATE':
               console.log('socket data', data);
               const { nextMilestone } = data.data;
-              updateNextMilestoneAction(data.oppId, nextMilestone);
+              updateNextMilestoneAction(data.oppId, nextMilestone, data.data.proposalId);
               break;
 
             case 'CUSTOM_NAME_UPDATE':
@@ -869,7 +878,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const questionLockWrapper = questionId => {
+  const questionLockWrapper = (questionId) => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
   const questionUnlockWrapper = (questionId, answer) => {
@@ -879,9 +888,9 @@ const SocketContextProvider = props => {
     });
   };
 
-  const questionAnswerUpdateWrapper = (questionId, answer) => {
+  const questionAnswerUpdateWrapper = (questionId, answer, proposalId) => {
     waitForSocketConnectionMinInterval(() =>
-      questionAnswerUpdate(questionId, answer, null)
+      questionAnswerUpdate(questionId, answer, null, proposalId)
     );
   };
 
@@ -910,17 +919,17 @@ const SocketContextProvider = props => {
 
   const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {};
 
-  const addQuestionWrapper = questionData => {
-    waitForSocketConnectionMinInterval(() => addQuestion(questionData, null));
+  const addQuestionWrapper = (questionData, proposalId) => {
+    waitForSocketConnectionMinInterval(() => addQuestion(questionData, null, proposalId));
   };
 
-  const questionTextUpdateWrapper = questionData => {
+  const questionTextUpdateWrapper = (questionData, proposalId) => {
     waitForSocketConnectionMinInterval(() =>
-      questionTextUpdate(questionData, null)
+      questionTextUpdate(questionData, null, proposalId)
     );
   };
 
-  const questionDeleteWrapper = questionId => {
+  const questionDeleteWrapper = (questionId) => {
     waitForSocketConnectionMinInterval(() => questionDelete(questionId, null));
   };
 
@@ -1048,7 +1057,9 @@ const SocketContextProvider = props => {
   );
 };
 
-const mapStateToProps = (state: Map) => ({});
+const mapStateToProps = (state: Map) => ({
+  selectedBid: getSelectedBid(state)
+});
 
 const mapDispatchToProps = {
   addNewBid: UpdateNewBid,

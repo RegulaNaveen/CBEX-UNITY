@@ -97,7 +97,6 @@ describe('test question for customer tab', () => {
     });
     fireEvent.blur(questionInput[0]);
     expect(screen.getByText('test question input')).toBeInTheDocument();
-
     const answerInput = screen.getAllByText('test answer one');
     fireEvent.focus(answerInput[0]);
     fireEvent.paste(answerInput[0], {

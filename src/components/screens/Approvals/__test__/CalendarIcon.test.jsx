@@ -1,5 +1,4 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React, { useState as useStateMock } from 'react';
 import { render } from '@testing-library/react';
 import CalendarIcon from '../CalendarIcon';
 import { Provider } from 'react-redux';
@@ -13,7 +12,18 @@ const CalendarIconWithStore = props => {
   );
 };
 
+// Mock state.
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useState: jest.fn()
+}));
+
+const setState = jest.fn();
+
 describe('CalendarIcon', () => {
+  beforeEach(() => {
+    useStateMock.mockImplementation(init => [init, setState]);
+  });
   it('renders the noanswers icon when last answer is an empty object', () => {
     const question = { answers: [{}] };
     const { getByTestId } = render(
@@ -50,5 +60,19 @@ describe('CalendarIcon', () => {
       <CalendarIconWithStore question={question} />
     );
     expect(getByTestId('unity-nonpredicted-calender-icon')).toBeInTheDocument();
+  });
+
+  it.skip('show carry forward indication icon only if flag is enabled', () => {
+    const question = {
+      answers: [{ answer: 'Some answer', userName: 'CarryForwardAnswer' }],
+      answerConfiguration: {
+        type: 'table'
+      },
+      bidAnswerCopy: 'some',
+      latestAnsweredBidNo: 'some'
+    };
+
+    useStateMock.mockImplementation(() => [true, setState]);
+    render(<CalendarIconWithStore question={question} />);
   });
 });

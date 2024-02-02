@@ -1,6 +1,6 @@
 {
   "name": "gbo-efficiencies-frontend",
-  "version": "4.11.1",
+  "version": "4.12.0",
   "description": "GBO Efficiencies Frontend App",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "build:crm": "webpack --env API_ENV=CRM --mode production ",
     "build:uat": "webpack --env API_ENV=UAT --mode production ",
     "build:prod": "webpack --env API_ENV=PROD --mode production ",
-    "coverage": "yarn test -- --env=jsdom --coverage --watchAll=false --timeout=3000",
+    "coverage": "yarn test -- --env=jsdom --coverage --watchAll=false --timeout=3000 --noStackTrace",
     "test": "jest",
     "clear_jest": "jest  --clearCache",
     "lint:fix": "eslint --ext .js,.jsx src test --fix",
@@ -92,6 +92,7 @@
     "querystring-es3": "^0.2.1",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-big-calendar": "^1.6.9",
     "react-day-picker": "^7.4.5",
     "react-dom": "^18.2.0",
@@ -101,7 +102,7 @@
     "react-html-parser": "^2.0.2",
     "react-iframe": "^1.8.5",
     "react-loader-spinner": "^3.1.14",
-    "react-pdf-html": "^1.1.18",
+    "react-pdf-html": "1.1.18",
     "react-redux": "^8.0.5",
     "react-rendered-size": "^1.1.1",
     "react-router-dom": "^5.3.4",
@@ -212,5 +213,9 @@
   },
   "directories": {
     "test": "test"
+  },
+  "overrides": {
+    "@react-pdf/image": "2.2.3",
+    "@react-pdf/pdfkit": "3.0.4"
   }
 }

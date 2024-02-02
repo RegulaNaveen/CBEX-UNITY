@@ -38,6 +38,11 @@ const PROPOSAL = {
   ATTENDEES: 'Attendees'
 };
 
+const TABLEANSWER = {
+  DUPLICATE_ROWS: 'Two or more rows have the same name: ',
+  DUPLICATE_COLUMNS: 'Two or more columns have the same name: '
+};
+
 export const DashboardSFUpDATE = {
   Phase_P__c: 'phase',
   Name: 'customer',
@@ -64,7 +69,10 @@ export const OpportunitySFUpDATE = {
   Drug_Product_Name__c: 'Product name',
   Verbatim_Indication_Term__c: 'Verbatim indication',
   StageName: 'Opportunity status',
-  Early_Engagement_Development_Plan__c: 'earlyEngagementDevelopmentPlan'
+  Early_Engagement_Development_Plan__c: 'earlyEngagementDevelopmentPlan',
+  Describe_Activity__c: 'describeActivity',
+  Type_of_Activity__c: 'typeOfActivity',
+  Request_Detail__c: 'requestDetail'
 };
 
 const PROFILE = {
@@ -104,6 +112,8 @@ const SEARCH = {
 
 const BID_TYPES = {
   Early_Engagement_Bid: 'Early Engagement',
+  Post_Award_Bid: 'Post Award',
+  RFI_Request: 'RFI',
   Clinical_Bid: 'Bid'
 };
 
@@ -145,5 +155,6 @@ export {
   SEARCH,
   BID_TYPES,
   EMAIL_TEMPLATES,
-  SECTIONS
+  SECTIONS,
+  TABLEANSWER
 };

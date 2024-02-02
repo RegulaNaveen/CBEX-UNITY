@@ -1,9 +1,13 @@
 import {
+  formatProposalTeamAnswers,
   generateApprovalEmailInfo,
   generateApprovalEmailURL,
-  getProposalTeamUsers
+  generateEmailTemplateEmail,
+  getProposalTeamUsers,
+  handleHyperlinks
 } from '../emailUtils';
 import '@testing-library/jest-dom/extend-expect';
+import moment from 'moment';
 
 describe('emailUtils getProposalTeamUsers unit tests', () => {
   it('getProposalTeamUsers should return empty array on no input', () => {
@@ -413,9 +417,68 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
         questionId: '0c391d22-8c40-4823-bd8e-9967802ee108',
         section: { sectionOrder: 40, sectionName: 'Different section' },
         questionText: 'Decision',
-        answerConfiguration: { type: 'text', options: [] },
+        answerConfiguration: { type: 'table', options: [] },
         roleNames: ['Core - Proposal Developer'],
-        answers: [{ answer: 'Decision answer' }],
+        answers: [
+          {
+            user: 'AnswerPulledFromSalesforce',
+            userName: 'AnswerPulledFromSalesforce',
+            userRole: 'AnswerPulledFromSalesforce',
+            date: '2023-01-12T09:04:56.720Z',
+            answer: {
+              rows: [
+                {
+                  test: '1',
+                  header: '1',
+                  rowId: 0,
+                  canEdit: true,
+                  hidden: false
+                },
+                {
+                  header: '2',
+                  canEdit: true,
+                  test: '2',
+                  hidden: false
+                },
+                { header: '3', canEdit: true, test: '3', hidden: false }
+              ],
+              columns: [
+                {
+                  accessor: 'header',
+                  frozen: true,
+                  hidden: false,
+                  locked: false,
+                  type: 'text',
+                  alwaysVisible: false,
+                  canEdit: false
+                },
+                {
+                  hidden: true,
+                  alwaysVisible: false,
+                  accessor: 'test',
+                  frozen: false,
+                  locked: false,
+                  type: 'text',
+                  canEdit: false,
+                  header: 'test'
+                }
+              ]
+            },
+            proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+            formattedAnswer: ['qweq'],
+            updatedInPG: false
+          },
+          {
+            user: 'AnswerPulledFromSalesforce',
+            userName: 'AnswerPulledFromSalesforce',
+            userRole: 'AnswerPulledFromSalesforce',
+            date: '2023-01-13T09:12:32.087Z',
+            answer: '',
+            proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+            formattedAnswer: ['qweq'],
+            updatedInPG: false
+          }
+        ],
         questionOrder: 29,
         visible: true,
         locked: false,
@@ -436,7 +499,9 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
         integration: '',
         events: '',
         notApplicable: false,
-        questionApproval: false
+        questionApproval: false,
+        questionTableConfig:
+          '{"canEditColumn":false,"canAddRow":true,"rows":[{"header":"tptabler1","tptablec3":"","tptablec1":"","rowId":0,"tptablec2":""},{"header":"tptabler2","tptablec3":"","tptablec1":"","rowId":1,"tptablec2":""},{"header":"tptabler3","tptablec3":"","tptablec1":"","rowId":2,"tptablec2":""}],"columns":[{"accessor":"header","frozen":true,"hidden":false,"locked":false,"type":"text","alwaysVisible":false},{"hidden":false,"alwaysVisible":false,"accessor":"tptablec1","header":"tptablec1","frozen":false,"locked":false,"type":"text"},{"hidden":false,"alwaysVisible":false,"accessor":"tptablec2","header":"tptablec2","frozen":false,"locked":false,"type":"text"},{"hidden":false,"alwaysVisible":false,"accessor":"tptablec3","header":"tptablec3","frozen":false,"locked":false,"type":"text"}],"canAddColumn":true,"canEditRow":false}'
       },
       {
         proposalId: '705b8f01-8b34-467b-bab3-0ed7ef30a1cd',
@@ -581,6 +646,82 @@ describe('emailUtils generateApprovalEmailInfo unit tests', () => {
       {},
       []
     );
-    expect(result.subject).toMatch(/Decision answer/);
+    expect(result.subject).toMatch(
+      'Strategy Approval test 01 for    (Opportunity  Bid )'
+    );
+  });
+
+  it('should generate the correct email template', () => {
+    const subject = 'Test Subject';
+    const to = ['test1@example.com', 'test2@example.com'];
+    const cc = ['test3@example.com'];
+    const body = 'Test Body';
+    const result = generateEmailTemplateEmail(subject, to, cc, body);
+    const expected =
+      `https://outlook.office.com/?path=/mail/action/compose&to=${to.join(
+        ','
+      )}` +
+      `?cc=${cc.join(
+        ','
+      )}&subject=${subject}&body=Unity%20has%20copied%20the%20configured%20email%20content%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20into%20the%20Body%20of%20this%20email.&online=1`;
+
+    expect(result).toEqual(expected);
+  });
+  it('should return N/A for N/A answer and date type config', () => {
+    const answer = 'N/A';
+    const config = { type: 'date' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual('N/A');
+  });
+
+  it('should format date for valid date answer and date type config', () => {
+    const answer = '2022-01-01';
+    const config = { type: 'date' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual(moment(answer).format('DD-MMM-YYYY'));
+  });
+
+  it('should return empty string for invalid date answer and date type config', () => {
+    const answer = 'invalid date';
+    const config = { type: 'date' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual('');
+  });
+
+  it('should return string answer for non-date type config', () => {
+    const answer = 'test';
+    const config = { type: 'text' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual(answer);
+  });
+
+  it('should return undefined answer as is', () => {
+    const answer = undefined;
+    const config = { type: 'text' };
+
+    const result = handleHyperlinks(answer, config);
+    expect(result).toEqual(answer);
+  });
+  it('should format the proposal team answers correctly', () => {
+    const answer = 'JohnDoe,JaneDoe'; // adjust this input as needed
+    const PROPOSAL_TEAM_USER_MATCH_REGEXP = /(\w+)(\d+)/; // replace with the actual regular expression
+
+    const result = formatProposalTeamAnswers(answer);
+    const expected = answer
+      .split(',')
+      .map(user => {
+        const userMatchFound = user.match(PROPOSAL_TEAM_USER_MATCH_REGEXP);
+        if (userMatchFound !== null) {
+          return `${userMatchFound[1]} ${userMatchFound[2]}`;
+        }
+        return user;
+      })
+      .join(', ');
+
+    expect(result).toEqual(expected);
   });
 });

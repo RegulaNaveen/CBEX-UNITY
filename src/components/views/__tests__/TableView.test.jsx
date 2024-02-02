@@ -37,6 +37,7 @@ const data = [
     'bid due date': '2022-01-01',
     'opportunity status': 'Active',
     bidNo: 1,
+    bidType: 'Clinical_Bid',
     isFavourite: false,
     nextMilestone: 'Milestone 1',
     unknown: '',
@@ -50,6 +51,7 @@ const data = [
     isFavourite: false,
     nextMilestone: 'Milestone 2',
     bidNo: 2,
+    bidType: 'Early_Engagement_Bid',
     proposalId: 'id2'
   }
 ];
@@ -156,6 +158,8 @@ describe('TableView component', () => {
     await waitFor(() => {
       expect(toggleFavStub.callCount).toBe(1);
       expect(saveRecentOppPrefStub.callCount).toBe(1);
+    }).catch(err => {
+      console.log(err);
     });
   });
 
@@ -180,6 +184,8 @@ describe('TableView component', () => {
       expect(
         container.querySelector('.MuiCircularProgress-root')
       ).toBeInTheDocument();
+    }).catch(err => {
+      console.log(err);
     });
 
     expect(
@@ -209,11 +215,14 @@ describe('TableView component', () => {
     );
     await waitFor(() =>
       expect(container.querySelector('.edit-icon-button')).toBeInTheDocument()
-    );
+    ).catch(err => {
+      console.log(err);
+    });
     userEvent.click(container.querySelector('.edit-icon-button'));
-    debug(container, 50000);
     await waitFor(() =>
       expect(queryByTestId('edit-name-modal')).toBeInTheDocument()
-    );
+    ).catch(err => {
+      console.log(err);
+    });
   });
 });

@@ -5977,7 +5977,97 @@
         },
         "questionText": "Indication",
         "answerConfiguration": {
-          "type": "text",
+          "type": "table",
+          "options": []
+        },
+        "roleNames": ["Business Developer"],
+        "answers": [],
+        "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"header\":\"tptabler1\",\"tptablec3\":\"\",\"tptablec1\":\"\",\"rowId\":0,\"tptablec2\":\"\"},{\"header\":\"tptabler2\",\"tptablec3\":\"\",\"tptablec1\":\"\",\"rowId\":1,\"tptablec2\":\"\"},{\"header\":\"tptabler3\",\"tptablec3\":\"\",\"tptablec1\":\"\",\"rowId\":2,\"tptablec2\":\"\"}],\"columns\":[{\"accessor\":\"header\",\"frozen\":true,\"hidden\":false,\"locked\":false,\"type\":\"text\",\"alwaysVisible\":false},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"tptablec1\",\"header\":\"tptablec1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"tptablec2\",\"header\":\"tptablec2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"tptablec3\",\"header\":\"tptablec3\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":true,\"canEditRow\":false}",
+        "questionOrder": 2,
+        "visible": true,
+        "locked": false,
+        "sfObject": "Opportunity",
+        "sfField": "Indication__c",
+        "milestone": "Overview",
+        "milestoneNew": [
+          {
+            "Name": "Overview",
+            "Color": "#015ff1"
+          }
+        ],
+        "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing",
+        "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+        "hasDifferentSFanswer": false,
+        "currentSFanswer": {
+          "value": ["Cardiovascular Disease"],
+          "time": "2023-01-13T09:12:32.087Z"
+        },
+        "isCustomQuestion": false,
+        "questionJSON": "{\"blocks\":[{\"key\":\"fao2w\",\"text\":\"Indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+        "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8vq7g\" data-offset-key=\"fao2w-0-0\"><div data-offset-key=\"fao2w-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"fao2w-0-0\"><span data-text=\"true\">Indication(</span></span></div></div></div>",
+        "questionHintJSON": "",
+        "questionHintHTML": "",
+        "active": true,
+        "integration": "",
+        "events": "",
+        "notApplicable": false,
+        "questionApproval": false
+      },
+      {
+        "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+        "questionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+        "section": {
+          "sectionOrder": 3,
+          "sectionName": "Opportunity Information from CRM (for Team review)"
+        },
+        "questionText": "Indication",
+        "answerConfiguration": {
+          "type": "table",
+          "options": []
+        },
+        "roleNames": ["Business Developer"],
+        "answers": [],
+        "questionTableConfig": 123,
+        "questionOrder": 2,
+        "visible": true,
+        "locked": false,
+        "sfObject": "Opportunity",
+        "sfField": "Indication__c",
+        "milestone": "Overview",
+        "milestoneNew": [
+          {
+            "Name": "Overview",
+            "Color": "#015ff1"
+          }
+        ],
+        "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing",
+        "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+        "hasDifferentSFanswer": false,
+        "currentSFanswer": {
+          "value": ["Cardiovascular Disease"],
+          "time": "2023-01-13T09:12:32.087Z"
+        },
+        "isCustomQuestion": false,
+        "questionJSON": "{\"blocks\":[{\"key\":\"fao2w\",\"text\":\"Indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+        "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8vq7g\" data-offset-key=\"fao2w-0-0\"><div data-offset-key=\"fao2w-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"fao2w-0-0\"><span data-text=\"true\">Indication(</span></span></div></div></div>",
+        "questionHintJSON": "",
+        "questionHintHTML": "",
+        "active": true,
+        "integration": "",
+        "events": "",
+        "notApplicable": false,
+        "questionApproval": false
+      },
+      {
+        "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+        "questionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+        "section": {
+          "sectionOrder": 3,
+          "sectionName": "Opportunity Information from CRM (for Team review)"
+        },
+        "questionText": "Indication",
+        "answerConfiguration": {
+          "type": "table",
           "options": []
         },
         "roleNames": ["Business Developer"],
@@ -5987,7 +6077,45 @@
             "userName": "AnswerPulledFromSalesforce",
             "userRole": "AnswerPulledFromSalesforce",
             "date": "2023-01-12T09:04:56.720Z",
-            "answer": ["qweq"],
+            "answer": {
+              "rows": [
+                {
+                  "test": "1",
+                  "header": "1",
+                  "rowId": 0,
+                  "canEdit": true,
+                  "hidden": false
+                },
+                {
+                  "header": "2",
+                  "canEdit": true,
+                  "test": "2",
+                  "hidden": false
+                },
+                { "header": "3", "canEdit": true, "test": "3", "hidden": false }
+              ],
+              "columns": [
+                {
+                  "accessor": "header",
+                  "frozen": true,
+                  "hidden": false,
+                  "locked": false,
+                  "type": "text",
+                  "alwaysVisible": false,
+                  "canEdit": false
+                },
+                {
+                  "hidden": true,
+                  "alwaysVisible": false,
+                  "accessor": "test",
+                  "frozen": false,
+                  "locked": false,
+                  "type": "text",
+                  "canEdit": false,
+                  "header": "test"
+                }
+              ]
+            },
             "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
             "formattedAnswer": ["qweq"],
             "updatedInPG": false
@@ -5998,6 +6126,61 @@
             "userRole": "AnswerPulledFromSalesforce",
             "date": "2023-01-13T09:12:32.087Z",
             "answer": ["qweq"],
+            "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+            "formattedAnswer": ["qweq"],
+            "updatedInPG": false
+          }
+        ],
+        "questionOrder": 2,
+        "visible": true,
+        "locked": false,
+        "sfObject": "Opportunity",
+        "sfField": "Indication__c",
+        "milestone": "Overview",
+        "milestoneNew": [
+          {
+            "Name": "Overview",
+            "Color": "#015ff1"
+          }
+        ],
+        "interestedParties": "Analytics Strategy Lead,Business Developer,Clinical DS&B,Medical Strategy Lead,Project Lead,Proposal Developer,TSL,Biostats,Business Account Manager,CEVA,Data Management,Executive Oversight,Feasibility,Medical Writing,Global Site Activation (GSA),Safety,Site Analytics,Strategic Pricing",
+        "opportunityType": "Opportunity Launch Call (Pilot),Core Strategy Call Template - AMR/EMEA,Default Type,Core Strategy Call Template - APAC,Core Strategy and Data Planning Calls - AMR/EMEA,Ballpark,Non-Core Clinical Studies",
+        "hasDifferentSFanswer": false,
+        "currentSFanswer": {
+          "value": ["Cardiovascular Disease"],
+          "time": "2023-01-13T09:12:32.087Z"
+        },
+        "isCustomQuestion": false,
+        "questionJSON": "{\"blocks\":[{\"key\":\"fao2w\",\"text\":\"Indication\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+        "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"8vq7g\" data-offset-key=\"fao2w-0-0\"><div data-offset-key=\"fao2w-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"fao2w-0-0\"><span data-text=\"true\">Indication(</span></span></div></div></div>",
+        "questionHintJSON": "",
+        "questionHintHTML": "",
+        "active": true,
+        "integration": "",
+        "events": "",
+        "notApplicable": false,
+        "questionApproval": false
+      },
+      {
+        "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
+        "questionId": "8959b856-0f49-4c4e-8ec8-f5955320866a",
+        "section": {
+          "sectionOrder": 3,
+          "sectionName": "Opportunity Information from CRM (for Team review)"
+        },
+        "questionText": "Indication",
+        "answerConfiguration": {
+          "type": "table",
+          "options": []
+        },
+        "roleNames": ["Business Developer"],
+        "answers": [
+          {
+            "user": "AnswerPulledFromSalesforce",
+            "userName": "AnswerPulledFromSalesforce",
+            "userRole": "AnswerPulledFromSalesforce",
+            "date": "2023-01-12T09:04:56.720Z",
+            "answer": 123,
             "proposalId": "86462966-7e94-4648-b1e7-fb908f48eaf0",
             "formattedAnswer": ["qweq"],
             "updatedInPG": false

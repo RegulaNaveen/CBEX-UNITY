@@ -1,5 +1,5 @@
 // @flow
-import { isEmpty, cloneDeep, uniqBy } from 'lodash';
+import { isEmpty, cloneDeep, uniqBy, orderBy } from 'lodash';
 import { fromJS } from 'immutable';
 import axios from 'axios';
 import type { Dispatch, ThunkAction } from './action-types';
@@ -39,7 +39,11 @@ import {
   getFavouriteProposals,
   getfetchUserTagFlag
 } from '../selectors';
-import { getSelectedBid, getUniqueMilestones } from '../selectors/proposal';
+import {
+  getSelectedBid,
+  getUniqueMilestones,
+  getOpportunityData
+} from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
@@ -49,6 +53,7 @@ import { doSearchAction } from './search-actions';
 import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import featureFlags from '../../constants/featureFlags';
+import proposal from '../reducers/proposal';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -144,7 +149,7 @@ const {
 /**
  * Updates bidNo Query param without page reload
  */
-const updateBidNoQueryparam = bidNo => {
+export const updateBidNoQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
@@ -157,7 +162,7 @@ const updateBidNoQueryparam = bidNo => {
   }
 };
 
-const updateBidTypeQueryparam = bidNo => {
+export const updateBidTypeQueryparam = bidNo => {
   if ('URLSearchParams' in window) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
@@ -287,17 +292,17 @@ export const getPriceModelerData = proposalId => {
     }
   };
 };
-
-export const getBidCostData = proposalId => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    try {
-      const response = await bidCostApi(proposalId);
-      dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
+// commented unused code
+// export const getBidCostData = proposalId => {
+//   return async (dispatch: Dispatch<string, Object>) => {
+//     try {
+//       const response = await bidCostApi(proposalId);
+//       dispatch({ type: SET_BID_COST_DATA_FIELDS, payload: response.data });
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+// };
 
 export const setApprovalQuestionLoading = (questionId, value) => {
   return async (dispatch: Dispatch<string, Object>) => {
@@ -349,10 +354,13 @@ export const setPriceModelerRecalculationStatusAction = (
  * @param {costUpdate} Object
  */
 export const updatePriceModelerEstimateAction = (costUpdate = {}) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const selectedBid = getSelectedBid(getState()).toJS();
     try {
       if (!isEmpty(costUpdate)) {
-        dispatch({ type: PRICE_MODELER_UPDATE, payload: costUpdate });
+        if (selectedBid?.id === costUpdate?.ProposalId) {
+          dispatch({ type: PRICE_MODELER_UPDATE, payload: costUpdate });
+        }
       }
       dispatch(setPriceModelerRecalculationStatusAction(false));
     } catch (error) {
@@ -397,7 +405,11 @@ export const setProposalAnswerData = (
         if (isPriceModelerQuestion(questionId, allQuestions)) {
           await getPriceModelerData(proposalId)(dispatch);
         }
-        await socketContext.questionAnswerUpdateWrapper(questionId, data);
+        await socketContext.questionAnswerUpdateWrapper(
+          questionId,
+          data,
+          proposalId
+        );
         dispatch({
           type: PROPOSAL_ANSWER,
           payload: {
@@ -433,118 +445,124 @@ export const setProposalAnswerData = (
 
 export const setProposalAnswerDatafromSocket = (
   questionId: string,
-  data: any
+  data: any,
+  proposalId
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
-    });
-    const questionsFilter = getQuestionsFilters(getState());
-
-    try {
-      dispatch({
-        type: PROPOSAL_ANSWER,
-        payload: {
-          data: Array.isArray(data.answers) ? data.answers : data,
-          questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
-        }
-      });
-
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
+    const selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
       dispatch({
         type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: false }
+        payload: { questionId, loading: true }
       });
-    } catch (err) {
-      console.log('error occurred ', err);
-      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+      const questionsFilter = getQuestionsFilters(getState());
+
+      try {
+        dispatch({
+          type: PROPOSAL_ANSWER,
+          payload: {
+            data: Array.isArray(data.answers) ? data.answers : data,
+            questionId,
+            hasDifferentSFanswer: data.hasDifferentSFanswer || false
+          }
+        });
+
+        const { modifiedQuestions } = data;
+        if (!isEmpty(modifiedQuestions)) {
+          modifiedQuestions.forEach(question => {
+            dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+          });
+        }
+        dispatch(onQuestionsFilterApplied(questionsFilter));
+        dispatch({
+          type: PROPOSAL_ANSWER_LOADING,
+          payload: { questionId, loading: false }
+        });
+      } catch (err) {
+        console.log('error occurred ', err);
+        dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+      }
     }
   };
 };
+// commented unused code
+// export const setProposalQuestionfromSocket = (
+//   questionId: string,
+//   data: any
+// ): ThunkAction<string, Object> => {
+//   return async (dispatch: Dispatch<string, Object>, getState) => {
+//     dispatch({
+//       type: PROPOSAL_ANSWER_LOADING,
+//       payload: { questionId, loading: true }
+//     });
+//     const questionsFilter = getQuestionsFilters(getState());
 
-export const setProposalQuestionfromSocket = (
-  questionId: string,
-  data: any
-): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>, getState) => {
-    dispatch({
-      type: PROPOSAL_ANSWER_LOADING,
-      payload: { questionId, loading: true }
-    });
-    const questionsFilter = getQuestionsFilters(getState());
+//     try {
+//       dispatch({
+//         type: PROPOSAL_ANSWER,
+//         payload: {
+//           data: Array.isArray(data.answers) ? data.answers : data,
+//           questionId,
+//           hasDifferentSFanswer: data.hasDifferentSFanswer || false
+//         }
+//       });
 
-    try {
-      dispatch({
-        type: PROPOSAL_ANSWER,
-        payload: {
-          data: Array.isArray(data.answers) ? data.answers : data,
-          questionId,
-          hasDifferentSFanswer: data.hasDifferentSFanswer || false
-        }
-      });
-
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
-      dispatch({
-        type: PROPOSAL_ANSWER_LOADING,
-        payload: { questionId, loading: false }
-      });
-    } catch (err) {
-      console.log('error occurred ', err);
-      dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
-    }
-  };
-};
+//       const { modifiedQuestions } = data;
+//       if (!isEmpty(modifiedQuestions)) {
+//         modifiedQuestions.forEach(question => {
+//           dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+//         });
+//       }
+//       dispatch(onQuestionsFilterApplied(questionsFilter));
+//       dispatch({
+//         type: PROPOSAL_ANSWER_LOADING,
+//         payload: { questionId, loading: false }
+//       });
+//     } catch (err) {
+//       console.log('error occurred ', err);
+//       dispatch({ type: PROPOSAL_ANSWER_ERROR, payload: { questionId, err } });
+//     }
+//   };
+// };
 
 export const updateAnswerFromWebSocket = (
   data = {}
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    const { questionId } = data;
+    const { questionId, proposalId } = data;
     let questionsFilter = getQuestionsFilters(getState());
-
-    try {
-      if (Array.isArray(data.answers)) {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data: data.answers,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
-      } else {
-        dispatch({
-          type: PROPOSAL_ANSWER,
-          payload: {
-            data,
-            questionId,
-            hasDifferentSFanswer: data.hasDifferentSFanswer || false
-          }
-        });
+    const selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
+      try {
+        if (Array.isArray(data.answers)) {
+          dispatch({
+            type: PROPOSAL_ANSWER,
+            payload: {
+              data: data.answers,
+              questionId,
+              hasDifferentSFanswer: data.hasDifferentSFanswer || false
+            }
+          });
+        } else {
+          dispatch({
+            type: PROPOSAL_ANSWER,
+            payload: {
+              data,
+              questionId,
+              hasDifferentSFanswer: data.hasDifferentSFanswer || false
+            }
+          });
+        }
+        const { modifiedQuestions } = data;
+        if (!isEmpty(modifiedQuestions)) {
+          modifiedQuestions.forEach(question => {
+            dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
+          });
+        }
+        dispatch(onQuestionsFilterApplied(questionsFilter));
+      } catch (err) {
+        console.log('Error in updating answer from WS', err);
       }
-      const { modifiedQuestions } = data;
-      if (!isEmpty(modifiedQuestions)) {
-        modifiedQuestions.forEach(question => {
-          dispatch({ type: UPDATE_MODIFIED_QUESTION, payload: { question } });
-        });
-      }
-      dispatch(onQuestionsFilterApplied(questionsFilter));
-    } catch (err) {
-      console.log('Error in updating answer from WS', err);
     }
   };
 };
@@ -647,7 +665,8 @@ export const setProposalQuestion = (
       const data = await setProposalQuestionData(proposalId, questionData);
 
       dispatch({ type: PROPOSAL_SET_QUESTION, payload: data });
-      if (socketContext) await socketContext?.addQuestionWrapper(data);
+      if (socketContext)
+        await socketContext?.addQuestionWrapper(data, proposalId);
       return data;
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
@@ -656,29 +675,33 @@ export const setProposalQuestion = (
 };
 
 export const setProposalQuestionFromSocket = (
-  questionData: Object
+  questionData: Object,
+  proposalId
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: {}
-    });
-    try {
-      dispatch({ type: PROPOSAL_SET_QUESTION, payload: questionData });
-      if (questionData && questionData?.section?.tabID) {
-        dispatch({
-          type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
-          payload: questionData
-        });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    const selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
+      dispatch({
+        type: PROPOSAL_SET_QUESTION_LOADING,
+        payload: {}
+      });
+      try {
+        dispatch({ type: PROPOSAL_SET_QUESTION, payload: questionData });
+        if (questionData && questionData?.section?.tabID) {
+          dispatch({
+            type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+            payload: questionData
+          });
+        }
+        if (questionData && questionData?.section?.approvalSectionName) {
+          dispatch({
+            type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
+            payload: questionData
+          });
+        }
+      } catch (err) {
+        dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
       }
-      if (questionData && questionData?.section?.approvalSectionName) {
-        dispatch({
-          type: SET_APPROVAL_QUESTION_APPROVALS_TAB,
-          payload: questionData
-        });
-      }
-    } catch (err) {
-      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
   };
 };
@@ -1098,7 +1121,6 @@ export function onQuestionsFilterApplied(questionsFilter) {
       type: ON_APPLY_QUESTIONS_FILTER,
       payload: { questionsFilter }
     });
-
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
 
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
@@ -1305,7 +1327,8 @@ export const editProposalQuestion = (
         questionData
       );
 
-      if (socketContext) await socketContext?.questionTextUpdateWrapper(data);
+      if (socketContext)
+        await socketContext?.questionTextUpdateWrapper(data, proposalId);
       dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
     } catch (err) {
       dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
@@ -1314,30 +1337,34 @@ export const editProposalQuestion = (
 };
 
 export const editProposalQuestionfromSocket = (
-  questionData: Object
+  questionData: Object,
+  proposalId
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: PROPOSAL_SET_QUESTION_LOADING,
-      payload: {}
-    });
-    try {
-      const data = questionData;
-      dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
-      if (data && data?.section?.tabID) {
-        dispatch({
-          type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
-          payload: data
-        });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    const selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
+      dispatch({
+        type: PROPOSAL_SET_QUESTION_LOADING,
+        payload: {}
+      });
+      try {
+        const data = questionData;
+        dispatch({ type: PROPOSAL_EDIT_QUESTION, payload: data });
+        if (data && data?.section?.tabID) {
+          dispatch({
+            type: UNITY_TABS.UPDATE_CUSTOM_QUESTION_CUSTOM_TAB,
+            payload: data
+          });
+        }
+        if (data && data?.section?.approvalSectionName) {
+          dispatch({
+            type: UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
+            payload: data
+          });
+        }
+      } catch (err) {
+        dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
       }
-      if (data && data?.section?.approvalSectionName) {
-        dispatch({
-          type: UPDATE_APPROVAL_QUESTION_CUSTOM_TAB,
-          payload: data
-        });
-      }
-    } catch (err) {
-      dispatch({ type: PROPOSAL_SET_QUESTION_ERROR, payload: err });
     }
   };
 };
@@ -1449,7 +1476,8 @@ export const getOpportunity = (
     const flags = getfetchUserTagFlag(getState());
     const earlyEngagmentBidHistoryFlag =
       flags[featureFlags.EARLY_ENGAGEMENT_BID_HISTORY];
-
+    const postAwardBidHistoryFlag = flags[featureFlags.POST_AWARD_BID_HISTORY];
+    const rfiRequestFlag = flags[featureFlags.RFI_BID_HISTORY];
     try {
       let allProposals = await getAllProposals(id);
       if (earlyEngagmentBidHistoryFlag === false) {
@@ -1462,6 +1490,26 @@ export const getOpportunity = (
           allProposals[0].isCurrent = true;
         }
       }
+      if (postAwardBidHistoryFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !== 'Post_Award_Bid'
+        );
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
+      }
+
+      if (rfiRequestFlag === false) {
+        allProposals = allProposals.filter(
+          proposal =>
+            (proposal.proposal.bidType || 'Clinical_Bid') !== 'RFI_Request'
+        );
+        if (allProposals.length > 0) {
+          allProposals[0].isCurrent = true;
+        }
+      }
+
       const proposal = allProposals.find(
         thisProposal =>
           thisProposal.proposal.proposalDetails.bidNo === bidNo &&
@@ -1586,6 +1634,22 @@ export const getOpportunity = (
   };
 };
 
+export const checkIsEditableTrue = (selectedBid, allProposals) => {
+  const bidList = Object.groupBy(allProposals, item =>
+    item.proposal.bidType ? item.proposal.bidType : 'Clinical_Bid'
+  );
+  const selectedBidType = selectedBid.bidType || 'Clinical_Bid';
+  if (bidList[selectedBidType] && bidList[selectedBidType].length > 0) {
+    if (
+      bidList[selectedBidType][0].proposal.proposalDetails.bidNo ==
+      selectedBid.bidNo
+    ) {
+      return true;
+    } else return false;
+  }
+  return true;
+};
+
 export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
@@ -1611,6 +1675,8 @@ export const changeBid = (bid, viewType) => {
 
   return async (dispatch, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
+    const OppoData = getOpportunityData(getState()).toJS();
+    const allProposals = Object.values(OppoData);
     dispatch({ type: CHANGE_BID_LOADER, payload: true });
     if (selectedBid.bidName !== bid?.bidName) {
       dispatch({ type: SEARCH.SET_CLEAR_INPUT_FLAG });
@@ -1625,7 +1691,9 @@ export const changeBid = (bid, viewType) => {
       type: CHANGE_BID,
       payload: {
         proposalDetails: { ...response.data, isCurrent: bid.isCurrent },
-        bid
+        bid: {
+          ...bid
+        }
       }
     });
     dispatch({
@@ -1748,16 +1816,17 @@ export const activateProposalLoading = () => {
 };
 
 /**
+ * commented unused code
  * Deactivate Proposal Loading - Action
  */
-export const deactivateProposalLoading = () => {
-  return async dispatch => {
-    dispatch({
-      type: PROPOSAL_INFO_ERROR,
-      payload: undefined
-    });
-  };
-};
+// export const deactivateProposalLoading = () => {
+//   return async dispatch => {
+//     dispatch({
+//       type: PROPOSAL_INFO_ERROR,
+//       payload: undefined
+//     });
+//   };
+// };
 
 /**
  * Fetch All Opportunity Type
@@ -1802,45 +1871,39 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB = (
-  proposalId,
-  email,
-  sectionOrder,
-  sectionName
-) => async () => {
-  try {
-    // Api Response
-    const response = await deleteProposalUser(proposalId, {
-      email,
-      section: { sectionOrder, sectionName }
-    });
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-  } catch (error) {
-    // Error
-    console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const deleteProposalUserFromDB =
+  (proposalId, email, sectionOrder, sectionName) => async () => {
+    try {
+      // Api Response
+      const response = await deleteProposalUser(proposalId, {
+        email,
+        section: { sectionOrder, sectionName }
+      });
+      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+    } catch (error) {
+      // Error
+      console.log(error.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory = (
-  proposalId: string,
-  questionId: string
-) => async () => {
-  try {
-    // Api Response
-    const response = await getProposalAnswer(proposalId, questionId);
-    return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const getProposalAnswerHistory =
+  (proposalId: string, questionId: string) => async () => {
+    try {
+      // Api Response
+      const response = await getProposalAnswer(proposalId, questionId);
+      return { status: true, title: DEFAULT.SUCCESS, data: response };
+    } catch (error) {
+      // Error
+      console.log(error?.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Set Flag for Event Launcher
@@ -1990,36 +2053,39 @@ export const onSaveCustomName = (oppNo, customName) => {
   };
 };
 
-export const updateNextMilestone = (oppNumber, nextMilestone) => {
+export const updateNextMilestone = (oppNumber, nextMilestone, proposalId) => {
   return async (dispatch, getState) => {
-    try {
-      let proposals = getProposals(getState());
-      let proposalInfo = getProposalDetails(getState());
-      let proposalsFavourite = getFavouriteProposals(getState());
-      const proposalIndex = proposals.findIndex(
-        proposal => proposal['opportunity number'] === oppNumber
-      );
-      if (proposalIndex > -1) {
-        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
-        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
-      }
+    let selectedBid = getSelectedBid(getState()).toJS();
+    if (selectedBid?.id === proposalId) {
+      try {
+        let proposals = getProposals(getState());
+        let proposalInfo = getProposalDetails(getState());
+        let proposalsFavourite = getFavouriteProposals(getState());
+        const proposalIndex = proposals.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        if (proposalIndex > -1) {
+          proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+        }
 
-      const favouriteIndex = proposalsFavourite.findIndex(
-        proposal => proposal['opportunity number'] === oppNumber
-      );
-      if (favouriteIndex > -1) {
-        proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
-        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
-      }
+        const favouriteIndex = proposalsFavourite.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        if (favouriteIndex > -1) {
+          proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+        }
 
-      if (proposalInfo['CRM #'] === oppNumber) {
-        dispatch({
-          type: SET_NEXT_MILESTONE,
-          payload: nextMilestone
-        });
+        if (proposalInfo['CRM #'] === oppNumber) {
+          dispatch({
+            type: SET_NEXT_MILESTONE,
+            payload: nextMilestone
+          });
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   };
 };

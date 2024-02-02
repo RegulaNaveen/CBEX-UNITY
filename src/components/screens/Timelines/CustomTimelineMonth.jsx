@@ -223,7 +223,7 @@ class MonthView extends React.Component {
               size="small"
               style={{ marginRight: 0, marginBottom: 10 }}
               onClick={() => this.props.setShowAddModal(true)}
-              disabled={!this.props.selectedBid.isCurrent}
+              disabled={!this.props.selectedBid.isEditable}
             >
               Add New
             </Button>
@@ -308,7 +308,7 @@ class MonthView extends React.Component {
   readerDateHeading = ({ date, className, ...props }) => {
     let { date: currentDate, getDrilldownView, localizer } = this.props;
     let isOffRange = localizer.neq(date, currentDate, 'month');
-    let isCurrent = localizer.isSameDate(date, currentDate);
+    let isEditable = localizer.isSameDate(date, currentDate);
     let drilldownView = getDrilldownView(date);
     let label = this.getDateHeadingLabel(date);
 
@@ -320,7 +320,7 @@ class MonthView extends React.Component {
         className={clsx(
           className,
           isOffRange && 'rbc-off-range',
-          isCurrent && 'rbc-current'
+          isEditable && 'rbc-current'
         )}
         role="cell"
       >

@@ -17,8 +17,11 @@ import {
 import { shouldShowSection } from './utils';
 import { Add, Refresh } from '../../svg';
 import AddQuestionModalComponent from '../../views/modals/AddQuestionModal';
+import ApolloCheckbox from 'apollo-react/components/Checkbox';
+import { getSelectedBid } from '../../../redux/selectors/proposal';
 
 const CustomTabs = ({ tabId, key }) => {
+  const selectedBid = useSelector(getSelectedBid);
   const allTab = useSelector(state => state.unitytab.allTabs);
   const allQuestion = useSelector(state =>
     state.proposal.get('proposalQuestions')
@@ -29,9 +32,30 @@ const CustomTabs = ({ tabId, key }) => {
       return o.UnityTabSectionOrder;
     }
   ]);
+  const tabTitle = tab.map(item => {
+    return item.UnityTabSectionTitle;
+  });
+
+  const panels = tabTitle;
   const [isShowFilters, setIsShowFilters] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [expandAll, setExpandAll] = useState(() =>
+    Array.from({ length: panels.length }, () => false)
+  );
+  const allOpen = expandAll.every(exp => exp);
   const dispatch = useDispatch();
+
+  const handleExpandAllChange = () => {
+    setExpandAll(oldPanels => oldPanels.map(() => !allOpen));
+  };
+
+  const handleChange = panelIndex => () => {
+    setExpandAll(oldPanels => {
+      const newPanels = [...oldPanels];
+      newPanels[panelIndex] = !newPanels[panelIndex];
+      return newPanels;
+    });
+  };
 
   useEffect(() => {
     dispatch(resetFiltersAction());
@@ -96,17 +120,35 @@ const CustomTabs = ({ tabId, key }) => {
         <BidHistory data-testid="bid-history" />
       </ViewAboveVerticalTabs>
 
-      <div className="filter-container">
-        <div className="filter-btn">
-          <div
-            data-testid="selectedbid-testid"
-            title="Add New Question"
-            className="tasksList-add-icon-wrapper"
-            role="presentation"
-            onClick={onAddQuestion}
-          >
-            <Add className="tasksList-add-icon add-icon-btn" />
+      <div
+        className={` ${
+          !selectedBid.get('isCurrent') && !selectedBid.get('isEditable')
+            ? 'add-btn-container'
+            : 'filter-container'
+        }`}
+      >
+        <div className="expand-all">
+          <div className="tasksList-expand-all-icon">
+            <ApolloCheckbox
+              label="Expand All"
+              data-testid="expand-all"
+              checked={expandAll.every(exp => exp)}
+              onChange={handleExpandAllChange}
+            />
           </div>
+        </div>
+        <div className="filter-btn">
+          {(selectedBid.get('isCurrent') || selectedBid.get('isEditable')) && (
+            <div
+              data-testid="selectedbid-testid"
+              title="Add New Question"
+              className="tasksList-add-icon-wrapper"
+              role="presentation"
+              onClick={onAddQuestion}
+            >
+              <Add className="tasksList-add-icon add-icon-btn" />
+            </div>
+          )}
           <FilterButton setIsShowFilters={setIsShowFilters} />
         </div>
         {isShowFilters && <Filters />}
@@ -114,7 +156,7 @@ const CustomTabs = ({ tabId, key }) => {
 
       <div className="all-approvals-container">
         {!isEmpty(tab) ? (
-          tab.map(tabs => {
+          tab.map((tabs, index) => {
             if (tabs?.UnityTabSectionQuestions?.length > 0) {
               return (
                 <Section
@@ -122,6 +164,8 @@ const CustomTabs = ({ tabId, key }) => {
                   sectionId={tabs.UnityTabSectionId}
                   title={tabs.UnityTabSectionTitle}
                   tabId={tabId}
+                  isExpandAll={expandAll[index]}
+                  handleChange={handleChange(index)}
                 />
               );
             }

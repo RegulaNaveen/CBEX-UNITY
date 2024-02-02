@@ -6,7 +6,16 @@
 import React, { createRef } from 'react';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { isObject, isEqual, isEmpty, xor, has, isString } from 'lodash';
+import {
+  isObject,
+  isEqual,
+  isEmpty,
+  xor,
+  has,
+  isString,
+  merge,
+  cloneDeep
+} from 'lodash';
 import IconButton from 'apollo-react/components/IconButton';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import Grid from 'apollo-react/components/Grid';
@@ -81,6 +90,8 @@ import {
   selectQuery
 } from '../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../redux/actions/search-actions';
+import { TableAnswer } from './atoms/TableAnswer';
+import { diffArrays } from 'diff';
 
 const DropdownWithIdleStateDetection = withIdleStateDetection(Dropdown);
 const QuestionDatePickerWithIdleStateDetection = withIdleStateDetection(
@@ -94,6 +105,7 @@ const RadioQuestionIdleStateDetection = withIdleStateDetection(RadioQuestion);
 const CheckBoxQuestionsIdleStateDetection = withIdleStateDetection(
   CheckBoxQuestions
 );
+const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
 // Regex Fix for HTML and plain text showing /span> at the end of question
 type State = {
@@ -382,6 +394,53 @@ export class TaskRow extends React.PureComponent<Props, State> {
     this.setSelectRow(false);
   };
 
+  handleTableValueChange = (newValue, lastAnswer) => {
+    const { setProposalAnswer, proposalId, questionId, userData } = this.props;
+    let lastAnswerValue;
+    if (
+      lastAnswer &&
+      lastAnswer.get('answer') &&
+      lastAnswer.get('answer') !== ' ' &&
+      lastAnswer.get('answer') !== 'N/A'
+    ) {
+      lastAnswerValue = JSON.parse(lastAnswer.get('answer'));
+      // compare prev and next answers and do a save
+
+      const rowsDiff = diffArrays(lastAnswerValue.rows, newValue.rows, {
+        comparator: isEqual
+      });
+      const columnsDiff = diffArrays(
+        lastAnswerValue.columns,
+        newValue.columns,
+        {
+          comparator: isEqual
+        }
+      );
+      if (
+        rowsDiff.some(row => row.added || row.removed) ||
+        columnsDiff.some(column => column.added || column.removed)
+      ) {
+        setProposalAnswer(
+          this.context,
+          proposalId,
+          questionId,
+          JSON.stringify(newValue),
+          userData
+        );
+      }
+    } else {
+      // it's a new answer
+      setProposalAnswer(
+        this.context,
+        proposalId,
+        questionId,
+        JSON.stringify({ ...newValue }), // stringified value
+        userData
+      );
+    }
+    this.setSelectRow(false);
+  };
+
   /**
    * Func to save data onBlur RichText Editor
    */
@@ -583,7 +642,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context,
         proposalId,
         questionId,
-        lastAnswer?.answer || ' ',
+        lastAnswer?.answer === 'N/A' ? ' ' : lastAnswer?.answer || ' ',
         userData
       );
     }
@@ -792,7 +851,8 @@ export class TaskRow extends React.PureComponent<Props, State> {
     type: string,
     options: Map,
     answers: Map,
-    lastAnswer: Map
+    lastAnswer: Map,
+    answered
   ) => {
     const {
       sectionName,
@@ -811,7 +871,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const { selectedRow } = this.state;
     const isCurrentBid = selectedBid.get('isCurrent');
-
+    const isEditableBid = selectedBid.get('isEditable');
     const optionsYN = ['Yes', 'No'];
     const answer = lastAnswer && lastAnswer?.get('answer');
 
@@ -824,7 +884,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       return (
         checkNonEditableFields(noneditableField, sfField, sfObject) ||
-        !isCurrentBid
+        !isEditableBid
       );
     };
     const checkDisableFlag = () => {
@@ -833,7 +893,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
       return (
         checkNonEditableFields(noneditableField, sfField, sfObject) ||
-        !isCurrentBid
+        !isEditableBid
       );
     };
     // onFocus for question concurrency
@@ -856,15 +916,81 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
     const focusState = this.state.focusedSpan;
     const blurState = this.state.blurredSpan;
-    if (answer) {
-      if (isObject(answer)) answerValueComplex = answer.toJS();
-      else answerValue = answer.toString();
+
+    if (type === ANSWER_TYPES.TABLE) {
+      let tableConfigJSON = {
+        columns: [],
+        rows: []
+      };
+      try {
+        // parse JSON from lastAnswer
+        tableConfigJSON = JSON.parse(this.props.tableConfiguration);
+      } catch (e) {
+        console.error('Error parsing table configuration', e);
+      }
+      if (answer) {
+        try {
+          const defaultColumnsLength = tableConfigJSON.columns.length;
+          const defaultRowsLength = tableConfigJSON.rows.length;
+          if (answer === ' ' || answer === 'N/A') {
+            answerValue = tableConfigJSON;
+          } else {
+            const noConfigTableAnswer = JSON.parse(answer);
+            answerValue = merge(tableConfigJSON, noConfigTableAnswer);
+          }
+          if (Array.isArray(answerValue.columns)) {
+            answerValue.columns = cloneDeep(answerValue.columns).map(
+              (column, colIndex) => ({
+                ...column,
+                canEdit:
+                  colIndex <= defaultColumnsLength - 1
+                    ? answerValue.canEditColumn
+                    : column.canEdit
+              })
+            );
+          }
+          if (Array.isArray(answerValue.rows)) {
+            answerValue.rows = cloneDeep(answerValue.rows).map(
+              (row, rowIndex) => ({
+                ...row,
+                canEdit:
+                  rowIndex <= defaultRowsLength - 1
+                    ? answerValue.canEditRow
+                    : row.canEdit
+              })
+            );
+          }
+        } catch (e) {
+          // if any error in parsing JSON, set answer to default table configuration
+          console.error('Error parsing table answer', e);
+          answerValue = tableConfigJSON;
+        }
+      } else {
+        answerValue = cloneDeep(tableConfigJSON);
+        answerValue.columns = answerValue?.columns
+          ? cloneDeep(answerValue.columns).map(column => ({
+              ...column,
+              canEdit: answerValue.canEditColumn
+            }))
+          : [];
+        answerValue.rows = answerValue?.rows
+          ? cloneDeep(answerValue.rows).map(row => ({
+              ...row,
+              canEdit: answerValue.canEditRow
+            }))
+          : [];
+      }
+    } else {
+      if (answer) {
+        if (isObject(answer)) answerValueComplex = answer.toJS();
+        else answerValue = answer.toString();
+      }
     }
 
     if (sectionName === 'Proposal Team') {
       return (
         <SFAnswerValidationWrapper
-          hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+          hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
           sfObject={sfObject}
         >
           <span
@@ -895,7 +1021,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 }}
                 onBlur={() => {
                   this.context.questionUnlockWrapper(this.props.questionId);
-
                   this.setSelectRow(false);
                 }}
                 onChange={this.handlePropsalChange}
@@ -1037,7 +1162,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1067,7 +1192,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         answerValue = getConvertedAnsString(answerValue);
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1099,7 +1224,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'y/n':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1139,7 +1264,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'select':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1181,7 +1306,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'date':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1222,7 +1347,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case ANSWER_TYPES.PICKLIST:
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1258,7 +1383,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case 'multi-select-lookup':
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1306,7 +1431,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
 
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1352,7 +1477,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case ANSWER_TYPES.RADIO:
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1376,6 +1501,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
               </span>
               <RadioQuestionIdleStateDetection
                 id="dd-proposal-answer"
+                data-testid="radio-answer"
                 items={finalOptions}
                 onClick={val => {
                   this.onClickChange(val, answerValue).then(dataResponse => {
@@ -1395,7 +1521,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       case ANSWER_TYPES.CHECKBOX:
         return (
           <SFAnswerValidationWrapper
-            hasDifferentSFanswer={hasDifferentSFanswer && isCurrentBid}
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
             sfObject={sfObject}
           >
             <span
@@ -1439,6 +1565,46 @@ export class TaskRow extends React.PureComponent<Props, State> {
               </div>
             </span>
           </SFAnswerValidationWrapper>
+        );
+      case ANSWER_TYPES.TABLE:
+        return (
+          // Commented out SF intregration for Table answer type
+          // <SFAnswerValidationWrapper
+          //   hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
+          //   sfObject={sfObject}
+          // >
+          <span
+            id="table-question-answer"
+            tabIndex={-1}
+            style={
+              `${this.props.showNaCheckbox}`
+                ? {
+                    display: 'flex'
+                  }
+                : ''
+            }
+          >
+            <span className={this.props.showNaCheckbox ? 'markNaActive' : ''}>
+              {this.renderNACheckbox(checkDisableFlag, 'checkbox')}
+            </span>
+            <TableAnswerWithIdleStateDetection
+              {...this.props}
+              answered={answered}
+              lastAnswer={lastAnswer}
+              tableConfiguration={answerValue}
+              onChange={this.handleTableValueChange}
+              disabled={checkDisableFlag() || isNotApplicable}
+              onFocus={() => {
+                this.context.questionLockWrapper(this.props.questionId);
+                this.setSelectRow(true);
+              }}
+              onBlur={() => {
+                this.context.questionUnlockWrapper(this.props.questionId);
+                this.setSelectRow(false);
+              }}
+            />
+          </span>
+          // </SFAnswerValidationWrapper>
         );
       default:
         return <div id="no-configuration">Click to answer</div>;
@@ -1644,7 +1810,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         answerDate = 'Not Answered';
       }
     }
-    const isCurrentBid = selectedBid.get('isCurrent');
+    const isEditableBid = selectedBid.get('isEditable');
     const {
       selectedRow,
       iconColor,
@@ -1709,7 +1875,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 )}
 
                 {/* Edit Question Icon */}
-                {isCustomQuestion && isCurrentBid && (
+                {isCustomQuestion && isEditableBid && (
                   <div className="question-edit">
                     <span
                       aria-hidden="true"
@@ -1814,9 +1980,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     answerConfiguration.get('type'),
                     answerConfiguration.get('options'),
                     answers,
-                    lastAnswer
+                    lastAnswer,
+                    this.isAnswered(lastAnswer, isAnswerPredicted)
                   )
-                : this.renderAnswer('', [], [], undefined)}
+                : this.renderAnswer('', [], [], undefined, false)}
             </div>
           </Grid>
 
@@ -1841,7 +2008,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             showNaCheckbox={showNaCheckbox}
             isNotepadOpen={isNotepadOpen}
             changeIcon={changeIcon}
-            isCurrentBid={isCurrentBid}
+            isEditableBid={isEditableBid}
             sfObject={sfObject}
             answer={answerValue}
             answerText={answerText}
@@ -1853,6 +2020,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             latestAnsweredBidNo={latestAnsweredBidNo}
             questionId={qId}
             questionDataDestinations={this.props.questionDataDestinations}
+            answerConfiguration={answerConfiguration}
           />
           {/* Question Lock Info */}
           {/* {this.props.questionLockInfo &&
@@ -1872,21 +2040,23 @@ export class TaskRow extends React.PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = (state: Object) => ({
-  userData: getUserData(state),
-  proposalDetail: getProposalDetails(state),
-  integrationsData: getIntegrations(state),
-  selectedBid: getSelectedBid(state),
-  oppdata: getOpportunityData(state),
-  noneditableField: getnoneditableField(state),
-  showNaCheckbox: getShowNaCheckbox(state),
-  canUserTagInQuestion: getCanUserTagInQuestion(state),
-  allFlags: getfetchAllFlags(state),
-  query: selectQuery(state),
-  currentSearchResult: selectCurrentSearchResult(state),
-  prevSearchResult: selectPrevSearchResult(state),
-  autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
-});
+const mapStateToProps = (state: Object) => {
+  return {
+    userData: getUserData(state),
+    proposalDetail: getProposalDetails(state),
+    integrationsData: getIntegrations(state),
+    selectedBid: getSelectedBid(state),
+    oppdata: getOpportunityData(state),
+    noneditableField: getnoneditableField(state),
+    showNaCheckbox: getShowNaCheckbox(state),
+    canUserTagInQuestion: getCanUserTagInQuestion(state),
+    allFlags: getfetchAllFlags(state),
+    query: selectQuery(state),
+    currentSearchResult: selectCurrentSearchResult(state),
+    prevSearchResult: selectPrevSearchResult(state),
+    autoNavigatedToCurrentResult: selectAutoNavigatedToCurrentResult(state)
+  };
+};
 
 export default connect(mapStateToProps, {
   widgetUpdates: widgetUpdate,
