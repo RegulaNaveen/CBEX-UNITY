@@ -53,6 +53,122 @@
         "type": "table",
         "options": ["YES", "NO"]
       }
+    },
+    {
+      "proposalId": "2f59a5f2-9479-474e-8dfb-e3d560c02556",
+      "questionId": "091831ad-3dd6-4e54-a1b1-a39ce5717431",
+      "section": {
+        "sectionOrder": 26,
+        "sectionName": "TestCRMEE"
+      },
+      "questionText": "Test Table new",
+      "answerConfiguration": {
+        "type": "table",
+        "options": []
+      },
+      "roleNames": ["Biostats"],
+      "answers": [
+        {
+          "user": "pooja.chahar@iqvia.com",
+          "userName": "Pooja Chahar",
+          "userRole": "Business Developer",
+          "date": "2024-01-31T07:00:11.865Z",
+          "answer": "{\"rows\":[{\"C3\":\"\",\"header\":\"R1\",\"C4\":\"\",\"C1\":\"hello\",\"rowId\":0,\"C2\":\"\",\"canEdit\":false},{\"C3\":\"\",\"header\":\"R2\",\"C4\":\"\",\"C1\":\"\",\"rowId\":1,\"C2\":\"\",\"canEdit\":false},{\"C3\":\"\",\"header\":\"R3\",\"C4\":\"\",\"C1\":\"\",\"rowId\":2,\"C2\":\"\",\"canEdit\":false},{\"C3\":\"\",\"header\":\"R4\",\"C4\":\"\",\"C1\":\"\",\"rowId\":3,\"C2\":\"\",\"canEdit\":false},{\"header\":\"new row search\",\"canEdit\":true,\"rowId\":\"row-4\",\"C1\":\"\",\"C2\":\"\",\"C3\":\"\",\"C4\":\"\"},{\"header\":\"search 1\",\"canEdit\":true,\"rowId\":\"row-5\",\"C1\":\"\",\"C2\":\"\",\"C3\":\"\",\"C4\":\"\"},{\"header\":\"dfsdfsd\",\"canEdit\":true,\"rowId\":\"row-6\",\"C1\":\"\",\"C2\":\"\",\"C3\":\"\",\"C4\":\"\"}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"frozen\":true,\"locked\":false,\"type\":\"text\",\"canEdit\":false,\"header\":\"\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C1\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":false,\"header\":\"C1\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C2\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":false,\"header\":\"C2\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C3\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":false,\"header\":\"C3\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C4\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":false,\"header\":\"C4\"}]}",
+          "proposalId": "2f59a5f2-9479-474e-8dfb-e3d560c02556",
+          "updatedInPG": true
+        }
+      ],
+      "questionOrder": 5,
+      "visible": true,
+      "locked": true,
+      "sfObject": "n/a",
+      "sfField": "n/a",
+      "milestoneNew": [],
+      "opportunityType": "Default Type",
+      "hasDifferentSFanswer": false,
+      "isCustomQuestion": false,
+      "questionJSON": "{\"blocks\":[{\"key\":\"3olpp\",\"text\":\"Test Table new\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"20f4b\" data-offset-key=\"3olpp-0-0\"><div data-offset-key=\"3olpp-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"3olpp-0-0\"><span data-text=\"true\">Test Table new</span></span></div></div></div>",
+      "questionHintJSON": "",
+      "questionHintHTML": "",
+      "active": true,
+      "integration": "",
+      "events": "",
+      "notApplicable": false,
+      "questionApproval": false,
+      "bidAnswerCopy": true,
+      "questionTableConfig": "{\"canEditColumn\":false,\"canAddRow\":true,\"rows\":[{\"C3\":\"\",\"header\":\"R1\",\"C4\":\"\",\"C1\":\"\",\"rowId\":0,\"C2\":\"\"},{\"C3\":\"\",\"header\":\"R2\",\"C4\":\"\",\"C1\":\"\",\"rowId\":1,\"C2\":\"\"},{\"C3\":\"\",\"header\":\"R3\",\"C4\":\"\",\"C1\":\"\",\"rowId\":2,\"C2\":\"\"},{\"C3\":\"\",\"header\":\"R4\",\"C4\":\"\",\"C1\":\"\",\"rowId\":3,\"C2\":\"\"}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C1\",\"header\":\"C1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C2\",\"header\":\"C2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C3\",\"header\":\"C3\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"C4\",\"header\":\"C4\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":false,\"canEditRow\":false}",
+      "latestAnsweredBidNo": null,
+      "bidType": "Clinical_Bid"
+    },
+    {
+      "proposalId": "27423fe0-ea03-497b-9fc3-491cdd21f120",
+      "questionId": "cb44f794-0a0d-49d5-93ee-8d0a1de80a2e",
+      "section": {
+        "sectionOrder": 26,
+        "sectionName": "TestCRMEE"
+      },
+      "questionText": "TEST RFI",
+      "answerConfiguration": {
+        "type": "table",
+        "options": []
+      },
+      "roleNames": ["BD Leadership"],
+      "answers": [
+        {
+          "user": "pooja.chahar@iqvia.com",
+          "userName": "Pooja Chahar",
+          "userRole": "Business Developer",
+          "date": "2024-02-01T07:17:26.170Z",
+          "answer": "{\"rows\":[{\"header\":\"Row 1\",\"OClumn 2\":\"row 2 answer\",\"Column 1\":\"row 1 answer\",\"canEdit\":true,\"column-3\":\"test cell data entry test cell data entry test cell data entry\",\"index\":0,\"hidden\":false},{\"header\":\"r\",\"OClumn 2\":\"\",\"Column 1\":\"test r2c2\",\"canEdit\":true,\"column-3\":\"\",\"index\":1,\"hidden\":true},{\"header\":\"Row 2\",\"canEdit\":true,\"rowId\":\"row-2\",\"Column 1\":\"\",\"OClumn 2\":\"\",\"column-3\":\"\",\"index\":2,\"hidden\":true}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"frozen\":true,\"locked\":false,\"type\":\"text\",\"canEdit\":true,\"index\":0,\"header\":\"\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"Column 1\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":true,\"index\":1,\"header\":\"col 4\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"OClumn 2\",\"frozen\":false,\"locked\":false,\"type\":\"text\",\"canEdit\":true,\"index\":2,\"header\":\"OClumn 2\"},{\"accessor\":\"column-3\",\"canEdit\":true,\"index\":3,\"hidden\":true,\"header\":\"col3\"}]}",
+          "proposalId": "27423fe0-ea03-497b-9fc3-491cdd21f120",
+          "updatedInPG": true
+        }
+      ],
+      "questionOrder": 3,
+      "visible": true,
+      "locked": true,
+      "sfObject": "Bid_History__c",
+      "sfField": "RFP_Ranking__c",
+      "milestoneNew": [
+        {
+          "Name": "abc",
+          "Color": "#df216d"
+        },
+        {
+          "Name": "Budget",
+          "Color": "#00c221"
+        },
+        {
+          "Name": "Follow-Up",
+          "Color": "#015ff1"
+        },
+        {
+          "Name": "Overview",
+          "Color": "#015ff1"
+        }
+      ],
+      "opportunityType": "Default Type",
+      "questionHint": "hello test Rfi ",
+      "hasDifferentSFanswer": true,
+      "currentSFanswer": {
+        "value": "",
+        "time": "2024-02-01T07:11:21.906Z"
+      },
+      "isCustomQuestion": false,
+      "questionJSON": "{\"blocks\":[{\"key\":\"b8f2h\",\"text\":\"TEST RFI\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"69dgi\" data-offset-key=\"b8f2h-0-0\"><div data-offset-key=\"b8f2h-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"b8f2h-0-0\"><span data-text=\"true\">TEST RFI</span></span></div></div></div>",
+      "questionHintJSON": "{\"blocks\":[{\"key\":\"dirvm\",\"text\":\"hello test Rfi \",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      "questionHintHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"f663a\" data-offset-key=\"dirvm-0-0\"><div data-offset-key=\"dirvm-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"dirvm-0-0\"><span data-text=\"true\">hello test Rfi </span></span></div></div></div>",
+      "active": true,
+      "integration": "",
+      "events": "",
+      "notApplicable": false,
+      "questionApproval": false,
+      "bidAnswerCopy": true,
+      "questionTableConfig": "{\"canEditColumn\":true,\"canAddRow\":true,\"rows\":[{\"header\":\"Row 1\",\"OClumn 2\":\"\",\"Column 1\":\"\"},{\"header\":\"Row 2\",\"OClumn 2\":\"\",\"Column 1\":\"\"}],\"columns\":[{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"header\",\"header\":\"\",\"frozen\":true,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"Column 1\",\"header\":\"Column 1\",\"frozen\":false,\"locked\":false,\"type\":\"text\"},{\"hidden\":false,\"alwaysVisible\":false,\"accessor\":\"OClumn 2\",\"header\":\"OClumn 2\",\"frozen\":false,\"locked\":false,\"type\":\"text\"}],\"canAddColumn\":true,\"canEditRow\":true}",
+      "latestAnsweredBidNo": null,
+      "bidType": "Clinical_Bid"
     }
   ],
   "approvals": [
@@ -174,6 +290,25 @@
           "updated_date": "2023-01-13T15:45:11.260Z"
         }
       ]
+    },
+    {
+      "ApprovalSectionTitle": "TestCRMEE Approval",
+      "ApprovalSectionRightQuestions": [
+        "6939d6ed-4590-4e35-90a9-ebfb89d52f75",
+        "86ab41b4-8451-4e6c-93c6-b6b09aa47bac",
+        "969ac244-5781-49ae-ad02-e157f5b06a3e",
+        "6cede2a3-1c76-4d64-a15b-1ec2eb5568dd"
+      ],
+      "ApprovalSectionId": "20ca3c51-1238-4067-bf0c-43ad3f2baa5f",
+      "ApprovalSectionOrder": 18,
+      "ApprovalSectionLeftQuestions": [
+        "cb44f794-0a0d-49d5-93ee-8d0a1de80a2e",
+        "091831ad-3dd6-4e54-a1b1-a39ce5717431",
+        "722f9c3c-5538-4b64-bda5-76604d61da46",
+        "2185e87c-65c6-4bb4-ab2f-3e24bdd829d3"
+      ],
+      "ArchivedData": [],
+      "key": "20ca3c51-1238-4067-bf0c-43ad3f2baa5f-1706845375175"
     }
   ],
   "sections": {
