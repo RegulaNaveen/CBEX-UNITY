@@ -8,6 +8,16 @@ import {
   shouldShowQuestion as customTabShouldShowQuestion
 } from '../components/screens/UnityTabs/utils';
 import { DEFAULT_TABS_LEN, NOTEPAD_UI_ID } from '../constants/app';
+import {
+  isObject,
+  isEqual,
+  isEmpty,
+  xor,
+  has,
+  isString,
+  merge,
+  cloneDeep
+} from 'lodash';
 
 /**
  * function to find search results with query string
@@ -289,37 +299,61 @@ export function searchInTab({
                 sectionName: section.sectionName
               });
             }
-            // searching in answer
-            if (
-              Array.isArray(question.answers) &&
-              question.answers.length > 0
-            ) {
-              let recentAnswer =
-                question.answers[question.answers.length - 1].answer;
-              // if multiple answer
-              if (Array.isArray(recentAnswer)) {
-                recentAnswer.forEach(answerChunk => {
+
+            //searching in table
+            if (question.answerConfiguration.type === 'table') {
+              const tableConfigJSON = getTableData(question);
+              var totalNotHiddenColumns = tableConfigJSON.columns.filter(
+                column => !column.hidden
+              );
+              var totalNotHiddenRows = tableConfigJSON.rows.filter(
+                column => !column.hidden
+              );
+              totalNotHiddenColumns.map((value, index) => {
+                if (value.header) {
                   updateSearchMatches({
                     regexp,
-                    inputText: answerChunk,
+                    inputText: value.header,
                     index: questionKey,
                     finalResult,
                     tab: tabIndex,
                     vTab: null,
                     tabName,
-                    sectionName: section.sectionName
+                    sectionName: section.sectionName,
+                    colIndex: index + 1,
+                    rowIndex: 0
                   });
+                }
+              });
+              totalNotHiddenRows.map((row, index) => {
+                totalNotHiddenColumns.map(column => {
+                  if (row[column.accessor]) {
+                    updateSearchMatches({
+                      regexp,
+                      inputText: row[column.accessor],
+                      index: questionKey,
+                      finalResult,
+                      tab: tabIndex,
+                      vTab: null,
+                      tabName,
+                      sectionName: section.sectionName,
+                      colIndex: index + 1,
+                      rowIndex: 0
+                    });
+                  }
                 });
-              } else if (typeof recentAnswer === 'string') {
-                if (question.answerConfiguration.type === 'proposal_team') {
-                  const newAnswer = [];
-                  recentAnswer.split(',').forEach(answer => {
-                    const split_array = answer.split('(');
-                    if (split_array && split_array.length > 0) {
-                      newAnswer.push(split_array[0].trim());
-                    }
-                  });
-                  newAnswer.forEach(answerChunk => {
+              });
+            } else {
+              // searching in answer
+              if (
+                Array.isArray(question.answers) &&
+                question.answers.length > 0
+              ) {
+                let recentAnswer =
+                  question.answers[question.answers.length - 1].answer;
+                // if multiple answer
+                if (Array.isArray(recentAnswer)) {
+                  recentAnswer.forEach(answerChunk => {
                     updateSearchMatches({
                       regexp,
                       inputText: answerChunk,
@@ -331,30 +365,52 @@ export function searchInTab({
                       sectionName: section.sectionName
                     });
                   });
-                } else if (question.answerConfiguration.type === 'date') {
-                  updateSearchMatches({
-                    regexp,
-                    inputText: moment(recentAnswer).isValid()
-                      ? moment(recentAnswer).format('DD-MMM-YYYY')
-                      : recentAnswer,
-                    index: questionKey,
-                    finalResult,
-                    tab: tabIndex,
-                    vTab: null,
-                    tabName,
-                    sectionName: section.sectionName
-                  });
-                } else {
-                  updateSearchMatches({
-                    regexp,
-                    inputText: recentAnswer,
-                    index: questionKey,
-                    finalResult,
-                    tab: tabIndex,
-                    vTab: null,
-                    tabName,
-                    sectionName: section.sectionName
-                  });
+                } else if (typeof recentAnswer === 'string') {
+                  if (question.answerConfiguration.type === 'proposal_team') {
+                    const newAnswer = [];
+                    recentAnswer.split(',').forEach(answer => {
+                      const split_array = answer.split('(');
+                      if (split_array && split_array.length > 0) {
+                        newAnswer.push(split_array[0].trim());
+                      }
+                    });
+                    newAnswer.forEach(answerChunk => {
+                      updateSearchMatches({
+                        regexp,
+                        inputText: answerChunk,
+                        index: questionKey,
+                        finalResult,
+                        tab: tabIndex,
+                        vTab: null,
+                        tabName,
+                        sectionName: section.sectionName
+                      });
+                    });
+                  } else if (question.answerConfiguration.type === 'date') {
+                    updateSearchMatches({
+                      regexp,
+                      inputText: moment(recentAnswer).isValid()
+                        ? moment(recentAnswer).format('DD-MMM-YYYY')
+                        : recentAnswer,
+                      index: questionKey,
+                      finalResult,
+                      tab: tabIndex,
+                      vTab: null,
+                      tabName,
+                      sectionName: section.sectionName
+                    });
+                  } else {
+                    updateSearchMatches({
+                      regexp,
+                      inputText: recentAnswer,
+                      index: questionKey,
+                      finalResult,
+                      tab: tabIndex,
+                      vTab: null,
+                      tabName,
+                      sectionName: section.sectionName
+                    });
+                  }
                 }
               }
             }
@@ -612,34 +668,63 @@ export function searchInApprovals(
             sectionName: approval.ApprovalSectionTitle
           });
 
-          // searching in answer
-          if (Array.isArray(question.answers) && question.answers.length > 0) {
-            const recentAnswer =
-              question.answers[question.answers.length - 1].answer;
-            // if multiple answer
-            if (Array.isArray(recentAnswer)) {
-              recentAnswer.forEach(answerChunk => {
+          //searching in table
+          if (question.answerConfiguration.type === 'table') {
+            const tableConfigJSON = getTableData(question);
+
+            var totalNotHiddenColumns = tableConfigJSON.columns.filter(
+              column => !column.hidden
+            );
+            var totalNotHiddenRows = tableConfigJSON.rows.filter(
+              column => !column.hidden
+            );
+
+            totalNotHiddenColumns.map((value, index) => {
+              if (value.header) {
                 updateSearchMatches({
                   regexp,
-                  inputText: answerChunk,
+                  inputText: value.header,
                   index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
                   finalResult,
                   tab: 2,
                   vTab: null,
                   tabName: 'Approvals',
-                  sectionName: approval.ApprovalSectionTitle
+                  sectionName: approval.ApprovalSectionTitle,
+                  colIndex: index + 1,
+                  rowIndex: 0
                 });
+              }
+            });
+
+            totalNotHiddenRows.map((row, index) => {
+              totalNotHiddenColumns.map(column => {
+                if (row[column.accessor]) {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: row[column.accessor],
+                    index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle,
+                    colIndex: index + 1,
+                    rowIndex: 0
+                  });
+                }
               });
-            } else if (typeof recentAnswer === 'string') {
-              if (question.answerConfiguration.type === 'proposal_team') {
-                const newAnswer = [];
-                recentAnswer.split(',').forEach(answer => {
-                  const split_array = answer.split('(');
-                  if (split_array && split_array.length > 0) {
-                    newAnswer.push(split_array[0].trim());
-                  }
-                });
-                newAnswer.forEach(answerChunk => {
+            });
+          } else {
+            // searching in answer
+            if (
+              Array.isArray(question.answers) &&
+              question.answers.length > 0
+            ) {
+              const recentAnswer =
+                question.answers[question.answers.length - 1].answer;
+              // if multiple answer
+              if (Array.isArray(recentAnswer)) {
+                recentAnswer.forEach(answerChunk => {
                   updateSearchMatches({
                     regexp,
                     inputText: answerChunk,
@@ -651,30 +736,52 @@ export function searchInApprovals(
                     sectionName: approval.ApprovalSectionTitle
                   });
                 });
-              } else if (question.answerConfiguration.type === 'date') {
-                updateSearchMatches({
-                  regexp,
-                  inputText: moment(recentAnswer).isValid()
-                    ? moment(recentAnswer).format('DD-MMM-YYYY')
-                    : recentAnswer,
-                  index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-                  finalResult,
-                  tab: 2,
-                  vTab: null,
-                  tabName: 'Approvals',
-                  sectionName: approval.ApprovalSectionTitle
-                });
-              } else {
-                updateSearchMatches({
-                  regexp,
-                  inputText: recentAnswer,
-                  index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
-                  finalResult,
-                  tab: 2,
-                  vTab: null,
-                  tabName: 'Approvals',
-                  sectionName: approval.ApprovalSectionTitle
-                });
+              } else if (typeof recentAnswer === 'string') {
+                if (question.answerConfiguration.type === 'proposal_team') {
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches({
+                      regexp,
+                      inputText: answerChunk,
+                      index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                      finalResult,
+                      tab: 2,
+                      vTab: null,
+                      tabName: 'Approvals',
+                      sectionName: approval.ApprovalSectionTitle
+                    });
+                  });
+                } else if (question.answerConfiguration.type === 'date') {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: moment(recentAnswer).isValid()
+                      ? moment(recentAnswer).format('DD-MMM-YYYY')
+                      : recentAnswer,
+                    index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
+                  });
+                } else {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: recentAnswer,
+                    index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
+                  });
+                }
               }
             }
           }
@@ -701,34 +808,61 @@ export function searchInApprovals(
             sectionName: approval.ApprovalSectionTitle
           });
 
-          // searching in answer
-          if (Array.isArray(question.answers) && question.answers.length > 0) {
-            const recentAnswer =
-              question.answers[question.answers.length - 1].answer;
-            // if multiple answer
-            if (Array.isArray(recentAnswer)) {
-              recentAnswer.forEach(answerChunk => {
+          if (question.answerConfiguration.type === 'table') {
+            const tableConfigJSON = getTableData(question);
+            var totalNotHiddenColumns = tableConfigJSON.columns.filter(
+              column => !column.hidden
+            );
+            var totalNotHiddenRows = tableConfigJSON.rows.filter(
+              column => !column.hidden
+            );
+
+            totalNotHiddenColumns.map((value, index) => {
+              if (value.header) {
                 updateSearchMatches({
                   regexp,
-                  inputText: answerChunk,
+                  inputText: value.header,
                   index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
                   finalResult,
                   tab: 2,
                   vTab: null,
                   tabName: 'Approvals',
-                  sectionName: approval.ApprovalSectionTitle
+                  sectionName: approval.ApprovalSectionTitle,
+                  colIndex: index + 1,
+                  rowIndex: 0
                 });
+              }
+            });
+
+            totalNotHiddenRows.map((row, index) => {
+              totalNotHiddenColumns.map(column => {
+                if (row[column.accessor]) {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: row[column.accessor],
+                    index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle,
+                    colIndex: index + 1,
+                    rowIndex: 0
+                  });
+                }
               });
-            } else if (typeof recentAnswer === 'string') {
-              if (question.answerConfiguration.type === 'proposal_team') {
-                const newAnswer = [];
-                recentAnswer.split(',').forEach(answer => {
-                  const split_array = answer.split('(');
-                  if (split_array && split_array.length > 0) {
-                    newAnswer.push(split_array[0].trim());
-                  }
-                });
-                newAnswer.forEach(answerChunk => {
+            });
+          } else {
+            // searching in answer
+            if (
+              Array.isArray(question.answers) &&
+              question.answers.length > 0
+            ) {
+              const recentAnswer =
+                question.answers[question.answers.length - 1].answer;
+              // if multiple answer
+              if (Array.isArray(recentAnswer)) {
+                recentAnswer.forEach(answerChunk => {
                   updateSearchMatches({
                     regexp,
                     inputText: answerChunk,
@@ -740,30 +874,52 @@ export function searchInApprovals(
                     sectionName: approval.ApprovalSectionTitle
                   });
                 });
-              } else if (question.answerConfiguration.type === 'date') {
-                updateSearchMatches({
-                  regexp,
-                  inputText: moment(recentAnswer).isValid()
-                    ? moment(recentAnswer).format('DD-MMM-YYYY')
-                    : recentAnswer,
-                  index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-                  finalResult,
-                  tab: 2,
-                  vTab: null,
-                  tabName: 'Approvals',
-                  sectionName: approval.ApprovalSectionTitle
-                });
-              } else {
-                updateSearchMatches({
-                  regexp,
-                  inputText: recentAnswer,
-                  index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
-                  finalResult,
-                  tab: 2,
-                  vTab: null,
-                  tabName: 'Approvals',
-                  sectionName: approval.ApprovalSectionTitle
-                });
+              } else if (typeof recentAnswer === 'string') {
+                if (question.answerConfiguration.type === 'proposal_team') {
+                  const newAnswer = [];
+                  recentAnswer.split(',').forEach(answer => {
+                    const split_array = answer.split('(');
+                    if (split_array && split_array.length > 0) {
+                      newAnswer.push(split_array[0].trim());
+                    }
+                  });
+                  newAnswer.forEach(answerChunk => {
+                    updateSearchMatches({
+                      regexp,
+                      inputText: answerChunk,
+                      index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                      finalResult,
+                      tab: 2,
+                      vTab: null,
+                      tabName: 'Approvals',
+                      sectionName: approval.ApprovalSectionTitle
+                    });
+                  });
+                } else if (question.answerConfiguration.type === 'date') {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: moment(recentAnswer).isValid()
+                      ? moment(recentAnswer).format('DD-MMM-YYYY')
+                      : recentAnswer,
+                    index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
+                  });
+                } else {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: recentAnswer,
+                    index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
+                    finalResult,
+                    tab: 2,
+                    vTab: null,
+                    tabName: 'Approvals',
+                    sectionName: approval.ApprovalSectionTitle
+                  });
+                }
               }
             }
           }
@@ -894,33 +1050,81 @@ export function searchInKeyMilestone(
               tabName
             });
           }
-          // searching in answer
-          if (Array.isArray(question.answers) && question.answers.length > 0) {
-            let recentAnswer =
-              question.answers[question.answers.length - 1].answer;
-            // if multiple answer
-            if (Array.isArray(recentAnswer)) {
-              recentAnswer.forEach(answerChunk => {
+          //searching in table
+          if (question.answerConfiguration.type === 'table') {
+            const tableConfigJSON = getTableData(question);
+            var totalNotHiddenColumns = tableConfigJSON.columns.filter(
+              column => !column.hidden
+            );
+            var totalNotHiddenRows = tableConfigJSON.rows.filter(
+              column => !column.hidden
+            );
+
+            totalNotHiddenColumns.map((value, index) => {
+              if (value.header) {
                 updateSearchMatches({
                   regexp,
-                  inputText: answerChunk,
+                  inputText: value.header,
+                  index: questionKey,
+                  finalResult,
+                  tab,
+                  vTab: 3,
+                  tabName,
+                  colIndex: index + 1,
+                  rowIndex: 0
+                });
+              }
+            });
+
+            totalNotHiddenRows.map((row, index) => {
+              totalNotHiddenColumns.map(column => {
+                if (row[column.accessor]) {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: row[column.accessor],
+                    index: questionKey,
+                    finalResult,
+                    tab,
+                    vTab: 3,
+                    tabName,
+                    colIndex: index + 1,
+                    rowIndex: 0
+                  });
+                }
+              });
+            });
+          } else {
+            // searching in answer
+            if (
+              Array.isArray(question.answers) &&
+              question.answers.length > 0
+            ) {
+              let recentAnswer =
+                question.answers[question.answers.length - 1].answer;
+              // if multiple answer
+              if (Array.isArray(recentAnswer)) {
+                recentAnswer.forEach(answerChunk => {
+                  updateSearchMatches({
+                    regexp,
+                    inputText: answerChunk,
+                    index: questionKey,
+                    finalResult,
+                    tab,
+                    vTab: 3,
+                    tabName
+                  });
+                });
+              } else if (typeof recentAnswer === 'string') {
+                updateSearchMatches({
+                  regexp,
+                  inputText: recentAnswer,
                   index: questionKey,
                   finalResult,
                   tab,
                   vTab: 3,
                   tabName
                 });
-              });
-            } else if (typeof recentAnswer === 'string') {
-              updateSearchMatches({
-                regexp,
-                inputText: recentAnswer,
-                index: questionKey,
-                finalResult,
-                tab,
-                vTab: 3,
-                tabName
-              });
+              }
             }
           }
         });
@@ -1011,6 +1215,7 @@ export function searchInProposalTeam(
                 tabName
               });
             }
+
             // searching in answer
             if (
               Array.isArray(question.answers) &&
@@ -1119,4 +1324,30 @@ export function extractTextFromProseMirrorJSON(
     return;
   }
   return results;
+}
+
+export function getTableData(question) {
+  let answerValue = '';
+  let tableConfigJSON = { columns: [], rows: [] };
+  try {
+    tableConfigJSON = JSON.parse(question.questionTableConfig);
+  } catch (e) {
+    console.error('Error parsing table configuration', e);
+  }
+  if (Array.isArray(question.answers) && question.answers.length > 0) {
+    let recentAnswer = question.answers[question.answers.length - 1].answer;
+    if (typeof recentAnswer === 'string') {
+      try {
+        let noConfigTableAnswer = JSON.parse(recentAnswer);
+        answerValue = merge(tableConfigJSON, noConfigTableAnswer);
+      } catch (e) {
+        console.error('Error parsing table answer', e);
+        answerValue = tableConfigJSON;
+      }
+    }
+  } else {
+    answerValue = cloneDeep(tableConfigJSON);
+  }
+
+  return answerValue;
 }
