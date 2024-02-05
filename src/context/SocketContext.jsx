@@ -356,7 +356,7 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_DELETE',
             data: {
-              questionId              
+              questionId
             }
           }
         })
@@ -576,12 +576,19 @@ const SocketContextProvider = props => {
               }
               break;
             case 'SWITCH_TEMPLATE_IN_PROGRESS':
-              if (setSwitchInProgress) setSwitchInProgress(true);
-              if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
+              if (setSwitchInProgress) {
+                setSwitchInProgress(true, data.data.proposalId);
+              }
+              if (updateSwitchTempStatus) {
+                updateSwitchTempStatus('progress');
+              }
               break;
             case 'SWITCH_TEMPLATE_COMPLETED':
               console.log('SWITCH_TEMPLATE_COMPLETED');
-              if (updateSwitchTempStatus) updateSwitchTempStatus('success');
+              if (updateSwitchTempStatus) {
+                updateSwitchTempStatus('success');
+              }
+              setSwitchInProgress(false, data.data.proposalId);
               break;
             case 'SWITCH_TEMPLATE_ERROR':
               if (setSwitchInProgress) setSwitchInProgress(false);
@@ -625,7 +632,10 @@ const SocketContextProvider = props => {
               break;
             case 'QUESTION_TEXT_UPDATE':
               if (data.data.questionData) {
-                editProposalQuestionfromSocket(data.data.questionData, data.data.proposalId);
+                editProposalQuestionfromSocket(
+                  data.data.questionData,
+                  data.data.proposalId
+                );
               }
               break;
 
@@ -659,7 +669,10 @@ const SocketContextProvider = props => {
               break;
             case 'ADD_QUESTION':
               if (data.data.questionData) {
-                setProposalQuestionFromSocket(data.data.questionData, data.data.proposalId);
+                setProposalQuestionFromSocket(
+                  data.data.questionData,
+                  data.data.proposalId
+                );
               }
               break;
 
@@ -686,7 +699,7 @@ const SocketContextProvider = props => {
 
             case 'COST_ESTIMATE_CALCULATING':
               const currentBidID = selectedBid.toJS().id;
-              if(data?.data?.proposalId === currentBidID){
+              if (data?.data?.proposalId === currentBidID) {
                 setPriceModelerRecalculationStatus(true);
               }
               break;
@@ -719,7 +732,11 @@ const SocketContextProvider = props => {
             case 'NEXT_MILESTONE_UPDATE':
               console.log('socket data', data);
               const { nextMilestone } = data.data;
-              updateNextMilestoneAction(data.oppId, nextMilestone, data.data.proposalId);
+              updateNextMilestoneAction(
+                data.oppId,
+                nextMilestone,
+                data.data.proposalId
+              );
               break;
 
             case 'CUSTOM_NAME_UPDATE':
@@ -878,7 +895,7 @@ const SocketContextProvider = props => {
     }
   };
 
-  const questionLockWrapper = (questionId) => {
+  const questionLockWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
   const questionUnlockWrapper = (questionId, answer) => {
@@ -920,7 +937,9 @@ const SocketContextProvider = props => {
   const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {};
 
   const addQuestionWrapper = (questionData, proposalId) => {
-    waitForSocketConnectionMinInterval(() => addQuestion(questionData, null, proposalId));
+    waitForSocketConnectionMinInterval(() =>
+      addQuestion(questionData, null, proposalId)
+    );
   };
 
   const questionTextUpdateWrapper = (questionData, proposalId) => {
@@ -929,7 +948,7 @@ const SocketContextProvider = props => {
     );
   };
 
-  const questionDeleteWrapper = (questionId) => {
+  const questionDeleteWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => questionDelete(questionId, null));
   };
 
