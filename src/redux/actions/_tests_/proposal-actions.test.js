@@ -15,7 +15,8 @@ import {
   setShowNaCheckbox,
   updateBidNoQueryparam,
   updateBidTypeQueryparam,
-  updateChangeBidStatusOperation
+  updateChangeBidStatusOperation,
+  updateSwitchInProgress
 } from '../proposal-actions';
 import { waitFor } from '@testing-library/react';
 import * as ProposalApi from '../../../api/proposal';
@@ -987,6 +988,11 @@ describe('proposal-actions test', () => {
       setNotApplicableQuestion('proposalId', 'questionId', true, {
         naQuestionUpdateWrapper: jest.fn()
       })
+    );
+  });
+  test('updateSwitchInProgress', async () => {
+    store.dispatch(
+      updateSwitchInProgress(true, '9aa9dfe2-1222-4dff-8977-f06f45656a4b')
     );
   });
 });

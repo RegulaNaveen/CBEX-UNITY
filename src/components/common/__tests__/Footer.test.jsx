@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { 
-  fireEvent, 
-  render, 
-  screen, 
-  act, 
+import {
+  fireEvent,
+  render,
+  screen,
+  act,
   waitFor
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -18,26 +18,25 @@ import { store } from '../../../store';
 import UnityFooter from '../Footer';
 import { REDUX_TYPES } from '../../../constants';
 import * as ProposalApi from '../../../api/proposal';
-import { 
-  updateSwitchInProgress 
-} from '../../../redux/actions/proposal-actions';
+import { updateSwitchInProgress } from '../../../redux/actions/proposal-actions';
+import { PROPOSAL } from '../../../constants/app';
 
 const oppTypeList = {
-data: {
-  "Opportunity Type": [
-    "Core Opportunity Launch Call (AMR/EMEA)",
-    "Core Opportunity Launch Call (APAC)",
-    "Non-Core Clinical Studies",
-    "Ballpark",
-    "IQB Template",
-    "PILOT - DO NOT USE: PROGRAMS",
-    "Default Type"
-  ],
-  "Publish Version": "v2023.423"
+  data: {
+    'Opportunity Type': [
+      'Core Opportunity Launch Call (AMR/EMEA)',
+      'Core Opportunity Launch Call (APAC)',
+      'Non-Core Clinical Studies',
+      'Ballpark',
+      'IQB Template',
+      'PILOT - DO NOT USE: PROGRAMS',
+      'Default Type'
+    ],
+    'Publish Version': 'v2023.423'
   }
 };
 
-const FooterWithRedux = (props) => (
+const FooterWithRedux = props => (
   <Provider store={store}>
     <Router>
       <UnityFooter {...props} />
@@ -63,13 +62,12 @@ describe('Test Footer Component', () => {
   });
 
   test('Load footer component', async () => {
-    jest.spyOn(ProposalApi, 'getOTListData')
-      .mockRejectedValue({ 
-        data: { message: "rejected" }, 
-        status: 400 
-      });
+    jest.spyOn(ProposalApi, 'getOTListData').mockRejectedValue({
+      data: { message: 'rejected' },
+      status: 400
+    });
     const { container } = render(
-      <FooterWithRedux 
+      <FooterWithRedux
         questionTemplateVersionNumber="version-0.29"
         opportunityType="Core Clinical"
       />
@@ -78,8 +76,11 @@ describe('Test Footer Component', () => {
     expect(container).toBeInTheDocument();
     expect(screen.getByTestId('footer')).toBeInTheDocument();
     expect(screen.getByText('Update Template')).toBeInTheDocument();
-    expect(screen.getByText('Question Template Version: version-0.29 - Core Clinical'))
-      .toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Question Template Version: version-0.29 - Core Clinical'
+      )
+    ).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText('Alert')).toBeInTheDocument();
@@ -89,7 +90,7 @@ describe('Test Footer Component', () => {
   test('Refresh button disable and able to change the opportunity type', async () => {
     jest.spyOn(ProposalApi, 'getOTListData').mockResolvedValue(oppTypeList);
     const { queryByTestId } = render(
-      <FooterWithRedux 
+      <FooterWithRedux
         questionTemplateVersionNumber="version-0.29"
         opportunityType="Default Type"
       />
@@ -98,7 +99,7 @@ describe('Test Footer Component', () => {
     await waitFor(() => {
       expect(queryByTestId('update-triangle')).not.toBeInTheDocument();
     });
-    
+
     act(() => {
       fireEvent.click(queryByTestId('sync-icon'));
     });
@@ -135,14 +136,41 @@ describe('Test Footer Component', () => {
       type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
       payload: 'success'
     });
-    const { container } = render(
-      <FooterWithRedux />
-    );
+    const { container } = render(<FooterWithRedux />);
     await waitFor(() => {
       expect(
-        screen
-          .getByText('Opportunity type has been updated successfully'))
-      .toBeInTheDocument();
+        screen.getByText('Opportunity type has been updated successfully')
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('should close the alert modal when the banner message is clicked', async () => {
+    const getAllProposalsStub = sinonSandbox
+      .stub(ProposalApi, 'getAllProposals')
+      .resolves([
+        {
+          isCurrent: true
+        }
+      ]);
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
+      payload: 'success'
+    });
+    render(<FooterWithRedux />);
+    await waitFor(() => {
+      expect(
+        screen.getByText('Opportunity type has been updated successfully')
+      ).toBeInTheDocument();
+    });
+
+    // Simulate a click event on the banner message
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+
+    // Check that the alert modal is not rendered after the click event
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Opportunity type has been updated successfully')
+      ).not.toBeInTheDocument();
     });
   });
 });
