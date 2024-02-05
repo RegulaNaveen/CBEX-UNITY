@@ -63,8 +63,15 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    * Trigger Modal onUpdate switchTempInProgress state
    */
   useEffect(() => {
-    setOtProcessing(switchTempInProgress);
-  }, [switchTempInProgress]);
+    if (
+      switchTempInProgress.status &&
+      selectedBidId === switchTempInProgress.proposalId
+    ) {
+      setOtProcessing(true);
+    } else {
+      setOtProcessing(false);
+    }
+  }, [switchTempInProgress, selectedBidId]);
 
   /**
    * Trigger Modal onUpdate switchTempStatus state
@@ -75,15 +82,19 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
       const queryparams = new URLSearchParams(winLocationSearch);
       const bidNumber = queryparams.get('bidNo');
       const bidType = queryparams.get('bidType') || 'Clinical_Bid';
-      dispatch(getOpportunity(opportunityId, bidNumber, bidType)).then(() => {
-        dispatch(updateSwitchInProgress(false));
-        setAlertModal(true);
-        dispatch(updateSwitchTempStatusFromWebSocket(false));
-        const className = '._question-tab > div > div > button:nth-child(1)';
-        if (document && document.querySelector(className)) {
-          document.querySelector(className).click();
-        }
-      });
+      if (selectedBidId === switchTempInProgress.proposalId) {
+        dispatch(getOpportunity(opportunityId, bidNumber, bidType)).then(() => {
+          dispatch(
+            updateSwitchInProgress(false, switchTempInProgress.proposalId)
+          );
+          setAlertModal(true);
+          dispatch(updateSwitchTempStatusFromWebSocket(false));
+          const className = '._question-tab > div > div > button:nth-child(1)';
+          if (document && document.querySelector(className)) {
+            document.querySelector(className).click();
+          }
+        });
+      }
     }
     if (switchTempStatus === 'error') {
       setAlertModal(true);
@@ -116,8 +127,9 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   /**
    * Render Switch Temp Error/Success Modal
    */
+  // Render Switch Temp Error/Success Modal
   let renderAlertModal;
-  if (alertModal) {
+  if (alertModal && selectedBidId === switchTempInProgress.proposalId) {
     let modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
     let variant = 'success';
 
