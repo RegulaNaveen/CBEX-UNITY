@@ -14,6 +14,7 @@ import NotesIcon from '../../../../../svg/Notes';
 import QuestionsForCustomerIcon from '../../../../../svg/QuestionsForCustomer';
 import ProposalTeamIcon from '../../../../../svg/ProposalTeam';
 import EmailTemplatesIcon from '../../../../../svg/EmailTemplates';
+import { ClipboardCheck } from '../../../../../svg';
 import KeyMilestoneDeliverableTimelinesIcon from '../../../../../svg/KeyMilestoneDeliverableTimelines';
 import './styles.scss';
 import { selectActiveVTabIndex } from '../../../../../../redux/selectors/proposal';
@@ -31,6 +32,8 @@ function getTabNameFromIndex(index) {
     return 'keymilestonedeliverabletab';
   } else if (index === 4) {
     return 'emailtemplatestab';
+  } else if (index === 5) {
+    return 'tasklisttab';
   }
 }
 const VerticalTabs = styled(Tabs)({
@@ -65,6 +68,7 @@ function VerticalTabsCollapsiblePanel({
   showKeyMilestoneDeliverableTab,
   showEmailTemplatesTab,
   activeVerticleTab,
+  showTasklistTab,
   onTabClick
 }) {
   const activeTabIndex = useSelector(selectActiveVTabIndex);
@@ -98,6 +102,9 @@ function VerticalTabsCollapsiblePanel({
   ];
   if (showEmailTemplatesTab) {
     tabArr.push({ showEmailTemplatesTab });
+  }
+  if (showTasklistTab) {
+    tabArr.push({ showTasklistTab });
   }
 
   function handleTabChange(event, newActiveTab) {
@@ -209,6 +216,23 @@ function VerticalTabsCollapsiblePanel({
                       ? '#0557d5'
                       : '#999999'
                   }
+                />
+              }
+            />
+          </div>
+        );
+      }
+      if (v['showTasklistTab'] !== undefined && v['showTasklistTab'] !== null) {
+        return (
+          <div
+            onClick={e => handleTabChange(e, 5)}
+            key={`vTab-TaskList-${vIdx}`}
+          >
+            <VerticalTab
+              textColor="primary"
+              icon={
+                <ClipboardCheck
+                  active={getTabNameFromIndex(activeTabIndex) === 'tasklisttab'}
                 />
               }
             />
