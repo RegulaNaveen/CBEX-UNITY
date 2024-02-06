@@ -11,7 +11,7 @@ export function fetchTasksList(proposalId) {
     });
     try {
       const taskListResponse = await fetchTasksListApi(proposalId);
-      if (taskListResponse.status === 200) {
+      if (Array.isArray(taskListResponse.tasks)) {
         dispatch({
           type: SET_TASKS,
           payload: taskListResponse.tasks
