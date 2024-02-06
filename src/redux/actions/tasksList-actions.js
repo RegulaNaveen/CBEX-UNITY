@@ -10,11 +10,18 @@ export function fetchTasksList(proposalId) {
       payload: true
     });
     try {
-      const data = await fetchTasksListApi(proposalId);
-      dispatch({
-        type: SET_TASKS,
-        payload: data.tasks
-      });
+      const taskListResponse = await fetchTasksListApi(proposalId);
+      if (taskListResponse.status === 200) {
+        dispatch({
+          type: SET_TASKS,
+          payload: taskListResponse.tasks
+        });
+      } else {
+        dispatch({
+          type: SET_TASKS,
+          payload: []
+        });
+      }
     } catch (err) {
       dispatch({
         type: ERROR_FETCHING_TASKS,

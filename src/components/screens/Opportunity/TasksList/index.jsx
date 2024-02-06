@@ -19,40 +19,40 @@ import {
 } from '../../../../redux/selectors/tasks';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 
-const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
-  if (count === 0) {
-    return null;
-  }
-  if (dayDiffFromToday < 0) {
-    return (
-      <div className="uncompleted-tasks-count">
-        <AlertTriangle />
-        <Typography className="font-red count-text" variant="caption">
-          {count}
-        </Typography>
-      </div>
-    );
-  }
+// const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
+//   if (count === 0) {
+//     return null;
+//   }
+//   if (dayDiffFromToday < 0) {
+//     return (
+//       <div className="uncompleted-tasks-count">
+//         <AlertTriangle />
+//         <Typography className="font-red count-text" variant="caption">
+//           {count}
+//         </Typography>
+//       </div>
+//     );
+//   }
 
-  if (dayDiffFromToday === 0) {
-    return (
-      <div className="uncompleted-tasks-count">
-        <AlertDiamond />
-        <Typography className="font-yellow count-text" variant="caption">
-          {count}
-        </Typography>
-      </div>
-    );
-  }
+//   if (dayDiffFromToday === 0) {
+//     return (
+//       <div className="uncompleted-tasks-count">
+//         <AlertDiamond />
+//         <Typography className="font-yellow count-text" variant="caption">
+//           {count}
+//         </Typography>
+//       </div>
+//     );
+//   }
 
-  return (
-    <div className="uncompleted-tasks-count">
-      <Typography className="count-text" variant="caption">
-        {count}
-      </Typography>
-    </div>
-  );
-};
+//   return (
+//     <div className="uncompleted-tasks-count">
+//       <Typography className="count-text" variant="caption">
+//         {count}
+//       </Typography>
+//     </div>
+//   );
+// };
 
 const TasksList = () => {
   const [tasksGroupsByDay, setTasksGroupsByDay] = useState({});
@@ -175,23 +175,23 @@ const TasksList = () => {
                     <div className="header">
                       <Typography
                         className={classNames('header-title', {
-                          'font-bold': bidCreatedDate.isValid()
-                            ? isCorrectDay(day)
-                            : false
+                          'font-bold': bidCreatedDate.isValid() && false // remove && false
+                          // ? isCorrectDay(day)
+                          // : false
                         })}
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
                         Day {day}{' '}
-                        {tasksGroup.expanded || isCorrectDay(day)
+                        {/* {tasksGroup.expanded || isCorrectDay(day)
                           ? ` (${tasksGroup.dateFormatted})`
-                          : ''}
+                          : ''} */}
                       </Typography>
                       <div>
-                        <UncompletedTasksCount
+                        {/* <UncompletedTasksCount
                           count={tasksGroup.uncompletedCount}
                           dayDiffFromToday={tasksGroup.dayDiffFromToday}
-                        />
+                        /> */}
                       </div>
                     </div>
                   )}
@@ -230,10 +230,10 @@ const TasksList = () => {
                                     wordBreak: 'break-word'
                                   }}
                                   className={classNames({
-                                    'font-red':
-                                      tasksGroup.dayDiffFromToday < 0 &&
-                                      !task.is_completed,
-                                    'font-bold': task.is_completed
+                                    // 'font-red':
+                                    // tasksGroup.dayDiffFromToday < 0 &&
+                                    // !task.is_completed,
+                                    // 'font-bold': task.is_completed
                                   })}
                                 >
                                   {task.description}

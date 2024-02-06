@@ -227,6 +227,7 @@ function VerticalTabsCollapsiblePanel({
           <div
             onClick={e => handleTabChange(e, 5)}
             key={`vTab-TaskList-${vIdx}`}
+            id="vTab-tasklist"
           >
             <VerticalTab
               textColor="primary"
