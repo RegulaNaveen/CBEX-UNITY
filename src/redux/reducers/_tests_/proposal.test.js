@@ -16,10 +16,11 @@ cloneData.proposal.unityTabQuestionLoading = Map({
   questionId: '',
   value: false
 });
-cloneData.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b'] =
-  Map(
-    cloneData.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b']
-  );
+cloneData.proposal.opportunityData[
+  '9aa9dfe2-1222-4dff-8977-f06f45656a4b'
+] = Map(
+  cloneData.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b']
+);
 cloneData.proposal.opportunityData = Map(cloneData.proposal.opportunityData);
 cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
 cloneData.proposal.editQuestionsData = Map({});
@@ -1440,7 +1441,7 @@ describe('proposal reducer', () => {
     expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
   });
   test('updateQuestionLockByUser ', () => {
-    const localStorageMock = (function () {
+    const localStorageMock = (function() {
       let store = {
         userEmail: 'abc@yopmail.com'
       };
@@ -1502,7 +1503,7 @@ describe('proposal reducer', () => {
   });
 
   test('questionLockDetails ', () => {
-    const localStorageMock = (function () {
+    const localStorageMock = (function() {
       let store = {
         userEmail: 'abc@yopmail.com'
       };
@@ -1740,12 +1741,11 @@ describe('proposal reducer', () => {
       questionId: '',
       value: false
     });
-    newState.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b'] =
-      Map(
-        newState.proposal.opportunityData[
-          '9aa9dfe2-1222-4dff-8977-f06f45656a4b'
-        ]
-      );
+    newState.proposal.opportunityData[
+      '9aa9dfe2-1222-4dff-8977-f06f45656a4b'
+    ] = Map(
+      newState.proposal.opportunityData['9aa9dfe2-1222-4dff-8977-f06f45656a4b']
+    );
     newState.proposal.opportunityData = Map(newState.proposal.opportunityData);
     newState.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
     newState.proposal.editQuestionsData = Map({});
@@ -1760,5 +1760,24 @@ describe('proposal reducer', () => {
 
     result = result.toJS();
     expect(result.proposalDetails).toEqual(expectedState);
+  });
+
+  test('switchTempInProgress', () => {
+    const action = {
+      type: PROPOSAL.SWITCH_TEMP_IN_PROGRESS,
+      payload: {
+        proposalId: '9aa9dfe2-1222-4dff-8977-f06f45656a4b',
+        status: true
+      }
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
+  });
+
+  test('SWITCH_TEMP_STATUS', () => {
+    const action = {
+      type: PROPOSAL.SWITCH_TEMP_STATUS,
+      payload: {}
+    };
+    expect(proposalReducer(initialState.proposal, action)).toBeTruthy();
   });
 });
