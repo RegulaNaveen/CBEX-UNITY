@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { selectApprovalsFetching } from './approvals';
 import { isProposalLoading } from './index';
+import { selectTasksFetching } from './tasks';
 
 const selectSearch = state => state.search;
 
@@ -56,7 +57,9 @@ export const selectClearInputFlag = createSelector(
 export const selectDataPrerequisiteSatisfied = createSelector(
   isProposalLoading,
   selectApprovalsFetching,
-  (proposalLoading, approvalLoading) => !proposalLoading && !approvalLoading
+  selectTasksFetching,
+  (proposalLoading, approvalLoading, tasksLoading) =>
+    !proposalLoading && !approvalLoading && !tasksLoading
 );
 
 export const selectSearching = createSelector(

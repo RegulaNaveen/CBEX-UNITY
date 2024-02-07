@@ -32,8 +32,8 @@ export default function TablePreview({ columns, rows }) {
           setTimeout(() => {
             tableColumnRef.current.scrollIntoView({
               behavior: 'auto',
-              block: 'end',
-              inline: 'start'
+              block: 'center',
+              inline: 'nearest'
             });
             dispatch(autoNavigationCompletedAction());
           }, 700);
@@ -45,8 +45,8 @@ export default function TablePreview({ columns, rows }) {
             setTimeout(() => {
               tableRowRef.current.scrollIntoView({
                 behavior: 'auto',
-                block: 'end',
-                inline: 'start'
+                block: 'center',
+                inline: 'nearest'
               });
               dispatch(autoNavigationCompletedAction());
             }, 700);
