@@ -20,12 +20,16 @@ jest.mock('../../../../utils/launchDarkly', () => ({
   default: () => Promise.resolve({ favouriteFlag: true })
 }));
 
+jest.mock('../components/views/export-component/GenerateDocs.jsx', () => (
+  <p>React PDF Component</p>
+));
+
 const proposalId = data.proposalID;
 const autDataMap = Map(data.ssoAuth);
 const detailsMap = Map(data.details);
 const selectedBidMap = Map(data.selectedBid);
 
-describe.skip('Opportunity component', () => {
+describe('Opportunity component', () => {
   window.scrollTo = jest.fn();
   const props = {
     authData: autDataMap,
