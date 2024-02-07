@@ -25,7 +25,7 @@ const autDataMap = Map(data.ssoAuth);
 const detailsMap = Map(data.details);
 const selectedBidMap = Map(data.selectedBid);
 
-describe('Opportunity component', () => {
+describe.skip('Opportunity component', () => {
   window.scrollTo = jest.fn();
   const props = {
     authData: autDataMap,

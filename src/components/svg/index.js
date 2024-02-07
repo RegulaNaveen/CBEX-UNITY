@@ -33,6 +33,9 @@ import Pencil from './Pencil';
 import Globe from './Globe';
 import CalendarWithNum from './CalendarWithNum';
 import CalendarWithMinus from './CalendarWithMinus';
+import ClipboardCheck from './ClipboardCheck';
+import AlertTriangle from './AlertTriangle';
+import AlertDiamond from './AlertDiamond';
 
 export {
   Checkmark,
@@ -68,5 +71,8 @@ export {
   Pencil,
   Globe,
   CalendarWithNum,
-  CalendarWithMinus
+  CalendarWithMinus,
+  ClipboardCheck,
+  AlertTriangle,
+  AlertDiamond
 };
