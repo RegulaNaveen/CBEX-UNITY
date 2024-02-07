@@ -17,7 +17,7 @@ import Spinner from 'react-loader-spinner';
 import Typography from 'apollo-react/components/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import {useAnalytics} from "../../../../hooks" ;
+import { useAnalytics } from '../../../../hooks';
 import { useWindowSize } from '../../../../hooks';
 import Validate from '../../../screens/Opportunity/Validate';
 import {
@@ -119,6 +119,14 @@ const EmailTemplates = React.lazy(() =>
   )
 );
 
+const TasksList = React.lazy(() =>
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "TasksList" */ '../../../screens/Opportunity/TasksList'
+    )
+  )
+);
+
 const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const defaultTabs = [
     {
@@ -163,6 +171,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     setShowshowKeyMilestoneDeliverableTab
   ] = useState(false);
   const [showEmailTemplatesTab, setshowEmailTemplatesTab] = useState(false);
+  const [showTaskslistTab, setShowTasksListTab] = useState(false);
   const switchTempStatus = useSelector(
     state => state.proposal?.toJSON()?.switchTempCallStatus
   );
@@ -425,6 +434,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     const proposalTeamFlag = allFlags.proposalTeamTab || false; // Proposal Team flag
     const approvalFlag = allFlags.approvalsFlag || false;
     const emailTemplatesFlag = allFlags.emailTemplatesFlag || false;
+    const tasksListFlag = allFlags.tasksListFlag || false;
 
     if (
       !verticalTabFlag ||
@@ -432,7 +442,8 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         questionsForCustomerFlag,
         notepadFlag,
         proposalTeamFlag,
-        emailTemplatesFlag
+        emailTemplatesFlag,
+        tasksListFlag
       ].some(flag => !!flag)
     ) {
       verticalTabFlag = false;
@@ -444,6 +455,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     setShowProposalTeamTab(proposalTeamFlag);
     setShowshowKeyMilestoneDeliverableTab(true);
     setshowEmailTemplatesTab(emailTemplatesFlag);
+    setShowTasksListTab(tasksListFlag);
   }
 
   const evalAndSetVTabCollapse = useCallback(
@@ -1044,6 +1056,60 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         </div>
       );
     }
+    if (activeVerticleTab === 'tasklisttab') {
+      return (
+        <div
+          id="panel-notepad"
+          style={{ borderRadius: '5px' }}
+          ref={refVal => setPanelRef(refVal)}
+          className={classNames({
+            collapsed: vtabCollpased
+          })}
+        >
+          <Panel
+            minWidth={notepadMinWidthPx}
+            maxWidth={notepadMaxWidthPx}
+            width={notepadMaxWidthPx}
+            style={{ borderRadius: '5px' }}
+            resizable
+            onClose={() => {
+              setIsNotepadOpen(false);
+              setVTabCollapsed(true);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, true));
+              }
+              setSystemTriggeredClick(false);
+            }}
+            onOpen={() => {
+              setIsNotepadOpen(true);
+              setVTabCollapsed(false);
+              if (!systemTriggeredClick) {
+                dispatch(setVTabUserPreferenceAction(value, false));
+              }
+              setSystemTriggeredClick(false);
+            }}
+          >
+            <Suspense
+              fallback={
+                <Spinner
+                  type="TailSpin"
+                  color="#297DFD"
+                  width={30}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                  }}
+                />
+              }
+            >
+              <TasksList />
+            </Suspense>
+          </Panel>
+        </div>
+      );
+    }
   };
 
   const renderTabList = () => {
@@ -1106,6 +1172,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
                 showKeyMilestoneDeliverableTab={showKeyMilestoneDeliverableTab}
                 activeVerticleTab={activeVerticleTab}
                 showEmailTemplatesTab={showEmailTemplatesTab}
+                showTasklistTab={showTaskslistTab}
                 renderPanel={activeTab => {
                   // Check activeTab value and render required component
                   return <>{renderVerticleTabsComponent(activeTab)}</>;
