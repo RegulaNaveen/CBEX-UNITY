@@ -4,7 +4,13 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  queryByAttribute
+} from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
@@ -15,6 +21,8 @@ import { SocketContext } from '../../../../../context/SocketContext';
 import * as UtilsFunc from '../../../../screens/UnityTabs/utils';
 import Tab from '../Tab';
 import * as proposalData from '../../../../../components/views/__tests__/Search/data.json';
+
+const getById = queryByAttribute.bind(null, 'id');
 
 const customTab = [
   {
@@ -358,6 +366,11 @@ jest.mock('../../../../../components/screens/UnityTabs', () => () => (
   <p>Custom tab Mock Component</p>
 ));
 
+jest.mock(
+  '../../../../../components/screens/Opportunity/TasksList',
+  () => () => <p>Task List Mock Component</p>
+);
+
 describe('testing for tab component', () => {
   beforeEach(() => {
     jest.useFakeTimers();
@@ -618,6 +631,65 @@ describe('testing for tab component', () => {
     fireEvent.click(getByText('Strategy Development'));
     await waitFor(() => {
       expect(getByText('Questions Mock Component')).toBeInTheDocument();
+    });
+  });
+
+  test('should render tasklist tab', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: {
+        tasksListFlag: true,
+        verticalTab: true
+      }
+    });
+    const { getByText, container } = render(
+      <TabWithRedux
+        id="UZA89257"
+        selectedView="questions"
+        onChangeSelectedTab={jest.fn()}
+      />
+    );
+    await waitFor(() => {
+      expect(getById(container, 'vTab-tasklist')).toBeInTheDocument();
+    });
+    fireEvent.click(getById(container, 'vTab-tasklist'));
+    await waitFor(() => {
+      expect(getByText('Task List Mock Component')).toBeInTheDocument();
+    });
+  });
+
+  test.skip('should open/close panel of task list', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: {
+        tasksListFlag: true,
+        verticalTab: true
+      }
+    });
+    const { getByText, container, debug } = render(
+      <TabWithRedux
+        id="UZA89257"
+        selectedView="questions"
+        onChangeSelectedTab={jest.fn()}
+      />
+    );
+    await waitFor(() => {
+      expect(getById(container, 'vTab-tasklist')).toBeInTheDocument();
+    });
+    fireEvent.click(getById(container, 'vTab-tasklist'));
+    await waitFor(() => {
+      expect(getByText('Task List Mock Component')).toBeInTheDocument();
+    });
+    const panelToggleBtn = container.querySelector(
+      '#panel-notepad > div > button > svg > path'
+    );
+    fireEvent.click(panelToggleBtn);
+    await waitFor(() => {
+      expect(container.querySelector('.collapsed')).toBeNull();
+    });
+    fireEvent.click(panelToggleBtn);
+    await waitFor(() => {
+      expect(container.querySelector('.collapsed')).not.toBeNull();
     });
   });
 });

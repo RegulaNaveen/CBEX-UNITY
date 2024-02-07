@@ -1,0 +1,54 @@
+#tasks-list-left-section {
+  padding: 16px;
+  padding-right: 0;
+  .task-list-divider-hr {
+    height: 1px;
+    border: 0.6em;
+    border-top: 1px solid #ddd;
+    padding: 0;
+  }
+  .accordions-wrapper {
+    height: calc(100% - 2.25rem);
+    overflow: auto;
+    padding: 8px;
+    .header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      .header-title {
+        font-weight: 400;
+        padding-top: 0.75rem;
+        &.font-bold {
+          font-weight: bold;
+        }
+      }
+      .uncompleted-tasks-count {
+        display: flex;
+        align-items: center;
+        .count-text {
+          font-size: 14px;
+          padding-left: 4px;
+          margin-bottom: -4px;
+        }
+      }
+    }
+    .MuiPaper-root.MuiAccordion-root {
+      border-width: 0;
+      .task-item-drag-container {
+        display: flex !important;
+        .drag-icon {
+          margin-right: 0.35rem;
+        }
+        .font-bold {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  .font-red {
+    color: #e20000;
+  }
+  .font-yellow {
+    color: #ff9300;
+  }
+}
