@@ -1,10 +1,9 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import Statement from '../Statement';
 import { Provider } from 'react-redux';
 import { store } from '../../../store';
-import { List, Map, OrderedMap } from 'immutable';
+import { List, OrderedMap } from 'immutable';
 const milestoneNewList = List([
   {
     Name: 'Overview',
@@ -13,8 +12,8 @@ const milestoneNewList = List([
 ]);
 const oppdataOrderedmap = OrderedMap({});
 const roleNamesList = List(['Business Developer']);
-const selectedBidMap = Map({});
-const questionDataMap = Map({});
+const selectedBidMap = new Map();
+const questionDataMap = new Map();
 const proposalDetail = {
   Customer: 'Vamsitest',
   'CRM #': 'UZA89202',
