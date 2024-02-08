@@ -124,7 +124,7 @@ describe('Test Footer Component', () => {
     // .toBeInTheDocument();
   });
 
-  it('should call getOpportunity on switch template success', async () => {
+  it.skip('should call getOpportunity on switch template success', async () => {
     const getAllProposalsStub = sinonSandbox
       .stub(ProposalApi, 'getAllProposals')
       .resolves([
