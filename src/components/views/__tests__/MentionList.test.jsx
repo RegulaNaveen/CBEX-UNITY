@@ -9,7 +9,6 @@ describe('MentionList', () => {
       items: [{ listOption: 'abc' }],
       command: jest.fn()
     };
-    ('');
 
     const mockSelectItem = jest.fn();
 
