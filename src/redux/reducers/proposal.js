@@ -174,7 +174,7 @@ const INITIAL_STATE: Map = fromJS({
   lookUpOptions: {},
   boxAdditionalLink: {},
   boxOpportunityFolderId: '',
-  switchTempCallStatus: false,
+  switchTempCallStatus: { data: false, proposalId: null },
   switchTempInProgress: { status: false, proposalId: null },
   eventflag: {},
   showNaCheckbox: false,
@@ -1681,6 +1681,15 @@ const switchTempInProgress = (state, action) => {
   return state;
 };
 
+const switchTempCallStatus = (state, action) => {
+  const { payload } = action;
+  const selectedBid = state.getIn(['selectedBid', 'id']);
+  if (selectedBid === payload.proposalId) {
+    return state.set('switchTempCallStatus', payload);
+  }
+  return state;
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1738,8 +1747,14 @@ const actionMap = {
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [BOX_OPPORTUNITY_FOLDER_ID]: onBoxOpportunityFolderId,
-  [SWITCH_TEMP_STATUS]: (state, { payload }) =>
-    state.set('switchTempCallStatus', payload),
+  // [SWITCH_TEMP_STATUS]: (state, { data, proposalId }) => {
+  //   console.log('first', data, proposalId);
+  //   const selectedBid = state.getIn(['selectedBid', 'id']);
+  //   if (selectedBid === payload.proposalId) {
+  //     return state.set('switchTempCallStatus', payload);
+  //   }
+  // },
+  [SWITCH_TEMP_STATUS]: switchTempCallStatus,
   [SWITCH_TEMP_IN_PROGRESS]: switchTempInProgress,
   [RESET_PROPOSALID]: resetProposalId,
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
