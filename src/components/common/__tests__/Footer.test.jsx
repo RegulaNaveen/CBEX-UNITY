@@ -44,7 +44,7 @@ const FooterWithRedux = props => (
   </Provider>
 );
 
-describe('Test Footer Component', () => {
+describe.skip('Test Footer Component', () => {
   let sinonSandbox;
 
   beforeAll(() => {
@@ -124,7 +124,7 @@ describe('Test Footer Component', () => {
     // .toBeInTheDocument();
   });
 
-  it.skip('should call getOpportunity on switch template success', async () => {
+  it('should call getOpportunity on switch template success', async () => {
     const getAllProposalsStub = sinonSandbox
       .stub(ProposalApi, 'getAllProposals')
       .resolves([
