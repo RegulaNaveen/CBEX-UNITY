@@ -18,7 +18,6 @@ import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
-import TextField from 'apollo-react/components/TextField';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -188,10 +187,10 @@ const BidHistory = () => {
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
                                 : item.bidName.startsWith('Post Award')
-                                  ? `Post Award ${item.bidNo}`
-                                  : item.bidName.startsWith('RFI')
-                                    ? `RFI ${item.bidNo}`
-                                    : item.bidName}
+                                ? `Post Award ${item.bidNo}`
+                                : item.bidName.startsWith('RFI')
+                                ? `RFI ${item.bidNo}`
+                                : item.bidName}
                               {selectedBid.get('id') === item.bidId &&
                               selectedBid.get('bidStatus')
                                 ? '(processing)'
@@ -223,10 +222,10 @@ const BidHistory = () => {
                     {bidType && bidType.includes('Early_Engagement_Bid')
                       ? 'Early Engagement Development Plan'
                       : bidType && bidType.includes('Post_Award_Bid')
-                        ? ''
-                        : bidType && bidType.includes('RFI_Request')
-                          ? ''
-                          : 'Pertinent Details / Specific Rebid Request'}
+                      ? ''
+                      : bidType && bidType.includes('RFI_Request')
+                      ? 'Request Detail'
+                      : 'Pertinent Details / Specific Rebid Request'}
                   </p>
                   {bidType && bidType.includes('Post_Award_Bid') ? (
                     <div>
@@ -253,19 +252,8 @@ const BidHistory = () => {
                   ) : bidType &&
                     bidType.includes('RFI_Request' || 'Bid RFI_Request') ? (
                     <div>
-                      <p className="pertinent-details-title req-detail-title">
-                        Request Detail
-                      </p>
-                      <div className="rfi-textfield-container">
-                        <TextField
-                          placeholder="Describe details"
-                          sizeAdjustable
-                          maxWidth={500}
-                          maxHeight={150}
-                          fullWidth
-                          value={selectedBid.get('requestDetail')}
-                          InputProps={{ readOnly: true }}
-                        />
+                      <div className="pertinent-details-section">
+                        <p>{selectedBid.get('requestDetail')}</p>
                       </div>
                     </div>
                   ) : (
