@@ -44,6 +44,7 @@ import '../../../../fonts/Proxima-Nova-Alt-Bold-bold';
 import '../../../../fonts/Proxima-Nova-Bold-It-bolditalic';
 import '../../../../fonts/Proxima-Nova-Reg-It-italic';
 import { savePDF } from '../../../api/proposal';
+import { formatAnswer } from './utils';
 
 const styles = StyleSheet.create({
   page: {
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     height: 'auto'
   }
 });
-function checkFormattedAnswer(answers) {
+export function checkFormattedAnswer(answers) {
   try {
     let lastAnswer = answers[answers.length - 1];
     let formattedAnswer;
@@ -508,9 +509,9 @@ function questionTables(allQuestions, proposalQuestions) {
         if (question.questionText.length > 1) {
           html += `<div class="resp-table-row">`;
           html += `<div class="table-header-cell"> ${question.questionHTML} </div>`;
-          html += `<div class="table-header-cell"> ${formatDate(
-            checkFormattedAnswer(question.answers),
-            question.answerConfiguration
+          html += `<div class="table-header-cell"> ${formatAnswer(
+            question,
+            'pdf'
           )} <span class="blueColorText">${
             getUnityPredicatedText(question.answers)
               ? getUnityPredicatedText(question.answers)
@@ -530,9 +531,9 @@ function questionTables(allQuestions, proposalQuestions) {
         const { questionText } = question;
         html += `<div class="resp-table-row">`;
         html += `<div class="table-header-cell"> ${questionText}</div>`;
-        html += `<div class="table-header-cell"> ${formatDate(
-          checkFormattedAnswer(question.answers),
-          question.answerConfiguration
+        html += `<div class="table-header-cell"> ${formatAnswer(
+          question,
+          'pdf'
         )} <span class="blueColorText">${
           getUnityPredicatedText(question.answers)
             ? getUnityPredicatedText(question.answers)
@@ -571,9 +572,9 @@ function questionTables(allQuestions, proposalQuestions) {
           if (question.questionText.length > 1) {
             html += `<div class="resp-table-row">`;
             html += `<div class="table-header-cell"> ${questionHTML}</div>`;
-            html += `<div class="table-header-cell"  style=${questionTypeValidation}> ${formatDate(
-              checkFormattedAnswer(question.answers),
-              question.answerConfiguration
+            html += `<div class="table-header-cell"  style=${questionTypeValidation}> ${formatAnswer(
+              question,
+              'pdf'
             )} <span class="blueColorText">${
               getUnityPredicatedText(question.answers)
                 ? getUnityPredicatedText(question.answers)
