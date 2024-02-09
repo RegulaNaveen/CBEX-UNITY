@@ -164,7 +164,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const isBtnDisabledRefresh =
     questionTemplateVersionNumber &&
     pubTempVersion === questionTemplateVersionNumber;
-  console.log('switchTempStatus.data', switchTempStatus.data);
+
   return (
     <>
       <Footer
@@ -186,7 +186,6 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                       <Lock fontSize="extraSmall" />
                     ) : (
                       <>
-                        {console.log('I am here because switch temp is false')}
                         {pubTempVersion && !isBtnDisabledRefresh && (
                           <ExclamationTriangle data-testid="update-triangle" />
                         )}
@@ -198,7 +197,6 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
                       </>
                     ),
                   size: 'small',
-                  // disabled: !!switchTempStatus.data,
                   disabled:
                     switchTempStatus.data &&
                     switchTempStatus.data !== 'success',

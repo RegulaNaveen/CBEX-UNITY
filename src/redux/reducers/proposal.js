@@ -1747,13 +1747,6 @@ const actionMap = {
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [BOX_OPPORTUNITY_FOLDER_ID]: onBoxOpportunityFolderId,
-  // [SWITCH_TEMP_STATUS]: (state, { data, proposalId }) => {
-  //   console.log('first', data, proposalId);
-  //   const selectedBid = state.getIn(['selectedBid', 'id']);
-  //   if (selectedBid === payload.proposalId) {
-  //     return state.set('switchTempCallStatus', payload);
-  //   }
-  // },
   [SWITCH_TEMP_STATUS]: switchTempCallStatus,
   [SWITCH_TEMP_IN_PROGRESS]: switchTempInProgress,
   [RESET_PROPOSALID]: resetProposalId,

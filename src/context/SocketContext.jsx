@@ -592,7 +592,8 @@ const SocketContextProvider = props => {
             case 'SWITCH_TEMPLATE_ERROR':
               if (setSwitchInProgress)
                 setSwitchInProgress(false, data.data.proposalId);
-              if (updateSwitchTempStatus) updateSwitchTempStatus('error');
+              if (updateSwitchTempStatus)
+                updateSwitchTempStatus('error', data.data.proposalId);
               break;
             case 'IN_APP_NOTIFICATION_RECEIVED':
               updateNotification();

@@ -1562,7 +1562,6 @@ export const getOpportunity = (
       data[0].isCurrent =
         currentProposal.proposal.proposalId === data[0].proposal.proposalId;
       if (data && data.length && data[0].proposal?.switchTemplateStatus) {
-        console.log('I am here');
         dispatch(updateSwitchInProgress(true, data[0].proposal.proposalId));
         dispatch({
           type: SWITCH_TEMP_STATUS,
@@ -1699,7 +1698,6 @@ export const changeBid = (bid, viewType) => {
     });
     if (response?.data && response?.data?.proposal?.switchTemplateStatus) {
       dispatch(updateSwitchInProgress(true, response.data.proposal.proposalId));
-      console.log('why I am here');
       dispatch({
         type: SWITCH_TEMP_STATUS,
         payload: {
