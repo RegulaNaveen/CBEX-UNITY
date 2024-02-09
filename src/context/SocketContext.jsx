@@ -554,7 +554,6 @@ const SocketContextProvider = props => {
         // On Message Recieve
         newSocket.addEventListener('message', async response => {
           const data = JSON.parse(response.data);
-
           switch (data.event) {
             case 'IN_PROGRESS':
               addNewBid(data.data);
@@ -580,19 +579,21 @@ const SocketContextProvider = props => {
                 setSwitchInProgress(true, data.data.proposalId);
               }
               if (updateSwitchTempStatus) {
-                updateSwitchTempStatus('progress');
+                updateSwitchTempStatus('progress', data.data.proposalId);
               }
               break;
             case 'SWITCH_TEMPLATE_COMPLETED':
               console.log('SWITCH_TEMPLATE_COMPLETED');
               if (updateSwitchTempStatus) {
-                updateSwitchTempStatus('success');
+                updateSwitchTempStatus('success', data.data.proposalId);
               }
               setSwitchInProgress(false, data.data.proposalId);
               break;
             case 'SWITCH_TEMPLATE_ERROR':
-              if (setSwitchInProgress) setSwitchInProgress(false);
-              if (updateSwitchTempStatus) updateSwitchTempStatus('error');
+              if (setSwitchInProgress)
+                setSwitchInProgress(false, data.data.proposalId);
+              if (updateSwitchTempStatus)
+                updateSwitchTempStatus('error', data.data.proposalId);
               break;
             case 'IN_APP_NOTIFICATION_RECEIVED':
               updateNotification();
