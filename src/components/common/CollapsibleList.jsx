@@ -2,7 +2,6 @@
 // @flow
 import React, { Component, Suspense } from 'react';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
 import Link from 'apollo-react/components/Link';
 import Plus from 'apollo-react-icons/Plus';
 import FolderOpen from 'apollo-react-icons/FolderOpen';
