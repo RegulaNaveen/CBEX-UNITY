@@ -1565,7 +1565,10 @@ export const getOpportunity = (
         dispatch(updateSwitchInProgress(true, data[0].proposal.proposalId));
         dispatch({
           type: SWITCH_TEMP_STATUS,
-          payload: 'progress'
+          payload: {
+            data: 'progress',
+            proposalId: data[0].proposal.proposalId
+          }
         });
       }
       proposalsData.push(data[0]);
@@ -1697,7 +1700,10 @@ export const changeBid = (bid, viewType) => {
       dispatch(updateSwitchInProgress(true, response.data.proposal.proposalId));
       dispatch({
         type: SWITCH_TEMP_STATUS,
-        payload: 'progress'
+        payload: {
+          data: 'progress',
+          proposalId: response.data.proposal.proposalId
+        }
       });
     }
     dispatch({
@@ -1778,11 +1784,11 @@ export const fetchOTListData = () => async () => {
 /**
  * Switch Temp Status Update - Action
  */
-export const updateSwitchTempStatusFromWebSocket = data => {
+export const updateSwitchTempStatusFromWebSocket = (data, proposalId) => {
   return async dispatch => {
     dispatch({
       type: SWITCH_TEMP_STATUS,
-      payload: data
+      payload: { data, proposalId }
     });
   };
 };

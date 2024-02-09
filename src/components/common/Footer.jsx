@@ -77,7 +77,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
    * Trigger Modal onUpdate switchTempStatus state
    */
   useEffect(() => {
-    if (switchTempStatus === 'success') {
+    if (switchTempStatus.data === 'success') {
       const winLocationSearch = window.location.search;
       const queryparams = new URLSearchParams(winLocationSearch);
       const bidNumber = queryparams.get('bidNo');
@@ -96,11 +96,11 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
         });
       }
     }
-    if (switchTempStatus === 'error') {
+    if (switchTempStatus.data === 'error') {
       setAlertModal(true);
       dispatch(updateSwitchTempStatusFromWebSocket(false));
     }
-  }, [switchTempStatus]);
+  }, [switchTempStatus.data]);
 
   /**
    * Fetch OT list from Api
@@ -133,7 +133,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
     let modalMsg = PROPOSAL.SWITCH_TEMP_SUCCESS;
     let variant = 'success';
 
-    switch (switchTempStatus) {
+    switch (switchTempStatus.data) {
       case 'error':
         modalMsg = PROPOSAL.SWITCH_TEMP_FAILED;
         variant = 'error';
@@ -175,26 +175,34 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
           templateVersion
             ? [
                 {
-                  label: !switchTempStatus ? PROPOSAL.SWITCH_TEMP : '',
-                  icon: switchTempStatus ? (
-                    <Lock fontSize="extraSmall" />
-                  ) : (
-                    <>
-                      {pubTempVersion && !isBtnDisabledRefresh && (
-                        <ExclamationTriangle data-testid="update-triangle" />
-                      )}
-                      <Sync
-                        fontSize="extraSmall"
-                        data-testid="sync-icon"
-                        style={{ marginRight: '5px' }}
-                      />
-                    </>
-                  ),
+                  label:
+                    !switchTempStatus.data ||
+                    switchTempStatus.data === 'success'
+                      ? PROPOSAL.SWITCH_TEMP
+                      : '',
+                  icon:
+                    switchTempStatus.data === 'progress' &&
+                    selectedBidId === switchTempStatus.proposalId ? (
+                      <Lock fontSize="extraSmall" />
+                    ) : (
+                      <>
+                        {pubTempVersion && !isBtnDisabledRefresh && (
+                          <ExclamationTriangle data-testid="update-triangle" />
+                        )}
+                        <Sync
+                          fontSize="extraSmall"
+                          data-testid="sync-icon"
+                          style={{ marginRight: '5px' }}
+                        />
+                      </>
+                    ),
                   size: 'small',
-                  disabled: !!switchTempStatus,
+                  disabled:
+                    switchTempStatus.data &&
+                    switchTempStatus.data !== 'success',
                   className: classNames('switch-temp-btn', 'no-animation', {
                     'display-none': !isEditableBid,
-                    'red-btn': !!switchTempStatus
+                    'red-btn': !!switchTempStatus.data
                   }),
                   onClick: () => {
                     setAlertModal(false);
