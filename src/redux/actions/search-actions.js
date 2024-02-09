@@ -408,11 +408,11 @@ export const resumeSearchAction = ({
 const resetAutoNavigatedStateAfterDelay = () => {
   return async (dispatch, getState) => {
     await new Promise(resolve => {
-      setTimeout(() => resolve(), 10000);
+      setTimeout(() => resolve(), 15000);
     });
-    const autoNavigated = selectAutoNavigatedToCurrentResult(getState());
-    if (!autoNavigated) {
-      dispatch(autoNavigationCompletedAction());
-    }
+    // const autoNavigated = selectAutoNavigatedToCurrentResult(getState());
+    // if (!autoNavigated) {
+    //   dispatch(autoNavigationCompletedAction());
+    // }
   };
 };
