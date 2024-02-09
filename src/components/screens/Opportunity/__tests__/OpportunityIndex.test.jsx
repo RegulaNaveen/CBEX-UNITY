@@ -1,9 +1,6 @@
-/**
- * @jest-environment jsdom
- */
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+// import { act,  } from 'react-dom/test-utils';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -20,12 +17,16 @@ jest.mock('../../../../utils/launchDarkly', () => ({
   default: () => Promise.resolve({ favouriteFlag: true })
 }));
 
+jest.mock('../../../views/export-component/GenerateDocs.jsx', () => () => (
+  <p>React PDF Component</p>
+));
+
 const proposalId = data.proposalID;
 const autDataMap = Map(data.ssoAuth);
 const detailsMap = Map(data.details);
 const selectedBidMap = Map(data.selectedBid);
 
-describe.skip('Opportunity component', () => {
+describe('Opportunity component', () => {
   window.scrollTo = jest.fn();
   const props = {
     authData: autDataMap,
@@ -72,25 +73,21 @@ describe.skip('Opportunity component', () => {
     .spyOn(SessionHandler, 'getUserRole')
     .mockReturnValue('Proposal Developer');
   test('Opportunity component header', async () => {
-    await act(async () => {
-      render(
-        <Provider store={store}>
-          <SocketContext.Provider
-            value={{ socket: null, updateSocketOppId: jest.fn() }}
-          >
-            <BrowserRouter>
-              <Opportunity {...props} />
-            </BrowserRouter>
-          </SocketContext.Provider>
-        </Provider>
-      );
+    const { getByText } = render(
+      <Provider store={store}>
+        <SocketContext.Provider
+          value={{ socket: null, updateSocketOppId: jest.fn() }}
+        >
+          <BrowserRouter>
+            <Opportunity {...props} />
+          </BrowserRouter>
+        </SocketContext.Provider>
+      </Provider>
+    );
+    await store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_ERROR,
+      payload: 'proposal error'
     });
-    act(() => {
-      store.dispatch({
-        type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_ERROR,
-        payload: 'proposal error'
-      });
-    });
-    expect(screen.getByText(/IQVIA™/i)).toBeInTheDocument();
-  }, 20000);
+    expect(getByText(/IQVIA™/i)).toBeInTheDocument();
+  });
 });

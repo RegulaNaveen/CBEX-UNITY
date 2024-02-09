@@ -236,6 +236,7 @@ function VerticalTabsCollapsiblePanel({
                   active={getTabNameFromIndex(activeTabIndex) === 'tasklisttab'}
                 />
               }
+              title="Task List"
             />
           </div>
         );
