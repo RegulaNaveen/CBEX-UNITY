@@ -10,6 +10,63 @@ import {
 } from '../../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
+// TablePreviewCell component
+function TablePreviewCell({ row, column }) {
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const prevSearchResult = useSelector(selectPrevSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
+
+  const dispatch = useDispatch();
+
+  const cellRef = useRef(null);
+
+  useEffect(() => {
+    if (
+      currentSearchResult !== null &&
+      currentSearchResult.inputText === row[column.accessor] &&
+      cellRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
+      const delay =
+        prevSearchResult && prevSearchResult.tab !== currentSearchResult.tab
+          ? 700
+          : 1400;
+      setTimeout(() => {
+        cellRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        });
+        dispatch(autoNavigationCompletedAction());
+      }, delay);
+    }
+  }, [currentSearchResult, autoNavigatedToCurrentResult, cellRef.current]);
+
+  return (
+    <td
+      ref={cellRef}
+      style={{
+        color:
+          currentSearchResult !== null &&
+          currentSearchResult.inputText === row[column.accessor]
+            ? '#fff'
+            : '',
+        backgroundColor:
+          currentSearchResult !== null &&
+          currentSearchResult.inputText === row[column.accessor]
+            ? '#0557d559'
+            : ''
+      }}
+    >
+      <Tooltip title={row[column.accessor]} placement="top" id="table-tooltip">
+        <p>{row[column.accessor]}</p>
+      </Tooltip>
+    </td>
+  );
+}
+
 export default function TablePreview({ columns, rows }) {
   const tableColumnRef = useRef(null);
   const tableRowRef = useRef(null);
@@ -38,27 +95,9 @@ export default function TablePreview({ columns, rows }) {
         }
       });
     }
-
-    if (currentSearchResult !== null && tableRowRef.current !== null) {
-      totalNotHiddenRows.map(row => {
-        totalNotHiddenColumns.map((column, index) => {
-          if (currentSearchResult.inputText === row[column.accessor]) {
-            setTimeout(() => {
-              tableRowRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'center',
-                inline: 'nearest'
-              });
-              dispatch(autoNavigationCompletedAction());
-            }, 400);
-          }
-        });
-      });
-    }
   }, [
     currentSearchResult,
     tableColumnRef.current,
-    tableRowRef.current,
     prevSearchResult,
     autoNavigatedToCurrentResult,
     query
@@ -109,33 +148,7 @@ export default function TablePreview({ columns, rows }) {
                     {columns.map(column => (
                       <>
                         {row[column.accessor] ? (
-                          <>
-                            <td
-                              ref={tableRowRef}
-                              style={{
-                                color:
-                                  currentSearchResult !== null &&
-                                  currentSearchResult.inputText ===
-                                    row[column.accessor]
-                                    ? '#fff'
-                                    : '',
-                                backgroundColor:
-                                  currentSearchResult !== null &&
-                                  currentSearchResult.inputText ===
-                                    row[column.accessor]
-                                    ? '#0557d559'
-                                    : ''
-                              }}
-                            >
-                              <Tooltip
-                                title={row[column.accessor]}
-                                placement="top"
-                                id="table-tooltip"
-                              >
-                                <p>{row[column.accessor]}</p>
-                              </Tooltip>
-                            </td>
-                          </>
+                          <TablePreviewCell row={row} column={column} />
                         ) : (
                           <td className="blankRow"> - </td>
                         )}
