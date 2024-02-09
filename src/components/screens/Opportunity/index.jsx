@@ -60,13 +60,15 @@ import {
   selectFavourite,
   selectCustomName,
   selectNextMilestone,
-  selectGetbidChangeLoader
+  selectGetbidChangeLoader,
+  selectTasksListFlag
 } from '../../../redux/selectors/proposal';
 import {
   clearSearchAction,
   closeSearchAction
 } from '../../../redux/actions/search-actions';
 import { fetchEmailTemplates } from '../../../redux/actions/emailTemplate-actions';
+import { fetchTasksList } from '../../../redux/actions/tasksList-actions';
 
 type State = {
   selectedView: string
@@ -145,7 +147,7 @@ export class Opportunity extends Component<Props, State> {
     const notificationId = queryparams.get('notification_id');
     const bidNumber = queryparams.get('bidNo');
     const bidType = queryparams.get('bidType') || 'Clinical_Bid';
-    
+
     if (!queryparams.get('bidType')) {
       queryparams.set('bidType', 'Clinical_Bid');
       history.push({
@@ -209,7 +211,9 @@ export class Opportunity extends Component<Props, State> {
       selectedBid,
       bidList,
       changeBidInView,
-      location
+      location,
+      fetchTasksList,
+      tasksListFlag
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const { bidStatus } = selectedBid.toJS();
@@ -217,6 +221,9 @@ export class Opportunity extends Component<Props, State> {
 
     // Bid changed
     if (prevProposalId !== thisProposalId) {
+      if (tasksListFlag && thisProposalId !== '') {
+        fetchTasksList(thisProposalId);
+      }
       if ((this.props && location && location?.pathname) !== UBUILD) {
         this.context.updateSocketOppId(params.id, thisProposalId);
         localStorage.setItem('proposalId', thisProposalId);
@@ -417,7 +424,8 @@ const mapStateToProps = (state: Map) => ({
   favourite: selectFavourite(state),
   customName: selectCustomName(state),
   nextMilestone: selectNextMilestone(state),
-  getbidChangeLoader: selectGetbidChangeLoader(state)
+  getbidChangeLoader: selectGetbidChangeLoader(state),
+  tasksListFlag: selectTasksListFlag(state)
 });
 
 export default compose(
@@ -450,6 +458,7 @@ export default compose(
     toggleEditCustomNameModal,
     onEditCustomName,
     updateProposalDetailFromWebSocket,
-    fetchEmailTemplates
+    fetchEmailTemplates,
+    fetchTasksList
   })
 )(AnalyticsHOC(Opportunity));
