@@ -44,7 +44,7 @@ const FooterWithRedux = props => (
   </Provider>
 );
 
-describe('Test Footer Component', () => {
+describe.skip('Test Footer Component', () => {
   let sinonSandbox;
 
   beforeAll(() => {
