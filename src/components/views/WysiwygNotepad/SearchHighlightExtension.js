@@ -4,19 +4,19 @@ function extractTextFromDoc(
   doc,
   refs = { texts: [], mentionIndices: [], offset: 0 }
 ) {
-  if (doc.type && doc.type && doc.type.name === 'hardBreak') {
+  if (doc.type && doc.type.name === 'hardBreak') {
     refs.texts.push(' ');
     refs.offset += 1;
   }
-  if (doc.type && doc.type && doc.type.name === 'listItem') {
+  if (doc.type && doc.type.name === 'listItem') {
     refs.texts.push('  ');
     refs.offset += 2;
   }
-  if (doc.type && doc.type && doc.type.name === 'horizontalRule') {
+  if (doc.type && doc.type.name === 'horizontalRule') {
     refs.texts.push(' ');
     refs.offset += 1;
   }
-  if (doc.type && doc.type && doc.type.name === 'text') {
+  if (doc.type && doc.type.name === 'text') {
     refs.texts.push(doc.text);
     refs.offset += doc.text.length;
     return;
@@ -44,7 +44,6 @@ function extractTextFromDoc(
 
   if (
     doc.type &&
-    doc.type &&
     (doc.type.name === 'paragraph' ||
       doc.type.name === 'bulletList' ||
       doc.type.name === 'orderedList' ||
@@ -52,8 +51,6 @@ function extractTextFromDoc(
   ) {
     refs.texts.push('  ');
     refs.offset += 2;
-    // if (parent !== 'listItem') {
-    // }
   }
 
   return refs;
