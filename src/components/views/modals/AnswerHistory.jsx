@@ -1557,7 +1557,7 @@ class AnswerHistory extends Component<Props> {
             const tmp = answers.toJS();
             let styleClass =
               !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
-            if (new Date(answer) === 'Invalid Date') {
+            if (new Date(answer) == 'Invalid Date') {
               return renderWord('Invalid Date', 'removed');
             }
             // Dont add styles if answers are same
