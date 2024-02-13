@@ -39,6 +39,12 @@ describe('TasksList Unit Tests', () => {
     });
   });
 
+  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn()
+  }));
+
   test('render Task list component', async () => {
     const { getByText } = render(<TasksListWithRedux />);
     expect(getByText('Task List')).toBeTruthy();

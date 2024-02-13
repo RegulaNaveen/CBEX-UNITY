@@ -6,9 +6,7 @@ import AccordionDetails from 'apollo-react/components/AccordionDetails';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import classNames from 'classnames';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import Checkbox from 'apollo-react/components/Checkbox';
-import DragIcon from 'apollo-react-icons/Drag';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Loader from 'apollo-react/components/Loader';
 import { groupBy, merge } from 'lodash';
 import Header from './Header';
@@ -18,6 +16,7 @@ import {
   selectTasksList
 } from '../../../../redux/selectors/tasks';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
+import ListItem from './ListItem';
 
 // const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 //   if (count === 0) {
@@ -168,6 +167,7 @@ const TasksList = () => {
               defaultExpanded={isCorrectDay(day)}
               expanded={tasksGroup.expanded}
               onChange={() => handleExpandChange(day)}
+              key={`task-day-${day}`}
             >
               <AccordionSummary>
                 <Droppable droppableId={`droppable-task-group-${day}-header`}>
@@ -202,46 +202,11 @@ const TasksList = () => {
                   {(provided, snapshot) => (
                     <div {...provided.droppableProps} ref={provided.innerRef}>
                       {tasksGroup.tasks.map((task, index) => (
-                        <Draggable
-                          key={`drag-group-1-item-${index}`}
-                          draggableId={`drag-group-1-item-${index}`}
+                        <ListItem
                           index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div>
-                              <div
-                                ref={provided.innerRef}
-                                className="task-item-drag-container"
-                                {...provided.draggableProps}
-                              >
-                                <span {...provided.dragHandleProps}>
-                                  <DragIcon fontSize="small" />
-                                </span>
-                                <Checkbox
-                                  checked={task.is_completed}
-                                  style={{
-                                    marginLeft: '0.01rem',
-                                    marginTop: '-0.25rem'
-                                  }}
-                                />
-                                <p
-                                  style={{
-                                    flexGrow: 1,
-                                    wordBreak: 'break-word'
-                                  }}
-                                  className={classNames({
-                                    // 'font-red':
-                                    // tasksGroup.dayDiffFromToday < 0 &&
-                                    // !task.is_completed,
-                                    // 'font-bold': task.is_completed
-                                  })}
-                                >
-                                  {task.description}
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
+                          task={task}
+                          key={`task-item-${day}-${index}`}
+                        />
                       ))}
                     </div>
                   )}
