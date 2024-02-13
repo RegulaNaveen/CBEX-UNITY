@@ -55,51 +55,51 @@ function ListItem({ index, task }) {
     };
   }, [descRef]);
 
-  //   const handleClick = label => () => {
-  //     console.log(`You picked ${label}.`);
-  //   };
+  const handleClick = label => () => {
+    console.log(`You picked ${label}.`);
+  };
 
-  //   const menuItems = [
-  //     {
-  //       text: (
-  //         <div className="task-list-menu-item-wrapper">
-  //           <User2Icon fontSize="small" />
-  //           <Typography className="menu-item-label">See Owners</Typography>
-  //         </div>
-  //       ),
-  //       onClick: handleClick('See Owners'),
-  //       disabled: true
-  //     },
-  //     {
-  //       text: (
-  //         <div className="task-list-menu-item-wrapper">
-  //           <CalendarIcon fontSize="small" />
-  //           <Typography className="menu-item-label">History</Typography>
-  //         </div>
-  //       ),
-  //       onClick: handleClick('History'),
-  //       disabled: true
-  //     },
-  //     {
-  //       text: (
-  //         <div className="task-list-menu-item-wrapper">
-  //           <PencilIcon fontSize="small" />
-  //           <Typography className="menu-item-label">Edit</Typography>
-  //         </div>
-  //       ),
-  //       onClick: handleClick('Edit')
-  //     },
-  //     {
-  //       text: (
-  //         <div className="task-list-menu-item-wrapper">
-  //           <TrashIcon fontSize="small" />
-  //           <Typography className="menu-item-label">Delete</Typography>
-  //         </div>
-  //       ),
-  //       onClick: handleClick('Delete'),
-  //       destructiveAction: true
-  //     }
-  //   ];
+  const menuItems = [
+    {
+      text: (
+        <div className="task-list-menu-item-wrapper">
+          <User2Icon fontSize="small" />
+          <Typography className="menu-item-label">See Owners</Typography>
+        </div>
+      ),
+      onClick: handleClick('See Owners'),
+      disabled: true
+    },
+    {
+      text: (
+        <div className="task-list-menu-item-wrapper">
+          <CalendarIcon fontSize="small" />
+          <Typography className="menu-item-label">History</Typography>
+        </div>
+      ),
+      onClick: handleClick('History'),
+      disabled: true
+    },
+    {
+      text: (
+        <div className="task-list-menu-item-wrapper">
+          <PencilIcon fontSize="small" />
+          <Typography className="menu-item-label">Edit</Typography>
+        </div>
+      ),
+      onClick: handleClick('Edit')
+    },
+    {
+      text: (
+        <div className="task-list-menu-item-wrapper">
+          <TrashIcon fontSize="small" />
+          <Typography className="menu-item-label">Delete</Typography>
+        </div>
+      ),
+      onClick: handleClick('Delete'),
+      destructiveAction: true
+    }
+  ];
 
   return (
     <Draggable
@@ -138,7 +138,7 @@ function ListItem({ index, task }) {
                 <OverflowEllipsis show={overflowed} desc={task.description} />
               </p>
             </div>
-            {/* <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
+            <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
               <IconMenuButton
                 menuItems={menuItems}
                 size="small"
@@ -146,7 +146,7 @@ function ListItem({ index, task }) {
               >
                 <EllipsisVertical />
               </IconMenuButton>
-            </Tooltip> */}
+            </Tooltip>
           </div>
         </div>
       )}
