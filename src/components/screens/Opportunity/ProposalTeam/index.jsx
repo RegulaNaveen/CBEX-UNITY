@@ -145,6 +145,8 @@ function ProposalTeam() {
           questionDataDestinations: questionDataDestinations
         });
       }
+      // code has been added to fix sonar issue
+      return item;
     });
 
   useEffect(() => {

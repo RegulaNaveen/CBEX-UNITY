@@ -34,13 +34,44 @@
     }
     .MuiPaper-root.MuiAccordion-root {
       border-width: 0;
+      .MuiAccordionDetails-root {
+        padding: 0.5rem;
+        padding-left: 1rem;
+      }
       .task-item-drag-container {
         display: flex !important;
+        align-items: center;
         .drag-icon {
           margin-right: 0.35rem;
         }
-        .font-bold {
-          font-weight: bold;
+        .task-desc {
+          line-height: 24px;
+          max-height: 48px; // line-height * 2 - two lines
+          overflow: hidden;
+          p {
+            position: relative;
+            // padding-left: 14px;
+            word-break: break-all;
+            &.font-bold {
+              font-weight: bold;
+            }
+            .ellipsis {
+              display: none;
+              position: absolute;
+              right: 0;
+              top: 24px;
+              height: 24px;
+              background-color: #ffffff;
+              &.show {
+                width: 30px;
+                display: flex;
+                align-items: flex-end;
+              }
+              svg {
+                font-size: 16px;
+              }
+            }
+          }
         }
       }
     }
@@ -50,5 +81,18 @@
   }
   .font-yellow {
     color: #ff9300;
+  }
+}
+
+#task-list-item-menu-btn {
+  .MuiMenuItem-root {
+    padding: 12px 32px 12px 16px;
+    .task-list-menu-item-wrapper {
+      display: flex;
+      align-items: center;
+      .menu-item-label {
+        padding-left: 8px;
+      }
+    }
   }
 }

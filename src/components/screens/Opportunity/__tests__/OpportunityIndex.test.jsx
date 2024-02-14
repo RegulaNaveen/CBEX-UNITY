@@ -1,6 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
-// import { act,  } from 'react-dom/test-utils';
+import { cleanup, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -10,7 +9,6 @@ import { store } from '../../../../store';
 import { SocketContext } from '../../../../context/SocketContext';
 import * as SessionHandler from '../../../../SessionHandler';
 import Opportunity from '../index';
-import { Map } from 'immutable';
 
 jest.mock('../../../../utils/launchDarkly', () => ({
   __esModule: true,
@@ -22,9 +20,9 @@ jest.mock('../../../views/export-component/GenerateDocs.jsx', () => () => (
 ));
 
 const proposalId = data.proposalID;
-const autDataMap = Map(data.ssoAuth);
-const detailsMap = Map(data.details);
-const selectedBidMap = Map(data.selectedBid);
+const autDataMap = new Map(Object.entries(data.ssoAuth));
+const detailsMap = new Map(Object.entries(data.details));
+const selectedBidMap = new Map(Object.entries(data.selectedBid));
 
 describe('Opportunity component', () => {
   window.scrollTo = jest.fn();
