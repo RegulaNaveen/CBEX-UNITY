@@ -4,12 +4,6 @@
 
 # include:
 #   - local: devops/vars/global.yml
-#   - project: 'CBEx/devops'
-#     ref: test
-#     file: /gitlab_balckduck_scan.yml
-#     rules:
-#       - if: $CI_PIPELINE_SOURCE == "push"
-#       - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 variables:
   RDS_DOMAIN: cbex
@@ -34,8 +28,6 @@ stages:
   - gitleaks
   - blackduck_scan
   - summary_notification
-
-
 # #include:
 # #- project: 'CBEx/unity/Unity-QA'
 # #ref: Unity_QA_Testing
