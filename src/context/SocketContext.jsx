@@ -32,6 +32,9 @@ import {
   updateDashboardBid,
   syncDashboardOpportunity
 } from '../redux/actions/proposals-actions';
+import {
+  setTaskFromSocket
+} from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
@@ -417,6 +420,29 @@ const SocketContextProvider = props => {
     }
   };
 
+
+  const addTask = (taskData, ws, proposalId) => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'ADD_TASK',
+            data: {
+              taskData,
+              proposalId
+            }
+          }
+        })
+      );
+    } catch (error) {
+      console.log('addTask', error);
+    }
+  };
+
   /**
    *  Question unLock
    */
@@ -676,6 +702,14 @@ const SocketContextProvider = props => {
                 );
               }
               break;
+              case 'ADD_TASK':  
+              if (data.data.taskData) {
+                setTaskFromSocket(
+                 data.data.taskData,
+                  data.data.proposalId
+                );
+              }
+              break;
 
             case 'QUESTIONS':
               // Get list of questions already locked by other users
@@ -928,6 +962,12 @@ const SocketContextProvider = props => {
       )
     );
   };
+  //add task 
+  const addTaskWrapper = (taskData, proposalId) => { 
+    waitForSocketConnectionMinInterval(() =>
+    addTask(taskData, null, proposalId)
+    );
+  }
 
   const updateCustomNameWrapper = (oppNo, customName) => {
     waitForSocketConnectionMinInterval(() =>
@@ -1113,7 +1153,8 @@ const mapDispatchToProps = {
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  setTaskFromSocket: setTaskFromSocket
 };
 
 export default connect(
