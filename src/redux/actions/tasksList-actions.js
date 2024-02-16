@@ -50,6 +50,7 @@ export const setTask = (
 ): ThunkAction<string, Object> => {
  
   return async (dispatch: Dispatch<string, Object>) => {
+    
     try {
       const taskListResponse = await setTaskDataApi(proposalId, taskData);
       const data = taskListResponse.result;
@@ -80,6 +81,10 @@ export const editTask = (
   socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
+    dispatch({
+      type: LOADING_TASKS,
+      payload: true
+    });
     try {
       const taskListResponse = await editTaskDataApi(
         proposalId,
@@ -114,10 +119,7 @@ export const setTaskFromSocket = (
   return async (dispatch: Dispatch<string, Object>, getState) => {
    const selectedBid = getSelectedBid(getState()).toJS();
    if (selectedBid?.id === proposalId) {
-    dispatch({
-      type: LOADING_TASKS,
-      payload: true
-    });
+   
     try {
         dispatch({
           type: ADD_TASK,

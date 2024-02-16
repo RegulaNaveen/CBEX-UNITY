@@ -26,7 +26,7 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
     case 'ADD_TASK':
       return {
         ...state,
-        tasks: [...state.tasks, action.payload]
+        tasks: addTask(state, action)
       };
     case 'EDIT_TASK':
       return {
@@ -37,6 +37,19 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
       return state;
   }
 }
+
+const addTask = (state, action) => {
+  const { payload } = action;
+  const tasks = [...state.tasks];
+  const { task_id, proposal_id } = payload;
+  const tabIndex = tasks.findIndex(
+    value => value.task_id === task_id && value.proposal_id === proposal_id
+  );
+  if (tabIndex === -1) {
+    tasks.push(payload);
+  }
+  return tasks;
+};
 
 const editTask = (state, action) => {
   const { payload } = action;
