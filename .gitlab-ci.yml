@@ -1,554 +1,579 @@
-workflow:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
+# workflow:
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"' # Disable pipeline for Merge requests
+
+# include:
+#   - local: devops/vars/global.yml
+#   - project: 'CBEx/devops'
+#     ref: test
+#     file: /gitlab_balckduck_scan.yml
+#     rules:
+#       - if: $CI_PIPELINE_SOURCE == "push"
+#       - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+variables:
+  RDS_DOMAIN: cbex
+  RDS_TEST: "react-frontend"
 
 include:
-  - local: devops/vars/global.yml
-  - project: 'CBEx/devops'
-    ref: test
-    file: /gitlab_balckduck_scan.yml
+  - project: 'RDS-DevOps-COE/templates'
+    ref: main
+    file: 
+      - ci/unittest-ci.yml    
+      - ci/sonar-ci.yml
+      - ci/gitleaks-ci.yml
+      - ci/blackduck-ci.yml
+      - utilities/email-notification.yml
     rules:
       - if: $CI_PIPELINE_SOURCE == "push"
-      - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-
-#include:
-#- project: 'CBEx/unity/Unity-QA'
-#ref: Unity_QA_Testing
-#file: /.gitlab-ci.yml
-#when: always
-#needs:
-#- deployqa
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "dev"
 
 stages:
-  #- prebuild
-  #- sonar #sonar report
-  - test
-  - sonar
-  - blackduckscan
-  - builddev
-  - deploydev
-  - builddev2
-  - deploydev2
-  - buildl4
-  - deployl4
-  - pafexecution_l4
-  - buildqa
-  - deployqa
-  - pafexecution_svt
-  - builddemo
-  - deploydemo
-  - builduat
-  - deployuat
-  - pafexecution_uat
-  - buildprod
-  - deployprod
-  - pafexecution_prod
-  - deploystack
+  - unit_test
+  - sonar_check
+  - gitleaks
+  - blackduck_scan
+  - summary_notification
 
-sonar:
-  stage: sonar
-  image: sonarsource/sonar-scanner-cli:4.5
-  # needs:
-  #   - test
-  # rules:
-  #   - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
-  #   - when: always
-  variables:
-    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
-    GIT_DEPTH: 0
-  cache:
-    key: '${CI_JOB_NAME}'
-    paths:
-      - .sonar/cache
-  artifacts:
-    paths:
-      - coverage/
-  script:
-    - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
-    - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
-  only:
-    - pushes
-    - merge_requests
 
-test:
-  stage: test
-  image: node:18
-  except:
-    - qa
-    - uat
-  script:
-    #- yarn install #v1.22.5
-    #- yarn test
-    #- yarn coverage
-    - npm install --legacy-peer-deps
-    - npm run coverage
-  artifacts:
-    paths:
-      - coverage/
-  #allow_failure: false
-  tags:
-    - docker
-  only:
-    - pushes
-    - merge_requests
+# #include:
+# #- project: 'CBEx/unity/Unity-QA'
+# #ref: Unity_QA_Testing
+# #file: /.gitlab-ci.yml
+# #when: always
+# #needs:
+# #- deployqa
 
-dev:
-  stage: builddev
-  image: node:18
-  variables:
-    Environment: $CI_JOB_NAME
-  rules:
-    - if: $ENV=="dev"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
-  script:
-    - cat $devaccount >> build.env
-    - cat $frontendacmdev >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: dev
+# stages:
+#   #- prebuild
+#   #- sonar #sonar report
+#   - test
+#   - sonar
+#   - blackduckscan
+#   - builddev
+#   - deploydev
+#   - builddev2
+#   - deploydev2
+#   - buildl4
+#   - deployl4
+#   - pafexecution_l4
+#   - buildqa
+#   - deployqa
+#   - pafexecution_svt
+#   - builddemo
+#   - deploydemo
+#   - builduat
+#   - deployuat
+#   - pafexecution_uat
+#   - buildprod
+#   - deployprod
+#   - pafexecution_prod
+#   - deploystack
 
-deploydev:
-  stage: deploydev
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - dev
-  # only:
-  #   - dev
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="dev"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - aws --version
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: dev
+# sonar:
+#   stage: sonar
+#   image: sonarsource/sonar-scanner-cli:4.5
+#   # needs:
+#   #   - test
+#   # rules:
+#   #   - if: $CI_COMMIT_REF_NAME == "dev" || $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+#   #   - when: always
+#   variables:
+#     SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+#     GIT_DEPTH: 0
+#   cache:
+#     key: '${CI_JOB_NAME}'
+#     paths:
+#       - .sonar/cache
+#   artifacts:
+#     paths:
+#       - coverage/
+#   script:
+#     - apk upgrade --update-cache --available && apk add openssl && rm -rf /var/cache/apk/*
+#     - sonar-scanner -X -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.projectKey=$CI_PROJECT_NAME
+#   only:
+#     - pushes
+#     - merge_requests
 
-dev2:
-  stage: builddev2
-  image: node:18
-  variables:
-    Environment: $CI_JOB_NAME
-  #when: manual
-  # only:
-  #   #- dev
-  #   - migration
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="dev2"
-    - if: '$CI_COMMIT_TAG'
-      when: manual
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - cat $devaccount > build.env #(Skip if creating env in production account)
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: dev2
+# test:
+#   stage: test
+#   image: node:18
+#   except:
+#     - qa
+#     - uat
+#   script:
+#     #- yarn install #v1.22.5
+#     #- yarn test
+#     #- yarn coverage
+#     - npm install --legacy-peer-deps
+#     - npm run coverage
+#   artifacts:
+#     paths:
+#       - coverage/
+#   #allow_failure: false
+#   tags:
+#     - docker
+#   only:
+#     - pushes
+#     - merge_requests
 
-deploydev2:
-  stage: deploydev2
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - dev2
-  # only:
-  #   #- dev
-  #   - migration
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="dev2"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: dev2
+# dev:
+#   stage: builddev
+#   image: node:18
+#   variables:
+#     Environment: $CI_JOB_NAME
+#   rules:
+#     - if: $ENV=="dev"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#     - if: $CI_PIPELINE_SOURCE == "push"
+#   script:
+#     - cat $devaccount >> build.env
+#     - cat $frontendacmdev >> build.env
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: dev
 
-buildl4:
-  stage: buildl4
-  image: node:18
-  when: manual
-  variables:
-    Environment: l4
-  # only:
-  #  # #- dev
-  #   - migration
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="l4"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - cat $prod_build >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: l4
+# deploydev:
+#   stage: deploydev
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - dev
+#   # only:
+#   #   - dev
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="dev"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - aws --version
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: dev
 
-deployl4:
-  stage: deployl4
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - buildl4
-  when: manual
-  # only:
-  #   #- dev
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="l4"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: l4
+# dev2:
+#   stage: builddev2
+#   image: node:18
+#   variables:
+#     Environment: $CI_JOB_NAME
+#   #when: manual
+#   # only:
+#   #   #- dev
+#   #   - migration
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="dev2"
+#     - if: '$CI_COMMIT_TAG'
+#       when: manual
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - cat $devaccount > build.env #(Skip if creating env in production account)
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: dev2
 
-demo:
-  stage: builddemo
-  image: node:18
-  variables:
-    Environment: $CI_JOB_NAME
-  when: manual
-  # only:
-  #   - demonew
-  #   - dev
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="demo"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - cat $devaccount >> build.env
-    - cat $frontendacmdev >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: demo
+# deploydev2:
+#   stage: deploydev2
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - dev2
+#   # only:
+#   #   #- dev
+#   #   - migration
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="dev2"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: dev2
 
-deploydemo:
-  stage: deploydemo
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - demo
-  when: manual
-  # only:
-  #   - demonew
-  #   - dev
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="demo"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: demo
+# buildl4:
+#   stage: buildl4
+#   image: node:18
+#   when: manual
+#   variables:
+#     Environment: l4
+#   # only:
+#   #  # #- dev
+#   #   - migration
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="l4"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - cat $prod_build >> build.env
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: l4
 
-qa:
-  stage: buildqa
-  image: node:18
-  # needs:
-  #   - deploydev
-  when: manual
-  variables:
-    Environment: $CI_JOB_NAME
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="qa"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - cat $prod_build >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: qa
+# deployl4:
+#   stage: deployl4
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - buildl4
+#   when: manual
+#   # only:
+#   #   #- dev
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="l4"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: l4
 
-deployqa:
-  stage: deployqa
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - qa
-  when: manual
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="qa"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: qa
+# demo:
+#   stage: builddemo
+#   image: node:18
+#   variables:
+#     Environment: $CI_JOB_NAME
+#   when: manual
+#   # only:
+#   #   - demonew
+#   #   - dev
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="demo"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - cat $devaccount >> build.env
+#     - cat $frontendacmdev >> build.env
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: demo
 
-uat:
-  stage: builduat
-  image: node:18
-  variables:
-    Environment: $CI_JOB_NAME
-  # needs:
-  #   - deploydev
-  #- pafexecution_regression
-  when: manual
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="uat"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - cat $prod_build >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: uat
+# deploydemo:
+#   stage: deploydemo
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - demo
+#   when: manual
+#   # only:
+#   #   - demonew
+#   #   - dev
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="demo"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region $Region
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: demo
 
-deployuat:
-  stage: deployuat
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - uat
-  when: manual
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="uat"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: uat
+# qa:
+#   stage: buildqa
+#   image: node:18
+#   # needs:
+#   #   - deploydev
+#   when: manual
+#   variables:
+#     Environment: $CI_JOB_NAME
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="qa"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - cat $prod_build >> build.env
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: qa
 
-prod:
-  stage: buildprod
-  image: node:18
-  variables:
-    Environment: $CI_JOB_NAME
-  # only:
-  #   - tags
-  #   - pipelines
-  # needs:
-  #   - deploydev
-  rules:
-    - if: $ENV=="prod"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  when: manual
-  script:
-    - cat $prod_build >> build.env
-    - cat devops/vars/${Environment}.env >> build.env
-    - source build.env
-    - npm cache clean --force
-    - npm install --legacy-peer-deps
-    - npm run build:$Environment
-    - cp -r public/* dist/
-  artifacts:
-    paths:
-      - dist/
-      - build.env
-  tags:
-    - docker
-  environment: prod
+# deployqa:
+#   stage: deployqa
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - qa
+#   when: manual
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="qa"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: qa
 
-deployprod:
-  stage: deployprod
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  needs:
-    - prod
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="prod"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  when: manual
-  script:
-    - source build.env
-    - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
-    - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
-  tags:
-    - docker
-  environment: prod
+# uat:
+#   stage: builduat
+#   image: node:18
+#   variables:
+#     Environment: $CI_JOB_NAME
+#   # needs:
+#   #   - deploydev
+#   #- pafexecution_regression
+#   when: manual
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="uat"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - cat $prod_build >> build.env
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: uat
 
-pafexecution_l4:
-  stage: pafexecution_l4
-  needs:
-    - deployl4
-  #when: always
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="l4"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  variables:
-    ENV_NAME: l4
-  trigger:
-    project: 'CBEx/unity/Unity-QA'
-    branch: preprod
-    strategy: depend
+# deployuat:
+#   stage: deployuat
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - uat
+#   when: manual
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="uat"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   script:
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: uat
 
-pafexecution_svt:
-  stage: pafexecution_svt
-  needs:
-    - deployqa
-  #when: always
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="qa"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  variables:
-    ENV_NAME: svt
-  trigger:
-    project: 'CBEx/unity/Unity-QA'
-    branch: svt
-    strategy: depend
+# prod:
+#   stage: buildprod
+#   image: node:18
+#   variables:
+#     Environment: $CI_JOB_NAME
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   # needs:
+#   #   - deploydev
+#   rules:
+#     - if: $ENV=="prod"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   when: manual
+#   script:
+#     - cat $prod_build >> build.env
+#     - cat devops/vars/${Environment}.env >> build.env
+#     - source build.env
+#     - npm cache clean --force
+#     - npm install --legacy-peer-deps
+#     - npm run build:$Environment
+#     - cp -r public/* dist/
+#   artifacts:
+#     paths:
+#       - dist/
+#       - build.env
+#   tags:
+#     - docker
+#   environment: prod
 
-pafexecution_uat:
-  stage: pafexecution_uat
-  needs:
-    - deployuat
-  #when: always
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="uat"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  variables:
-    ENV_NAME: uat
-  trigger:
-    project: 'CBEx/unity/Unity-QA'
-    branch: uat
-    strategy: depend
+# deployprod:
+#   stage: deployprod
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   needs:
+#     - prod
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="prod"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   when: manual
+#   script:
+#     - source build.env
+#     - aws s3 sync dist/ s3://$BucketName/ --delete --region "us-east-1"
+#     - aws cloudfront create-invalidation --distribution-id $(aws cloudfront list-distributions  --query "DistributionList.Items[?starts_with(to_string(AliasICPRecordals[0].CNAME), '$Route53Cname')].Id" --output text) --paths "/*" --region "us-east-1"
+#   tags:
+#     - docker
+#   environment: prod
 
-pafexecution_prod:
-  stage: pafexecution_prod
-  needs:
-    - deployprod
-  #when: always
-  # only:
-  #   - tags
-  #   - pipelines
-  rules:
-    - if: $ENV=="prod"
-    - if: '$CI_COMMIT_TAG'
-    - if: $CI_PIPELINE_SOURCE == "pipelines"
-  variables:
-    ENV_NAME: prod
-  trigger:
-    project: 'CBEx/unity/Unity-QA'
-    branch: prd
-    strategy: depend
+# pafexecution_l4:
+#   stage: pafexecution_l4
+#   needs:
+#     - deployl4
+#   #when: always
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="l4"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   variables:
+#     ENV_NAME: l4
+#   trigger:
+#     project: 'CBEx/unity/Unity-QA'
+#     branch: preprod
+#     strategy: depend
 
-.deploystack:
-  stage: deploystack
-  rules:
-    #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
-    #when: never
-    #- if:  $CI_COMMIT_REF_NAME =~ /demonew/
-    #when: never
-    - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
-      when: always
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  #dependencies:
-  #- l4
-  script:
-    - source build.env
-    - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
-    - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
+# pafexecution_svt:
+#   stage: pafexecution_svt
+#   needs:
+#     - deployqa
+#   #when: always
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="qa"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   variables:
+#     ENV_NAME: svt
+#   trigger:
+#     project: 'CBEx/unity/Unity-QA'
+#     branch: svt
+#     strategy: depend
+
+# pafexecution_uat:
+#   stage: pafexecution_uat
+#   needs:
+#     - deployuat
+#   #when: always
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="uat"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   variables:
+#     ENV_NAME: uat
+#   trigger:
+#     project: 'CBEx/unity/Unity-QA'
+#     branch: uat
+#     strategy: depend
+
+# pafexecution_prod:
+#   stage: pafexecution_prod
+#   needs:
+#     - deployprod
+#   #when: always
+#   # only:
+#   #   - tags
+#   #   - pipelines
+#   rules:
+#     - if: $ENV=="prod"
+#     - if: '$CI_COMMIT_TAG'
+#     - if: $CI_PIPELINE_SOURCE == "pipelines"
+#   variables:
+#     ENV_NAME: prod
+#   trigger:
+#     project: 'CBEx/unity/Unity-QA'
+#     branch: prd
+#     strategy: depend
+
+# .deploystack:
+#   stage: deploystack
+#   rules:
+#     #- if:  $CI_COMMIT_REF_NAME =~ /^feature/ || $CI_COMMIT_REF_NAME =~ /^bugfix/
+#     #when: never
+#     #- if:  $CI_COMMIT_REF_NAME =~ /demonew/
+#     #when: never
+#     - if: '$DeployStack == "True"' #this flag drives whether to deploy the infrastructure stack
+#       when: always
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   #dependencies:
+#   #- l4
+#   script:
+#     - source build.env
+#     - aws cloudformation validate-template --template-body file://devops/cloudformation/cbex-unity-frontend-cf.yml --region $Region
+#     - aws cloudformation deploy --stack-name $Project-$Product-$Module-$Environment --template-file devops/cloudformation/cbex-unity-frontend-cf.yml --parameter-overrides $(cat devops/vars/cfparameters.ini) $(cat build.env) --tags $(cat devops/vars/cftags.ini) Environment=$Environment Lifecycle=$Environment --region $Region
