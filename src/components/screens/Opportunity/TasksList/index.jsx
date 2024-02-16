@@ -17,6 +17,7 @@ import {
 } from '../../../../redux/selectors/tasks';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
+import ProgressIndicator from './ProgressIndicator';
 
 // const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 //   if (count === 0) {
@@ -61,6 +62,14 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
+  console.log(
+    'bidCreatedDate',
+    moment([
+      bidCreatedDate.year(),
+      bidCreatedDate.month(),
+      bidCreatedDate.date()
+    ]).format('DD MMM')
+  );
   const TODAY = useMemo(() => moment(), []);
   const DAYS_SINCE_BID_CREATED = useMemo(
     () =>
@@ -88,6 +97,21 @@ const TasksList = () => {
     [bidCreatedDate, DAYS_SINCE_BID_CREATED]
   );
 
+  const getDays = bidDate => {
+    let days = [];
+    let date = moment(bidDate, 'DD MMM YY');
+    date = date.add(1, 'days');
+    let count = 0;
+    while (count < 10) {
+      if (date.day() !== 0 && date.day() !== 6) {
+        days.push(date.format('DD MMM YY'));
+        count++;
+      }
+      date = date.add(1, 'days');
+    }
+    return days;
+  };
+
   useEffect(() => {
     const tasksGroup = {
       1: [],
@@ -101,15 +125,18 @@ const TasksList = () => {
       9: [],
       10: []
     };
+    const days = getDays(moment(bidCreatedDate).format('DD MMM YY')); // 10 days from bid created date
     Object.entries(merge(tasksGroup, groupBy(tasks, 'no_of_units'))).forEach(
       ([day, tasksForADay]) => {
         const dateForDay = bidCreatedDate.clone().add(day, 'd');
         tasksGroup[day] = {
           tasks: tasksForADay.sort((a, b) => a.order - b.order),
           expanded: isCorrectDay(day),
-          date: dateForDay,
+          date: days[day - 1],
           dateFormatted: dateForDay.format('DD MMM'),
           uncompletedCount: tasksForADay.filter(task => !task.is_completed)
+            .length,
+          completedCount: tasksForADay.filter(task => !task.is_completed)
             .length,
           dayDiffFromToday: moment([
             dateForDay.year(),
@@ -159,6 +186,9 @@ const TasksList = () => {
     <div id="tasks-list-left-section">
       <div className="task-list-header">
         <Header />
+        <div className="progress-indicator">
+          <ProgressIndicator tasksList={tasksGroupsByDay} />
+        </div>
       </div>
       <div className="accordions-wrapper">
         <DragDropContext onDragUpdate={handleDragUpdate}>
