@@ -4,6 +4,9 @@ import {
   editTaskDataApi
 } from '../../api/tasksList';
 import { TASKS } from '../../constants/types';
+import {
+  getSelectedBid
+} from '../selectors';
 
 const { LOADING_TASKS, SET_TASKS, ERROR_FETCHING_TASKS, ADD_TASK, EDIT_TASK } =
   TASKS;
@@ -56,12 +59,6 @@ export const setTask = (
           payload: data
         });
       }
-      if (socketContext)
-        await socketContext?.addTaskWrapper(
-          data,
-          proposalId
-        );
-      return data;
     } catch (err) {
       dispatch({
         type: ERROR_FETCHING_TASKS,
@@ -72,9 +69,7 @@ export const setTask = (
         type: LOADING_TASKS,
         payload: false
       });
-    }
-    
-    
+    } 
   };
 };
 
@@ -117,18 +112,57 @@ export const setTaskFromSocket = (
   proposalId
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
-    const selectedBid = getSelectedBid(getState()).toJS();
-    if (selectedBid?.id === proposalId) {
+   const selectedBid = getSelectedBid(getState()).toJS();
+   if (selectedBid?.id === proposalId) {
+    dispatch({
+      type: LOADING_TASKS,
+      payload: true
+    });
+    try {
+        dispatch({
+          type: ADD_TASK,
+          payload: taskData
+        });
+    } catch (err) {
+      dispatch({ type: ERROR_FETCHING_TASKS, payload: err });
+    }finally {
       dispatch({
         type: LOADING_TASKS,
-        payload: {}
+        payload: false
       });
-      try {
-        dispatch({ type: ADD_TASK, payload: taskData });
-      } catch (err) {
-        dispatch({ type: ERROR_FETCHING_TASKS, payload: err });
-      }
     }
+  }
+    
+  };
+};
+
+
+export const editTaskFromSocket = (
+  taskData: Object,
+  proposalId
+): ThunkAction<string, Object> => {
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+   const selectedBid = getSelectedBid(getState()).toJS();
+   if (selectedBid?.id === proposalId) {
+    dispatch({
+      type: LOADING_TASKS,
+      payload: true
+    });
+    try {
+        dispatch({
+          type: EDIT_TASK,
+          payload: taskData
+        });
+    } catch (err) {
+      dispatch({ type: ERROR_FETCHING_TASKS, payload: err });
+    }finally {
+      dispatch({
+        type: LOADING_TASKS,
+        payload: false
+      });
+    }
+  }
+    
   };
 };
 
