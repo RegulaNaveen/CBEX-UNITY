@@ -13,6 +13,8 @@ import PencilIcon from 'apollo-react-icons/Pencil';
 import TrashIcon from 'apollo-react-icons/Trash';
 import classNames from 'classnames';
 import Typography from 'apollo-react/components/Typography';
+import { editTask } from '../../../../redux/actions/tasksList-actions';
+import { useDispatch } from 'react-redux';
 
 function OverflowEllipsis({ desc, show }) {
   return (
@@ -32,6 +34,7 @@ function OverflowEllipsis({ desc, show }) {
 function ListItem({ index, task }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
+  const dispatch = useDispatch();
 
   const handleResize = useCallback(() => {
     if (descRef) {
@@ -101,6 +104,15 @@ function ListItem({ index, task }) {
     }
   ];
 
+  const handleCheckboxClick = task => {
+    const taskData = {
+      is_completed: !task.is_completed,
+      no_of_units: task.no_of_units,
+      description: task.description
+    };
+    const result = dispatch(editTask(task.proposal_id, task.task_id, taskData));
+  };
+
   return (
     <Draggable
       key={`drag-group-1-item-${index}`}
@@ -123,6 +135,7 @@ function ListItem({ index, task }) {
                 marginLeft: '0.01rem',
                 marginTop: '-0.25rem'
               }}
+              onClick={() => handleCheckboxClick(task)}
             />
             <div className="task-desc">
               <p
