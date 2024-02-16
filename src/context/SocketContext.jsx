@@ -428,9 +428,9 @@ const SocketContextProvider = props => {
       }
       ws.send(
         JSON.stringify({
-          action: 'TASK',
+          action: 'TASK_ADD',
           body: {
-            event: 'ADD_TASK',
+            event: 'TASK_ADD',
             data: {
               taskData,
               proposalId
@@ -964,8 +964,9 @@ const SocketContextProvider = props => {
   };
   //add task 
   const addTaskWrapper = (taskData, proposalId) => { 
+    console.log('addTaskWrapper', taskData, proposalId)
     waitForSocketConnectionMinInterval(() =>
-    addTask(taskData, null, proposalId)
+      addTask(taskData, null, proposalId)
     );
   }
 
@@ -1109,7 +1110,8 @@ const SocketContextProvider = props => {
         updateFavouriteWrapper,
         updateCustomNameWrapper,
         updateDashboardSFValueWrapper,
-        ApprovalCustomQuestionDeleteWrapper
+        ApprovalCustomQuestionDeleteWrapper,
+        addTaskWrapper
       }}
     >
       {props.children}

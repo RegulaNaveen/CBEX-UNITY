@@ -45,6 +45,7 @@ export const setTask = (
   taskData: Object,
   socketContext
 ): ThunkAction<string, Object> => {
+ 
   return async (dispatch: Dispatch<string, Object>) => {
     try {
       const taskListResponse = await setTaskDataApi(proposalId, taskData);

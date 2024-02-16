@@ -38,7 +38,7 @@ const AddNewTask = ({ day, proposalId }) => {
         no_of_units: Number(day),
         description: inputValue
       };
-      const result = dispatch(setTask(proposalId, taskData));
+      const result = dispatch(setTask(proposalId, taskData, socketContext));
       if (result) {
         setShowAddTask(false);
         setShowAddOwner(false);
