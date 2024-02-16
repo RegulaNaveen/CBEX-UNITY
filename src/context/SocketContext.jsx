@@ -33,7 +33,8 @@ import {
   syncDashboardOpportunity
 } from '../redux/actions/proposals-actions';
 import {
-  setTaskFromSocket
+  setTaskFromSocket,
+  editTaskFromSocket
 } from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -421,27 +422,6 @@ const SocketContextProvider = props => {
   };
 
 
-  const addTask = (taskData, ws, proposalId) => {
-    try {
-      if (!ws) {
-        ws = socket.current;
-      }
-      ws.send(
-        JSON.stringify({
-          action: 'TASK_ADD',
-          body: {
-            event: 'TASK_ADD',
-            data: {
-              taskData,
-              proposalId
-            }
-          }
-        })
-      );
-    } catch (error) {
-      console.log('addTask', error);
-    }
-  };
 
   /**
    *  Question unLock
@@ -574,7 +554,9 @@ const SocketContextProvider = props => {
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
           deleteApprovalCustomTabCustomQuestionFromSocket,
-          selectedBid
+          selectedBid,
+          setTaskFromSocket,
+          editTaskFromSocket
         } = props;
 
         // On Message Recieve
@@ -702,11 +684,19 @@ const SocketContextProvider = props => {
                 );
               }
               break;
-              case 'ADD_TASK':  
-              if (data.data.taskData) {
+              case 'TASK_ADD':  
+              if (data.data) {
                 setTaskFromSocket(
-                 data.data.taskData,
-                  data.data.proposalId
+                 data.data,
+                  data.proposalId
+                );
+              }
+              break;
+              case 'TASK_UPDATE':  
+              if (data.data) {
+                editTaskFromSocket(
+                 data.data,
+                  data.proposalId
                 );
               }
               break;
@@ -962,13 +952,7 @@ const SocketContextProvider = props => {
       )
     );
   };
-  //add task 
-  const addTaskWrapper = (taskData, proposalId) => { 
-    console.log('addTaskWrapper', taskData, proposalId)
-    waitForSocketConnectionMinInterval(() =>
-      addTask(taskData, null, proposalId)
-    );
-  }
+
 
   const updateCustomNameWrapper = (oppNo, customName) => {
     waitForSocketConnectionMinInterval(() =>
@@ -1111,7 +1095,6 @@ const SocketContextProvider = props => {
         updateCustomNameWrapper,
         updateDashboardSFValueWrapper,
         ApprovalCustomQuestionDeleteWrapper,
-        addTaskWrapper
       }}
     >
       {props.children}
@@ -1156,7 +1139,8 @@ const mapDispatchToProps = {
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
   deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
-  setTaskFromSocket: setTaskFromSocket
+  setTaskFromSocket: setTaskFromSocket,
+  editTaskFromSocket: editTaskFromSocket
 };
 
 export default connect(

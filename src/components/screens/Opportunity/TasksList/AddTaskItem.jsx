@@ -33,7 +33,7 @@ const AddNewTask = ({ day, proposalId }) => {
 
   const handleInputBlur = e => {
     const inputValue = e.target.value;
-    if (inputValue) {
+    if (inputValue !== '') {
       const taskData = {
         no_of_units: Number(day),
         description: inputValue
@@ -42,7 +42,6 @@ const AddNewTask = ({ day, proposalId }) => {
       if (result) {
         setShowAddTask(false);
         setShowAddOwner(false);
-        //props.onChangeAddTask(day);
       }
     } else {
       setShowAddTask(false);
