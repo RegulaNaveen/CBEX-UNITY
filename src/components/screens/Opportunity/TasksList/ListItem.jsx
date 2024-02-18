@@ -29,7 +29,7 @@ function OverflowEllipsis({ desc, show }) {
   );
 }
 
-function ListItem({ index, task }) {
+function ListItem({ index, task, openModal }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
 
@@ -59,6 +59,10 @@ function ListItem({ index, task }) {
     console.log(`You picked ${label}.`);
   };
 
+  const handleSeeOwners = text => () => {
+    openModal(task.task_id);
+  };
+
   const menuItems = [
     {
       text: (
@@ -67,8 +71,7 @@ function ListItem({ index, task }) {
           <Typography className="menu-item-label">See Owners</Typography>
         </div>
       ),
-      onClick: handleClick('See Owners'),
-      disabled: true
+      onClick: handleSeeOwners()
     },
     {
       text: (

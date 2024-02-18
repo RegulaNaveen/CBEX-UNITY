@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import ReactDOM from 'react-dom';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import Typography from 'apollo-react/components/Typography';
@@ -17,6 +18,7 @@ import {
 } from '../../../../redux/selectors/tasks';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
+import TaskListToolbarMenu from './taskListToolbarMenu';
 
 // const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 //   if (count === 0) {
@@ -53,12 +55,19 @@ import ListItem from './ListItem';
 //   );
 // };
 
+const TaskListToolbarMenuPortal = props => {
+  const modalRoot = document.getElementById('modal-wrapper');
+  return ReactDOM.createPortal(props.children, modalRoot);
+};
+
 const TasksList = () => {
   const [tasksGroupsByDay, setTasksGroupsByDay] = useState({});
 
   const selectedBid = useSelector(getSelectedBid).toJS();
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskId, setTaskId] = useState(null);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -155,6 +164,16 @@ const TasksList = () => {
     );
   }
 
+  const openModal = task_id => {
+    setIsModalOpen(true);
+    setTaskId(task_id);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTaskId(null);
+  };
+
   return (
     <div id="tasks-list-left-section">
       <div className="task-list-header">
@@ -206,6 +225,7 @@ const TasksList = () => {
                           index={index}
                           task={task}
                           key={`task-item-${day}-${index}`}
+                          openModal={openModal}
                         />
                       ))}
                     </div>
@@ -215,6 +235,15 @@ const TasksList = () => {
             </Accordion>
           ))}
         </DragDropContext>
+
+        <TaskListToolbarMenuPortal>
+          <TaskListToolbarMenu
+            isModalOpen={isModalOpen}
+            closeModal={closeModal}
+            setIsModalOpen={setIsModalOpen}
+            taskId={taskId}
+          />
+        </TaskListToolbarMenuPortal>
       </div>
     </div>
   );
