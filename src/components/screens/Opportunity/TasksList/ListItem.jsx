@@ -250,6 +250,7 @@ function ListItem({ index, task, dayDiffFromToday }) {
                   marginLeft: '0.01rem',
                   marginTop: '-0.25rem'
                 }}
+                onClick={() => handleCheckboxClick(task)}
               />
               <div className="task-desc">
                 <p
