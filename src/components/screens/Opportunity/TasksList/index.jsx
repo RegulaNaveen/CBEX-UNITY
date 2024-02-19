@@ -18,7 +18,7 @@ import {
 } from '../../../../redux/selectors/tasks';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
-import TaskListToolbarMenu from './taskListToolbarMenu';
+import SeeOwners from './SeeOwnersModal';
 
 // const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 //   if (count === 0) {
@@ -68,6 +68,7 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [ownersCount, setOwnersCount] = useState(0);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -226,6 +227,7 @@ const TasksList = () => {
                           task={task}
                           key={`task-item-${day}-${index}`}
                           openModal={openModal}
+                          ownersCount={ownersCount}
                         />
                       ))}
                     </div>
@@ -237,11 +239,12 @@ const TasksList = () => {
         </DragDropContext>
 
         <TaskListToolbarMenuPortal>
-          <TaskListToolbarMenu
+          <SeeOwners
             isModalOpen={isModalOpen}
             closeModal={closeModal}
             setIsModalOpen={setIsModalOpen}
             taskId={taskId}
+            setOwnersCount={setOwnersCount}
           />
         </TaskListToolbarMenuPortal>
       </div>

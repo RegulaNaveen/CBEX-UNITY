@@ -29,7 +29,7 @@ function OverflowEllipsis({ desc, show }) {
   );
 }
 
-function ListItem({ index, task, openModal }) {
+function ListItem({ index, task, openModal, ownersCount }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
 
@@ -68,7 +68,9 @@ function ListItem({ index, task, openModal }) {
       text: (
         <div className="task-list-menu-item-wrapper">
           <User2Icon fontSize="small" />
-          <Typography className="menu-item-label">See Owners</Typography>
+          <Typography className="menu-item-label">
+            See Owners({ownersCount})
+          </Typography>
         </div>
       ),
       onClick: handleSeeOwners()
