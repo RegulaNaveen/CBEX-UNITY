@@ -8,7 +8,6 @@ import StatusNegative from 'apollo-react-icons/StatusNegative';
 import { DayIndicator } from '../../../svg';
 
 const ProgressIndicator = ({ tasksList }) => {
-  console.log('tasksList', tasksList);
   const [totalTasksCount, setTotalTasksCount] = useState(0); //total tasks count
 
   const [progressBarValue, setProgressBarValue] = useState(0); //progress bar value
