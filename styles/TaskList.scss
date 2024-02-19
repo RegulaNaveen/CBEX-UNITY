@@ -37,6 +37,7 @@
       .MuiAccordionDetails-root {
         padding: 0.5rem;
         padding-left: 1rem;
+        padding-right: 1.25rem;
       }
       .task-item-drag-container {
         display: flex !important;
@@ -73,6 +74,28 @@
               }
             }
           }
+        }
+      }
+      .edit-container {
+        background-color: #f6f7fb;
+        padding: 0.5rem;
+        display: flex;
+        .MuiFormControl-root {
+          flex-grow: 1;
+          margin: 8px 0;
+          width: 95%;
+          .MuiInput-root {
+            margin: 0;
+            input {
+              height: 32px;
+            }
+          }
+        }
+        .loader-container {
+          margin: 8px 0px 8px 4px;
+          position: relative;
+          width: 28px;
+          height: 28px;
         }
       }
     }
