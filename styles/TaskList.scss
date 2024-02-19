@@ -114,9 +114,11 @@
         display: flex;
         align-items: center;
         .status-icon {
-          width: 16px;
-          height: 16px;
+          width: 20px;
+          height: 20px;
           margin-left: 4px;
+          position: relative;
+          top: -1px;
         }
         &.up-to-date {
           color: #00c221;
@@ -147,13 +149,22 @@
         // font-size: 13px;
         font-size: 12px;
         position: relative;
-        left: 20px;
-        top: -8px;
+        left: 25px;
+        top: -12px;
         color: #5e082a;
-        height: 16px;
         font-weight: bold;
-        &.ten {
-          left: 10px;
+        display: flex;
+        flex-direction: column-reverse;
+        &.day-ten {
+          left: 30px;
+        }
+        span {
+          left: -10px;
+          position: relative;
+          &.ten {
+            left: -28px;
+            position: relative;
+          }
         }
       }
       .line {

@@ -62,14 +62,6 @@ const TasksList = () => {
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
   const bidCreatedDate = moment(selectedBid.proposalDate);
-  console.log(
-    'bidCreatedDate',
-    moment([
-      bidCreatedDate.year(),
-      bidCreatedDate.month(),
-      bidCreatedDate.date()
-    ]).format('DD MMM')
-  );
   const TODAY = useMemo(() => moment(), []);
   const DAYS_SINCE_BID_CREATED = useMemo(
     () =>
@@ -128,7 +120,11 @@ const TasksList = () => {
     const days = getDays(moment(bidCreatedDate).format('DD MMM YY')); // 10 days from bid created date
     Object.entries(merge(tasksGroup, groupBy(tasks, 'no_of_units'))).forEach(
       ([day, tasksForADay]) => {
-        const dateForDay = bidCreatedDate.clone().add(day, 'd');
+        const dateForDay =
+          day <= 5
+            ? moment(days[day - 1], 'DD MMM YY')
+            : moment(days[4], 'DD MMM YY').add(day - 5, 'days');
+
         tasksGroup[day] = {
           tasks: tasksForADay.sort((a, b) => a.order - b.order),
           expanded: isCorrectDay(day),
@@ -136,8 +132,7 @@ const TasksList = () => {
           dateFormatted: dateForDay.format('DD MMM'),
           uncompletedCount: tasksForADay.filter(task => !task.is_completed)
             .length,
-          completedCount: tasksForADay.filter(task => !task.is_completed)
-            .length,
+          completedCount: tasksForADay.filter(task => task.is_completed).length,
           dayDiffFromToday: moment([
             dateForDay.year(),
             dateForDay.month(),

@@ -5,6 +5,7 @@ import StatusExclamation from 'apollo-react-icons/StatusExclamation';
 import moment from 'moment';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 import StatusNegative from 'apollo-react-icons/StatusNegative';
+import { DayIndicator } from '../../../svg';
 
 const ProgressIndicator = ({ tasksList }) => {
   console.log('tasksList', tasksList);
@@ -36,16 +37,12 @@ const ProgressIndicator = ({ tasksList }) => {
         currentDayIndexValue = index;
       }
       if (task?.dayDiffFromToday <= 0) {
-        // completedTasks += task?.tasks?.length - task?.uncompletedCount; //if completedcount not coming from backend
         completedTasks += task?.completedCount; //completed tasks till current day
 
-        // totalTasksTillDay += task?.tasks?.length;
         totalTasksTillDay += task?.completedCount + task?.uncompletedCount; //total tasks till current day
       }
       totalCount += task?.completedCount + task?.uncompletedCount; //count for 10 days
-      //   totalCount += task?.tasks?.length;
     });
-    console.log('currentDayIndexValue', currentDayIndexValue);
     if (currentDayIndexValue !== null && currentDayIndexValue >= 0) {
       setCurrentDayIndex(currentDayIndexValue);
       setIncompletedTasksCount(totalTasksTillDay - completedTasks);
@@ -79,13 +76,6 @@ const ProgressIndicator = ({ tasksList }) => {
     };
   }, [tasksList]);
 
-  {
-    /**
-    Logic
-    (completedTasks on that day / total tasks till that day) * (10 * how many days completed till that day)
-    10 --- 100% (10 days of progress bar) 100/10= 10 days of progress bar  
-    */
-  }
   return (
     <>
       {taskProgress && (
@@ -101,10 +91,16 @@ const ProgressIndicator = ({ tasksList }) => {
                 }
                 style={{ width: day * 10 + '%' }}
               >
-                <span
-                  className={day === 10 ? 'indicator-day ten' : 'indicator-day'}
-                >{`Day ${day}`}</span>
-                <span className="line">|</span>
+                <div
+                  className={
+                    day === 10 ? 'indicator-day day-ten' : 'indicator-day'
+                  }
+                >
+                  <DayIndicator />
+                  <span
+                    className={day === 10 ? 'ten' : ''}
+                  >{`Day ${day}`}</span>
+                </div>
               </div>
             );
           })}
