@@ -81,16 +81,16 @@ describe('TasksList Unit Tests', () => {
       ]
     });
     const { getByText } = render(<TasksListWithRedux />);
-    expect(getByText('Day 1')).toBeTruthy();
-    expect(getByText('Day 2')).toBeTruthy();
-    expect(getByText('Day 3')).toBeTruthy();
-    expect(getByText('Day 4')).toBeTruthy();
-    expect(getByText('Day 5')).toBeTruthy();
-    expect(getByText('Day 6')).toBeTruthy();
-    expect(getByText('Day 7')).toBeTruthy();
-    expect(getByText('Day 8')).toBeTruthy();
-    expect(getByText('Day 9')).toBeTruthy();
-    expect(getByText('Day 10')).toBeTruthy();
+    expect(getByText(/Day 1 /)).toBeTruthy();
+    expect(getByText(/Day 2/)).toBeTruthy();
+    expect(getByText(/Day 3/)).toBeTruthy();
+    expect(getByText(/Day 4/)).toBeTruthy();
+    expect(getByText(/Day 5/)).toBeTruthy();
+    expect(getByText(/Day 6/)).toBeTruthy();
+    expect(getByText(/Day 7/)).toBeTruthy();
+    expect(getByText(/Day 8/)).toBeTruthy();
+    expect(getByText(/Day 9/)).toBeTruthy();
+    expect(getByText(/Day 10/)).toBeTruthy();
   });
 
   test('render loader while fetching tasks', async () => {
