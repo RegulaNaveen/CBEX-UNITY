@@ -270,6 +270,15 @@ const TablePreviewWithStore = () => {
 };
 
 describe('Test cases for tablePreview', () => {
+  it('render the component withpout props', () => {
+    render(
+      <Provider store={store}>
+        <SocketContext.Provider store={store}>
+          <TablePreview rows={[]} columns={[]} />
+        </SocketContext.Provider>
+      </Provider>
+    );
+  });
   it('render the component', () => {
     render(<TablePreviewWithStore />);
   });
