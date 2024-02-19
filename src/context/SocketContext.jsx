@@ -34,7 +34,9 @@ import {
 } from '../redux/actions/proposals-actions';
 import {
   setTaskFromSocket,
-  editTaskFromSocket
+  editTaskFromSocket,
+  handleTaskLock,
+  handleTaskUnlock
 } from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -421,8 +423,6 @@ const SocketContextProvider = props => {
     }
   };
 
-
-
   /**
    *  Question unLock
    */
@@ -463,6 +463,23 @@ const SocketContextProvider = props => {
       );
     } catch (error) {
       console.log('questionLockDetails', error);
+    }
+  };
+
+  // Get All Locked tasks
+  const getTaskLockDetails = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: { event: 'TASK' }
+        })
+      );
+    } catch (error) {
+      console.log('getTaskLockDetails', error);
     }
   };
 
@@ -556,7 +573,9 @@ const SocketContextProvider = props => {
           deleteApprovalCustomTabCustomQuestionFromSocket,
           selectedBid,
           setTaskFromSocket,
-          editTaskFromSocket
+          editTaskFromSocket,
+          handleTaskLockAction,
+          handleTaskUnlockAction
         } = props;
 
         // On Message Recieve
@@ -684,20 +703,14 @@ const SocketContextProvider = props => {
                 );
               }
               break;
-              case 'TASK_ADD':  
+            case 'TASK_ADD':
               if (data.data) {
-                setTaskFromSocket(
-                 data.data,
-                  data.proposalId
-                );
+                setTaskFromSocket(data.data, data.proposalId);
               }
               break;
-              case 'TASK_UPDATE':  
+            case 'TASK_UPDATE':
               if (data.data) {
-                editTaskFromSocket(
-                 data.data,
-                  data.proposalId
-                );
+                editTaskFromSocket(data.data, data.proposalId);
               }
               break;
 
@@ -767,6 +780,16 @@ const SocketContextProvider = props => {
             case 'CUSTOM_NAME_UPDATE':
               const { customName } = data.data;
               updateCustomNameAction(data.data.oppNumber, customName);
+              break;
+            case 'TASK':
+              console.log('Locked tasks: ', data);
+              break;
+            case 'TASK_LOCK':
+              console.log('TASK_LOCK', data);
+              handleTaskLockAction(data.data);
+              break;
+            case 'TASK_UNLOCK':
+              handleTaskUnlockAction(data.data);
               break;
             default:
               break;
@@ -920,6 +943,43 @@ const SocketContextProvider = props => {
     }
   };
 
+  // Lock a task for a user
+  const lockTask = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'TASK_LOCK',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in locking a task: ', error);
+    }
+  };
+
+  // Unlock a task for a user
+  const unlockTask = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'TASK_UNLOCK',
+            data,
+            clienttaskId: data.taskId
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in locking a task: ', error);
+    }
+  };
+
   const questionLockWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
@@ -952,7 +1012,6 @@ const SocketContextProvider = props => {
       )
     );
   };
-
 
   const updateCustomNameWrapper = (oppNo, customName) => {
     waitForSocketConnectionMinInterval(() =>
@@ -1009,6 +1068,10 @@ const SocketContextProvider = props => {
     waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
 
+  const getTaskLockDetailsWrapper = () => {
+    waitForSocketConnectionMinInterval(() => getTaskLockDetails(null));
+  };
+
   // Approval's Questions - duplicating - socket message wrapper
   // info - sectionId, duplicating(bool)
   const approvalSectionDuplicatingWrapper = data => {
@@ -1031,6 +1094,14 @@ const SocketContextProvider = props => {
   // info - sectionId
   const approvalSectionDeletedWrapper = data => {
     waitForSocketConnectionMinInterval(() => approvalDeleted(data));
+  };
+
+  const lockTaskWrapper = data => {
+    waitForSocketConnectionMinInterval(() => lockTask(data));
+  };
+
+  const unlockTaskWrapper = data => {
+    waitForSocketConnectionMinInterval(() => unlockTask(data));
   };
 
   const refreshSocketConnection = () => {
@@ -1095,6 +1166,9 @@ const SocketContextProvider = props => {
         updateCustomNameWrapper,
         updateDashboardSFValueWrapper,
         ApprovalCustomQuestionDeleteWrapper,
+        getTaskLockDetailsWrapper,
+        lockTaskWrapper,
+        unlockTaskWrapper
       }}
     >
       {props.children}
@@ -1140,7 +1214,9 @@ const mapDispatchToProps = {
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
   deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
   setTaskFromSocket: setTaskFromSocket,
-  editTaskFromSocket: editTaskFromSocket
+  editTaskFromSocket: editTaskFromSocket,
+  handleTaskLockAction: handleTaskLock,
+  handleTaskUnlockAction: handleTaskUnlock
 };
 
 export default connect(
