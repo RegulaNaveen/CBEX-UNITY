@@ -1,3 +1,4 @@
+import { TASKS } from '../../../constants/types';
 import tasksReducer from '../tasks';
 
 describe('tasksReducer', () => {
@@ -23,8 +24,11 @@ describe('tasksReducer', () => {
   });
 
   it('should handle ERROR_TASKS', () => {
-    const action = { type: 'ERROR_TASKS', payload: 'Error message' };
-    const expectedState = { ...initialState, error: 'Error message' };
+    const action = { type: TASKS.ERROR_TASKS, payload: 'Error message' };
+    const expectedState = {
+      ...initialState,
+      error: 'Error message'
+    };
     expect(tasksReducer(initialState, action)).toEqual(expectedState);
   });
 
