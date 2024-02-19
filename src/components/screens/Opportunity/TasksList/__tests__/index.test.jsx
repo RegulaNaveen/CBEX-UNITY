@@ -7,50 +7,20 @@ import { REDUX_TYPES } from '../../../../../constants';
 import mockData from '../../../../views/__tests__/Search/data.json';
 import { TASKS } from '../../../../../constants/types';
 import moment from 'moment';
+import { SocketContext } from '../../../../../context/SocketContext';
 
 const { LOADING_TASKS, SET_TASKS } = TASKS;
 
 const TasksListWithRedux = props => (
   <Provider store={store}>
-    <TasksList {...props} />
+    <SocketContext.Provider value={{ getTaskLockDetailsWrapper: jest.fn() }}>
+      <TasksList {...props} />
+    </SocketContext.Provider>
   </Provider>
 );
 
 describe('TasksList Unit Tests', () => {
   beforeAll(() => {
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.CHANGE_BID,
-      payload: {
-        ...mockData,
-        proposalDetails: {
-          proposal: {
-            ...mockData.proposal,
-            proposalDate: moment().subtract(1, 'days')
-          }
-        },
-        bid: {
-          bidId: '',
-          isCurrent: true,
-          isEditable: true,
-          pertinentDetails: null,
-          bidName: 'Bid'
-        }
-      }
-    });
-  });
-
-  global.ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn()
-  }));
-
-  test('render Task list component', async () => {
-    const { getByText } = render(<TasksListWithRedux />);
-    expect(getByText('Task List')).toBeTruthy();
-  });
-
-  test('render day 1 to 10', async () => {
     store.dispatch({
       type: SET_TASKS,
       payload: [
@@ -80,17 +50,51 @@ describe('TasksList Unit Tests', () => {
         }
       ]
     });
-    const { getAllByText } = render(<TasksListWithRedux />);
-    expect(getAllByText('Day 1')).toBeTruthy();
-    expect(getAllByText('Day 2')).toBeTruthy();
-    expect(getAllByText('Day 3')).toBeTruthy();
-    expect(getAllByText('Day 4')).toBeTruthy();
-    expect(getAllByText('Day 5')).toBeTruthy();
-    expect(getAllByText('Day 6')).toBeTruthy();
-    expect(getAllByText('Day 7')).toBeTruthy();
-    expect(getAllByText('Day 8')).toBeTruthy();
-    expect(getAllByText('Day 9')).toBeTruthy();
-    expect(getAllByText('Day 10')).toBeTruthy();
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.CHANGE_BID,
+      payload: {
+        ...mockData,
+        proposalDetails: {
+          proposal: {
+            ...mockData.proposal,
+            proposalDate: moment('2024-02-16').subtract(1, 'days')
+          }
+        },
+        bid: {
+          bidId: '',
+          isCurrent: true,
+          isEditable: true,
+          pertinentDetails: null,
+          bidName: 'Bid'
+        }
+      }
+    });
+  });
+
+  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn()
+  }));
+
+  test('render Task list component', async () => {
+    const { getByText } = render(<TasksListWithRedux />);
+    expect(getByText('Task List')).toBeTruthy();
+  });
+
+  test('render day 1 to 10', async () => {
+    const { getByText, debug, container } = render(<TasksListWithRedux />);
+    debug(container, Infinity);
+    expect(getByText(/Day 1$/)).toBeTruthy();
+    expect(getByText(/Day 2/)).toBeTruthy();
+    expect(getByText(/Day 3/)).toBeTruthy();
+    expect(getByText(/Day 4/)).toBeTruthy();
+    expect(getByText(/Day 5/)).toBeTruthy();
+    expect(getByText(/Day 6/)).toBeTruthy();
+    expect(getByText(/Day 7/)).toBeTruthy();
+    expect(getByText(/Day 8/)).toBeTruthy();
+    expect(getByText(/Day 9/)).toBeTruthy();
+    expect(getByText(/Day 10/)).toBeTruthy();
   });
 
   test('render loader while fetching tasks', async () => {
@@ -121,7 +125,7 @@ describe('TasksList Unit Tests', () => {
         proposalDetails: {
           proposal: {
             ...mockData.proposal,
-            proposalDate: moment().subtract(2, 'days')
+            proposalDate: moment('2024-02-16').subtract(2, 'days')
           }
         },
         bid: {

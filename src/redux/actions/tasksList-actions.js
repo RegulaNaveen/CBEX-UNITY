@@ -195,3 +195,79 @@ export const editTaskFromSocket = (
     }
   };
 };
+
+export const handleTaskLock = taskLockInfo => {
+  return async (dispatch, getState) => {
+    if (taskLockInfo.userId === localStorage.getItem('userId')) {
+      return;
+    }
+    const tasksList = selectTasksList(getState());
+    const taskIndex = tasksList.findIndex(
+      task =>
+        task.task_id === taskLockInfo.taskId &&
+        task.proposal_id === taskLockInfo.proposalId
+    );
+    if (taskIndex > -1) {
+      tasksList[taskIndex]['locked'] = true;
+      tasksList[taskIndex]['lockedBy'] = {
+        userId: taskLockInfo.userId,
+        userEmail: taskLockInfo.userEmail,
+        userName: taskLockInfo.userName
+      };
+      dispatch({
+        type: SET_TASKS,
+        payload: tasksList
+      });
+    }
+  };
+};
+
+export const handleTaskUnlock = taskLockInfo => {
+  return async (dispatch, getState) => {
+    if (taskLockInfo.userId === localStorage.getItem('userId')) {
+      return;
+    }
+    const tasksList = selectTasksList(getState());
+    const taskIndex = tasksList.findIndex(
+      task =>
+        task.task_id === taskLockInfo.taskId &&
+        task.proposal_id === taskLockInfo.proposalId
+    );
+    if (taskIndex > -1) {
+      tasksList[taskIndex]['locked'] = false;
+      tasksList[taskIndex]['lockedBy'] = {};
+      dispatch({
+        type: SET_TASKS,
+        payload: tasksList
+      });
+    }
+  };
+};
+
+export const handleMultipleTaskLocks = tasksLocksInfo => {
+  return async (dispatch, getState) => {
+    const tasksList = selectTasksList(getState());
+    const tasksIndexMap = tasksList.reduce((acc, task, index) => {
+      acc[task.task_id] = index;
+      return acc;
+    }, {});
+    tasksLocksInfo.forEach(taskLockInfo => {
+      const taskIndex = tasksIndexMap[taskLockInfo.taskId];
+      if (
+        taskIndex >= 0 &&
+        tasksList[taskIndex]['proposal_id'] === taskLockInfo.proposalId
+      ) {
+        tasksList[taskIndex]['locked'] = true;
+        tasksList[taskIndex]['lockedBy'] = {
+          userId: taskLockInfo.userId,
+          userEmail: taskLockInfo.userEmail,
+          userName: taskLockInfo.userName
+        };
+      }
+    });
+    dispatch({
+      type: SET_TASKS,
+      payload: tasksList
+    });
+  };
+};

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import Typography from 'apollo-react/components/Typography';
@@ -20,6 +26,7 @@ import ListItem from './ListItem';
 import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
+import { SocketContext } from '../../../../context/SocketContext';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -64,18 +71,9 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
-  const DAYS_SINCE_BID_CREATED = useMemo(
-    () =>
-      moment([TODAY.year(), TODAY.month(), TODAY.date()]).diff(
-        moment([
-          bidCreatedDate.year(),
-          bidCreatedDate.month(),
-          bidCreatedDate.date()
-        ]),
-        'd'
-      ),
-    [bidCreatedDate, TODAY]
-  );
+  const editable = selectedBid.isEditable;
+
+  const { getTaskLockDetailsWrapper } = useContext(SocketContext);
 
   const isCorrectDay = useCallback(
     dateOFADay => {
@@ -137,6 +135,11 @@ const TasksList = () => {
         ]).diff(moment([TODAY.year(), TODAY.month(), TODAY.date()]), 'd')
       };
     });
+
+    // If tasksGroupsByDay is empty, then it is the first render
+    if (isEmpty(tasksGroupsByDay)) {
+      getTaskLockDetailsWrapper();
+    }
 
     setTasksGroupsByDay(tasksGroup);
   }, [tasks]);
@@ -228,16 +231,19 @@ const TasksList = () => {
                           task={task}
                           dayDiffFromToday={tasksGroup.dayDiffFromToday}
                           key={`task-item-${day}-${index}`}
+                          editable={editable}
                         />
                       ))}
                     </div>
                   )}
                 </Droppable>
-                <AddTaskItem
-                  day={day}
-                  proposalId={proposalId}
-                  //onChangeAddTask={handleExpandChange}
-                />
+                {selectedBid.isEditable && (
+                  <AddTaskItem
+                    day={day}
+                    proposalId={proposalId}
+                    //onChangeAddTask={handleExpandChange}
+                  />
+                )}
               </AccordionDetails>
             </Accordion>
           ))}
