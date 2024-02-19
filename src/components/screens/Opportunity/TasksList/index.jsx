@@ -18,6 +18,7 @@ import {
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
 import getNextWorkingDay from './utils';
+import AddTaskItem from './AddTaskItem';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -56,11 +57,10 @@ const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 
 const TasksList = () => {
   const [tasksGroupsByDay, setTasksGroupsByDay] = useState({});
-
   const selectedBid = useSelector(getSelectedBid).toJS();
+  const proposalId = selectedBid.id;
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
-
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const DAYS_SINCE_BID_CREATED = useMemo(
@@ -213,6 +213,11 @@ const TasksList = () => {
                     </div>
                   )}
                 </Droppable>
+                <AddTaskItem
+                  day={day}
+                  proposalId={proposalId}
+                  //onChangeAddTask={handleExpandChange}
+                />
               </AccordionDetails>
             </Accordion>
           ))}

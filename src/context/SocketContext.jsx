@@ -32,6 +32,10 @@ import {
   updateDashboardBid,
   syncDashboardOpportunity
 } from '../redux/actions/proposals-actions';
+import {
+  setTaskFromSocket,
+  editTaskFromSocket
+} from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
@@ -417,6 +421,8 @@ const SocketContextProvider = props => {
     }
   };
 
+
+
   /**
    *  Question unLock
    */
@@ -548,7 +554,9 @@ const SocketContextProvider = props => {
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
           deleteApprovalCustomTabCustomQuestionFromSocket,
-          selectedBid
+          selectedBid,
+          setTaskFromSocket,
+          editTaskFromSocket
         } = props;
 
         // On Message Recieve
@@ -673,6 +681,22 @@ const SocketContextProvider = props => {
                 setProposalQuestionFromSocket(
                   data.data.questionData,
                   data.data.proposalId
+                );
+              }
+              break;
+              case 'TASK_ADD':  
+              if (data.data) {
+                setTaskFromSocket(
+                 data.data,
+                  data.proposalId
+                );
+              }
+              break;
+              case 'TASK_UPDATE':  
+              if (data.data) {
+                editTaskFromSocket(
+                 data.data,
+                  data.proposalId
                 );
               }
               break;
@@ -929,6 +953,7 @@ const SocketContextProvider = props => {
     );
   };
 
+
   const updateCustomNameWrapper = (oppNo, customName) => {
     waitForSocketConnectionMinInterval(() =>
       updateCustomName(oppNo, customName, null)
@@ -1069,7 +1094,7 @@ const SocketContextProvider = props => {
         updateFavouriteWrapper,
         updateCustomNameWrapper,
         updateDashboardSFValueWrapper,
-        ApprovalCustomQuestionDeleteWrapper
+        ApprovalCustomQuestionDeleteWrapper,
       }}
     >
       {props.children}
@@ -1113,7 +1138,9 @@ const mapDispatchToProps = {
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  setTaskFromSocket: setTaskFromSocket,
+  editTaskFromSocket: editTaskFromSocket
 };
 
 export default connect(

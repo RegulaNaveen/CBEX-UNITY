@@ -14,7 +14,10 @@ import TrashIcon from 'apollo-react-icons/Trash';
 import classNames from 'classnames';
 import Typography from 'apollo-react/components/Typography';
 import { useDispatch } from 'react-redux';
-import { updateTaskDesc } from '../../../../redux/actions/tasksList-actions';
+import {
+  updateTaskDesc,
+  editTask
+} from '../../../../redux/actions/tasksList-actions';
 import { updateTaskDescApi } from '../../../../api/tasksList';
 import Loader from 'apollo-react/components/Loader';
 import DeleteAlert from './DeleteAlert';
@@ -170,6 +173,15 @@ function ListItem({ index, task, dayDiffFromToday }) {
       destructiveAction: true
     }
   ];
+
+  const handleCheckboxClick = task => {
+    const taskData = {
+      is_completed: !task.is_completed,
+      no_of_units: task.no_of_units,
+      description: task.description
+    };
+    const result = dispatch(editTask(task.proposal_id, task.task_id, taskData));
+  };
 
   if (editing || updatingDesc) {
     return (
