@@ -9,7 +9,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Loader from 'apollo-react/components/Loader';
-import { groupBy, merge } from 'lodash';
+import { groupBy, isEmpty, merge } from 'lodash';
 import Header from './Header';
 import { getSelectedBid } from '../../../../redux/selectors';
 import {
@@ -19,41 +19,44 @@ import {
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
 import SeeOwners from './SeeOwnersModal';
+import ProgressIndicator from './ProgressIndicator';
+import getNextWorkingDay from './utils';
+import AddTaskItem from './AddTaskItem';
 
-// const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
-//   if (count === 0) {
-//     return null;
-//   }
-//   if (dayDiffFromToday < 0) {
-//     return (
-//       <div className="uncompleted-tasks-count">
-//         <AlertTriangle />
-//         <Typography className="font-red count-text" variant="caption">
-//           {count}
-//         </Typography>
-//       </div>
-//     );
-//   }
+const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
+  if (count === 0) {
+    return null;
+  }
+  if (dayDiffFromToday < 0) {
+    return (
+      <div className="uncompleted-tasks-count">
+        <AlertTriangle />
+        <Typography className="font-red count-text" variant="caption">
+          {count}
+        </Typography>
+      </div>
+    );
+  }
 
-//   if (dayDiffFromToday === 0) {
-//     return (
-//       <div className="uncompleted-tasks-count">
-//         <AlertDiamond />
-//         <Typography className="font-yellow count-text" variant="caption">
-//           {count}
-//         </Typography>
-//       </div>
-//     );
-//   }
+  if (dayDiffFromToday === 0) {
+    return (
+      <div className="uncompleted-tasks-count">
+        <AlertDiamond />
+        <Typography className="font-yellow count-text" variant="caption">
+          {count}
+        </Typography>
+      </div>
+    );
+  }
 
-//   return (
-//     <div className="uncompleted-tasks-count">
-//       <Typography className="count-text" variant="caption">
-//         {count}
-//       </Typography>
-//     </div>
-//   );
-// };
+  return (
+    <div className="uncompleted-tasks-count">
+      <Typography className="count-text" variant="caption">
+        {count}
+      </Typography>
+    </div>
+  );
+};
 
 const TaskListToolbarMenuPortal = props => {
   const modalRoot = document.getElementById('modal-wrapper');
@@ -62,8 +65,8 @@ const TaskListToolbarMenuPortal = props => {
 
 const TasksList = () => {
   const [tasksGroupsByDay, setTasksGroupsByDay] = useState({});
-
   const selectedBid = useSelector(getSelectedBid).toJS();
+  const proposalId = selectedBid.id;
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,20 +89,29 @@ const TasksList = () => {
   );
 
   const isCorrectDay = useCallback(
-    day => {
-      if (bidCreatedDate.isValid()) {
-        if (DAYS_SINCE_BID_CREATED <= 1) {
-          return day === '1';
-        }
-        return `${DAYS_SINCE_BID_CREATED}` === `${day}`;
-      }
-      return false;
+    dateOFADay => {
+      return TODAY.date() === dateOFADay.date();
     },
-    [bidCreatedDate, DAYS_SINCE_BID_CREATED]
+    [TODAY]
   );
 
+  const getDays = bidDate => {
+    let days = [];
+    let date = moment(bidDate, 'DD MMM YY');
+    date = date.add(1, 'days');
+    let count = 0;
+    while (count < 10) {
+      if (date.day() !== 0 && date.day() !== 6) {
+        days.push(date.format('DD MMM YY'));
+        count++;
+      }
+      date = date.add(1, 'days');
+    }
+    return days;
+  };
+
   useEffect(() => {
-    const tasksGroup = {
+    let tasksGroup = {
       1: [],
       2: [],
       3: [],
@@ -111,24 +123,31 @@ const TasksList = () => {
       9: [],
       10: []
     };
-    Object.entries(merge(tasksGroup, groupBy(tasks, 'no_of_units'))).forEach(
-      ([day, tasksForADay]) => {
-        const dateForDay = bidCreatedDate.clone().add(day, 'd');
-        tasksGroup[day] = {
-          tasks: tasksForADay.sort((a, b) => a.order - b.order),
-          expanded: isCorrectDay(day),
-          date: dateForDay,
-          dateFormatted: dateForDay.format('DD MMM'),
-          uncompletedCount: tasksForADay.filter(task => !task.is_completed)
-            .length,
-          dayDiffFromToday: moment([
-            dateForDay.year(),
-            dateForDay.month(),
-            dateForDay.date()
-          ]).diff(moment([TODAY.year(), TODAY.month(), TODAY.date()]), 'd')
-        };
+    tasksGroup = merge(tasksGroup, groupBy(tasks, 'no_of_units'));
+    Object.entries(tasksGroup).forEach(([day, tasksForADay]) => {
+      let dateForDay;
+      if (day === '1') {
+        dateForDay = getNextWorkingDay(bidCreatedDate);
+      } else {
+        dateForDay = getNextWorkingDay(tasksGroup[day - 1].date);
       }
-    );
+      tasksGroup[day] = {
+        tasks: tasksForADay.sort((a, b) => a.order - b.order),
+        expanded: isEmpty(tasksGroupsByDay)
+          ? isCorrectDay(dateForDay)
+          : tasksGroupsByDay[day].expanded,
+        date: dateForDay,
+        dateFormatted: dateForDay.format('DD MMM'),
+        uncompletedCount: tasksForADay.filter(task => !task.is_completed)
+          .length,
+        completedCount: tasksForADay.filter(task => task.is_completed).length,
+        dayDiffFromToday: moment([
+          dateForDay.year(),
+          dateForDay.month(),
+          dateForDay.date()
+        ]).diff(moment([TODAY.year(), TODAY.month(), TODAY.date()]), 'd')
+      };
+    });
 
     setTasksGroupsByDay(tasksGroup);
   }, [tasks]);
@@ -179,12 +198,15 @@ const TasksList = () => {
     <div id="tasks-list-left-section">
       <div className="task-list-header">
         <Header />
+        <div className="progress-indicator">
+          <ProgressIndicator tasksList={tasksGroupsByDay} />
+        </div>
       </div>
       <div className="accordions-wrapper">
         <DragDropContext onDragUpdate={handleDragUpdate}>
           {Object.entries(tasksGroupsByDay).map(([day, tasksGroup]) => (
             <Accordion
-              defaultExpanded={isCorrectDay(day)}
+              defaultExpanded={isCorrectDay(tasksGroup.date)}
               expanded={tasksGroup.expanded}
               onChange={() => handleExpandChange(day)}
               key={`task-day-${day}`}
@@ -195,23 +217,23 @@ const TasksList = () => {
                     <div className="header">
                       <Typography
                         className={classNames('header-title', {
-                          'font-bold': bidCreatedDate.isValid() && false // remove && false
-                          // ? isCorrectDay(day)
-                          // : false
+                          'font-bold': bidCreatedDate.isValid()
+                            ? isCorrectDay(tasksGroup.date)
+                            : false
                         })}
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                       >
                         Day {day}{' '}
-                        {/* {tasksGroup.expanded || isCorrectDay(day)
+                        {tasksGroup.expanded
                           ? ` (${tasksGroup.dateFormatted})`
-                          : ''} */}
+                          : ''}
                       </Typography>
                       <div>
-                        {/* <UncompletedTasksCount
+                        <UncompletedTasksCount
                           count={tasksGroup.uncompletedCount}
                           dayDiffFromToday={tasksGroup.dayDiffFromToday}
-                        /> */}
+                        />
                       </div>
                     </div>
                   )}
@@ -225,6 +247,7 @@ const TasksList = () => {
                         <ListItem
                           index={index}
                           task={task}
+                          dayDiffFromToday={tasksGroup.dayDiffFromToday}
                           key={`task-item-${day}-${index}`}
                           openModal={openModal}
                           ownersCount={ownersCount}
@@ -233,6 +256,11 @@ const TasksList = () => {
                     </div>
                   )}
                 </Droppable>
+                <AddTaskItem
+                  day={day}
+                  proposalId={proposalId}
+                  //onChangeAddTask={handleExpandChange}
+                />
               </AccordionDetails>
             </Accordion>
           ))}
