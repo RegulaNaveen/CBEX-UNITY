@@ -243,3 +243,31 @@ export const handleTaskUnlock = taskLockInfo => {
     }
   };
 };
+
+export const handleMultipleTaskLocks = tasksLocksInfo => {
+  return async (dispatch, getState) => {
+    const tasksList = selectTasksList(getState());
+    const tasksIndexMap = tasksList.reduce((acc, task, index) => {
+      acc[task.task_id] = index;
+      return acc;
+    }, {});
+    tasksLocksInfo.forEach(taskLockInfo => {
+      const taskIndex = tasksIndexMap[taskLockInfo.taskId];
+      if (
+        taskIndex >= 0 &&
+        tasksList[taskIndex]['proposal_id'] === taskLockInfo.proposalId
+      ) {
+        tasksList[taskIndex]['locked'] = true;
+        tasksList[taskIndex]['lockedBy'] = {
+          userId: taskLockInfo.userId,
+          userEmail: taskLockInfo.userEmail,
+          userName: taskLockInfo.userName
+        };
+      }
+    });
+    dispatch({
+      type: SET_TASKS,
+      payload: tasksList
+    });
+  };
+};

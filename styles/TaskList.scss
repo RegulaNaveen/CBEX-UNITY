@@ -13,11 +13,11 @@
     padding: 8px;
     .header {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
+      min-height: 48px;
       .header-title {
         font-weight: 400;
-        padding-top: 0.75rem;
         &.font-bold {
           font-weight: bold;
         }

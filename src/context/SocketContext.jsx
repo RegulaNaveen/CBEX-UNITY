@@ -36,7 +36,8 @@ import {
   setTaskFromSocket,
   editTaskFromSocket,
   handleTaskLock,
-  handleTaskUnlock
+  handleTaskUnlock,
+  handleMultipleTaskLocks
 } from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -575,7 +576,8 @@ const SocketContextProvider = props => {
           setTaskFromSocket,
           editTaskFromSocket,
           handleTaskLockAction,
-          handleTaskUnlockAction
+          handleTaskUnlockAction,
+          handleMultipleTaskLocksAction
         } = props;
 
         // On Message Recieve
@@ -782,10 +784,9 @@ const SocketContextProvider = props => {
               updateCustomNameAction(data.data.oppNumber, customName);
               break;
             case 'TASK':
-              console.log('Locked tasks: ', data);
+              handleMultipleTaskLocksAction(data.data);
               break;
             case 'TASK_LOCK':
-              console.log('TASK_LOCK', data);
               handleTaskLockAction(data.data);
               break;
             case 'TASK_UNLOCK':
@@ -1216,7 +1217,8 @@ const mapDispatchToProps = {
   setTaskFromSocket: setTaskFromSocket,
   editTaskFromSocket: editTaskFromSocket,
   handleTaskLockAction: handleTaskLock,
-  handleTaskUnlockAction: handleTaskUnlock
+  handleTaskUnlockAction: handleTaskUnlock,
+  handleMultipleTaskLocksAction: handleMultipleTaskLocks
 };
 
 export default connect(
