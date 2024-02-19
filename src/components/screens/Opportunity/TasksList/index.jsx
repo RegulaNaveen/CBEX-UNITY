@@ -23,6 +23,7 @@ import {
 } from '../../../../redux/selectors/tasks';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
+import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
@@ -81,6 +82,21 @@ const TasksList = () => {
     [TODAY]
   );
 
+  const getDays = bidDate => {
+    let days = [];
+    let date = moment(bidDate, 'DD MMM YY');
+    date = date.add(1, 'days');
+    let count = 0;
+    while (count < 10) {
+      if (date.day() !== 0 && date.day() !== 6) {
+        days.push(date.format('DD MMM YY'));
+        count++;
+      }
+      date = date.add(1, 'days');
+    }
+    return days;
+  };
+
   useEffect(() => {
     let tasksGroup = {
       1: [],
@@ -111,6 +127,7 @@ const TasksList = () => {
         dateFormatted: dateForDay.format('DD MMM'),
         uncompletedCount: tasksForADay.filter(task => !task.is_completed)
           .length,
+        completedCount: tasksForADay.filter(task => task.is_completed).length,
         dayDiffFromToday: moment([
           dateForDay.year(),
           dateForDay.month(),
@@ -163,6 +180,9 @@ const TasksList = () => {
     <div id="tasks-list-left-section">
       <div className="task-list-header">
         <Header />
+        <div className="progress-indicator">
+          <ProgressIndicator tasksList={tasksGroupsByDay} />
+        </div>
       </div>
       <div className="accordions-wrapper">
         <DragDropContext onDragUpdate={handleDragUpdate}>

@@ -8,7 +8,8 @@
     padding: 0;
   }
   .accordions-wrapper {
-    height: calc(100% - 2.25rem);
+    // height: calc(100% - 2.25rem);
+    height: calc(100% - 6.25rem);
     overflow: auto;
     padding: 8px;
     .header {
@@ -128,6 +129,93 @@
     }
   }
 }
+
+.progress-indicator {
+  padding-right: 16px;
+  margin-top: 30px;
+  .progress-bar {
+    position: relative;
+    .task-status {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      .task-text {
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        .status-icon {
+          width: 20px;
+          height: 20px;
+          margin-left: 4px;
+          position: relative;
+          top: -1px;
+        }
+        &.up-to-date {
+          color: #00c221;
+        }
+        &.incomplete {
+          color: #ff9300;
+        }
+        &.no-task {
+          color: #595959;
+        }
+      }
+      .task-no {
+        font-size: 13px;
+        color: #595959;
+      }
+    }
+    .MuiLinearProgress-bar {
+      background: #250056;
+      transition: width 1s linear;
+    }
+
+    .indicator-icon {
+      display: flex;
+      justify-content: flex-end;
+      position: absolute;
+      top: -18px;
+      .indicator-day {
+        // font-size: 13px;
+        font-size: 12px;
+        position: relative;
+        left: 25px;
+        top: -12px;
+        color: #5e082a;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column-reverse;
+        &.day-ten {
+          left: 30px;
+        }
+        span {
+          left: -10px;
+          position: relative;
+          &.ten {
+            left: -28px;
+            position: relative;
+          }
+        }
+      }
+      .line {
+        font-weight: bold;
+        font-size: 30px;
+        position: relative;
+        top: 0px;
+        color: #250056;
+      }
+      &.show {
+        visibility: visible;
+      }
+
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+  }
+}
+
 .addOwnerButton {
   margin-top: 21px;
   margin-left: 10px;
