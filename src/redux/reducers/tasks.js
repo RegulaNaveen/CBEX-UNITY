@@ -1,3 +1,5 @@
+import { TASKS } from '../../constants/types';
+
 const INITIAL_STATE = {
   tasks: [],
   loading: false,
@@ -6,17 +8,17 @@ const INITIAL_STATE = {
 
 export default function tasksReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case 'SET_TASKS':
+    case TASKS.SET_TASKS:
       return {
         ...state,
         tasks: action.payload
       };
-    case 'LOADING_TASKS':
+    case TASKS.LOADING_TASKS:
       return {
         ...state,
         loading: action.payload
       };
-    case 'ERROR_TASKS':
+    case TASKS.ERROR_TASKS:
       return {
         ...state,
         error: action.payload
