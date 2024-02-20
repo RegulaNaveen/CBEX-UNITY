@@ -54,6 +54,7 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
   const [descEditRef, setDescEditRef] = useState(null);
   const [updatingDesc, setUpdatingDesc] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   const locked = !!task.locked;
   const lockedBy = locked ? task.lockedBy : null;
@@ -230,12 +231,13 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
   ];
 
   const handleCheckboxClick = task => {
+    setShowLoader(true);
     const taskData = {
-      is_completed: !task.is_completed,
-      no_of_units: task.no_of_units,
-      description: task.description
+      is_completed: !task.is_completed
     };
-    const result = dispatch(editTask(task.proposal_id, task.task_id, taskData));
+    dispatch(editTask(task.proposal_id, task.task_id, taskData)).then(() => {
+      setShowLoader(false);
+    });
   };
 
   if ((editing || updatingDesc) && !locked && editable) {
@@ -323,6 +325,37 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
                   <OverflowEllipsis show={overflowed} desc={task.description} />
                 </p>
               </div>
+              {showLoader && (
+                <>
+                  <div className="loader-container">
+                    <div
+                      style={{
+                        display: 'flex',
+                        height: '24px',
+                        marginRight: '20px'
+                      }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: '0px',
+                          position: 'relative',
+                          top: '15px'
+                        }}
+                      >
+                        <Loader
+                          isInner
+                          size={20}
+                          style={{
+                            width: '20px',
+                            height: '20px'
+                          }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+
               <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
                 <IconMenuButton
                   menuItems={menuItems}

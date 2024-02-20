@@ -113,10 +113,6 @@ export const editTask = (
   socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: LOADING_TASKS,
-      payload: true
-    });
     try {
       const taskListResponse = await editTaskDataApi(
         proposalId,
