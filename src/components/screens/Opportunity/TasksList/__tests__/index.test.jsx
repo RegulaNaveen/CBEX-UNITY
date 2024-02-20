@@ -85,7 +85,7 @@ describe('TasksList Unit Tests', () => {
   test('render day 1 to 10', async () => {
     const { getByText, debug, container } = render(<TasksListWithRedux />);
     debug(container, Infinity);
-    expect(getByText(/Day 1$/)).toBeTruthy();
+    expect(getByText(/Day 1/, { exact: true })).toBeTruthy();
     expect(getByText(/Day 2/)).toBeTruthy();
     expect(getByText(/Day 3/)).toBeTruthy();
     expect(getByText(/Day 4/)).toBeTruthy();
