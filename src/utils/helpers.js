@@ -67,3 +67,17 @@ export function extractEmails(text) {
 export const avoidSpecialChars = string => {
   return string.replace(/[&\/\\#,+$~%.'":*?<>]/g, '');
 };
+
+/**
+ * Reordering Array
+ * @param {Array} list Array
+ * @param {Number} startIndex Start Index
+ * @param {Number} endIndex End Index
+ * @returns Array
+ */
+export function reorder(list, startIndex, endIndex) {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+}

@@ -32,6 +32,13 @@ import {
   updateDashboardBid,
   syncDashboardOpportunity
 } from '../redux/actions/proposals-actions';
+import {
+  setTaskFromSocket,
+  editTaskFromSocket,
+  handleTaskLock,
+  handleTaskUnlock,
+  handleMultipleTaskLocks
+} from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
@@ -45,6 +52,10 @@ import {
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
 import { getSelectedBid } from '../redux/selectors';
+import {
+  updateTaskListOrderAction,
+  updateTaskListMoveAction
+} from '../redux/actions/tasksList-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -460,6 +471,23 @@ const SocketContextProvider = props => {
     }
   };
 
+  // Get All Locked tasks
+  const getTaskLockDetails = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: { event: 'TASK' }
+        })
+      );
+    } catch (error) {
+      console.log('getTaskLockDetails', error);
+    }
+  };
+
   /**
    * Function called after bid creation completed
    */
@@ -548,7 +576,14 @@ const SocketContextProvider = props => {
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
           deleteApprovalCustomTabCustomQuestionFromSocket,
-          selectedBid
+          selectedBid,
+          updateTaskListOrderAction,
+          updateTaskListMoveAction,
+          setTaskFromSocket,
+          editTaskFromSocket,
+          handleTaskLockAction,
+          handleTaskUnlockAction,
+          handleMultipleTaskLocksAction
         } = props;
 
         // On Message Recieve
@@ -676,6 +711,16 @@ const SocketContextProvider = props => {
                 );
               }
               break;
+            case 'TASK_ADD':
+              if (data.data) {
+                setTaskFromSocket(data.data, data.proposalId);
+              }
+              break;
+            case 'TASK_UPDATE':
+              if (data.data) {
+                editTaskFromSocket(data.data, data.proposalId);
+              }
+              break;
 
             case 'QUESTIONS':
               // Get list of questions already locked by other users
@@ -743,6 +788,22 @@ const SocketContextProvider = props => {
             case 'CUSTOM_NAME_UPDATE':
               const { customName } = data.data;
               updateCustomNameAction(data.data.oppNumber, customName);
+              break;
+
+            case 'TASK_REORDER':
+              updateTaskListOrderAction(data);
+              break;
+
+            case 'TASK_MOVE':
+              updateTaskListMoveAction(data);
+            case 'TASK':
+              handleMultipleTaskLocksAction(data.data);
+              break;
+            case 'TASK_LOCK':
+              handleTaskLockAction(data.data);
+              break;
+            case 'TASK_UNLOCK':
+              handleTaskUnlockAction(data.data);
               break;
             default:
               break;
@@ -896,6 +957,43 @@ const SocketContextProvider = props => {
     }
   };
 
+  // Lock a task for a user
+  const lockTask = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'TASK_LOCK',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in locking a task: ', error);
+    }
+  };
+
+  // Unlock a task for a user
+  const unlockTask = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'TASK_UNLOCK',
+            data,
+            clienttaskId: data.taskId
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in locking a task: ', error);
+    }
+  };
+
   const questionLockWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
@@ -984,6 +1082,10 @@ const SocketContextProvider = props => {
     waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
 
+  const getTaskLockDetailsWrapper = () => {
+    waitForSocketConnectionMinInterval(() => getTaskLockDetails(null));
+  };
+
   // Approval's Questions - duplicating - socket message wrapper
   // info - sectionId, duplicating(bool)
   const approvalSectionDuplicatingWrapper = data => {
@@ -1006,6 +1108,14 @@ const SocketContextProvider = props => {
   // info - sectionId
   const approvalSectionDeletedWrapper = data => {
     waitForSocketConnectionMinInterval(() => approvalDeleted(data));
+  };
+
+  const lockTaskWrapper = data => {
+    waitForSocketConnectionMinInterval(() => lockTask(data));
+  };
+
+  const unlockTaskWrapper = data => {
+    waitForSocketConnectionMinInterval(() => unlockTask(data));
   };
 
   const refreshSocketConnection = () => {
@@ -1069,7 +1179,10 @@ const SocketContextProvider = props => {
         updateFavouriteWrapper,
         updateCustomNameWrapper,
         updateDashboardSFValueWrapper,
-        ApprovalCustomQuestionDeleteWrapper
+        ApprovalCustomQuestionDeleteWrapper,
+        getTaskLockDetailsWrapper,
+        lockTaskWrapper,
+        unlockTaskWrapper
       }}
     >
       {props.children}
@@ -1113,7 +1226,14 @@ const mapDispatchToProps = {
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  updateTaskListOrderAction,
+  updateTaskListMoveAction,
+  setTaskFromSocket: setTaskFromSocket,
+  editTaskFromSocket: editTaskFromSocket,
+  handleTaskLockAction: handleTaskLock,
+  handleTaskUnlockAction: handleTaskUnlock,
+  handleMultipleTaskLocksAction: handleMultipleTaskLocks
 };
 
 export default connect(

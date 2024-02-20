@@ -36,7 +36,7 @@ import CalendarWithMinus from './CalendarWithMinus';
 import ClipboardCheck from './ClipboardCheck';
 import AlertTriangle from './AlertTriangle';
 import AlertDiamond from './AlertDiamond';
-
+import DayIndicator from './DayIndicator';
 export {
   Checkmark,
   Edit,
@@ -74,5 +74,6 @@ export {
   CalendarWithMinus,
   ClipboardCheck,
   AlertTriangle,
-  AlertDiamond
+  AlertDiamond,
+  DayIndicator
 };
