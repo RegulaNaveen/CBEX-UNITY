@@ -60,7 +60,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
 
   const handleShowOwner = () => {
     if (showAddOwner && taskId) {
-      openModal(taskId);
+      // openModal(taskId);
     }
   };
 
@@ -84,7 +84,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                 <Button
                   variant="secondary"
                   disabled={!showAddOwner}
-                  onClick={() => handleShowOwner()} // Wrap handleShowOwner call in an arrow function
+                  onClick={() => handleShowOwner()}
                 >
                   Add Owner
                   {showLoader && (
