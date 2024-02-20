@@ -12,14 +12,13 @@ import Button from 'apollo-react/components/Button';
 import { setTask } from '../../../../redux/actions/tasksList-actions';
 import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
-import { useSelector } from 'react-redux';
-import { selectTasksList } from '../../../../redux/selectors/tasks';
-import { setTaskDataApi } from '../../../../api/tasksList';
+import Loader from 'apollo-react/components/Loader';
 
 const AddNewTask = ({ day, proposalId, openModal }) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleAddNewTask = () => {
     setShowAddTask(true);
@@ -43,11 +42,16 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
         no_of_units: Number(day),
         description: inputValue
       };
-      const result = setTaskDataApi(proposalId, taskData);
-      await dispatch(setTask(proposalId, taskData, socketContext));
-      if (result && result.task_id) {
+      setShowLoader(true);
+      const result = await dispatch(
+        setTask(proposalId, taskData, socketContext)
+      );
+
+      if (result) {
         setTaskId(result.task_id);
-        // setShowAddTask(false);
+        setShowAddTask(false);
+        // setShowAddOwner(false);
+        setShowLoader(false);
       }
     } else {
       setShowAddTask(false);
@@ -55,11 +59,8 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
   };
 
   const handleShowOwner = () => {
-    console.log('I am here', taskId);
     if (showAddOwner && taskId) {
       openModal(taskId);
-      setShowAddOwner(false);
-      setShowAddTask(false);
     }
   };
 
@@ -86,6 +87,36 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                   onClick={() => handleShowOwner()} // Wrap handleShowOwner call in an arrow function
                 >
                   Add Owner
+                  {showLoader && (
+                    <>
+                      <div className="loader-container">
+                        <div
+                          style={{
+                            display: 'flex',
+                            height: '24px',
+                            marginRight: '20px'
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: '0px',
+                              position: 'relative',
+                              top: '15px'
+                            }}
+                          >
+                            <Loader
+                              isInner
+                              size={20}
+                              style={{
+                                width: '20px',
+                                height: '20px'
+                              }}
+                            />
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </Button>
               </Grid>
             </Grid>
