@@ -21,6 +21,9 @@ const TasksListWithRedux = props => (
 
 describe('TasksList Unit Tests', () => {
   beforeAll(() => {
+    const modalRoot = document.createElement('div');
+    modalRoot.setAttribute('id', 'modal-wrapper');
+    document.body.appendChild(modalRoot);
     store.dispatch({
       type: SET_TASKS,
       payload: [
