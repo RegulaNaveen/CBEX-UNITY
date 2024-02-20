@@ -45,6 +45,10 @@ import {
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
 import { getSelectedBid } from '../redux/selectors';
+import {
+  updateTaskListOrderAction,
+  updateTaskListMoveAction
+} from '../redux/actions/tasksList-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -548,7 +552,9 @@ const SocketContextProvider = props => {
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
           deleteApprovalCustomTabCustomQuestionFromSocket,
-          selectedBid
+          selectedBid,
+          updateTaskListOrderAction,
+          updateTaskListMoveAction
         } = props;
 
         // On Message Recieve
@@ -743,6 +749,14 @@ const SocketContextProvider = props => {
             case 'CUSTOM_NAME_UPDATE':
               const { customName } = data.data;
               updateCustomNameAction(data.data.oppNumber, customName);
+              break;
+
+            case 'TASK_REORDER':
+              updateTaskListOrderAction(data);
+              break;
+
+            case 'TASK_MOVE':
+              updateTaskListMoveAction(data);
               break;
             default:
               break;
@@ -1113,7 +1127,9 @@ const mapDispatchToProps = {
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  updateTaskListOrderAction,
+  updateTaskListMoveAction
 };
 
 export default connect(

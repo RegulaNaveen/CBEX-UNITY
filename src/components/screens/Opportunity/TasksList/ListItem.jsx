@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import Checkbox from 'apollo-react/components/Checkbox';
 import DragIcon from 'apollo-react-icons/Drag';
@@ -29,7 +29,13 @@ function OverflowEllipsis({ desc, show }) {
   );
 }
 
-function ListItem({ index, task }) {
+const getItemStyle = (isDragging, draggableStyle) => ({
+  userSelect: 'none',
+  background: isDragging ? 'rgba(255, 255, 255, 0.7)' : 'transparent',
+  ...draggableStyle
+});
+
+function ListItem({ index, task, day }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
 
@@ -103,51 +109,58 @@ function ListItem({ index, task }) {
 
   return (
     <Draggable
-      key={`drag-group-1-item-${index}`}
-      draggableId={`drag-group-1-item-${index}`}
+      key={`drag-group-${day}-item-${index}`}
+      draggableId={`drag-group-${day}-item-${index}`}
       index={index}
     >
       {(provided, snapshot) => (
-        <div>
-          <div
-            ref={provided.innerRef}
-            className="task-item-drag-container"
-            {...provided.draggableProps}
+        <div
+          ref={provided.innerRef}
+          className="task-item-drag-container"
+          {...provided.draggableProps}
+          style={getItemStyle(
+            snapshot.isDragging,
+            provided.draggableProps.style
+          )}
+        >
+          <span
+            {...provided.dragHandleProps}
+            data-testid={`drag-group-${day}-item-${index}`}
+            className="drag-icon-container"
+            style={{ height: '24px' }}
           >
-            <span {...provided.dragHandleProps}>
-              <DragIcon fontSize="small" />
-            </span>
-            <Checkbox
-              checked={task.is_completed}
-              style={{
-                marginLeft: '0.01rem',
-                marginTop: '-0.25rem'
-              }}
-            />
-            <div className="task-desc">
-              <p
-                ref={_ref => setDescRef(_ref)}
-                // className={classNames({
-                // 'font-red':
-                // tasksGroup.dayDiffFromToday < 0 &&
-                // !task.is_completed,
-                // 'font-bold': task.is_completed
-                // })}
-              >
-                {task.description}
-                <OverflowEllipsis show={overflowed} desc={task.description} />
-              </p>
-            </div>
-            <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
-              <IconMenuButton
-                menuItems={menuItems}
-                size="small"
-                id="task-list-item-menu-btn"
-              >
-                <EllipsisVertical />
-              </IconMenuButton>
-            </Tooltip>
+            <DragIcon fontSize="small" />
+          </span>
+          <Checkbox
+            checked={task?.is_completed}
+            style={{
+              marginLeft: '0.01rem',
+              marginTop: '-0.25rem'
+            }}
+          />
+          <div className="task-desc">
+            <p
+              ref={_ref => setDescRef(_ref)}
+              // className={classNames({
+              // 'font-red':
+              // tasksGroup.dayDiffFromToday < 0 &&
+              // !task.is_completed,
+              // 'font-bold': task.is_completed
+              // })}
+            >
+              {task?.description}
+              <OverflowEllipsis show={overflowed} desc={task?.description} />
+            </p>
           </div>
+          <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
+            <IconMenuButton
+              menuItems={menuItems}
+              size="small"
+              id="task-list-item-menu-btn"
+            >
+              <EllipsisVertical />
+            </IconMenuButton>
+          </Tooltip>
         </div>
       )}
     </Draggable>
