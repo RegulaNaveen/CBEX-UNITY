@@ -97,7 +97,6 @@ export function tasksListReordering(proposalId, tasks, taskId = '') {
 }
 
 export function updateTaskById(proposalId, taskId, payload) {
-  console.log('Here', taskId, payload);
   return async (dispatch, getState) => {
     try {
       const taskListResponse = await updateTaskListApi(
@@ -105,7 +104,6 @@ export function updateTaskById(proposalId, taskId, payload) {
         taskId,
         payload
       );
-      console.log('tasksList', taskListResponse);
       if (Array.isArray(taskListResponse.result)) {
         const tasksList = selectTasksList(getState());
         const taskIndex = tasksList.findIndex(task => task.id === taskId);

@@ -90,7 +90,6 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
-  const [ownersCount, setOwnersCount] = useState(0);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -144,7 +143,12 @@ const TasksList = () => {
         dateForDay = getNextWorkingDay(tasksGroup[day - 1].date);
       }
       tasksGroup[day] = {
-        tasks: tasksForADay.sort((a, b) => a.order - b.order),
+        tasks: tasksForADay
+          .sort((a, b) => a.order - b.order)
+          .map(task => {
+            const ownersCount = task?.task_role?.length;
+            return { ...task, ownersCount };
+          }),
         expanded: isEmpty(tasksGroupsByDay)
           ? isCorrectDay(dateForDay)
           : tasksGroupsByDay[day].expanded,
@@ -160,7 +164,6 @@ const TasksList = () => {
         ]).diff(moment([TODAY.year(), TODAY.month(), TODAY.date()]), 'd')
       };
     });
-
     // If tasksGroupsByDay is empty, then it is the first render
     if (isEmpty(tasksGroupsByDay)) {
       getTaskLockDetailsWrapper();
@@ -168,6 +171,21 @@ const TasksList = () => {
 
     setTasksGroupsByDay(tasksGroup);
   }, [tasks]);
+
+  const updateOwnersCount = (taskId, newCount) => {
+    setTasksGroupsByDay(prevTasksGroups => {
+      const updatedTasksGroups = { ...prevTasksGroups };
+      Object.values(updatedTasksGroups).forEach(dayGroup => {
+        const taskToUpdate = dayGroup.tasks.find(
+          task => task.task_id === taskId
+        );
+        if (taskToUpdate) {
+          taskToUpdate.ownersCount = newCount;
+        }
+      });
+      return updatedTasksGroups;
+    });
+  };
 
   function handleDragEnd(result) {
     const { source, destination } = result;
@@ -323,7 +341,7 @@ const TasksList = () => {
                         key={`task-item-${day}-${index}`}
                         editable={editable}
                         openModal={openModal}
-                        ownersCount={ownersCount}
+                        ownersCount={task.ownersCount}
                       />
                     ))}
                     {selectedBid.isEditable && (
@@ -348,8 +366,8 @@ const TasksList = () => {
           closeModal={closeModal}
           setIsModalOpen={setIsModalOpen}
           taskId={taskId}
-          setOwnersCount={setOwnersCount}
           tasks={tasks}
+          updateOwnersCount={updateOwnersCount}
         />
       </TaskListToolbarMenuPortal>
     </div>

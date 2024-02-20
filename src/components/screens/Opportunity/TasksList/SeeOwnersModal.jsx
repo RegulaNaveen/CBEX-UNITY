@@ -25,7 +25,7 @@ const SeeOwners = ({
   closeModal,
   setIsModalOpen,
   taskId,
-  setOwnersCount
+  updateOwnersCount
 }) => {
   const [taskDescriptions, setTaskDescriptions] = useState('');
   const [showInput, setShowInput] = useState(false);
@@ -170,6 +170,7 @@ const SeeOwners = ({
       setSelectedTask(null);
       setHandlePayload([]);
       setSelectedUsers([]);
+      updateOwnersCount(task_id, selectedUsers.length);
     });
   };
 
@@ -326,9 +327,6 @@ const SeeOwners = ({
     setShowWarningModal(false);
     setUserToRemoveIndex(null);
   };
-  useEffect(() => {
-    setOwnersCount(selectedUsers.length);
-  }, [selectedUsers, isModalOpen, taskId]);
 
   return (
     <>
