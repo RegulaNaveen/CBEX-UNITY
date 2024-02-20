@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext
+} from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import Checkbox from 'apollo-react/components/Checkbox';
 import DragIcon from 'apollo-react-icons/Drag';
@@ -21,6 +27,9 @@ import {
 import { updateTaskDescApi } from '../../../../api/tasksList';
 import Loader from 'apollo-react/components/Loader';
 import DeleteAlert from './DeleteAlert';
+import { SocketContext } from '../../../../context/SocketContext';
+import { useSelector } from 'react-redux';
+import { getSelectedBid } from '../../../../redux/selectors';
 
 function OverflowEllipsis({ desc, show }) {
   return (
@@ -37,7 +46,14 @@ function OverflowEllipsis({ desc, show }) {
   );
 }
 
-function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
+function ListItem({
+  index,
+  task,
+  dayDiffFromToday,
+  editable,
+  openModal,
+  ownersCount
+}) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -45,8 +61,14 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
   const [descEditRef, setDescEditRef] = useState(null);
   const [updatingDesc, setUpdatingDesc] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+
+  const locked = !!task.locked;
+  const lockedBy = locked ? task.lockedBy : null;
 
   const dispatch = useDispatch();
+
+  const { lockTaskWrapper, unlockTaskWrapper } = useContext(SocketContext);
 
   const handleResize = useCallback(() => {
     if (descRef) {
@@ -88,12 +110,28 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
   };
 
   const handleEditClick = useCallback(() => {
+    lockTaskWrapper({
+      taskId: task.task_id,
+      userEmail: localStorage.getItem('userEmail'),
+      userId: localStorage.getItem('userId'),
+      proposalId: task.proposal_id,
+      userName: localStorage.getItem('userName'),
+      oppNo: localStorage.getItem('oppNo') || ''
+    });
     setEditingDesc(task.description);
     setEditing(true);
   }, [task, descEditRef]);
 
   const updateDesc = async () => {
     if (editingDesc === task.description) {
+      unlockTaskWrapper({
+        taskId: task.task_id,
+        userEmail: localStorage.getItem('userEmail'),
+        userId: localStorage.getItem('userId'),
+        proposalId: task.proposal_id,
+        userName: localStorage.getItem('userName'),
+        oppNo: localStorage.getItem('oppNo') || ''
+      });
       return;
     }
     setUpdatingDesc(true);
@@ -115,6 +153,14 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
       }
     }
     setUpdatingDesc(false);
+    unlockTaskWrapper({
+      taskId: task.task_id,
+      userEmail: localStorage.getItem('userEmail'),
+      userId: localStorage.getItem('userId'),
+      proposalId: task.proposal_id,
+      userName: localStorage.getItem('userName'),
+      oppNo: localStorage.getItem('oppNo') || ''
+    });
   };
 
   const handleEditBlur = useCallback(() => {
@@ -129,10 +175,26 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
   }, [descEditRef, editingDesc, task]);
 
   const handleDeleteClick = useCallback(() => {
+    lockTaskWrapper({
+      taskId: task.task_id,
+      userEmail: localStorage.getItem('userEmail'),
+      userId: localStorage.getItem('userId'),
+      proposalId: task.proposal_id,
+      userName: localStorage.getItem('userName'),
+      oppNo: localStorage.getItem('oppNo') || ''
+    });
     setShowDeleteAlert(true);
   }, []);
 
   const handleDeleteAlertClose = useCallback(() => {
+    unlockTaskWrapper({
+      taskId: task.task_id,
+      userEmail: localStorage.getItem('userEmail'),
+      userId: localStorage.getItem('userId'),
+      proposalId: task.proposal_id,
+      userName: localStorage.getItem('userName'),
+      oppNo: localStorage.getItem('oppNo') || ''
+    });
     setShowDeleteAlert(false);
   }, []);
 
@@ -155,8 +217,7 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
           <Typography className="menu-item-label">History</Typography>
         </div>
       ),
-      onClick: handleClick('History'),
-      disabled: true
+      onClick: handleClick('History')
     },
     {
       text: (
@@ -165,7 +226,8 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
           <Typography className="menu-item-label">Edit</Typography>
         </div>
       ),
-      onClick: handleEditClick
+      onClick: handleEditClick,
+      disabled: locked || !editable
     },
     {
       text: (
@@ -175,20 +237,22 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
         </div>
       ),
       onClick: handleDeleteClick,
-      destructiveAction: true
+      destructiveAction: true,
+      disabled: locked || !editable
     }
   ];
 
   const handleCheckboxClick = task => {
+    setShowLoader(true);
     const taskData = {
-      is_completed: !task.is_completed,
-      no_of_units: task.no_of_units,
-      description: task.description
+      is_completed: !task.is_completed
     };
-    const result = dispatch(editTask(task.proposal_id, task.task_id, taskData));
+    dispatch(editTask(task.proposal_id, task.task_id, taskData)).then(() => {
+      setShowLoader(false);
+    });
   };
 
-  if (editing || updatingDesc) {
+  if ((editing || updatingDesc) && !locked && editable) {
     return (
       <div className={classNames(['edit-container'])}>
         <TextField
@@ -246,7 +310,10 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
               className="task-item-drag-container"
               {...provided.draggableProps}
             >
-              <span {...provided.dragHandleProps}>
+              <span
+                {...provided.dragHandleProps}
+                className={classNames({ disabled: locked || !editable })}
+              >
                 <DragIcon fontSize="small" />
               </span>
               <Checkbox
@@ -256,6 +323,7 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
                   marginTop: '-0.25rem'
                 }}
                 onClick={() => handleCheckboxClick(task)}
+                disabled={locked || !editable}
               />
               <div className="task-desc">
                 <p
@@ -269,6 +337,37 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
                   <OverflowEllipsis show={overflowed} desc={task.description} />
                 </p>
               </div>
+              {showLoader && (
+                <>
+                  <div className="loader-container">
+                    <div
+                      style={{
+                        display: 'flex',
+                        height: '24px',
+                        marginRight: '20px'
+                      }}
+                    >
+                      <span
+                        style={{
+                          marginLeft: '0px',
+                          position: 'relative',
+                          top: '15px'
+                        }}
+                      >
+                        <Loader
+                          isInner
+                          size={20}
+                          style={{
+                            width: '20px',
+                            height: '20px'
+                          }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+
               <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
                 <IconMenuButton
                   menuItems={menuItems}
@@ -279,6 +378,9 @@ function ListItem({ index, task, dayDiffFromToday, openModal, ownersCount }) {
                 </IconMenuButton>
               </Tooltip>
             </div>
+            {locked ? (
+              <p className="who-is-typing">{lockedBy.userName} is typing...</p>
+            ) : null}
           </div>
         )}
       </Draggable>
