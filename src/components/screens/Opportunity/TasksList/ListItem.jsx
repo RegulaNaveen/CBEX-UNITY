@@ -28,10 +28,8 @@ import { updateTaskDescApi } from '../../../../api/tasksList';
 import Loader from 'apollo-react/components/Loader';
 import DeleteAlert from './DeleteAlert';
 import { SocketContext } from '../../../../context/SocketContext';
-import { useSelector } from 'react-redux';
-import { getSelectedBid } from '../../../../redux/selectors';
 
-function OverflowEllipsis({ desc, show }) {
+function OverflowEllipsis({ show }) {
   return (
     <span
       className={classNames({
@@ -39,9 +37,7 @@ function OverflowEllipsis({ desc, show }) {
         show: show
       })}
     >
-      <Tooltip placement="top" title={desc}>
-        <EllipsisHorizontal />
-      </Tooltip>
+      <EllipsisHorizontal />
     </span>
   );
 }
@@ -298,15 +294,6 @@ function ListItem({
               </span>
             ) : null}
           </div>
-          <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
-            <IconMenuButton
-              menuItems={menuItems}
-              size="small"
-              id="task-list-item-menu-btn"
-            >
-              <EllipsisVertical />
-            </IconMenuButton>
-          </Tooltip>
         </div>
       </div>
     );
@@ -348,19 +335,18 @@ function ListItem({
                 disabled={locked || !editable}
               />
               <div className="task-desc">
-                <p
-                  ref={_ref => setDescRef(_ref)}
-                  className={classNames({
-                    'font-red': dayDiffFromToday < 0 && !task?.is_completed,
-                    'font-bold': task?.is_completed
-                  })}
-                >
-                  {task?.description}
-                  <OverflowEllipsis
-                    show={overflowed}
-                    desc={task?.description}
-                  />
-                </p>
+                <Tooltip placement="top" title={task?.description}>
+                  <p
+                    ref={_ref => setDescRef(_ref)}
+                    className={classNames({
+                      'font-red': dayDiffFromToday < 0 && !task?.is_completed,
+                      'font-bold': task?.is_completed
+                    })}
+                  >
+                    {task?.description}
+                    <OverflowEllipsis show={overflowed} />
+                  </p>
+                </Tooltip>
               </div>
               {showLoader && (
                 <>
