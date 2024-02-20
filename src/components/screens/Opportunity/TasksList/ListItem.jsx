@@ -46,7 +46,13 @@ function OverflowEllipsis({ desc, show }) {
   );
 }
 
-function ListItem({ index, task, dayDiffFromToday, editable }) {
+const getItemStyle = (isDragging, draggableStyle) => ({
+  userSelect: 'none',
+  background: isDragging ? 'rgba(255, 255, 255, 0.7)' : 'transparent',
+  ...draggableStyle
+});
+
+function ListItem({ index, task, day, dayDiffFromToday, editable }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -279,6 +285,15 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
               </span>
             ) : null}
           </div>
+          <Tooltip disableFocusListener id="task-list-menu-btn-tooltip">
+            <IconMenuButton
+              menuItems={menuItems}
+              size="small"
+              id="task-list-item-menu-btn"
+            >
+              <EllipsisVertical />
+            </IconMenuButton>
+          </Tooltip>
         </div>
       </div>
     );
@@ -287,8 +302,8 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
   return (
     <>
       <Draggable
-        key={`drag-group-1-item-${index}`}
-        draggableId={`drag-group-1-item-${index}`}
+        key={`drag-group-${day}-item-${index}`}
+        draggableId={`drag-group-${day}-item-${index}`}
         index={index}
       >
         {(provided, snapshot) => (
@@ -297,15 +312,21 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
               ref={provided.innerRef}
               className="task-item-drag-container"
               {...provided.draggableProps}
+              style={getItemStyle(
+                snapshot.isDragging,
+                provided.draggableProps.style
+              )}
             >
               <span
                 {...provided.dragHandleProps}
                 className={classNames({ disabled: locked || !editable })}
+                data-testid={`drag-group-${day}-item-${index}`}
+                style={{ height: '24px' }}
               >
                 <DragIcon fontSize="small" />
               </span>
               <Checkbox
-                checked={task.is_completed}
+                checked={task?.is_completed}
                 style={{
                   marginLeft: '0.01rem',
                   marginTop: '-0.25rem'
@@ -317,12 +338,15 @@ function ListItem({ index, task, dayDiffFromToday, editable }) {
                 <p
                   ref={_ref => setDescRef(_ref)}
                   className={classNames({
-                    'font-red': dayDiffFromToday < 0 && !task.is_completed,
-                    'font-bold': task.is_completed
+                    'font-red': dayDiffFromToday < 0 && !task?.is_completed,
+                    'font-bold': task?.is_completed
                   })}
                 >
-                  {task.description}
-                  <OverflowEllipsis show={overflowed} desc={task.description} />
+                  {task?.description}
+                  <OverflowEllipsis
+                    show={overflowed}
+                    desc={task?.description}
+                  />
                 </p>
               </div>
               {showLoader && (
