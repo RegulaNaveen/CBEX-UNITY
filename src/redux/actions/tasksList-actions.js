@@ -2,6 +2,7 @@ import {
   fetchTasksListApi,
   tasksListReorderingApi,
   tasksListMoveApi,
+  updateTaskListApi,
   updateTaskDescApi,
   setTaskDataApi,
   editTaskDataApi
@@ -95,6 +96,33 @@ export function tasksListReordering(proposalId, tasks, taskId = '') {
   };
 }
 
+export function updateTaskById(proposalId, taskId, payload) {
+  console.log('Here', taskId, payload);
+  return async (dispatch, getState) => {
+    try {
+      const taskListResponse = await updateTaskListApi(
+        proposalId,
+        taskId,
+        payload
+      );
+      console.log('tasksList', taskListResponse);
+      if (Array.isArray(taskListResponse.result)) {
+        const tasksList = selectTasksList(getState());
+        const taskIndex = tasksList.findIndex(task => task.id === taskId);
+        if (taskIndex > -1) {
+          tasksList[taskIndex].task_role = taskListResponse.result;
+          dispatch({
+            type: SET_TASKS,
+            payload: tasksList
+          });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+}
+
 export function updateTaskDesc(taskId, newDesc) {
   return async (dispatch, getState) => {
     const tasksList = selectTasksList(getState());
@@ -128,14 +156,17 @@ export const setTask = (
   socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
+    let responseData = null;
     try {
       const taskListResponse = await setTaskDataApi(proposalId, taskData);
       const data = taskListResponse.result;
+      console.log(data);
       if (data) {
         dispatch({
           type: ADD_TASK,
           payload: data
         });
+        responseData = data;
       }
     } catch (err) {
       dispatch({
@@ -148,6 +179,7 @@ export const setTask = (
         payload: false
       });
     }
+    return responseData;
   };
 };
 

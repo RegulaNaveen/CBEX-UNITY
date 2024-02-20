@@ -52,7 +52,15 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
-function ListItem({ index, task, day, dayDiffFromToday, editable }) {
+function ListItem({
+  index,
+  task,
+  day,
+  dayDiffFromToday,
+  editable,
+  openModal,
+  ownersCount
+}) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -102,6 +110,10 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
 
   const handleClick = label => () => {
     console.log(`You picked ${label}.`);
+  };
+
+  const handleSeeOwners = text => () => {
+    openModal(task.task_id);
   };
 
   const handleEditClick = useCallback(() => {
@@ -198,11 +210,12 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
       text: (
         <div className="task-list-menu-item-wrapper">
           <User2Icon fontSize="small" />
-          <Typography className="menu-item-label">See Owners</Typography>
+          <Typography className="menu-item-label">
+            See Owners({ownersCount})
+          </Typography>
         </div>
       ),
-      onClick: handleClick('See Owners'),
-      disabled: true
+      onClick: handleSeeOwners()
     },
     {
       text: (

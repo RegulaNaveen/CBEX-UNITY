@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState
 } from 'react';
+import ReactDOM from 'react-dom';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import Typography from 'apollo-react/components/Typography';
@@ -29,6 +30,7 @@ import {
 import { reorder } from '../../../../utils/helpers';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
+import SeeOwners from './SeeOwnersModal';
 import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
@@ -69,6 +71,10 @@ const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   );
 };
 
+const TaskListToolbarMenuPortal = props => {
+  const modalRoot = document.getElementById('modal-wrapper');
+  return ReactDOM.createPortal(props.children, modalRoot);
+};
 // Drag & Drop Style
 const getListStyle = isDraggingOver => ({
   background: isDraggingOver ? '#ecf3ff' : 'transparent',
@@ -82,6 +88,10 @@ const TasksList = () => {
   const proposalId = selectedBid.id;
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskId, setTaskId] = useState(null);
+  const [ownersCount, setOwnersCount] = useState(0);
+
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const editable = selectedBid.isEditable;
@@ -248,6 +258,16 @@ const TasksList = () => {
     );
   }
 
+  const openModal = task_id => {
+    setIsModalOpen(true);
+    setTaskId(task_id);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTaskId(null);
+  };
+
   return (
     <div id="tasks-list-left-section">
       <div className="task-list-header">
@@ -302,12 +322,15 @@ const TasksList = () => {
                         dayDiffFromToday={tasksGroup.dayDiffFromToday}
                         key={`task-item-${day}-${index}`}
                         editable={editable}
+                        openModal={openModal}
+                        ownersCount={ownersCount}
                       />
                     ))}
                     {selectedBid.isEditable && (
                       <AddTaskItem
                         day={day}
                         proposalId={proposalId}
+                        openModal={openModal}
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -319,6 +342,16 @@ const TasksList = () => {
           ))}
         </div>
       </DragDropContext>
+      <TaskListToolbarMenuPortal>
+        <SeeOwners
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          setIsModalOpen={setIsModalOpen}
+          taskId={taskId}
+          setOwnersCount={setOwnersCount}
+          tasks={tasks}
+        />
+      </TaskListToolbarMenuPortal>
     </div>
   );
 };
