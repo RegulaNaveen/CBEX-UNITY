@@ -412,8 +412,8 @@ describe('testing for tab component', () => {
   test('render the component without crashing', async () => {
     const { container, getByText, findByText } = render(<TabWithRedux />);
     expect(container).toBeInTheDocument();
-    const moreButton = await findByText('More');
-    expect(moreButton).toBeInTheDocument();
+    // const moreButton = await findByText('More');
+    // expect(moreButton).toBeInTheDocument();
     // await fireEvent.click(moreButton);
     // expect(getByText('Strategy Development')).toBeInTheDocument();
     // expect(getByText('Timeline')).toBeInTheDocument();

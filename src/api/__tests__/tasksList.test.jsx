@@ -1,6 +1,10 @@
 import Sinon from 'sinon';
 import { axiosInstance } from '../../store';
-import { fetchTasksListApi } from '../tasksList';
+import {
+  fetchTasksListApi,
+  setTaskDataApi,
+  editTaskDataApi
+} from '../tasksList';
 
 describe('tasksList api functions', () => {
   const sandbox = Sinon.createSandbox();
@@ -25,5 +29,18 @@ describe('tasksList api functions', () => {
     expect(() => fetchTasksListApi()).rejects.toStrictEqual([
       'Unauthorized access'
     ]);
+  });
+
+  test('setTasksData should add data', () => {
+    sandbox.stub(axiosInstance, 'post').resolves({
+      data: []
+    });
+    expect(setTaskDataApi()).resolves.toStrictEqual([]);
+  });
+  test('editTasksData should edit data', () => {
+    sandbox.stub(axiosInstance, 'post').resolves({
+      data: []
+    });
+    expect(editTaskDataApi()).resolves.toStrictEqual([]);
   });
 });
