@@ -12,6 +12,8 @@
     height: calc(100% - 6.25rem);
     overflow: auto;
     padding: 8px;
+    display: flex;
+    flex-direction: column;
     .header {
       display: flex;
       align-items: center;

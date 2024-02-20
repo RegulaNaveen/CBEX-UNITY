@@ -5,14 +5,14 @@ import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHand
 const { TASKSLIST_API_URL, TASKLIST_UPDATE_API_URL } = API.TASKSLIST;
 const { API_KEY } = API.PROPOSAL;
 
-export function fetchTasksListApi(proposalId) {
-  const config = {
-    headers: {
-      'x-api-key': API_KEY,
-      'x-access-token': getAccessToken()
-    }
-  };
+const config = {
+  headers: {
+    'x-api-key': API_KEY,
+    'x-access-token': getAccessToken()
+  }
+};
 
+export function fetchTasksListApi(proposalId) {
   return new Promise((resolve, reject) => {
     axiosInstance
       .get(`${TASKSLIST_API_URL}/${proposalId}`, config)
@@ -34,7 +34,6 @@ export function updateTaskListApi(proposalId, task_Id, roles) {
     axiosInstance
       .put(`${TASKLIST_UPDATE_API_URL}/${proposalId}/${task_Id}`, roles, config)
       .then(response => {
-        console.log(response.data);
         resolve(response.data);
       })
       .catch(err => {
@@ -44,6 +43,34 @@ export function updateTaskListApi(proposalId, task_Id, roles) {
   });
 }
 
+export function tasksListReorderingApi(proposalId, taskIds, taskId) {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(
+        `${TASKSLIST_API_URL}/${proposalId}/${taskId}/reorder`,
+        { order: taskIds },
+        config
+      )
+      .then(response => resolve(response.data))
+      .catch(error => reject(error));
+  });
+}
+
+export function tasksListMoveApi(proposalId, taskIds, taskId, destDay) {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .put(
+        `${TASKSLIST_API_URL}/${proposalId}/${taskId}/move`,
+        {
+          no_of_units: destDay,
+          order: taskIds
+        },
+        config
+      )
+      .then(response => resolve(response.data))
+      .catch(error => reject(error));
+  });
+}
 export function updateTaskDescApi(proposalId, taskId, newDesc) {
   const config = {
     headers: {
