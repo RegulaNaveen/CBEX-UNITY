@@ -17,6 +17,7 @@ import Loader from 'apollo-react/components/Loader';
 const AddNewTask = ({ day, proposalId, openModal }) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [showLoader, setShowLoader] = useState(false);
 
@@ -38,31 +39,32 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
   const handleInputBlur = async e => {
     const inputValue = e.target.value;
     if (inputValue !== '') {
+      setShowLoader(true);
       const taskData = {
         no_of_units: Number(day),
         description: inputValue
       };
-      setShowLoader(true);
       const result = await dispatch(
         setTask(proposalId, taskData, socketContext)
       );
-
       if (result) {
         setTaskId(result.task_id);
         setShowAddTask(false);
         // setShowAddOwner(false);
-        setShowLoader(false);
       }
+      setShowLoader(false);
     } else {
       setShowAddTask(false);
     }
   };
 
-  const handleShowOwner = () => {
-    if (showAddOwner && taskId) {
-      // openModal(taskId);
+  useEffect(() => {
+    if (showModal && taskId) {
+      openModal(taskId);
+      setShowModal(false);
+      setTaskId(null);
     }
-  };
+  }, [showModal, taskId]);
 
   return (
     <>
@@ -84,7 +86,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                 <Button
                   variant="secondary"
                   disabled={!showAddOwner}
-                  onClick={() => handleShowOwner()}
+                  onClick={() => setShowModal(true)}
                 >
                   Add Owner
                   {showLoader && (

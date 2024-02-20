@@ -188,13 +188,13 @@ const TasksList = () => {
   }
 
   const openModal = task_id => {
-    setIsModalOpen(true);
     setTaskId(task_id);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
     setTaskId(null);
+    setIsModalOpen(false);
   };
 
   return (
@@ -280,7 +280,6 @@ const TasksList = () => {
             setIsModalOpen={setIsModalOpen}
             taskId={taskId}
             setOwnersCount={setOwnersCount}
-            tasks={tasks}
           />
         </TaskListToolbarMenuPortal>
       </div>
