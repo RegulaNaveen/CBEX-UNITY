@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor, screen } from '@testing-library/react';
 import TasksList from '..';
 import { Provider } from 'react-redux';
 import { store } from '../../../../../store';
@@ -86,18 +86,18 @@ describe('TasksList Unit Tests', () => {
   });
 
   test('render day 1 to 10', async () => {
-    const { getByText, debug, container } = render(<TasksListWithRedux />);
+    const { getAllByText, debug, container } = render(<TasksListWithRedux />);
     debug(container, Infinity);
-    expect(getByText(/Day 1$/)).toBeTruthy();
-    expect(getByText(/Day 2/)).toBeTruthy();
-    expect(getByText(/Day 3/)).toBeTruthy();
-    expect(getByText(/Day 4/)).toBeTruthy();
-    expect(getByText(/Day 5/)).toBeTruthy();
-    expect(getByText(/Day 6/)).toBeTruthy();
-    expect(getByText(/Day 7/)).toBeTruthy();
-    expect(getByText(/Day 8/)).toBeTruthy();
-    expect(getByText(/Day 9/)).toBeTruthy();
-    expect(getByText(/Day 10/)).toBeTruthy();
+    expect(getAllByText(/Day 1$/)).toBeTruthy();
+    expect(getAllByText(/Day 2/)).toBeTruthy();
+    expect(getAllByText(/Day 3/)).toBeTruthy();
+    expect(getAllByText(/Day 4/)).toBeTruthy();
+    expect(getAllByText(/Day 5/)).toBeTruthy();
+    expect(getAllByText(/Day 6/)).toBeTruthy();
+    expect(getAllByText(/Day 7/)).toBeTruthy();
+    expect(getAllByText(/Day 8/)).toBeTruthy();
+    expect(getAllByText(/Day 9/)).toBeTruthy();
+    expect(getAllByText(/Day 10/)).toBeTruthy();
   });
 
   test('render loader while fetching tasks', async () => {
@@ -148,5 +148,47 @@ describe('TasksList Unit Tests', () => {
     await waitFor(() => {
       expect(getByText('task 1')).toBeInTheDocument();
     });
+  });
+
+  test('drag and drop task', async () => {
+    store.dispatch({
+      type: SET_TASKS,
+      payload: [
+        {
+          no_of_units: 1,
+          description: 'task 1',
+          order: 1,
+          opportunity_types: 'Default Type'
+        },
+        {
+          no_of_units: 1,
+          description: 'task 1.1',
+          order: 2,
+          opportunity_types: 'Default Type'
+        },
+        {
+          no_of_units: 2,
+          description: 'task 2',
+          order: 2,
+          opportunity_types: 'Default Type'
+        },
+        {
+          no_of_units: 3,
+          description: 'task 3',
+          order: 3,
+          opportunity_types: 'Default Type'
+        }
+      ]
+    });
+    render(<TasksListWithRedux />);
+    const draggableElement1 = screen.getByTestId('drag-group-1-item-0');
+    const droppableElement = screen.getByTestId('droppable-task-group-1');
+    const SPACE = { keyCode: 32 };
+    const ARROW_DOWN = { keyCode: 40 };
+    fireEvent.keyDown(draggableElement1, SPACE); // Begins the dnd
+    fireEvent.keyDown(draggableElement1, ARROW_DOWN); // Moves the element
+    fireEvent.keyDown(draggableElement1, SPACE); // Ends the dnd
+    // Check that the draggable element has been added to the droppable element.
+    expect(droppableElement.contains(draggableElement1)).toBe(true);
   });
 });

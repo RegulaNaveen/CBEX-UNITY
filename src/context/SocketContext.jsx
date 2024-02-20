@@ -52,6 +52,10 @@ import {
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
 import { getSelectedBid } from '../redux/selectors';
+import {
+  updateTaskListOrderAction,
+  updateTaskListMoveAction
+} from '../redux/actions/tasksList-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -573,6 +577,8 @@ const SocketContextProvider = props => {
           deleteCustomTabCustomQuestionFromSocket,
           deleteApprovalCustomTabCustomQuestionFromSocket,
           selectedBid,
+          updateTaskListOrderAction,
+          updateTaskListMoveAction,
           setTaskFromSocket,
           editTaskFromSocket,
           handleTaskLockAction,
@@ -783,6 +789,13 @@ const SocketContextProvider = props => {
               const { customName } = data.data;
               updateCustomNameAction(data.data.oppNumber, customName);
               break;
+
+            case 'TASK_REORDER':
+              updateTaskListOrderAction(data);
+              break;
+
+            case 'TASK_MOVE':
+              updateTaskListMoveAction(data);
             case 'TASK':
               handleMultipleTaskLocksAction(data.data);
               break;
@@ -1214,6 +1227,8 @@ const mapDispatchToProps = {
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
   deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  updateTaskListOrderAction,
+  updateTaskListMoveAction,
   setTaskFromSocket: setTaskFromSocket,
   editTaskFromSocket: editTaskFromSocket,
   handleTaskLockAction: handleTaskLock,
