@@ -12,10 +12,11 @@ export const selectTasksList = createSelector(
   selectTasks,
   getSelectedBid,
   (task, selectedBid) =>
-    task.tasks.filter(task =>
-      task.opportunity_types
-        .split(',')
-        .includes(selectedBid.get('opportunityType'))
+    task.tasks.filter(
+      task =>
+        task.opportunity_types
+          .split(',')
+          .includes(selectedBid.get('opportunityType')) && !!!task.is_deleted
     )
 );
 
