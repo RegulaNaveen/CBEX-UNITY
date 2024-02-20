@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import Accordion from 'apollo-react/components/Accordion';
 import AccordionSummary from 'apollo-react/components/AccordionSummary';
 import Typography from 'apollo-react/components/Typography';
@@ -9,7 +15,7 @@ import { cloneDeep } from 'lodash';
 import classNames from 'classnames';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Loader from 'apollo-react/components/Loader';
-import { groupBy, merge } from 'lodash';
+import { groupBy, isEmpty, merge } from 'lodash';
 import Header from './Header';
 import { getSelectedBid } from '../../../../redux/selectors';
 import {
@@ -23,41 +29,45 @@ import {
 import { reorder } from '../../../../utils/helpers';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
+import ProgressIndicator from './ProgressIndicator';
+import getNextWorkingDay from './utils';
+import AddTaskItem from './AddTaskItem';
+import { SocketContext } from '../../../../context/SocketContext';
 
-// const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
-//   if (count === 0) {
-//     return null;
-//   }
-//   if (dayDiffFromToday < 0) {
-//     return (
-//       <div className="uncompleted-tasks-count">
-//         <AlertTriangle />
-//         <Typography className="font-red count-text" variant="caption">
-//           {count}
-//         </Typography>
-//       </div>
-//     );
-//   }
+const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
+  if (count === 0) {
+    return null;
+  }
+  if (dayDiffFromToday < 0) {
+    return (
+      <div className="uncompleted-tasks-count">
+        <AlertTriangle />
+        <Typography className="font-red count-text" variant="caption">
+          {count}
+        </Typography>
+      </div>
+    );
+  }
 
-//   if (dayDiffFromToday === 0) {
-//     return (
-//       <div className="uncompleted-tasks-count">
-//         <AlertDiamond />
-//         <Typography className="font-yellow count-text" variant="caption">
-//           {count}
-//         </Typography>
-//       </div>
-//     );
-//   }
+  if (dayDiffFromToday === 0) {
+    return (
+      <div className="uncompleted-tasks-count">
+        <AlertDiamond />
+        <Typography className="font-yellow count-text" variant="caption">
+          {count}
+        </Typography>
+      </div>
+    );
+  }
 
-//   return (
-//     <div className="uncompleted-tasks-count">
-//       <Typography className="count-text" variant="caption">
-//         {count}
-//       </Typography>
-//     </div>
-//   );
-// };
+  return (
+    <div className="uncompleted-tasks-count">
+      <Typography className="count-text" variant="caption">
+        {count}
+      </Typography>
+    </div>
+  );
+};
 
 // Drag & Drop Style
 const getListStyle = isDraggingOver => ({
@@ -68,43 +78,42 @@ const getListStyle = isDraggingOver => ({
 
 const TasksList = () => {
   const [tasksGroupsByDay, setTasksGroupsByDay] = useState({});
-
   const selectedBid = useSelector(getSelectedBid).toJS();
+  const proposalId = selectedBid.id;
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
-
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
-  const DAYS_SINCE_BID_CREATED = useMemo(
-    () =>
-      moment([TODAY.year(), TODAY.month(), TODAY.date()]).diff(
-        moment([
-          bidCreatedDate.year(),
-          bidCreatedDate.month(),
-          bidCreatedDate.date()
-        ]),
-        'd'
-      ),
-    [bidCreatedDate, TODAY]
-  );
+  const editable = selectedBid.isEditable;
+
+  const { getTaskLockDetailsWrapper } = useContext(SocketContext);
 
   const dispatch = useDispatch();
 
   const isCorrectDay = useCallback(
-    day => {
-      if (bidCreatedDate.isValid()) {
-        if (DAYS_SINCE_BID_CREATED <= 1) {
-          return day === '1';
-        }
-        return `${DAYS_SINCE_BID_CREATED}` === `${day}`;
-      }
-      return false;
+    dateOFADay => {
+      return TODAY.date() === dateOFADay.date();
     },
-    [bidCreatedDate, DAYS_SINCE_BID_CREATED]
+    [TODAY]
   );
 
+  const getDays = bidDate => {
+    let days = [];
+    let date = moment(bidDate, 'DD MMM YY');
+    date = date.add(1, 'days');
+    let count = 0;
+    while (count < 10) {
+      if (date.day() !== 0 && date.day() !== 6) {
+        days.push(date.format('DD MMM YY'));
+        count++;
+      }
+      date = date.add(1, 'days');
+    }
+    return days;
+  };
+
   useEffect(() => {
-    const tasksGroup = {
+    let tasksGroup = {
       1: [],
       2: [],
       3: [],
@@ -116,24 +125,36 @@ const TasksList = () => {
       9: [],
       10: []
     };
-    Object.entries(merge(tasksGroup, groupBy(tasks, 'no_of_units'))).forEach(
-      ([day, tasksForADay]) => {
-        const dateForDay = bidCreatedDate.clone().add(day, 'd');
-        tasksGroup[day] = {
-          tasks: tasksForADay.sort((a, b) => a.order - b.order),
-          expanded: isCorrectDay(day),
-          date: dateForDay,
-          dateFormatted: dateForDay.format('DD MMM'),
-          uncompletedCount: tasksForADay.filter(task => !task.is_completed)
-            .length,
-          dayDiffFromToday: moment([
-            dateForDay.year(),
-            dateForDay.month(),
-            dateForDay.date()
-          ]).diff(moment([TODAY.year(), TODAY.month(), TODAY.date()]), 'd')
-        };
+    tasksGroup = merge(tasksGroup, groupBy(tasks, 'no_of_units'));
+    Object.entries(tasksGroup).forEach(([day, tasksForADay]) => {
+      let dateForDay;
+      if (day === '1') {
+        dateForDay = getNextWorkingDay(bidCreatedDate);
+      } else {
+        dateForDay = getNextWorkingDay(tasksGroup[day - 1].date);
       }
-    );
+      tasksGroup[day] = {
+        tasks: tasksForADay.sort((a, b) => a.order - b.order),
+        expanded: isEmpty(tasksGroupsByDay)
+          ? isCorrectDay(dateForDay)
+          : tasksGroupsByDay[day].expanded,
+        date: dateForDay,
+        dateFormatted: dateForDay.format('DD MMM'),
+        uncompletedCount: tasksForADay.filter(task => !task.is_completed)
+          .length,
+        completedCount: tasksForADay.filter(task => task.is_completed).length,
+        dayDiffFromToday: moment([
+          dateForDay.year(),
+          dateForDay.month(),
+          dateForDay.date()
+        ]).diff(moment([TODAY.year(), TODAY.month(), TODAY.date()]), 'd')
+      };
+    });
+
+    // If tasksGroupsByDay is empty, then it is the first render
+    if (isEmpty(tasksGroupsByDay)) {
+      getTaskLockDetailsWrapper();
+    }
 
     setTasksGroupsByDay(tasksGroup);
   }, [tasks]);
@@ -231,6 +252,9 @@ const TasksList = () => {
     <div id="tasks-list-left-section">
       <div className="task-list-header">
         <Header />
+        <div className="progress-indicator">
+          <ProgressIndicator tasksList={tasksGroupsByDay} />
+        </div>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="accordions-wrapper">
@@ -238,7 +262,7 @@ const TasksList = () => {
             <Droppable droppableId={`droppable-task-group-${day}`}>
               {(provided, snapshot) => (
                 <Accordion
-                  defaultExpanded={isCorrectDay(day)}
+                  defaultExpanded={isCorrectDay(tasksGroup.date)}
                   expanded={tasksGroup.expanded}
                   onChange={() => handleExpandChange(day)}
                   key={`task-day-${day}`}
@@ -251,22 +275,21 @@ const TasksList = () => {
                     <div className="header">
                       <Typography
                         className={classNames('header-title', {
-                          'font-bold':
-                            bidCreatedDate.isValid() && false // remove && false
-                              ? isCorrectDay(day)
-                              : false
+                          'font-bold': bidCreatedDate.isValid()
+                            ? isCorrectDay(tasksGroup.date)
+                            : false
                         })}
                       >
                         Day {day}{' '}
-                        {/* {tasksGroup.expanded || isCorrectDay(day)
+                        {tasksGroup.expanded
                           ? ` (${tasksGroup.dateFormatted})`
-                          : ''} */}
+                          : ''}
                       </Typography>
                       <div>
-                        {/* <UncompletedTasksCount
+                        <UncompletedTasksCount
                           count={tasksGroup.uncompletedCount}
                           dayDiffFromToday={tasksGroup.dayDiffFromToday}
-                        /> */}
+                        />
                       </div>
                     </div>
                   </AccordionSummary>
@@ -276,9 +299,18 @@ const TasksList = () => {
                         index={index}
                         task={task}
                         day={day}
+                        dayDiffFromToday={tasksGroup.dayDiffFromToday}
                         key={`task-item-${day}-${index}`}
+                        editable={editable}
                       />
                     ))}
+                    {selectedBid.isEditable && (
+                      <AddTaskItem
+                        day={day}
+                        proposalId={proposalId}
+                        //onChangeAddTask={handleExpandChange}
+                      />
+                    )}
                   </AccordionDetails>
                   {provided.placeholder}
                 </Accordion>
