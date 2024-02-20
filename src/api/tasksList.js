@@ -34,7 +34,6 @@ export function updateTaskListApi(proposalId, task_Id, roles) {
     axiosInstance
       .put(`${TASKLIST_UPDATE_API_URL}/${proposalId}/${task_Id}`, roles, config)
       .then(response => {
-        console.log(response.data);
         resolve(response.data);
       })
       .catch(err => {
