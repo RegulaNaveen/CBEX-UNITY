@@ -111,14 +111,17 @@ export const setTask = (
   socketContext
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>) => {
+    let responseData = null;
     try {
       const taskListResponse = await setTaskDataApi(proposalId, taskData);
       const data = taskListResponse.result;
+      console.log(data);
       if (data) {
         dispatch({
           type: ADD_TASK,
           payload: data
         });
+        responseData = data;
       }
     } catch (err) {
       dispatch({
@@ -131,6 +134,7 @@ export const setTask = (
         payload: false
       });
     }
+    return responseData;
   };
 };
 

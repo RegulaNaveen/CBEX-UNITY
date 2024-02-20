@@ -46,6 +46,8 @@ const SeeOwners = ({
   const dispatch = useDispatch();
   const previousController = useRef(null);
   const autocompleteField = useRef(null);
+  const userName = localStorage.getItem('userName');
+  const email = localStorage.getItem('userEmail');
 
   useEffect(() => {
     const task = tasks.find(task => task?.task_id === taskId);
@@ -153,8 +155,8 @@ const SeeOwners = ({
           name: user.name,
           email: user.email,
           type: user.type,
-          updated_by: 'varsha kumari',
-          updated_by_email: 'varsha.kumari2@iqvia.com'
+          updated_by: userName,
+          updated_by_email: email
         });
       } else {
         payload.deleterole.push({
@@ -236,6 +238,7 @@ const SeeOwners = ({
   };
 
   const handleRemoveUser = index => {
+    setAreButtonsDisabled(false);
     const users = [...selectedUsers];
 
     const user = users[index];
@@ -283,7 +286,7 @@ const SeeOwners = ({
 
   const handleConfirmRemoveUser = () => {
     setShowWarningModal(false);
-
+    setAreButtonsDisabled(false);
     // if (userToRemoveIndex != null) {
     const users = [...selectedUsers];
     const user = users[userToRemoveIndex];

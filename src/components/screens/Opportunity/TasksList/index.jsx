@@ -259,6 +259,7 @@ const TasksList = () => {
                 <AddTaskItem
                   day={day}
                   proposalId={proposalId}
+                  openModal={openModal}
                   //onChangeAddTask={handleExpandChange}
                 />
               </AccordionDetails>
@@ -273,6 +274,7 @@ const TasksList = () => {
             setIsModalOpen={setIsModalOpen}
             taskId={taskId}
             setOwnersCount={setOwnersCount}
+            tasks={tasks}
           />
         </TaskListToolbarMenuPortal>
       </div>

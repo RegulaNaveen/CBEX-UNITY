@@ -12,10 +12,15 @@ import Button from 'apollo-react/components/Button';
 import { setTask } from '../../../../redux/actions/tasksList-actions';
 import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
+import { useSelector } from 'react-redux';
+import { selectTasksList } from '../../../../redux/selectors/tasks';
+import { setTaskDataApi } from '../../../../api/tasksList';
 
-const AddNewTask = ({ day, proposalId }) => {
+const AddNewTask = ({ day, proposalId, openModal }) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
+  const [taskId, setTaskId] = useState(null);
+
   const handleAddNewTask = () => {
     setShowAddTask(true);
   };
@@ -31,19 +36,29 @@ const AddNewTask = ({ day, proposalId }) => {
     }
   }, []);
 
-  const handleInputBlur = e => {
+  const handleInputBlur = async e => {
     const inputValue = e.target.value;
     if (inputValue !== '') {
       const taskData = {
         no_of_units: Number(day),
         description: inputValue
       };
-      const result = dispatch(setTask(proposalId, taskData, socketContext));
-      if (result) {
-        setShowAddTask(false);
-        setShowAddOwner(false);
+      const result = setTaskDataApi(proposalId, taskData);
+      await dispatch(setTask(proposalId, taskData, socketContext));
+      if (result && result.task_id) {
+        setTaskId(result.task_id);
+        // setShowAddTask(false);
       }
     } else {
+      setShowAddTask(false);
+    }
+  };
+
+  const handleShowOwner = () => {
+    console.log('I am here', taskId);
+    if (showAddOwner && taskId) {
+      openModal(taskId);
+      setShowAddOwner(false);
       setShowAddTask(false);
     }
   };
@@ -65,7 +80,11 @@ const AddNewTask = ({ day, proposalId }) => {
                 />
               </Grid>
               <Grid xs={2} className="addOwnerButton">
-                <Button variant="secondary" disabled={!showAddOwner}>
+                <Button
+                  variant="secondary"
+                  disabled={!showAddOwner}
+                  onClick={() => handleShowOwner()} // Wrap handleShowOwner call in an arrow function
+                >
                   Add Owner
                 </Button>
               </Grid>
