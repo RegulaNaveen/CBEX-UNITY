@@ -31,8 +31,8 @@ function TablePreviewCell({ row, column }) {
     ) {
       const delay =
         prevSearchResult && prevSearchResult.tab !== currentSearchResult.tab
-          ? 700
-          : 1400;
+          ? 1500
+          : 700;
       setTimeout(() => {
         cellRef.current.scrollIntoView({
           behavior: 'smooth',
