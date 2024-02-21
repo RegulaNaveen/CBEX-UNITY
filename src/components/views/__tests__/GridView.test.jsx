@@ -29,8 +29,6 @@ describe('GridView component', () => {
       {
         'opportunity number': 1,
         'verbatim indication': 'Indication 1',
-        'opportunity number': 1,
-        'protocol number': 1,
         'protocol number': 1,
         opportunityName: 'Opportunity 1',
         customer: 'Customer 1',

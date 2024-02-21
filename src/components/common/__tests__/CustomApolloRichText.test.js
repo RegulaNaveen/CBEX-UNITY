@@ -81,18 +81,12 @@ describe('CustomApolloRichText unit tests', () => {
       unlockTimeout: null
     };
 
-    const {
-      component,
-      getByRole,
-      findByText,
-      findByRole,
-      getByTestId,
-      debug,
-      findByTestId
-    } = render(<CustomApolloRichText {...props} />);
-    await waitFor(async () => {
-      expect(await findByText('Test placeholder')).toBeInTheDocument();
-      expect(await findByRole('textbox')).toBeInTheDocument();
+    const { component, getByRole, getByText, getByTestId } = render(
+      <CustomApolloRichText {...props} />
+    );
+    await waitFor(() => {
+      expect(getByText('Test placeholder')).toBeInTheDocument();
+      expect(getByRole('textbox')).toBeInTheDocument();
     });
     const textbox = getByRole('textbox');
     fireEvent.paste(textbox, {
@@ -100,8 +94,9 @@ describe('CustomApolloRichText unit tests', () => {
         getData: () => 'https://www.iqvia.com'
       }
     });
-    await waitFor(async () => {
-      expect(await findByText('https://www.iqvia.com')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(getByText('https://www.iqvia.com')).toBeInTheDocument();
       expect(getByTestId('decorated-link')).toBeInTheDocument();
     });
   });

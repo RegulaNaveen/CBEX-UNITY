@@ -4,7 +4,7 @@
 // @flow
 /* eslint-disable no-plusplus */
 import React, { createRef } from 'react';
-import { Map, List } from 'immutable';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
 import {
   isObject,

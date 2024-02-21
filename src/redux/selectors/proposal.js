@@ -543,3 +543,8 @@ export const selectShowEditCustomNameModal = createSelector(
   selectProposal,
   proposal => proposal?.get('showEditCustomNameModal', false)
 );
+
+export const selectTasksListFlag = createSelector(
+  getfetchAllFlags,
+  flags => !!flags['tasksListFlag']
+);

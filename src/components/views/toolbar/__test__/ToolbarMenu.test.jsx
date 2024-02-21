@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Map } from 'immutable';
+import { Map as IMap } from 'immutable';
 import Button from 'apollo-react/components/Button';
 import { BrowserRouter } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
@@ -33,7 +33,7 @@ const rolesList = [
   'xAdmin'
 ];
 
-const proposal = Map(stateData.proposal);
+const proposal = IMap(stateData.proposal);
 const getRolesInfoF = jest.fn();
 const changeUserRole = jest.fn();
 const isRolesLoading = false;

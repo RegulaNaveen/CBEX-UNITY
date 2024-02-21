@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import React from 'react';
 import '@testing-library/jest-dom';
-import { Map } from 'immutable';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
@@ -11,12 +10,14 @@ import MockState from '../mockdata/indexQCT.json';
 import Index from '../../QuestionsForCustomerTab/index';
 import * as ProposalActions from '../../../../../redux/actions/proposal-actions';
 
+const proposal = new Map([
+  ['eventflag', MockState.allFlags],
+  ['selectedBid', new Map(Object.entries(MockState.selectedBid))],
+  ['proposalQuestions', MockState.proposalQuestions]
+]);
+
 const initialState = {
-  proposal: Map({
-    eventflag: MockState.allFlags,
-    selectedBid: Map(MockState.selectedBid),
-    proposalQuestions: MockState.proposalQuestions
-  }),
+  proposal: proposal,
   search: { query: null }
 };
 

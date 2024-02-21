@@ -60,7 +60,6 @@ import {
   getBidList,
   getSelectedBid as getCurrentBid
 } from '../../../redux/selectors/proposal';
-import { selectUserRole } from '../../../redux/selectors/sso-auth';
 import AnswerHistory from '../../views/modals/AnswerHistory';
 import { getAllUsers } from '../../../redux/actions/sso-auth-actions';
 import AnalyticsHOC from '../../HOC/AnalyticsHOC';
@@ -790,7 +789,6 @@ const mapStateToProps = (state: Map) => ({
   isQuestionsFiltersEnabled: selectIsQuestionsFilterEnabled(state),
   activeQuestionsFilterCount: selectActiveQuestionsFilterCount(state),
   milestones: selectUniqueMilestones(state),
-  userRole: selectUserRole(state),
   allSectionsExpanded: selectAreAllSectionsExpanded(state),
   editQuestionsData: getEditQuestionData(state),
   selectedBid: getSelectedBid(state),

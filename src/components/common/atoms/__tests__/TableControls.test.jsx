@@ -219,7 +219,6 @@ describe('TableControls', () => {
     const settingsMenuButton = getByTestId('settingsMenuButton');
     expect(settingsMenuButton).toBeInTheDocument();
     fireEvent.click(settingsMenuButton);
-    screen.debug(undefined, Infinity);
     expect(
       screen.getByRole('menuitem', { name: /add column/i })
     ).toBeInTheDocument();
@@ -282,7 +281,6 @@ describe('TableControls', () => {
     fireEvent.click(settingsMenuButton);
 
     fireEvent.click(getByRole('menuitem', { name: /edit columns/i }));
-    screen.debug(undefined, Infinity);
 
     screen.getByRole('button', { name: /apply/i });
     // expect(onEdit).toHaveBeenCalledWith('column', columns);
@@ -322,14 +320,11 @@ describe('TableControls', () => {
       />
     );
 
-    screen.debug(undefined, Infinity);
     const settingsMenuButton = getByTestId('settingsMenuButton');
     expect(settingsMenuButton).toBeInTheDocument();
     fireEvent.click(settingsMenuButton);
-    screen.debug(undefined, Infinity);
     fireEvent.click(getByRole('menuitem', { name: /edit columns/i }));
     fireEvent.click(getByText('Apply'));
-    screen.debug(undefined, Infinity);
     await waitFor(() => {
       expect(onEdit).toHaveBeenCalledWith('column', columns);
     });
@@ -344,11 +339,9 @@ describe('TableControls', () => {
         onEdit={onEdit}
       />
     );
-    screen.debug(undefined, Infinity);
     const settingsMenuButton = getByTestId('settingsMenuButton');
     expect(settingsMenuButton).toBeInTheDocument();
     fireEvent.click(settingsMenuButton);
-    screen.debug(undefined, Infinity);
     fireEvent.click(getByRole('menuitem', { name: /edit rows/i }));
     // Simulate a click event on the "Apply" button
     fireEvent.click(getByText('Apply'));
@@ -405,7 +398,6 @@ describe('TableControls', () => {
 
     // Check that the column is not in the document
     expect(column).toBeNull();
-    screen.debug(undefined, Infinity);
   });
 
   it('drag and drop feature', async () => {
@@ -421,12 +413,12 @@ describe('TableControls', () => {
         onExpandAll={onExpandAllMock}
       />
     );
+
     fireEvent.click(getByTestId('settingsMenuButton')); // Open popover
     fireEvent.click(getByRole('menuitem', { name: /edit columns/i }));
     // Simulate drag and drop event
     const sourceDraggable = getByTestId('draggable-0'); // The item you want to drag
     const destinationDraggable = getByTestId('draggable-1'); // The item you want to drop the source item before
-    screen.debug(undefined, Infinity);
 
     // Simulate the drag start, drag over, and drop events
     fireEvent.dragStart(sourceDraggable);

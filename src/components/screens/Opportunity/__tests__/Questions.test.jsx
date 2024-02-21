@@ -25,6 +25,7 @@ import { store } from '../../../../store';
 import Questions from '../Questions';
 import data from './mockdata/question.json';
 import lazyWithRetry from '../../../../utils/lazy';
+import { SocketContext } from '../../../../context/SocketContext';
 
 const Sidebar = React.lazy(() =>
   lazyWithRetry(() =>
@@ -141,8 +142,32 @@ const history = createMemoryHistory({
   ]
 });
 
+const QuestionsWReduxAndSocket = () => (
+  <BrowserRouter>
+    <Router history={history}>
+      <Provider store={store}>
+        <SocketContext.Provider
+          value={{
+            socket: null,
+            questionLockWrapper: jest.fn(),
+            questionUnlockWrapper: jest.fn(),
+            questionLockDetailsWrapper: jest.fn()
+          }}
+        >
+          <Questions {...initalstate} />
+        </SocketContext.Provider>
+      </Provider>
+    </Router>
+  </BrowserRouter>
+);
+
 describe('Questions component', () => {
   afterEach(cleanup);
+  global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn()
+  }));
   test('Questions component render', async () => {
     const location = window.location;
     delete window.location;
@@ -150,19 +175,9 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
+
     const { getByText, queryByTestId } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate} />
-          </Provider>
-        </Router>
-      </BrowserRouter>
+      <QuestionsWReduxAndSocket />
     );
     expect(getByText('Mark N/A')).toBeInTheDocument();
     expect(getByText('Expand All')).toBeInTheDocument();
@@ -176,24 +191,7 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
-    const { findByText } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate}>
-              <Suspense fallback={<p>Loading...</p>}>
-                <Sidebar {...initalstate} />
-              </Suspense>
-            </Questions>
-          </Provider>
-        </Router>
-      </BrowserRouter>
-    );
+    const { findByText } = await render(<QuestionsWReduxAndSocket />);
     expect(await findByText('Controls')).toBeInTheDocument();
   });
 
@@ -219,21 +217,8 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
 
-    const wrapper = shallow(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate} />
-          </Provider>
-        </Router>
-      </BrowserRouter>
-    );
+    const wrapper = shallow(<QuestionsWReduxAndSocket />);
 
     const component = wrapper.dive();
     component.setState(state);
@@ -248,20 +233,7 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
-    const { getByTestId } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate} />
-          </Provider>
-        </Router>
-      </BrowserRouter>
-    );
+    const { getByTestId } = await render(<QuestionsWReduxAndSocket />);
     expect(getByTestId('selectedbid-testid')).toBeInTheDocument();
     fireEvent.click(getByTestId('selectedbid-testid'));
     expect(getByTestId('question-model-testid')).toBeInTheDocument();
@@ -274,20 +246,7 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
-    const { getByText } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate} />
-          </Provider>
-        </Router>
-      </BrowserRouter>
-    );
+    const { getByText } = await render(<QuestionsWReduxAndSocket />);
     fireEvent.change(getByText('Expand All'));
     expect(getByText('Expand All')).toBeEnabled();
   });
@@ -299,19 +258,8 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
     const { findByText, getByText } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate} />
-          </Provider>
-        </Router>
-      </BrowserRouter>
+      <QuestionsWReduxAndSocket />
     );
     await fireEvent.click(getByText('Filter'));
     const filterelem = await findByText('Filters');
@@ -332,19 +280,8 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
     const { findByText, getByText, getByTestId } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate} />
-          </Provider>
-        </Router>
-      </BrowserRouter>
+      <QuestionsWReduxAndSocket />
     );
     fireEvent.click(getByText('Mark N/A'));
 
@@ -363,26 +300,11 @@ describe('Questions component', () => {
       ...location,
       reload: jest.fn()
     };
-    global.ResizeObserver = jest.fn().mockImplementation(() => ({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn()
-    }));
     initalstate.sidebar = initalstate.sidebar.toJS();
     initalstate.sidebar.isOpen = true;
     initalstate.sidebar = Map(initalstate.sidebar);
     const { getByTestId, findByText } = await render(
-      <BrowserRouter>
-        <Router history={history}>
-          <Provider store={store}>
-            <Questions {...initalstate}>
-              <Suspense fallback={<p>Loading...</p>}>
-                <Sidebar {...initalstate} />
-              </Suspense>
-            </Questions>
-          </Provider>
-        </Router>
-      </BrowserRouter>
+      <QuestionsWReduxAndSocket />
     );
     const sidebaricon_newQuestionAdd = await getByTestId(
       'sidebar-panel-testid'

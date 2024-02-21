@@ -249,7 +249,6 @@ function TableAnswer({
 
     if (nextColumnsWithExtra.length === 0) {
       nextColumnsWithExtra.push({
-        header: ``,
         accessor: `header`,
         alwaysVisible: true,
         customCell: cellProps => (
@@ -323,7 +322,6 @@ function TableAnswer({
 
     if (nextColumnsWithExtra.length === 0) {
       nextColumnsWithExtra.push({
-        header: ``,
         accessor: `header`,
         alwaysVisible: true,
         customCell: cellProps => (
