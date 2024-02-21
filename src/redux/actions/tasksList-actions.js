@@ -464,7 +464,7 @@ export const handleMultipleTaskLocks = tasksLocksInfo => {
       acc[task.task_id] = index;
       return acc;
     }, {});
-    tasksLocksInfo.forEach(taskLockInfo => {
+    tasksLocksInfo?.forEach(taskLockInfo => {
       const taskIndex = tasksIndexMap[taskLockInfo.taskId];
       if (
         taskIndex >= 0 &&
@@ -482,5 +482,41 @@ export const handleMultipleTaskLocks = tasksLocksInfo => {
       type: SET_TASKS,
       payload: tasksList
     });
+  };
+};
+
+export const editRoleFromSocket = (roleData, proposalId) => {
+  return async (dispatch, getState) => {
+    const tasksList = selectTasksList(getState());
+    const selectedBid = getSelectedBid(getState()).toJS(); // Get the selected bid from the state
+    if (tasksList && selectedBid?.id === proposalId) {
+      // Check if the selected bid id is equal to the proposal id
+      dispatch({
+        type: LOADING_TASKS,
+        payload: true
+      });
+      try {
+        // Here, roleData is an array of updated roles
+        roleData?.forEach(role => {
+          const taskIndex = tasksList.findIndex(
+            task => task.id === role.task_list_id
+          );
+          if (taskIndex > -1) {
+            tasksList[taskIndex].task_role = role;
+            dispatch({
+              type: SET_TASKS,
+              payload: tasksList
+            });
+          }
+        });
+      } catch (err) {
+        dispatch({ type: ERROR_FETCHING_TASKS, payload: err });
+      } finally {
+        dispatch({
+          type: LOADING_TASKS,
+          payload: false
+        });
+      }
+    }
   };
 };
