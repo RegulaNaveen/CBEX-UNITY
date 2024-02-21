@@ -6,7 +6,6 @@ const Header = () => {
   return (
     <>
       <Typography variant="h3">Task List</Typography>
-      <hr style={{ marginTop: '15px' }} className="task-list-divider-hr" />
     </>
   );
 };
