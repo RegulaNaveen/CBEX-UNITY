@@ -464,7 +464,7 @@ export const handleMultipleTaskLocks = tasksLocksInfo => {
       acc[task.task_id] = index;
       return acc;
     }, {});
-    tasksLocksInfo?.forEach(taskLockInfo => {
+    tasksLocksInfo.forEach(taskLockInfo => {
       const taskIndex = tasksIndexMap[taskLockInfo.taskId];
       if (
         taskIndex >= 0 &&
@@ -497,18 +497,20 @@ export const editRoleFromSocket = (roleData, proposalId) => {
       });
       try {
         // Here, roleData is an array of updated roles
-        roleData?.forEach(role => {
+        if (Array.isArray(roleData) && roleData.length > 0) {
+          // Check if roleData is an array
+          const task_list_id = roleData[0].task_list_id;
           const taskIndex = tasksList.findIndex(
-            task => task.id === role.task_list_id
+            task => task.id === task_list_id && task.proposal_id === proposalId
           );
           if (taskIndex > -1) {
-            tasksList[taskIndex].task_role = role;
+            tasksList[taskIndex].task_role = roleData;
             dispatch({
               type: SET_TASKS,
               payload: tasksList
             });
           }
-        });
+        }
       } catch (err) {
         dispatch({ type: ERROR_FETCHING_TASKS, payload: err });
       } finally {

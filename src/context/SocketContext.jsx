@@ -585,7 +585,7 @@ const SocketContextProvider = props => {
           handleTaskLockAction,
           handleTaskUnlockAction,
           handleMultipleTaskLocksAction,
-          editRoleFromSocket
+          editRoleFromSockets
         } = props;
 
         // On Message Recieve
@@ -726,7 +726,7 @@ const SocketContextProvider = props => {
 
             case 'TASK_ROLE_UPDATE':
               if (data.data) {
-                editRoleFromSocket(data.data, data.proposalId);
+                editRoleFromSockets(data.data, data.proposalId);
               }
 
             case 'QUESTIONS':
@@ -1241,7 +1241,7 @@ const mapDispatchToProps = {
   handleTaskLockAction: handleTaskLock,
   handleTaskUnlockAction: handleTaskUnlock,
   handleMultipleTaskLocksAction: handleMultipleTaskLocks,
-  editRoleFromSocket: editRoleFromSocket
+  editRoleFromSockets: editRoleFromSocket
 };
 
 export default connect(

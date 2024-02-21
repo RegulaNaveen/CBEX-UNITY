@@ -53,7 +53,7 @@ const SeeOwners = ({
     const task = tasks.find(task => task?.task_id === taskId);
     if (task) {
       const roles = [];
-      task?.task_role?.forEach(role => {
+      task?.task_role.forEach(role => {
         if (role.type === 'roles') {
           const { questionText, data: question_answers } = processRole(
             role.question_id
@@ -80,7 +80,7 @@ const SeeOwners = ({
       setSelectedUsers(roles);
       setSelectedTask(task);
     }
-  }, [taskId, isModalOpen]);
+  }, [taskId, isModalOpen, tasks]);
 
   const processRole = value => {
     const data = [];
