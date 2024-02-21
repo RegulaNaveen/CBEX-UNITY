@@ -294,6 +294,7 @@ const TasksList = () => {
           <ProgressIndicator tasksList={tasksGroupsByDay} />
         </div>
       </div>
+      <hr style={{ marginTop: '8px' }} className="task-list-divider-hr" />
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="accordions-wrapper">
           {Object.entries(tasksGroupsByDay).map(([day, tasksGroup]) => (

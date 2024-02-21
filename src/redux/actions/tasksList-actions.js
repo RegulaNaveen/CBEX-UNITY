@@ -484,3 +484,41 @@ export const handleMultipleTaskLocks = tasksLocksInfo => {
     });
   };
 };
+
+export const editRoleFromSocket = (roleData, proposalId) => {
+  return async (dispatch, getState) => {
+    const tasksList = selectTasksList(getState());
+    const selectedBid = getSelectedBid(getState()).toJS(); // Get the selected bid from the state
+    if (tasksList && selectedBid?.id === proposalId) {
+      // Check if the selected bid id is equal to the proposal id
+      dispatch({
+        type: LOADING_TASKS,
+        payload: true
+      });
+      try {
+        // Here, roleData is an array of updated roles
+        if (Array.isArray(roleData) && roleData.length > 0) {
+          // Check if roleData is an array
+          const task_list_id = roleData[0].task_list_id;
+          const taskIndex = tasksList.findIndex(
+            task => task.id === task_list_id && task.proposal_id === proposalId
+          );
+          if (taskIndex > -1) {
+            tasksList[taskIndex].task_role = roleData;
+            dispatch({
+              type: SET_TASKS,
+              payload: tasksList
+            });
+          }
+        }
+      } catch (err) {
+        dispatch({ type: ERROR_FETCHING_TASKS, payload: err });
+      } finally {
+        dispatch({
+          type: LOADING_TASKS,
+          payload: false
+        });
+      }
+    }
+  };
+};
