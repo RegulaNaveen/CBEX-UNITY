@@ -96,11 +96,12 @@ class MonthView extends React.Component {
     if (!startDate || !endDate) return [new Date()];
     const dates = [];
     let currentDate = new Date(startDate);
-    if (currentDate <= endDate) {
-      while (currentDate <= endDate) {
-        dates.push(new Date(currentDate));
-        currentDate.setDate(currentDate.getDate() + 1);
+    while (currentDate <= endDate) {
+      if (currentDate > endDate) {
+        break;
       }
+      dates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
     }
     return dates;
   };
