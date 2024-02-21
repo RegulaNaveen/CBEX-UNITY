@@ -42,7 +42,6 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
-import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
 import {
   setEditQuestionData,
@@ -53,15 +52,19 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(SelectQuestion);
-const MultiSelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(MultiSelectQuestion);
-const YesNoQuestionWithIdleStateDetection =
-  withIdleStateDetection(YesNoQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
 
-const CheckBoxQuestionWithIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestion);
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
@@ -610,25 +613,15 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(answer.get('answer').toString().trim());
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
     return false;
   };
-
-  //this function is used to show tags in the approvals tab
-  // const renderTags = milestoneNew => {
-  //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
-  //     return milestoneNew.map(({ Name, Color }) => (
-  //       <Tooltip title={Name} placement="top">
-  //         <div className="tag">
-  //           <span className="tag-box" style={{ backgroundColor: Color }}></span>
-  //         </div>
-  //       </Tooltip>
-  //     ));
-  //   } else {
-  //     return null;
-  //   }
-  // };
 
   const questionRender = useMemo(
     () =>
@@ -688,10 +681,9 @@ const QuestionItem = ({
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
                                   direction: 'left',
-                                  questionAnswered:
-                                    checkLastAnswerOfQuestionVisibility(
-                                      question?.answers
-                                    )
+                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                    question?.answers
+                                  )
                                 })
                               );
                             }}
