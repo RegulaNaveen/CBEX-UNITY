@@ -4,7 +4,7 @@
 // eslint-disable-next-line react/destructuring-assignment
 import React, { createRef, createContext, Component, Suspense } from 'react';
 import { withRouter } from 'react-router-dom';
-import { List, Map } from 'immutable';
+import { List, Map as IMap } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Button from 'apollo-react/components/Button';
@@ -402,7 +402,7 @@ class Questions extends Component {
       .getIn(['questions', selectedAnswer]);
 
     const answerConfigType = question
-      .get('answerConfiguration', Map({ type: '' }))
+      .get('answerConfiguration', IMap({ type: '' }))
       .get('type', '');
     const sfObject = question.get('sfObject', '');
     const sfField = question.get('sfField', '');

@@ -10,7 +10,7 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import InfoIcon from 'apollo-react-icons/Info';
 import Popover from 'apollo-react/components/Popover';
 import { EditorState } from 'apollo-react/node_modules/draft-js';
-import { Map, List, fromJS } from 'immutable';
+import { Map as IMap, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import CalendarIcon from './CalendarIcon';
 import QuestionLabel from './QuestionLabel';
@@ -188,7 +188,7 @@ const QuestionItem = ({
       // It prepares answer data for a specific answer type.
       // If possible move this logic inside AnswerHistory component to avoid duplication of code
       const answerConfigType = questionMap
-        .get('answerConfiguration', Map({ type: '' }))
+        .get('answerConfiguration', IMap({ type: '' }))
         .get('type', '');
       const sfObject = questionMap.get('sfObject', '');
       const sfField = questionMap.get('sfField', '');
@@ -308,7 +308,7 @@ const QuestionItem = ({
 
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
-    const lastAnswerMap = Map(lastAnswer);
+    const lastAnswerMap = IMap(lastAnswer);
     let isAnswerPredicted = false;
     let answerDate = 'Not Answered';
 
@@ -519,7 +519,7 @@ const QuestionItem = ({
             tableConfiguration={jsonTableConfig}
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
-            section={Map(section)}
+            section={IMap(section)}
             sectionName={approvalSectionTitle}
             answers={answers}
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
