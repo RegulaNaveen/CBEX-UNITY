@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Map } from 'immutable';
+import { Map as IMap } from 'immutable';
 import { connect } from 'react-redux';
 import Tab from 'apollo-react/components/Tab';
 import Tabs from 'apollo-react/components/Tabs';
@@ -38,7 +38,7 @@ import { SECTIONS } from '../../constants/app';
 const MANUAL_REFRESH = false;
 
 type Props = {
-  sections: Map,
+  sections: IMap,
   notes: [],
   setSelectedSection: (selectedItem: string) => void,
   handleOpenClose: (isOpen: boolean) => void,

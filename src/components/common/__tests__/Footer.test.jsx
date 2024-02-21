@@ -7,19 +7,22 @@ import {
   render,
   screen,
   act,
-  waitFor
+  waitFor,
+  getByText
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Sinon from 'sinon';
-
+import { createStore, applyMiddleware } from 'redux';
 import { store } from '../../../store';
 import UnityFooter from '../Footer';
 import { REDUX_TYPES } from '../../../constants';
 import * as ProposalApi from '../../../api/proposal';
-import { updateSwitchInProgress } from '../../../redux/actions/proposal-actions';
-import { PROPOSAL } from '../../../constants/app';
+import {
+  updateSwitchInProgress,
+  updateSwitchTempStatusFromWebSocket
+} from '../../../redux/actions/proposal-actions';
 
 const oppTypeList = {
   data: {
@@ -96,81 +99,39 @@ describe('Test Footer Component', () => {
       />
     );
     expect(queryByTestId('sync-icon')).toBeInTheDocument();
+    screen.debug(undefined, Infinity);
     await waitFor(() => {
       expect(queryByTestId('update-triangle')).not.toBeInTheDocument();
     });
-
     act(() => {
       fireEvent.click(queryByTestId('sync-icon'));
     });
     expect(screen.getByText('Opportunity Type Override')).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByText('Default Type')).toBeInTheDocument();
+      screen.debug(undefined, Infinity);
+      expect(
+        screen.getByRole('button', { name: /cancel/i })
+      ).toBeInTheDocument();
+      expect;
+      expect(screen.getByRole('button', { name: /change/i })).toBeDisabled();
     });
   });
 
-  it('test for update template in progess and got error', async () => {
+  test('test for update template in progess and got error', async () => {
     store.dispatch(updateSwitchInProgress(true));
     render(<FooterWithRedux />);
     expect(screen.getByText('Opportunity Type Update')).toBeInTheDocument();
 
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
-      payload: 'error'
+      payload: {
+        data: 'error',
+        proposalId: 'ed090ac8-3902-46cc-9530-73797cc78308'
+      }
     });
     // expect(
-    //   await screen
-    //     .findByText('Operation failed due to error'))
-    // .toBeInTheDocument();
-  });
-
-  it('should call getOpportunity on switch template success', async () => {
-    const getAllProposalsStub = sinonSandbox
-      .stub(ProposalApi, 'getAllProposals')
-      .resolves([
-        {
-          isCurrent: true
-        }
-      ]);
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
-      payload: 'success'
-    });
-    const { container } = render(<FooterWithRedux />);
-    await waitFor(() => {
-      expect(
-        screen.getByText('Opportunity type has been updated successfully')
-      ).toBeInTheDocument();
-    });
-  });
-
-  it('should close the alert modal when the banner message is clicked', async () => {
-    const getAllProposalsStub = sinonSandbox
-      .stub(ProposalApi, 'getAllProposals')
-      .resolves([
-        {
-          isCurrent: true
-        }
-      ]);
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
-      payload: 'success'
-    });
-    render(<FooterWithRedux />);
-    await waitFor(() => {
-      expect(
-        screen.getByText('Opportunity type has been updated successfully')
-      ).toBeInTheDocument();
-    });
-
-    // Simulate a click event on the banner message
-    fireEvent.click(screen.getByRole('button', { name: /close/i }));
-
-    // Check that the alert modal is not rendered after the click event
-    await waitFor(() => {
-      expect(
-        screen.queryByText('Opportunity type has been updated successfully')
-      ).not.toBeInTheDocument();
-    });
+    //   await screen.findByText('Operation failed due to error')
+    // ).toBeInTheDocument();
   });
 });

@@ -710,6 +710,7 @@ function getHtml(
   const url = getUnityLink(proposalDetails);
   const oppId = proposalDetails['CRM #'];
   savePDF(string, url, userName, time, oppId, fileName);
+  return string;
 }
 const MyDoc = (
   proposalDetails,

@@ -8,16 +8,19 @@
     padding: 0;
   }
   .accordions-wrapper {
-    height: calc(100% - 2.25rem);
+    // height: calc(100% - 2.25rem);
+    height: calc(100% - 6.25rem);
     overflow: auto;
     padding: 8px;
+    display: flex;
+    flex-direction: column;
     .header {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
+      min-height: 48px;
       .header-title {
         font-weight: 400;
-        padding-top: 0.75rem;
         &.font-bold {
           font-weight: bold;
         }
@@ -34,13 +37,78 @@
     }
     .MuiPaper-root.MuiAccordion-root {
       border-width: 0;
-      .task-item-drag-container {
-        display: flex !important;
-        .drag-icon {
-          margin-right: 0.35rem;
+      .MuiAccordionDetails-root {
+        padding: 0.5rem;
+        padding-left: 1rem;
+        padding-right: 1.25rem;
+        .who-is-typing {
+          font-size: 14px;
+          color: #116efd;
+          padding-left: 28px;
         }
-        .font-bold {
-          font-weight: bold;
+        .task-item-drag-container {
+          display: flex !important;
+          align-items: center;
+          .disabled {
+            pointer-events: none;
+          }
+          .drag-icon {
+            margin-right: 0.35rem;
+          }
+          .task-desc {
+            flex-grow: 1;
+            line-height: 24px;
+            max-height: 48px; // line-height * 2 - two lines
+            overflow: hidden;
+            p {
+              display: inline-block;
+              max-width: 100%;
+              position: relative;
+              // padding-left: 14px;
+              word-break: break-all;
+              &.font-bold {
+                font-weight: bold;
+              }
+              .ellipsis {
+                display: none;
+                position: absolute;
+                right: 0;
+                top: 24px;
+                height: 24px;
+                background-color: #ffffff;
+                &.show {
+                  width: 30px;
+                  display: flex;
+                  align-items: flex-end;
+                }
+                svg {
+                  font-size: 16px;
+                }
+              }
+            }
+          }
+        }
+        .edit-container {
+          background-color: #f6f7fb;
+          padding: 0.5rem;
+          display: flex;
+          .MuiFormControl-root {
+            flex-grow: 1;
+            margin: 8px 0;
+            width: 95%;
+            .MuiInput-root {
+              margin: 0;
+              input {
+                height: 32px;
+              }
+            }
+          }
+          .loader-container {
+            margin: 8px 0px 8px 4px;
+            position: relative;
+            width: 28px;
+            height: 28px;
+          }
         }
       }
     }
@@ -51,4 +119,108 @@
   .font-yellow {
     color: #ff9300;
   }
+}
+
+#task-list-item-menu-btn {
+  .MuiMenuItem-root {
+    padding: 12px 32px 12px 16px;
+    .task-list-menu-item-wrapper {
+      display: flex;
+      align-items: center;
+      .menu-item-label {
+        padding-left: 8px;
+      }
+    }
+  }
+}
+
+.progress-indicator {
+  padding-right: 16px;
+  margin-top: 30px;
+  .progress-bar {
+    position: relative;
+    .task-status {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      .task-text {
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        .status-icon {
+          width: 20px;
+          height: 20px;
+          margin-left: 4px;
+          position: relative;
+          top: -1px;
+        }
+        &.up-to-date {
+          color: #00c221;
+        }
+        &.incomplete {
+          color: #ff9300;
+        }
+        &.no-task {
+          color: #595959;
+        }
+      }
+      .task-no {
+        font-size: 13px;
+        color: #595959;
+      }
+    }
+    .MuiLinearProgress-bar {
+      background: #250056;
+      transition: width 1s linear;
+    }
+
+    .indicator-icon {
+      display: flex;
+      justify-content: flex-end;
+      position: absolute;
+      top: -18px;
+      .indicator-day {
+        // font-size: 13px;
+        font-size: 12px;
+        position: relative;
+        left: 25px;
+        top: -12px;
+        color: #5e082a;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column-reverse;
+        &.day-ten {
+          left: 30px;
+        }
+        span {
+          left: -10px;
+          position: relative;
+          &.ten {
+            left: -28px;
+            position: relative;
+          }
+        }
+      }
+      .line {
+        font-weight: bold;
+        font-size: 30px;
+        position: relative;
+        top: 0px;
+        color: #250056;
+      }
+      &.show {
+        visibility: visible;
+      }
+
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+  }
+}
+
+.addOwnerButton {
+  margin-top: 21px;
+  margin-left: 10px;
 }

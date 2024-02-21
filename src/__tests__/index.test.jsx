@@ -7,7 +7,7 @@ jest.mock('../components/views/export-component/GenerateDocs.jsx', () => (
 ));
 
 describe('App', () => {
-  it.skip('renders without crashing', () => {
+  it('renders without crashing', () => {
     const div = document.createElement('div');
     mount(<App />, { attachTo: div });
   });

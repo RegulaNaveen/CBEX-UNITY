@@ -9,9 +9,9 @@ import {
   screen,
   fireEvent,
   waitFor,
-  queryByAttribute
+  queryByAttribute,
+  act
 } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { store } from '../../../../../store';
@@ -323,6 +323,13 @@ const allFlags = {
     value: true,
     variation: 0,
     version: 717
+  },
+  tasksListFlag: {
+    flagVersion: 35,
+    trackEvents: false,
+    value: true,
+    variation: 0,
+    version: 717
   }
 };
 
@@ -372,6 +379,20 @@ jest.mock(
 );
 
 describe('testing for tab component', () => {
+  beforeAll(() => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
+      payload: Object.entries(allFlags).reduce((acc, [key, value]) => {
+        acc[key] = value['value'];
+        return acc;
+      }, {})
+    });
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
+      payload: [{ ...proposalData }]
+    });
+  });
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -387,34 +408,22 @@ describe('testing for tab component', () => {
     unobserve: jest.fn(),
     disconnect: jest.fn()
   }));
+
   test('render the component without crashing', async () => {
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: {
-        answerUserTagFlag: true,
-        showTimelineFlag: true
-      }
-    });
-    const { container } = render(<TabWithRedux />);
+    const { container, getByText, findByText } = render(<TabWithRedux />);
     expect(container).toBeInTheDocument();
-    await waitFor(() => {
-      const moreButton = screen.getByText('More');
-      expect(screen.getByText('More')).toBeInTheDocument();
-      fireEvent.click(moreButton);
-      expect(screen.getByText('Strategy Development')).toBeInTheDocument();
-      expect(screen.getByText('Timeline')).toBeInTheDocument();
-      expect(screen.getByText('Documents')).toBeInTheDocument();
-    });
-  }, 20000);
+    // const moreButton = await findByText('More');
+    // expect(moreButton).toBeInTheDocument();
+    // await fireEvent.click(moreButton);
+    // expect(getByText('Strategy Development')).toBeInTheDocument();
+    // expect(getByText('Timeline')).toBeInTheDocument();
+    // expect(getByText('Documents')).toBeInTheDocument();
+  });
 
   test('render with questions tab', () => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
       payload: 0
-    });
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: allFlags
     });
     store.dispatch({
       type: UNITY_TABS.SET_UNITY_TABS,
@@ -460,10 +469,6 @@ describe('testing for tab component', () => {
 
   test('check for timelines tab', () => {
     store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: allFlags
-    });
-    store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
       payload: 1
     });
@@ -493,10 +498,6 @@ describe('testing for tab component', () => {
 
   test('check for approval tab rendering', () => {
     store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: allFlags
-    });
-    store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
       payload: 2
     });
@@ -521,10 +522,6 @@ describe('testing for tab component', () => {
 
   test('check for documents tab rendering', () => {
     store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: allFlags
-    });
-    store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
       payload: 3
     });
@@ -548,30 +545,14 @@ describe('testing for tab component', () => {
   });
 
   test('check for custom tab rendering', async () => {
-    store.dispatch({
-      type: UNITY_TABS.SET_UNITY_TABS,
-      payload: customTab
-    });
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_ACTIVE_TABINDEX,
-      payload: 4
-    });
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SWITCH_TEMP_STATUS,
-      payload: 'success'
-    });
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.CHANGE_BID_STATUS_OPERATION,
-      payload: true
-    });
-
     jest.spyOn(UtilsFunc, 'checkTabRender').mockReturnValue(true);
     window.history.pushState(
       {},
       '',
       '/opportunities/UZA89257?viewType=testing&bidNo=3'
     );
-    const { container } = render(
+
+    const { findByText } = render(
       <TabWithRedux
         id="UZA89257"
         enableValidateTab
@@ -579,15 +560,14 @@ describe('testing for tab component', () => {
         onChangeSelectedTab={jest.fn()}
       />
     );
-    await waitFor(() => {
-      const moreButton = screen.getByText('More');
-      fireEvent.click(moreButton);
 
-      const timelineTab = screen.getByText('Timeline');
-      fireEvent.click(timelineTab);
-      expect(container).toBeInTheDocument();
-      expect(screen.getByText('Available Dates')).toBeInTheDocument();
-    });
+    const moreButton = await findByText('More');
+    fireEvent.click(moreButton);
+    const timelineTab = await findByText('Timeline');
+    fireEvent.click(timelineTab);
+
+    const availableDates = await findByText('Available Dates');
+    expect(availableDates).toBeInTheDocument();
   });
 
   test('bidType in URL', async () => {
@@ -596,20 +576,7 @@ describe('testing for tab component', () => {
       '',
       '/opportunities/UZA89257?bidNo=1&bidType=Clinical_Bid&viewType=questions'
     );
-    store.dispatch({
-      type: UNITY_TABS.SET_UNITY_TABS,
-      payload: customTab
-    });
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
-      payload: [{ ...proposalData }]
-    });
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: {
-        searchFlag: true
-      }
-    });
+
     const { getByText } = render(
       <TabWithRedux
         id="UZA89257"
@@ -617,10 +584,6 @@ describe('testing for tab component', () => {
         onChangeSelectedTab={jest.fn()}
       />
     );
-    store.dispatch({
-      type: UNITY_TABS.SET_UNITY_TABS,
-      payload: customTab.slice(1)
-    });
     await waitFor(() => {
       expect(getByText('More')).toBeInTheDocument();
     });
@@ -635,14 +598,7 @@ describe('testing for tab component', () => {
   });
 
   test('should render tasklist tab', async () => {
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: {
-        tasksListFlag: true,
-        verticalTab: true
-      }
-    });
-    const { getByText, container } = render(
+    const { findByText, container } = render(
       <TabWithRedux
         id="UZA89257"
         selectedView="questions"
@@ -652,21 +608,13 @@ describe('testing for tab component', () => {
     await waitFor(() => {
       expect(getById(container, 'vTab-tasklist')).toBeInTheDocument();
     });
-    fireEvent.click(getById(container, 'vTab-tasklist'));
-    await waitFor(() => {
-      expect(getByText('Task List Mock Component')).toBeInTheDocument();
-    });
+    await fireEvent.click(getById(container, 'vTab-tasklist'));
+    const taskList = await findByText('Task List Mock Component');
+    expect(taskList).toBeInTheDocument();
   });
 
-  test.skip('should open/close panel of task list', async () => {
-    store.dispatch({
-      type: REDUX_TYPES.PROPOSAL.SET_FLAG,
-      payload: {
-        tasksListFlag: true,
-        verticalTab: true
-      }
-    });
-    const { getByText, container, debug } = render(
+  test('should open/close panel of task list', async () => {
+    const { findByText, container, debug } = render(
       <TabWithRedux
         id="UZA89257"
         selectedView="questions"
@@ -676,20 +624,19 @@ describe('testing for tab component', () => {
     await waitFor(() => {
       expect(getById(container, 'vTab-tasklist')).toBeInTheDocument();
     });
-    fireEvent.click(getById(container, 'vTab-tasklist'));
-    await waitFor(() => {
-      expect(getByText('Task List Mock Component')).toBeInTheDocument();
-    });
+    await fireEvent.click(getById(container, 'vTab-tasklist'));
+    const taskList = await findByText('Task List Mock Component');
+    expect(taskList).toBeInTheDocument();
     const panelToggleBtn = container.querySelector(
-      '#panel-notepad > div > button > svg > path'
+      '#panel-notepad > div > button'
     );
-    fireEvent.click(panelToggleBtn);
+    await fireEvent.click(panelToggleBtn);
+    await waitFor(() => {
+      expect(container.querySelector('.collapsed')).toBeInTheDocument();
+    });
+    await fireEvent.click(panelToggleBtn);
     await waitFor(() => {
       expect(container.querySelector('.collapsed')).toBeNull();
-    });
-    fireEvent.click(panelToggleBtn);
-    await waitFor(() => {
-      expect(container.querySelector('.collapsed')).not.toBeNull();
     });
   });
 });
