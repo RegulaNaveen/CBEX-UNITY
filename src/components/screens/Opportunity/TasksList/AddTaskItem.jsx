@@ -12,10 +12,15 @@ import Button from 'apollo-react/components/Button';
 import { setTask } from '../../../../redux/actions/tasksList-actions';
 import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
+import Loader from 'apollo-react/components/Loader';
 
-const AddNewTask = ({ day, proposalId }) => {
+const AddNewTask = ({ day, proposalId, openModal }) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [taskId, setTaskId] = useState(null);
+  const [showLoader, setShowLoader] = useState(false);
+
   const handleAddNewTask = () => {
     setShowAddTask(true);
   };
@@ -31,22 +36,35 @@ const AddNewTask = ({ day, proposalId }) => {
     }
   }, []);
 
-  const handleInputBlur = e => {
+  const handleInputBlur = async e => {
     const inputValue = e.target.value;
     if (inputValue !== '') {
+      setShowLoader(true);
       const taskData = {
         no_of_units: Number(day),
         description: inputValue
       };
-      const result = dispatch(setTask(proposalId, taskData, socketContext));
+      const result = await dispatch(
+        setTask(proposalId, taskData, socketContext)
+      );
       if (result) {
+        setTaskId(result.task_id);
         setShowAddTask(false);
-        setShowAddOwner(false);
+        // setShowAddOwner(false);
       }
+      setShowLoader(false);
     } else {
       setShowAddTask(false);
     }
   };
+
+  useEffect(() => {
+    if (showModal && taskId) {
+      openModal(taskId);
+      setShowModal(false);
+      setTaskId(null);
+    }
+  }, [showModal, taskId]);
 
   return (
     <>
@@ -65,8 +83,42 @@ const AddNewTask = ({ day, proposalId }) => {
                 />
               </Grid>
               <Grid xs={2} className="addOwnerButton">
-                <Button variant="secondary" disabled={!showAddOwner}>
+                <Button
+                  variant="secondary"
+                  disabled={!showAddOwner}
+                  onClick={() => setShowModal(true)}
+                >
                   Add Owner
+                  {showLoader && (
+                    <>
+                      <div className="loader-container">
+                        <div
+                          style={{
+                            display: 'flex',
+                            height: '24px',
+                            marginRight: '20px'
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: '0px',
+                              position: 'relative',
+                              top: '15px'
+                            }}
+                          >
+                            <Loader
+                              isInner
+                              size={20}
+                              style={{
+                                width: '20px',
+                                height: '20px'
+                              }}
+                            />
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </Button>
               </Grid>
             </Grid>
