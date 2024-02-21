@@ -293,7 +293,7 @@ const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 const EMAILTEMPLATES_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals/emailTemplates`;
 const TASKSLIST_API_URL = `${PROPOSAL_API_ENDPOINT}/api/tasks`;
-const TASKLIST_UPDATE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/tasks/roles`;
+const TASKLIST_UPDATE_API_URL = `${TASKSLIST_API_URL}/roles`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
