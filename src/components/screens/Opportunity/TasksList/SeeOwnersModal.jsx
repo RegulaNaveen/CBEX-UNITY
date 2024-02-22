@@ -51,8 +51,8 @@ const SeeOwners = ({
 
   useEffect(() => {
     const task = tasks.find(task => task?.task_id === taskId);
-    if (task) {
-      const roles = [];
+    const roles = [];
+    if (task && Array.isArray(task.task_role)) {
       task?.task_role.forEach(role => {
         if (role.type === 'roles') {
           const { questionText, data: question_answers } = processRole(
@@ -77,7 +77,10 @@ const SeeOwners = ({
           });
         }
       });
+
       setSelectedUsers(roles);
+      setSelectedTask(task);
+    } else if (task) {
       setSelectedTask(task);
     }
   }, [taskId, isModalOpen, tasks]);
@@ -134,12 +137,6 @@ const SeeOwners = ({
     setButtonDisabled(false); // Enable the button after a user is added
   };
 
-  if (isModalOpen) {
-    document.body.classList.add('no-scroll');
-  } else {
-    document.body.classList.remove('no-scroll');
-  }
-
   const handleSave = () => {
     const payload = {
       addrole: [],
@@ -174,6 +171,14 @@ const SeeOwners = ({
     });
   };
 
+  useEffect(() => {
+    if (!isModalOpen) {
+      // Reset state variables when the modal is closed
+      setTaskDescriptions('');
+      setSelectedTask(null);
+    }
+  }, [isModalOpen, taskId]);
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setShowInput(false);
@@ -186,6 +191,9 @@ const SeeOwners = ({
     setShowInput(false);
     setButtonDisabled(false);
     setAreButtonsDisabled(true);
+    setSelectedTask(null);
+    setSelectedUsers([]);
+    closeModal();
   };
 
   const handleCloseInnerModal = () => {
@@ -196,8 +204,16 @@ const SeeOwners = ({
     const task = tasks.find(task => task?.task_id === taskId);
     if (task) {
       setTaskDescriptions(task.description);
+      updateOwnersCount(task?.task_id, selectedUsers.length);
     }
-  }, [taskId, tasks]);
+  }, [
+    taskId,
+    tasks,
+    isModalOpen,
+    taskDescriptions,
+    selectedTask,
+    selectedUsers
+  ]);
 
   const getData = async searchTerm => {
     if (previousController.current) {
@@ -408,9 +424,7 @@ const SeeOwners = ({
                 )}
               </div>
               <div className="modal-buttons">
-                <Button onClick={handleCancel} disabled={areButtonsDisabled}>
-                  Cancel
-                </Button>
+                <Button onClick={handleCancel}>Cancel</Button>
                 <Button onClick={handleSave} disabled={areButtonsDisabled}>
                   Save
                 </Button>
