@@ -158,7 +158,6 @@ export const setTask = (
     try {
       const taskListResponse = await setTaskDataApi(proposalId, taskData);
       const data = taskListResponse.result;
-      console.log(data);
       if (data) {
         dispatch({
           type: ADD_TASK,
