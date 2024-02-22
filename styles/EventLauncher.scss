@@ -18,7 +18,7 @@
     padding-top: 0.75rem;
     padding-bottom: 0.5rem;
     font-weight: 400;
-    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+    font-family: $proximaNovaRegular, Arial, sans-serif;
   }
 
   .unassigned-roles-list-scrollable {
@@ -31,7 +31,7 @@
       font-size: 0.8777rem;
       line-height: 1.5rem;
       font-weight: 400;
-      font-family: 'ProximaNova-Regular', Arial, sans-serif;
+      font-family: $proximaNovaRegular, Arial, sans-serif;
     }
   }
 }

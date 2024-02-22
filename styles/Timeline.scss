@@ -7,7 +7,7 @@
     height: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
-    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+    font-family: $proximaNovaRegular, Arial, sans-serif;
     .rbc-event-content {
       width: 260px !important;
       white-space: nowrap;
@@ -20,7 +20,7 @@
 
 #Timeline-main-wrapper {
   .month-range-label {
-    font-family: 'Proxima Nova', Arial, sans-serif;
+    font-family: $proximaNova, Arial, sans-serif;
     font-size: 16px;
     font-weight: 600;
 
@@ -77,7 +77,7 @@
     height: 32px;
     width: 258px;
     color: #000000;
-    font-family: 'Proxima Nova', Arial, sans-serif;
+    font-family: $proximaNova, Arial, sans-serif;
     font-size: 20px;
     font-weight: 600;
     letter-spacing: 0;
@@ -87,7 +87,7 @@
     height: 24px;
     width: 258px;
     color: #444444;
-    font-family: 'Proxima Nova', Arial, sans-serif;
+    font-family: $proximaNova, Arial, sans-serif;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
@@ -146,7 +146,7 @@
     margin: 10px 0px;
     cursor: pointer;
     color: #000000;
-    font-family: 'Proxima Nova', Arial, sans-serif;
+    font-family: $proximaNova, Arial, sans-serif;
     font-size: 16px;
     letter-spacing: 0;
     line-height: 24px;
@@ -163,21 +163,21 @@
 
   .rbc-button-link {
     font-size: 16px;
-    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+    font-family: $proximaNovaRegular, Arial, sans-serif;
     color: #595959;
   }
   .rbc-show-more {
     font-size: 14px !important;
-    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+    font-family: $proximaNovaRegular, Arial, sans-serif;
     color: #015ff1;
   }
   .rbc-event-content {
     font-size: 14px !important;
-    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+    font-family: $proximaNovaRegular, Arial, sans-serif;
   }
   .rbc-header {
     color: #999999;
-    font-family: 'ProximaNova-Regular', Arial, sans-serif;
+    font-family: $proximaNovaRegular, Arial, sans-serif;
     font-size: 14px;
     font-weight: normal;
   }
