@@ -63,7 +63,6 @@
     .MuiInputBase-root.Mui-disabled {
       color: black;
       cursor: not-allowed;
-      opacity: 0.4;
       pointer-events: none;
       background-color: #f2f2f2;
       opacity: 0.8;
@@ -73,7 +72,7 @@
       padding-left: 8px;
       padding-right: 8px;
       color: #000000;
-      font-family: 'ProximaNova-Regular';
+      font-family: $proximaNovaRegular;
     }
 
     .MuiOutlinedInput-root {
@@ -115,7 +114,7 @@
 
     .a-MuiChip-label {
       color: #000000 !important;
-      font-family: 'ProximaNova-Regular', Arial, sans-serif !important;
+      font-family: $proximaNovaRegular, Arial, sans-serif !important;
       font-size: 16px !important;
       font-weight: bold;
 
@@ -211,7 +210,6 @@
     .MuiInputBase-root.Mui-disabled {
       color: black;
       cursor: not-allowed;
-      opacity: 0.4;
       pointer-events: none;
       background-color: #f2f2f2;
       opacity: 0.8;
@@ -221,7 +219,7 @@
       padding-left: 8px;
       padding-right: 8px;
       color: #000000;
-      font-family: 'ProximaNova-Regular', Arial, sans-serif;
+      font-family: $proximaNovaRegular, Arial, sans-serif;
     }
 
     .MuiOutlinedInput-root {
@@ -258,7 +256,7 @@
 
     .a-MuiChip-label {
       color: #000000 !important;
-      font-family: 'ProximaNova-Regular', Arial, sans-serif !important;
+      font-family: $proximaNovaRegular, Arial, sans-serif !important;
       font-size: 16px !important;
       font-weight: bold;
 
@@ -299,7 +297,7 @@
 
   .MuiInputBase-root {
     font-size: 16px;
-    font-family: $proximaNova, Nunito Sans, sans-serif;
+    font-family: $proximaNovaRegular, Nunito Sans, sans-serif;
   }
 
   .MuiInputBase-input {

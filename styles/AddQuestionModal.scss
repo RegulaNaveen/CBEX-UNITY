@@ -51,7 +51,7 @@
           background-color: #fff;
           border: 1px solid#e3e3e3;
           color: #297dfd;
-          font-family: $proximaNova;
+          font-family: $proximaNovaRegular;
           font-size: 16px;
           font-weight: 500;
 
@@ -102,7 +102,7 @@
   height: 32px;
   width: 522px;
   color: $black;
-  font-family: $proximaNova;
+  font-family: $proximaNovaRegular;
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 0;
@@ -113,7 +113,7 @@
   height: 24px;
   width: 190.06px;
   color: $black;
-  font-family: $proximaNova;
+  font-family: $proximaNovaRegular;
   font-size: 16px;
   letter-spacing: 0;
   line-height: 24px;
@@ -173,7 +173,7 @@
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
-  font-family: $proximaNova;
+  font-family: $proximaNovaRegular;
   padding: 8px;
   resize: none;
   font-size: 16px;
@@ -190,7 +190,7 @@
   background-color: $white;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0);
   outline: none;
-  font-family: $proximaNova;
+  font-family: $proximaNovaRegular;
   padding: 8px;
   resize: none;
   font-size: 16px;
@@ -207,7 +207,7 @@
   flex-direction: column;
 
   &-title {
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
     margin-top: 50px;
   }
 }

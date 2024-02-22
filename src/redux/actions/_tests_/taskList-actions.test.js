@@ -3,10 +3,16 @@ import {
   fetchTasksList,
   setTask,
   editTask,
-  setTaskFromSocket
+  setTaskFromSocket,
+  updateTaskDesc,
+  deleteTask,
+  handleTaskLock,
+  handleTaskUnlock,
+  handleMultipleTaskLocks
 } from '../tasksList-actions';
 import * as TasklistApis from '../../../api/tasksList';
 import { getSelectedBid } from '../../selectors'; // import the selector
+import * as taskSelectors from '../../selectors/tasks';
 
 describe('taskList actions', () => {
   let sinonSandbox;
@@ -215,6 +221,179 @@ describe('taskList actions', () => {
     expect(dispatch).toHaveBeenCalledWith({
       type: 'LOADING_TASKS',
       payload: false
+    });
+  });
+
+  it('should delete a task', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'desc'
+      }
+    ]);
+    await deleteTask('task_id')(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: []
+    });
+  });
+
+  it('should update task description', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc'
+      }
+    ]);
+    await updateTaskDesc('task_id', 'new_desc')(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [{ task_id: 'task_id', description: 'new_desc' }]
+    });
+  });
+
+  it('should handle task lock', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id_2');
+    await handleTaskLock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          task_id: 'task_id',
+          description: 'old_desc',
+          proposal_id: 'proposal_id',
+          locked: true,
+          lockedBy: {
+            userId: 'user_id',
+            userEmail: 'user_email',
+            userName: 'user_name'
+          }
+        }
+      ]
+    });
+  });
+
+  it('should handle task unlock', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id_2');
+    await handleTaskUnlock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          task_id: 'task_id',
+          description: 'old_desc',
+          proposal_id: 'proposal_id',
+          locked: false,
+          lockedBy: {}
+        }
+      ]
+    });
+  });
+
+  it('should not handle task lock when same user', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id');
+    await handleTaskLock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it('should not handle task unlock when same user', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id');
+    await handleTaskUnlock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it('should handle multiple task locks', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id_2');
+    await handleMultipleTaskLocks([
+      {
+        taskId: 'task_id',
+        proposalId: 'proposal_id',
+        userId: 'user_id',
+        userEmail: 'user_email',
+        userName: 'user_name'
+      }
+    ])(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          task_id: 'task_id',
+          description: 'old_desc',
+          proposal_id: 'proposal_id',
+          locked: true,
+          lockedBy: {
+            userId: 'user_id',
+            userEmail: 'user_email',
+            userName: 'user_name'
+          }
+        }
+      ]
     });
   });
 });
