@@ -21,7 +21,6 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
   const [showModal, setShowModal] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [showLoader, setShowLoader] = useState(false);
-  const [showError, setShowError] = useState(false);
   const [descEditRef, setDescEditRef] = useState(null);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
   const socketContext = useContext(SocketContext);
   const handleValueChange = useCallback(e => {
     const description = e.target.value;
-    setShowError(false);
     if (description.length > 3) {
       setShowAddOwner(true);
     } else if (description.length <= 3) {
@@ -65,8 +63,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
       }
       setShowLoader(false);
     } else {
-      //setShowAddTask(false);
-      setShowError(true);
+      setShowAddTask(false);
     }
   };
 
@@ -93,10 +90,6 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                   InputProps={{
                     inputProps: { maxLength: 200 }
                   }}
-                  error={showError}
-                  helperText={
-                    showError ? 'Task Description cannot be left blank' : ''
-                  }
                 />
               </Grid>
               <Grid xs={2} className="addOwnerButton">
