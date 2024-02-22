@@ -216,8 +216,13 @@ export class Opportunity extends Component<Props, State> {
       tasksListFlag
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
+    const thisOpportunityType = selectedBid.get('opportunityType', '');
     const { bidStatus } = selectedBid.toJS();
     const prevProposalId = prevProps.selectedBid.get('id', '');
+    const prevOpportunityType = prevProps.selectedBid.get(
+      'opportunityType',
+      ''
+    );
 
     // Bid changed
     if (prevProposalId !== thisProposalId) {
@@ -227,6 +232,10 @@ export class Opportunity extends Component<Props, State> {
       if ((this.props && location && location?.pathname) !== UBUILD) {
         this.context.updateSocketOppId(params.id, thisProposalId);
         localStorage.setItem('proposalId', thisProposalId);
+      }
+    } else if (prevOpportunityType !== thisOpportunityType) {
+      if (tasksListFlag && thisProposalId !== '') {
+        fetchTasksList(thisProposalId);
       }
     }
   }
@@ -323,48 +332,51 @@ export class Opportunity extends Component<Props, State> {
         </div>
       );
     return (
-      <div
-        className={
-          getbidChangeLoader
-            ? 'proposal-details bid-change-loader-status'
-            : 'proposal-details'
-        }
-      >
-        {getbidChangeLoader && (
-          <div className="bid-change-loader">
-            <div>
-              <Loader
-                type="TailSpin"
-                color="#297DFD"
-                height={100}
-                width={100}
-              />
+      <>
+        <div id="tasklist-modal-wrapper" />
+        <div
+          className={
+            getbidChangeLoader
+              ? 'proposal-details bid-change-loader-status'
+              : 'proposal-details'
+          }
+        >
+          {getbidChangeLoader && (
+            <div className="bid-change-loader">
+              <div>
+                <Loader
+                  type="TailSpin"
+                  color="#297DFD"
+                  height={100}
+                  width={100}
+                />
+              </div>
             </div>
-          </div>
-        )}
-        <GenerateDocs />
-        <UnityGrid
-          data={details}
-          isOpen={isOpen}
-          windowSize={windowSize}
-          bidStatus={bidStatus}
-          bidStopStatus={bidStopStatus}
-          favourite={favourite}
-          customName={customName}
-          nextMilestone={nextMilestone}
-          opportunityName={opportunityName}
-          opportunityStatus={opportunityStatus}
-          handleEditCustomName={this.handleEditCustomName}
-          isApprovalCountPresent={isApprovalCountPresent}
-        />
-        <span className="unity-tabs-container-wrapper">
-          <UnityTab
-            id={params.id}
-            selectedView={selectedView}
-            onChangeSelectedTab={this.onChangeSelectedTab}
+          )}
+          <GenerateDocs />
+          <UnityGrid
+            data={details}
+            isOpen={isOpen}
+            windowSize={windowSize}
+            bidStatus={bidStatus}
+            bidStopStatus={bidStopStatus}
+            favourite={favourite}
+            customName={customName}
+            nextMilestone={nextMilestone}
+            opportunityName={opportunityName}
+            opportunityStatus={opportunityStatus}
+            handleEditCustomName={this.handleEditCustomName}
+            isApprovalCountPresent={isApprovalCountPresent}
           />
-        </span>
-      </div>
+          <span className="unity-tabs-container-wrapper">
+            <UnityTab
+              id={params.id}
+              selectedView={selectedView}
+              onChangeSelectedTab={this.onChangeSelectedTab}
+            />
+          </span>
+        </div>
+      </>
     );
   };
 
