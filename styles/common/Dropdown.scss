@@ -2,7 +2,7 @@
   height: 21px;
   width: 100%;
   color: $neutral8;
-  font-family: $proximaNova;
+  font-family: $proximaNovaRegular;
   font-size: 14px;
   letter-spacing: 0;
   line-height: 21px;
@@ -42,7 +42,7 @@
     background-color: $white;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 9;
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
     font-size: 14px;
     letter-spacing: 0;
     line-height: 24px;
@@ -117,7 +117,7 @@
       height: 24px;
       width: 100%;
       color: $neutral6;
-      font-family: $proximaNova;
+      font-family: $proximaNovaRegular;
       pointer-events: none;
       font-size: 14px;
       letter-spacing: 0;
@@ -127,7 +127,7 @@
     .dd-header-selected {
       width: 100%;
       color: $black;
-      font-family: $proximaNova;
+      font-family: $proximaNovaRegular;
       font-size: 14px;
       pointer-events: none;
     }
