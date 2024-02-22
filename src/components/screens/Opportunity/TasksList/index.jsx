@@ -72,7 +72,7 @@ const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 };
 
 const TaskListToolbarMenuPortal = props => {
-  const modalRoot = document.getElementById('modal-wrapper');
+  const modalRoot = document.getElementById('tasklist-modal-wrapper');
   return ReactDOM.createPortal(props.children, modalRoot);
 };
 // Drag & Drop Style
