@@ -3,7 +3,8 @@ import React, {
   useEffect,
   useMemo,
   useState,
-  useContext
+  useContext,
+  useRef
 } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import TextField from 'apollo-react/components/TextField';
@@ -20,13 +21,22 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
   const [showModal, setShowModal] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [showLoader, setShowLoader] = useState(false);
+  const [descEditRef, setDescEditRef] = useState(null);
 
+  useEffect(() => {
+    if (descEditRef) {
+      const descInput = descEditRef.querySelector('input');
+      if (descInput) {
+        descInput.focus();
+      }
+    }
+  }, [descEditRef]);
   const handleAddNewTask = () => {
     setShowAddTask(true);
+    setShowAddOwner(false);
   };
   const dispatch = useDispatch();
   const socketContext = useContext(SocketContext);
-
   const handleValueChange = useCallback(e => {
     const description = e.target.value;
     if (description.length > 3) {
@@ -50,7 +60,6 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
       if (result) {
         setTaskId(result.task_id);
         setShowAddTask(false);
-        // setShowAddOwner(false);
       }
       setShowLoader(false);
     } else {
@@ -74,6 +83,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
             <Grid container>
               <Grid xs={8}>
                 <TextField
+                  ref={_ref => setDescEditRef(_ref)}
                   onChange={handleValueChange}
                   onBlur={handleInputBlur}
                   fullWidth

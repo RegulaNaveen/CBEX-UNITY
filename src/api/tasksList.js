@@ -2,7 +2,7 @@ import { axiosInstance } from '../store';
 import { API } from '../constants';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 
-const { TASKSLIST_API_URL, TASKLIST_UPDATE_API_URL } = API.TASKSLIST;
+const { TASKSLIST_API_URL } = API.TASKSLIST;
 const { API_KEY } = API.PROPOSAL;
 
 const config = {
@@ -32,7 +32,7 @@ export function updateTaskListApi(proposalId, task_Id, roles) {
 
   return new Promise((resolve, reject) => {
     axiosInstance
-      .put(`${TASKLIST_UPDATE_API_URL}/${proposalId}/${task_Id}`, roles, config)
+      .put(`${TASKSLIST_API_URL}/roles/${proposalId}/${task_Id}`, roles, config)
       .then(response => {
         resolve(response.data);
       })

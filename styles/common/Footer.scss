@@ -27,7 +27,7 @@
   span.MuiButton-label {
     color: #646464;
     font-weight: 800;
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
   }
 
   button {
@@ -52,7 +52,7 @@
 
       color: #646464;
       font-weight: 800;
-      font-family: 'ProximaNova-Regular', 'Noto Sans', Helvetica, Arial,
+      font-family: $proximaNovaRegular, 'Noto Sans', Helvetica, Arial,
         sans-serif;
     }
     &.switch-temp-btn {

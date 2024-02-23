@@ -45,7 +45,9 @@ const answeredFilter: Boolean = (question, flags) => {
       !isCarryForwarded(lastAnswer)
     );
   }
-  !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
+  const res =
+    !isAnswerEmpty(lastAnswer.answer) && !isUnityPredicted(lastAnswer);
+  return res;
 };
 // UnansweredFilter => No Answers, Indetermined Answers and Unity Predicted Answers
 const unansweredFilter: Boolean = (question, flags) => {

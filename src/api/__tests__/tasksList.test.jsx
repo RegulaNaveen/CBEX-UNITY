@@ -3,7 +3,9 @@ import { axiosInstance } from '../../store';
 import {
   fetchTasksListApi,
   setTaskDataApi,
-  editTaskDataApi
+  editTaskDataApi,
+  updateTaskDescApi,
+  deleteTaskApi
 } from '../tasksList';
 
 describe('tasksList api functions', () => {
@@ -42,5 +44,48 @@ describe('tasksList api functions', () => {
       data: []
     });
     expect(editTaskDataApi()).resolves.toStrictEqual([]);
+  });
+
+  test('updateTaskDescApi should update description of a task', async () => {
+    const response = {
+      data: {
+        description: 'new task',
+        proposal_id: 'TEST_PROPOSAL_ID',
+        task_id: 'TEST_TASK_ID'
+      }
+    };
+    sandbox.stub(axiosInstance, 'put').resolves(response);
+    expect(
+      updateTaskDescApi('TEST_PROPOSAL_ID', 'TEST_TASK_ID', 'new task')
+    ).resolves.toStrictEqual(response);
+  });
+
+  test('updateTaskDescApi should throw error on failure', async () => {
+    sandbox.stub(axiosInstance, 'put').rejects(['Unauthorized access']);
+    expect(
+      updateTaskDescApi('TEST_PROPOSAL_ID', 'TEST_TASK_ID', 'new task')
+    ).rejects.toStrictEqual(['Unauthorized access']);
+  });
+
+  test('deleteTaskApi should throw error on failure', async () => {
+    sandbox.stub(axiosInstance, 'put').rejects(['Unauthorized access']);
+    expect(
+      deleteTaskApi('TEST_PROPOSAL_ID', 'TEST_TASK_ID', 'new task')
+    ).rejects.toStrictEqual(['Unauthorized access']);
+  });
+
+  test('deleteTaskApi should delete a task', async () => {
+    const response = {
+      data: {
+        description: 'new task',
+        proposal_id: 'TEST_PROPOSAL_ID',
+        task_id: 'TEST_TASK_ID',
+        is_deleted: true
+      }
+    };
+    sandbox.stub(axiosInstance, 'put').resolves(response);
+    expect(
+      deleteTaskApi('TEST_PROPOSAL_ID', 'TEST_TASK_ID', 'new task')
+    ).resolves.toStrictEqual(response);
   });
 });

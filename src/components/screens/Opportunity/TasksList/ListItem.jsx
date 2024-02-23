@@ -211,7 +211,8 @@ function ListItem({
           </Typography>
         </div>
       ),
-      onClick: handleSeeOwners()
+      onClick: handleSeeOwners(),
+      disabled: locked || !editable
     },
     {
       text: (

@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from 'apollo-react/components/Typography';
 import Search from 'apollo-react/components/Search';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map as IMap } from 'immutable';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import TimelineCalender from './TimelineCalender';
@@ -36,10 +36,10 @@ const Timeline = () => {
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const bidList = useSelector(getBidList);
   const [currentBidDetails, setCurrentBidDetails] = useState({});
-  const { proposalDate, isCurrent, isEditable } = selectedBid;
+  const { proposalDate, isEditable } = selectedBid;
   const [timelineEvents, setTimelineEvents] = useState([]);
   const [filteredSections, setFilteredSections] = useState(null);
-  const [sections, setSections] = useState(Map());
+  const [sections, setSections] = useState(IMap());
   const [searchKey, setSearchKey] = useState('');
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const [draggedQuestionData, setDraggedQuestionData] = useState(null);
@@ -61,7 +61,7 @@ const Timeline = () => {
 
   const generateSections = proposalQuestions => {
     try {
-      let sectionsData = Map();
+      let sectionsData = IMap();
 
       proposalQuestions.forEach(question => {
         const {
@@ -70,9 +70,9 @@ const Timeline = () => {
         } = question;
 
         const createSections = () => {
-          let section = Map({});
+          let section = IMap({});
           let questionsData =
-            sectionsData.getIn([sectionName, 'questions']) || Map({});
+            sectionsData.getIn([sectionName, 'questions']) || IMap({});
 
           questionsData = questionsData.set(questionId, fromJS(question));
           questionsData = questionsData.sortBy(item =>

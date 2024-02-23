@@ -46,7 +46,7 @@
 .unity-tab-question-item .question-title-txt {
   color: #000000;
   font-size: 16px;
-  font-family: Proxima Nova, Nunito Sans, sans-serif;
+  font-family: $proximaNova, Nunito Sans, sans-serif;
   font-weight: 400;
   line-height: 1.5;
   padding-right: 4px;
@@ -161,6 +161,6 @@ svg.add-icon-btn {
   width: 12px;
 }
 .unity-tab-question-item .RichEditor-editor .public-DraftStyleDefault-block {
-  font-family: 'ProximaNova-Regular';
+  font-family: $proximaNovaRegular;
   color: #000000;
 }

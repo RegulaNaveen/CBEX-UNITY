@@ -37,7 +37,8 @@ import {
   editTaskFromSocket,
   handleTaskLock,
   handleTaskUnlock,
-  handleMultipleTaskLocks
+  handleMultipleTaskLocks,
+  editRoleFromSocket
 } from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
@@ -583,7 +584,8 @@ const SocketContextProvider = props => {
           editTaskFromSocket,
           handleTaskLockAction,
           handleTaskUnlockAction,
-          handleMultipleTaskLocksAction
+          handleMultipleTaskLocksAction,
+          editRoleFromSockets
         } = props;
 
         // On Message Recieve
@@ -721,6 +723,11 @@ const SocketContextProvider = props => {
                 editTaskFromSocket(data.data, data.proposalId);
               }
               break;
+
+            case 'TASK_ROLE_UPDATE':
+              if (data.data) {
+                editRoleFromSockets(data.data, data.proposalId);
+              }
 
             case 'QUESTIONS':
               // Get list of questions already locked by other users
@@ -1233,7 +1240,8 @@ const mapDispatchToProps = {
   editTaskFromSocket: editTaskFromSocket,
   handleTaskLockAction: handleTaskLock,
   handleTaskUnlockAction: handleTaskUnlock,
-  handleMultipleTaskLocksAction: handleMultipleTaskLocks
+  handleMultipleTaskLocksAction: handleMultipleTaskLocks,
+  editRoleFromSockets: editRoleFromSocket
 };
 
 export default connect(

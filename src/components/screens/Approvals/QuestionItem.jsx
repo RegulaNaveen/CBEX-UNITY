@@ -10,7 +10,7 @@ import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import InfoIcon from 'apollo-react-icons/Info';
 import Popover from 'apollo-react/components/Popover';
 import { EditorState } from 'apollo-react/node_modules/draft-js';
-import { Map, List, fromJS } from 'immutable';
+import { Map as IMap, List, fromJS } from 'immutable';
 import isEmpty from 'lodash/isEmpty';
 import CalendarIcon from './CalendarIcon';
 import QuestionLabel from './QuestionLabel';
@@ -42,7 +42,6 @@ import { selectCurrentSearchResult } from '../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../redux/actions/search-actions';
 import withIdleStateDetection from '../../HOC/IdleStateDetector';
 import { compositeDecorator } from '../../common/CustomApolloRichText';
-import Tooltip from 'apollo-react/components/Tooltip';
 import { Edit } from '../../svg';
 import {
   setEditQuestionData,
@@ -53,15 +52,19 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(SelectQuestion);
-const MultiSelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(MultiSelectQuestion);
-const YesNoQuestionWithIdleStateDetection =
-  withIdleStateDetection(YesNoQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
 
-const CheckBoxQuestionWithIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestion);
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
@@ -185,7 +188,7 @@ const QuestionItem = ({
       // It prepares answer data for a specific answer type.
       // If possible move this logic inside AnswerHistory component to avoid duplication of code
       const answerConfigType = questionMap
-        .get('answerConfiguration', Map({ type: '' }))
+        .get('answerConfiguration', IMap({ type: '' }))
         .get('type', '');
       const sfObject = questionMap.get('sfObject', '');
       const sfField = questionMap.get('sfField', '');
@@ -305,7 +308,7 @@ const QuestionItem = ({
 
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
-    const lastAnswerMap = Map(lastAnswer);
+    const lastAnswerMap = IMap(lastAnswer);
     let isAnswerPredicted = false;
     let answerDate = 'Not Answered';
 
@@ -516,7 +519,7 @@ const QuestionItem = ({
             tableConfiguration={jsonTableConfig}
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
-            section={Map(section)}
+            section={IMap(section)}
             sectionName={approvalSectionTitle}
             answers={answers}
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
@@ -610,25 +613,15 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(answer.get('answer').toString().trim());
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
     return false;
   };
-
-  //this function is used to show tags in the approvals tab
-  // const renderTags = milestoneNew => {
-  //   if (Array.isArray(milestoneNew) && milestoneNew.length > 0) {
-  //     return milestoneNew.map(({ Name, Color }) => (
-  //       <Tooltip title={Name} placement="top">
-  //         <div className="tag">
-  //           <span className="tag-box" style={{ backgroundColor: Color }}></span>
-  //         </div>
-  //       </Tooltip>
-  //     ));
-  //   } else {
-  //     return null;
-  //   }
-  // };
 
   const questionRender = useMemo(
     () =>
@@ -688,10 +681,9 @@ const QuestionItem = ({
                                   questionId: question?.questionId,
                                   tabFlag: 'Approvals',
                                   direction: 'left',
-                                  questionAnswered:
-                                    checkLastAnswerOfQuestionVisibility(
-                                      question?.answers
-                                    )
+                                  questionAnswered: checkLastAnswerOfQuestionVisibility(
+                                    question?.answers
+                                  )
                                 })
                               );
                             }}
