@@ -15,7 +15,16 @@ import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
 import Loader from 'apollo-react/components/Loader';
 
-const AddNewTask = ({ day, proposalId, openModal }) => {
+const AddNewTask = ({
+  day,
+  proposalId,
+  openModal,
+  setShowInputImmediately,
+  setAreButtonsDisabled,
+  areButtonsDisabled,
+  autocompleteValue,
+  setAutocompleteValue
+}) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -78,6 +87,10 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
     }
   }, [showModal, taskId]);
 
+  useEffect(() => {
+    setAreButtonsDisabled(false);
+  }, [autocompleteValue, setAutocompleteValue]);
+
   return (
     <>
       {showAddTask && (
@@ -103,7 +116,11 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                 <Button
                   variant="secondary"
                   disabled={!showAddOwner}
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    setShowModal(true);
+                    setShowInputImmediately(true);
+                    setAreButtonsDisabled(true);
+                  }}
                 >
                   Add Owner
                   {showLoader && (
@@ -113,7 +130,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                           style={{
                             display: 'flex',
                             height: '24px',
-                            marginRight: '20px'
+                            marginRight: '25px'
                           }}
                         >
                           <span

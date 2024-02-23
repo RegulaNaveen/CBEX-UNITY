@@ -90,6 +90,9 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [showInputImmediately, setShowInputImmediately] = useState(false);
+  const [areButtonsDisabled, setAreButtonsDisabled] = useState(true);
+  const [autocompleteValue, setAutocompleteValue] = useState('');
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -279,11 +282,13 @@ const TasksList = () => {
   const openModal = task_id => {
     setTaskId(task_id);
     setIsModalOpen(true);
+    setAreButtonsDisabled(true);
   };
 
   const closeModal = () => {
     setTaskId(null);
     setIsModalOpen(false);
+    setAreButtonsDisabled(true);
   };
 
   return (
@@ -350,6 +355,12 @@ const TasksList = () => {
                         day={day}
                         proposalId={proposalId}
                         openModal={openModal}
+                        setShowInputImmediately={setShowInputImmediately}
+                        setAreButtonsDisabled={setAreButtonsDisabled}
+                        areButtonsDisabled={areButtonsDisabled}
+                        autocompleteValue={autocompleteValue}
+                        setAutocompleteValue={setAutocompleteValue}
+
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -369,6 +380,12 @@ const TasksList = () => {
           taskId={taskId}
           tasks={tasks}
           updateOwnersCount={updateOwnersCount}
+          showInputImmediately={showInputImmediately}
+          areButtonsDisabled={areButtonsDisabled}
+          setAreButtonsDisabled={setAreButtonsDisabled}
+          setShowInputImmediately={setShowInputImmediately}
+          autocompleteValue={autocompleteValue}
+          setAutocompleteValue={setAutocompleteValue}
         />
       </TaskListToolbarMenuPortal>
     </div>
