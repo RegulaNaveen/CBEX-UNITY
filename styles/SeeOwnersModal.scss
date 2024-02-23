@@ -17,7 +17,6 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 40%;
-    height: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -215,4 +214,9 @@
 .warning-modal {
   width: 30%;
   height: 30%;
+}
+.MuiAutocomplete-popper > div > ul > li > span {
+  white-space: normal;
+  overflow: visible;
+  word-break: break-all;
 }
