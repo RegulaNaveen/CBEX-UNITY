@@ -3,8 +3,8 @@
 // @flow
 // eslint-disable-next-line react/destructuring-assignment
 import React, { createRef, createContext, Component, Suspense } from 'react';
-import { withRouter, Match } from 'react-router-dom';
-import { List, Map } from 'immutable';
+import { withRouter } from 'react-router-dom';
+import { List, Map as IMap } from 'immutable';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Button from 'apollo-react/components/Button';
@@ -14,7 +14,6 @@ import ApolloCheckbox from 'apollo-react/components/Checkbox';
 import classNames from 'classnames';
 import Grid from 'apollo-react/components/Grid';
 import Switch from 'apollo-react/components/Switch';
-import Tooltip from 'apollo-react/components/Tooltip';
 import Popover from 'apollo-react/components/Popover';
 import Typography from 'apollo-react/components/Typography';
 import InfoIcon from 'apollo-react-icons/Info';
@@ -90,46 +89,9 @@ const QuestionsSectionMapping = React.lazy(() =>
   )
 );
 
-type Props = {
-  match: Match,
-  details: Map,
-  sections: Map,
-  filteredSections: Map,
-  setQuestion: Map,
-  hasQuestionError: boolean,
-  isQuestionLoading: boolean,
-  getProposalInfoUpdated: Function,
-  fetchUsers: () => {},
-  selectedBid: Map,
-  eventCategories: any,
-  userActions: any,
-  trackEvent: any,
-  proposalDetail: any,
-  userRole: string,
-  questionsFilters: Map,
-  applyQuestionsFilter: Function,
-  resetQuestionsFilter: Function,
-  clearQuestionsFilter: Function,
-  isQuestionsFiltersEnabled: boolean,
-  activeQuestionsFilterCount: Number,
-  allSectionsExpanded: boolean,
-  expandAllSections: Function,
-  editQuestionsData: Map,
-  setQuestion: Function,
-  hasQuestionError: boolean
-};
-
-type State = {
-  showModal: boolean,
-  selectedQuestionForHistory: string,
-  isHistoryModalShown: boolean,
-  showFilter: boolean,
-  anchorEl: null
-};
-
 const MANUAL_REFRESH = false;
 class Questions extends Component {
-  constructor(props: Object) {
+  constructor(props) {
     super(props);
     this.resizeObserver = null;
 
@@ -179,7 +141,7 @@ class Questions extends Component {
     }
   }
 
-  componentDidUpdate(prevProps: Map) {
+  componentDidUpdate(prevProps) {
     const {
       setQuestion,
       hasQuestionError,
@@ -354,7 +316,7 @@ class Questions extends Component {
     });
   };
 
-  handleItemsVisibility = (e: SyntheticEvent<EventTarget>) => {
+  handleItemsVisibility = e => {
     e.stopPropagation();
     const { isOpen, handleOpenClose } = this.props;
     this.setState({ activeTabIndex: 0 });
@@ -424,7 +386,7 @@ class Questions extends Component {
     this.props.handleShowNaCheckbox(checked);
   };
 
-  setQuestionToDisplayHistory = (selectedAnswer: string) => {
+  setQuestionToDisplayHistory = selectedAnswer => {
     const {
       sections,
       filteredSections,
@@ -439,7 +401,7 @@ class Questions extends Component {
       .getIn(['questions', selectedAnswer]);
 
     const answerConfigType = question
-      .get('answerConfiguration', Map({ type: '' }))
+      .get('answerConfiguration', IMap({ type: '' }))
       .get('type', '');
     const sfObject = question.get('sfObject', '');
     const sfField = question.get('sfField', '');
@@ -469,7 +431,7 @@ class Questions extends Component {
     });
   };
 
-  setIsNotepadOpen = (value: boolean) => {
+  setIsNotepadOpen = value => {
     this.setState({ isNotepadOpen: value });
   };
 
@@ -775,7 +737,7 @@ class Questions extends Component {
   }
 }
 
-const mapStateToProps = (state: Map) => ({
+const mapStateToProps = state => ({
   isOpen: getIsOpen(state),
   details: getProposalDetails(state),
   filterMilestone: getMilestoneSections(state),

@@ -72,7 +72,7 @@ const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 };
 
 const TaskListToolbarMenuPortal = props => {
-  const modalRoot = document.getElementById('modal-wrapper');
+  const modalRoot = document.getElementById('tasklist-modal-wrapper');
   return ReactDOM.createPortal(props.children, modalRoot);
 };
 // Drag & Drop Style
@@ -294,6 +294,7 @@ const TasksList = () => {
           <ProgressIndicator tasksList={tasksGroupsByDay} />
         </div>
       </div>
+      <hr style={{ marginTop: '8px' }} className="task-list-divider-hr" />
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="accordions-wrapper">
           {Object.entries(tasksGroupsByDay).map(([day, tasksGroup]) => (
