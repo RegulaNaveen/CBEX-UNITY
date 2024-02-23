@@ -73,7 +73,7 @@
   .proposal-wrapper {
     height: 100%;
     flex: 1;
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
     color: $black;
     position: relative;
     transition: 0.4s ease-in-out margin-right;
@@ -101,7 +101,7 @@
     p.boldtext {
       font-weight: 600;
       color: $black;
-      font-family: $proximaNova;
+      font-family: $proximaNovaRegular;
     }
     .sidebarduedatedsg {
       text-align: center !important;
@@ -134,7 +134,7 @@
     p.greytext {
       color: $neutral10;
       font-weight: 530;
-      font-family: $proximaNova;
+      font-family: $proximaNovaRegular;
     }
     button.MuiTab-textColorInherit {
       color: $neutral10;
@@ -306,7 +306,7 @@
   .proposal-wrapper {
     height: 100%;
     flex: 1;
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
     color: $black;
     position: relative;
     transition: 0.4s ease-in-out margin-right;
@@ -334,7 +334,7 @@
     p.boldtext {
       font-weight: 600;
       color: $black;
-      font-family: $proximaNova;
+      font-family: $proximaNovaRegular;
     }
     .sidebarduedatedsg {
       text-align: center !important;
@@ -374,7 +374,7 @@
     p.greytext {
       color: $neutral10;
       font-weight: 530;
-      font-family: $proximaNova;
+      font-family: $proximaNovaRegular;
     }
     button.MuiTab-textColorInherit {
       color: $neutral10;
@@ -528,17 +528,17 @@
 
 .autocomplete-text {
   color: $black !important;
-  font-family: $proximaNova !important;
+  font-family: $proximaNovaRegular !important;
   font-size: 16px !important;
   input {
     height: 36px !important;
     color: $black !important;
-    font-family: $proximaNova !important;
+    font-family: $proximaNovaRegular !important;
     font-size: 16px !important;
   }
   .a-MuiChip-label {
     color: $black !important;
-    font-family: $proximaNova !important;
+    font-family: $proximaNovaRegular !important;
     font-size: 16px !important;
   }
 }
@@ -566,7 +566,7 @@
     justify-content: space-between;
     label {
       font-size: 14px;
-      font-family: $proximaNova !important;
+      font-family: $proximaNovaRegular !important;
       color: $black;
     }
     .exportOptionsCell {
@@ -580,7 +580,7 @@
       margin-bottom: 5px;
       margin-top: 7px;
       color: $black !important;
-      font-family: $proximaNova !important;
+      font-family: $proximaNovaRegular !important;
       font-size: 16px !important;
     }
     .exportFileName:hover,
