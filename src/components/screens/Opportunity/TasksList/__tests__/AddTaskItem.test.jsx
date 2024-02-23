@@ -32,7 +32,7 @@ describe('Add Task Unit Tests', () => {
     const button = getByText(/Add new task/i);
     fireEvent.click(button);
     const textField = queryByRole('textbox');
-    onchange = jest.fn();
+    // const onchange = jest.fn();
     fireEvent.change(textField, { target: { value: 'New Task' } });
     fireEvent.blur(textField);
   });
@@ -72,7 +72,7 @@ describe('Add Task Unit Tests', () => {
     const button = getByText(/Add new task/i);
     fireEvent.click(button);
     const textField = queryByRole('textbox');
-    onchange = jest.fn();
+    // const onchange = jest.fn();
     fireEvent.change(textField, { target: { value: 'the' } });
     fireEvent.blur(textField);
   });

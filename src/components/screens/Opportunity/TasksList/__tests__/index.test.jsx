@@ -12,11 +12,13 @@ import { SocketContext } from '../../../../../context/SocketContext';
 const { LOADING_TASKS, SET_TASKS } = TASKS;
 
 const TasksListWithRedux = props => (
-  <Provider store={store}>
-    <SocketContext.Provider value={{ getTaskLockDetailsWrapper: jest.fn() }}>
-      <TasksList {...props} />
-    </SocketContext.Provider>
-  </Provider>
+  <>
+    <Provider store={store}>
+      <SocketContext.Provider value={{ getTaskLockDetailsWrapper: jest.fn() }}>
+        <TasksList {...props} />
+      </SocketContext.Provider>
+    </Provider>
+  </>
 );
 
 describe('TasksList Unit Tests', () => {
@@ -24,6 +26,9 @@ describe('TasksList Unit Tests', () => {
     const modalRoot = document.createElement('div');
     modalRoot.setAttribute('id', 'modal-wrapper');
     document.body.appendChild(modalRoot);
+    const tasklistRoot = document.createElement('div');
+    tasklistRoot.setAttribute('id', 'tasklist-modal-wrapper');
+    document.body.appendChild(tasklistRoot);
     store.dispatch({
       type: SET_TASKS,
       payload: [
