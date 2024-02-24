@@ -349,7 +349,11 @@ const SeeOwners = ({
       {isModalOpen && (
         <div id="modal-overlay">
           <div className="modal">
-            <button className="close-button" onClick={handleClose}>
+            <button
+              className="close-button"
+              onClick={handleClose}
+              data-testid="close-button"
+            >
               X
             </button>
             <div className="modal-content">
@@ -393,7 +397,10 @@ const SeeOwners = ({
                             className="remove-user"
                             onClick={() => handleRemoveUser(index)}
                           >
-                            <TrashIcon fontSize="small" />
+                            <TrashIcon
+                              fontSize="small"
+                              data-testid="trash-icon"
+                            />
                           </div>
                         </div>
                       )

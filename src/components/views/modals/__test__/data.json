@@ -832,5 +832,57 @@
       },
       "isCurrent": false
     }
-  ]
+  ],
+  "proposalTeamQuestion": {
+    "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+    "questionId": "d7f00e27-409d-4220-af5d-a015f189a5f5",
+    "section": {
+      "sectionOrder": 1,
+      "sectionName": "Proposal Team"
+    },
+    "questionText": "Global Analytics Strategic",
+    "answerConfiguration": {
+      "type": "text",
+      "options": []
+    },
+    "roleNames": ["Global Analytics"],
+    "answers": [
+      {
+        "user": "sushil.munda@iqvia.com",
+        "userName": "Sushil Munda",
+        "userRole": "Bid Grid Analyst",
+        "date": "2024-02-24T07:35:10.334Z",
+        "answer": "Sushil Munda(sushil.munda@iqvia.com),Varsha Kumari(varsha.kumari2@iqvia.com)",
+        "proposalId": "e7071fa9-a5e3-4708-bc52-211e6c0f6c5b",
+        "updatedInPG": true
+      }
+    ],
+    "questionOrder": 33,
+    "visible": true,
+    "locked": false,
+    "sfObject": "pse__Resource_Request__c",
+    "sfField": "pse__Staffer_Resource__c",
+    "developerUsageComments": "AND SubGroup__c = 'Global Analytics'",
+    "milestoneNew": [],
+    "opportunityType": "Default Type,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA),Ballpark OT",
+    "hasDifferentSFanswer": false,
+    "currentSFanswer": {
+      "value": "",
+      "time": "2023-12-19T09:31:08.016Z"
+    },
+    "isCustomQuestion": false,
+    "questionJSON": "{\"blocks\":[{\"key\":\"aljlr\",\"text\":\"Global Analytics Strategic\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+    "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"702lo\" data-offset-key=\"aljlr-0-0\"><div data-offset-key=\"aljlr-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"aljlr-0-0\"><span data-text=\"true\">Global Analytics Strategic</span></span></div></div></div>",
+    "questionHintJSON": "",
+    "questionHintHTML": "",
+    "active": true,
+    "integration": "",
+    "events": "",
+    "notApplicable": false,
+    "questionApproval": false,
+    "bidAnswerCopy": true,
+    "questionTableConfig": "{}",
+    "latestAnsweredBidNo": null,
+    "bidType": "Clinical_Bid"
+  }
 }
