@@ -386,7 +386,9 @@ function ListItem({
                   size="small"
                   id="task-list-item-menu-btn"
                 >
-                  <EllipsisVertical />
+                  <EllipsisVertical
+                    data-testid={`ellipsis-vertical-${index}`}
+                  />
                 </IconMenuButton>
               </Tooltip>
             </div>
