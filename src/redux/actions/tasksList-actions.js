@@ -86,6 +86,7 @@ export function tasksListReordering(proposalId, tasks, taskId = '') {
       }
     } catch (error) {
       console.log('Error! occurred..', error);
+      return error;
       // Server Error
     } finally {
       dispatch({

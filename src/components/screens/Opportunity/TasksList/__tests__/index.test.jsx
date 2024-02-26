@@ -2,15 +2,17 @@ import React from 'react';
 import { fireEvent, render, waitFor, screen } from '@testing-library/react';
 import TasksList from '..';
 import { Provider } from 'react-redux';
-import { store } from '../../../../../store';
+import { store, axiosInstance } from '../../../../../store';
 import { REDUX_TYPES } from '../../../../../constants';
 import mockData from '../../../../views/__tests__/Search/data.json';
 import { TASKS } from '../../../../../constants/types';
+import { API } from '../../../../../constants';
 import moment from 'moment';
 import { SocketContext } from '../../../../../context/SocketContext';
 import data from '../../../../views/modals/__test__/data.json';
 
 const { LOADING_TASKS, SET_TASKS } = TASKS;
+const { TASKSLIST_API_URL } = API.TASKSLIST;
 
 const TasksListWithRedux = props => (
   <>
@@ -34,10 +36,12 @@ describe('TasksList Unit Tests', () => {
       type: SET_TASKS,
       payload: [
         {
+          id: 1,
           no_of_units: 1,
           description: 'task 1',
           order: 1,
           opportunity_types: 'Default Type',
+          proposal_id: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904',
           task_role: [
             {
               task_list_id: 20,
@@ -117,6 +121,40 @@ describe('TasksList Unit Tests', () => {
     unobserve: jest.fn(),
     disconnect: jest.fn()
   }));
+
+  axiosInstance.put = jest.fn().mockImplementation(url => {
+    switch (url) {
+      case `${TASKSLIST_API_URL}/roles/a49ed80a-d782-40c0-9ff4-bbe35eb0e904/1`:
+        return Promise.resolve({
+          status: 200,
+          data: {
+            result: [
+              {
+                task_list_id: 20,
+                proposal_id: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904',
+                task_id: '4d1b5820-cd8b-417e-8b64-5a8bfe91b842',
+                question_id: null,
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'user'
+              },
+              {
+                id: 1390,
+                task_list_id: 20,
+                proposal_id: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904',
+                task_id: '4d1b5820-cd8b-417e-8b64-5a8bfe91b842',
+                question_id: null,
+                name: 'Varsha Agarwal',
+                email: 'varsha.goyal@iqvia.com',
+                type: 'user'
+              }
+            ]
+          }
+        });
+      default:
+        return Promise.reject({ status: 404 });
+    }
+  });
 
   test('render Task list component', async () => {
     const { getByText } = render(<TasksListWithRedux />);
@@ -221,7 +259,7 @@ describe('TasksList Unit Tests', () => {
     const emailInput = screen.getByPlaceholderText('Add user');
     fireEvent.change(emailInput, { target: { value: 'owner' } });
 
-    fetch = jest.fn().mockResolvedValue(
+    global.fetch = jest.fn().mockResolvedValue(
       Promise.resolve({
         json: () =>
           Promise.resolve({
@@ -284,6 +322,10 @@ describe('TasksList Unit Tests', () => {
       )
     ).toBeVisible();
     fireEvent.click(screen.getByText('Continue'));
+
+    const saveBtn = screen.getByRole('button', { name: 'Save' });
+    expect(saveBtn).toBeEnabled();
+    fireEvent.click(saveBtn);
   });
 
   test('drag and drop task', async () => {
