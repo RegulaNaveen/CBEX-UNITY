@@ -90,6 +90,10 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [showInputImmediately, setShowInputImmediately] = useState(false);
+  const [areButtonsDisabled, setAreButtonsDisabled] = useState(true);
+  const [autocompleteValue, setAutocompleteValue] = useState('');
+  const [resetToDefault, setResetToDefault] = useState(false);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -122,6 +126,11 @@ const TasksList = () => {
   };
 
   useEffect(() => {
+    // if bid is changed
+    setResetToDefault(true);
+  }, [proposalId]);
+
+  useEffect(() => {
     let tasksGroup = {
       1: [],
       2: [],
@@ -149,9 +158,10 @@ const TasksList = () => {
             const ownersCount = task?.task_role?.length;
             return { ...task, ownersCount };
           }),
-        expanded: isEmpty(tasksGroupsByDay)
-          ? isCorrectDay(dateForDay)
-          : tasksGroupsByDay[day].expanded,
+        expanded:
+          isEmpty(tasksGroupsByDay) || resetToDefault
+            ? isCorrectDay(dateForDay)
+            : tasksGroupsByDay[day].expanded,
         date: dateForDay,
         dateFormatted: dateForDay.format('DD MMM'),
         uncompletedCount: tasksForADay.filter(task => !task.is_completed)
@@ -170,7 +180,15 @@ const TasksList = () => {
     }
 
     setTasksGroupsByDay(tasksGroup);
-  }, [tasks]);
+    if (resetToDefault) {
+      setResetToDefault(false);
+    }
+  }, [tasks, proposalId]);
+
+  useEffect(() => {
+    if (resetToDefault) {
+    }
+  }, [resetToDefault]);
 
   const updateOwnersCount = (taskId, newCount) => {
     setTasksGroupsByDay(prevTasksGroups => {
@@ -279,11 +297,13 @@ const TasksList = () => {
   const openModal = task_id => {
     setTaskId(task_id);
     setIsModalOpen(true);
+    setAreButtonsDisabled(true);
   };
 
   const closeModal = () => {
     setTaskId(null);
     setIsModalOpen(false);
+    setAreButtonsDisabled(true);
   };
 
   return (
@@ -316,7 +336,8 @@ const TasksList = () => {
                         className={classNames('header-title', {
                           'font-bold': bidCreatedDate.isValid()
                             ? isCorrectDay(tasksGroup.date)
-                            : false
+                            : false,
+                          'font-color-grey': tasksGroup.dayDiffFromToday < 0
                         })}
                       >
                         Day {day}{' '}
@@ -350,6 +371,12 @@ const TasksList = () => {
                         day={day}
                         proposalId={proposalId}
                         openModal={openModal}
+                        setShowInputImmediately={setShowInputImmediately}
+                        setAreButtonsDisabled={setAreButtonsDisabled}
+                        areButtonsDisabled={areButtonsDisabled}
+                        autocompleteValue={autocompleteValue}
+                        setAutocompleteValue={setAutocompleteValue}
+
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -369,6 +396,12 @@ const TasksList = () => {
           taskId={taskId}
           tasks={tasks}
           updateOwnersCount={updateOwnersCount}
+          showInputImmediately={showInputImmediately}
+          areButtonsDisabled={areButtonsDisabled}
+          setAreButtonsDisabled={setAreButtonsDisabled}
+          setShowInputImmediately={setShowInputImmediately}
+          autocompleteValue={autocompleteValue}
+          setAutocompleteValue={setAutocompleteValue}
         />
       </TaskListToolbarMenuPortal>
     </div>
