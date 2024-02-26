@@ -8,9 +8,11 @@ import { TASKS } from '../../../../../constants/types';
 import moment from 'moment';
 
 describe('Add Task Unit Tests', () => {
+  const setAreButtonsDisabled = jest.fn();
   const props = {
     day: 1,
-    proposalId: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904'
+    proposalId: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904',
+    setAreButtonsDisabled
   };
 
   test('renders Add new task button', () => {
