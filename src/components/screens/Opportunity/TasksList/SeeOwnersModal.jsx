@@ -25,7 +25,13 @@ const SeeOwners = ({
   closeModal,
   setIsModalOpen,
   taskId,
-  updateOwnersCount
+  updateOwnersCount,
+  showInputImmediately,
+  setShowInputImmediately,
+  setAreButtonsDisabled,
+  areButtonsDisabled,
+  autocompleteValue,
+  setAutocompleteValue
 }) => {
   const [taskDescriptions, setTaskDescriptions] = useState('');
   const [showInput, setShowInput] = useState(false);
@@ -40,7 +46,7 @@ const SeeOwners = ({
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [userToRemoveIndex, setUserToRemoveIndex] = useState(null);
-  const [areButtonsDisabled, setAreButtonsDisabled] = useState(true); // Initially, the buttons are disabled
+
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const tasks = useSelector(selectTasksList);
   const dispatch = useDispatch();
@@ -83,7 +89,7 @@ const SeeOwners = ({
     } else if (task) {
       setSelectedTask(task);
     }
-  }, [taskId, isModalOpen, tasks]);
+  }, [taskId, isModalOpen, tasks, proposalTeamQuestions]);
 
   const processRole = value => {
     const data = [];
@@ -131,9 +137,14 @@ const SeeOwners = ({
       ...handlePayload,
       { name, email, type: 'user', event: 'add' }
     ]);
+    if (autocompleteValue) {
+      setAutocompleteValue(newValue);
+    }
 
+    setAreButtonsDisabled(false);
     setValue(null);
     setShowInput(false);
+    setShowInputImmediately(false);
     setButtonDisabled(false); // Enable the button after a user is added
   };
 
@@ -176,12 +187,14 @@ const SeeOwners = ({
       // Reset state variables when the modal is closed
       setTaskDescriptions('');
       setSelectedTask(null);
+      setAreButtonsDisabled(true);
     }
   }, [isModalOpen, taskId]);
 
   const handleCancel = () => {
     setIsModalOpen(false);
     setShowInput(false);
+    setShowInputImmediately(false);
     setButtonDisabled(false);
     setAreButtonsDisabled(true);
   };
@@ -189,6 +202,7 @@ const SeeOwners = ({
   const handleClose = () => {
     setIsModalOpen(false);
     setShowInput(false);
+    setShowInputImmediately(false);
     setButtonDisabled(false);
     setAreButtonsDisabled(true);
     setSelectedTask(null);
@@ -344,6 +358,14 @@ const SeeOwners = ({
     setUserToRemoveIndex(null);
   };
 
+  useEffect(() => {
+    if (showInput || showInputImmediately) {
+      if (autocompleteField.current) {
+        autocompleteField.current.querySelector('input').focus();
+      }
+    }
+  });
+
   return (
     <>
       {isModalOpen && (
@@ -368,7 +390,7 @@ const SeeOwners = ({
                   onClick={() => {
                     setShowInput(true);
                     setButtonDisabled(true);
-                    setAreButtonsDisabled(false);
+                    setShowInputImmediately(false);
                     setTimeout(() => {
                       autocompleteField.current.scrollIntoView({
                         behavior: 'smooth'
@@ -406,7 +428,7 @@ const SeeOwners = ({
                       )
                   )}
                 </div>
-                {showInput && (
+                {(showInput || showInputImmediately) && (
                   <div className="add-user-input">
                     <hr className="input-divider" />
                     <div className="autocomplete-container">

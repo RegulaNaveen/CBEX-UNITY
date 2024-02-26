@@ -497,18 +497,32 @@ export const editRoleFromSocket = (roleData, proposalId) => {
       });
       try {
         // Here, roleData is an array of updated roles
-        if (Array.isArray(roleData) && roleData.length > 0) {
-          // Check if roleData is an array
-          const task_list_id = roleData[0].task_list_id;
-          const taskIndex = tasksList.findIndex(
-            task => task.id === task_list_id && task.proposal_id === proposalId
-          );
-          if (taskIndex > -1) {
-            tasksList[taskIndex].task_role = roleData;
-            dispatch({
-              type: SET_TASKS,
-              payload: tasksList
-            });
+        if (Array.isArray(roleData)) {
+          if (roleData.length > 0) {
+            const task_list_id = roleData[0].task_list_id;
+            const taskIndex = tasksList.findIndex(
+              task =>
+                task.id === task_list_id && task.proposal_id === proposalId
+            );
+            if (taskIndex > -1) {
+              tasksList[taskIndex].task_role = roleData;
+              dispatch({
+                type: SET_TASKS,
+                payload: tasksList
+              });
+            }
+          } else {
+            // Handle the case when roleData is empty
+            const taskIndex = tasksList.findIndex(
+              task => task.proposal_id === proposalId
+            );
+            if (taskIndex > -1) {
+              tasksList.splice(taskIndex, 1);
+              dispatch({
+                type: SET_TASKS,
+                payload: tasksList
+              });
+            }
           }
         }
       } catch (err) {
