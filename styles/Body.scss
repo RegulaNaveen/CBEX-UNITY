@@ -8,6 +8,11 @@
   src: url('../fonts/ProximaNova-Thin.otf') format('opentype');
 }
 
+@font-face {
+  font-family: $proximaNovaBold;
+  src: url('../fonts/Proxima Nova Bold.otf') format('opentype');
+}
+
 * {
   margin: 0;
   padding: 0;

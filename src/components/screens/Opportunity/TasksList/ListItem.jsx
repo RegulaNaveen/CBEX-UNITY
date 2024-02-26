@@ -324,7 +324,7 @@ function ListItem({
                 data-testid={`drag-group-${day}-item-${index}`}
                 style={{ height: '24px' }}
               >
-                <DragIcon fontSize="small" />
+                <DragIcon className="drag-icon" />
               </span>
               <Checkbox
                 checked={task?.is_completed}
@@ -385,6 +385,7 @@ function ListItem({
                   menuItems={menuItems}
                   size="small"
                   id="task-list-item-menu-btn"
+                  className="task-list-item-menu-btn"
                 >
                   <EllipsisVertical
                     data-testid={`ellipsis-vertical-${index}`}
