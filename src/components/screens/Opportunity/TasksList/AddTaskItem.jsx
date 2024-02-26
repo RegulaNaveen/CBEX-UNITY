@@ -139,7 +139,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
         <Button
           icon={<PlusIcon />}
           size="small"
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, marginLeft: -6 }}
           onClick={handleAddNewTask}
           disabled={showAddTask}
         >
