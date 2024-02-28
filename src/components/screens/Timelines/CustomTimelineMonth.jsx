@@ -98,7 +98,7 @@ class MonthView extends React.Component {
     let currentDate = new Date(startDate);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
-      currentDate = currentDate.setDate(currentDate.getDate() + 1);
+      currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
     }
     return dates;
   };
@@ -202,9 +202,9 @@ class MonthView extends React.Component {
           {moment(this.props.timelineDateRange[0])
             .format('MMMM')
             .toString() ===
-          moment(this.props.timelineDateRange[1])
-            .format('MMMM')
-            .toString() ? (
+            moment(this.props.timelineDateRange[1])
+              .format('MMMM')
+              .toString() ? (
             <div className="month-range-label">{`${moment(
               this.props.timelineDateRange[1]
             ).format('MMMM YYYY')}`}</div>
