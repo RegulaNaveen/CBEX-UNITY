@@ -88,17 +88,17 @@ const TasksList = () => {
   const proposalId = selectedBid.id;
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
+  const showMine = useSelector(state => state.tasks.showMine);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [showInputImmediately, setShowInputImmediately] = useState(false);
   const [areButtonsDisabled, setAreButtonsDisabled] = useState(true);
   const [autocompleteValue, setAutocompleteValue] = useState('');
   const [resetToDefault, setResetToDefault] = useState(false);
-
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const editable = selectedBid.isEditable;
-
+  const userName = localStorage.getItem('userName');
   const { getTaskLockDetailsWrapper } = useContext(SocketContext);
 
   const dispatch = useDispatch();
@@ -143,7 +143,13 @@ const TasksList = () => {
       9: [],
       10: []
     };
-    tasksGroup = merge(tasksGroup, groupBy(tasks, 'no_of_units'));
+    const tasksToShow = showMine
+      ? tasks.filter(
+          task =>
+            task.task_role && task.task_role.some(role => role.name == userName)
+        )
+      : tasks;
+    tasksGroup = merge(tasksGroup, groupBy(tasksToShow, 'no_of_units'));
     Object.entries(tasksGroup).forEach(([day, tasksForADay]) => {
       let dateForDay;
       if (day === '1') {
@@ -183,7 +189,7 @@ const TasksList = () => {
     if (resetToDefault) {
       setResetToDefault(false);
     }
-  }, [tasks, proposalId]);
+  }, [tasks, proposalId, showMine, userName]);
 
   useEffect(() => {
     if (resetToDefault) {
