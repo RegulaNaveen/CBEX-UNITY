@@ -19,11 +19,8 @@ const AddNewTask = ({
   day,
   proposalId,
   openModal,
-  setShowInputImmediately,
-  setAreButtonsDisabled,
-  areButtonsDisabled,
-  autocompleteValue,
-  setAutocompleteValue
+  setIsNewTask,
+  setSaveButtonDisable
 }) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
@@ -69,6 +66,8 @@ const AddNewTask = ({
       if (result) {
         setTaskId(result.task_id);
         setShowAddTask(false);
+        const payload = { result, isNew: true };
+        setIsNewTask(payload);
       }
       setShowLoader(false);
     } else {
@@ -81,12 +80,9 @@ const AddNewTask = ({
       openModal(taskId);
       setShowModal(false);
       setTaskId(null);
+      setSaveButtonDisable(false);
     }
   }, [showModal, taskId]);
-
-  useEffect(() => {
-    setAreButtonsDisabled(false);
-  }, [autocompleteValue, setAutocompleteValue]);
 
   return (
     <>
@@ -111,8 +107,6 @@ const AddNewTask = ({
                   disabled={!showAddOwner}
                   onClick={() => {
                     setShowModal(true);
-                    setShowInputImmediately(true);
-                    setAreButtonsDisabled(true);
                   }}
                 >
                   Add Owner
