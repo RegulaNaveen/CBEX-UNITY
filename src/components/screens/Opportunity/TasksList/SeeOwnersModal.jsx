@@ -7,14 +7,9 @@ import UserIcon from 'apollo-react-icons/User';
 // import TextField from 'apollo-react/components/TextField';
 import Autocomplete from 'apollo-react/components/Autocomplete';
 import { API } from '../../../../constants';
-import { debounce } from 'lodash';
-import { getData } from '../../../../api/proposal';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../../../../SessionHandler';
-import { getQuestion } from '../../../../redux/selectors';
 import { useSelector } from 'react-redux';
-import { selectSections } from '../../../../redux/selectors';
 import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
-import { updateTaskListApi } from '../../../../api/tasksList';
 import { updateTaskById } from '../../../../redux/actions/tasksList-actions';
 import { useDispatch } from 'react-redux';
 import { selectTasksList } from '../../../../redux/selectors/tasks';
@@ -24,19 +19,17 @@ const SeeOwners = ({
   isModalOpen,
   closeModal,
   setIsModalOpen,
-  taskId,
-  updateOwnersCount,
-  showInputImmediately,
-  setShowInputImmediately,
-  setAreButtonsDisabled,
-  areButtonsDisabled,
-  autocompleteValue,
-  setAutocompleteValue
+  ownersCount,
+  setIsNewTask,
+  isNewTask,
+  task
 }) => {
-  const [taskDescriptions, setTaskDescriptions] = useState('');
+  const description = isNewTask?.isNew
+    ? isNewTask?.result?.description
+    : task?.description;
+
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
-
   const [value, setValue] = useState(null);
   const [options, setOptions] = useState([]);
   const [getNoOptionsText, setNoOptionsText] = useState(1);
@@ -54,21 +47,29 @@ const SeeOwners = ({
   const autocompleteField = useRef(null);
   const userName = localStorage.getItem('userName');
   const email = localStorage.getItem('userEmail');
-
+  const len = selectedUsers.filter(value => !value?.new)?.length;
   useEffect(() => {
-    const task = tasks.find(task => task?.task_id === taskId);
     const roles = [];
     if (task && Array.isArray(task.task_role)) {
       task?.task_role.forEach(role => {
+        const { questionText, data: question_answers } = processRole(
+          role?.question_id
+        );
         if (role.type === 'roles') {
-          const { questionText, data: question_answers } = processRole(
-            role.question_id
-          );
-          for (let answer = 0; answer < question_answers?.length; answer++) {
+          if (question_answers?.length > 0) {
+            for (let answer = 0; answer < question_answers?.length; answer++) {
+              roles.push({
+                id: role.id,
+                name: question_answers[answer]?.name,
+                email: question_answers[answer]?.email,
+                questionText,
+                question_id: role.question_id,
+                type: role.type
+              });
+            }
+          } else {
             roles.push({
               id: role.id,
-              name: question_answers[answer]?.name,
-              email: question_answers[answer]?.email,
               questionText,
               question_id: role.question_id,
               type: role.type
@@ -86,10 +87,10 @@ const SeeOwners = ({
 
       setSelectedUsers(roles);
       setSelectedTask(task);
-    } else if (task) {
-      setSelectedTask(task);
+    } else if (isNewTask && isNewTask?.isNew) {
+      setSelectedTask(isNewTask?.result);
     }
-  }, [taskId, isModalOpen, tasks, proposalTeamQuestions]);
+  }, [proposalTeamQuestions, task, isModalOpen]);
 
   const processRole = value => {
     const data = [];
@@ -98,11 +99,11 @@ const SeeOwners = ({
     );
     let questionText = '';
     if (question) {
+      questionText = question.questionText;
       const answer = question.answers;
       if (answer && answer.length) {
         const lastAnswer = answer[answer.length - 1];
         const answerData = lastAnswer.answer;
-        questionText = question.questionText;
 
         if (answerData && answerData.length) {
           try {
@@ -113,8 +114,8 @@ const SeeOwners = ({
                 if (splitName) {
                   const name = splitName[0].trim();
                   const email = splitName[1]
-                    .substring(0, splitName[1].length - 1)
-                    .trim();
+                    ? splitName[1].substring(0, splitName[1].length - 1).trim()
+                    : '';
                   data.push({ name, email });
                 }
               }
@@ -132,20 +133,19 @@ const SeeOwners = ({
     const splitName = newValue.label.split('(');
     const name = splitName[0].trim();
     const email = splitName[1].substring(0, splitName[1].length - 1).trim();
-    setSelectedUsers([...selectedUsers, { name, email, type: 'user' }]);
+    const usersList = [
+      ...selectedUsers,
+      { name, email, type: 'user', new: true }
+    ];
+    setSelectedUsers(usersList);
     setHandlePayload([
       ...handlePayload,
       { name, email, type: 'user', event: 'add' }
     ]);
-    if (autocompleteValue) {
-      setAutocompleteValue(newValue);
-    }
-
-    setAreButtonsDisabled(false);
-    setValue(null);
+    setValue('');
+    setInputValue('');
     setShowInput(false);
-    setShowInputImmediately(false);
-    setButtonDisabled(false); // Enable the button after a user is added
+    setButtonDisabled(false);
   };
 
   const handleSave = () => {
@@ -174,60 +174,43 @@ const SeeOwners = ({
       }
     });
     dispatch(updateTaskById(proposal_id, id, payload)).then(() => {
+      if (isNewTask && isNewTask?.isNew) {
+        setIsNewTask({ result: {}, isNew: false });
+      }
       setIsModalOpen(false);
-      setSelectedTask(null);
-      setHandlePayload([]);
-      setSelectedUsers([]);
-      updateOwnersCount(task_id, selectedUsers.length);
     });
   };
 
   useEffect(() => {
     if (!isModalOpen) {
-      // Reset state variables when the modal is closed
-      setTaskDescriptions('');
       setSelectedTask(null);
-      setAreButtonsDisabled(true);
     }
-  }, [isModalOpen, taskId]);
+  }, []);
 
   const handleCancel = () => {
     setIsModalOpen(false);
     setShowInput(false);
-    setShowInputImmediately(false);
     setButtonDisabled(false);
-    setAreButtonsDisabled(true);
+    if (isNewTask && isNewTask?.isNew) {
+      setIsNewTask({ result: {}, isNew: false });
+    }
   };
 
   const handleClose = () => {
     setIsModalOpen(false);
     setShowInput(false);
-    setShowInputImmediately(false);
     setButtonDisabled(false);
-    setAreButtonsDisabled(true);
     setSelectedTask(null);
     setSelectedUsers([]);
     closeModal();
+    if (isNewTask && isNewTask?.isNew) {
+      setIsNewTask({ result: {}, isNew: false });
+    }
   };
 
   const handleCloseInnerModal = () => {
     setShowWarningModal(false);
   };
-
-  useEffect(() => {
-    const task = tasks.find(task => task?.task_id === taskId);
-    if (task) {
-      setTaskDescriptions(task.description);
-      updateOwnersCount(task?.task_id, selectedUsers.length);
-    }
-  }, [
-    taskId,
-    tasks,
-    isModalOpen,
-    taskDescriptions,
-    selectedTask,
-    selectedUsers
-  ]);
 
   const getData = async searchTerm => {
     if (previousController.current) {
@@ -269,7 +252,6 @@ const SeeOwners = ({
   };
 
   const handleRemoveUser = index => {
-    setAreButtonsDisabled(false);
     const users = [...selectedUsers];
 
     const user = users[index];
@@ -317,8 +299,6 @@ const SeeOwners = ({
 
   const handleConfirmRemoveUser = () => {
     setShowWarningModal(false);
-    setAreButtonsDisabled(false);
-    // if (userToRemoveIndex != null) {
     const users = [...selectedUsers];
     const user = users[userToRemoveIndex];
     const removedUser = users.splice(userToRemoveIndex, 1);
@@ -350,7 +330,6 @@ const SeeOwners = ({
 
     setSelectedUsers(users);
     setUserToRemoveIndex(null);
-    // }
   };
 
   const handleCancelRemoveUser = () => {
@@ -359,12 +338,30 @@ const SeeOwners = ({
   };
 
   useEffect(() => {
-    if (showInput || showInputImmediately) {
+    if (showInput || (isNewTask && isNewTask?.isNew)) {
       if (autocompleteField.current) {
         autocompleteField.current.querySelector('input').focus();
       }
     }
   });
+  const checkDisable = () => {
+    if (isNewTask && isNewTask?.isNew) {
+      return selectedUsers.some(value => value?.new) ? false : true;
+    } else if (
+      !isNewTask &&
+      !isNewTask?.isNew &&
+      (selectedUsers.some(value => value?.new) || len != ownersCount)
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (isNewTask && isNewTask?.isNew) {
+      setShowInput(true);
+    }
+  }, [isNewTask]);
 
   return (
     <>
@@ -376,8 +373,8 @@ const SeeOwners = ({
             </button>
             <div className="modal-content">
               <h2>Task Owners</h2>
-              <div className="description" title={taskDescriptions}>
-                {taskDescriptions}
+              <div className="description" title={description}>
+                {description}
               </div>
               <div className="modal-content-common modal-content-2a">
                 <p>Users assigned this task</p>
@@ -386,7 +383,6 @@ const SeeOwners = ({
                   onClick={() => {
                     setShowInput(true);
                     setButtonDisabled(true);
-                    setShowInputImmediately(false);
                     setTimeout(() => {
                       autocompleteField.current.scrollIntoView({
                         behavior: 'smooth'
@@ -403,7 +399,7 @@ const SeeOwners = ({
                   {selectedUsers?.map(
                     (item, index) =>
                       item && (
-                        <div key={item.id} className="user-item">
+                        <div key={index} className="user-item">
                           <div className="user-details">
                             <UserIcon className="user-icon" />
                             <div className="user-info">
@@ -421,7 +417,7 @@ const SeeOwners = ({
                       )
                   )}
                 </div>
-                {(showInput || showInputImmediately) && (
+                {showInput && (
                   <div className="add-user-input">
                     <hr className="input-divider" />
                     <div className="autocomplete-container">
@@ -434,7 +430,7 @@ const SeeOwners = ({
                         value={value}
                         onInputChange={handleInputChange}
                         onChange={handleChange}
-                        popupIcon
+                        forcePopupIcon={false}
                         noOptionsText={
                           getNoOptionsText === 0
                             ? 'No Matches Found'
@@ -447,7 +443,7 @@ const SeeOwners = ({
               </div>
               <div className="modal-buttons">
                 <Button onClick={handleCancel}>Cancel</Button>
-                <Button onClick={handleSave} disabled={areButtonsDisabled}>
+                <Button onClick={handleSave} disabled={checkDisable()}>
                   Save
                 </Button>
               </div>

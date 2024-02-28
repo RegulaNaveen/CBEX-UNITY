@@ -55,6 +55,9 @@
           .drag-icon {
             margin-right: 0.35rem;
           }
+          .MuiButtonBase-root {
+            background-color: white !important;
+          }
           .task-desc {
             flex-grow: 1;
             line-height: 24px;
