@@ -412,7 +412,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
                 data-testid={`drag-group-${day}-item-${index}`}
                 style={{ height: '24px' }}
               >
-                <DragIcon fontSize="small" />
+                <DragIcon className="drag-icon" />
               </span>
               <Checkbox
                 checked={task?.is_completed}
@@ -473,12 +473,14 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
                   menuItems={menuItems}
                   size="small"
                   id="task-list-item-menu-btn"
+                  className="task-list-item-menu-btn"
                 >
                   <EllipsisVertical
                     onClick={() => {
                       calculateOwnersCount();
                       setIsComponentMounted(true); // set the state value to true to mount the component
                     }}
+                    data-testid={`ellipsis-vertical-${index}`}
                   />
                 </IconMenuButton>
               </Tooltip>
