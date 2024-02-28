@@ -11,13 +11,12 @@ import {
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
 // TablePreviewCell component
-function TablePreviewCell({ row, column }) {
+function TablePreviewCell({ row, column, index }) {
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const prevSearchResult = useSelector(selectPrevSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
-
   const dispatch = useDispatch();
 
   const cellRef = useRef(null);
@@ -32,17 +31,17 @@ function TablePreviewCell({ row, column }) {
       const delay =
         prevSearchResult && prevSearchResult.tab !== currentSearchResult.tab
           ? 1500
-          : 700;
+          : 900;
       setTimeout(() => {
         cellRef.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'center',
+          block: 'start',
           inline: 'nearest'
         });
         dispatch(autoNavigationCompletedAction());
       }, delay);
     }
-  }, [currentSearchResult, autoNavigatedToCurrentResult, cellRef.current]);
+  }, [currentSearchResult, autoNavigatedToCurrentResult]);
 
   return (
     <td
@@ -139,14 +138,18 @@ export default function TablePreview({ columns, rows }) {
         </thead>
         <tbody>
           {rows.map(
-            row =>
+            (row, index) =>
               !row.hidden && (
                 <>
                   <tr>
                     {columns.map(column => (
                       <>
                         {row[column.accessor] ? (
-                          <TablePreviewCell row={row} column={column} />
+                          <TablePreviewCell
+                            row={row}
+                            column={column}
+                            index={index}
+                          />
                         ) : (
                           <td className="blankRow"> - </td>
                         )}
