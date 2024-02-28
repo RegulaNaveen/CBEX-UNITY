@@ -253,9 +253,7 @@ const SeeOwners = ({
 
   const handleRemoveUser = index => {
     const users = [...selectedUsers];
-
     const user = users[index];
-
     if (user.type === 'roles') {
       setUserToRemoveIndex(index);
       setShowWarningModal(true);
@@ -277,10 +275,8 @@ const SeeOwners = ({
         const removedUserIndex = handlePayload.findIndex(
           user => user === payloadUser
         );
-
         const payloadUsers = [...handlePayload];
         const updatedPayload = payloadUsers.splice(removedUserIndex, 1);
-
         setHandlePayload(updatedPayload);
       } else {
         const updatedPayload = [...handlePayload]; // creates a new array updatedPayload copy of handlePayload
@@ -292,9 +288,8 @@ const SeeOwners = ({
         });
         setHandlePayload(updatedPayload);
       }
-
-      setSelectedUsers(users);
     }
+    setSelectedUsers(users);
   };
 
   const handleConfirmRemoveUser = () => {
