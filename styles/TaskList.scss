@@ -224,3 +224,74 @@
   margin-top: 21px;
   margin-left: 10px;
 }
+
+/* History Modal */
+.history-modal {
+  .modal-content {
+    .bluegrid {
+      height: 4px !important;
+    }
+    .modal-header {
+      .header-titles {
+        h1 {
+          font-size: 20px;
+        }
+        p {
+          font-size: 16px !important;
+          color: #444444 !important;
+          font-family: 'Proxima Nova', Arial, sans-serif;
+          font-weight: 400 !important;
+        }
+      }
+    }
+    .modal-body {
+      .answer-container {
+        align-items: center;
+        padding: 10px 0 !important;
+        &::before {
+          width: 100% !important;
+          background-color: #d9d9d9 !important;
+        }
+        .main-container {
+          align-items: center;
+          max-width: 80% !important;
+          p {
+            margin-top: 6px !important;
+            .text {
+              color: #595959;
+            }
+            .red {
+              color: #e20000;
+              text-decoration: line-through;
+              margin-right: 4px;
+            }
+            &:first-of-type {
+              font-weight: 500 !important;
+            }
+          }
+          .avatar {
+            background-color: #595959 !important;
+            color: white !important;
+          }
+        }
+        .answer-meta-data {
+          p {
+            font-weight: normal !important;
+            padding-top: 8px !important;
+            font-family: 'Proxima Nova', Arial, sans-serif;
+          }
+        }
+      }
+      .no-history {
+        display: flex;
+        height: calc(100% - 170px);
+        position: absolute;
+        width: calc(100% - 40px);
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+}

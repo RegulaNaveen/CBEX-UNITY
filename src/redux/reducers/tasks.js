@@ -3,7 +3,9 @@ import { TASKS } from '../../constants/types';
 const INITIAL_STATE = {
   tasks: [],
   loading: false,
-  error: ''
+  error: '',
+  taskHistory: [],
+  taskHistoryLoading: false
 };
 
 export default function tasksReducer(state = INITIAL_STATE, action) {
@@ -32,6 +34,16 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         tasks: editTask(state, action)
+      };
+    case TASKS.SET_TASK_HISTORY:
+      return {
+        ...state,
+        taskHistory: action.payload
+      };
+    case TASKS.LOADING_TASK_HISTORY:
+      return {
+        ...state,
+        taskHistoryLoading: action.payload
       };
     default:
       return state;

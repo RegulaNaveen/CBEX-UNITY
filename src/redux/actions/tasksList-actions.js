@@ -5,7 +5,8 @@ import {
   updateTaskListApi,
   updateTaskDescApi,
   setTaskDataApi,
-  editTaskDataApi
+  editTaskDataApi,
+  getTaskHistoryApi
 } from '../../api/tasksList';
 import { getSelectedBid } from '../selectors/proposal';
 import { selectTasksList } from '../selectors/tasks';
@@ -52,6 +53,30 @@ export function fetchTasksList(proposalId) {
       });
     }
   };
+}
+
+export function getTaskHistory(proposalId, taskId) {
+  return async dispatch => {
+    try {
+      dispatch({
+        type: TASKS.LOADING_TASK_HISTORY,
+        payload: true
+      });
+      const response = await getTaskHistoryApi(proposalId, taskId);
+      if(Array.isArray(response.result)) {
+        dispatch({
+          type: TASKS.SET_TASK_HISTORY,
+          payload: response.result
+        });
+        dispatch({
+          type: TASKS.LOADING_TASK_HISTORY,
+          payload: false
+        });
+     }    
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
 
 export function tasksListReordering(proposalId, tasks, taskId = '') {
@@ -522,3 +547,5 @@ export const editRoleFromSocket = (roleData, proposalId) => {
     }
   };
 };
+
+

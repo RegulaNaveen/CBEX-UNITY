@@ -35,6 +35,7 @@ import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
+import HistoryModal from './HistoryModal';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -90,6 +91,7 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -105,21 +107,6 @@ const TasksList = () => {
     },
     [TODAY]
   );
-
-  const getDays = bidDate => {
-    let days = [];
-    let date = moment(bidDate, 'DD MMM YY');
-    date = date.add(1, 'days');
-    let count = 0;
-    while (count < 10) {
-      if (date.day() !== 0 && date.day() !== 6) {
-        days.push(date.format('DD MMM YY'));
-        count++;
-      }
-      date = date.add(1, 'days');
-    }
-    return days;
-  };
 
   useEffect(() => {
     let tasksGroup = {
@@ -286,6 +273,16 @@ const TasksList = () => {
     setIsModalOpen(false);
   };
 
+  const openHistoryModal = task_id => {
+    setTaskId(task_id);
+    setIsHistoryModalOpen(true);
+  };
+
+  const closeHistoryModal = () => {
+    setTaskId(null);
+    setIsHistoryModalOpen(false);
+  };
+
   return (
     <div id="tasks-list-left-section">
       <div className="task-list-header">
@@ -343,6 +340,7 @@ const TasksList = () => {
                         editable={editable}
                         openModal={openModal}
                         ownersCount={task.ownersCount}
+                        openHistoryModal={openHistoryModal}
                       />
                     ))}
                     {selectedBid.isEditable && (
@@ -369,6 +367,12 @@ const TasksList = () => {
           taskId={taskId}
           tasks={tasks}
           updateOwnersCount={updateOwnersCount}
+        />
+        <HistoryModal
+          isHistoryModalOpen={isHistoryModalOpen}
+          closeHistoryModal={closeHistoryModal}
+          taskId={taskId}
+          proposalId={proposalId}
         />
       </TaskListToolbarMenuPortal>
     </div>

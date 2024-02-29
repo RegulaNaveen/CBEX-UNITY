@@ -55,7 +55,8 @@ function ListItem({
   dayDiffFromToday,
   editable,
   openModal,
-  ownersCount
+  ownersCount,
+  openHistoryModal
 }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
@@ -105,7 +106,8 @@ function ListItem({
   }, [descEditRef]);
 
   const handleClick = label => () => {
-    console.log(`You picked ${label}.`);
+    // console.log(`You picked ${label}.`);
+    openHistoryModal(task.task_id);
   };
 
   const handleSeeOwners = text => () => {
