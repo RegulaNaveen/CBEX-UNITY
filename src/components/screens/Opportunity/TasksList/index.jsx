@@ -90,9 +90,8 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
-  const [showInputImmediately, setShowInputImmediately] = useState(false);
-  const [areButtonsDisabled, setAreButtonsDisabled] = useState(true);
-  const [autocompleteValue, setAutocompleteValue] = useState('');
+  const [isNewTask, setIsNewTask] = useState({ result: {}, isNew: false });
+  const [saveButtonDisable, setSaveButtonDisable] = useState(false);
   const [resetToDefault, setResetToDefault] = useState(false);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
@@ -190,21 +189,6 @@ const TasksList = () => {
     }
   }, [resetToDefault]);
 
-  const updateOwnersCount = (taskId, newCount) => {
-    setTasksGroupsByDay(prevTasksGroups => {
-      const updatedTasksGroups = { ...prevTasksGroups };
-      Object.values(updatedTasksGroups).forEach(dayGroup => {
-        const taskToUpdate = dayGroup.tasks.find(
-          task => task.task_id === taskId
-        );
-        if (taskToUpdate) {
-          taskToUpdate.ownersCount = newCount;
-        }
-      });
-      return updatedTasksGroups;
-    });
-  };
-
   function handleDragEnd(result) {
     const { source, destination } = result;
     // dragging outside the list
@@ -297,13 +281,11 @@ const TasksList = () => {
   const openModal = task_id => {
     setTaskId(task_id);
     setIsModalOpen(true);
-    setAreButtonsDisabled(true);
   };
 
   const closeModal = () => {
     setTaskId(null);
     setIsModalOpen(false);
-    setAreButtonsDisabled(true);
   };
 
   return (
@@ -362,8 +344,6 @@ const TasksList = () => {
                         dayDiffFromToday={tasksGroup.dayDiffFromToday}
                         key={`task-item-${day}-${index}`}
                         editable={editable}
-                        openModal={openModal}
-                        ownersCount={task.ownersCount}
                       />
                     ))}
                     {selectedBid.isEditable && (
@@ -371,12 +351,10 @@ const TasksList = () => {
                         day={day}
                         proposalId={proposalId}
                         openModal={openModal}
-                        setShowInputImmediately={setShowInputImmediately}
-                        setAreButtonsDisabled={setAreButtonsDisabled}
-                        areButtonsDisabled={areButtonsDisabled}
-                        autocompleteValue={autocompleteValue}
-                        setAutocompleteValue={setAutocompleteValue}
-
+                        setIsNewTask={setIsNewTask}
+                        isNewTask={isNewTask}
+                        saveButtonDisable={saveButtonDisable}
+                        setSaveButtonDisable={setSaveButtonDisable}
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -388,22 +366,20 @@ const TasksList = () => {
           ))}
         </div>
       </DragDropContext>
-      <TaskListToolbarMenuPortal>
-        <SeeOwners
-          isModalOpen={isModalOpen}
-          closeModal={closeModal}
-          setIsModalOpen={setIsModalOpen}
-          taskId={taskId}
-          tasks={tasks}
-          updateOwnersCount={updateOwnersCount}
-          showInputImmediately={showInputImmediately}
-          areButtonsDisabled={areButtonsDisabled}
-          setAreButtonsDisabled={setAreButtonsDisabled}
-          setShowInputImmediately={setShowInputImmediately}
-          autocompleteValue={autocompleteValue}
-          setAutocompleteValue={setAutocompleteValue}
-        />
-      </TaskListToolbarMenuPortal>
+      {isModalOpen && (
+        <TaskListToolbarMenuPortal>
+          <SeeOwners
+            isModalOpen={isModalOpen}
+            closeModal={closeModal}
+            setIsModalOpen={setIsModalOpen}
+            taskId={taskId}
+            isNewTask={isNewTask}
+            setIsNewTask={setIsNewTask}
+            saveButtonDisable={saveButtonDisable}
+            setSaveButtonDisable={setSaveButtonDisable}
+          />
+        </TaskListToolbarMenuPortal>
+      )}
     </div>
   );
 };

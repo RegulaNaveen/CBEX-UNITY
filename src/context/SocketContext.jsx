@@ -726,7 +726,7 @@ const SocketContextProvider = props => {
 
             case 'TASK_ROLE_UPDATE':
               if (data.data) {
-                editRoleFromSockets(data.data, data.proposalId);
+                editRoleFromSockets(data.data, data.proposalId, data.taskId);
               }
 
             case 'QUESTIONS':

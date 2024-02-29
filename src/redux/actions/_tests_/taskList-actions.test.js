@@ -6,12 +6,16 @@ import {
   setTaskFromSocket,
   updateTaskDesc,
   deleteTask,
+  tasksListMove,
   handleTaskLock,
   handleTaskUnlock,
-  handleMultipleTaskLocks
+  tasksListReordering,
+  handleMultipleTaskLocks,
+  updateTaskListMoveAction,
+  updateTaskListOrderAction
 } from '../tasksList-actions';
 import * as TasklistApis from '../../../api/tasksList';
-import { getSelectedBid } from '../../selectors'; // import the selector
+import * as proposalSelectors from '../../selectors/proposal'; // import the selector
 import * as taskSelectors from '../../selectors/tasks';
 
 describe('taskList actions', () => {
@@ -395,5 +399,102 @@ describe('taskList actions', () => {
         }
       ]
     });
+  });
+
+  it('should handle reordering task within a day', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox
+      .stub(TasklistApis, 'tasksListReorderingApi')
+      .resolves({ result: { source: [{ task_id: 'task_id', order: 1 }] } });
+    await tasksListReordering(
+      '',
+      [{ task_id: 'task_id' }],
+      'task_id'
+    )(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle move task into other day', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id 1',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      },
+      {
+        task_id: 'task_id 2',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox.stub(TasklistApis, 'tasksListMoveApi').resolves({
+      result: {
+        source: [{ task_id: 'task_id 1', order: 1, no_of_units: 1 }],
+        target: [{ task_id: 'task_id 2', order: 1, no_of_units: 2 }]
+      }
+    });
+    await tasksListMove(
+      '',
+      [{ task_id: 'task_id' }],
+      'task_id',
+      2
+    )(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle reordering task within a day | WEB SOCKET', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox
+      .stub(proposalSelectors, 'getSelectedBid')
+      .returns(new Map([['id', 'test']]));
+    await updateTaskListOrderAction({
+      proposalId: 'test',
+      data: { sourceTaskIds: ['task_id'] }
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle move task into other day | WEB SOCKET', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id 1',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      },
+      {
+        task_id: 'task_id 2',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox
+      .stub(proposalSelectors, 'getSelectedBid')
+      .returns(new Map([['id', 'test']]));
+    await updateTaskListMoveAction({
+      proposalId: 'test',
+      data: {
+        sourceTaskIds: ['task_id 2'],
+        source_no_of_units: 1,
+        targetTaskIds: ['task_id'],
+        target_no_of_units: 2
+      }
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
   });
 });
