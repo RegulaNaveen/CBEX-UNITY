@@ -67,7 +67,10 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
   const [showLoader, setShowLoader] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isComponentMounted, setIsComponentMounted] = useState(false);
+  const [isComponentMounted, setIsComponentMounted] = useState({
+    count: 0,
+    mounted: false
+  });
   const [taskId, setTaskId] = useState(null);
   const [ownersCount, setOwnersCount] = useState(0);
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
@@ -385,7 +388,9 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
         }
       });
     }
-    setOwnersCount(roles.length);
+    const count = roles.length; // Calculate count
+    setOwnersCount(count); // Update state
+    setIsComponentMounted({ count, mounted: true });
   };
 
   return (
@@ -477,8 +482,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
                 >
                   <EllipsisVertical
                     onClick={() => {
-                      calculateOwnersCount();
-                      setIsComponentMounted(true); // set the state value to true to mount the component
+                      calculateOwnersCount(); // Trigger calculation of owners count
                     }}
                     data-testid={`ellipsis-vertical-${index}`}
                   />
@@ -502,9 +506,9 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
             isModalOpen={isModalOpen}
             closeModal={closeModal}
             setIsModalOpen={setIsModalOpen}
-            taskId={taskId}
+            taskId={task.task_id}
             task={task}
-            ownersCount={ownersCount}
+            ownersCount={isComponentMounted.count}
           />
         </TaskListToolbarMenuPortal>
       )}

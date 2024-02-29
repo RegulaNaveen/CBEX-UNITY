@@ -174,6 +174,9 @@ const SeeOwners = ({
       }
     });
     dispatch(updateTaskById(proposal_id, id, payload)).then(() => {
+      setSelectedTask(null);
+      setHandlePayload([]);
+      setSelectedUsers([]);
       if (isNewTask && isNewTask?.isNew) {
         setIsNewTask({ result: {}, isNew: false });
       }
@@ -288,8 +291,8 @@ const SeeOwners = ({
         });
         setHandlePayload(updatedPayload);
       }
+      setSelectedUsers(users);
     }
-    setSelectedUsers(users);
   };
 
   const handleConfirmRemoveUser = () => {
