@@ -220,3 +220,7 @@
   overflow: visible;
   word-break: break-all;
 }
+
+.MuiAutocomplete-popper > div > ul {
+  max-height: 175px !important;
+}
