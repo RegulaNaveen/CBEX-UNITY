@@ -92,7 +92,6 @@ const TasksList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [isNewTask, setIsNewTask] = useState({ result: {}, isNew: false });
-  const [saveButtonDisable, setSaveButtonDisable] = useState(false);
   const [resetToDefault, setResetToDefault] = useState(false);
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -359,8 +358,6 @@ const TasksList = () => {
                         openModal={openModal}
                         setIsNewTask={setIsNewTask}
                         isNewTask={isNewTask}
-                        saveButtonDisable={saveButtonDisable}
-                        setSaveButtonDisable={setSaveButtonDisable}
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -381,8 +378,6 @@ const TasksList = () => {
             taskId={taskId}
             isNewTask={isNewTask}
             setIsNewTask={setIsNewTask}
-            saveButtonDisable={saveButtonDisable}
-            setSaveButtonDisable={setSaveButtonDisable}
           />
         </TaskListToolbarMenuPortal>
       )}
