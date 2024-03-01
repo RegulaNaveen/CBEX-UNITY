@@ -59,7 +59,7 @@ const editTask = (state, action) => {
     value => value.task_id === task_id && value.proposal_id === proposal_id
   );
   if (tabIndex > -1) {
-    tasks[tabIndex] = payload;
+    tasks[tabIndex] = { ...tasks[tabIndex], ...payload };
   }
   return tasks;
 };
