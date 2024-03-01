@@ -8,9 +8,11 @@ import { TASKS } from '../../../../../constants/types';
 import moment from 'moment';
 
 describe('Add Task Unit Tests', () => {
+  const setAreButtonsDisabled = jest.fn();
   const props = {
     day: 1,
-    proposalId: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904'
+    proposalId: 'a49ed80a-d782-40c0-9ff4-bbe35eb0e904',
+    setAreButtonsDisabled
   };
 
   test('renders Add new task button', () => {
@@ -32,7 +34,7 @@ describe('Add Task Unit Tests', () => {
     const button = getByText(/Add new task/i);
     fireEvent.click(button);
     const textField = queryByRole('textbox');
-    onchange = jest.fn();
+    // const onchange = jest.fn();
     fireEvent.change(textField, { target: { value: 'New Task' } });
     fireEvent.blur(textField);
   });
@@ -72,7 +74,7 @@ describe('Add Task Unit Tests', () => {
     const button = getByText(/Add new task/i);
     fireEvent.click(button);
     const textField = queryByRole('textbox');
-    onchange = jest.fn();
+    // const onchange = jest.fn();
     fireEvent.change(textField, { target: { value: 'the' } });
     fireEvent.blur(textField);
   });

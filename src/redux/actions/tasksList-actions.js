@@ -111,6 +111,7 @@ export function tasksListReordering(proposalId, tasks, taskId = '') {
       }
     } catch (error) {
       console.log('Error! occurred..', error);
+      return error;
       // Server Error
     } finally {
       dispatch({
@@ -183,7 +184,6 @@ export const setTask = (
     try {
       const taskListResponse = await setTaskDataApi(proposalId, taskData);
       const data = taskListResponse.result;
-      console.log(data);
       if (data) {
         dispatch({
           type: ADD_TASK,
@@ -412,6 +412,7 @@ export const editTaskFromSocket = (
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     const selectedBid = getSelectedBid(getState()).toJS();
+
     if (selectedBid?.id === proposalId) {
       dispatch({
         type: LOADING_TASKS,
@@ -510,23 +511,21 @@ export const handleMultipleTaskLocks = tasksLocksInfo => {
   };
 };
 
-export const editRoleFromSocket = (roleData, proposalId) => {
+export const editRoleFromSocket = (roleData, proposalId, taskId) => {
   return async (dispatch, getState) => {
     const tasksList = selectTasksList(getState());
-    const selectedBid = getSelectedBid(getState()).toJS(); // Get the selected bid from the state
-    if (tasksList && selectedBid?.id === proposalId) {
-      // Check if the selected bid id is equal to the proposal id
+    const selectedBid = getSelectedBid(getState()).toJS();
+    const task_list_id = taskId;
+    const pId = proposalId;
+    if (tasksList && selectedBid?.id === pId) {
       dispatch({
         type: LOADING_TASKS,
         payload: true
       });
       try {
-        // Here, roleData is an array of updated roles
-        if (Array.isArray(roleData) && roleData.length > 0) {
-          // Check if roleData is an array
-          const task_list_id = roleData[0].task_list_id;
+        if (Array.isArray(roleData)) {
           const taskIndex = tasksList.findIndex(
-            task => task.id === task_list_id && task.proposal_id === proposalId
+            task => task.id == task_list_id && task.proposal_id === pId
           );
           if (taskIndex > -1) {
             tasksList[taskIndex].task_role = roleData;

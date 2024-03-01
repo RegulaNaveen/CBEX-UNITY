@@ -17,7 +17,6 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 40%;
-    height: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -35,7 +34,7 @@
   .modal h2 {
     margin-top: 0;
     color: #000;
-    font-family: 'Proxima Nova';
+    font-family: $proximaNova;
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
@@ -44,7 +43,7 @@
 
   .modal h3 {
     color: #444;
-    font-family: 'Proxima Nova';
+    font-family: $proximaNova;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -70,7 +69,7 @@
     color: #333;
     font-feature-settings: 'clig' off, 'liga' off;
     /* label/text */
-    font-family: 'Proxima Nova';
+    font-family: $proximaNova;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -95,7 +94,6 @@
     border: 1px solid #e6e6e6;
     padding: 10px;
     margin-top: 2px;
-    height: 160px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -179,7 +177,7 @@
     -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
     overflow: hidden;
-    font-family: 'Proxima Nova';
+    font-family: $proximaNova;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -216,4 +214,13 @@
 .warning-modal {
   width: 30%;
   height: 30%;
+}
+.MuiAutocomplete-popper > div > ul > li > span {
+  white-space: normal;
+  overflow: visible;
+  word-break: break-all;
+}
+
+.MuiAutocomplete-popper > div > ul {
+  max-height: 175px !important;
 }

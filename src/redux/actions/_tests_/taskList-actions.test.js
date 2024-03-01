@@ -3,10 +3,20 @@ import {
   fetchTasksList,
   setTask,
   editTask,
-  setTaskFromSocket
+  setTaskFromSocket,
+  updateTaskDesc,
+  deleteTask,
+  tasksListMove,
+  handleTaskLock,
+  handleTaskUnlock,
+  tasksListReordering,
+  handleMultipleTaskLocks,
+  updateTaskListMoveAction,
+  updateTaskListOrderAction
 } from '../tasksList-actions';
 import * as TasklistApis from '../../../api/tasksList';
-import { getSelectedBid } from '../../selectors'; // import the selector
+import * as proposalSelectors from '../../selectors/proposal'; // import the selector
+import * as taskSelectors from '../../selectors/tasks';
 
 describe('taskList actions', () => {
   let sinonSandbox;
@@ -216,5 +226,275 @@ describe('taskList actions', () => {
       type: 'LOADING_TASKS',
       payload: false
     });
+  });
+
+  it('should delete a task', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'desc'
+      }
+    ]);
+    await deleteTask('task_id')(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: []
+    });
+  });
+
+  it('should update task description', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc'
+      }
+    ]);
+    await updateTaskDesc('task_id', 'new_desc')(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [{ task_id: 'task_id', description: 'new_desc' }]
+    });
+  });
+
+  it('should handle task lock', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id_2');
+    await handleTaskLock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          task_id: 'task_id',
+          description: 'old_desc',
+          proposal_id: 'proposal_id',
+          locked: true,
+          lockedBy: {
+            userId: 'user_id',
+            userEmail: 'user_email',
+            userName: 'user_name'
+          }
+        }
+      ]
+    });
+  });
+
+  it('should handle task unlock', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id_2');
+    await handleTaskUnlock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          task_id: 'task_id',
+          description: 'old_desc',
+          proposal_id: 'proposal_id',
+          locked: false,
+          lockedBy: {}
+        }
+      ]
+    });
+  });
+
+  it('should not handle task lock when same user', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id');
+    await handleTaskLock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it('should not handle task unlock when same user', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id');
+    await handleTaskUnlock({
+      taskId: 'task_id',
+      proposalId: 'proposal_id',
+      userId: 'user_id',
+      userEmail: 'user_email',
+      userName: 'user_name'
+    })(dispatch, () => {});
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it('should handle multiple task locks', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    localStorage.setItem('userId', 'user_id_2');
+    await handleMultipleTaskLocks([
+      {
+        taskId: 'task_id',
+        proposalId: 'proposal_id',
+        userId: 'user_id',
+        userEmail: 'user_email',
+        userName: 'user_name'
+      }
+    ])(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          task_id: 'task_id',
+          description: 'old_desc',
+          proposal_id: 'proposal_id',
+          locked: true,
+          lockedBy: {
+            userId: 'user_id',
+            userEmail: 'user_email',
+            userName: 'user_name'
+          }
+        }
+      ]
+    });
+  });
+
+  it('should handle reordering task within a day', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox
+      .stub(TasklistApis, 'tasksListReorderingApi')
+      .resolves({ result: { source: [{ task_id: 'task_id', order: 1 }] } });
+    await tasksListReordering(
+      '',
+      [{ task_id: 'task_id' }],
+      'task_id'
+    )(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle move task into other day', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id 1',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      },
+      {
+        task_id: 'task_id 2',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox.stub(TasklistApis, 'tasksListMoveApi').resolves({
+      result: {
+        source: [{ task_id: 'task_id 1', order: 1, no_of_units: 1 }],
+        target: [{ task_id: 'task_id 2', order: 1, no_of_units: 2 }]
+      }
+    });
+    await tasksListMove(
+      '',
+      [{ task_id: 'task_id' }],
+      'task_id',
+      2
+    )(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle reordering task within a day | WEB SOCKET', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox
+      .stub(proposalSelectors, 'getSelectedBid')
+      .returns(new Map([['id', 'test']]));
+    await updateTaskListOrderAction({
+      proposalId: 'test',
+      data: { sourceTaskIds: ['task_id'] }
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle move task into other day | WEB SOCKET', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        task_id: 'task_id 1',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      },
+      {
+        task_id: 'task_id 2',
+        description: 'old_desc',
+        proposal_id: 'proposal_id'
+      }
+    ]);
+    sinonSandbox
+      .stub(proposalSelectors, 'getSelectedBid')
+      .returns(new Map([['id', 'test']]));
+    await updateTaskListMoveAction({
+      proposalId: 'test',
+      data: {
+        sourceTaskIds: ['task_id 2'],
+        source_no_of_units: 1,
+        targetTaskIds: ['task_id'],
+        target_no_of_units: 2
+      }
+    })(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledTimes(3);
   });
 });

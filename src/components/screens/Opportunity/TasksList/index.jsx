@@ -73,7 +73,7 @@ const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
 };
 
 const TaskListToolbarMenuPortal = props => {
-  const modalRoot = document.getElementById('modal-wrapper');
+  const modalRoot = document.getElementById('tasklist-modal-wrapper');
   return ReactDOM.createPortal(props.children, modalRoot);
 };
 // Drag & Drop Style
@@ -91,6 +91,9 @@ const TasksList = () => {
   const tasksLoading = useSelector(selectTasksFetching);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
+  const [isNewTask, setIsNewTask] = useState({ result: {}, isNew: false });
+  const [saveButtonDisable, setSaveButtonDisable] = useState(false);
+  const [resetToDefault, setResetToDefault] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
@@ -107,6 +110,11 @@ const TasksList = () => {
     },
     [TODAY]
   );
+
+  useEffect(() => {
+    // if bid is changed
+    setResetToDefault(true);
+  }, [proposalId]);
 
   useEffect(() => {
     let tasksGroup = {
@@ -136,9 +144,10 @@ const TasksList = () => {
             const ownersCount = task?.task_role?.length;
             return { ...task, ownersCount };
           }),
-        expanded: isEmpty(tasksGroupsByDay)
-          ? isCorrectDay(dateForDay)
-          : tasksGroupsByDay[day].expanded,
+        expanded:
+          isEmpty(tasksGroupsByDay) || resetToDefault
+            ? isCorrectDay(dateForDay)
+            : tasksGroupsByDay[day].expanded,
         date: dateForDay,
         dateFormatted: dateForDay.format('DD MMM'),
         uncompletedCount: tasksForADay.filter(task => !task.is_completed)
@@ -157,22 +166,15 @@ const TasksList = () => {
     }
 
     setTasksGroupsByDay(tasksGroup);
-  }, [tasks]);
+    if (resetToDefault) {
+      setResetToDefault(false);
+    }
+  }, [tasks, proposalId]);
 
-  const updateOwnersCount = (taskId, newCount) => {
-    setTasksGroupsByDay(prevTasksGroups => {
-      const updatedTasksGroups = { ...prevTasksGroups };
-      Object.values(updatedTasksGroups).forEach(dayGroup => {
-        const taskToUpdate = dayGroup.tasks.find(
-          task => task.task_id === taskId
-        );
-        if (taskToUpdate) {
-          taskToUpdate.ownersCount = newCount;
-        }
-      });
-      return updatedTasksGroups;
-    });
-  };
+  useEffect(() => {
+    if (resetToDefault) {
+    }
+  }, [resetToDefault]);
 
   function handleDragEnd(result) {
     const { source, destination } = result;
@@ -313,7 +315,8 @@ const TasksList = () => {
                         className={classNames('header-title', {
                           'font-bold': bidCreatedDate.isValid()
                             ? isCorrectDay(tasksGroup.date)
-                            : false
+                            : false,
+                          'font-color-grey': tasksGroup.dayDiffFromToday < 0
                         })}
                       >
                         Day {day}{' '}
@@ -338,8 +341,6 @@ const TasksList = () => {
                         dayDiffFromToday={tasksGroup.dayDiffFromToday}
                         key={`task-item-${day}-${index}`}
                         editable={editable}
-                        openModal={openModal}
-                        ownersCount={task.ownersCount}
                         openHistoryModal={openHistoryModal}
                       />
                     ))}
@@ -348,6 +349,10 @@ const TasksList = () => {
                         day={day}
                         proposalId={proposalId}
                         openModal={openModal}
+                        setIsNewTask={setIsNewTask}
+                        isNewTask={isNewTask}
+                        saveButtonDisable={saveButtonDisable}
+                        setSaveButtonDisable={setSaveButtonDisable}
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -359,22 +364,30 @@ const TasksList = () => {
           ))}
         </div>
       </DragDropContext>
-      <TaskListToolbarMenuPortal>
-        <SeeOwners
-          isModalOpen={isModalOpen}
-          closeModal={closeModal}
-          setIsModalOpen={setIsModalOpen}
-          taskId={taskId}
-          tasks={tasks}
-          updateOwnersCount={updateOwnersCount}
-        />
-        <HistoryModal
-          isHistoryModalOpen={isHistoryModalOpen}
-          closeHistoryModal={closeHistoryModal}
-          taskId={taskId}
-          proposalId={proposalId}
-        />
-      </TaskListToolbarMenuPortal>
+      {isModalOpen && (
+        <TaskListToolbarMenuPortal>
+          <SeeOwners
+            isModalOpen={isModalOpen}
+            closeModal={closeModal}
+            setIsModalOpen={setIsModalOpen}
+            taskId={taskId}
+            isNewTask={isNewTask}
+            setIsNewTask={setIsNewTask}
+            saveButtonDisable={saveButtonDisable}
+            setSaveButtonDisable={setSaveButtonDisable}
+          />
+        </TaskListToolbarMenuPortal>
+      )}
+      {isHistoryModalOpen && (
+        <TaskListToolbarMenuPortal>
+          <HistoryModal
+            isHistoryModalOpen={isHistoryModalOpen}
+            closeHistoryModal={closeHistoryModal}
+            taskId={taskId}
+            proposalId={proposalId}
+          />
+        </TaskListToolbarMenuPortal>
+      )}
     </div>
   );
 };

@@ -3,7 +3,8 @@ import React, {
   useEffect,
   useMemo,
   useState,
-  useContext
+  useContext,
+  useRef
 } from 'react';
 import Grid from 'apollo-react/components/Grid';
 import TextField from 'apollo-react/components/TextField';
@@ -14,19 +15,34 @@ import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
 import Loader from 'apollo-react/components/Loader';
 
-const AddNewTask = ({ day, proposalId, openModal }) => {
+const AddNewTask = ({
+  day,
+  proposalId,
+  openModal,
+  setIsNewTask,
+  setSaveButtonDisable
+}) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [showLoader, setShowLoader] = useState(false);
+  const [descEditRef, setDescEditRef] = useState(null);
 
+  useEffect(() => {
+    if (descEditRef) {
+      const descInput = descEditRef.querySelector('input');
+      if (descInput) {
+        descInput.focus();
+      }
+    }
+  }, [descEditRef]);
   const handleAddNewTask = () => {
     setShowAddTask(true);
+    setShowAddOwner(false);
   };
   const dispatch = useDispatch();
   const socketContext = useContext(SocketContext);
-
   const handleValueChange = useCallback(e => {
     const description = e.target.value;
     if (description.length > 3) {
@@ -50,7 +66,8 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
       if (result) {
         setTaskId(result.task_id);
         setShowAddTask(false);
-        // setShowAddOwner(false);
+        const payload = { result, isNew: true };
+        setIsNewTask(payload);
       }
       setShowLoader(false);
     } else {
@@ -63,6 +80,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
       openModal(taskId);
       setShowModal(false);
       setTaskId(null);
+      setSaveButtonDisable(false);
     }
   }, [showModal, taskId]);
 
@@ -74,6 +92,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
             <Grid container>
               <Grid xs={8}>
                 <TextField
+                  ref={_ref => setDescEditRef(_ref)}
                   onChange={handleValueChange}
                   onBlur={handleInputBlur}
                   fullWidth
@@ -86,7 +105,9 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                 <Button
                   variant="secondary"
                   disabled={!showAddOwner}
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
                 >
                   Add Owner
                   {showLoader && (
@@ -96,7 +117,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
                           style={{
                             display: 'flex',
                             height: '24px',
-                            marginRight: '20px'
+                            marginRight: '25px'
                           }}
                         >
                           <span
@@ -129,7 +150,7 @@ const AddNewTask = ({ day, proposalId, openModal }) => {
         <Button
           icon={<PlusIcon />}
           size="small"
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, marginLeft: -6 }}
           onClick={handleAddNewTask}
           disabled={showAddTask}
         >
