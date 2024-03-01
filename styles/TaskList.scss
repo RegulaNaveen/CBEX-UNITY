@@ -249,3 +249,10 @@
   margin-top: 21px;
   margin-left: 10px;
 }
+.search-result-highlight {
+  background-color: #0557d559;
+  .ellipsis {
+    background-color: #0557d559 !important;
+    visibility: hidden;
+  }
+}

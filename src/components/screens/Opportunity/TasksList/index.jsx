@@ -3,7 +3,8 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState
+  useState,
+  useRef
 } from 'react';
 import ReactDOM from 'react-dom';
 import Accordion from 'apollo-react/components/Accordion';
@@ -35,6 +36,13 @@ import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
+
+import {
+  selectQuery,
+  selectCurrentSearchResult,
+  selectAutoNavigatedToCurrentResult,
+  selectPrevSearchResult
+} from '../../../../redux/selectors/search';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -98,8 +106,13 @@ const TasksList = () => {
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const editable = selectedBid.isEditable;
-
+  const cellRef = useRef(null);
   const { getTaskLockDetailsWrapper } = useContext(SocketContext);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const prevSearchResult = useSelector(selectPrevSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
 
   const dispatch = useDispatch();
 
@@ -183,7 +196,33 @@ const TasksList = () => {
     if (resetToDefault) {
       setResetToDefault(false);
     }
+    //searchWithDay();
   }, [tasks, proposalId]);
+
+  useEffect(() => {
+    if (
+      currentSearchResult !== null &&
+      currentSearchResult.inputText &&
+      !autoNavigatedToCurrentResult
+    ) {
+      setTasksGroupsByDay(prevTasksGroups => {
+        const updatedTasksGroups = { ...prevTasksGroups };
+        Object.values(updatedTasksGroups).forEach(dayGroup => {
+          const taskToUpdate = dayGroup.tasks.find(
+            task => task.id === currentSearchResult.searchIndex
+          );
+          if (taskToUpdate) {
+            dayGroup.expanded = true;
+          } else {
+            dayGroup.expanded = false;
+          }
+        });
+        return updatedTasksGroups;
+      });
+    }
+  }, [currentSearchResult, autoNavigatedToCurrentResult, tasks]);
+
+  const searchWithDay = () => {};
 
   useEffect(() => {
     if (resetToDefault) {
