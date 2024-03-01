@@ -18,7 +18,13 @@ const Header = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'baseline'
+      }}
+    >
       <Typography variant="h3">Task List</Typography>
       <Checkbox
         label="Show Mine"

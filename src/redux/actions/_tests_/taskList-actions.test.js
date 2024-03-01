@@ -564,8 +564,13 @@ describe('taskList actions', () => {
           updated_date: '2024-02-26T07:33:00.788Z'
         }
       ],
-      '67e3e355-b8bd-4114-b377-27898c4603c4'
+      '67e3e355-b8bd-4114-b377-27898c4603c4',
+      573
     )(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'LOADING_TASKS',
+      payload: true
+    });
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_TASKS',
       payload: [
@@ -608,6 +613,11 @@ describe('taskList actions', () => {
           task_history: []
         }
       ]
+    });
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'LOADING_TASKS',
+      payload: false
     });
   });
 });
