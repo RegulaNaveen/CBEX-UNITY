@@ -8,6 +8,7 @@ import StatusNegative from 'apollo-react-icons/StatusNegative';
 import { DayIndicator } from '../../../svg';
 
 const ProgressIndicator = ({ tasksList }) => {
+  // console.log('tasksList', tasksList);
   const [totalTasksCount, setTotalTasksCount] = useState(0); //total tasks count
 
   const [progressBarValue, setProgressBarValue] = useState(0); //progress bar value
@@ -15,23 +16,29 @@ const ProgressIndicator = ({ tasksList }) => {
   const [currentDayIndex, setCurrentDayIndex] = useState(null); //current day index
 
   const [tasksCountTillDate, setTasksCountTillDate] = useState(0); //tasks count till date (current day)
-
-  const totalDays = Array.from({ length: 10 }, (v, i) => i + 1);
-
   const [incompletedTasksCount, setIncompletedTasksCount] = useState(0); //incompleted tasks count
-
   const [taskProgress, setTaskProgress] = useState(false);
-
+  const [totalDays, setTotalDays] = useState([]); //total days count
+  const [maxNoOfUnits, setMaxNoOfUnits] = useState(0); //max no of units
   useEffect(() => {
     let completedTasks = 0;
     let totalCount = 0;
     let totalTasksTillDay = 0;
     let currentDayIndexValue = null;
-
     setTaskProgress(false);
-
     const tasksForDay = Object.values(tasksList);
+    // console.log('tasksForDay', tasksForDay);
     tasksForDay.forEach((task, index) => {
+      if (index === tasksForDay.length - 1 && task?.tasks.length > 0) {
+        let lastTaskInfo = task?.tasks[0];
+        if (lastTaskInfo) {
+          setMaxNoOfUnits(lastTaskInfo?.no_of_units);
+        } else {
+          setMaxNoOfUnits(0);
+        }
+      } else {
+        setMaxNoOfUnits(0);
+      }
       if (task?.dayDiffFromToday === 0) {
         currentDayIndexValue = index;
       }
@@ -42,7 +49,15 @@ const ProgressIndicator = ({ tasksList }) => {
       }
       totalCount += task?.completedCount + task?.uncompletedCount; //count for 10 days
     });
-    if (currentDayIndexValue !== null && currentDayIndexValue >= 0) {
+    if (maxNoOfUnits > 0) {
+      let totalDaysTemp = Array.from({ length: maxNoOfUnits }, (_, i) => i + 1);
+      setTotalDays(totalDaysTemp);
+    }
+    if (currentDayIndexValue === null) {
+      setCurrentDayIndex(0);
+      setTotalTasksCount(totalCount);
+      setTaskProgress(true);
+    } else if (currentDayIndexValue !== null && currentDayIndexValue >= 0) {
       setCurrentDayIndex(currentDayIndexValue);
       setIncompletedTasksCount(totalTasksTillDay - completedTasks);
       setTasksCountTillDate(totalTasksTillDay);
@@ -50,11 +65,11 @@ const ProgressIndicator = ({ tasksList }) => {
       setProgressBarValue(
         Math.round(
           (completedTasks / totalTasksTillDay) *
-            (10 * (currentDayIndexValue + 1))
+            (Math.round(100 / maxNoOfUnits) * (currentDayIndexValue + 1))
         )
       );
     } else {
-      setCurrentDayIndex(9);
+      setCurrentDayIndex(maxNoOfUnits - 1);
       setIncompletedTasksCount(totalTasksTillDay - completedTasks);
       setTasksCountTillDate(totalTasksTillDay);
       setTotalTasksCount(totalCount); //total tasks count of 10 days for previous bids
@@ -73,36 +88,45 @@ const ProgressIndicator = ({ tasksList }) => {
     return () => {
       setTaskProgress(false);
     };
-  }, [tasksList]);
-
+  }, [tasksList, totalTasksCount]);
+  // console.log('currentDayIndexValue', currentDayIndex);
   return (
     <>
       {taskProgress && (
         <div className="progress-bar">
-          {totalDays.map((day, index) => {
-            return (
-              <div
-                key={index}
-                className={
-                  currentDayIndex === index
-                    ? 'indicator-icon show'
-                    : 'indicator-icon hidden'
-                }
-                style={{ width: day * 10 + '%' }}
-              >
+          {totalDays &&
+            totalDays.length > 0 &&
+            totalDays.map((day, index) => {
+              return (
                 <div
+                  key={index}
                   className={
-                    day === 10 ? 'indicator-day day-ten' : 'indicator-day'
+                    currentDayIndex === index
+                      ? 'indicator-icon show'
+                      : 'indicator-icon hidden'
                   }
+                  style={{
+                    width:
+                      currentDayIndex === 0
+                        ? 0
+                        : day * Math.round(100 / maxNoOfUnits) + '%'
+                  }}
                 >
-                  <DayIndicator />
-                  <span
-                    className={day === 10 ? 'ten' : ''}
-                  >{`Day ${day}`}</span>
+                  <div
+                    className={
+                      day === maxNoOfUnits
+                        ? 'indicator-day day-ten'
+                        : 'indicator-day'
+                    }
+                  >
+                    <DayIndicator />
+                    <span className={day === maxNoOfUnits ? 'ten' : ''}>
+                      {currentDayIndex === 0 ? `Day 0` : `Day ${day}`}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
           <LinearProgress variant="determinate" value={progressBarValue} />
           {taskProgress && (
             <div className="task-status">
@@ -114,13 +138,14 @@ const ProgressIndicator = ({ tasksList }) => {
               )}
 
               {/* NO tasks assigned Till date*/}
-              {totalTasksCount > 0 && tasksCountTillDate === 0 && (
-                <Typography className="task-text no-task">
-                  No Tasks Assigned Till Date
-                  <StatusNegative className="status-icon" />{' '}
-                </Typography>
-              )}
-
+              {totalTasksCount > 0 &&
+                tasksCountTillDate === 0 &&
+                currentDayIndex !== 0 && (
+                  <Typography className="task-text no-task">
+                    No Tasks Assigned Till Date
+                    <StatusNegative className="status-icon" />{' '}
+                  </Typography>
+                )}
               {/* Incompleted tasks*/}
               {totalTasksCount > 0 &&
                 tasksCountTillDate > 0 &&
