@@ -23,9 +23,10 @@ html,
 body {
   font-size: 16px;
   height: 100%;
-  scroll-behavior: smooth;
+  scroll-behavior: unset !important;
   font-family: $proximaNovaRegular;
   background-color: #f6f6f6 !important;
+  overflow: auto;
 
   .a-MuiAutocomplete-popper {
     &.disable {

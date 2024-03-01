@@ -35,6 +35,9 @@ describe('ListItem Unit Tests', () => {
   let sinonSandBox;
   beforeAll(() => {
     sinonSandBox = Sinon.createSandbox();
+    const tasklistRoot = document.createElement('div');
+    tasklistRoot.setAttribute('id', 'tasklist-modal-wrapper');
+    document.body.appendChild(tasklistRoot);
   });
 
   afterEach(() => {
