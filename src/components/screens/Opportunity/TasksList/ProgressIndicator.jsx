@@ -87,7 +87,7 @@ const ProgressIndicator = ({ tasksList }) => {
     return () => {
       setTaskProgress(false);
     };
-  }, [tasksList]);
+  }, [tasksList, totalTasksCount]);
   return (
     <>
       {taskProgress && (
