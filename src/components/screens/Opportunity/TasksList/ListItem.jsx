@@ -56,7 +56,14 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
-function ListItem({ index, task, day, dayDiffFromToday, editable }) {
+function ListItem({
+  index,
+  task,
+  day,
+  dayDiffFromToday,
+  editable,
+  openHistoryModal
+}) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);

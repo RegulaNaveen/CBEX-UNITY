@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { getTaskHistory } from '../../../../redux/actions/tasksList-actions';
 import { useSelector } from 'react-redux';
 import { getUserInitials } from '../../../../utils/utils';
-import moment from 'moment';
 import { parseMomentDate } from '../../../../utils/DateUtils';
 import { BID_TYPES } from '../../../../constants/app';
 import Loader from 'apollo-react/components/Loader';
@@ -20,34 +19,15 @@ const HistoryModal = ({
   const taskHistoryLoading = useSelector(
     state => state.tasks.taskHistoryLoading
   );
+  console.log('taskHistory', taskHistory);
   const [headerTitle, setHeaderTitle] = useState('');
-  // console.log('taskHistory', taskHistory);
   useEffect(() => {
     if (taskId) dispatch(getTaskHistory(proposalId, taskId));
-
     return () => {
       dispatch({ type: 'SET_TASK_HISTORY', payload: [] });
+      document.body.classList.remove('no-scroll');
     };
   }, [proposalId, taskId]);
-
-  // const getTaskStatus = item => {
-  //   //action: "task_created"
-  //   if (item?.action === 'task_created') {
-  //     return 'Task Created';
-  //   }
-  //   if (item?.action === 'description') {
-  //     return item?.value?.newValue ? 'Edit Task' : '';
-  //   }
-  //   if (item.action === 'is_completed') {
-  //     return item?.value?.newValue ? 'Completed' : 'Marked as Uncompleted';
-  //   }
-  //   if (item?.action === 'reorder') {
-  //     return 'Task Order Changed';
-  //   }
-  //   if (item?.action === 'task_role') {
-  //     return 'Change to Owner';
-  //   }
-  // };
 
   const getTaskStatus = item => {
     switch (item?.action) {
@@ -78,10 +58,7 @@ const HistoryModal = ({
 
   if (isHistoryModalOpen) {
     document.body.classList.add('no-scroll');
-  } else {
-    document.body.classList.remove('no-scroll');
   }
-
   let bidType = '';
   let bidNo = '';
   const renderContent = () => {
@@ -119,8 +96,14 @@ const HistoryModal = ({
                     )}
                   {/* {item?.action === 'task_role' && (
                     <p>
-                      <span className="red">{item?.value?.oldValue} </span>
-                      <span className="text">{item?.value?.newValue}</span>
+                      <span className="red">
+                        {item?.value?.newValue[0]?.name} {'  '}(
+                        {item?.value?.newValue[0]?.email})
+                      </span>
+                      <span className="text">
+                        {item?.value?.oldValue[0]?.name} {'  '}(
+                        {item?.value?.oldValue[0]?.email})
+                      </span>
                     </p>
                   )} */}
                   {item?.action === 'task_created' && (
