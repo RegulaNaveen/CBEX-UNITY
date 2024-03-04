@@ -119,8 +119,7 @@ function ListItem({
     }
   }, [descEditRef]);
 
-  const handleClick = label => () => {
-    // console.log(`You picked ${label}.`);
+  const handleHistoryClick = () => {
     openHistoryModal(task.task_id);
   };
 
@@ -243,7 +242,7 @@ function ListItem({
           <Typography className="menu-item-label">History</Typography>
         </div>
       ),
-      onClick: handleClick('History')
+      onClick: handleHistoryClick
     },
     {
       text: (

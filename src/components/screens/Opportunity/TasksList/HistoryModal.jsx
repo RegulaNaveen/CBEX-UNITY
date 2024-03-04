@@ -7,6 +7,8 @@ import { getUserInitials } from '../../../../utils/utils';
 import { parseMomentDate } from '../../../../utils/DateUtils';
 import { BID_TYPES } from '../../../../constants/app';
 import Loader from 'apollo-react/components/Loader';
+import { selectTasksList } from '../../../../redux/selectors/tasks';
+import moment from 'moment';
 
 const HistoryModal = ({
   isHistoryModalOpen,
@@ -14,13 +16,15 @@ const HistoryModal = ({
   taskId,
   proposalId
 }) => {
-  const dispatch = useDispatch();
+  const [headerTitle, setHeaderTitle] = useState('');
+  const [taskCreatedDate, setTaskCreatedDate] = useState('');
   const taskHistory = useSelector(state => state.tasks.taskHistory);
   const taskHistoryLoading = useSelector(
     state => state.tasks.taskHistoryLoading
   );
-  console.log('taskHistory', taskHistory);
-  const [headerTitle, setHeaderTitle] = useState('');
+  const tasks = useSelector(selectTasksList);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (taskId) dispatch(getTaskHistory(proposalId, taskId));
     return () => {
@@ -56,11 +60,55 @@ const HistoryModal = ({
     }
   };
 
+  const renderTaskRoles = item => {
+    let oldRoles = [];
+    let newRoles = [];
+
+    if (item?.value?.oldValue) {
+      item?.value?.oldValue?.map((role, index) => {
+        oldRoles.push({ email: role.email, name: role.name });
+      });
+    }
+
+    if (item?.value?.newValue) {
+      item?.value?.newValue?.map((role, index) => {
+        newRoles.push({ email: role.email, name: role.name });
+      });
+    }
+
+    return (
+      <div className="task-roles">
+        {oldRoles?.map((role, index) => {
+          if (!newRoles?.some(newRole => newRole.email === role.email)) {
+            return (
+              <p key={index}>
+                <span className="red">
+                  {role.name} ({role.email}){'  '}
+                </span>
+              </p>
+            );
+          }
+        })}
+        {newRoles?.map((role, index) => {
+          return (
+            <p key={index}>
+              <span className="text">
+                {role.name} ({role.email}){'  '}
+              </span>
+            </p>
+          );
+        })}
+      </div>
+    );
+  };
+
   if (isHistoryModalOpen) {
     document.body.classList.add('no-scroll');
   }
+
   let bidType = '';
   let bidNo = '';
+
   const renderContent = () => {
     const winLocationSearch = window.location.search;
     bidNo = new URLSearchParams(winLocationSearch).get('bidNo');
@@ -71,7 +119,12 @@ const HistoryModal = ({
     }
 
     if (taskHistory.length === 0) {
-      return <div className="no-history">No History Available</div>;
+      return (
+        <div className="no-history">
+          <p>System created</p>
+          <p>{moment(taskCreatedDate).format('D-MMM-yyyy')}</p>
+        </div>
+      );
     }
 
     if (taskHistory.length > 0) {
@@ -94,18 +147,9 @@ const HistoryModal = ({
                         <span className="text">{item?.value?.newValue}</span>
                       </p>
                     )}
-                  {/* {item?.action === 'task_role' && (
-                    <p>
-                      <span className="red">
-                        {item?.value?.newValue[0]?.name} {'  '}(
-                        {item?.value?.newValue[0]?.email})
-                      </span>
-                      <span className="text">
-                        {item?.value?.oldValue[0]?.name} {'  '}(
-                        {item?.value?.oldValue[0]?.email})
-                      </span>
-                    </p>
-                  )} */}
+                  {item?.action === 'task_role' && (
+                    <div className="task-roles">{renderTaskRoles(item)}</div>
+                  )}
                   {item?.action === 'task_created' && (
                     <p>
                       <span className="text">
@@ -114,7 +158,9 @@ const HistoryModal = ({
                     </p>
                   )}
                   {item.action === 'reorder' && (
-                    <p>
+                    <p
+                      className={getReorderStatus(item) === '' ? 'd-none' : ''}
+                    >
                       <span className="text">{getReorderStatus(item)}</span>
                     </p>
                   )}
@@ -138,6 +184,13 @@ const HistoryModal = ({
   };
 
   useEffect(() => {
+    if (tasks) {
+      const task = tasks?.find(task => task.task_id === taskId);
+      if (task) {
+        setHeaderTitle(task?.description);
+        setTaskCreatedDate(task?.created_date);
+      }
+    }
     if (taskHistory?.length > 0) {
       const lastDescription = [];
       taskHistory?.forEach(item => {
@@ -180,14 +233,10 @@ const HistoryModal = ({
               <div className="header-titles">
                 <h1>History</h1>
                 <p>{headerTitle}</p>
-                {/* <p>
-                  {taskHistory &&
-                    taskHistory.length > 0 &&
-                    taskHistory[taskHistory.length - 1]?.value.oldValue}
-                </p> */}
               </div>
               <button
                 type="button"
+                data-testid="close-history-modal"
                 onClick={() => {
                   closeHistoryModal();
                 }}
@@ -197,41 +246,6 @@ const HistoryModal = ({
             </div>
             <div className="modal-body">
               {!taskHistoryLoading && renderContent()}
-              {/* <div>
-                <div className="answer-container">
-                  <div className="main-container">
-                    <span className="avatar">MS</span>
-                    <div>
-                      <p>John Doe - Complete Task</p>
-                      <p>
-                        <span className="text">Customanswer13182 </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="answer-meta-data">
-                    <p className="answer-history-para">14-Dec-2023</p>
-                    <p className="answer-history-para">Early Engagement 1</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="answer-container">
-                  <div className="main-container">
-                    <span className="avatar">MS</span>
-                    <div>
-                      <p>John Doe - Complete Task</p>
-                      <p>
-                        <span className="red">Customanswer13182 </span>
-                        <span className="text">Customanswer13182 </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="answer-meta-data">
-                    <p className="answer-history-para">14-Dec-2023</p>
-                    <p className="answer-history-para">Early Engagement 1</p>
-                  </div>
-                </div>
-              </div> */}
             </div>
             <div className="modal-actions">
               <button
