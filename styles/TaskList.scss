@@ -71,7 +71,7 @@
             margin-right: 0.35rem;
           }
           .MuiButtonBase-root {
-            background-color: white !important;
+            background-color: white;
           }
           .task-desc {
             flex-grow: 1;
@@ -164,7 +164,7 @@
 
 .progress-indicator {
   padding-right: 16px;
-  margin-top: 30px;
+  margin-top: 34px;
   .progress-bar {
     position: relative;
     .task-status {
@@ -192,6 +192,9 @@
         &.no-task {
           color: #595959;
         }
+        &.hidden-text {
+          visibility: hidden;
+        }
       }
       .task-no {
         font-size: 13px;
@@ -209,17 +212,21 @@
       position: absolute;
       top: -18px;
       .indicator-day {
-        // font-size: 13px;
         font-size: 12px;
         position: relative;
-        left: 25px;
+        left: 22px;
         top: -12px;
         color: #5e082a;
         font-weight: bold;
         display: flex;
         flex-direction: column-reverse;
         &.day-ten {
-          left: 30px;
+          left: 27px;
+        }
+        &.day-zero {
+          span {
+            left: 0px;
+          }
         }
         span {
           left: -10px;
@@ -244,6 +251,10 @@
       &.hidden {
         visibility: hidden;
       }
+      &.day-zero {
+        left: -22px !important;
+        width: 34px !important;
+      }
     }
   }
 }
@@ -251,4 +262,15 @@
 .addOwnerButton {
   margin-top: 21px;
   margin-left: 10px;
+}
+.search-result-highlight {
+  background-color: #0557d559;
+
+  .ellipsis {
+    background: transparent !important;
+    visibility: hidden !important;
+  }
+  .MuiButtonBase-root {
+    background: transparent !important;
+  }
 }

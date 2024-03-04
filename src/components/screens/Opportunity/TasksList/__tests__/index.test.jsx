@@ -233,7 +233,7 @@ describe('TasksList Unit Tests', () => {
     });
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
-    const seeOwners = screen.getByText('See Owners()');
+    const seeOwners = screen.getByText('See Owners(0)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
 
@@ -248,7 +248,7 @@ describe('TasksList Unit Tests', () => {
     });
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
-    const seeOwners = screen.getByText('See Owners()');
+    const seeOwners = screen.getByText('See Owners(0)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
 
@@ -285,9 +285,9 @@ describe('TasksList Unit Tests', () => {
     await waitFor(() => {
       expect(screen.getByText('task 1')).toBeInTheDocument();
     });
-    const expandToggle = screen.getByTestId('ellipsis-vertical-1');
-    fireEvent.click(expandToggle);
-    const seeOwners = screen.getByText('See Owners()');
+    const expandToggle = screen.getAllByTestId('ellipsis-vertical-0');
+    fireEvent.click(expandToggle[0]);
+    const seeOwners = screen.getByText('See Owners(4)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
     expect(screen.getByText('Varsha Agarwal')).toBeInTheDocument();
@@ -297,7 +297,7 @@ describe('TasksList Unit Tests', () => {
     fireEvent.click(deleteOwner[0]);
     fireEvent.click(deleteOwner[1]);
 
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getAllByText('Cancel')[1]);
   });
 
   test('see owners of task || with proposal team owner', async () => {
@@ -305,9 +305,9 @@ describe('TasksList Unit Tests', () => {
     await waitFor(() => {
       expect(screen.getByText('task 1')).toBeInTheDocument();
     });
-    const expandToggle = screen.getByTestId('ellipsis-vertical-1');
-    fireEvent.click(expandToggle);
-    const seeOwners = screen.getByText('See Owners()');
+    const expandToggle = screen.getAllByTestId('ellipsis-vertical-0');
+    fireEvent.click(expandToggle[0]);
+    const seeOwners = screen.getByText('See Owners(4)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
     expect(screen.getByText('Sushil Munda')).toBeInTheDocument();
