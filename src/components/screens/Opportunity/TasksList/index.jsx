@@ -145,25 +145,17 @@ const TasksList = () => {
   }, [proposalId]);
 
   useEffect(() => {
-    let tasksGroup = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-      10: []
-    };
-    const tasksToShow = showMine
-      ? tasks.filter(
-          task =>
-            task.task_role && task.task_role.some(role => role.name == userName)
-        )
-      : tasks;
-    tasksGroup = merge(tasksGroup, groupBy(tasksToShow, 'no_of_units'));
+    const maxNoOfUnits =
+      tasks.length === 0
+        ? 0
+        : Math.max(...tasks.map(task => task.no_of_units || 0));
+    let tasksGroup = Array.from({ length: maxNoOfUnits })
+      .map((_, i) => i + 1)
+      .reduce((acc, curr) => {
+        acc[curr] = [];
+        return acc;
+      }, {});
+    tasksGroup = merge(tasksGroup, groupBy(tasks, 'no_of_units'));
     Object.entries(tasksGroup).forEach(([day, tasksForADay]) => {
       let dateForDay;
       if (day === '1') {
