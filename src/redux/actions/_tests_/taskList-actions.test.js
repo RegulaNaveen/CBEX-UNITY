@@ -12,11 +12,13 @@ import {
   tasksListReordering,
   handleMultipleTaskLocks,
   updateTaskListMoveAction,
-  updateTaskListOrderAction
+  updateTaskListOrderAction,
+  editRoleFromSocket
 } from '../tasksList-actions';
 import * as TasklistApis from '../../../api/tasksList';
 import * as proposalSelectors from '../../selectors/proposal'; // import the selector
 import * as taskSelectors from '../../selectors/tasks';
+import { Map } from 'immutable';
 
 describe('taskList actions', () => {
   let sinonSandbox;
@@ -496,5 +498,126 @@ describe('taskList actions', () => {
       }
     })(dispatch, () => {});
     expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+
+  it('should handle role edit from socket', async () => {
+    const dispatch = jest.fn();
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([
+      {
+        id: 573,
+        proposal_id: '67e3e355-b8bd-4114-b377-27898c4603c4',
+        task_id: 'd18a89df-f3da-408b-ab33-ce2aa847b769',
+        description: 'T',
+        primary_condition: 'Bid History Creation',
+        operator: 'addition',
+        unit_type: 'Business Days',
+        no_of_units: 1,
+        opportunity_types: 'Core Opportunity Launch Call (AMR/EMEA)',
+        order: 4,
+        is_completed: false,
+        is_modified: false,
+        is_deleted: false,
+        is_custom: true,
+        is_freezed: false,
+        updated_by: 'Pooja Chahar',
+        updated_by_email: 'pooja.chahar@iqvia.com',
+        created_date: '2024-02-26T07:26:29.458Z',
+        updated_date: '2024-02-26T07:26:29.458Z',
+        task_role: [
+          {
+            id: 1718,
+            task_list_id: 573,
+            proposal_id: '67e3e355-b8bd-4114-b377-27898c4603c4',
+            task_id: 'd18a89df-f3da-408b-ab33-ce2aa847b769',
+            question_id: null,
+            name: 'Kunal Nigam',
+            email: 'kunal.nigam@iqvia.com',
+            type: 'user',
+            updated_by: 'Varsha Kumari',
+            updated_by_email: 'varsha.kumari2@iqvia.com',
+            created_date: '2024-02-26T07:33:00.788Z',
+            updated_date: '2024-02-26T07:33:00.788Z'
+          }
+        ],
+        task_history: []
+      }
+    ]);
+    sinonSandbox.stub(proposalSelectors, 'getSelectedBid').returns(
+      Map({
+        id: '67e3e355-b8bd-4114-b377-27898c4603c4'
+      })
+    );
+    await editRoleFromSocket(
+      [
+        {
+          id: 1718,
+          task_list_id: 573,
+          proposal_id: '67e3e355-b8bd-4114-b377-27898c4603c4',
+          task_id: 'd18a89df-f3da-408b-ab33-ce2aa847b769',
+          question_id: null,
+          name: 'Kunal Nigam',
+          email: 'kunal.nigam@iqvia.com',
+          type: 'user',
+          updated_by: 'Varsha Kumari',
+          updated_by_email: 'varsha.kumari2@iqvia.com',
+          created_date: '2024-02-26T07:33:00.788Z',
+          updated_date: '2024-02-26T07:33:00.788Z'
+        }
+      ],
+      '67e3e355-b8bd-4114-b377-27898c4603c4',
+      573
+    )(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'LOADING_TASKS',
+      payload: true
+    });
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'SET_TASKS',
+      payload: [
+        {
+          id: 573,
+          proposal_id: '67e3e355-b8bd-4114-b377-27898c4603c4',
+          task_id: 'd18a89df-f3da-408b-ab33-ce2aa847b769',
+          description: 'T',
+          primary_condition: 'Bid History Creation',
+          operator: 'addition',
+          unit_type: 'Business Days',
+          no_of_units: 1,
+          opportunity_types: 'Core Opportunity Launch Call (AMR/EMEA)',
+          order: 4,
+          is_completed: false,
+          is_modified: false,
+          is_deleted: false,
+          is_custom: true,
+          is_freezed: false,
+          updated_by: 'Pooja Chahar',
+          updated_by_email: 'pooja.chahar@iqvia.com',
+          created_date: '2024-02-26T07:26:29.458Z',
+          updated_date: '2024-02-26T07:26:29.458Z',
+          task_role: [
+            {
+              id: 1718,
+              task_list_id: 573,
+              proposal_id: '67e3e355-b8bd-4114-b377-27898c4603c4',
+              task_id: 'd18a89df-f3da-408b-ab33-ce2aa847b769',
+              question_id: null,
+              name: 'Kunal Nigam',
+              email: 'kunal.nigam@iqvia.com',
+              type: 'user',
+              updated_by: 'Varsha Kumari',
+              updated_by_email: 'varsha.kumari2@iqvia.com',
+              created_date: '2024-02-26T07:33:00.788Z',
+              updated_date: '2024-02-26T07:33:00.788Z'
+            }
+          ],
+          task_history: []
+        }
+      ]
+    });
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'LOADING_TASKS',
+      payload: false
+    });
   });
 });

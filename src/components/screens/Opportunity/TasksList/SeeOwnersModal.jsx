@@ -13,6 +13,7 @@ import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal'
 import { updateTaskById } from '../../../../redux/actions/tasksList-actions';
 import { useDispatch } from 'react-redux';
 import { selectTasksList } from '../../../../redux/selectors/tasks';
+import Loader from 'apollo-react/components/Loader';
 
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const SeeOwners = ({
@@ -39,6 +40,7 @@ const SeeOwners = ({
   const [isButtonDisabled, setButtonDisabled] = useState(false);
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [userToRemoveIndex, setUserToRemoveIndex] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const tasks = useSelector(selectTasksList);
@@ -55,7 +57,7 @@ const SeeOwners = ({
         const { questionText, data: question_answers } = processRole(
           role?.question_id
         );
-        if (role.type === 'roles') {
+        if (role.type === 'roles' && questionText) {
           if (question_answers?.length > 0) {
             for (let answer = 0; answer < question_answers?.length; answer++) {
               roles.push({
@@ -75,7 +77,7 @@ const SeeOwners = ({
               type: role.type
             });
           }
-        } else {
+        } else if (role.type === 'user') {
           roles.push({
             id: role.id,
             name: role.name,
@@ -149,6 +151,7 @@ const SeeOwners = ({
   };
 
   const handleSave = () => {
+    setIsLoading(true);
     const payload = {
       addrole: [],
       deleterole: []
@@ -174,6 +177,7 @@ const SeeOwners = ({
       }
     });
     dispatch(updateTaskById(proposal_id, id, payload)).then(() => {
+      setIsLoading(false);
       setSelectedTask(null);
       setHandlePayload([]);
       setSelectedUsers([]);
@@ -450,6 +454,37 @@ const SeeOwners = ({
                 <Button onClick={handleCancel}>Cancel</Button>
                 <Button onClick={handleSave} disabled={checkDisable()}>
                   Save
+                  {isLoading && (
+                    <>
+                      <div className="loader-container">
+                        <div
+                          style={{
+                            display: 'flex',
+                            height: '24px',
+                            marginRight: '30px'
+                          }}
+                        >
+                          <span
+                            style={{
+                              marginLeft: '0px',
+                              position: 'relative',
+                              top: '15px'
+                            }}
+                          >
+                            <Loader
+                              isInner
+                              size={20}
+                              style={{
+                                width: '20px',
+                                height: '20px',
+                                color: '#FFF'
+                              }}
+                            />
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </Button>
               </div>
             </div>

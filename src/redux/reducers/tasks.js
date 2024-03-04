@@ -3,7 +3,8 @@ import { TASKS } from '../../constants/types';
 const INITIAL_STATE = {
   tasks: [],
   loading: false,
-  error: ''
+  error: '',
+  showMine: false
 };
 
 export default function tasksReducer(state = INITIAL_STATE, action) {
@@ -32,6 +33,11 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         tasks: editTask(state, action)
+      };
+    case TASKS.TOGGLE_SHOW_MINE:
+      return {
+        ...state,
+        showMine: action.payload
       };
     default:
       return state;
