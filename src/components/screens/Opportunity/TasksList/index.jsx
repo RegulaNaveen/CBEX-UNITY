@@ -3,7 +3,8 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState
+  useState,
+  useRef
 } from 'react';
 import ReactDOM from 'react-dom';
 import Accordion from 'apollo-react/components/Accordion';
@@ -36,6 +37,13 @@ import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
 import HistoryModal from './HistoryModal';
+
+import {
+  selectQuery,
+  selectCurrentSearchResult,
+  selectAutoNavigatedToCurrentResult,
+  selectPrevSearchResult
+} from '../../../../redux/selectors/search';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -89,18 +97,25 @@ const TasksList = () => {
   const proposalId = selectedBid.id;
   const tasks = useSelector(selectTasksList);
   const tasksLoading = useSelector(selectTasksFetching);
+  const showMine = useSelector(state => state.tasks.showMine);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskId, setTaskId] = useState(null);
   const [isNewTask, setIsNewTask] = useState({ result: {}, isNew: false });
-  const [saveButtonDisable, setSaveButtonDisable] = useState(false);
   const [resetToDefault, setResetToDefault] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [taskListContainerRef, setTaskListContainerRef] = useState(null);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const editable = selectedBid.isEditable;
-
+  const cellRef = useRef(null);
+  const userName = localStorage.getItem('userName');
   const { getTaskLockDetailsWrapper } = useContext(SocketContext);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const prevSearchResult = useSelector(selectPrevSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
 
   const dispatch = useDispatch();
 
@@ -117,19 +132,23 @@ const TasksList = () => {
   }, [proposalId]);
 
   useEffect(() => {
-    let tasksGroup = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-      10: []
-    };
-    tasksGroup = merge(tasksGroup, groupBy(tasks, 'no_of_units'));
+    const tasksToShow = showMine
+      ? tasks.filter(
+          task =>
+            task.task_role && task.task_role.some(role => role.name == userName)
+        )
+      : tasks;
+    const maxNoOfUnits =
+      tasksToShow.length === 0
+        ? 0
+        : Math.max(...tasksToShow.map(task => task.no_of_units || 0));
+    let tasksGroup = Array.from({ length: maxNoOfUnits })
+      .map((_, i) => i + 1)
+      .reduce((acc, curr) => {
+        acc[curr] = [];
+        return acc;
+      }, {});
+    tasksGroup = merge(tasksGroup, groupBy(tasksToShow, 'no_of_units'));
     Object.entries(tasksGroup).forEach(([day, tasksForADay]) => {
       let dateForDay;
       if (day === '1') {
@@ -169,12 +188,64 @@ const TasksList = () => {
     if (resetToDefault) {
       setResetToDefault(false);
     }
-  }, [tasks, proposalId]);
+  }, [tasks, proposalId, showMine, userName]);
 
   useEffect(() => {
-    if (resetToDefault) {
+    if (
+      currentSearchResult !== null &&
+      currentSearchResult.inputText &&
+      !autoNavigatedToCurrentResult
+    ) {
+      setTasksGroupsByDay(prevTasksGroups => {
+        const updatedTasksGroups = { ...prevTasksGroups };
+        Object.values(updatedTasksGroups).forEach(dayGroup => {
+          const taskToUpdate = dayGroup.tasks.find(
+            task => task.id === currentSearchResult.searchIndex
+          );
+          if (taskToUpdate) {
+            dayGroup.expanded = true;
+          } else {
+            dayGroup.expanded = false;
+          }
+        });
+        return updatedTasksGroups;
+      });
     }
-  }, [resetToDefault]);
+  }, [currentSearchResult, autoNavigatedToCurrentResult, tasks]);
+
+  const searchWithDay = () => {};
+
+  useEffect(() => {
+    let timer = null;
+    if (taskListContainerRef) {
+      taskListContainerRef.addEventListener('pointerenter', () => {
+        timer = setTimeout(() => {
+          if (taskListContainerRef && editable) {
+            const boundingRect = taskListContainerRef.getBoundingClientRect();
+            if (boundingRect.top > 58) {
+              taskListContainerRef.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
+              });
+            }
+          }
+          clearTimeout(timer);
+        }, 1200);
+      });
+
+      taskListContainerRef.addEventListener('pointerleave', () => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+      });
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [editable, taskListContainerRef]);
 
   function handleDragEnd(result) {
     const { source, destination } = result;
@@ -286,7 +357,10 @@ const TasksList = () => {
   };
 
   return (
-    <div id="tasks-list-left-section">
+    <div
+      id="tasks-list-left-section"
+      ref={_ref => setTaskListContainerRef(_ref)}
+    >
       <div className="task-list-header">
         <Header />
         <div className="progress-indicator">
@@ -351,8 +425,6 @@ const TasksList = () => {
                         openModal={openModal}
                         setIsNewTask={setIsNewTask}
                         isNewTask={isNewTask}
-                        saveButtonDisable={saveButtonDisable}
-                        setSaveButtonDisable={setSaveButtonDisable}
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -373,8 +445,6 @@ const TasksList = () => {
             taskId={taskId}
             isNewTask={isNewTask}
             setIsNewTask={setIsNewTask}
-            saveButtonDisable={saveButtonDisable}
-            setSaveButtonDisable={setSaveButtonDisable}
           />
         </TaskListToolbarMenuPortal>
       )}

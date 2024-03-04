@@ -5,7 +5,8 @@ const INITIAL_STATE = {
   loading: false,
   error: '',
   taskHistory: [],
-  taskHistoryLoading: false
+  taskHistoryLoading: false,
+  showMine: false
 };
 
 export default function tasksReducer(state = INITIAL_STATE, action) {
@@ -45,6 +46,11 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
         ...state,
         taskHistoryLoading: action.payload
       };
+    case TASKS.TOGGLE_SHOW_MINE:
+      return {
+        ...state,
+        showMine: action.payload
+      };
     default:
       return state;
   }
@@ -71,7 +77,7 @@ const editTask = (state, action) => {
     value => value.task_id === task_id && value.proposal_id === proposal_id
   );
   if (tabIndex > -1) {
-    tasks[tabIndex] = payload;
+    tasks[tabIndex] = { ...tasks[tabIndex], ...payload };
   }
   return tasks;
 };
