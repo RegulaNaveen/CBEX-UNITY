@@ -3,7 +3,8 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState
+  useState,
+  useRef
 } from 'react';
 import ReactDOM from 'react-dom';
 import Accordion from 'apollo-react/components/Accordion';
@@ -35,6 +36,13 @@ import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
+
+import {
+  selectQuery,
+  selectCurrentSearchResult,
+  selectAutoNavigatedToCurrentResult,
+  selectPrevSearchResult
+} from '../../../../redux/selectors/search';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -98,8 +106,14 @@ const TasksList = () => {
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const editable = selectedBid.isEditable;
+  const cellRef = useRef(null);
   const userName = localStorage.getItem('userName');
   const { getTaskLockDetailsWrapper } = useContext(SocketContext);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const prevSearchResult = useSelector(selectPrevSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
 
   const dispatch = useDispatch();
 
@@ -131,25 +145,17 @@ const TasksList = () => {
   }, [proposalId]);
 
   useEffect(() => {
-    let tasksGroup = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-      8: [],
-      9: [],
-      10: []
-    };
-    const tasksToShow = showMine
-      ? tasks.filter(
-          task =>
-            task.task_role && task.task_role.some(role => role.name == userName)
-        )
-      : tasks;
-    tasksGroup = merge(tasksGroup, groupBy(tasksToShow, 'no_of_units'));
+    const maxNoOfUnits =
+      tasks.length === 0
+        ? 0
+        : Math.max(...tasks.map(task => task.no_of_units || 0));
+    let tasksGroup = Array.from({ length: maxNoOfUnits })
+      .map((_, i) => i + 1)
+      .reduce((acc, curr) => {
+        acc[curr] = [];
+        return acc;
+      }, {});
+    tasksGroup = merge(tasksGroup, groupBy(tasks, 'no_of_units'));
     Object.entries(tasksGroup).forEach(([day, tasksForADay]) => {
       let dateForDay;
       if (day === '1') {
@@ -190,6 +196,31 @@ const TasksList = () => {
       setResetToDefault(false);
     }
   }, [tasks, proposalId, showMine, userName]);
+
+  useEffect(() => {
+    if (
+      currentSearchResult !== null &&
+      currentSearchResult.inputText &&
+      !autoNavigatedToCurrentResult
+    ) {
+      setTasksGroupsByDay(prevTasksGroups => {
+        const updatedTasksGroups = { ...prevTasksGroups };
+        Object.values(updatedTasksGroups).forEach(dayGroup => {
+          const taskToUpdate = dayGroup.tasks.find(
+            task => task.id === currentSearchResult.searchIndex
+          );
+          if (taskToUpdate) {
+            dayGroup.expanded = true;
+          } else {
+            dayGroup.expanded = false;
+          }
+        });
+        return updatedTasksGroups;
+      });
+    }
+  }, [currentSearchResult, autoNavigatedToCurrentResult, tasks]);
+
+  const searchWithDay = () => {};
 
   useEffect(() => {
     let timer = null;

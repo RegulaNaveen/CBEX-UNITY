@@ -3,23 +3,39 @@ import { mount } from 'enzyme';
 import ProgressIndicator from '../ProgressIndicator';
 
 describe('ProgressIndicator', () => {
+  it('should check for empty days', () => {
+    const taskList = {};
+    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    expect(wrapper.exists()).toBe(true);
+  });
+
   it('renders without crashing', () => {
     const taskList = {
       1: {
         expanded: true,
         date: '2024-02-13T09:36:15.908Z',
         dateFormatted: '13 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -2
+        uncompletedCount: 2,
+        completedCount: 2,
+        dayDiffFromToday: -1,
+        tasks: [
+          {
+            no_of_units: 1
+          }
+        ]
       },
       2: {
         expanded: false,
         date: '2024-02-14T09:36:15.908Z',
         dateFormatted: '14 Feb',
-        uncompletedCount: 0,
+        uncompletedCount: 2,
         completedCount: 0,
-        dayDiffFromToday: -1
+        dayDiffFromToday: 0,
+        tasks: [
+          {
+            no_of_units: 2
+          }
+        ]
       },
       3: {
         expanded: false,
@@ -27,69 +43,18 @@ describe('ProgressIndicator', () => {
         dateFormatted: '15 Feb',
         uncompletedCount: 0,
         completedCount: 0,
-        dayDiffFromToday: 0
-      },
-      4: {
-        expanded: false,
-        date: '2024-02-16T09:36:15.908Z',
-        dateFormatted: '16 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 1
-      },
-      5: {
-        expanded: false,
-        date: '2024-02-17T09:36:15.908Z',
-        dateFormatted: '17 Feb',
-        uncompletedCount: 10,
-        completedCount: 0,
-        dayDiffFromToday: 2
-      },
-      6: {
-        expanded: false,
-        date: '2024-02-18T09:36:15.908Z',
-        dateFormatted: '18 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 3
-      },
-      7: {
-        expanded: false,
-        date: '2024-02-19T09:36:15.908Z',
-        dateFormatted: '19 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 4
-      },
-      8: {
-        expanded: false,
-        date: '2024-02-20T09:36:15.908Z',
-        dateFormatted: '20 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 5
-      },
-      9: {
-        expanded: false,
-        date: '2024-02-21T09:36:15.908Z',
-        dateFormatted: '21 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 6
-      },
-      10: {
-        expanded: false,
-        date: '2024-02-22T09:36:15.908Z',
-        dateFormatted: '22 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 7
+        dayDiffFromToday: 1,
+        tasks: [
+          {
+            no_of_units: 3
+          }
+        ]
       }
     };
     const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
     expect(wrapper.exists()).toBe(true);
   });
-  it('should check till day 10 with all completed and uncompleted tasks', () => {
+  it('should check after bid creation date', () => {
     const taskList = {
       1: {
         expanded: true,
@@ -97,7 +62,12 @@ describe('ProgressIndicator', () => {
         dateFormatted: '13 Feb',
         uncompletedCount: 0,
         completedCount: 0,
-        dayDiffFromToday: -9
+        dayDiffFromToday: 3,
+        tasks: [
+          {
+            no_of_units: 1
+          }
+        ]
       },
       2: {
         expanded: false,
@@ -105,71 +75,25 @@ describe('ProgressIndicator', () => {
         dateFormatted: '14 Feb',
         uncompletedCount: 0,
         completedCount: 0,
-        dayDiffFromToday: -8
+        dayDiffFromToday: 4,
+        tasks: [
+          {
+            no_of_units: 2
+          }
+        ]
       },
       3: {
         expanded: false,
         date: '2024-02-15T09:36:15.908Z',
         dateFormatted: '15 Feb',
-        uncompletedCount: 0,
+        uncompletedCount: 2,
         completedCount: 0,
-        dayDiffFromToday: -7
-      },
-      4: {
-        expanded: false,
-        date: '2024-02-16T09:36:15.908Z',
-        dateFormatted: '16 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -6
-      },
-      5: {
-        expanded: false,
-        date: '2024-02-17T09:36:15.908Z',
-        dateFormatted: '17 Feb',
-        uncompletedCount: 10,
-        completedCount: 0,
-        dayDiffFromToday: -5
-      },
-      6: {
-        expanded: false,
-        date: '2024-02-18T09:36:15.908Z',
-        dateFormatted: '18 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -4
-      },
-      7: {
-        expanded: false,
-        date: '2024-02-19T09:36:15.908Z',
-        dateFormatted: '19 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -3
-      },
-      8: {
-        expanded: false,
-        date: '2024-02-20T09:36:15.908Z',
-        dateFormatted: '20 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -2
-      },
-      9: {
-        expanded: false,
-        date: '2024-02-21T09:36:15.908Z',
-        dateFormatted: '21 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -1
-      },
-      10: {
-        expanded: false,
-        date: '2024-02-22T09:36:15.908Z',
-        dateFormatted: '22 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 0
+        dayDiffFromToday: 5,
+        tasks: [
+          {
+            no_of_units: 3
+          }
+        ]
       }
     };
     const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
@@ -178,170 +102,63 @@ describe('ProgressIndicator', () => {
   it('should check for previous bids', () => {
     const taskList = {
       1: {
-        expanded: true,
-        date: '2024-02-13T09:36:15.908Z',
-        dateFormatted: '13 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -9
-      },
-      2: {
+        tasks: [
+          {
+            no_of_units: 1
+          }
+        ],
         expanded: false,
-        date: '2024-02-14T09:36:15.908Z',
+        date: '2024-02-14T12:14:07.989Z',
         dateFormatted: '14 Feb',
         uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -8
+        completedCount: 4,
+        dayDiffFromToday: -16
       },
-      3: {
+      2: {
+        tasks: [
+          {
+            no_of_units: 2
+          }
+        ],
         expanded: false,
-        date: '2024-02-15T09:36:15.908Z',
+        date: '2024-02-15T12:14:07.989Z',
         dateFormatted: '15 Feb',
         uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -7
-      },
-      4: {
-        expanded: false,
-        date: '2024-02-16T09:36:15.908Z',
-        dateFormatted: '16 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -6
-      },
-      5: {
-        expanded: false,
-        date: '2024-02-17T09:36:15.908Z',
-        dateFormatted: '17 Feb',
-        uncompletedCount: 10,
-        completedCount: 0,
-        dayDiffFromToday: -5
-      },
-      6: {
-        expanded: false,
-        date: '2024-02-18T09:36:15.908Z',
-        dateFormatted: '18 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -4
-      },
-      7: {
-        expanded: false,
-        date: '2024-02-19T09:36:15.908Z',
-        dateFormatted: '19 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -3
-      },
-      8: {
-        expanded: false,
-        date: '2024-02-20T09:36:15.908Z',
-        dateFormatted: '20 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -2
-      },
-      9: {
-        expanded: false,
-        date: '2024-02-21T09:36:15.908Z',
-        dateFormatted: '21 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -1
-      },
-      10: {
-        expanded: false,
-        date: '2024-02-22T09:36:15.908Z',
-        dateFormatted: '22 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: -3
+        completedCount: 2,
+        dayDiffFromToday: -15
       }
     };
     const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
     expect(wrapper.exists()).toBe(true);
   });
-  it('should check No Tasks Assigned Till Date', () => {
+
+  it('should check total tasks count', () => {
     const taskList = {
       1: {
-        expanded: true,
-        date: '2024-02-13T09:36:15.908Z',
-        dateFormatted: '13 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 1
-      },
-      2: {
+        tasks: [
+          {
+            no_of_units: 1
+          }
+        ],
         expanded: false,
-        date: '2024-02-14T09:36:15.908Z',
+        date: '2024-02-14T12:14:07.989Z',
         dateFormatted: '14 Feb',
         uncompletedCount: 0,
         completedCount: 0,
-        dayDiffFromToday: 2
+        dayDiffFromToday: -1
       },
-      3: {
+      2: {
+        tasks: [
+          {
+            no_of_units: 2
+          }
+        ],
         expanded: false,
-        date: '2024-02-15T09:36:15.908Z',
+        date: '2024-02-15T12:14:07.989Z',
         dateFormatted: '15 Feb',
         uncompletedCount: 0,
         completedCount: 0,
-        dayDiffFromToday: 1
-      },
-      4: {
-        expanded: false,
-        date: '2024-02-16T09:36:15.908Z',
-        dateFormatted: '16 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 2
-      },
-      5: {
-        expanded: false,
-        date: '2024-02-17T09:36:15.908Z',
-        dateFormatted: '17 Feb',
-        uncompletedCount: 10,
-        completedCount: 0,
-        dayDiffFromToday: 3
-      },
-      6: {
-        expanded: false,
-        date: '2024-02-18T09:36:15.908Z',
-        dateFormatted: '18 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 4
-      },
-      7: {
-        expanded: false,
-        date: '2024-02-19T09:36:15.908Z',
-        dateFormatted: '19 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 5
-      },
-      8: {
-        expanded: false,
-        date: '2024-02-20T09:36:15.908Z',
-        dateFormatted: '20 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 6
-      },
-      9: {
-        expanded: false,
-        date: '2024-02-21T09:36:15.908Z',
-        dateFormatted: '21 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 7
-      },
-      10: {
-        expanded: false,
-        date: '2024-02-22T09:36:15.908Z',
-        dateFormatted: '22 Feb',
-        uncompletedCount: 0,
-        completedCount: 0,
-        dayDiffFromToday: 8
+        dayDiffFromToday: 0
       }
     };
     const wrapper = mount(<ProgressIndicator tasksList={taskList} />);

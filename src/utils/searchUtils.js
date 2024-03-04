@@ -43,7 +43,8 @@ export async function getSearchResults({
   filteredQuestionsMap,
   sectionsUnfiltered,
   allFlags,
-  emailTemplates
+  emailTemplates,
+  taskData
 }) {
   let finalResult = {
     count: 0,
@@ -107,6 +108,13 @@ export async function getSearchResults({
         finalResult,
         regexp,
         emailTemplates,
+        allTabs[activeTab].tabName,
+        activeTab
+      );
+      searchInTaskList(
+        finalResult,
+        regexp,
+        taskData,
         allTabs[activeTab].tabName,
         activeTab
       );
@@ -309,9 +317,9 @@ export function searchInTab({
               var totalNotHiddenRows = tableConfigJSON.rows.filter(
                 column => !column.hidden
               );
-              totalNotHiddenColumns.map((value, index) => {
+              totalNotHiddenColumns.map((value, colIndex) => {
                 if (value.header) {
-                  updateSearchMatches({
+                  updateSearchMatchesInTable({
                     regexp,
                     inputText: value.header,
                     index: questionKey,
@@ -320,15 +328,15 @@ export function searchInTab({
                     vTab: null,
                     tabName,
                     sectionName: section.sectionName,
-                    colIndex: index + 1,
-                    rowIndex: 0
+                    colIndex: colIndex,
+                    rowIndex: null
                   });
                 }
               });
-              totalNotHiddenRows.map((row, index) => {
-                totalNotHiddenColumns.map(column => {
+              totalNotHiddenRows.map((row, rowIndex) => {
+                totalNotHiddenColumns.map((column, colIndex) => {
                   if (row[column.accessor]) {
-                    updateSearchMatches({
+                    updateSearchMatchesInTable({
                       regexp,
                       inputText: row[column.accessor],
                       index: questionKey,
@@ -337,8 +345,8 @@ export function searchInTab({
                       vTab: null,
                       tabName,
                       sectionName: section.sectionName,
-                      colIndex: index + 1,
-                      rowIndex: 0
+                      colIndex: colIndex,
+                      rowIndex: rowIndex
                     });
                   }
                 });
@@ -679,9 +687,9 @@ export function searchInApprovals(
               column => !column.hidden
             );
 
-            totalNotHiddenColumns.map((value, index) => {
+            totalNotHiddenColumns.map((value, colIndex) => {
               if (value.header) {
-                updateSearchMatches({
+                updateSearchMatchesInTable({
                   regexp,
                   inputText: value.header,
                   index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
@@ -690,16 +698,16 @@ export function searchInApprovals(
                   vTab: null,
                   tabName: 'Approvals',
                   sectionName: approval.ApprovalSectionTitle,
-                  colIndex: index + 1,
-                  rowIndex: 0
+                  colIndex: colIndex,
+                  rowIndex: null
                 });
               }
             });
 
-            totalNotHiddenRows.map((row, index) => {
-              totalNotHiddenColumns.map(column => {
+            totalNotHiddenRows.map((row, rowIndex) => {
+              totalNotHiddenColumns.map((column, colIndex) => {
                 if (row[column.accessor]) {
-                  updateSearchMatches({
+                  updateSearchMatchesInTable({
                     regexp,
                     inputText: row[column.accessor],
                     index: `${question.questionId}-approval-${approval.ApprovalSectionId}-left-ques`,
@@ -708,8 +716,8 @@ export function searchInApprovals(
                     vTab: null,
                     tabName: 'Approvals',
                     sectionName: approval.ApprovalSectionTitle,
-                    colIndex: index + 1,
-                    rowIndex: 0
+                    colIndex: colIndex,
+                    rowIndex: rowIndex
                   });
                 }
               });
@@ -807,7 +815,7 @@ export function searchInApprovals(
             tabName: 'Approvals',
             sectionName: approval.ApprovalSectionTitle
           });
-
+          //searching  in table
           if (question.answerConfiguration.type === 'table') {
             const tableConfigJSON = getTableData(question);
             var totalNotHiddenColumns = tableConfigJSON.columns.filter(
@@ -817,9 +825,9 @@ export function searchInApprovals(
               column => !column.hidden
             );
 
-            totalNotHiddenColumns.map((value, index) => {
+            totalNotHiddenColumns.map((value, colIndex) => {
               if (value.header) {
-                updateSearchMatches({
+                updateSearchMatchesInTable({
                   regexp,
                   inputText: value.header,
                   index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
@@ -828,16 +836,16 @@ export function searchInApprovals(
                   vTab: null,
                   tabName: 'Approvals',
                   sectionName: approval.ApprovalSectionTitle,
-                  colIndex: index + 1,
-                  rowIndex: 0
+                  colIndex: colIndex,
+                  rowIndex: null
                 });
               }
             });
 
-            totalNotHiddenRows.map((row, index) => {
-              totalNotHiddenColumns.map(column => {
+            totalNotHiddenRows.map((row, rowIndex) => {
+              totalNotHiddenColumns.map((column, colIndex) => {
                 if (row[column.accessor]) {
-                  updateSearchMatches({
+                  updateSearchMatchesInTable({
                     regexp,
                     inputText: row[column.accessor],
                     index: `${question.questionId}-approval-${approval.ApprovalSectionId}-right-ques`,
@@ -846,8 +854,8 @@ export function searchInApprovals(
                     vTab: null,
                     tabName: 'Approvals',
                     sectionName: approval.ApprovalSectionTitle,
-                    colIndex: index + 1,
-                    rowIndex: 0
+                    colIndex: colIndex,
+                    rowIndex: rowIndex
                   });
                 }
               });
@@ -1060,9 +1068,9 @@ export function searchInKeyMilestone(
               column => !column.hidden
             );
 
-            totalNotHiddenColumns.map((value, index) => {
+            totalNotHiddenColumns.map((value, colIndex) => {
               if (value.header) {
-                updateSearchMatches({
+                updateSearchMatchesInTable({
                   regexp,
                   inputText: value.header,
                   index: questionKey,
@@ -1070,16 +1078,16 @@ export function searchInKeyMilestone(
                   tab,
                   vTab: 3,
                   tabName,
-                  colIndex: index + 1,
-                  rowIndex: 0
+                  colIndex: colIndex,
+                  rowIndex: null
                 });
               }
             });
 
-            totalNotHiddenRows.map((row, index) => {
-              totalNotHiddenColumns.map(column => {
+            totalNotHiddenRows.map((row, rowIndex) => {
+              totalNotHiddenColumns.map((column, colIndex) => {
                 if (row[column.accessor]) {
-                  updateSearchMatches({
+                  updateSearchMatchesInTable({
                     regexp,
                     inputText: row[column.accessor],
                     index: questionKey,
@@ -1087,8 +1095,8 @@ export function searchInKeyMilestone(
                     tab,
                     vTab: 3,
                     tabName,
-                    colIndex: index + 1,
-                    rowIndex: 0
+                    colIndex: colIndex,
+                    rowIndex: rowIndex
                   });
                 }
               });
@@ -1257,6 +1265,7 @@ export function updateSearchMatches({
   tabName = '',
   sectionName = null
 }) {
+  console.log('updateSearchMatches', inputText, regexp, index, finalResult);
   let matchIndex = 0;
   for (const result of inputText.matchAll(regexp)) {
     finalResult.count++;
@@ -1270,6 +1279,38 @@ export function updateSearchMatches({
       matchIndex,
       tabName,
       sectionName
+    });
+    matchIndex++;
+  }
+}
+
+export function updateSearchMatchesInTable({
+  regexp,
+  inputText,
+  index,
+  finalResult,
+  tab = null,
+  vTab = null,
+  tabName = '',
+  sectionName = null,
+  rowIndex,
+  colIndex
+}) {
+  let matchIndex = 0;
+  for (const result of inputText.matchAll(regexp)) {
+    finalResult.count++;
+    finalResult.results.push({
+      tab,
+      searchIndex: index,
+      inputText,
+      vTab,
+      startIndex: result['index'],
+      endIndex: result['index'] + result[0].length,
+      matchIndex,
+      tabName,
+      sectionName,
+      rowIndex,
+      colIndex
     });
 
     matchIndex++;
@@ -1350,4 +1391,22 @@ export function getTableData(question) {
   }
 
   return answerValue;
+}
+
+export function searchInTaskList(finalResult, regexp, taskData, tabName, tab) {
+  if (Array.isArray(taskData)) {
+    taskData.forEach(task => {
+      if (task.description) {
+        updateSearchMatches({
+          regexp,
+          inputText: task.description,
+          index: task.id,
+          finalResult,
+          tab,
+          vTab: 5,
+          tabName
+        });
+      }
+    });
+  }
 }
