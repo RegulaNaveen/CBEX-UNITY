@@ -20,7 +20,7 @@ import PencilIcon from 'apollo-react-icons/Pencil';
 import TrashIcon from 'apollo-react-icons/Trash';
 import classNames from 'classnames';
 import Typography from 'apollo-react/components/Typography';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   updateTaskDesc,
   editTask
@@ -29,6 +29,11 @@ import { updateTaskDescApi } from '../../../../api/tasksList';
 import Loader from 'apollo-react/components/Loader';
 import DeleteAlert from './DeleteAlert';
 import { SocketContext } from '../../../../context/SocketContext';
+import {
+  selectCurrentSearchResult,
+  selectAutoNavigatedToCurrentResult,
+  selectPrevSearchResult
+} from '../../../../redux/selectors/search';
 import SeeOwners from './SeeOwnersModal';
 import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
 
@@ -65,6 +70,10 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
   const [updatingDesc, setUpdatingDesc] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState({
@@ -75,7 +84,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const locked = !!task.locked;
   const lockedBy = locked ? task.lockedBy : null;
-
+  const taskDescRef = useRef(null);
   const dispatch = useDispatch();
 
   const { lockTaskWrapper, unlockTaskWrapper } = useContext(SocketContext);
@@ -85,6 +94,20 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
       setOverflowed(descRef.clientHeight > 48);
     }
   }, [descRef]);
+  useEffect(() => {
+    if (currentSearchResult !== null && taskDescRef.current !== null) {
+      if (currentSearchResult.searchIndex === task.id) {
+        setTimeout(() => {
+          taskDescRef.current.scrollIntoView({
+            behaviour: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+          });
+          dispatch(autoNavigatedToCurrentResult());
+        }, 700);
+      }
+    }
+  }, [taskDescRef.current, currentSearchResult]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(entries => {
@@ -412,7 +435,14 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
         index={index}
       >
         {(provided, snapshot) => (
-          <div>
+          <div
+            className={
+              currentSearchResult !== null &&
+              currentSearchResult.searchIndex === task.id
+                ? 'search-result-highlight'
+                : ''
+            }
+          >
             <div
               ref={provided.innerRef}
               className="task-item-drag-container"
@@ -439,7 +469,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
                 onClick={() => handleCheckboxClick(task)}
                 disabled={locked || !editable}
               />
-              <div className="task-desc">
+              <div className="task-desc" ref={taskDescRef}>
                 <Tooltip placement="top" title={task?.description}>
                   <p
                     ref={_ref => setDescRef(_ref)}

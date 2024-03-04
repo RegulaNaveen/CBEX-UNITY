@@ -11,37 +11,37 @@ import {
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
 // TablePreviewCell component
-function TablePreviewCell({ row, column, index }) {
+function TablePreviewCell({ row, column, rowIndex, colIndex }) {
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const prevSearchResult = useSelector(selectPrevSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
   const dispatch = useDispatch();
-
   const cellRef = useRef(null);
-
   useEffect(() => {
     if (
       currentSearchResult !== null &&
       currentSearchResult.inputText === row[column.accessor] &&
       cellRef.current !== null &&
-      !autoNavigatedToCurrentResult
+      !autoNavigatedToCurrentResult &&
+      currentSearchResult.colIndex === colIndex &&
+      currentSearchResult.rowIndex === rowIndex
     ) {
       const delay =
         prevSearchResult && prevSearchResult.tab !== currentSearchResult.tab
-          ? 1500
-          : 900;
+          ? 700
+          : 1400;
       setTimeout(() => {
         cellRef.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'start',
+          block: 'center',
           inline: 'nearest'
         });
         dispatch(autoNavigationCompletedAction());
       }, delay);
     }
-  }, [currentSearchResult, autoNavigatedToCurrentResult]);
+  }, [currentSearchResult, cellRef.current, rowIndex, colIndex]);
 
   return (
     <td
@@ -49,12 +49,16 @@ function TablePreviewCell({ row, column, index }) {
       style={{
         color:
           currentSearchResult !== null &&
-          currentSearchResult.inputText === row[column.accessor]
+          currentSearchResult.inputText === row[column.accessor] &&
+          currentSearchResult.colIndex === colIndex &&
+          currentSearchResult.rowIndex === rowIndex
             ? '#fff'
             : '',
         backgroundColor:
           currentSearchResult !== null &&
-          currentSearchResult.inputText === row[column.accessor]
+          currentSearchResult.inputText === row[column.accessor] &&
+          currentSearchResult.colIndex === colIndex &&
+          currentSearchResult.rowIndex === rowIndex
             ? '#0557d559'
             : ''
       }}
@@ -67,7 +71,7 @@ function TablePreviewCell({ row, column, index }) {
 }
 // TablePreviewColumnCell component
 
-function TablePreviewColumnCell({ column }) {
+function TablePreviewColumnCell({ column, colIndex }) {
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const prevSearchResult = useSelector(selectPrevSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
@@ -83,7 +87,9 @@ function TablePreviewColumnCell({ column }) {
       currentSearchResult !== null &&
       currentSearchResult.inputText === column.headerTitle &&
       cellRef.current !== null &&
-      !autoNavigatedToCurrentResult
+      !autoNavigatedToCurrentResult &&
+      currentSearchResult.colIndex === colIndex &&
+      currentSearchResult.rowIndex === null
     ) {
       const delay =
         prevSearchResult && prevSearchResult.tab !== currentSearchResult.tab
@@ -98,10 +104,17 @@ function TablePreviewColumnCell({ column }) {
         dispatch(autoNavigationCompletedAction());
       }, delay);
     }
-  }, [currentSearchResult, autoNavigatedToCurrentResult, cellRef.current]);
+  }, [
+    currentSearchResult,
+    autoNavigatedToCurrentResult,
+    cellRef.current,
+    colIndex
+  ]);
 
   return (
     <th
+      key={colIndex}
+      ref={cellRef}
       style={{
         color:
           currentSearchResult !== null &&
@@ -114,7 +127,6 @@ function TablePreviewColumnCell({ column }) {
             ? '#0557d559'
             : ''
       }}
-      ref={cellRef}
     >
       <Tooltip title={column.headerTitle} placement="top" id="table-tooltip">
         <p>{column.headerTitle}</p>
@@ -131,24 +143,30 @@ export default function TablePreview({ columns, rows }) {
           <tr>
             {columns.length > 1 &&
               columns.map(
-                column =>
-                  !column.hidden && <TablePreviewColumnCell column={column} />
+                (column, colIndex) =>
+                  !column.hidden && (
+                    <TablePreviewColumnCell
+                      column={column}
+                      colIndex={colIndex}
+                    />
+                  )
               )}
           </tr>
         </thead>
         <tbody>
           {rows.map(
-            (row, index) =>
+            (row, rowIndex) =>
               !row.hidden && (
                 <>
                   <tr>
-                    {columns.map(column => (
+                    {columns.map((column, colIndex) => (
                       <>
                         {row[column.accessor] ? (
                           <TablePreviewCell
                             row={row}
                             column={column}
-                            index={index}
+                            rowIndex={rowIndex}
+                            colIndex={colIndex}
                           />
                         ) : (
                           <td className="blankRow"> - </td>
