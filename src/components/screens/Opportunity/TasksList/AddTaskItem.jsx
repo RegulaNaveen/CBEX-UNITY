@@ -15,16 +15,7 @@ import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
 import Loader from 'apollo-react/components/Loader';
 
-const AddNewTask = ({
-  day,
-  proposalId,
-  openModal,
-  setShowInputImmediately,
-  setAreButtonsDisabled,
-  areButtonsDisabled,
-  autocompleteValue,
-  setAutocompleteValue
-}) => {
+const AddNewTask = ({ day, proposalId, openModal, setIsNewTask }) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -69,6 +60,8 @@ const AddNewTask = ({
       if (result) {
         setTaskId(result.task_id);
         setShowAddTask(false);
+        const payload = { result, isNew: true };
+        setIsNewTask(payload);
       }
       setShowLoader(false);
     } else {
@@ -83,10 +76,6 @@ const AddNewTask = ({
       setTaskId(null);
     }
   }, [showModal, taskId]);
-
-  useEffect(() => {
-    setAreButtonsDisabled(false);
-  }, [autocompleteValue, setAutocompleteValue]);
 
   return (
     <>
@@ -111,8 +100,6 @@ const AddNewTask = ({
                   disabled={!showAddOwner}
                   onClick={() => {
                     setShowModal(true);
-                    setShowInputImmediately(true);
-                    setAreButtonsDisabled(true);
                   }}
                 >
                   Add Owner

@@ -147,6 +147,7 @@ export const doSearchAction = () => {
   return async (dispatch, getState) => {
     dispatch({ type: SEARCH.DO_SEARCH });
     const currentState = getState();
+    console.log('currentState', currentState);
     const allSectionsExpanded = selectAreAllSectionsExpanded(currentState);
     if (allSectionsExpanded) {
       dispatch(expandAllSectionsAction(false));
@@ -169,6 +170,7 @@ export const doSearchAction = () => {
     let notepadData = [];
     let emailTemplates = [];
     let taskData = [];
+
     const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
     const shouldCheckApprovals = isApprovalCount && allFlags.approvalsFlag;
     const approvals = selectAllApprovals(currentState);
@@ -187,16 +189,32 @@ export const doSearchAction = () => {
       );
     }
     if (shouldCheckTask) {
-      taskData = currentState.tasks.tasks.filter(task => {
-        return (
-          task.opportunity_types &&
-          task.opportunity_types.length > 0 &&
-          typeof task.opportunity_types === 'string' &&
-          task.opportunity_types
-            .split(',')
-            .includes(selectedBid.opportunityType)
-        );
-      });
+      if (currentState.tasks.showMine) {
+        const userName = localStorage.getItem('userName');
+        taskData = currentState.tasks.tasks.filter(task => {
+          return (
+            task.task_role &&
+            task.task_role.some(role => role.name == userName) &&
+            task.opportunity_types &&
+            task.opportunity_types.length > 0 &&
+            typeof task.opportunity_types === 'string' &&
+            task.opportunity_types
+              .split(',')
+              .includes(selectedBid.opportunityType)
+          );
+        });
+      } else {
+        taskData = currentState.tasks.tasks.filter(task => {
+          return (
+            task.opportunity_types &&
+            task.opportunity_types.length > 0 &&
+            typeof task.opportunity_types === 'string' &&
+            task.opportunity_types
+              .split(',')
+              .includes(selectedBid.opportunityType)
+          );
+        });
+      }
     }
     if (shouldCheckNotepad) {
       try {

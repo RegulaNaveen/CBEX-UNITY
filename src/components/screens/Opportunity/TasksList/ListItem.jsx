@@ -6,6 +6,7 @@ import React, {
   useContext
 } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import ReactDOM from 'react-dom';
 import Checkbox from 'apollo-react/components/Checkbox';
 import DragIcon from 'apollo-react-icons/Drag';
 import Tooltip from 'apollo-react/components/Tooltip';
@@ -33,6 +34,8 @@ import {
   selectAutoNavigatedToCurrentResult,
   selectPrevSearchResult
 } from '../../../../redux/selectors/search';
+import SeeOwners from './SeeOwnersModal';
+import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
 
 function OverflowEllipsis({ show }) {
   return (
@@ -47,21 +50,18 @@ function OverflowEllipsis({ show }) {
   );
 }
 
+const TaskListToolbarMenuPortal = props => {
+  const modalRoot = document.getElementById('tasklist-modal-wrapper');
+  return ReactDOM.createPortal(props.children, modalRoot);
+};
+
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
   background: isDragging ? 'rgba(255, 255, 255, 0.7)' : 'transparent',
   ...draggableStyle
 });
 
-function ListItem({
-  index,
-  task,
-  day,
-  dayDiffFromToday,
-  editable,
-  openModal,
-  ownersCount
-}) {
+function ListItem({ index, task, day, dayDiffFromToday, editable }) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -71,7 +71,18 @@ function ListItem({
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isComponentMounted, setIsComponentMounted] = useState({
+    count: 0,
+    mounted: false
+  });
+  const [taskId, setTaskId] = useState(null);
+  const [ownersCount, setOwnersCount] = useState(0);
+  const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const locked = !!task.locked;
   const lockedBy = locked ? task.lockedBy : null;
   const taskDescRef = useRef(null);
@@ -93,7 +104,7 @@ function ListItem({
             block: 'center',
             inline: 'nearest'
           });
-          dispatch(autoNavigationCompletedAction());
+          dispatch(autoNavigatedToCurrentResult());
         }, 700);
       }
     }
@@ -129,7 +140,13 @@ function ListItem({
   };
 
   const handleSeeOwners = text => () => {
-    openModal(task.task_id);
+    setTaskId(task.task_id);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setTaskId(null);
+    setIsModalOpen(false);
   };
 
   const handleEditClick = useCallback(() => {
@@ -320,6 +337,85 @@ function ListItem({
     );
   }
 
+  const processRole = value => {
+    const data = [];
+    const question = proposalTeamQuestions.find(
+      question => question.questionId === value
+    );
+    let questionText = '';
+    if (question) {
+      questionText = question.questionText;
+      const answer = question.answers;
+      if (answer && answer.length) {
+        const lastAnswer = answer[answer.length - 1];
+        const answerData = lastAnswer.answer;
+
+        if (answerData && answerData.length) {
+          try {
+            const splitAnswer = answerData?.split(',');
+            if (Array.isArray(splitAnswer)) {
+              for (let i = 0; i < splitAnswer.length; i++) {
+                const splitName = splitAnswer[i]?.split('(');
+                if (splitName) {
+                  const name = splitName[0].trim();
+                  const email = splitName[1]
+                    ? splitName[1].substring(0, splitName[1].length - 1).trim()
+                    : '';
+                  data.push({ name, email });
+                }
+              }
+            }
+          } catch (error) {
+            console.log('error', error);
+          }
+        }
+      }
+    }
+    return { data, questionText };
+  };
+
+  const calculateOwnersCount = () => {
+    const roles = [];
+    if (task && Array.isArray(task.task_role)) {
+      task?.task_role.forEach(role => {
+        const { questionText, data: question_answers } = processRole(
+          role?.question_id
+        );
+        if (role.type === 'roles') {
+          if (question_answers?.length > 0) {
+            for (let answer = 0; answer < question_answers?.length; answer++) {
+              roles.push({
+                id: role.id,
+                name: question_answers[answer]?.name,
+                email: question_answers[answer]?.email,
+                questionText,
+                question_id: role.question_id,
+                type: role.type
+              });
+            }
+          } else {
+            roles.push({
+              id: role.id,
+              questionText,
+              question_id: role.question_id,
+              type: role.type
+            });
+          }
+        } else {
+          roles.push({
+            id: role.id,
+            name: role.name,
+            email: role.email,
+            type: role.type
+          });
+        }
+      });
+    }
+    const count = roles.length; // Calculate count
+    setOwnersCount(count); // Update state
+    setIsComponentMounted({ count, mounted: true });
+  };
+
   return (
     <>
       <Draggable
@@ -415,6 +511,9 @@ function ListItem({
                   className="task-list-item-menu-btn"
                 >
                   <EllipsisVertical
+                    onClick={() => {
+                      calculateOwnersCount(); // Trigger calculation of owners count
+                    }}
                     data-testid={`ellipsis-vertical-${index}`}
                   />
                 </IconMenuButton>
@@ -431,6 +530,18 @@ function ListItem({
         open={showDeleteAlert}
         onClose={handleDeleteAlertClose}
       />
+      {isComponentMounted && (
+        <TaskListToolbarMenuPortal>
+          <SeeOwners
+            isModalOpen={isModalOpen}
+            closeModal={closeModal}
+            setIsModalOpen={setIsModalOpen}
+            taskId={task.task_id}
+            task={task}
+            ownersCount={isComponentMounted.count}
+          />
+        </TaskListToolbarMenuPortal>
+      )}
     </>
   );
 }

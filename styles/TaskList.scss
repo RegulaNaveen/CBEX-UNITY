@@ -70,6 +70,9 @@
             color: #4d4d4d;
             margin-right: 0.35rem;
           }
+          .MuiButtonBase-root {
+            background-color: white;
+          }
           .task-desc {
             flex-grow: 1;
             line-height: 24px;
@@ -251,8 +254,12 @@
 }
 .search-result-highlight {
   background-color: #0557d559;
+
   .ellipsis {
-    background-color: #0557d559 !important;
-    visibility: hidden;
+    background: transparent !important;
+    visibility: hidden !important;
+  }
+  .MuiButtonBase-root {
+    background: transparent !important;
   }
 }
