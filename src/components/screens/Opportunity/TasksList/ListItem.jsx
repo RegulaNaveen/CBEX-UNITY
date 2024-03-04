@@ -81,7 +81,6 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
     mounted: false
   });
   const [taskId, setTaskId] = useState(null);
-  const [ownersCount, setOwnersCount] = useState(0);
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const locked = !!task.locked;
   const lockedBy = locked ? task.lockedBy : null;
@@ -244,7 +243,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
         <div className="task-list-menu-item-wrapper">
           <User2Icon fontSize="small" />
           <Typography className="menu-item-label">
-            See Owners({ownersCount})
+            See Owners({isComponentMounted.count})
           </Typography>
         </div>
       ),
@@ -412,7 +411,6 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
       });
     }
     const count = roles.length; // Calculate count
-    setOwnersCount(count); // Update state
     setIsComponentMounted({ count, mounted: true });
   };
 

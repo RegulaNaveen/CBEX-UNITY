@@ -101,6 +101,8 @@ const TasksList = () => {
   const [taskId, setTaskId] = useState(null);
   const [isNewTask, setIsNewTask] = useState({ result: {}, isNew: false });
   const [resetToDefault, setResetToDefault] = useState(false);
+  const [taskListContainerRef, setTaskListContainerRef] = useState(null);
+
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
   const editable = selectedBid.isEditable;
@@ -229,9 +231,36 @@ const TasksList = () => {
   const searchWithDay = () => {};
 
   useEffect(() => {
-    if (resetToDefault) {
+    let timer = null;
+    if (taskListContainerRef) {
+      taskListContainerRef.addEventListener('pointerenter', () => {
+        timer = setTimeout(() => {
+          if (taskListContainerRef && editable) {
+            const boundingRect = taskListContainerRef.getBoundingClientRect();
+            if (boundingRect.top > 58) {
+              taskListContainerRef.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
+              });
+            }
+          }
+          clearTimeout(timer);
+        }, 1200);
+      });
+
+      taskListContainerRef.addEventListener('pointerleave', () => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+      });
     }
-  }, [resetToDefault]);
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [editable, taskListContainerRef]);
 
   function handleDragEnd(result) {
     const { source, destination } = result;
@@ -333,7 +362,10 @@ const TasksList = () => {
   };
 
   return (
-    <div id="tasks-list-left-section">
+    <div
+      id="tasks-list-left-section"
+      ref={_ref => setTaskListContainerRef(_ref)}
+    >
       <div className="task-list-header">
         <Header />
         <div className="progress-indicator">
