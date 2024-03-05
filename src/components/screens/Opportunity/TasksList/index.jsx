@@ -179,7 +179,7 @@ const TasksList = () => {
         expanded:
           isEmpty(tasksGroupsByDay) || resetToDefault
             ? isCorrectDay(dateForDay)
-            : tasksGroupsByDay[day].expanded,
+            : tasksGroupsByDay[day]?.expanded,
         date: dateForDay,
         dateFormatted: dateForDay.format('DD MMM'),
         uncompletedCount: tasksForADay.filter(task => !task.is_completed)
