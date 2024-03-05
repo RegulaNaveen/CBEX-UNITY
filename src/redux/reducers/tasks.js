@@ -4,6 +4,8 @@ const INITIAL_STATE = {
   tasks: [],
   loading: false,
   error: '',
+  taskHistory: [],
+  taskHistoryLoading: false,
   showMine: false
 };
 
@@ -33,6 +35,16 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         tasks: editTask(state, action)
+      };
+    case TASKS.SET_TASK_HISTORY:
+      return {
+        ...state,
+        taskHistory: action.payload
+      };
+    case TASKS.LOADING_TASK_HISTORY:
+      return {
+        ...state,
+        taskHistoryLoading: action.payload
       };
     case TASKS.TOGGLE_SHOW_MINE:
       return {

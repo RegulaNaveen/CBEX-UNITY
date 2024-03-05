@@ -36,6 +36,7 @@ import ProgressIndicator from './ProgressIndicator';
 import getNextWorkingDay from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
+import HistoryModal from './HistoryModal';
 
 import {
   selectQuery,
@@ -101,6 +102,7 @@ const TasksList = () => {
   const [taskId, setTaskId] = useState(null);
   const [isNewTask, setIsNewTask] = useState({ result: {}, isNew: false });
   const [resetToDefault, setResetToDefault] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [taskListContainerRef, setTaskListContainerRef] = useState(null);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
@@ -123,21 +125,6 @@ const TasksList = () => {
     },
     [TODAY]
   );
-
-  const getDays = bidDate => {
-    let days = [];
-    let date = moment(bidDate, 'DD MMM YY');
-    date = date.add(1, 'days');
-    let count = 0;
-    while (count < 10) {
-      if (date.day() !== 0 && date.day() !== 6) {
-        days.push(date.format('DD MMM YY'));
-        count++;
-      }
-      date = date.add(1, 'days');
-    }
-    return days;
-  };
 
   useEffect(() => {
     // if bid is changed
@@ -359,6 +346,16 @@ const TasksList = () => {
     setIsModalOpen(false);
   };
 
+  const openHistoryModal = task_id => {
+    setTaskId(task_id);
+    setIsHistoryModalOpen(true);
+  };
+
+  const closeHistoryModal = () => {
+    setTaskId(null);
+    setIsHistoryModalOpen(false);
+  };
+
   return (
     <div
       id="tasks-list-left-section"
@@ -418,6 +415,7 @@ const TasksList = () => {
                         dayDiffFromToday={tasksGroup.dayDiffFromToday}
                         key={`task-item-${day}-${index}`}
                         editable={editable}
+                        openHistoryModal={openHistoryModal}
                       />
                     ))}
                     {selectedBid.isEditable && (
@@ -447,6 +445,16 @@ const TasksList = () => {
             taskId={taskId}
             isNewTask={isNewTask}
             setIsNewTask={setIsNewTask}
+          />
+        </TaskListToolbarMenuPortal>
+      )}
+      {isHistoryModalOpen && (
+        <TaskListToolbarMenuPortal>
+          <HistoryModal
+            isHistoryModalOpen={isHistoryModalOpen}
+            closeHistoryModal={closeHistoryModal}
+            taskId={taskId}
+            proposalId={proposalId}
           />
         </TaskListToolbarMenuPortal>
       )}

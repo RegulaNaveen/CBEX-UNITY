@@ -149,3 +149,13 @@ export const editTaskDataApi = async (
       });
   });
 };
+
+
+export function getTaskHistoryApi(proposalId, taskId) {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${TASKSLIST_API_URL}/${proposalId}/${taskId}/history`, config)
+      .then(response => resolve(response.data))
+      .catch(err => reject(err));
+  });
+}
