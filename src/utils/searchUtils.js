@@ -182,6 +182,13 @@ export async function getSearchResults({
             allTabs[activeTab].tabName,
             activeTab
           );
+          searchInTaskList(
+            finalResult,
+            regexp,
+            taskData,
+            allTabs[activeTab].tabName,
+            activeTab
+          );
           verticalTabSearched = true;
         }
       });
@@ -1265,7 +1272,6 @@ export function updateSearchMatches({
   tabName = '',
   sectionName = null
 }) {
-  console.log('updateSearchMatches', inputText, regexp, index, finalResult);
   let matchIndex = 0;
   for (const result of inputText.matchAll(regexp)) {
     finalResult.count++;
