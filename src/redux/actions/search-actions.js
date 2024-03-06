@@ -147,7 +147,6 @@ export const doSearchAction = () => {
   return async (dispatch, getState) => {
     dispatch({ type: SEARCH.DO_SEARCH });
     const currentState = getState();
-    console.log('currentState', currentState);
     const allSectionsExpanded = selectAreAllSectionsExpanded(currentState);
     if (allSectionsExpanded) {
       dispatch(expandAllSectionsAction(false));

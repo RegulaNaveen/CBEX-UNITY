@@ -31,11 +31,11 @@ import DeleteAlert from './DeleteAlert';
 import { SocketContext } from '../../../../context/SocketContext';
 import {
   selectCurrentSearchResult,
-  selectAutoNavigatedToCurrentResult,
-  selectPrevSearchResult
+  selectAutoNavigatedToCurrentResult
 } from '../../../../redux/selectors/search';
 import SeeOwners from './SeeOwnersModal';
 import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
+import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
 function OverflowEllipsis({ show }) {
   return (
@@ -95,7 +95,11 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
     }
   }, [descRef]);
   useEffect(() => {
-    if (currentSearchResult !== null && taskDescRef.current !== null) {
+    if (
+      currentSearchResult !== null &&
+      taskDescRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
       if (currentSearchResult.searchIndex === task.id) {
         setTimeout(() => {
           taskDescRef.current.scrollIntoView({
@@ -103,11 +107,11 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
             block: 'center',
             inline: 'nearest'
           });
-          dispatch(autoNavigatedToCurrentResult());
+          dispatch(autoNavigationCompletedAction());
         }, 700);
       }
     }
-  }, [taskDescRef.current, currentSearchResult]);
+  }, [taskDescRef.current, currentSearchResult, autoNavigatedToCurrentResult]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(entries => {
