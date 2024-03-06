@@ -61,7 +61,14 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
-function ListItem({ index, task, day, dayDiffFromToday, editable }) {
+function ListItem({
+  index,
+  task,
+  day,
+  dayDiffFromToday,
+  editable,
+  openHistoryModal
+}) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -138,8 +145,8 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
     }
   }, [descEditRef]);
 
-  const handleClick = label => () => {
-    console.log(`You picked ${label}.`);
+  const handleHistoryClick = () => {
+    openHistoryModal(task.task_id);
   };
 
   const handleSeeOwners = text => () => {
@@ -261,7 +268,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
           <Typography className="menu-item-label">History</Typography>
         </div>
       ),
-      onClick: handleClick('History')
+      onClick: handleHistoryClick
     },
     {
       text: (
