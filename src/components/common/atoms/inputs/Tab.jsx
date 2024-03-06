@@ -593,7 +593,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       if (
         currentSearchResult.vTab !== null &&
         currentSearchResult.vTab >= 0 &&
-        currentSearchResult.vTab <= 3
+        currentSearchResult.vTab <= 5
       ) {
         if (!isNotepadOpen) {
           setSystemTriggeredClick(true);
@@ -749,6 +749,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   }
 
   const renderVerticleTabsComponent = activeVerticleTab => {
+    console.log('activeVerticleTab', activeVerticleTab);
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
         <div
