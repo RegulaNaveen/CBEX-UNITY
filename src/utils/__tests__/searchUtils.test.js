@@ -10,7 +10,9 @@ import {
   searchInEmailTemplates,
   searchInProposalTeam,
   updateSearchMatches,
-  getTableData
+  getTableData,
+  updateSearchMatchesInTable,
+  searchInTaskList
 } from '../searchUtils';
 import mockData from './search_data.json';
 import { shouldShowSection } from '../../components/screens/Approvals/utils';
@@ -1954,6 +1956,449 @@ describe('searchUtils unit tests cases', () => {
       approvals,
       approvalFilters,
       allFlags
+    );
+  });
+
+  it('search in searchInTaskList ', () => {
+    const props = {
+      finalResult: {
+        count: 1,
+        results: [
+          {
+            tab: 0,
+            searchIndex: 838,
+            inputText: 'test con',
+            vTab: 5,
+            startIndex: 0,
+            endIndex: 8,
+            matchIndex: 0,
+            tabName: 'Strategy Development',
+            sectionName: null
+          }
+        ],
+        newCurrentResultIndex: 0,
+        autoNavigatedToCurrentResult: false,
+        prevResult: null
+      },
+      regexp: '/test con/gi',
+      sections: [
+        {
+          id: 829,
+          proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+          task_id: 'a68eae93-b465-48b4-bd53-a127ecc2c7a7',
+          description: '1 march task',
+          primary_condition: 'Bid History Creation',
+          operator: 'addition',
+          unit_type: 'Business Days',
+          no_of_units: 1,
+          opportunity_types:
+            'Non-Core Clinical Studies,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA),Ballpark OT,IQB Template OT,Default Type,PILOT - DO NOT USE: PROGRAMS',
+          order: 1,
+          is_completed: false,
+          is_modified: true,
+          is_deleted: false,
+          is_custom: false,
+          is_freezed: false,
+          updated_by: 'Srinivas Manchikatla',
+          updated_by_email: 'Srinivas.Manchikatla@iqvia.com',
+          created_date: '2024-03-04T04:49:08.633Z',
+          updated_date: '2024-03-04T04:49:56.110Z',
+          task_role: [],
+          task_history: [
+            {
+              id: 362,
+              task_list_id: 829,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: 'a68eae93-b465-48b4-bd53-a127ecc2c7a7',
+              action: 'is_completed',
+              value: {
+                newValue: true,
+                oldValue: false
+              },
+              updated_by: 'Srinivas Manchikatla',
+              updated_by_email: 'Srinivas.Manchikatla@iqvia.com',
+              created_date: '2024-03-04T04:49:47.960Z',
+              updated_date: '2024-03-04T04:49:47.960Z'
+            },
+            {
+              id: 385,
+              task_list_id: 829,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: 'a68eae93-b465-48b4-bd53-a127ecc2c7a7',
+              action: 'task_role',
+              value: {
+                newValue: [],
+                oldValue: [
+                  {
+                    name: 'komal vijaykumar.mulik',
+                    email: 'komalvijaykumar.mulik@iqvia.com'
+                  }
+                ]
+              },
+              updated_by: 'Srinivas Manchikatla',
+              updated_by_email: 'Srinivas.Manchikatla@iqvia.com',
+              created_date: '2024-03-04T06:56:22.014Z',
+              updated_date: '2024-03-04T06:56:22.014Z'
+            },
+            {
+              id: 364,
+              task_list_id: 829,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: 'a68eae93-b465-48b4-bd53-a127ecc2c7a7',
+              action: 'is_completed',
+              value: {
+                newValue: false,
+                oldValue: true
+              },
+              updated_by: 'Srinivas Manchikatla',
+              updated_by_email: 'Srinivas.Manchikatla@iqvia.com',
+              created_date: '2024-03-04T04:49:56.110Z',
+              updated_date: '2024-03-04T04:49:56.110Z'
+            },
+            {
+              id: 363,
+              task_list_id: 829,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: 'a68eae93-b465-48b4-bd53-a127ecc2c7a7',
+              action: 'task_role',
+              value: {
+                newValue: [
+                  {
+                    name: 'komal vijaykumar.mulik',
+                    email: 'komalvijaykumar.mulik@iqvia.com'
+                  }
+                ],
+                oldValue: []
+              },
+              updated_by: 'Srinivas Manchikatla',
+              updated_by_email: 'Srinivas.Manchikatla@iqvia.com',
+              created_date: '2024-03-04T04:49:49.212Z',
+              updated_date: '2024-03-04T04:49:49.212Z'
+            }
+          ]
+        },
+        {
+          id: 836,
+          proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+          task_id: '3bfcfde2-daaa-4315-8d40-52868ffa784c',
+          description: '29 feb task',
+          primary_condition: 'Bid History Creation',
+          operator: 'addition',
+          unit_type: 'Business Days',
+          no_of_units: 2,
+          opportunity_types:
+            'Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA),Ballpark OT',
+          order: 2,
+          is_completed: false,
+          is_modified: false,
+          is_deleted: false,
+          is_custom: false,
+          is_freezed: false,
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-04T04:49:08.633Z',
+          updated_date: '2024-03-04T04:49:08.633Z',
+          task_role: [
+            {
+              id: 2481,
+              task_list_id: 836,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '3bfcfde2-daaa-4315-8d40-52868ffa784c',
+              question_id: 'Proposal Team-P0X',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2482,
+              task_list_id: 836,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '3bfcfde2-daaa-4315-8d40-52868ffa784c',
+              question_id: 'Proposal Team-Z5P',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2483,
+              task_list_id: 836,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '3bfcfde2-daaa-4315-8d40-52868ffa784c',
+              question_id: '722f9c3c-5538-4b64-bda5-76604d61da46',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2484,
+              task_list_id: 836,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '3bfcfde2-daaa-4315-8d40-52868ffa784c',
+              question_id: 'Proposal Team-D6B',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2485,
+              task_list_id: 836,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '3bfcfde2-daaa-4315-8d40-52868ffa784c',
+              question_id: 'Proposal Team-P0C',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            }
+          ],
+          task_history: []
+        },
+        {
+          id: 838,
+          proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+          task_id: 'fb605595-261e-49bb-a8b4-7c514d2d4d90',
+          description: 'test con',
+          primary_condition: 'Bid History Creation',
+          operator: 'addition',
+          unit_type: 'Business Days',
+          no_of_units: 2,
+          opportunity_types: 'Default Type,Ballpark OT',
+          order: 4,
+          is_completed: false,
+          is_modified: false,
+          is_deleted: false,
+          is_custom: false,
+          is_freezed: false,
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-04T04:49:08.633Z',
+          updated_date: '2024-03-04T04:49:08.633Z',
+          task_role: [
+            {
+              id: 2490,
+              task_list_id: 838,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: 'fb605595-261e-49bb-a8b4-7c514d2d4d90',
+              question_id: 'Proposal Team-L5J',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            }
+          ],
+          task_history: []
+        },
+        {
+          id: 841,
+          proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+          task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+          description: 'task-3',
+          primary_condition: 'Bid History Creation',
+          operator: 'addition',
+          unit_type: 'Business Days',
+          no_of_units: 3,
+          opportunity_types:
+            'Core Opportunity Launch Call (APAC),Non-Core Clinical Studies,Core Opportunity Launch Call (AMR/EMEA),Ballpark OT,IQB Template OT,Default Type,PILOT - DO NOT USE: PROGRAMS',
+          order: 3,
+          is_completed: false,
+          is_modified: false,
+          is_deleted: false,
+          is_custom: false,
+          is_freezed: false,
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-04T04:49:08.633Z',
+          updated_date: '2024-03-04T04:49:08.633Z',
+          task_role: [
+            {
+              id: 2493,
+              task_list_id: 841,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+              question_id: 'Proposal Team-D8U',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2498,
+              task_list_id: 841,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+              question_id: 'Proposal Team-I9S',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2497,
+              task_list_id: 841,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+              question_id: 'Proposal Team-W3O',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2496,
+              task_list_id: 841,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+              question_id: 'Proposal Team-W1D',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2495,
+              task_list_id: 841,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+              question_id: 'Proposal Team-X6F',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2494,
+              task_list_id: 841,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '880e97d1-fa90-42b0-b1c4-f8c74f52fa53',
+              question_id: '598e63b3-c9ab-4740-9a28-3cd7d65eefad',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            }
+          ],
+          task_history: []
+        },
+        {
+          id: 844,
+          proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+          task_id: '4b809426-b9ef-4fb7-9a50-5cf0a6fb0e38',
+          description: 'Test 201',
+          primary_condition: 'Bid History Creation',
+          operator: 'addition',
+          unit_type: 'Business Days',
+          no_of_units: 5,
+          opportunity_types:
+            'Non-Core Clinical Studies,Default Type,Ballpark OT,Core Opportunity Launch Call (AMR/EMEA),Core Opportunity Launch Call (APAC)',
+          order: 2,
+          is_completed: false,
+          is_modified: false,
+          is_deleted: false,
+          is_custom: false,
+          is_freezed: false,
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-04T04:49:08.633Z',
+          updated_date: '2024-03-04T04:49:08.633Z',
+          task_role: [
+            {
+              id: 2503,
+              task_list_id: 844,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '4b809426-b9ef-4fb7-9a50-5cf0a6fb0e38',
+              question_id: 'Proposal Team-P0X',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2505,
+              task_list_id: 844,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '4b809426-b9ef-4fb7-9a50-5cf0a6fb0e38',
+              question_id: '666629a9-e145-4374-9e2f-793fd998c56e',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            },
+            {
+              id: 2504,
+              task_list_id: 844,
+              proposal_id: '0f846d97-1913-4081-8a7b-82794a370f80',
+              task_id: '4b809426-b9ef-4fb7-9a50-5cf0a6fb0e38',
+              question_id: 'Proposal Team-Z5P',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-04T04:49:08.650Z',
+              updated_date: '2024-03-04T04:49:08.650Z'
+            }
+          ],
+          task_history: []
+        }
+      ],
+      tabName: 'Strategy Development',
+      activeTab: 0
+    };
+
+    const { finalResult, regexp, sections, tabName, activeTab } = props;
+
+    const result = searchInTaskList(
+      finalResult,
+      regexp,
+      sections,
+      tabName,
+      activeTab
     );
   });
 });
