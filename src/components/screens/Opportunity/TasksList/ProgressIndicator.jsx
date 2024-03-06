@@ -23,6 +23,10 @@ const ProgressIndicator = ({ tasksList }) => {
 
   const [maxNoOfUnits, setMaxNoOfUnits] = useState(0); //max no of units
 
+  const roundHalf = num => {
+    return Math.round(num * 2) / 2;
+  };
+
   useEffect(() => {
     let completedTasks = 0;
     let totalCount = 0;
@@ -62,9 +66,9 @@ const ProgressIndicator = ({ tasksList }) => {
       setTasksCountTillDate(totalTasksTillDay);
       setTotalTasksCount(totalCount);
       setProgressBarValue(
-        Math.round(
+        roundHalf(
           (completedTasks / totalTasksTillDay) *
-            (Math.round(100 / maxNoOfUnits) * (currentDayIndexValue + 1))
+            (roundHalf(100 / maxNoOfUnits) * (currentDayIndexValue + 1))
         )
       );
     } else {
@@ -73,7 +77,7 @@ const ProgressIndicator = ({ tasksList }) => {
       setTasksCountTillDate(totalTasksTillDay);
       setTotalTasksCount(totalCount); //total tasks count of 10 days for previous bids
       setProgressBarValue(
-        Math.round((completedTasks / totalTasksTillDay) * 100)
+        roundHalf((completedTasks / totalTasksTillDay) * 100)
       );
     }
 
@@ -99,30 +103,36 @@ const ProgressIndicator = ({ tasksList }) => {
                 <div
                   key={index}
                   className={
-                    currentDayIndex === index
+                    currentDayIndex === index && day !== 1
                       ? 'indicator-icon show'
                       : currentDayIndex === null && index === 0
                       ? 'indicator-icon show day-zero'
+                      : currentDayIndex === index && day === 1
+                      ? 'indicator-icon show day-one'
                       : 'indicator-icon hidden'
                   }
                   style={{
                     width:
                       currentDayIndex === null
                         ? 0
-                        : day * Math.round(100 / maxNoOfUnits) + '%'
+                        : day * roundHalf(100 / maxNoOfUnits) > 100
+                        ? 100 + '%'
+                        : day * roundHalf(100 / maxNoOfUnits) === 5
+                        ? 4.5 + '%'
+                        : day * roundHalf(100 / maxNoOfUnits) + '%'
                   }}
                 >
                   <div
                     className={
-                      day === maxNoOfUnits
-                        ? 'indicator-day day-ten'
+                      day === maxNoOfUnits || progressBarValue >= 100
+                        ? 'indicator-day last-day'
                         : currentDayIndex === null && index === 0
                         ? 'indicator-day day-zero'
                         : 'indicator-day'
                     }
                   >
                     <DayIndicator />
-                    <span className={day === maxNoOfUnits ? 'ten' : ''}>
+                    <span className={day === maxNoOfUnits ? 'lastDay' : ''}>
                       {currentDayIndex === null ? `Day 0` : `Day ${day}`}
                     </span>
                   </div>
