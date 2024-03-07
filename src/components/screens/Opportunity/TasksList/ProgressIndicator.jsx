@@ -97,8 +97,8 @@ const ProgressIndicator = ({ tasksList }) => {
       {taskProgress && (
         <div className="progress-bar">
           {totalDays &&
-            totalDays.length > 0 &&
-            totalDays.map((day, index) => {
+            totalDays?.length > 0 &&
+            totalDays?.map((day, index) => {
               return (
                 <div
                   key={index}
@@ -115,9 +115,9 @@ const ProgressIndicator = ({ tasksList }) => {
                     width:
                       currentDayIndex === null
                         ? 0
-                        : day * roundHalf(100 / maxNoOfUnits) > 100
+                        : day === maxNoOfUnits
                         ? 100 + '%'
-                        : day * roundHalf(100 / maxNoOfUnits) === 5
+                        : day * roundHalf(100 / maxNoOfUnits) <= 5
                         ? 4.5 + '%'
                         : day * roundHalf(100 / maxNoOfUnits) + '%'
                   }}
