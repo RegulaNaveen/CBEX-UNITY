@@ -214,16 +214,18 @@
       .indicator-day {
         font-size: 12px;
         position: relative;
-        left: 22px;
+        left: 24px;
         top: -12px;
         color: #5e082a;
         font-weight: bold;
         display: flex;
         flex-direction: column-reverse;
-        &.day-ten {
-          left: 20px;
+        &.last-day {
+          left: 32px;
+          width: 40px;
         }
         &.day-zero {
+          left: 22px;
           span {
             left: 0px;
           }
@@ -231,9 +233,11 @@
         span {
           left: -10px;
           position: relative;
-          &.ten {
+          width: auto;
+          &.lastDay {
             left: -28px;
             position: relative;
+            width: auto;
           }
         }
       }
@@ -254,6 +258,13 @@
       &.day-zero {
         left: -22px !important;
         width: 34px !important;
+      }
+      &.day-one {
+        .indicator-day {
+          span {
+            width: 28px;
+          }
+        }
       }
     }
   }

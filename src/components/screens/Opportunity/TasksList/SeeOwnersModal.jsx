@@ -14,6 +14,7 @@ import { updateTaskById } from '../../../../redux/actions/tasksList-actions';
 import { useDispatch } from 'react-redux';
 import { selectTasksList } from '../../../../redux/selectors/tasks';
 import Loader from 'apollo-react/components/Loader';
+import { processRole } from './utils';
 
 const { USER_API_URL, API_KEY } = API.PROPOSAL;
 const SeeOwners = ({
@@ -23,7 +24,10 @@ const SeeOwners = ({
   ownersCount,
   setIsNewTask,
   isNewTask,
-  task
+  task,
+  setAddOwnerBtn,
+  addOwnerBtn,
+  editable
 }) => {
   const description = isNewTask?.isNew
     ? isNewTask?.result?.description
@@ -55,7 +59,8 @@ const SeeOwners = ({
     if (task && Array.isArray(task.task_role)) {
       task?.task_role.forEach(role => {
         const { questionText, data: question_answers } = processRole(
-          role?.question_id
+          role?.question_id,
+          proposalTeamQuestions
         );
         if (role.type === 'roles' && questionText) {
           if (question_answers?.length > 0) {
@@ -91,45 +96,10 @@ const SeeOwners = ({
       setSelectedTask(task);
     } else if (isNewTask && isNewTask?.isNew) {
       setSelectedTask(isNewTask?.result);
+    } else {
+      setSelectedTask(task);
     }
   }, [proposalTeamQuestions, task, isModalOpen]);
-
-  const processRole = value => {
-    const data = [];
-    const question = proposalTeamQuestions.find(
-      question => question.questionId === value
-    );
-    let questionText = '';
-    if (question) {
-      questionText = question.questionText;
-      const answer = question.answers;
-      if (answer && answer.length) {
-        const lastAnswer = answer[answer.length - 1];
-        const answerData = lastAnswer.answer;
-
-        if (answerData && answerData.length) {
-          try {
-            const splitAnswer = answerData?.split(',');
-            if (Array.isArray(splitAnswer)) {
-              for (let i = 0; i < splitAnswer.length; i++) {
-                const splitName = splitAnswer[i]?.split('(');
-                if (splitName) {
-                  const name = splitName[0].trim();
-                  const email = splitName[1]
-                    ? splitName[1].substring(0, splitName[1].length - 1).trim()
-                    : '';
-                  data.push({ name, email });
-                }
-              }
-            }
-          } catch (error) {
-            console.log('error', error);
-          }
-        }
-      }
-    }
-    return { data, questionText };
-  };
 
   const handleChange = (event, newValue) => {
     const splitName = newValue.label.split('(');
@@ -148,6 +118,7 @@ const SeeOwners = ({
     setInputValue('');
     setShowInput(false);
     setButtonDisabled(false);
+    setAddOwnerBtn(false);
   };
 
   const handleSave = () => {
@@ -195,6 +166,15 @@ const SeeOwners = ({
   }, []);
 
   const handleCancel = () => {
+    setIsModalOpen(false);
+    setShowInput(false);
+    setButtonDisabled(false);
+    if (isNewTask && isNewTask?.isNew) {
+      setIsNewTask({ result: isNewTask?.result, isNew: false });
+    }
+  };
+
+  const handleOk = () => {
     setIsModalOpen(false);
     setShowInput(false);
     setButtonDisabled(false);
@@ -355,6 +335,8 @@ const SeeOwners = ({
       (selectedUsers.some(value => value?.new) || len != ownersCount)
     ) {
       return false;
+    } else if (isNewTask && isNewTask?.result) {
+      return false;
     }
     return true;
   };
@@ -385,7 +367,12 @@ const SeeOwners = ({
               <div className="modal-content-common modal-content-2a">
                 <p>Users assigned this task</p>
                 <Button
-                  disabled={isButtonDisabled}
+                  disabled={
+                    isButtonDisabled ||
+                    task?.is_completed ||
+                    addOwnerBtn ||
+                    !editable
+                  }
                   onClick={() => {
                     setShowInput(true);
                     setButtonDisabled(true);
@@ -417,10 +404,12 @@ const SeeOwners = ({
                             className="remove-user"
                             onClick={() => handleRemoveUser(index)}
                           >
-                            <TrashIcon
-                              fontSize="small"
-                              data-testid="trash-icon"
-                            />
+                            {!task?.is_completed && editable && (
+                              <TrashIcon
+                                fontSize="small"
+                                data-testid="trash-icon"
+                              />
+                            )}
                           </div>
                         </div>
                       )
@@ -451,7 +440,11 @@ const SeeOwners = ({
                 )}
               </div>
               <div className="modal-buttons">
-                <Button onClick={handleCancel}>Cancel</Button>
+                {task?.is_completed || !editable ? (
+                  <Button onClick={handleOk}>OK</Button>
+                ) : (
+                  <Button onClick={handleCancel}>Cancel</Button>
+                )}
                 <Button onClick={handleSave} disabled={checkDisable()}>
                   Save
                   {isLoading && (
