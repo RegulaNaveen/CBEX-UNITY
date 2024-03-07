@@ -4,16 +4,24 @@ import Checkbox from 'apollo-react/components/Checkbox';
 import { TASKS } from '../../../../constants/types';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { doSearchAction } from '../../../../redux/actions/search-actions';
+import { selectIsOpen, selectQuery } from '../../../../redux/selectors/search';
 
 const Header = () => {
+  const [showMine, setShowMine] = useState(false);
   const dispatch = useDispatch();
-  const showMine = useSelector(state => state.tasks.showMine);
+  const isOpen = useSelector(selectIsOpen);
+  const query = useSelector(selectQuery);
 
   const handleChange = event => {
     dispatch({
       type: TASKS.TOGGLE_SHOW_MINE,
       payload: event.target.checked
     });
+    {
+      isOpen && query && dispatch(doSearchAction());
+    }
+    setShowMine(event.target.checked);
   };
 
   return (

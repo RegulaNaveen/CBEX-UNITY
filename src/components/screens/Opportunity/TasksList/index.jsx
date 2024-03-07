@@ -114,7 +114,6 @@ const TasksList = () => {
   const userName = localStorage.getItem('userName');
   const { getTaskLockDetailsWrapper } = useContext(SocketContext);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const prevSearchResult = useSelector(selectPrevSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
@@ -229,7 +228,8 @@ const TasksList = () => {
     if (
       currentSearchResult !== null &&
       currentSearchResult.inputText &&
-      !autoNavigatedToCurrentResult
+      !autoNavigatedToCurrentResult &&
+      currentSearchResult.vTab == 5
     ) {
       setTasksGroupsByDay(prevTasksGroups => {
         const updatedTasksGroups = { ...prevTasksGroups };
