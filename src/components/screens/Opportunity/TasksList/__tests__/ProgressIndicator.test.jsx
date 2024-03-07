@@ -164,4 +164,95 @@ describe('ProgressIndicator', () => {
     const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
     expect(wrapper.exists()).toBe(true);
   });
+
+  it('should check for last Day', () => {
+    const taskList = {
+      1: {
+        tasks: [],
+        dayDiffFromToday: 0
+      },
+      2: {
+        tasks: [],
+        dayDiffFromToday: 1
+      },
+      3: {
+        tasks: [],
+        dayDiffFromToday: 2
+      },
+      4: {
+        tasks: [],
+        dayDiffFromToday: 5
+      },
+      5: {
+        tasks: [],
+        dayDiffFromToday: 6
+      },
+      6: {
+        tasks: [],
+        dayDiffFromToday: 7
+      },
+      7: {
+        tasks: [],
+        dayDiffFromToday: 8
+      },
+      8: {
+        tasks: [],
+        dayDiffFromToday: 9
+      },
+      9: {
+        tasks: [],
+        dayDiffFromToday: 12
+      },
+      10: {
+        tasks: [],
+        dayDiffFromToday: 13
+      },
+      11: {
+        tasks: [],
+        dayDiffFromToday: 14
+      },
+      12: {
+        tasks: [],
+        dayDiffFromToday: 15
+      },
+      13: {
+        tasks: [],
+        dayDiffFromToday: 16
+      },
+      14: {
+        tasks: [],
+        dayDiffFromToday: 19
+      },
+      15: {
+        tasks: [],
+        dayDiffFromToday: 20
+      },
+      16: {
+        tasks: [],
+        dayDiffFromToday: 21
+      },
+      17: {
+        tasks: [],
+        dayDiffFromToday: 22
+      },
+      18: {
+        tasks: [],
+        dayDiffFromToday: 23
+      },
+      19: {
+        tasks: [],
+        dayDiffFromToday: 26
+      },
+      20: {
+        tasks: [
+          {
+            no_of_units: 20
+          }
+        ],
+        dayDiffFromToday: 27
+      }
+    };
+    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    expect(wrapper.exists()).toBe(true);
+  });
 });

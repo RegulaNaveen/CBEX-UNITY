@@ -31,11 +31,11 @@ import DeleteAlert from './DeleteAlert';
 import { SocketContext } from '../../../../context/SocketContext';
 import {
   selectCurrentSearchResult,
-  selectAutoNavigatedToCurrentResult,
-  selectPrevSearchResult
+  selectAutoNavigatedToCurrentResult
 } from '../../../../redux/selectors/search';
 import SeeOwners from './SeeOwnersModal';
 import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
+import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 
 function OverflowEllipsis({ show }) {
   return (
@@ -61,7 +61,14 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle
 });
 
-function ListItem({ index, task, day, dayDiffFromToday, editable }) {
+function ListItem({
+  index,
+  task,
+  day,
+  dayDiffFromToday,
+  editable,
+  openHistoryModal
+}) {
   const [overflowed, setOverflowed] = useState(false);
   const [descRef, setDescRef] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -95,7 +102,11 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
     }
   }, [descRef]);
   useEffect(() => {
-    if (currentSearchResult !== null && taskDescRef.current !== null) {
+    if (
+      currentSearchResult !== null &&
+      taskDescRef.current !== null &&
+      !autoNavigatedToCurrentResult
+    ) {
       if (currentSearchResult.searchIndex === task.id) {
         setTimeout(() => {
           taskDescRef.current.scrollIntoView({
@@ -103,11 +114,11 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
             block: 'center',
             inline: 'nearest'
           });
-          dispatch(autoNavigatedToCurrentResult());
+          dispatch(autoNavigationCompletedAction());
         }, 700);
       }
     }
-  }, [taskDescRef.current, currentSearchResult]);
+  }, [taskDescRef.current, currentSearchResult, autoNavigatedToCurrentResult]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(entries => {
@@ -134,8 +145,8 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
     }
   }, [descEditRef]);
 
-  const handleClick = label => () => {
-    console.log(`You picked ${label}.`);
+  const handleHistoryClick = () => {
+    openHistoryModal(task.task_id);
   };
 
   const handleSeeOwners = text => () => {
@@ -256,7 +267,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
           <Typography className="menu-item-label">History</Typography>
         </div>
       ),
-      onClick: handleClick('History')
+      onClick: handleHistoryClick
     },
     {
       text: (
