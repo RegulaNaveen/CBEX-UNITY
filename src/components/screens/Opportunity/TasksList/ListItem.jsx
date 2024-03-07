@@ -243,12 +243,11 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
         <div className="task-list-menu-item-wrapper">
           <User2Icon fontSize="small" />
           <Typography className="menu-item-label">
-            See Owners({isComponentMounted.count})
+            See Owners ({isComponentMounted.count})
           </Typography>
         </div>
       ),
-      onClick: handleSeeOwners(),
-      disabled: locked || !editable
+      onClick: handleSeeOwners()
     },
     {
       text: (
@@ -520,11 +519,11 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
                   size="small"
                   id="task-list-item-menu-btn"
                   className="task-list-item-menu-btn"
+                  onMouseEnter={() => {
+                    calculateOwnersCount(); // Trigger calculation of owners count
+                  }}
                 >
                   <EllipsisVertical
-                    onClick={() => {
-                      calculateOwnersCount(); // Trigger calculation of owners count
-                    }}
                     data-testid={`ellipsis-vertical-${index}`}
                   />
                 </IconMenuButton>
@@ -550,6 +549,7 @@ function ListItem({ index, task, day, dayDiffFromToday, editable }) {
             taskId={task.task_id}
             task={task}
             ownersCount={isComponentMounted.count}
+            editable={editable}
           />
         </TaskListToolbarMenuPortal>
       )}
