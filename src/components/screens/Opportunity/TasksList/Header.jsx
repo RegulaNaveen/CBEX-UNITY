@@ -8,9 +8,11 @@ import { doSearchAction } from '../../../../redux/actions/search-actions';
 import { selectIsOpen, selectQuery } from '../../../../redux/selectors/search';
 
 const Header = () => {
+  const [showMine, setShowMine] = useState(false);
   const dispatch = useDispatch();
   const isOpen = useSelector(selectIsOpen);
   const query = useSelector(selectQuery);
+
   const handleChange = event => {
     dispatch({
       type: TASKS.TOGGLE_SHOW_MINE,
