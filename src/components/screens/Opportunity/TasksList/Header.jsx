@@ -8,10 +8,10 @@ import { doSearchAction } from '../../../../redux/actions/search-actions';
 import { selectIsOpen, selectQuery } from '../../../../redux/selectors/search';
 
 const Header = () => {
-  const [showMine, setShowMine] = useState(false);
   const dispatch = useDispatch();
   const isOpen = useSelector(selectIsOpen);
   const query = useSelector(selectQuery);
+  const showMine = useSelector(state => state.tasks.showMine);
 
   const handleChange = event => {
     dispatch({
@@ -21,7 +21,6 @@ const Header = () => {
     {
       isOpen && query && dispatch(doSearchAction());
     }
-    setShowMine(event.target.checked);
   };
 
   return (
