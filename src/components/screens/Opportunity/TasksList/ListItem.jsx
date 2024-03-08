@@ -36,6 +36,7 @@ import {
 import SeeOwners from './SeeOwnersModal';
 import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
+import { selectCanTaskReorder } from '../../../../redux/selectors/tasks';
 
 function OverflowEllipsis({ show }) {
   return (
@@ -81,6 +82,7 @@ function ListItem({
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
+  const canReorder = useSelector(selectCanTaskReorder);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState({
@@ -462,14 +464,16 @@ function ListItem({
                 provided.draggableProps.style
               )}
             >
-              <span
-                {...provided.dragHandleProps}
-                className={classNames({ disabled: locked || !editable })}
-                data-testid={`drag-group-${day}-item-${index}`}
-                style={{ height: '24px' }}
-              >
-                <DragIcon className="drag-icon" />
-              </span>
+              {canReorder && (
+                <span
+                  {...provided.dragHandleProps}
+                  className={classNames({ disabled: locked || !editable })}
+                  data-testid={`drag-group-${day}-item-${index}`}
+                  style={{ height: '24px' }}
+                >
+                  <DragIcon className="drag-icon" />
+                </span>
+              )}
               <Checkbox
                 checked={task?.is_completed}
                 style={{

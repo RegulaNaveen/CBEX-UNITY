@@ -24,3 +24,8 @@ export const selectTasksError = createSelector(
   selectTasks,
   tasks => tasks.error
 );
+
+export const selectCanTaskReorder = createSelector(
+  selectTasks,
+  task => task.canReorder
+);
