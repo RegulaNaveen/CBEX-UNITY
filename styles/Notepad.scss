@@ -44,6 +44,9 @@
       .editor__header {
         border-bottom: $border;
       }
+      .editor-scroll {
+        scrollbar-width: auto;
+      }
     }
     .network-heading {
       display: flex;
