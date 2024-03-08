@@ -61,6 +61,7 @@ const HistoryModal = ({
   };
 
   const renderTaskRoles = item => {
+    const taskRoles = taskHistory?.filter(item => item?.action === 'task_role');
     let oldRoles = [];
     let newRoles = [];
 
@@ -79,26 +80,57 @@ const HistoryModal = ({
     return (
       <div className="task-roles">
         {oldRoles?.map((role, index) => {
-          if (!newRoles?.some(newRole => newRole.email === role.email)) {
+          if (!newRoles?.some(newRole => newRole?.email === role?.email)) {
             return (
               <p key={index}>
                 <span className="red">
-                  {role.name} ({role.email}){'  '}
+                  {role?.name} ({role?.email}){'  '}
                 </span>
               </p>
             );
           }
         })}
         {newRoles?.map((role, index) => {
-          return (
-            <p key={index}>
-              <span className="text">
-                {role.name} ({role.email}){'  '}
-              </span>
-            </p>
-          );
+          if (
+            oldRoles &&
+            oldRoles?.length > 0 &&
+            !oldRoles?.some(oldRole => oldRole?.email === role?.email) &&
+            taskRoles?.[0]?.id === item?.id
+          ) {
+            return (
+              <p key={index}>
+                <span className="text blue">
+                  {role?.name} ({role?.email})
+                </span>
+              </p>
+            );
+          } else {
+            return (
+              <p key={index}>
+                <span className="text">
+                  {role?.name} ({role?.email})
+                </span>
+              </p>
+            );
+          }
         })}
       </div>
+    );
+  };
+
+  const renderTaskDescription = item => {
+    const taskDescriptions = taskHistory?.filter(
+      item => item?.action === 'description'
+    );
+    return (
+      <p>
+        <span className="red">{item?.value?.oldValue} </span>
+        {item?.id === taskDescriptions?.[0]?.id ? (
+          <span className="text blue">{item?.value?.newValue}</span>
+        ) : (
+          <span className="text">{item?.value?.newValue}</span>
+        )}
+      </p>
     );
   };
 
@@ -120,9 +152,21 @@ const HistoryModal = ({
 
     if (taskHistory.length === 0) {
       return (
-        <div className="no-history">
-          <p>System created</p>
-          <p>{moment(taskCreatedDate).format('D-MMM-yyyy')}</p>
+        <div>
+          <div className="answer-container">
+            <div className="main-container">
+              <span className="avatar">SC</span>
+              <div>
+                <p>System created</p>
+              </div>
+            </div>
+            <div className="answer-meta-data">
+              <p className="answer-history-para">
+                {moment(taskCreatedDate).format('D-MMM-yyyy')}
+              </p>
+              <p className="answer-history-para"></p>
+            </div>
+          </div>
         </div>
       );
     }
@@ -138,15 +182,11 @@ const HistoryModal = ({
                 </span>
                 <div>
                   <p>
-                    {item.updated_by} - {getTaskStatus(item)}
+                    {item?.updated_by} - {getTaskStatus(item)}
                   </p>
-                  {item.action !== 'reorder' &&
-                    item.action === 'description' && (
-                      <p>
-                        <span className="red">{item?.value?.oldValue} </span>
-                        <span className="text">{item?.value?.newValue}</span>
-                      </p>
-                    )}
+                  {item?.action !== 'reorder' &&
+                    item?.action === 'description' &&
+                    renderTaskDescription(item)}
                   {item?.action === 'task_role' && (
                     <div className="task-roles">{renderTaskRoles(item)}</div>
                   )}
@@ -157,7 +197,7 @@ const HistoryModal = ({
                       </span>
                     </p>
                   )}
-                  {item.action === 'reorder' && (
+                  {item?.action === 'reorder' && (
                     <p
                       className={getReorderStatus(item) === '' ? 'd-none' : ''}
                     >
@@ -203,9 +243,7 @@ const HistoryModal = ({
         }
       });
       if (lastDescription?.length > 0) {
-        setHeaderTitle(
-          lastDescription?.[lastDescription.length - 1]?.value?.oldValue
-        );
+        setHeaderTitle(lastDescription?.[0]?.value?.newValue);
       }
     }
     return () => {

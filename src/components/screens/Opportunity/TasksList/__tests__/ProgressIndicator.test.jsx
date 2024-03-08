@@ -1,11 +1,17 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import ProgressIndicator from '../ProgressIndicator';
+import { store } from '../../../../../store';
+import { Provider } from 'react-redux';
 
 describe('ProgressIndicator', () => {
   it('should check for empty days', () => {
     const taskList = {};
-    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ProgressIndicator tasksList={taskList} />
+      </Provider>
+    );
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -51,7 +57,11 @@ describe('ProgressIndicator', () => {
         ]
       }
     };
-    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ProgressIndicator tasksList={taskList} />
+      </Provider>
+    );
     expect(wrapper.exists()).toBe(true);
   });
   it('should check after bid creation date', () => {
@@ -96,7 +106,11 @@ describe('ProgressIndicator', () => {
         ]
       }
     };
-    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ProgressIndicator tasksList={taskList} />
+      </Provider>
+    );
     expect(wrapper.exists()).toBe(true);
   });
   it('should check for previous bids', () => {
@@ -128,7 +142,11 @@ describe('ProgressIndicator', () => {
         dayDiffFromToday: -15
       }
     };
-    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ProgressIndicator tasksList={taskList} />
+      </Provider>
+    );
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -161,7 +179,11 @@ describe('ProgressIndicator', () => {
         dayDiffFromToday: 0
       }
     };
-    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ProgressIndicator tasksList={taskList} />
+      </Provider>
+    );
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -252,7 +274,11 @@ describe('ProgressIndicator', () => {
         dayDiffFromToday: 27
       }
     };
-    const wrapper = mount(<ProgressIndicator tasksList={taskList} />);
+    const wrapper = mount(
+      <Provider store={store}>
+        <ProgressIndicator tasksList={taskList} />
+      </Provider>
+    );
     expect(wrapper.exists()).toBe(true);
   });
 });

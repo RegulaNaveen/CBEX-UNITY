@@ -749,7 +749,6 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   }
 
   const renderVerticleTabsComponent = activeVerticleTab => {
-    console.log('activeVerticleTab', activeVerticleTab);
     if (activeVerticleTab === 'showQuestionsForCustomerTab') {
       return (
         <div
