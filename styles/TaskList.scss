@@ -225,7 +225,7 @@
           width: 40px;
         }
         &.day-zero {
-          left: 22px;
+          left: 22.5px;
           span {
             left: 0px;
           }
@@ -258,6 +258,12 @@
       &.day-zero {
         left: -22px !important;
         width: 34px !important;
+        .last-day {
+          left: 25px;
+          .lastDay {
+            left: 0.5px;
+          }
+        }
       }
       &.day-one {
         .indicator-day {
@@ -309,6 +315,9 @@
             margin-top: 0px !important;
             .text {
               color: #595959;
+              &.blue {
+                color: #015ff1;
+              }
             }
             .red {
               color: #e20000;
@@ -345,19 +354,6 @@
             font-weight: normal !important;
             padding-top: 8px !important;
             font-family: 'Proxima Nova', Arial, sans-serif;
-          }
-        }
-      }
-      .no-history {
-        display: flex;
-        height: calc(100% - 170px);
-        position: absolute;
-        width: calc(100% - 40px);
-        font-size: 16px;
-        font-weight: bold;
-        p {
-          &:nth-child(2) {
-            margin-left: 30px;
           }
         }
       }
