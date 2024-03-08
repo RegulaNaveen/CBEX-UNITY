@@ -225,7 +225,7 @@
           width: 40px;
         }
         &.day-zero {
-          left: 22px;
+          left: 22.5px;
           span {
             left: 0px;
           }
@@ -258,6 +258,12 @@
       &.day-zero {
         left: -22px !important;
         width: 34px !important;
+        .last-day {
+          left: 25px;
+          .lastDay {
+            left: 0.5px;
+          }
+        }
       }
       &.day-one {
         .indicator-day {
@@ -309,6 +315,9 @@
             margin-top: 0px !important;
             .text {
               color: #595959;
+              &.blue {
+                color: #015ff1;
+              }
             }
             .red {
               color: #e20000;
@@ -348,19 +357,6 @@
           }
         }
       }
-      .no-history {
-        display: flex;
-        height: calc(100% - 170px);
-        position: absolute;
-        width: calc(100% - 40px);
-        font-size: 16px;
-        font-weight: bold;
-        p {
-          &:nth-child(2) {
-            margin-left: 30px;
-          }
-        }
-      }
     }
   }
 }
@@ -368,8 +364,7 @@
   background-color: #0557d559;
 
   .ellipsis {
-    background: transparent !important;
-    visibility: hidden !important;
+    background-color: #a8c4f0 !important;
   }
   .MuiButtonBase-root {
     background: transparent !important;

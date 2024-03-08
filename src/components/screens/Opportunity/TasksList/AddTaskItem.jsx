@@ -15,7 +15,13 @@ import { useDispatch } from 'react-redux';
 import { SocketContext } from '../../../../context/SocketContext';
 import Loader from 'apollo-react/components/Loader';
 
-const AddNewTask = ({ day, proposalId, openModal, setIsNewTask }) => {
+const AddNewTask = ({
+  day,
+  proposalId,
+  openModal,
+  setIsNewTask,
+  setAddOwnerBtn
+}) => {
   const [showAddTask, setShowAddTask] = useState(false);
   const [showAddOwner, setShowAddOwner] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -62,6 +68,7 @@ const AddNewTask = ({ day, proposalId, openModal, setIsNewTask }) => {
         setShowAddTask(false);
         const payload = { result, isNew: true };
         setIsNewTask(payload);
+        setAddOwnerBtn(true);
       }
       setShowLoader(false);
     } else {

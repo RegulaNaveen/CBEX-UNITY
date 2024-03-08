@@ -33,7 +33,7 @@ import { AlertDiamond, AlertTriangle } from '../../../svg';
 import ListItem from './ListItem';
 import SeeOwners from './SeeOwnersModal';
 import ProgressIndicator from './ProgressIndicator';
-import getNextWorkingDay from './utils';
+import getNextWorkingDay, { processRole } from './utils';
 import AddTaskItem from './AddTaskItem';
 import { SocketContext } from '../../../../context/SocketContext';
 import HistoryModal from './HistoryModal';
@@ -44,6 +44,7 @@ import {
   selectAutoNavigatedToCurrentResult,
   selectPrevSearchResult
 } from '../../../../redux/selectors/search';
+import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
 
 const UncompletedTasksCount = ({ count, dayDiffFromToday }) => {
   if (count === 0) {
@@ -104,6 +105,7 @@ const TasksList = () => {
   const [resetToDefault, setResetToDefault] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [taskListContainerRef, setTaskListContainerRef] = useState(null);
+  const [addOwnerBtn, setAddOwnerBtn] = useState(false);
 
   const bidCreatedDate = moment(selectedBid.proposalDate);
   const TODAY = useMemo(() => moment(), []);
@@ -112,11 +114,10 @@ const TasksList = () => {
   const userName = localStorage.getItem('userName');
   const { getTaskLockDetailsWrapper } = useContext(SocketContext);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
-  const prevSearchResult = useSelector(selectPrevSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
-
+  const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const dispatch = useDispatch();
 
   const isCorrectDay = useCallback(
@@ -126,18 +127,51 @@ const TasksList = () => {
     [TODAY]
   );
 
+  const getDays = bidDate => {
+    let days = [];
+    let date = moment(bidDate, 'DD MMM YY');
+    date = date.add(1, 'days');
+    let count = 0;
+    while (count < 10) {
+      if (date.day() !== 0 && date.day() !== 6) {
+        days.push(date.format('DD MMM YY'));
+        count++;
+      }
+      date = date.add(1, 'days');
+    }
+    return days;
+  };
+
+  const tasksToShow = showMine
+    ? tasks.filter(task => {
+        // If the task has a task_role property and it's an array
+        if (task && Array.isArray(task.task_role)) {
+          return task.task_role.some(role => {
+            // Check if the manually added name is equal to userName
+            const isManuallyAddedName = role.name === userName;
+            const { data: question_answers } = processRole(
+              role?.question_id,
+              proposalTeamQuestions
+            );
+            // Check if the name from question_answers is equal to userName
+            const isNameInQuestionAnswers = question_answers.some(
+              answer => answer.name === userName
+            );
+            // Include the task if either isManuallyAddedName or isNameInQuestionAnswers is true
+            return isManuallyAddedName || isNameInQuestionAnswers;
+          });
+        }
+        // If the task doesn't have a task_role property or it's not an array, exclude it
+        return false;
+      })
+    : tasks;
+
   useEffect(() => {
     // if bid is changed
     setResetToDefault(true);
   }, [proposalId]);
 
   useEffect(() => {
-    const tasksToShow = showMine
-      ? tasks.filter(
-          task =>
-            task.task_role && task.task_role.some(role => role.name == userName)
-        )
-      : tasks;
     const maxNoOfUnits =
       tasksToShow.length === 0
         ? 0
@@ -194,7 +228,8 @@ const TasksList = () => {
     if (
       currentSearchResult !== null &&
       currentSearchResult.inputText &&
-      !autoNavigatedToCurrentResult
+      !autoNavigatedToCurrentResult &&
+      currentSearchResult.vTab == 5
     ) {
       setTasksGroupsByDay(prevTasksGroups => {
         const updatedTasksGroups = { ...prevTasksGroups };
@@ -425,6 +460,8 @@ const TasksList = () => {
                         openModal={openModal}
                         setIsNewTask={setIsNewTask}
                         isNewTask={isNewTask}
+                        setAddOwnerBtn={setAddOwnerBtn}
+
                         //onChangeAddTask={handleExpandChange}
                       />
                     )}
@@ -445,6 +482,9 @@ const TasksList = () => {
             taskId={taskId}
             isNewTask={isNewTask}
             setIsNewTask={setIsNewTask}
+            addOwnerBtn={addOwnerBtn}
+            setAddOwnerBtn={setAddOwnerBtn}
+            editable={editable}
           />
         </TaskListToolbarMenuPortal>
       )}

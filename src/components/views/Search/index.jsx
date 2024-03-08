@@ -110,7 +110,8 @@ export default function Search() {
       searchInputRef.current,
       searchInput,
       isQuestionsFilterEnabled,
-      isApprovalFiltersEnabled
+      isApprovalFiltersEnabled,
+      tasksShowMine
     ]
   );
 
