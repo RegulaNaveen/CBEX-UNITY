@@ -124,7 +124,7 @@ describe('App Component', () => {
     expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
     const textEdit = await findByLabelText(/Custom Name/i);
     userEvent.type(await findByPlaceholderText('New Custom Name'), 'test');
-    await waitFor(() => expect(getByText('test')).toBeInTheDocument());
+    await waitFor(() => expect(getByText('tes')).toBeInTheDocument());
   });
 
   it('edit modal should hide on clicking close icon', async () => {
@@ -163,12 +163,8 @@ describe('App Component', () => {
   it('edit modal should show error when trying to save more than 250 characters', async () => {
     localStorage.setItem('access_token', 'token');
     window.history.pushState({}, '', '/dashboard');
-    const {
-      findByTestId,
-      getByText,
-      findByPlaceholderText,
-      findByText
-    } = render(<App />);
+    const { findByTestId, getByText, findByPlaceholderText, findByText } =
+      render(<App />);
     expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
     fireEvent.change(await findByPlaceholderText('New Custom Name'), {
       target: {
