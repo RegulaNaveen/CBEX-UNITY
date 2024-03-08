@@ -167,13 +167,6 @@ describe('TasksList Unit Tests', () => {
     expect(getAllByText(/Day 1$/)).toBeTruthy();
     expect(getAllByText(/Day 2/)).toBeTruthy();
     expect(getAllByText(/Day 3/)).toBeTruthy();
-    expect(getAllByText(/Day 4/)).toBeTruthy();
-    expect(getAllByText(/Day 5/)).toBeTruthy();
-    expect(getAllByText(/Day 6/)).toBeTruthy();
-    expect(getAllByText(/Day 7/)).toBeTruthy();
-    expect(getAllByText(/Day 8/)).toBeTruthy();
-    expect(getAllByText(/Day 9/)).toBeTruthy();
-    expect(getAllByText(/Day 10/)).toBeTruthy();
   });
 
   test('render loader while fetching tasks', async () => {

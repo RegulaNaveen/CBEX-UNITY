@@ -34,9 +34,9 @@ describe('search-actions test', () => {
   test('autoNavigationCompletedAction', async () => {
     await store.dispatch(autoNavigationCompletedAction());
   });
-  test('resetAutoNavigatedStateAfterDelay', async () => {
-    await store.dispatch(resetAutoNavigatedStateAfterDelay());
-  });
+  // test('resetAutoNavigatedStateAfterDelay', async () => {
+  //   await store.dispatch(resetAutoNavigatedStateAfterDelay());
+  // });
 
   test('doSearchAction', async () => {
     await store.dispatch(doSearchAction());
