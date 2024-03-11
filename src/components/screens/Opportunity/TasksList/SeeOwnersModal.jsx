@@ -45,6 +45,7 @@ const SeeOwners = ({
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [userToRemoveIndex, setUserToRemoveIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [saveBtnDisabled, setSaveBtnDisabled] = useState(false);
 
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const tasks = useSelector(selectTasksList);
@@ -123,6 +124,7 @@ const SeeOwners = ({
 
   const handleSave = () => {
     setIsLoading(true);
+    setSaveBtnDisabled(true);
     const payload = {
       addrole: [],
       deleterole: []
@@ -148,6 +150,7 @@ const SeeOwners = ({
       }
     });
     dispatch(updateTaskById(proposal_id, id, payload)).then(() => {
+      setSaveBtnDisabled(false);
       setIsLoading(false);
       setSelectedTask(null);
       setHandlePayload([]);
@@ -445,7 +448,10 @@ const SeeOwners = ({
                 ) : (
                   <Button onClick={handleCancel}>Cancel</Button>
                 )}
-                <Button onClick={handleSave} disabled={checkDisable()}>
+                <Button
+                  onClick={handleSave}
+                  disabled={checkDisable() || saveBtnDisabled}
+                >
                   Save
                   {isLoading && (
                     <>

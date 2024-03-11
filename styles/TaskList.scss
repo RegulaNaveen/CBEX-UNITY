@@ -1,6 +1,36 @@
 #tasks-list-left-section {
   padding: 16px;
   padding-right: 0;
+  .task-list-header {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .right-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        .switch-wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .switch {
+            margin-right: 0;
+            .MuiTypography-root {
+              display: none; // hiding label helps alignment
+            }
+          }
+          .label {
+            margin: 0 4px;
+          }
+        }
+        .MuiFormControlLabel-root {
+          margin-top: 0;
+        }
+      }
+    }
+  }
   .task-list-divider-hr {
     height: 1px;
     border: 0.6em;

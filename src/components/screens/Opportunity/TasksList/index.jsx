@@ -21,6 +21,7 @@ import { groupBy, isEmpty, merge } from 'lodash';
 import Header from './Header';
 import { getSelectedBid } from '../../../../redux/selectors';
 import {
+  selectCanTaskReorder,
   selectTasksFetching,
   selectTasksList
 } from '../../../../redux/selectors/tasks';
@@ -118,6 +119,8 @@ const TasksList = () => {
     selectAutoNavigatedToCurrentResult
   );
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
+  const canReorder = useSelector(selectCanTaskReorder);
+
   const dispatch = useDispatch();
 
   const isCorrectDay = useCallback(
@@ -252,22 +255,23 @@ const TasksList = () => {
 
   useEffect(() => {
     let timer = null;
-    if (taskListContainerRef) {
-      taskListContainerRef.addEventListener('pointerenter', () => {
-        timer = setTimeout(() => {
-          if (taskListContainerRef && editable) {
-            const boundingRect = taskListContainerRef.getBoundingClientRect();
-            if (boundingRect.top > 58) {
-              taskListContainerRef.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-                inline: 'nearest'
-              });
-            }
+    function onPointerEnter() {
+      timer = setTimeout(() => {
+        if (taskListContainerRef && editable && canReorder) {
+          const boundingRect = taskListContainerRef.getBoundingClientRect();
+          if (boundingRect.top > 58) {
+            taskListContainerRef.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+              inline: 'nearest'
+            });
           }
-          clearTimeout(timer);
-        }, 1200);
-      });
+        }
+        clearTimeout(timer);
+      }, 1200);
+    }
+    if (taskListContainerRef && canReorder) {
+      taskListContainerRef.addEventListener('pointerenter', onPointerEnter);
 
       taskListContainerRef.addEventListener('pointerleave', () => {
         if (timer) {
@@ -275,12 +279,43 @@ const TasksList = () => {
         }
       });
     }
-    return () => {
+
+    if (canReorder) {
+      timer = setTimeout(() => {
+        if (taskListContainerRef && editable && canReorder) {
+          const boundingRect = taskListContainerRef.getBoundingClientRect();
+          if (boundingRect.top > 58) {
+            taskListContainerRef.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+              inline: 'nearest'
+            });
+          }
+        }
+        clearTimeout(timer);
+      }, 1200);
+    } else {
+      if (taskListContainerRef) {
+        taskListContainerRef.removeEventListener(
+          'pointerenter',
+          onPointerEnter
+        );
+      }
       if (timer) {
         clearTimeout(timer);
       }
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+        taskListContainerRef.removeEventListener(
+          'pointerenter',
+          onPointerEnter
+        );
+      }
     };
-  }, [editable, taskListContainerRef]);
+  }, [canReorder, editable, taskListContainerRef]);
 
   function handleDragEnd(result) {
     const { source, destination } = result;
