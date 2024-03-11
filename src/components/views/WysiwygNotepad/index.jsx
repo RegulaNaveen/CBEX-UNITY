@@ -487,12 +487,10 @@ const WysiwygNotepad = ({
     ) {
       if (query !== null && query.length >= 3 && dataSynced) {
         !editor.isDestroyed &&
-          setTimeout(() => {
-            editor.commands.search(
-              query !== null ? query : '',
-              currentSearchResult.matchIndex
-            );
-          }, 1000);
+          editor.commands.search(
+            query !== null ? query : '',
+            currentSearchResult.matchIndex
+          );
       }
     } else if (
       editor &&
