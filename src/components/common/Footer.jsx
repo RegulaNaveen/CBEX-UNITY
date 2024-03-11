@@ -22,6 +22,7 @@ import { DEFAULT } from '../../constants/app';
 import CustomModal from './CustomModal';
 import ProcessingCRM from '../views/modals/ProcessingCRM';
 import { fetchOTListData } from '../../redux/actions/proposal-actions';
+import { fetchTasksList } from '../../redux/actions/tasksList-actions';
 
 const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
   const selectedBidState = useSelector(getSelectedBid);
@@ -84,6 +85,7 @@ const UnityFooter = ({ questionTemplateVersionNumber, opportunityType }) => {
       const bidType = queryparams.get('bidType') || 'Clinical_Bid';
       if (selectedBidId === switchTempInProgress.proposalId) {
         dispatch(getOpportunity(opportunityId, bidNumber, bidType)).then(() => {
+          dispatch(fetchTasksList(switchTempInProgress.proposalId));
           dispatch(
             updateSwitchInProgress(false, switchTempInProgress.proposalId)
           );
