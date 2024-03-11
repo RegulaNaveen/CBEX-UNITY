@@ -77,6 +77,7 @@ function ListItem({
   const [updatingDesc, setUpdatingDesc] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+  const [checkboxDisabled, setCheckboxDisabled] = useState(false);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
@@ -294,11 +295,13 @@ function ListItem({
 
   const handleCheckboxClick = task => {
     setShowLoader(true);
+    setCheckboxDisabled(true);
     const taskData = {
       is_completed: !task.is_completed
     };
     dispatch(editTask(task.proposal_id, task.task_id, taskData)).then(() => {
       setShowLoader(false);
+      setCheckboxDisabled(false);
     });
   };
 
@@ -477,7 +480,7 @@ function ListItem({
                   marginTop: '-0.25rem'
                 }}
                 onClick={() => handleCheckboxClick(task)}
-                disabled={locked || !editable}
+                disabled={locked || !editable || checkboxDisabled}
               />
               <div className="task-desc" ref={taskDescRef}>
                 <Tooltip placement="top" title={task?.description}>
