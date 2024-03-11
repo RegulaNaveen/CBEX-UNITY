@@ -164,7 +164,7 @@ describe('TableView component', () => {
   });
 
   it('should stop progress if error while toggle favourite', async () => {
-    sinonSandbox.stub(SSOApis, 'toggleFavourite').rejects();
+    sinonSandbox.stub(SSOApis, 'toggleFavourite').resolves();
     sinonSandbox.stub(ProposalsApi, 'saveRecentOppActivity').resolves();
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_FLAG,

@@ -12,8 +12,6 @@ import { toggleCanReorder } from '../../../../redux/actions/tasksList-actions';
 import { getSelectedBid } from '../../../../redux/selectors';
 
 const Header = () => {
-  const [showMine, setShowMine] = useState(false);
-
   const dispatch = useDispatch();
   const selectedBid = useSelector(getSelectedBid).toJS();
   const isOpen = useSelector(selectIsOpen);
@@ -21,6 +19,7 @@ const Header = () => {
   const canReorder = useSelector(selectCanTaskReorder);
 
   const editable = selectedBid.isEditable;
+  const showMine = useSelector(state => state.tasks.showMine);
 
   const handleChange = event => {
     dispatch({
@@ -30,7 +29,6 @@ const Header = () => {
     {
       isOpen && query && dispatch(doSearchAction());
     }
-    setShowMine(event.target.checked);
   };
 
   const handleReorderToggle = useCallback(toggleValue => {

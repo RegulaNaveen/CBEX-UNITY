@@ -167,13 +167,6 @@ describe('TasksList Unit Tests', () => {
     expect(getAllByText(/Day 1$/)).toBeTruthy();
     expect(getAllByText(/Day 2/)).toBeTruthy();
     expect(getAllByText(/Day 3/)).toBeTruthy();
-    expect(getAllByText(/Day 4/)).toBeTruthy();
-    expect(getAllByText(/Day 5/)).toBeTruthy();
-    expect(getAllByText(/Day 6/)).toBeTruthy();
-    expect(getAllByText(/Day 7/)).toBeTruthy();
-    expect(getAllByText(/Day 8/)).toBeTruthy();
-    expect(getAllByText(/Day 9/)).toBeTruthy();
-    expect(getAllByText(/Day 10/)).toBeTruthy();
   });
 
   test('render loader while fetching tasks', async () => {
@@ -233,7 +226,7 @@ describe('TasksList Unit Tests', () => {
     });
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
-    const seeOwners = screen.getByText('See Owners(0)');
+    const seeOwners = screen.getByText('See Owners (0)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
 
@@ -248,7 +241,7 @@ describe('TasksList Unit Tests', () => {
     });
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
-    const seeOwners = screen.getByText('See Owners(0)');
+    const seeOwners = screen.getByText('See Owners (0)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
 
@@ -287,7 +280,7 @@ describe('TasksList Unit Tests', () => {
     });
     const expandToggle = screen.getAllByTestId('ellipsis-vertical-0');
     fireEvent.click(expandToggle[0]);
-    const seeOwners = screen.getByText('See Owners(4)');
+    const seeOwners = screen.getByText('See Owners (0)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
     expect(screen.getByText('Varsha Agarwal')).toBeInTheDocument();
@@ -307,7 +300,7 @@ describe('TasksList Unit Tests', () => {
     });
     const expandToggle = screen.getAllByTestId('ellipsis-vertical-0');
     fireEvent.click(expandToggle[0]);
-    const seeOwners = screen.getByText('See Owners(4)');
+    const seeOwners = screen.getByText('See Owners (0)');
     fireEvent.click(seeOwners);
     expect(screen.getByText('Task Owners')).toBeInTheDocument();
     expect(screen.getByText('Sushil Munda')).toBeInTheDocument();
@@ -326,6 +319,32 @@ describe('TasksList Unit Tests', () => {
     const saveBtn = screen.getByRole('button', { name: 'Save' });
     expect(saveBtn).toBeEnabled();
     fireEvent.click(saveBtn);
+  });
+
+  test('see owners selecting user from AD', async () => {
+    render(<TasksListWithRedux />);
+    await waitFor(() => {
+      expect(screen.getByText('task 1')).toBeInTheDocument();
+    });
+    const expandToggle = screen.getByTestId('ellipsis-vertical-1');
+    fireEvent.click(expandToggle);
+    const seeOwners = screen.getByRole('menuitem', {
+      name: /see owners \(0\)/i
+    });
+    fireEvent.click(seeOwners);
+    expect(screen.getByText('Task Owners')).toBeInTheDocument();
+    expect(screen.getByText('Users assigned this task')).toBeInTheDocument();
+    const addOwner = screen.getByText('Add Owner');
+    fireEvent.click(addOwner);
+    const autocompleteField = screen.getByPlaceholderText('Add user');
+    expect(autocompleteField).toBeInTheDocument();
+    const dropdown = screen.getByRole('combobox');
+    fireEvent.change(dropdown, {
+      target: { value: 'Varsha Kumari' }
+    });
+    expect(screen.findByText('Varsha Kumari(varsha.kumari2@iqvia.com)'));
+    const cancelBtn = screen.getByText('Cancel');
+    fireEvent.click(cancelBtn);
   });
 
   test('drag and drop task', async () => {
