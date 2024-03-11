@@ -6,7 +6,8 @@ const INITIAL_STATE = {
   error: '',
   taskHistory: [],
   taskHistoryLoading: false,
-  showMine: false
+  showMine: false,
+  canReorder: false
 };
 
 export default function tasksReducer(state = INITIAL_STATE, action) {
@@ -50,6 +51,11 @@ export default function tasksReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         showMine: action.payload
+      };
+    case TASKS.TOGGLE_CAN_REORDER:
+      return {
+        ...state,
+        canReorder: action.payload
       };
     default:
       return state;
