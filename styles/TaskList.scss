@@ -373,6 +373,10 @@
             flex-wrap: wrap;
             p {
               margin-right: 8px;
+              margin-bottom: 0px !important;
+              &:nth-child(2) {
+                margin-top: 0px !important;
+              }
             }
           }
           .d-none {

@@ -56,7 +56,7 @@ const HistoryModal = ({
     ) {
       return '';
     } else {
-      return `Moved from day ${item?.value?.oldValue?.no_of_units} to day ${item?.value?.newValue?.no_of_units}`;
+      return `Moved from 'Day ${item?.value?.oldValue?.no_of_units}' to 'Day ${item?.value?.newValue?.no_of_units}'`;
     }
   };
 
@@ -157,7 +157,7 @@ const HistoryModal = ({
             <div className="main-container">
               <span className="avatar">SC</span>
               <div>
-                <p>System created</p>
+                <p>System Created</p>
               </div>
             </div>
             <div className="answer-meta-data">
@@ -257,16 +257,7 @@ const HistoryModal = ({
         <div className="history-modal" id="task-history-modal">
           <div className="modal-content">
             <div className="bluegrid"></div>
-            {taskHistoryLoading && (
-              <Loader
-                isInner
-                size={20}
-                style={{
-                  width: '20px',
-                  height: '20px'
-                }}
-              />
-            )}
+            {taskHistoryLoading && <Loader isInner />}
             <div className="modal-header">
               <div className="header-titles">
                 <h1>History</h1>
