@@ -172,22 +172,22 @@ export async function getSearchResults({
             finalResult,
             regexp,
             sectionsUnfiltered,
-            allTabs[activeTab].tabName,
-            activeTab
+            tab.tabName,
+            tab.tabIndex
           );
           searchInEmailTemplates(
             finalResult,
             regexp,
             emailTemplates,
-            allTabs[activeTab].tabName,
-            activeTab
+            tab.tabName,
+            tab.tabIndex
           );
           searchInTaskList(
             finalResult,
             regexp,
             taskData,
-            allTabs[activeTab].tabName,
-            activeTab
+            tab.tabName,
+            tab.tabIndex
           );
           verticalTabSearched = true;
         }
