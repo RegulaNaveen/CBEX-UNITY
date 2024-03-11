@@ -63,7 +63,7 @@ export function getTaskHistory(proposalId, taskId) {
         payload: true
       });
       const response = await getTaskHistoryApi(proposalId, taskId);
-      if(Array.isArray(response.result)) {
+      if (Array.isArray(response.result)) {
         dispatch({
           type: TASKS.SET_TASK_HISTORY,
           payload: response.result
@@ -72,11 +72,11 @@ export function getTaskHistory(proposalId, taskId) {
           type: TASKS.LOADING_TASK_HISTORY,
           payload: false
         });
-     }    
+      }
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 }
 
 export function tasksListReordering(proposalId, tasks, taskId = '') {
@@ -547,4 +547,11 @@ export const editRoleFromSocket = (roleData, proposalId, taskId) => {
   };
 };
 
-
+export function toggleCanReorder(canReorder = false) {
+  return dispatch => {
+    dispatch({
+      type: TASKS.TOGGLE_CAN_REORDER,
+      payload: canReorder
+    });
+  };
+}

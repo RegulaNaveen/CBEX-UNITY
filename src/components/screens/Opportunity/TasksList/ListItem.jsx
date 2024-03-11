@@ -36,6 +36,7 @@ import {
 import SeeOwners from './SeeOwnersModal';
 import { selectActiveTeamQuestions } from '../../../../redux/selectors/proposal';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
+import { selectCanTaskReorder } from '../../../../redux/selectors/tasks';
 
 function OverflowEllipsis({ show }) {
   return (
@@ -77,10 +78,12 @@ function ListItem({
   const [updatingDesc, setUpdatingDesc] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
+  const [checkboxDisabled, setCheckboxDisabled] = useState(false);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
+  const canReorder = useSelector(selectCanTaskReorder);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isComponentMounted, setIsComponentMounted] = useState({
@@ -294,11 +297,13 @@ function ListItem({
 
   const handleCheckboxClick = task => {
     setShowLoader(true);
+    setCheckboxDisabled(true);
     const taskData = {
       is_completed: !task.is_completed
     };
     dispatch(editTask(task.proposal_id, task.task_id, taskData)).then(() => {
       setShowLoader(false);
+      setCheckboxDisabled(false);
     });
   };
 
@@ -462,14 +467,16 @@ function ListItem({
                 provided.draggableProps.style
               )}
             >
-              <span
-                {...provided.dragHandleProps}
-                className={classNames({ disabled: locked || !editable })}
-                data-testid={`drag-group-${day}-item-${index}`}
-                style={{ height: '24px' }}
-              >
-                <DragIcon className="drag-icon" />
-              </span>
+              {canReorder && (
+                <span
+                  {...provided.dragHandleProps}
+                  className={classNames({ disabled: locked || !editable })}
+                  data-testid={`drag-group-${day}-item-${index}`}
+                  style={{ height: '24px' }}
+                >
+                  <DragIcon className="drag-icon" />
+                </span>
+              )}
               <Checkbox
                 checked={task?.is_completed}
                 style={{
@@ -477,7 +484,7 @@ function ListItem({
                   marginTop: '-0.25rem'
                 }}
                 onClick={() => handleCheckboxClick(task)}
-                disabled={locked || !editable}
+                disabled={locked || !editable || checkboxDisabled}
               />
               <div className="task-desc" ref={taskDescRef}>
                 <Tooltip placement="top" title={task?.description}>
