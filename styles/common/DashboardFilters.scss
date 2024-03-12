@@ -4,6 +4,7 @@
   background-color: #f6f7fb;
   padding: 12px 24px;
   margin-bottom: 20;
+  position: relative;
 
   .filter-wrapper {
     margin-right: 10px;
@@ -47,6 +48,7 @@
   }
   .filter-clear {
     position: absolute;
-    right: 30px;
+    right: -12px;
+    top: 14px;
   }
 }

@@ -158,6 +158,7 @@ function TableControls({
           () =>
             menuItems.length !== 0 ? (
               <IconMenuButton
+                id="table-settings-menu-btn"
                 data-testid="settingsMenuButton"
                 menuItems={menuItems}
                 size="small"
@@ -170,7 +171,7 @@ function TableControls({
         )}
       </div>
       <Popover
-        open={editing}
+        open={!!editing}
         anchorEl={menuRef.current}
         data-testid="popover"
         onClose={() => handlePopoverClose()}

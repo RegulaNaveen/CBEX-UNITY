@@ -155,17 +155,21 @@ export const doSearchAction = () => {
     const query = selectQuery(currentState);
     const sections = selectSections(currentState);
     const filteredSections = selectFilteredSections(currentState);
-    const isQuestionsFilterEnabled = selectIsQuestionsFilterEnabled(
-      currentState
-    );
+    const isQuestionsFilterEnabled =
+      selectIsQuestionsFilterEnabled(currentState);
     const questions = selectProposalQuestions(currentState);
     const selectedBid = getSelectedBid(currentState).toJS();
     const shouldCheckNotepad =
       (allFlags.notepad || false) && (allFlags.verticalTab || false);
     const shouldCheckEmailTemplates =
       (allFlags.emailTemplatesFlag || false) && (allFlags.verticalTab || false);
+
+    const shouldCheckTask =
+      (allFlags.tasksListFlag || false) && (allFlags.verticalTab || false);
     let notepadData = [];
     let emailTemplates = [];
+    let taskData = [];
+
     const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
     const shouldCheckApprovals = isApprovalCount && allFlags.approvalsFlag;
     const approvals = selectAllApprovals(currentState);
@@ -182,6 +186,34 @@ export const doSearchAction = () => {
           );
         }
       );
+    }
+    if (shouldCheckTask) {
+      if (currentState.tasks.showMine) {
+        const userName = localStorage.getItem('userName');
+        taskData = currentState.tasks.tasks.filter(task => {
+          return (
+            task.task_role &&
+            task.task_role.some(role => role.name == userName) &&
+            task.opportunity_types &&
+            task.opportunity_types.length > 0 &&
+            typeof task.opportunity_types === 'string' &&
+            task.opportunity_types
+              .split(',')
+              .includes(selectedBid.opportunityType)
+          );
+        });
+      } else {
+        taskData = currentState.tasks.tasks.filter(task => {
+          return (
+            task.opportunity_types &&
+            task.opportunity_types.length > 0 &&
+            typeof task.opportunity_types === 'string' &&
+            task.opportunity_types
+              .split(',')
+              .includes(selectedBid.opportunityType)
+          );
+        });
+      }
     }
     if (shouldCheckNotepad) {
       try {
@@ -202,7 +234,8 @@ export const doSearchAction = () => {
                 notepadData: extractTextFromProseMirrorJSON(
                   notepadJSON.noteJson
                 ),
-                emailTemplates
+                emailTemplates,
+                taskData
               })
             );
           } else {
@@ -221,7 +254,8 @@ export const doSearchAction = () => {
             sectionsUnfiltered: sections.toJS(),
             approvals: shouldCheckApprovals ? approvals : [],
             notepadData,
-            emailTemplates
+            emailTemplates,
+            taskData
           })
         );
       }
@@ -236,7 +270,8 @@ export const doSearchAction = () => {
           sectionsUnfiltered: sections.toJS(),
           approvals: shouldCheckApprovals ? approvals : [],
           notepadData,
-          emailTemplates
+          emailTemplates,
+          taskData
         })
       );
     }
@@ -250,7 +285,8 @@ export const resumeSearchAction = ({
   sectionsUnfiltered,
   approvals,
   notepadData,
-  emailTemplates
+  emailTemplates,
+  taskData
 }) => {
   return async (dispatch, getState) => {
     const currentState = getState();
@@ -258,9 +294,8 @@ export const resumeSearchAction = ({
     const activeVTab = selectActiveVTabIndex(currentState);
     const prevSearchResults = selectSearchResults(currentState);
     const prevActiveSearchIndex = selectCurrentResultIndex(currentState);
-    const isQuestionsFilterEnabled = selectIsQuestionsFilterEnabled(
-      currentState
-    );
+    const isQuestionsFilterEnabled =
+      selectIsQuestionsFilterEnabled(currentState);
     const approvalFilters = currentState.approvals.filters;
     const unityTabFilters = currentState.unitytab.filters;
     const allFlags = currentState.proposal.get('eventflag');
@@ -359,7 +394,8 @@ export const resumeSearchAction = ({
       filteredQuestionsMap,
       sectionsUnfiltered,
       allFlags,
-      emailTemplates
+      emailTemplates,
+      taskData
     });
     if (searchResults.count > 0) {
       searchResults.newCurrentResultIndex = 0;
@@ -408,11 +444,11 @@ export const resumeSearchAction = ({
 const resetAutoNavigatedStateAfterDelay = () => {
   return async (dispatch, getState) => {
     await new Promise(resolve => {
-      setTimeout(() => resolve(), 10000);
+      setTimeout(() => resolve(), 15000);
     });
-    const autoNavigated = selectAutoNavigatedToCurrentResult(getState());
-    if (!autoNavigated) {
-      dispatch(autoNavigationCompletedAction());
-    }
+    // const autoNavigated = selectAutoNavigatedToCurrentResult(getState());
+    // if (!autoNavigated) {
+    //   dispatch(autoNavigationCompletedAction());
+    // }
   };
 };

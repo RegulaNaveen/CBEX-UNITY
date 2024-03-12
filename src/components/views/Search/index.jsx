@@ -45,9 +45,8 @@ import CustomModal from '../../common/CustomModal';
 
 export default function Search() {
   const [searchInput, setSearchInput] = useState('');
-  const [isApprovalFiltersEnabled, setIsApprovalFiltersEnabled] = useState(
-    false
-  );
+  const [isApprovalFiltersEnabled, setIsApprovalFiltersEnabled] =
+    useState(false);
 
   const isOpen = useSelector(selectIsOpen);
   const query = useSelector(selectQuery);
@@ -63,6 +62,8 @@ export default function Search() {
   const modalContent = useSelector(selectModalContent);
   const isQuestionsFilterEnabled = useSelector(selectIsQuestionsFilterEnabled);
   const approvalFilters = useSelector(state => state.approvals.filters);
+  const tasksShowMine = useSelector(state => state.tasks.showMine);
+
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const proposalQuestions = useSelector(selectProposalQuestions);
   const searchFlag = allFlags.searchFlag || false;
@@ -86,7 +87,11 @@ export default function Search() {
     async e => {
       if (e.key === 'Enter') {
         if (searchInput.length >= 3) {
-          if (isQuestionsFilterEnabled || isApprovalFiltersEnabled) {
+          if (
+            isQuestionsFilterEnabled ||
+            isApprovalFiltersEnabled ||
+            tasksShowMine
+          ) {
             dispatch({
               type: SEARCH.SHOW_MODAL,
               payload: {
@@ -112,7 +117,8 @@ export default function Search() {
       searchInputRef.current,
       searchInput,
       isQuestionsFilterEnabled,
-      isApprovalFiltersEnabled
+      isApprovalFiltersEnabled,
+      tasksShowMine
     ]
   );
 

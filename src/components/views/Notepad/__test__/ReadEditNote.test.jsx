@@ -1,15 +1,15 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { Map } from 'immutable';
+import { Map as IMap } from 'immutable';
 import EditNote from '../ReadEditNote';
 
 describe('EditNote component', () => {
-  const sections = Map({
-    1: Map({ sectionName: 'Section 1' }),
-    2: Map({ sectionName: 'Section 2' })
+  const sections = IMap({
+    1: IMap({ sectionName: 'Section 1' }),
+    2: IMap({ sectionName: 'Section 2' })
   });
 
-  const note = Map({
+  const note = IMap({
     id: 1,
     noteText: '{"blocks":[],"entityMap":{}}',
     section: sections.get(1)

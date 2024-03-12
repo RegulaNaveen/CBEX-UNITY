@@ -1562,13 +1562,13 @@ export const getOpportunity = (
       data[0].isCurrent =
         currentProposal.proposal.proposalId === data[0].proposal.proposalId;
       if (data && data.length && data[0].proposal?.switchTemplateStatus) {
-        dispatch({
-          type: SWITCH_TEMP_IN_PROGRESS,
-          payload: true
-        });
+        dispatch(updateSwitchInProgress(true, data[0].proposal.proposalId));
         dispatch({
           type: SWITCH_TEMP_STATUS,
-          payload: 'progress'
+          payload: {
+            data: 'progress',
+            proposalId: data[0].proposal.proposalId
+          }
         });
       }
       proposalsData.push(data[0]);
@@ -1696,6 +1696,16 @@ export const changeBid = (bid, viewType) => {
         }
       }
     });
+    if (response?.data && response?.data?.proposal?.switchTemplateStatus) {
+      dispatch(updateSwitchInProgress(true, response.data.proposal.proposalId));
+      dispatch({
+        type: SWITCH_TEMP_STATUS,
+        payload: {
+          data: 'progress',
+          proposalId: response.data.proposal.proposalId
+        }
+      });
+    }
     dispatch({
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: response?.data.proposal?.customUnityTabs || []
@@ -1774,11 +1784,11 @@ export const fetchOTListData = () => async () => {
 /**
  * Switch Temp Status Update - Action
  */
-export const updateSwitchTempStatusFromWebSocket = data => {
+export const updateSwitchTempStatusFromWebSocket = (data, proposalId) => {
   return async dispatch => {
     dispatch({
       type: SWITCH_TEMP_STATUS,
-      payload: data
+      payload: { data, proposalId }
     });
   };
 };
@@ -1847,11 +1857,11 @@ export const changeOpportunityType = switchTempData => async () => {
 /**
  * Switch Temp In Progress - Action
  */
-export const updateSwitchInProgress = data => {
+export const updateSwitchInProgress = (status, proposalId) => {
   return async dispatch => {
     dispatch({
       type: SWITCH_TEMP_IN_PROGRESS,
-      payload: data
+      payload: { status, proposalId }
     });
   };
 };
@@ -1871,39 +1881,45 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB =
-  (proposalId, email, sectionOrder, sectionName) => async () => {
-    try {
-      // Api Response
-      const response = await deleteProposalUser(proposalId, {
-        email,
-        section: { sectionOrder, sectionName }
-      });
-      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-    } catch (error) {
-      // Error
-      console.log(error.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const deleteProposalUserFromDB = (
+  proposalId,
+  email,
+  sectionOrder,
+  sectionName
+) => async () => {
+  try {
+    // Api Response
+    const response = await deleteProposalUser(proposalId, {
+      email,
+      section: { sectionOrder, sectionName }
+    });
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory =
-  (proposalId: string, questionId: string) => async () => {
-    try {
-      // Api Response
-      const response = await getProposalAnswer(proposalId, questionId);
-      return { status: true, title: DEFAULT.SUCCESS, data: response };
-    } catch (error) {
-      // Error
-      console.log(error?.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const getProposalAnswerHistory = (
+  proposalId: string,
+  questionId: string
+) => async () => {
+  try {
+    // Api Response
+    const response = await getProposalAnswer(proposalId, questionId);
+    return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Set Flag for Event Launcher
