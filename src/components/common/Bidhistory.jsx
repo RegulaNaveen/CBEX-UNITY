@@ -241,7 +241,7 @@ const BidHistory = () => {
                       : bidType && bidType.includes('Post_Award_Bid')
                       ? ''
                       : bidType && bidType.includes('RFI_Request')
-                      ? ''
+                      ? 'Request Detail'
                       : 'Pertinent Details / Specific Rebid Request'}
                   </p>
                   {bidType && bidType.includes('Post_Award_Bid') ? (
@@ -269,19 +269,8 @@ const BidHistory = () => {
                   ) : bidType &&
                     bidType.includes('RFI_Request' || 'Bid RFI_Request') ? (
                     <div>
-                      <p className="pertinent-details-title req-detail-title">
-                        Request Detail
-                      </p>
-                      <div className="rfi-textfield-container">
-                        <TextField
-                          placeholder="Describe details"
-                          sizeAdjustable
-                          maxWidth={500}
-                          maxHeight={150}
-                          fullWidth
-                          value={selectedBid.get('requestDetail')}
-                          InputProps={{ readOnly: true }}
-                        />
+                      <div className="pertinent-details-section">
+                        <p>{selectedBid.get('requestDetail')}</p>
                       </div>
                     </div>
                   ) : (
