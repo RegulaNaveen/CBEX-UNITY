@@ -39,7 +39,7 @@
   }
   .accordions-wrapper {
     // height: calc(100% - 2.25rem);
-    height: calc(100% - 6.25rem);
+    height: calc(100% - 8.25rem);
     overflow: auto;
     padding: 8px;
     display: flex;
@@ -165,6 +165,22 @@
           }
         }
       }
+    }
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #cbc9c9;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #8d8b8b;
     }
   }
   .font-red {
