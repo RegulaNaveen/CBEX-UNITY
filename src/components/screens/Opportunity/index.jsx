@@ -355,7 +355,7 @@ export class Opportunity extends Component<Props, State> {
           )}
           <GenerateDocs />
           <UnityGrid
-            data={details}
+            data={details || {}}
             isOpen={isOpen}
             windowSize={windowSize}
             bidStatus={bidStatus}

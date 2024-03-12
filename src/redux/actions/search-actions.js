@@ -37,6 +37,8 @@ import { DEFAULT_TABS_LEN } from '../../constants/app';
 import { cloneDeep } from 'lodash';
 import { checkTabRender } from '../../components/screens/UnityTabs/utils';
 import { getWebsocketNotesApi } from '../../api/notepad';
+import { selectActiveTeamQuestions } from '../selectors/proposal';
+import { processRole } from '../../components/screens/Opportunity/TasksList/utils';
 
 export const openSearchAction = () => ({ type: SEARCH.OPEN });
 
@@ -173,6 +175,7 @@ export const doSearchAction = () => {
     const isApprovalCount = selectedBid?.isApprovalCountPresent || false;
     const shouldCheckApprovals = isApprovalCount && allFlags.approvalsFlag;
     const approvals = selectAllApprovals(currentState);
+    const proposalTeamQuestions = selectActiveTeamQuestions(currentState);
     if (shouldCheckEmailTemplates) {
       emailTemplates = currentState.emailTemplates.emailTemplatesList.filter(
         emailTemplate => {
@@ -193,7 +196,20 @@ export const doSearchAction = () => {
         taskData = currentState.tasks.tasks.filter(task => {
           return (
             task.task_role &&
-            task.task_role.some(role => role.name == userName) &&
+            task.task_role.some(role => {
+              // Check if the manually added name is equal to userName
+              const isManuallyAddedName = role.name === userName;
+              const { data: question_answers } = processRole(
+                role?.question_id,
+                proposalTeamQuestions
+              );
+              // Check if the name from question_answers is equal to userName
+              const isNameInQuestionAnswers = question_answers.some(
+                answer => answer.name === userName
+              );
+              // Include the task if either isManuallyAddedName or isNameInQuestionAnswers is true
+              return isManuallyAddedName || isNameInQuestionAnswers;
+            }) &&
             task.opportunity_types &&
             task.opportunity_types.length > 0 &&
             typeof task.opportunity_types === 'string' &&
