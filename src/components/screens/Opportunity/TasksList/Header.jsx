@@ -43,19 +43,20 @@ const Header = () => {
     <div className="header">
       <Typography variant="h3">Task List</Typography>
       <div className="right-box">
-        <div className="switch-wrapper">
-          <Switch
-            className="switch"
-            label={null}
-            checked={canReorder}
-            onChange={() => handleReorderToggle(!canReorder)}
-            size="small"
-            disabled={!editable}
-          />
-          <Typography variant="body1" className="label">
-            Reorder
-          </Typography>
-        </div>
+        {editable && (
+          <div className="switch-wrapper">
+            <Switch
+              className="switch"
+              label={null}
+              checked={canReorder}
+              onChange={() => handleReorderToggle(!canReorder)}
+              size="small"
+            />
+            <Typography variant="body1" className="label">
+              Reorder
+            </Typography>
+          </div>
+        )}
         <Checkbox
           label="Show Mine"
           checked={showMine}
