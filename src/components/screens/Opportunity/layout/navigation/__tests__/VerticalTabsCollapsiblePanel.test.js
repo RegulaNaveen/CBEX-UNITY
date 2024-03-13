@@ -72,14 +72,14 @@ describe('verticalTabs test cases', () => {
     expect(getByTestId('vtab-4')).toBeInTheDocument();
   });
 
-  it('should show only proposal team tab when other flags are off', () => {
-    const { getByTestId, queryByTestId } = render(
+  it('should show only proposal team tab when other flags are off', async () => {
+    const { getByTestId, queryByTestId } = await render(
       <VerticalTabsCollapsiblePanelWithRedux
         showQuestionsForCustomerTab={false}
         showNotepadTab={false}
-        showProposalTeamTab
-        showKeyMilestoneDeliverableTab
-        showEmailTemplatesTab
+        showProposalTeamTab={true}
+        showKeyMilestoneDeliverableTab={false}
+        showEmailTemplatesTab={false}
         renderPanel={activeTab => {
           if (activeTab === 'showQuestionsForCustomerTab') {
             return <div data-testid="vtab-1" />;
@@ -99,7 +99,7 @@ describe('verticalTabs test cases', () => {
         }}
       />
     );
-    expect(getByTestId('vtab-3')).toBeInTheDocument();
-    expect(queryByTestId('vtab-2')).not.toBeInTheDocument();
+    expect(await getByTestId('vtab-3')).toBeInTheDocument();
+    expect(await queryByTestId('vtab-2')).not.toBeInTheDocument();
   });
 });

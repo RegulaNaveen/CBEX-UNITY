@@ -50,90 +50,80 @@ import { DEFAULT_TABS_LEN } from '../../../../constants/app';
 // import KeyMilestoneDeliverableTimelines from '../../../screens/Opportunity/KeyMilestonesDeliverableTimelines';
 
 const Questions = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "Questions" */ '../../../screens/Opportunity/Questions'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Questions" */ '../../../screens/Opportunity/Questions'
+    )
   )
 );
 
 const NotepadWrapper = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "Notepad" */ '../../../views/WysiwygNotepad/NotepadWrapper'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Notepad" */ '../../../views/WysiwygNotepad/NotepadWrapper'
+    )
   )
 );
 const Approvals = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "Approvals" */ '../../../screens/Approvals/index'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Approvals" */ '../../../screens/Approvals/index'
+    )
   )
 );
 const Documents = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "Documents" */ '../../../screens/Opportunity/Documents'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Documents" */ '../../../screens/Opportunity/Documents'
+    )
   )
 );
 
 const QuestionsForCustomer = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/QuestionsForCustomerTab'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/QuestionsForCustomerTab'
+    )
   )
 );
 
 const KeyMilestone = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/KeyMilestonesDeliverableTimelines'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "QuestionsForCustomerTab" */ '../../../screens/Opportunity/KeyMilestonesDeliverableTimelines'
+    )
   )
 );
 
 const ProposalTeam = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "ProposalTeam" */ '../../../screens/Opportunity/ProposalTeam'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "ProposalTeam" */ '../../../screens/Opportunity/ProposalTeam'
+    )
   )
 );
 
 const CustomTabs = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "Approvals" */ '../../../screens/UnityTabs/index'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "Approvals" */ '../../../screens/UnityTabs/index'
+    )
   )
 );
 
 const EmailTemplates = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "EmailTemplates" */ '../../../screens/Opportunity/EmailTemplates'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "EmailTemplates" */ '../../../screens/Opportunity/EmailTemplates'
+    )
   )
 );
 
 const TasksList = React.lazy(() =>
-  lazyWithRetry(
-    () =>
-      import(
-        /* webpackChunkName: "TasksList" */ '../../../screens/Opportunity/TasksList'
-      )
+  lazyWithRetry(() =>
+    import(
+      /* webpackChunkName: "TasksList" */ '../../../screens/Opportunity/TasksList'
+    )
   )
 );
 
@@ -172,8 +162,10 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const [showApprovalTab, setShowApprovalTab] = useState(false);
   const [tabLoaded, setTabloaded] = useState(false);
   const [isShowVerticalTab, setShowVerticalTab] = useState(false);
-  const [showQuestionsForCustomerTab, setShowQuestionsForCustomerTab] =
-    useState(false);
+  const [
+    showQuestionsForCustomerTab,
+    setShowQuestionsForCustomerTab
+  ] = useState(false);
   const [
     showKeyMilestoneDeliverableTab,
     setShowshowKeyMilestoneDeliverableTab
@@ -548,9 +540,8 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     }
     if (selectedView && selectedView === 'approvals' && approvalsFlag) {
       const isApprovalTabVisible = approvalsFlag;
-      const approvalTabValue = tabs.find(
-        item => item.label === 'Approvals'
-      ).value;
+      const approvalTabValue = tabs.find(item => item.label === 'Approvals')
+        .value;
 
       dispatch(
         setActiveTabIndexAction(isApprovalTabVisible ? approvalTabValue : 0)
@@ -563,9 +554,8 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       if (!allFlags?.showTimelineFlag) {
         history.push(`${window.location.pathname}`);
       } else {
-        const timelinesTabValue = tabs.find(
-          item => item.label === 'Timeline'
-        ).value;
+        const timelinesTabValue = tabs.find(item => item.label === 'Timeline')
+          .value;
         dispatch(setActiveTabIndexAction(timelinesTabValue));
       }
     }
@@ -610,7 +600,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         }
       }
     }
-  }, [currentSearchResult]);
+  }, [currentSearchResult, panelRef]);
 
   useEffect(() => {
     if (
@@ -893,9 +883,9 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
                     plainPd: `Proposal Detail`,
                     tb: `ToolBar Menu`,
                     pg: `Pagination`,
-                    crmNo: `Proposal Detail (CRM#: ${
-                      localStorage.getItem('oppNo') || ''
-                    })`
+                    crmNo: `Proposal Detail (CRM#: ${localStorage.getItem(
+                      'oppNo'
+                    ) || ''})`
                   }}
                 />
               </Suspense>

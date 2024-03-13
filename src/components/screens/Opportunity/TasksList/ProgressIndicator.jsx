@@ -5,6 +5,8 @@ import StatusExclamation from 'apollo-react-icons/StatusExclamation';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 import StatusNegative from 'apollo-react-icons/StatusNegative';
 import { DayIndicator } from '../../../svg';
+import { getPanelStatus } from '../../../../redux/selectors/proposal';
+import { useSelector } from 'react-redux';
 
 const ProgressIndicator = ({ tasksList }) => {
   const [totalTasksCount, setTotalTasksCount] = useState(0); //total tasks count
@@ -22,6 +24,8 @@ const ProgressIndicator = ({ tasksList }) => {
   const [totalDays, setTotalDays] = useState([]); //total days count
 
   const [maxNoOfUnits, setMaxNoOfUnits] = useState(0); //max no of units
+
+  const panelStatus = useSelector(state => getPanelStatus(state));
 
   const roundHalf = num => {
     return Math.round(num * 2) / 2;
@@ -94,7 +98,7 @@ const ProgressIndicator = ({ tasksList }) => {
   }, [tasksList, totalTasksCount]);
   return (
     <>
-      {taskProgress && (
+      {taskProgress && !panelStatus && (
         <div className="progress-bar">
           {totalDays &&
             totalDays?.length > 0 &&

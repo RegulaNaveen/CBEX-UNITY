@@ -96,6 +96,7 @@
       "opportunityType": "Opportunity Launch Call (Pilot)",
       "opportunityId": "0060100000BAJ0tAAH",
       "isCurrent": true,
+      "isEditable": true,
       "bidStatus": false,
       "pertinentDetails": "Testing",
       "isApprovalCountPresent": true,
