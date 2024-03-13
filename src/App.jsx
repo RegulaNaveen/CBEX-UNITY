@@ -153,24 +153,24 @@ const Home = () => {
 const App = () => (
   <Provider store={store}>
     <SocketContextProvider>
-        <ErrorBoundaryComponent>
-          <ReduxSnackbar />
-          <BrowserRouter>
-            <SessionHandler>
-              <Switch>
-                <Route path="/" exact component={Login} />
-                <Route exact path={LOGIN} component={Login} />
-                <PrivateRoute
-                  exact
-                  path={UBUILD}
-                  component={UbuildShellComponent}
-                />
-                <Route path="/" component={Home} />
-                <Redirect to={LOGIN} />
-              </Switch>
-            </SessionHandler>
-          </BrowserRouter>
-        </ErrorBoundaryComponent>
+      <ErrorBoundaryComponent>
+        <ReduxSnackbar />
+        <BrowserRouter>
+          <SessionHandler>
+            <Switch>
+              <Route path="/" exact component={Login} />
+              <Route exact path={LOGIN} component={Login} />
+              <PrivateRoute
+                exact
+                path={UBUILD}
+                component={UbuildShellComponent}
+              />
+              <Route path="/" component={Home} />
+              <Redirect to={LOGIN} />
+            </Switch>
+          </SessionHandler>
+        </BrowserRouter>
+      </ErrorBoundaryComponent>
     </SocketContextProvider>
   </Provider>
 );
