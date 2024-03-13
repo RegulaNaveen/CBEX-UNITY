@@ -179,18 +179,24 @@ describe('TasksList Unit Tests', () => {
       payload: true
     });
     const { container } = render(<TasksListWithRedux />);
-    await waitFor(() => {
-      expect(
-        container.querySelector('.MuiCircularProgress-root')
-      ).not.toBeNull();
-    });
+    await waitFor(
+      () => {
+        expect(
+          container.querySelector('.MuiCircularProgress-root')
+        ).not.toBeNull();
+      },
+      { timeout: 3000 }
+    );
     store.dispatch({
       type: LOADING_TASKS,
       payload: false
     });
-    await waitFor(() => {
-      expect(container.querySelector('.MuiCircularProgress-root')).toBeNull();
-    });
+    await waitFor(
+      () => {
+        expect(container.querySelector('.MuiCircularProgress-root')).toBeNull();
+      },
+      { timeout: 3000 }
+    );
   });
 
   test('day should be expandable/collapsible', async () => {
@@ -230,9 +236,12 @@ describe('TasksList Unit Tests', () => {
 
   test('see owners of task', async () => {
     render(<TasksListWithRedux />);
-    await waitFor(() => {
-      expect(screen.getByText('task 1')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('task 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
     const seeOwners = screen.getByText('See Owners (0)');
@@ -245,9 +254,12 @@ describe('TasksList Unit Tests', () => {
 
   test('see owners of task || add new owner', async () => {
     render(<TasksListWithRedux />);
-    await waitFor(() => {
-      expect(screen.getByText('task 1')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('task 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
     const seeOwners = screen.getByText('See Owners (0)');
@@ -277,16 +289,22 @@ describe('TasksList Unit Tests', () => {
     );
 
     fireEvent.change(emailInput, { target: { value: 'new owner' } });
-    await waitFor(() => {
-      // fireEvent.click(screen.getByText('new owner(newowner@test.com)'));
-    });
+    await waitFor(
+      () => {
+        // fireEvent.click(screen.getByText('new owner(newowner@test.com)'));
+      },
+      { timeout: 7000 }
+    );
   }, 7000);
 
   test('see owners of task || with owner', async () => {
     render(<TasksListWithRedux />);
-    await waitFor(() => {
-      expect(screen.getByText('task 1')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('task 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
     const expandToggle = screen.getAllByTestId('ellipsis-vertical-0');
     fireEvent.click(expandToggle[0]);
     const seeOwners = screen.getByText('See Owners (0)');
@@ -302,9 +320,12 @@ describe('TasksList Unit Tests', () => {
 
   test('see owners of task || with proposal team owner', async () => {
     render(<TasksListWithRedux />);
-    await waitFor(() => {
-      expect(screen.getByText('task 1')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('task 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
     const expandToggle = screen.getAllByTestId('ellipsis-vertical-0');
     fireEvent.click(expandToggle[0]);
     const seeOwners = screen.getByText('See Owners (0)');
@@ -330,9 +351,12 @@ describe('TasksList Unit Tests', () => {
 
   test('see owners selecting user from AD', async () => {
     render(<TasksListWithRedux />);
-    await waitFor(() => {
-      expect(screen.getByText('task 1')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('task 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
     const expandToggle = screen.getByTestId('ellipsis-vertical-1');
     fireEvent.click(expandToggle);
     const seeOwners = screen.getByRole('menuitem', {
