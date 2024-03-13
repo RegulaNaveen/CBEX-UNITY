@@ -1,11 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import AddNewTask from '../AddTaskItem';
 import { Provider } from 'react-redux';
 import { store } from '../../../../../store';
-import { REDUX_TYPES } from '../../../../../constants';
-import { TASKS } from '../../../../../constants/types';
-import moment from 'moment';
+import * as TaskListAction from '../../../../../api/tasksList';
 
 describe('Add Task Unit Tests', () => {
   const setAreButtonsDisabled = jest.fn();
@@ -66,9 +64,39 @@ describe('Add Task Unit Tests', () => {
   });
 
   test(' text field have less then 3 chaharcter', () => {
+    TaskListAction.setTaskDataApi = jest.fn().mockResolvedValue({
+      result: {
+        id: 123,
+        proposal_id: '67e3e355-b8bd-4114-b377-27898c4603c4',
+        task_id: 'f03d3660-9d84-4297-92a4-264b9d0465f1',
+        description: 'test-1',
+        primary_condition: 'Bid History Creation',
+        operator: 'addition',
+        unit_type: 'Business Days',
+        no_of_units: 1,
+        opportunity_types: 'Core Opportunity Launch Call (AMR/EMEA)',
+        order: 2,
+        is_completed: false,
+        is_modified: false,
+        is_deleted: false,
+        is_custom: true,
+        is_freezed: false,
+        updated_by: 'Srinivas Manchikatla',
+        updated_by_email: 'Srinivas.Manchikatla@iqvia.com',
+        created_date: '2024-02-26T06:29:35.964Z',
+        updated_date: '2024-03-01T13:06:38.537Z',
+        task_role: [],
+        task_history: []
+      }
+    });
     const { getByText, queryByRole } = render(
       <Provider store={store}>
-        <AddNewTask {...props} />
+        <AddNewTask
+          {...props}
+          openModal={jest.fn()}
+          setIsNewTask={jest.fn()}
+          setAddOwnerBtn={jest.fn()}
+        />
       </Provider>
     );
     const button = getByText(/Add new task/i);

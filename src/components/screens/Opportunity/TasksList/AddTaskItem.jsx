@@ -22,13 +22,12 @@ const AddNewTask = ({
   setIsNewTask,
   setAddOwnerBtn
 }) => {
-  const [showAddTask, setShowAddTask] = useState(false);
-  const [showAddOwner, setShowAddOwner] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [taskId, setTaskId] = useState(null);
-  const [showLoader, setShowLoader] = useState(false);
-  const [descEditRef, setDescEditRef] = useState(null);
-
+  const [showAddTask, setShowAddTask] = React.useState(false);
+  const [showAddOwner, setShowAddOwner] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+  const [taskId, setTaskId] = React.useState(null);
+  const [showLoader, setShowLoader] = React.useState(false);
+  const [descEditRef, setDescEditRef] = React.useState(null);
   useEffect(() => {
     if (descEditRef) {
       const descInput = descEditRef.querySelector('input');

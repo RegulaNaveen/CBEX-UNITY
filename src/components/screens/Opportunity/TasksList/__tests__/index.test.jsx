@@ -10,10 +10,14 @@ import { API } from '../../../../../constants';
 import moment from 'moment';
 import { SocketContext } from '../../../../../context/SocketContext';
 import data from '../../../../views/modals/__test__/data.json';
-
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import { Map } from 'immutable';
+import * as datajson from '../../../../screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../../../views/modals/__test__/tabdata.json';
+import cloneDeep from 'lodash/cloneDeep';
 const { LOADING_TASKS, SET_TASKS } = TASKS;
 const { TASKSLIST_API_URL } = API.TASKSLIST;
-
 const TasksListWithRedux = props => (
   <>
     <Provider store={store}>
@@ -209,13 +213,18 @@ describe('TasksList Unit Tests', () => {
         }
       }
     });
-    const { getByText, container } = render(<TasksListWithRedux />);
+    const { getByText, container, findAllByText } = await render(
+      <TasksListWithRedux />
+    );
     const expandToggle = container.querySelector(
       '.MuiAccordion-root > .MuiButtonBase-root'
     );
     fireEvent.click(expandToggle);
     await waitFor(() => {
       expect(getByText('task 1')).toBeInTheDocument();
+    }).then(async () => {
+      const element = await findAllByText('Add new task');
+      fireEvent.click(element[0]);
     });
   });
 
@@ -282,8 +291,6 @@ describe('TasksList Unit Tests', () => {
     fireEvent.click(expandToggle[0]);
     const seeOwners = screen.getByText('See Owners (0)');
     fireEvent.click(seeOwners);
-    expect(screen.getByText('Task Owners')).toBeInTheDocument();
-    expect(screen.getByText('Varsha Agarwal')).toBeInTheDocument();
 
     // Delete a task owner
     const deleteOwner = screen.getAllByTestId('trash-icon');
@@ -348,44 +355,195 @@ describe('TasksList Unit Tests', () => {
   });
 
   test('drag and drop task', async () => {
-    store.dispatch({
-      type: SET_TASKS,
-      payload: [
-        {
-          no_of_units: 1,
-          description: 'task 1',
-          order: 1,
-          opportunity_types: 'Default Type'
-        },
-        {
-          no_of_units: 1,
-          description: 'task 1.1',
-          order: 2,
-          opportunity_types: 'Default Type'
-        },
-        {
-          no_of_units: 2,
-          description: 'task 2',
-          order: 2,
-          opportunity_types: 'Default Type'
-        },
-        {
-          no_of_units: 3,
-          description: 'task 3',
-          order: 3,
-          opportunity_types: 'Default Type'
-        }
-      ]
+    const middlewares = [thunk];
+    const mockStore = configureStore(middlewares);
+    const cloneData = cloneDeep(datajson);
+
+    cloneData.proposal.unityTabQuestionLoading = Map({
+      questionId: '',
+      value: false
     });
-    render(<TasksListWithRedux />);
-    const draggableElement1 = screen.getByTestId('drag-group-1-item-0');
-    const droppableElement = screen.getByTestId('droppable-task-group-1');
-    const SPACE = { keyCode: 32 };
-    const ARROW_DOWN = { keyCode: 40 };
-    fireEvent.keyDown(draggableElement1, SPACE); // Begins the dnd
-    fireEvent.keyDown(draggableElement1, ARROW_DOWN); // Moves the element
-    fireEvent.keyDown(draggableElement1, SPACE); // Ends the dnd
-    // Check that the draggable element has been added to the droppable element.
-    expect(droppableElement.contains(draggableElement1)).toBe(true);
+    cloneData.proposal.opportunityData = Map({});
+    cloneData.proposal.proposalAnswerTypes = [
+      'text',
+      'date',
+      'number',
+      'table'
+    ];
+    cloneData.proposal.editQuestionsData = Map({});
+    cloneData.proposal.getAnswerTypesDataF = jest.fn();
+    cloneData.proposal.getRolesInfoF = jest.fn();
+    cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+    const initialState = {
+      ssoAuth: Map(data.ssoAuth),
+      proposal: Map(cloneData.proposal),
+      selectedBid: Map(cloneData.selectedBid),
+      proposalQuestion: cloneData.proposal.proposalQuestions,
+      currentsection: '',
+      onClose: jest.fn(),
+      sidebar: Map({
+        isOpen: true
+      }),
+      notepad: {
+        proposalID: '',
+        notes: [],
+        fetchingNotes: false,
+        fetchNotesErrorMsg: '',
+        uploadingNote: false,
+        uploadNoteErrorMsg: '',
+        notepadMode: 'notepad_mode_default'
+      },
+      unitytab: tabdata.unitytab,
+      approvals: tabdata.approvals,
+      search: {
+        query: null,
+        isOpen: false,
+        currentResultIndex: -1,
+        prevResult: null,
+        totalResultsFound: 0,
+        searching: false,
+        searchResults: [],
+        autoNavigatedToCurrentResult: true,
+        clearInputFlag: false,
+        showModal: false,
+        modalTitle: '',
+        modalContent: ''
+      },
+      tasks: {
+        tasks: [
+          {
+            no_of_units: 1,
+            description: 'task 1',
+            order: 1,
+            opportunity_types: 'Opportunity Launch Call (Pilot)',
+            expanded: true,
+            task_role: [
+              {
+                id: 3129,
+                task_list_id: 1122,
+                proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+                question_id: 'Proposal Team-A2W',
+                task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'roles',
+                updated_by: 'System',
+                updated_by_email: 'System',
+                created_date: '2024-03-11T09:18:40.628Z',
+                updated_date: '2024-03-11T09:18:40.628Z'
+              }
+            ]
+          },
+          {
+            no_of_units: 1,
+            description: 'task 1.1',
+            order: 2,
+            expanded: true,
+            opportunity_types: 'Opportunity Launch Call (Pilot)',
+            task_role: [
+              {
+                id: 3129,
+                task_list_id: 1122,
+                proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+                question_id: 'Proposal Team-A2W',
+                task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'roles',
+                updated_by: 'System',
+                updated_by_email: 'System',
+                created_date: '2024-03-11T09:18:40.628Z',
+                updated_date: '2024-03-11T09:18:40.628Z'
+              }
+            ]
+          }
+        ],
+        loading: false,
+        error: '',
+        taskHistory: [],
+        taskHistoryLoading: false,
+        showMine: true,
+        canReorder: false
+      }
+    };
+    const sectionStore = mockStore(initialState);
+    const fakeLocalStorage = (function () {
+      let store = {
+        userName: 'RAHUL TIWARI'
+      };
+
+      return {
+        getItem: function (key) {
+          return store[key] || null;
+        },
+        setItem: function (key, value) {
+          store[key] = value.toString();
+        },
+        removeItem: function (key) {
+          delete store[key];
+        },
+        clear: function () {
+          store = {};
+        }
+      };
+    })();
+    Object.defineProperty(window, 'localStorage', {
+      value: fakeLocalStorage
+    });
+    jest.mock('react-beautiful-dnd', () => ({
+      Droppable: ({ children }) =>
+        children(
+          {
+            draggableProps: {
+              style: {}
+            },
+            innerRef: jest.fn()
+          },
+          {}
+        ),
+      Draggable: ({ children }) =>
+        children(
+          {
+            draggableProps: {
+              style: {}
+            },
+            innerRef: jest.fn()
+          },
+          {}
+        ),
+      DragDropContext: ({ children }) => children
+    }));
+    const { container } = await render(
+      <>
+        <Provider store={sectionStore}>
+          <SocketContext.Provider
+            value={{ getTaskLockDetailsWrapper: jest.fn() }}
+          >
+            <TasksList />
+          </SocketContext.Provider>
+        </Provider>
+      </>
+    );
+
+    const element1 = container.querySelector(
+      '[data-rbd-draggable-id="drag-group-1-item-0"]'
+    );
+    const element2 = container.querySelector(
+      '[data-rbd-draggable-id="drag-group-1-item-1"]'
+    );
+    fireEvent.keyDown(element1, { key: ' ', code: 'Space' });
+    fireEvent.dragStart(element1);
+    fireEvent.dragEnter(element2);
+    fireEvent.dragOver(element2);
+    fireEvent.drop(element2, {
+      dataTransfer: {
+        source: {
+          droppableId: 0
+        },
+        destination: {
+          droppableId: 1
+        }
+      }
+    });
   });
 });

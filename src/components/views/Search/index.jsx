@@ -9,6 +9,7 @@ import CloseIcon from 'apollo-react-icons/Close';
 import ChevronLeftIcon from 'apollo-react-icons/ChevronLeft';
 import ChevronRightIcon from 'apollo-react-icons/ChevronRight';
 import CircularProgress from 'apollo-react/components/CircularProgress';
+import { useHistory } from 'react-router-dom';
 
 import {
   selectIsOpen,
@@ -36,7 +37,10 @@ import './style.scss';
 import { Typography } from 'apollo-react/components/Typography/Typography';
 import { SEARCH } from '../../../constants/types';
 import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../../constants/app';
-import { selectIsQuestionsFilterEnabled } from '../../../redux/selectors';
+import {
+  selectIsQuestionsFilterEnabled,
+  selectProposalQuestions
+} from '../../../redux/selectors';
 import CustomModal from '../../common/CustomModal';
 
 export default function Search() {
@@ -61,11 +65,14 @@ export default function Search() {
   const tasksShowMine = useSelector(state => state.tasks.showMine);
 
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
+  const proposalQuestions = useSelector(selectProposalQuestions);
   const searchFlag = allFlags.searchFlag || false;
   const dispatch = useDispatch();
 
   const searchInputRef = useRef(null);
   const searchIconRef = useRef(null);
+
+  const history = useHistory();
 
   const toggleSearchIconOpen = useCallback(async () => {
     dispatch(openSearchAction());
@@ -192,6 +199,31 @@ export default function Search() {
     ).length;
     setIsApprovalFiltersEnabled(activeApprovalFiltersCount > 0);
   }, [approvalFilters]);
+
+  useEffect(() => {
+    // if searchFlag and doesDataPrerequisiteSatisfied is true and search_q queryparam is not empty then do search
+    if (searchFlag && doesDataPrerequisiteSatisfied) {
+      const winLocationSearch = window.location.search;
+      const queryparams = new URLSearchParams(winLocationSearch);
+      const search_q_param = queryparams.get('search_q');
+      if (search_q_param) {
+        const question = proposalQuestions.find(
+          q => q.questionId === search_q_param
+        );
+        // if question found set search from questionText
+        if (question) {
+          dispatch(openSearchAction());
+          setSearchInput(question.questionText);
+          dispatch(updateQuerySearchAction(question.questionText));
+          dispatch(doSearchAction());
+        }
+        queryparams.delete('search_q');
+        history.replace({
+          search: queryparams.toString()
+        });
+      }
+    }
+  }, [doesDataPrerequisiteSatisfied, searchFlag, proposalQuestions]);
 
   if (!searchFlag) {
     return null;

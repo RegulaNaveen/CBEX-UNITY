@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { fireEvent, prettyDOM, render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
@@ -12,11 +13,34 @@ import { getUniqueMilestones } from '../../../../redux/selectors/proposal';
 
 const SearchWithRedux = () => (
   <Provider store={store}>
-    <Search />
+    <BrowserRouter>
+      <Search />
+    </BrowserRouter>
   </Provider>
 );
 
 describe('Search component unit tests', () => {
+  beforeAll(() => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.CHANGE_BID,
+      payload: {
+        ...mockData,
+        proposalDetails: {
+          proposal: {
+            ...mockData.proposal
+          },
+          proposalQuestions: []
+        },
+        bid: {
+          bidId: '',
+          isCurrent: true,
+          isEditable: true,
+          pertinentDetails: null,
+          bidName: 'Bid'
+        }
+      }
+    });
+  });
   beforeEach(() => {
     store.dispatch({
       type: REDUX_TYPES.PROPOSAL.SET_FLAG,
@@ -139,8 +163,13 @@ describe('Search component unit tests', () => {
   });
 
   it('should allow us to navigate through search results', async () => {
-    const { queryByTestId, getByText, getByTestId, findByText, queryByText } =
-      render(<SearchWithRedux />);
+    const {
+      queryByTestId,
+      getByText,
+      getByTestId,
+      findByText,
+      queryByText
+    } = render(<SearchWithRedux />);
     store.dispatch({ type: SEARCH.OPEN });
     store.dispatch({ type: SEARCH.UPDATE_QUERY, payload: 'test' });
     store.dispatch({ type: SEARCH.DO_SEARCH });
@@ -178,5 +207,36 @@ describe('Search component unit tests', () => {
     expect(await findByText('2 of 2')).toBeInTheDocument();
     fireEvent.click(getByTestId('search-prev'));
     expect(await findByText('1 of 2')).toBeInTheDocument();
+  });
+
+  it('should seacrh if search_q queryparam is present', async () => {
+    store.dispatch({
+      type: REDUX_TYPES.PROPOSAL.CHANGE_BID,
+      payload: {
+        ...mockData,
+        proposalDetails: {
+          proposal: {
+            ...mockData.proposal
+          },
+          proposalQuestions: mockData.proposalQuestions
+        },
+        bid: {
+          bidId: '',
+          isCurrent: true,
+          isEditable: true,
+          pertinentDetails: null,
+          bidName: 'Bid'
+        }
+      }
+    });
+    window.history.pushState(
+      {},
+      '',
+      '/opportunities/UZA89257?bidNo=3&search_q=0314bfcc-357d-4231-8be4-1ca2461317c5'
+    );
+    const { getByDisplayValue } = render(<SearchWithRedux />);
+    await waitFor(() =>
+      expect(getByDisplayValue('Strategy Lock')).toBeInTheDocument()
+    );
   });
 });
