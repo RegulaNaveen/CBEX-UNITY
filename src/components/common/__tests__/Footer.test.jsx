@@ -18,6 +18,14 @@ import UnityFooter from '../Footer';
 import { REDUX_TYPES } from '../../../constants';
 import * as ProposalApi from '../../../api/proposal';
 import { updateSwitchInProgress } from '../../../redux/actions/proposal-actions';
+import * as datajson from '../../../components/screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../../components/views/modals/__test__/tabdata.json';
+import { Map } from 'immutable';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import cloneDeep from 'lodash/cloneDeep';
+import { SocketContext } from '../../../context/SocketContext';
+
 const oppTypeList = {
   data: {
     'Opportunity Type': [
@@ -127,5 +135,226 @@ describe('Test Footer Component', () => {
     // expect(
     //   await screen.findByText('Operation failed due to error')
     // ).toBeInTheDocument();
+  });
+
+  test('switch template success test', async () => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router'),
+      useParams: jest.fn().mockReturnValue({ id: '123' })
+    }));
+    const middlewares = [thunk];
+    const mockStore = configureStore(middlewares);
+    const cloneData = cloneDeep(datajson);
+    cloneData.proposal.switchTempCallStatus = {
+      data: 'success'
+    };
+    cloneData.proposal.switchTempInProgress = {
+      proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+      status: true
+    };
+    cloneData.proposal.unityTabQuestionLoading = Map({
+      questionId: '',
+      value: false
+    });
+    cloneData.proposal.opportunityData = Map({});
+    cloneData.proposal.proposalAnswerTypes = [
+      'text',
+      'date',
+      'number',
+      'table'
+    ];
+    cloneData.proposal.editQuestionsData = Map({});
+    cloneData.proposal.getAnswerTypesDataF = jest.fn();
+    cloneData.proposal.getRolesInfoF = jest.fn();
+    cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+    const initialState = {
+      ssoAuth: Map(cloneData.ssoAuth),
+      proposal: Map(cloneData.proposal),
+      selectedBid: Map(cloneData.selectedBid),
+      proposalQuestion: cloneData.proposal.proposalQuestions,
+      currentsection: '',
+      onClose: jest.fn(),
+      sidebar: Map({
+        isOpen: true
+      }),
+      notepad: {
+        proposalID: '',
+        notes: [],
+        fetchingNotes: false,
+        fetchNotesErrorMsg: '',
+        uploadingNote: false,
+        uploadNoteErrorMsg: '',
+        notepadMode: 'notepad_mode_default'
+      },
+      unitytab: tabdata.unitytab,
+      approvals: tabdata.approvals,
+      search: {
+        query: null,
+        isOpen: false,
+        currentResultIndex: -1,
+        prevResult: null,
+        totalResultsFound: 0,
+        searching: false,
+        searchResults: [],
+        autoNavigatedToCurrentResult: true,
+        clearInputFlag: false,
+        showModal: false,
+        modalTitle: '',
+        modalContent: ''
+      },
+      tasks: {
+        tasks: [],
+        loading: false,
+        error: '',
+        taskHistory: [],
+        taskHistoryLoading: false,
+        showMine: true,
+        canReorder: false
+      }
+    };
+    const sectionStore = mockStore(initialState);
+    const props = {
+      questionTemplateVersionNumber: 'v2023.12',
+      opportunityType: 'Opportunity Launch Call (Pilot)'
+    };
+
+    ProposalApi.getAllProposals = jest.fn().mockResolvedValue([
+      {
+        isCurrent: true,
+        proposal: {
+          proposalId: '123',
+          bidType: 'Clinical_Bid',
+          proposalDetails: {
+            bidNo: 1
+          }
+        },
+        proposalQuestion: [],
+        proposalUser: []
+      }
+    ]);
+    ProposalApi.getPaginateProposal = jest.fn().mockResolvedValue([
+      {
+        isCurrent: true,
+        proposal: {
+          proposalId: '123',
+          bidType: 'Clinical_Bid',
+          proposalDetails: {
+            bidNo: 1
+          }
+        },
+        proposalQuestion: [],
+        proposalUser: []
+      }
+    ]);
+
+    await render(
+      <>
+        <Provider store={sectionStore}>
+          <Router>
+            <SocketContext.Provider
+              value={{ getTaskLockDetailsWrapper: jest.fn() }}
+            >
+              <UnityFooter {...props} />
+            </SocketContext.Provider>
+          </Router>
+        </Provider>
+      </>
+    );
+  });
+
+  test('switch template error test', async () => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router'),
+      useParams: jest.fn().mockReturnValue({ id: '123' })
+    }));
+    const middlewares = [thunk];
+    const mockStore = configureStore(middlewares);
+    const cloneData = cloneDeep(datajson);
+    cloneData.proposal.switchTempCallStatus = {
+      data: 'error'
+    };
+    cloneData.proposal.switchTempInProgress = {
+      proposalId: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+      status: true
+    };
+    cloneData.proposal.unityTabQuestionLoading = Map({
+      questionId: '',
+      value: false
+    });
+    cloneData.proposal.opportunityData = Map({});
+    cloneData.proposal.proposalAnswerTypes = [
+      'text',
+      'date',
+      'number',
+      'table'
+    ];
+    cloneData.proposal.editQuestionsData = Map({});
+    cloneData.proposal.getAnswerTypesDataF = jest.fn();
+    cloneData.proposal.getRolesInfoF = jest.fn();
+    cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+    const initialState = {
+      ssoAuth: Map(cloneData.ssoAuth),
+      proposal: Map(cloneData.proposal),
+      selectedBid: Map(cloneData.selectedBid),
+      proposalQuestion: cloneData.proposal.proposalQuestions,
+      currentsection: '',
+      onClose: jest.fn(),
+      sidebar: Map({
+        isOpen: true
+      }),
+      notepad: {
+        proposalID: '',
+        notes: [],
+        fetchingNotes: false,
+        fetchNotesErrorMsg: '',
+        uploadingNote: false,
+        uploadNoteErrorMsg: '',
+        notepadMode: 'notepad_mode_default'
+      },
+      unitytab: tabdata.unitytab,
+      approvals: tabdata.approvals,
+      search: {
+        query: null,
+        isOpen: false,
+        currentResultIndex: -1,
+        prevResult: null,
+        totalResultsFound: 0,
+        searching: false,
+        searchResults: [],
+        autoNavigatedToCurrentResult: true,
+        clearInputFlag: false,
+        showModal: false,
+        modalTitle: '',
+        modalContent: ''
+      },
+      tasks: {
+        tasks: [],
+        loading: false,
+        error: '',
+        taskHistory: [],
+        taskHistoryLoading: false,
+        showMine: true,
+        canReorder: false
+      }
+    };
+    const sectionStore = mockStore(initialState);
+    const props = {
+      questionTemplateVersionNumber: 'v2023.12',
+      opportunityType: 'Opportunity Launch Call (Pilot)'
+    };
+
+    await render(
+      <>
+        <Provider store={sectionStore}>
+          <Router>
+            <SocketContext.Provider
+              value={{ getTaskLockDetailsWrapper: jest.fn() }}
+            >
+              <UnityFooter {...props} />
+            </SocketContext.Provider>
+          </Router>
+        </Provider>
+      </>
+    );
   });
 });
