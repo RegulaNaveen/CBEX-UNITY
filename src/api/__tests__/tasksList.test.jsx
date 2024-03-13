@@ -5,7 +5,10 @@ import {
   setTaskDataApi,
   editTaskDataApi,
   updateTaskDescApi,
-  deleteTaskApi
+  deleteTaskApi,
+  updateTaskListApi,
+  tasksListReorderingApi,
+  tasksListMoveApi
 } from '../tasksList';
 
 describe('tasksList api functions', () => {
@@ -44,6 +47,56 @@ describe('tasksList api functions', () => {
       data: []
     });
     expect(editTaskDataApi()).resolves.toStrictEqual([]);
+  });
+
+  test('updateTaskListApi api task', async () => {
+    const response = {
+      data: {
+        description: 'new task',
+        proposal_id: 'TEST_PROPOSAL_ID',
+        task_id: 'TEST_TASK_ID'
+      }
+    };
+    sandbox.stub(axiosInstance, 'put').resolves(response);
+    const results = await updateTaskListApi(
+      'TEST_PROPOSAL_ID',
+      'TEST_TASK_ID',
+      {}
+    );
+    expect(results).toEqual(response.data);
+  });
+
+  test('tasksListReorderingApi should update description of a task', async () => {
+    const response = {
+      data: {
+        description: 'new task',
+        proposal_id: 'TEST_PROPOSAL_ID',
+        task_id: 'TEST_TASK_ID'
+      }
+    };
+    sandbox.stub(axiosInstance, 'put').resolves(response);
+    const result = await tasksListReorderingApi(
+      'TEST_PROPOSAL_ID',
+      ['TEST_TASK_ID'],
+      'TEST_TASK_ID'
+    );
+    expect(result).toEqual(response.data);
+  });
+  test('tasksListMoveApi should update description of a task', async () => {
+    const response = {
+      data: {
+        description: 'new task',
+        proposal_id: 'TEST_PROPOSAL_ID',
+        task_id: 'TEST_TASK_ID'
+      }
+    };
+    sandbox.stub(axiosInstance, 'put').resolves(response);
+    const result = await tasksListMoveApi(
+      'TEST_PROPOSAL_ID',
+      ['TEST_TASK_ID'],
+      'TEST_TASK_ID'
+    );
+    expect(result).toEqual(response.data);
   });
 
   test('updateTaskDescApi should update description of a task', async () => {
