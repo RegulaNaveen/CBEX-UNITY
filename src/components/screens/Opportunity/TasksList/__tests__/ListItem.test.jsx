@@ -150,7 +150,6 @@ describe('ListItem Unit Tests', () => {
     const optionsBtn = container.querySelector('button');
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
-    screen.debug(undefined, Infinity);
     await waitFor(() => {
       expect(getByText('See Owners (0)')).toBeInTheDocument();
     });
@@ -206,7 +205,6 @@ describe('ListItem Unit Tests', () => {
     const optionsBtn = container.querySelector('button');
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
-    screen.debug(undefined, Infinity);
     const seeOwnersText = getByText('See Owners (2)');
     expect(seeOwnersText).toBeInTheDocument();
   });
@@ -258,6 +256,5 @@ describe('ListItem Unit Tests', () => {
     expect(getByText('task 1')).toBeInTheDocument();
     const checkBox = getByTestId('task-checkbox-1');
     fireEvent.click(checkBox);
-    screen.debug(undefined, Infinity);
   });
 });

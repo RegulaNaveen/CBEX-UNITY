@@ -7,23 +7,17 @@ import {
   render,
   screen,
   act,
-  waitFor,
-  getByText
+  waitFor
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Sinon from 'sinon';
-import { createStore, applyMiddleware } from 'redux';
 import { store } from '../../../store';
 import UnityFooter from '../Footer';
 import { REDUX_TYPES } from '../../../constants';
 import * as ProposalApi from '../../../api/proposal';
-import {
-  updateSwitchInProgress,
-  updateSwitchTempStatusFromWebSocket
-} from '../../../redux/actions/proposal-actions';
-
+import { updateSwitchInProgress } from '../../../redux/actions/proposal-actions';
 const oppTypeList = {
   data: {
     'Opportunity Type': [
