@@ -57,7 +57,7 @@ const EventLauncher = ({
   const userData = useSelector(getUserData);
   const allFlags = useSelector(state => state.proposal.get('eventflag'));
   const eventFlag = allFlags.eventLauncher || false;
-  const { isCurrent, id: proposalId } = useSelector(state =>
+  const { isEditable, id: proposalId } = useSelector(state =>
     state.proposal.get('selectedBid')
   )?.toJS();
 
@@ -293,7 +293,7 @@ const EventLauncher = ({
   );
 
   // Component will return null if no event found
-  if (!hasEvent || !eventFlag || !isCurrent) return null;
+  if (!hasEvent || !eventFlag || !isEditable) return null;
   return (
     <div className="event-launcher">
       {!isEmpty(eventStartDate.trim()) && !isEmpty(eventSubject.trim()) && (

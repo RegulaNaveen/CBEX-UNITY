@@ -129,22 +129,6 @@ const TasksList = () => {
     },
     [TODAY]
   );
-
-  const getDays = bidDate => {
-    let days = [];
-    let date = moment(bidDate, 'DD MMM YY');
-    date = date.add(1, 'days');
-    let count = 0;
-    while (count < 10) {
-      if (date.day() !== 0 && date.day() !== 6) {
-        days.push(date.format('DD MMM YY'));
-        count++;
-      }
-      date = date.add(1, 'days');
-    }
-    return days;
-  };
-
   const tasksToShow = showMine
     ? tasks.filter(task => {
         // If the task has a task_role property and it's an array
@@ -250,8 +234,6 @@ const TasksList = () => {
       });
     }
   }, [currentSearchResult, autoNavigatedToCurrentResult, tasks]);
-
-  const searchWithDay = () => {};
 
   useEffect(() => {
     let timer = null;
@@ -441,7 +423,10 @@ const TasksList = () => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="accordions-wrapper">
           {Object.entries(tasksGroupsByDay).map(([day, tasksGroup]) => (
-            <Droppable droppableId={`droppable-task-group-${day}`}>
+            <Droppable
+              droppableId={`droppable-task-group-${day}`}
+              key={`droppable-task-group-${day}`}
+            >
               {(provided, snapshot) => (
                 <Accordion
                   defaultExpanded={isCorrectDay(tasksGroup.date)}
