@@ -47,6 +47,7 @@ import Timelines from '../../../screens/Timelines';
 import { checkTabRender } from '../../../screens/UnityTabs/utils';
 import { setTabRefresh } from '../../../../redux/actions/unitytab-action';
 import { DEFAULT_TABS_LEN } from '../../../../constants/app';
+import { toggleCanReorder } from '../../../../redux/actions/tasksList-actions';
 // import KeyMilestoneDeliverableTimelines from '../../../screens/Opportunity/KeyMilestonesDeliverableTimelines';
 
 const Questions = React.lazy(() =>
@@ -722,6 +723,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     if (val === 0) {
       selectView.delete('viewType');
     }
+    dispatch(toggleCanReorder(false));
     history.push(`${window.location.pathname}?${selectView.toString()}`);
   };
 
