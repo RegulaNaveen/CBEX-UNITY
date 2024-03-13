@@ -251,8 +251,6 @@ function VerticalTabsCollapsiblePanel({
     return tabs;
   };
 
-  console.log({ activeTabIndex });
-
   return (
     <div
       className={`vertical-tabs-collapsible-panel ${
