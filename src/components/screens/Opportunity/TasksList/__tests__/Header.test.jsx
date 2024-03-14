@@ -22,7 +22,6 @@ describe('TasksList Header Unit Tests', () => {
         <Header />
       </Provider>
     );
-    screen.debug(undefined, Infinity);
     expect(getByRole('checkbox', { name: /show mine/i })).toBeInTheDocument();
   });
 

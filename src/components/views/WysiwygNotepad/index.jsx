@@ -76,7 +76,9 @@ const WysiwygNotepad = ({
           if (!localStorage.getItem('notepadStartDuration')) {
             localStorage.setItem(
               'notepadStartDuration',
-              moment().utc().format('MMMM Do YYYY, h:mm:ss a')
+              moment()
+                .utc()
+                .format('MMMM Do YYYY, h:mm:ss a')
             );
           }
         });
@@ -175,7 +177,9 @@ const WysiwygNotepad = ({
           matamoObj.action = `Event: Notepad ${proposalDetails['CRM #']}`;
           matamoObj.name = `Notepad: Duration ${localStorage.getItem(
             'notepadStartDuration'
-          )} - ${moment().utc().format('MMMM Do YYYY, h:mm:ss a')}`;
+          )} - ${moment()
+            .utc()
+            .format('MMMM Do YYYY, h:mm:ss a')}`;
           matamoObj.customDimensions = [
             JSON.stringify(proposalDetails),
             { user: userEmail },

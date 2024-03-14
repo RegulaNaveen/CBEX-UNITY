@@ -27,7 +27,8 @@ import {
 } from '../../../../redux/selectors/tasks';
 import {
   tasksListReordering,
-  tasksListMove
+  tasksListMove,
+  toggleCanReorder
 } from '../../../../redux/actions/tasksList-actions';
 import { reorder } from '../../../../utils/helpers';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
@@ -129,22 +130,6 @@ const TasksList = () => {
     },
     [TODAY]
   );
-
-  const getDays = bidDate => {
-    let days = [];
-    let date = moment(bidDate, 'DD MMM YY');
-    date = date.add(1, 'days');
-    let count = 0;
-    while (count < 10) {
-      if (date.day() !== 0 && date.day() !== 6) {
-        days.push(date.format('DD MMM YY'));
-        count++;
-      }
-      date = date.add(1, 'days');
-    }
-    return days;
-  };
-
   const tasksToShow = showMine
     ? tasks.filter(task => {
         // If the task has a task_role property and it's an array
@@ -168,6 +153,10 @@ const TasksList = () => {
         return false;
       })
     : tasks;
+
+  useEffect(() => {
+    dispatch(toggleCanReorder(false));
+  }, []);
 
   useEffect(() => {
     // if bid is changed
@@ -251,8 +240,6 @@ const TasksList = () => {
     }
   }, [currentSearchResult, autoNavigatedToCurrentResult, tasks]);
 
-  const searchWithDay = () => {};
-
   useEffect(() => {
     let timer = null;
     function onPointerEnter() {
@@ -309,10 +296,12 @@ const TasksList = () => {
     return () => {
       if (timer) {
         clearTimeout(timer);
-        taskListContainerRef.removeEventListener(
-          'pointerenter',
-          onPointerEnter
-        );
+        if (taskListContainerRef) {
+          taskListContainerRef.removeEventListener(
+            'pointerenter',
+            onPointerEnter
+          );
+        }
       }
     };
   }, [canReorder, editable, taskListContainerRef]);
@@ -391,21 +380,6 @@ const TasksList = () => {
     [tasksGroupsByDay]
   );
 
-  if (tasksLoading) {
-    return (
-      <div id="tasks-list-left-section">
-        <Loader
-          isInner
-          size={20}
-          style={{
-            width: '20px',
-            height: '20px'
-          }}
-        />
-      </div>
-    );
-  }
-
   const openModal = task_id => {
     setTaskId(task_id);
     setIsModalOpen(true);
@@ -431,6 +405,16 @@ const TasksList = () => {
       id="tasks-list-left-section"
       ref={_ref => setTaskListContainerRef(_ref)}
     >
+      {tasksLoading && (
+        <Loader
+          isInner
+          size={20}
+          style={{
+            width: '20px',
+            height: '20px'
+          }}
+        />
+      )}
       <div className="task-list-header">
         <Header />
         <div className="progress-indicator">
@@ -441,7 +425,10 @@ const TasksList = () => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="accordions-wrapper">
           {Object.entries(tasksGroupsByDay).map(([day, tasksGroup]) => (
-            <Droppable droppableId={`droppable-task-group-${day}`}>
+            <Droppable
+              droppableId={`droppable-task-group-${day}`}
+              key={`droppable-task-group-${day}`}
+            >
               {(provided, snapshot) => (
                 <Accordion
                   defaultExpanded={isCorrectDay(tasksGroup.date)}
