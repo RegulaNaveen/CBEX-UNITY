@@ -159,20 +159,23 @@ export default function TablePreview({ columns, rows }) {
               !row.hidden && (
                 <>
                   <tr>
-                    {columns.map((column, colIndex) => (
-                      <>
-                        {row[column.accessor] ? (
-                          <TablePreviewCell
-                            row={row}
-                            column={column}
-                            rowIndex={rowIndex}
-                            colIndex={colIndex}
-                          />
-                        ) : (
-                          <td className="blankRow"> - </td>
-                        )}
-                      </>
-                    ))}
+                    {columns.map(
+                      (column, colIndex) =>
+                        !column.hidden && (
+                          <>
+                            {row[column.accessor] ? (
+                              <TablePreviewCell
+                                row={row}
+                                column={column}
+                                rowIndex={rowIndex}
+                                colIndex={colIndex}
+                              />
+                            ) : (
+                              <td className="blankRow"> - </td>
+                            )}
+                          </>
+                        )
+                    )}
                   </tr>
                 </>
               )

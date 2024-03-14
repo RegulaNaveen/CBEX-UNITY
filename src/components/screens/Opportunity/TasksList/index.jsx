@@ -475,7 +475,7 @@ const TasksList = () => {
                         openHistoryModal={openHistoryModal}
                       />
                     ))}
-                    {selectedBid.isEditable && (
+                    {selectedBid.isEditable && !snapshot.isDraggingOver && (
                       <AddTaskItem
                         day={day}
                         proposalId={proposalId}
