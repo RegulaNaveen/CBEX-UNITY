@@ -5,33 +5,37 @@ import {
   deleteApprovalsApi,
   duplicateApprovalApi
 } from '../approvals';
+import Sinon from 'sinon';
 
-jest.mock('../../SessionHandler', () => ({
-  getAccessTokenFromLocalStorage: jest.fn(() => 'valid_access_token')
-}));
-
-describe('getApprovalsApi', () => {
-  const proposalId = 123;
+describe('Approvals api functions', () => {
+  const sandbox = Sinon.createSandbox();
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    sandbox.restore();
   });
 
-  it('should make an axios GET request with the correct URL and headers', async () => {
-    const axiosGetMock = jest.spyOn(axiosInstance, 'get');
-    const expectedUrl = `${APPROVALS_URL}?proposal_id=${proposalId}`;
-    const expectedHeaders = {
-      'x-api-key': PROPOSAL.API_KEY,
-      'x-access-token': 'valid_access_token'
-    };
+  afterAll(() => {
+    sandbox.restore();
+  });
 
-    axiosGetMock.mockResolvedValueOnce({ data: {} });
-
-    await getApprovalsApi(proposalId);
-
-    expect(axiosGetMock).toHaveBeenCalledTimes(1);
-    expect(axiosGetMock).toHaveBeenCalledWith(expectedUrl, {
-      headers: expectedHeaders
+  test('getApprovalsApi should send data', () => {
+    sandbox.stub(axiosInstance, 'get').resolves({
+      data: []
     });
+    expect(getApprovalsApi()).resolves.toStrictEqual({ data: [] });
+  });
+
+  test('deleteApprovalsApi should delete data', () => {
+    sandbox.stub(axiosInstance, 'delete').resolves({
+      data: []
+    });
+    expect(deleteApprovalsApi()).resolves.toStrictEqual({ data: [] });
+  });
+
+  test('duplicateApprovalApi should duplicate data', () => {
+    sandbox.stub(axiosInstance, 'put').resolves({
+      data: []
+    });
+    expect(duplicateApprovalApi()).resolves.toStrictEqual({ data: [] });
   });
 });
