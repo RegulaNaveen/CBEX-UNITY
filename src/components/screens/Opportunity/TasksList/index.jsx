@@ -27,7 +27,8 @@ import {
 } from '../../../../redux/selectors/tasks';
 import {
   tasksListReordering,
-  tasksListMove
+  tasksListMove,
+  toggleCanReorder
 } from '../../../../redux/actions/tasksList-actions';
 import { reorder } from '../../../../utils/helpers';
 import { AlertDiamond, AlertTriangle } from '../../../svg';
@@ -152,6 +153,10 @@ const TasksList = () => {
         return false;
       })
     : tasks;
+
+  useEffect(() => {
+    dispatch(toggleCanReorder(false));
+  }, []);
 
   useEffect(() => {
     // if bid is changed
@@ -291,10 +296,12 @@ const TasksList = () => {
     return () => {
       if (timer) {
         clearTimeout(timer);
-        taskListContainerRef.removeEventListener(
-          'pointerenter',
-          onPointerEnter
-        );
+        if (taskListContainerRef) {
+          taskListContainerRef.removeEventListener(
+            'pointerenter',
+            onPointerEnter
+          );
+        }
       }
     };
   }, [canReorder, editable, taskListContainerRef]);
@@ -373,21 +380,6 @@ const TasksList = () => {
     [tasksGroupsByDay]
   );
 
-  if (tasksLoading) {
-    return (
-      <div id="tasks-list-left-section">
-        <Loader
-          isInner
-          size={20}
-          style={{
-            width: '20px',
-            height: '20px'
-          }}
-        />
-      </div>
-    );
-  }
-
   const openModal = task_id => {
     setTaskId(task_id);
     setIsModalOpen(true);
@@ -413,6 +405,16 @@ const TasksList = () => {
       id="tasks-list-left-section"
       ref={_ref => setTaskListContainerRef(_ref)}
     >
+      {tasksLoading && (
+        <Loader
+          isInner
+          size={20}
+          style={{
+            width: '20px',
+            height: '20px'
+          }}
+        />
+      )}
       <div className="task-list-header">
         <Header />
         <div className="progress-indicator">
@@ -473,7 +475,7 @@ const TasksList = () => {
                         openHistoryModal={openHistoryModal}
                       />
                     ))}
-                    {selectedBid.isEditable && (
+                    {selectedBid.isEditable && !snapshot.isDraggingOver && (
                       <AddTaskItem
                         day={day}
                         proposalId={proposalId}
