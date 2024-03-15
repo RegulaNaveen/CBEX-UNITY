@@ -196,44 +196,6 @@ class CollapsibleList extends Component<Props, State> {
       .join('-');
   };
 
-  showNotesCount = title => {
-    const { notes, handleOpenClose, setTabFromQuestionNotes } = this.props;
-    if (notes && notes.size && notes.size > 0) {
-      const count = notes.filter(
-        note => note.getIn(['section', 'sectionName'], '') === title
-      );
-      if (count.size > 0) {
-        return (
-          <span
-            style={{
-              paddingLeft: 10,
-              fontSize: 12,
-              verticalAlign: 'top'
-            }}
-          >
-            <Link
-              onClick={e => {
-                e.stopPropagation();
-                handleOpenClose(true);
-                setTabFromQuestionNotes(1, title, true);
-              }}
-              style={{ borderBottom: 'none' }}
-              size="small"
-            >
-              <FolderOpen fontSize="extraSmall" />
-              <span style={{ verticalAlign: 'top' }}>
-                {' '}
-                Notes ({count.size})
-              </span>
-            </Link>
-          </span>
-        );
-      }
-      return null;
-    }
-    return null;
-  };
-
   trackEventBladeToggle = action => {
     const openOrclose = action ? 'Open' : 'Close';
     const {
@@ -259,9 +221,9 @@ class CollapsibleList extends Component<Props, State> {
     const { listIndex, questionsRef } = this.props;
     const altKeyPressed = e.altKey;
     if (altKeyPressed && String(e.key).toLowerCase() === 'q') {
-      if (this.taskRef.current.contains(document.activeElement)) {
+      if (this.taskRef?.current?.contains(document.activeElement)) {
         this.collapseTriggerRef.current.focus();
-      } else if (!questionsRef.current.contains(document.activeElement)) {
+      } else if (!questionsRef?.current?.contains(document.activeElement)) {
         if (listIndex === 0) {
           this.collapseTriggerRef.current.focus();
         }
@@ -295,7 +257,7 @@ class CollapsibleList extends Component<Props, State> {
           id={`arrow-icon-${this.createId()}`}
           className="task-icon-wrapper"
           onClick={this.handleCollapse}
-          onKeyPress={this.handleKeyPress}
+          onKeyDown={this.handleKeyPress}
           type="button"
           tabIndex={0}
           ref={this.collapseTriggerRef}
@@ -358,7 +320,6 @@ class CollapsibleList extends Component<Props, State> {
                     textToHighlight={title}
                     highlightClassName="search-highlight"
                   />
-                  {this.showNotesCount(title)}
                 </p>
               </div>
             </div>
