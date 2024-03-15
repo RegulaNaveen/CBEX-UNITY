@@ -20,6 +20,7 @@ import PencilIcon from 'apollo-react-icons/Pencil';
 import TrashIcon from 'apollo-react-icons/Trash';
 import classNames from 'classnames';
 import Typography from 'apollo-react/components/Typography';
+import IconButton from 'apollo-react/components/IconButton';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   updateTaskDesc,
@@ -435,24 +436,34 @@ function ListItem({
               {canReorder && (
                 <span
                   {...provided.dragHandleProps}
-                  className={classNames({ disabled: locked || !editable })}
+                  className={classNames({
+                    disabled: locked || !editable,
+                    'drag-btn-wrapper': true
+                  })}
                   data-testid={`drag-group-${day}-item-${index}`}
                   style={{ height: '24px' }}
                 >
-                  <DragIcon className="drag-icon" />
+                  <IconButton disabled={locked || !editable} size="small">
+                    <DragIcon className="drag-icon" />
+                  </IconButton>
                 </span>
               )}
               <Checkbox
                 checked={task?.is_completed}
                 style={{
-                  marginLeft: '0.01rem',
-                  marginTop: '-0.25rem'
+                  marginTop: '0rem'
                 }}
                 onClick={() => handleCheckboxClick(task)}
                 disabled={locked || !editable || checkboxDisabled}
                 data-testid={`task-checkbox-${index}`}
               />
-              <div className="task-desc" ref={taskDescRef}>
+              <div
+                className={classNames({
+                  'task-desc': true,
+                  disabled: locked || !editable
+                })}
+                ref={taskDescRef}
+              >
                 <Tooltip placement="top" title={task?.description}>
                   <p
                     ref={_ref => setDescRef(_ref)}

@@ -1,9 +1,6 @@
-import {
-  SearchHighlight,
-  extractTextFromDoc
-} from '../SearchHighlightExtension';
+import { extractTextFromDoc } from '../SearchHighlightExtension';
 describe('extractTextFromDoc', () => {
-  it('SearchHighlight', () => {
+  it('extractTextFromDoc', () => {
     const doc = [
       {
         type: {
@@ -24,6 +21,37 @@ describe('extractTextFromDoc', () => {
         text: 'test',
         type: {
           name: 'text'
+        }
+      },
+      {
+        type: {
+          name: 'mention'
+        },
+        attrs: {
+          label: 'test'
+        }
+      },
+      {
+        type: {
+          name: 'paragraph'
+        }
+      },
+      {
+        content: [
+          {
+            text: 'test',
+            type: {
+              name: 'text'
+            }
+          }
+        ]
+      },
+      {
+        content: {
+          text: 'test',
+          type: {
+            name: 'text'
+          }
         }
       }
     ];

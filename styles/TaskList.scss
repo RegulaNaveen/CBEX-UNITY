@@ -92,22 +92,33 @@
         }
         .task-item-drag-container {
           display: flex !important;
-          align-items: center;
+          align-items: flex-start;
           .disabled {
             pointer-events: none;
           }
-          .drag-icon {
-            color: #4d4d4d;
-            margin-right: 0.35rem;
-          }
-          .MuiButtonBase-root {
-            background-color: white;
+          .drag-btn-wrapper {
+            height: 22px !important;
+            width: 24px !important;
+            background: transparent !important;
+            .drag-icon {
+              color: #4d4d4d;
+              margin-right: 0.35rem;
+            }
+            .MuiButtonBase-root {
+              width: 24px !important;
+              background-color: transparent !important;
+            }
           }
           .task-desc {
             flex-grow: 1;
             line-height: 24px;
             max-height: 48px; // line-height * 2 - two lines
             overflow: hidden;
+            &.disabled {
+              p {
+                color: rgba(0, 0, 0, 0.4) !important;
+              }
+            }
             p {
               display: inline-block;
               max-width: 100%;
