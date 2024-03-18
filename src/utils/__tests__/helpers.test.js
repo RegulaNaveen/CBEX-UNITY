@@ -2,8 +2,66 @@ import {
   objectContains,
   convertToInternationalCurrency,
   avoidSpecialChars,
-  reorder
+  reorder,
+  objectToString
 } from '../helpers';
+
+describe('objectToString', () => {
+  it('should return the string representation of a non-empty object', () => {
+    const object = {
+      name: 'John Doe',
+      age: 30,
+      address: {
+        street: '123 Main St',
+        city: 'New York',
+        country: 'USA'
+      }
+    };
+
+    const result = objectToString(object);
+
+    expect(result).toBe('John Doe, 30, 123 Main St, New York, USA');
+  });
+
+  it('should return "No data" for an empty object', () => {
+    const object = {};
+
+    const result = objectToString(object);
+
+    expect(result).toBe('');
+  });
+
+  it('should return the string representation of a nested object', () => {
+    const object = {
+      name: 'John Doe',
+      age: 30,
+      address: {
+        street: '123 Main St',
+        city: 'New York',
+        country: {
+          name: 'USA',
+          code: 'US'
+        }
+      }
+    };
+
+    const result = objectToString(object);
+
+    expect(result).toBe('John Doe, 30, 123 Main St, New York, USA, US');
+  });
+
+  it('should return the string representation of an object with array values', () => {
+    const object = {
+      name: 'John Doe',
+      age: 30,
+      hobbies: ['reading', 'coding', 'gaming']
+    };
+
+    const result = objectToString(object);
+
+    expect(result).toBe('John Doe, 30, reading, coding, gaming');
+  });
+});
 
 describe('objectContains', () => {
   it('should return true if the object contains the search string', () => {

@@ -98,9 +98,9 @@ export function tasksListReordering(proposalId, tasks, taskId = '') {
         const updatedTasks = tasks.map(task => {
           return {
             ...task,
-            order: response.result.source.find(
-              item => item.task_id === task.task_id
-            )?.order
+            order:
+              response.result.source.find(item => item.task_id === task.task_id)
+                ?.order || task.order
           };
         });
         dispatch({
