@@ -15,7 +15,7 @@ export const selectTasksList = createSelector(
     task.tasks.filter(
       task =>
         task.opportunity_types
-          .split(',')
+          ?.split(',')
           .includes(selectedBid.get('opportunityType')) && !!!task.is_deleted
     )
 );

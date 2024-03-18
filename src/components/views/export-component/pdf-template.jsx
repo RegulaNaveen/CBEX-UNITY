@@ -449,7 +449,7 @@ function getProposalTeamsRows(questions) {
   }
   return html;
 }
-function questionTables(allQuestions, proposalQuestions) {
+export function questionTables(allQuestions, proposalQuestions) {
   // Array<div id="resp-table" of each section>
   let html = ``;
   // Remove not visible questions
@@ -665,9 +665,9 @@ function getHtml(
 ) {
   let html = ` 
   ${getStyled()}
-  <div id="page" style="width: 100%;"> <div style="width: 100%;"><div style="width: 100%;">  <div style="margin-bottom: 5px;width: 100%;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 100%;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${proposalDetails[
-    'CRM #'
-  ] || ' '}${'&nbsp'}
+  <div id="page" style="width: 100%;"> <div style="width: 100%;"><div style="width: 100%;">  <div style="margin-bottom: 5px;width: 100%;"><div style="font-size:14px;color:#00a3e0;font-family:inherit;font-weight:700;width: 100%;display: flex;">  <p style="font-style:italic;display: flex; margin: 0px !important;">${
+    proposalDetails['CRM #'] || ' '
+  }${'&nbsp'}
    Opportunity Overview</p>
 </div></div>${getHeaderInfoRows(proposalDetails)}
          ${getProposalTeamsRows(questions)}
