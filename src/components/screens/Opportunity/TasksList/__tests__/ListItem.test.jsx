@@ -16,6 +16,112 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import * as TaskApis from '../../../../../api/tasksList';
 import * as actionCreators from '../../../../../redux/actions/tasksList-actions';
 
+import SeeOwners from '../SeeOwnersModal';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import { Map } from 'immutable';
+import * as datajson from '../../../../screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../../../views/modals/__test__/tabdata.json';
+import cloneDeep from 'lodash/cloneDeep';
+
+const SeeOwnersWithRedux = props => {
+  const middlewares = [thunk];
+  const mockStore = configureStore(middlewares);
+  const cloneData = cloneDeep(datajson);
+
+  cloneData.proposal.unityTabQuestionLoading = Map({
+    questionId: '',
+    value: false
+  });
+  cloneData.proposal.opportunityData = Map({});
+  cloneData.proposal.proposalAnswerTypes = ['text', 'date', 'number', 'table'];
+  cloneData.proposal.editQuestionsData = Map({});
+  cloneData.proposal.getAnswerTypesDataF = jest.fn();
+  cloneData.proposal.getRolesInfoF = jest.fn();
+  cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+  const initialState = {
+    proposal: Map(cloneData.proposal),
+    tasks: {
+      tasks: [
+        {
+          id: 1122,
+          is_completed: true,
+          no_of_units: 1,
+          description: 'task 1',
+          order: 1,
+          opportunity_types: 'Opportunity Launch Call (Pilot)',
+          expanded: true,
+          task_role: [
+            {
+              id: 3129,
+              task_list_id: 1122,
+              proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+              question_id: 'Proposal Team-A2W',
+              task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+              name: 'RAHUL TIWARI',
+              email: 'rahul.tiwari@iqvia.com',
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-11T09:18:40.628Z',
+              updated_date: '2024-03-11T09:18:40.628Z'
+            }
+          ]
+        },
+        {
+          id: 3129,
+          is_completed: true,
+          no_of_units: 1,
+          description: 'task 1.1',
+          order: 2,
+          expanded: true,
+          opportunity_types: 'Opportunity Launch Call (Pilot)',
+          task_role: [
+            {
+              id: 3130,
+              task_list_id: 1122,
+              proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+              question_id: 'Proposal Team-A2W',
+              task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+              name: 'RAHUL TIWARI',
+              email: 'rahul.tiwari@iqvia.com',
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-11T09:18:40.628Z',
+              updated_date: '2024-03-11T09:18:40.628Z'
+            }
+          ]
+        }
+      ],
+      loading: false,
+      error: '',
+      taskHistory: [],
+      taskHistoryLoading: false,
+      showMine: true,
+      canReorder: false
+    }
+  };
+  const sectionStore = mockStore(initialState);
+  return (
+    <Provider store={sectionStore}>
+      <SocketContext.Provider
+        value={{ lockTaskWrapper: jest.fn(), unlockTaskWrapper: jest.fn() }}
+      >
+        <DragDropContext onDragUpdate={jest.fn()}>
+          <Droppable droppableId={`droppable-task-group-1`}>
+            {(provided, snapshot) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                <SeeOwners {...props} />
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </SocketContext.Provider>
+    </Provider>
+  );
+};
+
 const ListItemWithRedux = props => (
   <Provider store={store}>
     <SocketContext.Provider
@@ -383,5 +489,50 @@ describe('ListItem Unit Tests', () => {
     const historyButtons = getByTestId('task-history-1');
     fireEvent.click(historyButtons);
     expect(openHistoryModal).toHaveBeenCalledWith(props.task.task_id);
+  });
+
+  test('task see owner non editable', async () => {
+    const task = {
+      no_of_units: 1,
+      description: 'task 1',
+      order: 1,
+      opportunity_types: 'Opportunity Launch Call (Pilot)',
+      expanded: true,
+      task_role: [
+        {
+          id: 3129,
+          task_list_id: 1122,
+          proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+          question_id: '5b23339e-c750-4bff-82a8-95930b412733',
+          task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+          name: 'RAHUL TIWARI',
+          email: 'rahul.tiwari@iqvia.com',
+          type: 'roles',
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-11T09:18:40.628Z',
+          updated_date: '2024-03-11T09:18:40.628Z'
+        }
+      ]
+    };
+    const props = {
+      index: 1,
+      isModalOpen: true,
+      closeModal: jest.fn(),
+      setIsModalOpen: jest.fn(),
+      ownersCount: 2,
+      setIsNewTask: jest.fn(),
+      isNewTask: false,
+      task,
+      setAddOwnerBtn: jest.fn(),
+      addOwnerBtn: false,
+      editable: false
+    };
+    const { getByText } = await render(<SeeOwnersWithRedux {...props} />);
+    expect(getByText('Add Owner')).toBeDisabled();
+    expect(getByText('Global Analytics Lead')).toBeInTheDocument();
+    expect(getByText('OK')).toBeInTheDocument();
+    fireEvent.click(getByText('OK'));
+    expect(getByText('Save')).toBeInTheDocument();
   });
 });
