@@ -9,6 +9,7 @@ import configureStore from 'redux-mock-store';
 import * as data from '../__tests__/data.json';
 import thunk from 'redux-thunk';
 import cloneDeep from 'lodash/cloneDeep';
+import draftjs, { EditorState, ContentState } from 'apollo-react/node_modules/draft-js';
 import SocketContext from '../../../context/SocketContext';
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -58,12 +59,17 @@ const initialState = {
   search: {
     query: null,
     isOpen: false,
-    currentResultIndex: -1,
+    currentResultIndex: 0,
     prevResult: null,
     totalResultsFound: 0,
     searching: false,
-    searchResults: [],
-    autoNavigatedToCurrentResult: true,
+    searchResults: [
+      {
+        searchIndex: 'f67947eb-f1fb-4024-8a27-cb6f9af3d928',
+        sectionName: 'RFP & Customer Background'
+      }
+    ],
+    autoNavigatedToCurrentResult: false,
     clearInputFlag: false,
     showModal: false,
     modalTitle: '',
@@ -121,6 +127,15 @@ const currentSFanswerMap = Map({
 });
 
 describe('test for question component', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   const defaultProps = {
     answers: answersList,
     questionText: 'Indication',
@@ -648,7 +663,15 @@ describe('test for question component', () => {
     fireEvent.click(await findByText('alksdjf'));
   });
 
-  test('test question component text type', async () => {
+  test.only('test question component text type', async () => {
+    draftjs.Editor = jest.fn(props => {
+      const modifiedOnchange = e => {
+        const text = e.target.value;
+        const content = ContentState.createFromText(text);
+        props.onChange(EditorState.createWithContent(content));
+      };
+      return <input className="editor" onChange={e => modifiedOnchange(e)} />;
+    });
     const props = {
       eventCategories: {
         dp: 'Unity Dashboard',
@@ -720,14 +743,14 @@ describe('test for question component', () => {
       proposalId: '0b845c8a-9e31-4e34-92b9-86b8f66ed734',
       answers: Map([
         {
-          user: 'AnswerPulledFromSalesforce',
-          userName: 'AnswerPulledFromSalesforce',
-          userRole: 'AnswerPulledFromSalesforce',
-          date: '2023-02-01T12:56:41.433Z',
-          answer: List(['Viral hepatitis C']),
-          formattedAnswer: ['Viral hepatitis C'],
-          proposalId: '93c77a01-5e31-4191-9b2f-cfac782a21af',
-          updatedInPG: false
+          "user": "AnswerPulledFromSalesforce",
+          "userName": "AnswerPulledFromSalesforce",
+          "userRole": "AnswerPulledFromSalesforce",
+          "date": "2024-01-16T12:54:10.184Z",
+          "answer": "Malignant tumor of testis",
+          "formattedAnswer": "Malignant tumor of testis",
+          "proposalId": "0b845c8a-9e31-4e34-92b9-86b8f66ed734",
+          "updatedInPG": false
         }
       ]),
       questionText: 'alksdjf',
@@ -1076,6 +1099,19 @@ describe('test for question component', () => {
       prevSearchResult: null,
       autoNavigatedToCurrentResult: true
     };
+    const richtextObject = {
+      blocks: [
+        {
+          text: 'test textbox',
+          type: 'unstyled',
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: [],
+          data: {}
+        }
+      ],
+      entityMap: {}
+    };
     const socketContextObj = {
       questionLockWrapper: jest.fn(),
       questionUnlockWrapper: jest.fn()
@@ -1084,12 +1120,17 @@ describe('test for question component', () => {
       on: jest.fn(),
       emit: jest.fn()
     };
-    const { container, findByText, debug } = render(
+    const { container, findByText } = render(
       <Provider store={mockstore}>
-        <Question {...props} socketContext={socketContextObj} />
+        <Question {...props} />
       </Provider>
     );
-    screen.debug();
+
     fireEvent.click(await findByText('alksdjf'));
+    const textbox = screen.getByRole('textbox');
+    // fireEvent.focus(textbox);
+    // fireEvent.keyDown(textbox, { key: "a", code: "keyA" });
+    // fireEvent.blur(textbox);
+    screen.debug(textbox, Infinity);
   });
 });
