@@ -14,6 +14,7 @@ import { SocketContext } from '../../../../../context/SocketContext';
 import ListItem from '../ListItem';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import * as TaskApis from '../../../../../api/tasksList';
+import * as actionCreators from '../../../../../redux/actions/tasksList-actions';
 
 const ListItemWithRedux = props => (
   <Provider store={store}>
@@ -32,6 +33,11 @@ const ListItemWithRedux = props => (
     </SocketContext.Provider>
   </Provider>
 );
+
+jest.mock('../../../../../redux/actions/tasksList-actions', () => ({
+  editTask: jest.fn().mockReturnValue(() => Promise.resolve()),
+  updateTaskDesc: jest.fn().mockReturnValue(() => Promise.resolve())
+}));
 
 describe('ListItem Unit Tests', () => {
   let sinonSandBox;
@@ -249,12 +255,133 @@ describe('ListItem Unit Tests', () => {
       },
       index: 1
     };
+
     const { getByText, getByTestId, container } = render(
       <ListItemWithRedux {...props} />
     );
 
     expect(getByText('task 1')).toBeInTheDocument();
     const checkBox = getByTestId('task-checkbox-1');
-    fireEvent.click(checkBox);
+    await fireEvent.click(checkBox);
+    // Wait for promises to resolve
+    await Promise.resolve();
+
+    expect(actionCreators.editTask).toHaveBeenCalledWith(
+      props.task.proposal_id,
+      props.task.task_id,
+      { is_completed: !props.task.is_completed }
+    );
+  });
+
+  test('should handle see owners and close modal', async () => {
+    const props = {
+      task: {
+        description: 'task 1',
+        task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+        proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+        is_completed: false,
+        task_role: [
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: null,
+            name: 'Varsha Kumari',
+            email: 'varsha.kumari2@iqvia.com',
+            type: 'user',
+            updated_by: 'Pooja Chahar',
+            updated_by_email: 'pooja.chahar@iqvia.com',
+            created_date: '2024-03-12T05:30:45.126Z',
+            updated_date: '2024-03-12T05:30:45.126Z'
+          },
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: null,
+            name: 'Kunal nigam',
+            email: 'kunal.nigam@iqvia.com',
+            type: 'user',
+            updated_by: 'Pooja Chahar',
+            updated_by_email: 'pooja.chahar@iqvia.com',
+            created_date: '2024-03-12T05:30:45.126Z',
+            updated_date: '2024-03-12T05:30:45.126Z'
+          }
+        ]
+      },
+      index: 1
+    };
+    const { getByText, getByTestId, container, getAllByTestId } = render(
+      <ListItemWithRedux {...props} />
+    );
+    expect(getByText('task 1')).toBeInTheDocument();
+    const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
+    fireEvent.click(iconMenuButton);
+    const optionsBtn = container.querySelector('button');
+    screen.debug(undefined, Infinity);
+    expect(optionsBtn).toBeInTheDocument();
+    await fireEvent.click(optionsBtn);
+    const SeeOwnersBtn = getByTestId('task-see-owners-modal-1');
+    fireEvent.click(SeeOwnersBtn);
+  });
+
+  test('should show History modal', async () => {
+    const props = {
+      task: {
+        description: 'task 1',
+        task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+        proposal_id: 'PROPOSAL_ID_1',
+        task_role: [
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: null,
+            name: 'Varsha Kumari',
+            email: 'varsha.kumari2@iqvia.com',
+            type: 'user',
+            updated_by: 'Pooja Chahar',
+            updated_by_email: 'pooja.chahar@iqvia.com',
+            created_date: '2024-03-12T05:30:45.126Z',
+            updated_date: '2024-03-12T05:30:45.126Z'
+          },
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: null,
+            name: 'Kunal nigam',
+            email: 'kunal.nigam@iqvia.com',
+            type: 'user',
+            updated_by: 'Pooja Chahar',
+            updated_by_email: 'pooja.chahar@iqvia.com',
+            created_date: '2024-03-12T05:30:45.126Z',
+            updated_date: '2024-03-12T05:30:45.126Z'
+          }
+        ]
+      },
+      index: 1
+    };
+    const openHistoryModal = jest.fn();
+    // console.log(undefined, Infinity);
+    const { getByText, getByTestId, container } = render(
+      <ListItemWithRedux {...props} openHistoryModal={openHistoryModal} />
+    );
+
+    expect(getByText('task 1')).toBeInTheDocument();
+    const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
+    fireEvent.click(iconMenuButton);
+    const optionsBtn = container.querySelector('button');
+    screen.debug(undefined, Infinity);
+    expect(optionsBtn).toBeInTheDocument();
+    await fireEvent.click(optionsBtn);
+    // screen.debug(undefined, Infinity);
+    const historyButtons = getByTestId('task-history-1');
+    fireEvent.click(historyButtons);
+    expect(openHistoryModal).toHaveBeenCalledWith(props.task.task_id);
   });
 });
