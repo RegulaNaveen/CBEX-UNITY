@@ -13,12 +13,15 @@ import {
   handleMultipleTaskLocks,
   updateTaskListMoveAction,
   updateTaskListOrderAction,
-  editRoleFromSocket
+  editRoleFromSocket,
+  toggleCanReorder,
+  updateTaskById
 } from '../tasksList-actions';
 import * as TasklistApis from '../../../api/tasksList';
 import * as proposalSelectors from '../../selectors/proposal'; // import the selector
 import * as taskSelectors from '../../selectors/tasks';
 import { Map } from 'immutable';
+import { store } from '../../../store';
 
 describe('taskList actions', () => {
   let sinonSandbox;
@@ -619,5 +622,58 @@ describe('taskList actions', () => {
       type: 'LOADING_TASKS',
       payload: false
     });
+  });
+
+  it('toggleCanReorder', async () => {
+    const dispatch = jest.fn();
+    toggleCanReorder(true)(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'TOGGLE_CAN_REORDER',
+      payload: true
+    });
+  });
+
+  it('updateTaskById', async () => {
+    const task = {
+      is_completed: false,
+      is_modified: false,
+      is_deleted: false,
+      is_freezed: false,
+      id: 1246,
+      proposal_id: 'e7a77d70-b7a1-4a98-8d6e-e1f1244b64f5',
+      description: 'new task',
+      no_of_units: 1,
+      task_id: 'd0333719-2c3e-4574-b8a8-c36268166071',
+      primary_condition: 'Bid History Creation',
+      operator: 'addition',
+      unit_type: 'Business Days',
+      opportunity_types: 'Core Opportunity Launch Call (APAC)',
+      order: 5,
+      is_custom: true,
+      updated_by: 'RAHUL TIWARI',
+      updated_by_email: 'rahul.tiwari@iqvia.com',
+      updated_date: '2024-03-18T07:21:58.534Z',
+      created_date: '2024-03-18T07:21:58.534Z'
+    };
+    const payload = {
+      proposalId: 'e7a77d70-b7a1-4a98-8d6e-e1f1244b64f5',
+      taskId: 1246
+    };
+    store.dispatch(setTask(payload.proposalId, task));
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([task]);
+    sinonSandbox.stub(proposalSelectors, 'getSelectedBid').returns(
+      Map({
+        id: payload.proposalId
+      })
+    );
+    jest.spyOn(TasklistApis, 'setTaskDataApi').mockResolvedValue({
+      result: task
+    });
+    jest.spyOn(TasklistApis, 'updateTaskListApi').mockResolvedValue({
+      result: [task]
+    });
+    store.dispatch(
+      await updateTaskById(payload.proposalId, payload.taskId, task)
+    );
   });
 });
