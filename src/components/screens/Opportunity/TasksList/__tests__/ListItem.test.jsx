@@ -418,7 +418,6 @@ describe('ListItem Unit Tests', () => {
     const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
     fireEvent.click(iconMenuButton);
     const optionsBtn = container.querySelector('button');
-    screen.debug(undefined, Infinity);
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
     const SeeOwnersBtn = getByTestId('task-see-owners-modal-1');
@@ -474,10 +473,8 @@ describe('ListItem Unit Tests', () => {
     const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
     fireEvent.click(iconMenuButton);
     const optionsBtn = container.querySelector('button');
-    screen.debug(undefined, Infinity);
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
-    // screen.debug(undefined, Infinity);
     const historyButtons = getByTestId('task-history-1');
     fireEvent.click(historyButtons);
     expect(openHistoryModal).toHaveBeenCalledWith(props.task.task_id);
@@ -610,7 +607,16 @@ describe('ListItem Unit Tests', () => {
       addOwnerBtn: true,
       editable: true
     };
-    const { getByText } = await render(<SeeOwnersWithRedux {...props} />);
+    const { getByText, container } = await render(
+      <SeeOwnersWithRedux {...props} />
+    );
+    fireEvent.click(getByText('Add Owner'));
+    const element = container.querySelector(
+      "[data-testid='autocomplete-owner'] > div > div > div> input"
+    );
+    await fireEvent.change(element, {
+      target: { value: 'rahul tiwari' }
+    });
     fireEvent.click(getByText('Save'));
   });
 });

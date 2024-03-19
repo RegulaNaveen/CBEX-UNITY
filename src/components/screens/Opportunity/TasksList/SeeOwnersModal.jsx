@@ -423,6 +423,7 @@ const SeeOwners = ({
                     <hr className="input-divider" />
                     <div className="autocomplete-container">
                       <Autocomplete
+                        data-testid="autocomplete-owner"
                         ref={autocompleteField}
                         placeholder="Add user"
                         open={inputValue && inputValue?.length}
