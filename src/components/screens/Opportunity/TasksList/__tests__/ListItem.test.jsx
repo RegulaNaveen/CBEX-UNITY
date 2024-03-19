@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  fireEvent,
-  waitFor,
-  render,
-  waitForElementToBeRemoved,
-  getByTestId,
-  screen
-} from '@testing-library/react';
+import { fireEvent, waitFor, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import Sinon from 'sinon';
 import { store } from '../../../../../store';
@@ -21,7 +14,6 @@ import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import { Map } from 'immutable';
 import * as datajson from '../../../../screens/Opportunity/__tests__/mockdata/document.json';
-import tabdata from '../../../../views/modals/__test__/tabdata.json';
 import cloneDeep from 'lodash/cloneDeep';
 
 const SeeOwnersWithRedux = props => {
@@ -426,7 +418,6 @@ describe('ListItem Unit Tests', () => {
     const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
     fireEvent.click(iconMenuButton);
     const optionsBtn = container.querySelector('button');
-    screen.debug(undefined, Infinity);
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
     const SeeOwnersBtn = getByTestId('task-see-owners-modal-1');
@@ -482,10 +473,8 @@ describe('ListItem Unit Tests', () => {
     const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
     fireEvent.click(iconMenuButton);
     const optionsBtn = container.querySelector('button');
-    screen.debug(undefined, Infinity);
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
-    // screen.debug(undefined, Infinity);
     const historyButtons = getByTestId('task-history-1');
     fireEvent.click(historyButtons);
     expect(openHistoryModal).toHaveBeenCalledWith(props.task.task_id);
@@ -534,5 +523,100 @@ describe('ListItem Unit Tests', () => {
     expect(getByText('OK')).toBeInTheDocument();
     fireEvent.click(getByText('OK'));
     expect(getByText('Save')).toBeInTheDocument();
+  });
+  test('task see owner new task Cancel', async () => {
+    const task = {
+      no_of_units: 1,
+      description: 'task 1',
+      order: 1,
+      opportunity_types: 'Opportunity Launch Call (Pilot)',
+      expanded: true,
+      task_role: [
+        {
+          id: 3129,
+          task_list_id: 1122,
+          proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+          question_id: '5b23339e-c750-4bff-82a8-95930b412733',
+          task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+          name: 'RAHUL TIWARI',
+          email: 'rahul.tiwari@iqvia.com',
+          type: 'roles',
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-11T09:18:40.628Z',
+          updated_date: '2024-03-11T09:18:40.628Z'
+        }
+      ]
+    };
+    const props = {
+      index: 1,
+      isModalOpen: true,
+      closeModal: jest.fn(),
+      setIsModalOpen: jest.fn(),
+      ownersCount: 2,
+      setIsNewTask: jest.fn(),
+      isNewTask: {
+        isNew: true,
+        result: task
+      },
+      task: {},
+      setAddOwnerBtn: jest.fn(),
+      addOwnerBtn: true,
+      editable: true
+    };
+    const { getByText } = await render(<SeeOwnersWithRedux {...props} />);
+    fireEvent.click(getByText('Cancel'));
+  });
+  test('task see owner new task save', async () => {
+    const task = {
+      no_of_units: 1,
+      description: 'task 1',
+      order: 1,
+      opportunity_types: 'Opportunity Launch Call (Pilot)',
+      expanded: true,
+      task_role: [
+        {
+          id: 3129,
+          task_list_id: 1122,
+          proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+          question_id: '5b23339e-c750-4bff-82a8-95930b412733',
+          task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+          name: 'RAHUL TIWARI',
+          email: 'rahul.tiwari@iqvia.com',
+          type: 'roles',
+          updated_by: 'System',
+          updated_by_email: 'System',
+          created_date: '2024-03-11T09:18:40.628Z',
+          updated_date: '2024-03-11T09:18:40.628Z'
+        }
+      ]
+    };
+    const props = {
+      index: 1,
+      isModalOpen: true,
+      closeModal: jest.fn(),
+      setIsModalOpen: jest.fn(),
+      ownersCount: 2,
+      setIsNewTask: jest.fn(),
+      isNewTask: {
+        isNew: true,
+        result: task
+      },
+      task: {},
+      setAddOwnerBtn: jest.fn(),
+      addOwnerBtn: true,
+      editable: true
+    };
+    const { getByText, container } = await render(
+      <SeeOwnersWithRedux {...props} />
+    );
+    fireEvent.click(getByText('Add Owner'));
+    const element = container.querySelector(
+      "[data-testid='autocomplete-owner'] > div > div > div> input"
+    );
+    await fireEvent.change(element, {
+      target: { value: 'rahul tiwari' }
+    });
+    fireEvent.click(getByText('Save'));
   });
 });
