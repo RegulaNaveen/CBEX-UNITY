@@ -296,12 +296,12 @@ const TasksList = () => {
     return () => {
       if (timer) {
         clearTimeout(timer);
-        if (taskListContainerRef) {
-          taskListContainerRef.removeEventListener(
-            'pointerenter',
-            onPointerEnter
-          );
-        }
+      }
+      if (taskListContainerRef) {
+        taskListContainerRef.removeEventListener(
+          'pointerenter',
+          onPointerEnter
+        );
       }
     };
   }, [canReorder, editable, taskListContainerRef]);

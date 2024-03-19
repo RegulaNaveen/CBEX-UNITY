@@ -68,7 +68,10 @@ import {
   closeSearchAction
 } from '../../../redux/actions/search-actions';
 import { fetchEmailTemplates } from '../../../redux/actions/emailTemplate-actions';
-import { fetchTasksList } from '../../../redux/actions/tasksList-actions';
+import {
+  fetchTasksList,
+  toggleCanReorder
+} from '../../../redux/actions/tasksList-actions';
 
 type State = {
   selectedView: string
@@ -213,7 +216,8 @@ export class Opportunity extends Component<Props, State> {
       changeBidInView,
       location,
       fetchTasksList,
-      tasksListFlag
+      tasksListFlag,
+      toggleCanReorder
     } = this.props;
     const thisProposalId = selectedBid.get('id', '');
     const thisOpportunityType = selectedBid.get('opportunityType', '');
@@ -224,10 +228,11 @@ export class Opportunity extends Component<Props, State> {
       ''
     );
 
-    // Bid changed
+    // When bid changed
     if (prevProposalId !== thisProposalId) {
       if (tasksListFlag && thisProposalId !== '') {
         fetchTasksList(thisProposalId);
+        toggleCanReorder(false);
       }
       if ((this.props && location && location?.pathname) !== UBUILD) {
         this.context.updateSocketOppId(params.id, thisProposalId);
@@ -471,6 +476,7 @@ export default compose(
     onEditCustomName,
     updateProposalDetailFromWebSocket,
     fetchEmailTemplates,
-    fetchTasksList
+    fetchTasksList,
+    toggleCanReorder
   })
 )(AnalyticsHOC(Opportunity));
