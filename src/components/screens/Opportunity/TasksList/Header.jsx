@@ -26,6 +26,7 @@ const Header = () => {
       type: TASKS.TOGGLE_SHOW_MINE,
       payload: event.target.checked
     });
+    handleReorderToggle(false);
     {
       isOpen && query && dispatch(doSearchAction());
     }
@@ -51,6 +52,7 @@ const Header = () => {
               checked={canReorder}
               onChange={() => handleReorderToggle(!canReorder)}
               size="small"
+              disabled={showMine}
             />
             <Typography variant="body1" className="label">
               Reorder
