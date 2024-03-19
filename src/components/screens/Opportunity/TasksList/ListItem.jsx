@@ -256,7 +256,10 @@ function ListItem({
   const menuItems = [
     {
       text: (
-        <div className="task-list-menu-item-wrapper">
+        <div
+          className="task-list-menu-item-wrapper"
+          data-testid={`task-see-owners-modal-${index}`}
+        >
           <User2Icon fontSize="small" />
           <Typography className="menu-item-label">
             See Owners ({isComponentMounted.count})
@@ -267,7 +270,10 @@ function ListItem({
     },
     {
       text: (
-        <div className="task-list-menu-item-wrapper">
+        <div
+          className="task-list-menu-item-wrapper"
+          data-testid={`task-history-${index}`}
+        >
           <CalendarIcon fontSize="small" />
           <Typography className="menu-item-label">History</Typography>
         </div>
@@ -408,6 +414,7 @@ function ListItem({
     const count = roles.length; // Calculate count
     setIsComponentMounted({ count, mounted: true });
   };
+
   return (
     <>
       <Draggable
