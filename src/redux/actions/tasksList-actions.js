@@ -306,7 +306,7 @@ export function updateTaskListOrderAction(data) {
           );
           return {
             ...task,
-            order: modifiedIndex !== -1 ? modifiedIndex : task.order
+            order: modifiedIndex !== -1 ? modifiedIndex + 1 : task.order
           };
         });
         dispatch({
