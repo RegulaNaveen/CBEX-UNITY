@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import VerticalTabsCollapsiblePanel from '../VerticalTabsCollapsiblePanel';
 import { Provider } from 'react-redux';
@@ -101,5 +101,26 @@ describe('verticalTabs test cases', () => {
     );
     expect(await getByTestId('vtab-3')).toBeInTheDocument();
     expect(await queryByTestId('vtab-2')).not.toBeInTheDocument();
+  });
+
+  it('VerticalTabsCollapsiblePanelWithRedux', async () => {
+    const { getByText, container } = await render(
+      <VerticalTabsCollapsiblePanelWithRedux
+        showQuestionsForCustomerTab={true}
+        showNotepadTab={true}
+        showProposalTeamTab={true}
+        showKeyMilestoneDeliverableTab={true}
+        showEmailTemplatesTab={true}
+        showTasklistTab={true}
+        renderPanel={jest.fn()}
+        onTabClick={jest.fn()}
+      />
+    );
+    fireEvent.click(getByText('Questions for Customer'));
+    fireEvent.click(getByText('Notes'));
+    fireEvent.click(getByText('Team'));
+    fireEvent.click(getByText('Key Milestones & Deliverable Timelines'));
+    fireEvent.click(getByText('Email Templates'));
+    fireEvent.click(container.querySelector('#vTab-tasklist'));
   });
 });
