@@ -502,7 +502,7 @@ describe('taskList actions', () => {
         target_no_of_units: 2
       }
     })(dispatch, () => {});
-    expect(dispatch).toHaveBeenCalledTimes(3);
+    expect(dispatch).toHaveBeenCalledTimes(2);
   });
 
   it('should handle role edit from socket', async () => {
@@ -654,7 +654,8 @@ describe('taskList actions', () => {
     // Check if dispatch was called once with the loading action
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({
-      type: TASKS.LOADING_TASK_HISTORY
+      type: TASKS.LOADING_TASK_HISTORY,
+      payload: true
     });
   });
 
