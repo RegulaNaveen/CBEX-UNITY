@@ -11,7 +11,7 @@ import {
 import { getSelectedBid } from '../selectors/proposal';
 import { selectTasksList } from '../selectors/tasks';
 import { TASKS } from '../../constants/types';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 
 const {
   LOADING_TASKS,
@@ -344,27 +344,32 @@ export function updateTaskListMoveAction(data) {
           target_no_of_units
         } = data.data;
         const tasks = selectTasksList(state);
-        const updatedTasks = tasks.map(task => {
-          const modifiedSourceIndex = sourceTaskIds.findIndex(
-            item => item === task.task_id
+        const modifiedTasks = cloneDeep(tasks).filter(
+          task =>
+            task.no_of_units === source_no_of_units ||
+            task.no_of_units === target_no_of_units
+        );
+        const unModifiedTasks = tasks.filter(
+          task =>
+            task.no_of_units !== source_no_of_units &&
+            task.no_of_units !== target_no_of_units
+        );
+        sourceTaskIds.forEach((sourceTaskId, index) => {
+          const task = modifiedTasks.find(
+            task => task.task_id === sourceTaskId
           );
-          const modifiedTargetIndex = targetTaskIds.findIndex(
-            item => item === task.task_id
-          );
-          return {
-            ...task,
-            order:
-              (modifiedSourceIndex !== -1 && modifiedSourceIndex) ||
-              (modifiedTargetIndex !== -1 && modifiedTargetIndex) ||
-              task.order,
-            no_of_units:
-              modifiedSourceIndex !== -1
-                ? source_no_of_units
-                : modifiedTargetIndex !== -1
-                ? target_no_of_units
-                : task.no_of_units
-          };
+          task.order = index + 1;
+          task.no_of_units = source_no_of_units;
         });
+        targetTaskIds.forEach((targetTaskId, index) => {
+          const task = modifiedTasks.find(
+            task => task.task_id === targetTaskId
+          );
+          task.order = index + 1;
+          task.no_of_units = target_no_of_units;
+        });
+
+        const updatedTasks = [...unModifiedTasks, ...modifiedTasks];
         dispatch({
           type: SET_TASKS,
           payload: updatedTasks
