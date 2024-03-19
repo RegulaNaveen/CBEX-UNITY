@@ -728,7 +728,7 @@ const SocketContextProvider = props => {
               if (data.data) {
                 editRoleFromSockets(data.data, data.proposalId, data.taskId);
               }
-
+              break;
             case 'QUESTIONS':
               // Get list of questions already locked by other users
               getQuestionLockDetails(data);
@@ -762,7 +762,7 @@ const SocketContextProvider = props => {
             case 'WIDGET_UPDATE':
               const { proposalId, typeOfWidget } = data.data;
               widgetUpdate(proposalId, typeOfWidget);
-
+              break;
             case 'FAVOURITE':
               const { oppNumber, favourite, favouriteUpdatedDate } = data.data;
               updateFavouriteAction(
@@ -803,6 +803,7 @@ const SocketContextProvider = props => {
 
             case 'TASK_MOVE':
               updateTaskListMoveAction(data);
+              break;
             case 'TASK':
               handleMultipleTaskLocksAction(data.data);
               break;
