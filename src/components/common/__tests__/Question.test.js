@@ -138,11 +138,11 @@ axiosInstance.put = jest.fn().mockImplementation(url => {
           "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
           "answers": [
             {
-              "user": "sushil.munda@iqvia.com",
-              "userName": "Sushil Munda",
+              "user": "owner.owner@test.com",
+              "userName": "new owner",
               "userRole": "Bid Grid Analyst",
               "date": "2024-03-18T13:12:46.050Z",
-              "answer": "Sushil Munda(sushil.munda@iqvia.com)",
+              "answer": "new owner(newowner@test.com)",
               "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
               "updatedInPG": true
             }
@@ -700,7 +700,8 @@ describe('test for question component', () => {
         plainPd: 'Proposal Detail',
         tb: 'ToolBar Menu',
         pg: 'Pagination',
-        crmNo: 'Proposal Detail (CRM#: LAB09095)'
+        crmNo: 'Proposal Detail (CRM#: LAB09095)',
+        pd: jest.fn()
       },
       userActions: {
         click: 'Clicked',
@@ -1140,7 +1141,7 @@ describe('test for question component', () => {
     });
   });
 
-  test('test question component proposal team type', async () => {
+  test.only('test question component proposal team type', async () => {
     global.fetch = jest.fn().mockResolvedValue(
       Promise.resolve({
         json: () =>
@@ -1174,7 +1175,17 @@ describe('test for question component', () => {
       "roleNames": [
         "Executive Oversight"
       ],
-      "answers": List([]),
+      "answers": List([
+        Map({
+          "user": "sushil.munda@iqvia.com",
+          "userName": "Sushil Munda",
+          "userRole": "Bid Grid Analyst",
+          "date": "2024-03-18T13:12:46.050Z",
+          "answer": "Sushil Munda(sushil.munda@iqvia.com)",
+          "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
+          "updatedInPG": true
+        })
+      ]),
       "questionOrder": 34,
       "visible": true,
       "locked": false,
