@@ -1,15 +1,17 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { List, Map, OrderedMap } from 'immutable';
 import { store } from '../../../store';
+import { API } from '../../../constants';
+import { axiosInstance } from '../../../store';
 import Question from '../Question';
 import configureStore from 'redux-mock-store';
 import * as data from '../__tests__/data.json';
 import thunk from 'redux-thunk';
 import cloneDeep from 'lodash/cloneDeep';
-import draftjs, { EditorState, ContentState } from 'apollo-react/node_modules/draft-js';
 import SocketContext from '../../../context/SocketContext';
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -36,6 +38,7 @@ cloneData.proposal.editQuestionsData = editquestion;
 cloneData.proposal.getAnswerTypesDataF = jest.fn();
 cloneData.proposal.getRolesInfoF = jest.fn();
 cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+cloneData.proposal.questionsFilter = Map({});
 const initialState = {
   ssoAuth: Map(data.ssoAuth),
   proposal: Map(cloneData.proposal),
@@ -126,7 +129,35 @@ const currentSFanswerMap = Map({
   time: '2023-02-08T09:47:45.821Z'
 });
 
+axiosInstance.put = jest.fn().mockImplementation(url => {
+  switch (url) {
+    case `${API.PROPOSAL.PROPOSAL_QUESTIONS_API_URL}/4e3e234c-606b-4289-836a-74e396e64f24/5b23339e-c750-4bff-82a8-95930b412733`:
+      return Promise.resolve({
+        status: 200,
+        data: {
+          "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
+          "answers": [
+            {
+              "user": "sushil.munda@iqvia.com",
+              "userName": "Sushil Munda",
+              "userRole": "Bid Grid Analyst",
+              "date": "2024-03-18T13:12:46.050Z",
+              "answer": "Sushil Munda(sushil.munda@iqvia.com)",
+              "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
+              "updatedInPG": true
+            }
+          ],
+          "modifiedQuestions": [],
+          "hasDifferentSFanswer": true
+        }
+      });
+    default:
+      return Promise.reject({ status: 404 });
+  }
+});
+
 describe('test for question component', () => {
+  window.scrollTo = jest.fn();
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -659,19 +690,10 @@ describe('test for question component', () => {
         <Question {...props} socketContext={socketContextObj} />
       </Provider>
     );
-    screen.debug();
     fireEvent.click(await findByText('alksdjf'));
   });
 
-  test.only('test question component text type', async () => {
-    draftjs.Editor = jest.fn(props => {
-      const modifiedOnchange = e => {
-        const text = e.target.value;
-        const content = ContentState.createFromText(text);
-        props.onChange(EditorState.createWithContent(content));
-      };
-      return <input className="editor" onChange={e => modifiedOnchange(e)} />;
-    });
+  test('test question component text type', async () => {
     const props = {
       eventCategories: {
         dp: 'Unity Dashboard',
@@ -1099,38 +1121,114 @@ describe('test for question component', () => {
       prevSearchResult: null,
       autoNavigatedToCurrentResult: true
     };
-    const richtextObject = {
-      blocks: [
-        {
-          text: 'test textbox',
-          type: 'unstyled',
-          depth: 0,
-          inlineStyleRanges: [],
-          entityRanges: [],
-          data: {}
-        }
-      ],
-      entityMap: {}
-    };
-    const socketContextObj = {
-      questionLockWrapper: jest.fn(),
-      questionUnlockWrapper: jest.fn()
-    };
-    let mockSocket = {
-      on: jest.fn(),
-      emit: jest.fn()
-    };
-    const { container, findByText } = render(
-      <Provider store={mockstore}>
-        <Question {...props} />
-      </Provider>
-    );
-
-    fireEvent.click(await findByText('alksdjf'));
+    act(() => {
+      render(
+        <Provider store={mockstore}>
+          <Question {...props} />
+        </Provider>
+      );
+    })
     const textbox = screen.getByRole('textbox');
-    // fireEvent.focus(textbox);
-    // fireEvent.keyDown(textbox, { key: "a", code: "keyA" });
-    // fireEvent.blur(textbox);
-    screen.debug(textbox, Infinity);
+    act(() => {
+      fireEvent.focus(textbox);
+      fireEvent.paste(textbox, {
+        clipboardData: {
+          getData: () => 'https://www.iqvia.com'
+        }
+      });
+      fireEvent.blur(textbox);
+    });
+  });
+
+  test('test question component proposal team type', async () => {
+    global.fetch = jest.fn().mockResolvedValue(
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            data: [
+              {
+                first_name: 'new',
+                last_name: 'owner',
+                email: 'newowner@test.com'
+              }
+            ]
+          })
+      })
+    );
+    const props = {
+      eventCategories: {
+        pd: jest.fn()
+      },
+      "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
+      "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
+      "section": Map({
+        "sectionOrder": 1,
+        "sectionName": "Proposal Team"
+      }),
+      "sectionName": "Proposal Team",
+      "questionText": "Global Analytics Lead",
+      "answerConfiguration": Map({
+        "type": "text",
+        "options": []
+      }),
+      "roleNames": [
+        "Executive Oversight"
+      ],
+      "answers": List([]),
+      "questionOrder": 34,
+      "visible": true,
+      "locked": false,
+      "sfObject": "pse__Resource_Request__c",
+      "sfField": "pse__Staffer_Resource__c",
+      "developerUsageComments": "AND SubGroup__c = 'Global Analytics' AND Regional_Analytics_Country__c='Strategic Analytics'",
+      "milestoneNew": List([
+        {
+          "Name": "Team",
+          "Color": "#595959"
+        },
+        {
+          "Name": "test-2",
+          "Color": "#008000"
+        },
+        {
+          "Name": "test",
+          "Color": "#0CEFC3"
+        }
+      ]),
+      "opportunityType": "Default Type,Non-Core Clinical Studies,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA)",
+      "hasDifferentSFanswer": false,
+      "currentSFanswer": Map({
+        "value": "",
+        "time": "2024-03-18T09:58:56.753Z"
+      }),
+      "isCustomQuestion": false,
+      "questionJSON": "{\"blocks\":[{\"key\":\"bbise\",\"text\":\"Global Analytics Lead\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"4ring\" data-offset-key=\"bbise-0-0\"><div data-offset-key=\"bbise-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bbise-0-0\"><span data-text=\"true\">Global Analytics Lead</span></span></div></div></div>",
+      "questionHintJSON": "",
+      "questionHintHTML": "",
+      "active": true,
+      "integration": "",
+      "events": "",
+      "notApplicable": false,
+      "questionApproval": false,
+      "bidAnswerCopy": true,
+      "questionTableConfig": "{}",
+      "latestAnsweredBidNo": null,
+      "bidType": "RFI_Request"
+    };
+    act(() => {
+      render(
+        <Provider store={mockstore}>
+          <Question {...props} />
+        </Provider>
+      );
+    });
+    const combobox = screen.getByRole('combobox');
+    act(() => {
+      fireEvent.change(combobox, { target: { value: 'new' } });
+    });
+    await waitFor(() => {
+      fireEvent.click(screen.getByText('owner(newowner@test.com)'));
+    });
   });
 });
