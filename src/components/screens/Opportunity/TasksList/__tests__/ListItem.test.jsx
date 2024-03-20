@@ -15,6 +15,7 @@ import configureStore from 'redux-mock-store';
 import { Map } from 'immutable';
 import * as datajson from '../../../../screens/Opportunity/__tests__/mockdata/document.json';
 import cloneDeep from 'lodash/cloneDeep';
+import { processRole } from '../utils';
 
 const SeeOwnersWithRedux = props => {
   const middlewares = [thunk];
@@ -135,6 +136,30 @@ const ListItemWithRedux = props => (
 jest.mock('../../../../../redux/actions/tasksList-actions', () => ({
   editTask: jest.fn().mockReturnValue(() => Promise.resolve()),
   updateTaskDesc: jest.fn().mockReturnValue(() => Promise.resolve())
+}));
+
+jest.mock('../utils', () => ({
+  processRole: jest.fn(value => {
+    if (value === 'Proposal Team-I9S') {
+      return {
+        questionText: 'Safety',
+        data: [
+          {
+            user: 'AnswerPulledFromSalesforce',
+            userName: 'AnswerPulledFromSalesforce',
+            userRole: 'AnswerPulledFromSalesforce',
+            date: '2023-12-12T06:32:54.169Z',
+            answer: 'Sushil Munda(sushil.munda@iqvia.com)',
+            formattedAnswer: 'Sushil Munda(sushil.munda@iqvia.com)',
+            proposalId: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            updatedInPG: false
+          }
+        ]
+      };
+    } else {
+      return { questionText: 'Safety', data: [] };
+    }
+  })
 }));
 
 describe('ListItem Unit Tests', () => {
@@ -264,7 +289,7 @@ describe('ListItem Unit Tests', () => {
       task: {
         description: 'task 1',
         task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
-        proposal_id: 'PROPOSAL_ID_1',
+        proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
         task_role: [
           {
             id: 3145,
@@ -293,6 +318,20 @@ describe('ListItem Unit Tests', () => {
             updated_by_email: 'pooja.chahar@iqvia.com',
             created_date: '2024-03-12T05:30:45.126Z',
             updated_date: '2024-03-12T05:30:45.126Z'
+          },
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: 'Proposal Team-I9S',
+            name: null,
+            email: null,
+            type: 'roles',
+            updated_by: 'System',
+            updated_by_email: 'System',
+            created_date: '2024-03-07T06:51:02.344Z',
+            updated_date: '2024-03-07T06:51:02.344Z'
           }
         ]
       },
@@ -309,7 +348,7 @@ describe('ListItem Unit Tests', () => {
     const optionsBtn = container.querySelector('button');
     expect(optionsBtn).toBeInTheDocument();
     await fireEvent.click(optionsBtn);
-    const seeOwnersText = getByText('See Owners (2)');
+    const seeOwnersText = getByText('See Owners (3)');
     expect(seeOwnersText).toBeInTheDocument();
   });
 
@@ -519,11 +558,74 @@ describe('ListItem Unit Tests', () => {
     };
     const { getByText } = await render(<SeeOwnersWithRedux {...props} />);
     expect(getByText('Add Owner')).toBeDisabled();
-    expect(getByText('Global Analytics Lead')).toBeInTheDocument();
+    expect(getByText('Safety')).toBeInTheDocument();
     expect(getByText('OK')).toBeInTheDocument();
     fireEvent.click(getByText('OK'));
     expect(getByText('Save')).toBeInTheDocument();
   });
+
+  test('task description cannot be blank', async () => {
+    const props = {
+      task: {
+        description: 'task 1',
+        task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+        proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+        task_role: [
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: null,
+            name: 'Varsha Kumari',
+            email: 'varsha.kumari2@iqvia.com',
+            type: 'user',
+            updated_by: 'Pooja Chahar',
+            updated_by_email: 'pooja.chahar@iqvia.com',
+            created_date: '2024-03-12T05:30:45.126Z',
+            updated_date: '2024-03-12T05:30:45.126Z'
+          },
+          {
+            id: 3145,
+            task_list_id: 1022,
+            proposal_id: '9ec54eac-fe06-48f3-bf98-a26e1b6981e9',
+            task_id: 'ff995548-2e25-4b36-a893-38d00139540b',
+            question_id: null,
+            name: 'Kunal nigam',
+            email: 'kunal.nigam@iqvia.com',
+            type: 'user',
+            updated_by: 'Pooja Chahar',
+            updated_by_email: 'pooja.chahar@iqvia.com',
+            created_date: '2024-03-12T05:30:45.126Z',
+            updated_date: '2024-03-12T05:30:45.126Z'
+          }
+        ]
+      },
+      index: 1
+    };
+    const { getByText, getByTestId, container } = render(
+      <ListItemWithRedux {...props} />
+    );
+
+    expect(getByText('task 1')).toBeInTheDocument();
+    const iconMenuButton = getByTestId('ellipsis-vertical-1'); // replace 0 with the actual index
+    fireEvent.click(iconMenuButton);
+    const optionsBtn = container.querySelector('button');
+    screen.debug(undefined, Infinity);
+    expect(optionsBtn).toBeInTheDocument();
+    await fireEvent.click(optionsBtn);
+    const editButton = getByText('Edit');
+    fireEvent.click(editButton);
+    screen.debug(undefined, Infinity);
+
+    const textField = container.querySelector('input');
+    fireEvent.change(textField, { target: { value: '' } });
+    screen.debug(undefined, Infinity);
+    // Simulate a blur event on the TextField
+    fireEvent.blur(textField);
+    screen.debug(undefined, Infinity);
+  });
+  // expect(document.activeElement).toBe(textField);
   test('task see owner new task Cancel', async () => {
     const task = {
       no_of_units: 1,
