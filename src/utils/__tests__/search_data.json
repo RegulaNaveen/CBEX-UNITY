@@ -210,7 +210,11 @@
               "isCustomQuestion": false,
               "active": true,
               "notApplicable": false,
-              "questionApproval": false
+              "questionApproval": false,
+              "answerConfiguration": {
+                "type": "text",
+                "options": []
+              }
             }
           ],
           "section_right_questions": [
@@ -238,7 +242,11 @@
               "isCustomQuestion": false,
               "active": true,
               "notApplicable": false,
-              "questionApproval": false
+              "questionApproval": false,
+              "answerConfiguration": {
+                "type": "text",
+                "options": []
+              }
             }
           ],
           "created_date": "2023-01-13T15:45:11.260Z",
@@ -265,7 +273,11 @@
               "isCustomQuestion": false,
               "active": true,
               "notApplicable": false,
-              "questionApproval": false
+              "questionApproval": false,
+              "answerConfiguration": {
+                "type": "proposal_team",
+                "options": ["YES", "NO"]
+              }
             }
           ],
           "section_right_questions": [
@@ -283,7 +295,11 @@
               "isCustomQuestion": false,
               "active": true,
               "notApplicable": false,
-              "questionApproval": false
+              "questionApproval": false,
+              "answerConfiguration": {
+                "type": "proposal_team",
+                "options": ["YES", "NO"]
+              }
             }
           ],
           "created_date": "2023-01-13T15:45:11.260Z",

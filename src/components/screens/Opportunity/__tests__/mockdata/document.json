@@ -5366,7 +5366,7 @@
           {
             "proposalId": "8df0a9c0-e991-481a-9b28-df4039ee57e2",
             "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
-            "answer": "undefined(undefined)",
+            "answer": "Biswajit Behera(biswajit.behera@iqvia.com)",
             "formattedAnswer": "",
             "date": "2023-11-02T17:19:20.278Z",
             "user": "AnswerPulledFromSalesforce",
@@ -5458,14 +5458,20 @@
             "updatedInPG": false
           },
           {
+            "proposalId": "8df0a9c0-e991-481a-9b28-df4039ee57e2",
+            "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
+            "answer": "Biswajit Behera(biswajit.behera@iqvia.com)",
+            "formattedAnswer": "",
+            "date": "2023-11-02T17:19:20.278Z",
             "user": "AnswerPulledFromSalesforce",
             "userName": "AnswerPulledFromSalesforce",
             "userRole": "AnswerPulledFromSalesforce",
-            "date": "2023-12-15T11:12:02.111Z",
-            "answer": "",
-            "formattedAnswer": "",
-            "proposalId": "9aa9dfe2-1222-4dff-8977-f06f45656a4b",
-            "updatedInPG": false
+            "created_by": "AnswerPulledFromSalesforce",
+            "updated_by": "AnswerPulledFromSalesforce",
+            "created_date": "2023-11-02T17:19:20.591Z",
+            "updated_date": "2023-11-02T17:19:20.591Z",
+            "updatedInPG": true,
+            "cfProposalId": null
           }
         ],
         "questionOrder": 34,
