@@ -1141,7 +1141,7 @@ describe('test for question component', () => {
     });
   });
 
-  test.only('test question component proposal team type', async () => {
+  test('test question component proposal team type', async () => {
     global.fetch = jest.fn().mockResolvedValue(
       Promise.resolve({
         json: () =>
