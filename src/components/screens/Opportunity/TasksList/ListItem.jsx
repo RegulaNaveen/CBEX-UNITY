@@ -537,13 +537,11 @@ function ListItem({
           </div>
         )}
       </Draggable>
-      {showDeleteAlert ? (
-        <DeleteAlert
-          task={task}
-          open={showDeleteAlert}
-          onClose={handleDeleteAlertClose}
-        />
-      ) : null}
+      <DeleteAlert
+        task={task}
+        open={showDeleteAlert}
+        onClose={handleDeleteAlertClose}
+      />
       {isComponentMounted && (
         <TaskListToolbarMenuPortal>
           <SeeOwners
