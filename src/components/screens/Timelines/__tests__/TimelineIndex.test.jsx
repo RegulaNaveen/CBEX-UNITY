@@ -1,20 +1,13 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  renderHook,
-  act
-} from '@testing-library/react';
-import { fromJS, Map } from 'immutable';
+import { render, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-
+import { cloneDeep } from 'lodash';
 import { store } from '../../../../store';
 import calenderData from './mockData/timelineCalender.json';
-import Timeline from '../index';
+import Timeline, { generateSections } from '../index';
 import mockData from '../../../screens/Opportunity/__tests__/mockdata/question.json';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
@@ -58,5 +51,11 @@ describe('unit testing for timeline index component', () => {
     expect(search).toBeInTheDocument();
     fireEvent.change(search, { target: { value: 'abc' } });
     expect(search.value).toBe('abc');
+  });
+
+  it('generateSections', () => {
+    const ques = cloneDeep(mockData.proposal.proposalQuestions);
+    const results = generateSections(ques);
+    expect(results.size).toBeGreaterThan(0);
   });
 });

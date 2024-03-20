@@ -74,7 +74,7 @@ describe('testing switch template component', () => {
     jest.spyOn(ProposalApi, 'changeProposalOT').mockRejectedValue({
       data: { message: 'resolved' }
     });
-    render(
+    await render(
       <SwitchWithRedux
         open
         otList={otList}
