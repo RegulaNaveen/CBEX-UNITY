@@ -30,6 +30,43 @@ import {
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
 
+export const generateSections = proposalQuestions => {
+  try {
+    let sectionsData = IMap();
+
+    proposalQuestions.forEach(question => {
+      const {
+        questionId,
+        section: { sectionName, sectionOrder }
+      } = question;
+
+      const createSections = () => {
+        let section = IMap({});
+        let questionsData =
+          sectionsData.getIn([sectionName, 'questions']) || IMap({});
+
+        questionsData = questionsData.set(questionId, fromJS(question));
+        questionsData = questionsData.sortBy(item => item.get('questionOrder'));
+
+        section = section
+          .set('sectionOrder', sectionOrder)
+          .set('sectionName', sectionName)
+          .set('questions', questionsData);
+
+        sectionsData = sectionsData.set(sectionName, section);
+      };
+
+      createSections();
+    });
+
+    sectionsData = sectionsData.sortBy(section => section.get('sectionOrder'));
+
+    return sectionsData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const Timeline = () => {
   const socketContext = useContext(SocketContext);
   const questions = useSelector(getProposalQuestions);
@@ -58,47 +95,6 @@ const Timeline = () => {
       setTimeout(() => dispatch(setShowAddModal(false)), 1000);
     }
   }, [isSetQuestionLoadingData]);
-
-  const generateSections = proposalQuestions => {
-    try {
-      let sectionsData = IMap();
-
-      proposalQuestions.forEach(question => {
-        const {
-          questionId,
-          section: { sectionName, sectionOrder }
-        } = question;
-
-        const createSections = () => {
-          let section = IMap({});
-          let questionsData =
-            sectionsData.getIn([sectionName, 'questions']) || IMap({});
-
-          questionsData = questionsData.set(questionId, fromJS(question));
-          questionsData = questionsData.sortBy(item =>
-            item.get('questionOrder')
-          );
-
-          section = section
-            .set('sectionOrder', sectionOrder)
-            .set('sectionName', sectionName)
-            .set('questions', questionsData);
-
-          sectionsData = sectionsData.set(sectionName, section);
-        };
-
-        createSections();
-      });
-
-      sectionsData = sectionsData.sortBy(section =>
-        section.get('sectionOrder')
-      );
-
-      return sectionsData;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getFilteredSections = key => {
     const questionsToFilter = [...questions];

@@ -100,7 +100,7 @@ const SeeOwners = ({
     } else {
       setSelectedTask(task);
     }
-  }, [proposalTeamQuestions, task, isModalOpen]);
+  }, [proposalTeamQuestions, task, isModalOpen, isNewTask]);
 
   const handleChange = (event, newValue) => {
     const splitName = newValue.label.split('(');
@@ -423,6 +423,7 @@ const SeeOwners = ({
                     <hr className="input-divider" />
                     <div className="autocomplete-container">
                       <Autocomplete
+                        data-testid="autocomplete-owner"
                         ref={autocompleteField}
                         placeholder="Add user"
                         open={inputValue && inputValue?.length}

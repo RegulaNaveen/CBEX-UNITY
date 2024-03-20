@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import AddNewTask from '../AddTaskItem';
 import { Provider } from 'react-redux';
 import { store } from '../../../../../store';
@@ -50,7 +50,7 @@ describe('Add Task Unit Tests', () => {
     expect(textField).not.toBeInTheDocument();
   });
 
-  test('check Add Owner button', () => {
+  test('check Add Owner button', async () => {
     const { getByText, queryByRole } = render(
       <Provider store={store}>
         <AddNewTask {...props} />
@@ -61,6 +61,7 @@ describe('Add Task Unit Tests', () => {
     const textField = queryByRole('textbox');
     const addOwnerButton = getByText(/Add Owner/i);
     expect(addOwnerButton).toBeInTheDocument();
+    fireEvent.click(addOwnerButton);
   });
 
   test(' text field have less then 3 chaharcter', () => {
