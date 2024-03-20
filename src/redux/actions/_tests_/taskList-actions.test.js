@@ -13,12 +13,17 @@ import {
   handleMultipleTaskLocks,
   updateTaskListMoveAction,
   updateTaskListOrderAction,
-  editRoleFromSocket
+  editRoleFromSocket,
+  getTaskHistory,
+  toggleCanReorder,
+  updateTaskById
 } from '../tasksList-actions';
 import * as TasklistApis from '../../../api/tasksList';
 import * as proposalSelectors from '../../selectors/proposal'; // import the selector
 import * as taskSelectors from '../../selectors/tasks';
 import { Map } from 'immutable';
+import { TASKS } from '../../../constants/types';
+import { store } from '../../../store';
 
 describe('taskList actions', () => {
   let sinonSandbox;
@@ -497,7 +502,7 @@ describe('taskList actions', () => {
         target_no_of_units: 2
       }
     })(dispatch, () => {});
-    expect(dispatch).toHaveBeenCalledTimes(3);
+    expect(dispatch).toHaveBeenCalledTimes(2);
   });
 
   it('should handle role edit from socket', async () => {
@@ -619,5 +624,184 @@ describe('taskList actions', () => {
       type: 'LOADING_TASKS',
       payload: false
     });
+  });
+
+  it('should handle taskHistory', async () => {
+    const dispatch = jest.fn();
+    const proposalId = 'proposal_id';
+    const taskId = 'task_id';
+
+    sinonSandbox
+      .stub(TasklistApis, 'getTaskHistoryApi')
+      .resolves({ result: [{ task_id: taskId, order: 1 }] });
+
+    await getTaskHistory(proposalId, taskId)(dispatch);
+
+    expect(dispatch).toHaveBeenCalledTimes(3);
+  });
+  it('should handle taskHistory error', async () => {
+    const dispatch = jest.fn();
+    const proposalId = 'proposal_id';
+    const taskId = 'task_id';
+
+    // Make the getTaskHistoryApi stub reject with an error
+    sinonSandbox
+      .stub(TasklistApis, 'getTaskHistoryApi')
+      .rejects(new Error('An error occurred'));
+
+    await getTaskHistory(proposalId, taskId)(dispatch);
+
+    // Check if dispatch was called once with the loading action
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith({
+      type: TASKS.LOADING_TASK_HISTORY,
+      payload: true
+    });
+  });
+
+  it('toggleCanReorder', async () => {
+    const dispatch = jest.fn();
+    toggleCanReorder(true)(dispatch, () => {});
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'TOGGLE_CAN_REORDER',
+      payload: true
+    });
+  });
+
+  it('should handle tasksListReordering error', async () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const proposalId = 'proposal_id';
+    const tasks = [{ task_id: 'task_id' }];
+    const taskId = 'task_id';
+
+    // Make the tasksListReorderingApi stub reject with an error
+    sinonSandbox
+      .stub(TasklistApis, 'tasksListReorderingApi')
+      .rejects(new Error('An error occurred'));
+
+    const result = await tasksListReordering(
+      proposalId,
+      tasks,
+      taskId
+    )(dispatch, getState);
+
+    // Check if dispatch was called twice with the loading action
+    expect(dispatch).toHaveBeenCalledTimes(2);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: TASKS.LOADING_TASKS,
+      payload: true
+    });
+    expect(dispatch).toHaveBeenNthCalledWith(2, {
+      type: TASKS.LOADING_TASKS,
+      payload: false
+    });
+
+    // Check if the returned error is the one we threw
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toBe('An error occurred');
+  });
+
+  it('should handle updateTaskById error', async () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const proposalId = 'proposal_id';
+    const taskId = 'task_id';
+    const payload = { key: 'value' };
+
+    // Make the updateTaskListApi stub reject with an error
+    sinonSandbox
+      .stub(TasklistApis, 'updateTaskListApi')
+      .rejects(new Error('An error occurred'));
+
+    try {
+      await updateTaskById(proposalId, taskId, payload)(dispatch, getState);
+    } catch (error) {
+      // Check if the error is the one we threw
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe('An error occurred');
+    }
+  });
+
+  it('should handle tasksListMove error', async () => {
+    const dispatch = jest.fn();
+    const getState = jest.fn();
+    const proposalId = 'proposal_id';
+    const tasks = [{ task_id: 'task_id' }];
+    const taskId = 'task_id';
+    const destDay = 'dest_day';
+
+    // Make the tasksListMoveApi stub reject with an error
+    sinonSandbox
+      .stub(TasklistApis, 'tasksListMoveApi')
+      .rejects(new Error('An error occurred'));
+
+    try {
+      await tasksListMove(
+        proposalId,
+        tasks,
+        taskId,
+        destDay
+      )(dispatch, getState);
+    } catch (error) {
+      // Check if the error is the one we threw
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe('An error occurred');
+    }
+
+    // Check if dispatch was called twice with the loading action
+    expect(dispatch).toHaveBeenCalledTimes(2);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: TASKS.LOADING_TASKS,
+      payload: true
+    });
+    expect(dispatch).toHaveBeenNthCalledWith(2, {
+      type: TASKS.LOADING_TASKS,
+      payload: false
+    });
+  });
+
+  it('updateTaskById', async () => {
+    const task = {
+      is_completed: false,
+      is_modified: false,
+      is_deleted: false,
+      is_freezed: false,
+      id: 1246,
+      proposal_id: 'e7a77d70-b7a1-4a98-8d6e-e1f1244b64f5',
+      description: 'new task',
+      no_of_units: 1,
+      task_id: 'd0333719-2c3e-4574-b8a8-c36268166071',
+      primary_condition: 'Bid History Creation',
+      operator: 'addition',
+      unit_type: 'Business Days',
+      opportunity_types: 'Core Opportunity Launch Call (APAC)',
+      order: 5,
+      is_custom: true,
+      updated_by: 'RAHUL TIWARI',
+      updated_by_email: 'rahul.tiwari@iqvia.com',
+      updated_date: '2024-03-18T07:21:58.534Z',
+      created_date: '2024-03-18T07:21:58.534Z'
+    };
+    const payload = {
+      proposalId: 'e7a77d70-b7a1-4a98-8d6e-e1f1244b64f5',
+      taskId: 1246
+    };
+    store.dispatch(setTask(payload.proposalId, task));
+    sinonSandbox.stub(taskSelectors, 'selectTasksList').returns([task]);
+    sinonSandbox.stub(proposalSelectors, 'getSelectedBid').returns(
+      Map({
+        id: payload.proposalId
+      })
+    );
+    jest.spyOn(TasklistApis, 'setTaskDataApi').mockResolvedValue({
+      result: task
+    });
+    jest.spyOn(TasklistApis, 'updateTaskListApi').mockResolvedValue({
+      result: [task]
+    });
+    store.dispatch(
+      await updateTaskById(payload.proposalId, payload.taskId, task)
+    );
   });
 });

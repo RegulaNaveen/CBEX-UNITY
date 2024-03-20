@@ -215,7 +215,6 @@ describe.skip('searchUtils unit tests', () => {
     expect(searchResults.results[0].searchIndex).toBe('Date');
   });
 });
-
 describe('searchUtils unit tests cases', () => {
   it('check function getSearchResults', async () => {
     const {
@@ -397,11 +396,6 @@ describe('searchUtils unit tests cases', () => {
     const data = { ...mockData, ...props };
     const searchResults = searchInTab(data);
   });
-  // it('check function getSearchResults with activeTab is zero', async () => {
-  //   mockData.activeTab = 0;
-  //   mockData = { ...mockData };
-  //   const searchResults = await getSearchResults(mockData);
-  // });
 
   it('check searchInQuestionsForCustomer', () => {
     const props = {
@@ -2400,5 +2394,286 @@ describe('searchUtils unit tests cases', () => {
       tabName,
       activeTab
     );
+  });
+
+  it('extractTextFromProseMirrorJSON should return textual data from prosemirror json', async () => {
+    let proseMirrorJSON = {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          attrs: { textAlign: 'left' },
+          content: [
+            {
+              type: 'text',
+              text: 'highlight in notepad ',
+              marks: [{ type: 'highlight', attrs: {} }]
+            },
+            { type: 'text', text: ' non-highlight in same line' },
+            { type: 'mention', attrs: { label: 'User name' } }
+          ]
+        }
+      ]
+    };
+
+    const responseTextArr = extractTextFromProseMirrorJSON(proseMirrorJSON);
+    expect(responseTextArr).toEqual([
+      'highlight in notepad ',
+      ' non-highlight in same line',
+      'User name'
+    ]);
+  });
+  it('getSearchResults should return count and searchResults on a match', async () => {
+    var searchArr = {
+      questions: {
+        proposalId: '27423fe0-ea03-497b-9fc3-491cdd21f120',
+        questionId: '00379f69-2ea0-417a-b4fc-8f1d66da868d',
+        section: {
+          sectionOrder: 1,
+          sectionName: 'Questions for the Customer'
+        },
+        questionText: 'Test CFA',
+        answerConfiguration: {
+          type: 'text',
+          options: []
+        },
+        roleNames: ['Business Account Manager'],
+        answers: [
+          {
+            proposalId: '3e066eae-ca6e-492d-8e29-164d002fcd3a',
+            questionId: '00379f69-2ea0-417a-b4fc-8f1d66da868d',
+            answer: 'Here',
+            formattedAnswer:
+              '{"value":{"blocks":[{"key":"3bekb","text":"Here","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"6nqdh\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"88u17\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>"}',
+            date: 'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
+            user: 'kunal.nigam@iqvia.com',
+            userName: 'Kunal Nigam',
+            userRole: 'Business Account Manager',
+            created_by: '1092584',
+            updated_by: '1092584',
+            created_date: '2023-03-28T08:44:46.122Z',
+            updated_date: '2023-03-28T08:44:46.122Z',
+            updatedInPG: true,
+            cfProposalId: null
+          },
+          {
+            user: 'CarryForwardAnswer',
+            userName: 'CarryForwardAnswer',
+            userRole: 'CarryForwardAnswer',
+            date: '2024-03-14T13:31:23.475Z',
+            answer: 'Here 123 45',
+            formattedAnswer:
+              '{"value":{"blocks":[{"key":"3bekb","text":"Here 123 45","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"ammke\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here 123 45</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"33re1\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here 123 4</span></span></div></div></div>"}',
+            proposalId: '27423fe0-ea03-497b-9fc3-491cdd21f120',
+            updatedInPG: false,
+            cfProposalId: '9436b082-3ec3-4094-b6c4-7b62e4dae20a'
+          }
+        ],
+        questionOrder: 5,
+        visible: true,
+        locked: true,
+        milestoneNew: [],
+        hasDifferentSFanswer: false,
+        isCustomQuestion: true,
+        questionJSON: '',
+        questionHTML: '',
+        questionHintJSON: '',
+        questionHintHTML: '',
+        active: true,
+        integration: '',
+        events: '',
+        notApplicable: false,
+        questionApproval: false,
+        bidAnswerCopy: true,
+        latestAnsweredBidNo: 9,
+        bidType: 'Clinical_Bid'
+      },
+      approvals: mockData.approvals,
+      sections: mockData.sections,
+      query: 'Test Question 1',
+      notepadData: ['testing', 'data', 'notes'],
+      activeTab: 2,
+      isQuestionsFilterEnabled: false,
+      approvalFilters: mockData.approvalFilters,
+      unityTabFilters: mockData.unityTabFilters,
+      questionsForCustomersEnabled: true,
+      allTabs: mockData.allTabs,
+      filteredQuestionsMap: mockData.filteredQuestionsMap,
+      sectionsUnfiltered: mockData.sectionsUnfiltered,
+      allFlags: mockData.allFlags,
+      emailTemplates: mockData.emailTemplates
+    };
+    let searchResults = await getSearchResults(searchArr);
+    expect(searchResults.count).toBe(searchResults.results.length);
+  });
+
+  it("should match text from approval section's right question", async () => {
+    var searchArr = {
+      questions: {
+        proposalId: '27423fe0-ea03-497b-9fc3-491cdd21f120',
+        questionId: '00379f69-2ea0-417a-b4fc-8f1d66da868d',
+        section: {
+          sectionOrder: 1,
+          sectionName: 'Questions for the Customer'
+        },
+        questionText: 'Test CFA',
+        answerConfiguration: {
+          type: 'text',
+          options: []
+        },
+        roleNames: ['Business Account Manager'],
+        answers: [
+          {
+            proposalId: '3e066eae-ca6e-492d-8e29-164d002fcd3a',
+            questionId: '00379f69-2ea0-417a-b4fc-8f1d66da868d',
+            answer: 'Here',
+            formattedAnswer:
+              '{"value":{"blocks":[{"key":"3bekb","text":"Here","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"6nqdh\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"88u17\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>"}',
+            date: 'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
+            user: 'kunal.nigam@iqvia.com',
+            userName: 'Kunal Nigam',
+            userRole: 'Business Account Manager',
+            created_by: '1092584',
+            updated_by: '1092584',
+            created_date: '2023-03-28T08:44:46.122Z',
+            updated_date: '2023-03-28T08:44:46.122Z',
+            updatedInPG: true,
+            cfProposalId: null
+          },
+          {
+            user: 'CarryForwardAnswer',
+            userName: 'CarryForwardAnswer',
+            userRole: 'CarryForwardAnswer',
+            date: '2024-03-14T13:31:23.475Z',
+            answer: 'Here 123 45',
+            formattedAnswer:
+              '{"value":{"blocks":[{"key":"3bekb","text":"Here 123 45","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"ammke\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here 123 45</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"33re1\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here 123 4</span></span></div></div></div>"}',
+            proposalId: '27423fe0-ea03-497b-9fc3-491cdd21f120',
+            updatedInPG: false,
+            cfProposalId: '9436b082-3ec3-4094-b6c4-7b62e4dae20a'
+          }
+        ],
+        questionOrder: 5,
+        visible: true,
+        locked: true,
+        milestoneNew: [],
+        hasDifferentSFanswer: false,
+        isCustomQuestion: true,
+        questionJSON: '',
+        questionHTML: '',
+        questionHintJSON: '',
+        questionHintHTML: '',
+        active: true,
+        integration: '',
+        events: '',
+        notApplicable: false,
+        questionApproval: false,
+        bidAnswerCopy: true,
+        latestAnsweredBidNo: 9,
+        bidType: 'Clinical_Bid'
+      },
+      approvals: mockData.approvals,
+      sections: mockData.sections,
+      query: 'Test Question 1',
+      notepadData: ['testing', 'data', 'notes'],
+      activeTab: 2,
+      isQuestionsFilterEnabled: false,
+      approvalFilters: mockData.approvalFilters,
+      unityTabFilters: mockData.unityTabFilters,
+      questionsForCustomersEnabled: true,
+      allTabs: mockData.allTabs,
+      filteredQuestionsMap: mockData.filteredQuestionsMap,
+      sectionsUnfiltered: mockData.sectionsUnfiltered,
+      allFlags: mockData.allFlags,
+      emailTemplates: mockData.emailTemplates
+    };
+    let searchResults = await getSearchResults(searchArr);
+    expect(searchResults.count).toBe(1);
+  });
+  test('test getSearchResults function ', async () => {
+    let queryStr = 'Test Question 1';
+    var searchArr = {
+      questions: {
+        proposalId: '27423fe0-ea03-497b-9fc3-491cdd21f120',
+        questionId: '00379f69-2ea0-417a-b4fc-8f1d66da868d',
+        section: {
+          sectionOrder: 1,
+          sectionName: 'Questions for the Customer'
+        },
+        questionText: 'Test CFA',
+        answerConfiguration: {
+          type: 'text',
+          options: []
+        },
+        roleNames: ['Business Account Manager'],
+        answers: [
+          {
+            proposalId: '3e066eae-ca6e-492d-8e29-164d002fcd3a',
+            questionId: '00379f69-2ea0-417a-b4fc-8f1d66da868d',
+            answer: 'Here',
+            formattedAnswer:
+              '{"value":{"blocks":[{"key":"3bekb","text":"Here","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"6nqdh\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"88u17\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>"}',
+            date: 'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
+            user: 'kunal.nigam@iqvia.com',
+            userName: 'Kunal Nigam',
+            userRole: 'Business Account Manager',
+            created_by: '1092584',
+            updated_by: '1092584',
+            created_date: '2023-03-28T08:44:46.122Z',
+            updated_date: '2023-03-28T08:44:46.122Z',
+            updatedInPG: true,
+            cfProposalId: null
+          },
+          {
+            user: 'CarryForwardAnswer',
+            userName: 'CarryForwardAnswer',
+            userRole: 'CarryForwardAnswer',
+            date: '2024-03-14T13:31:23.475Z',
+            answer: 'Here 123 45',
+            formattedAnswer:
+              '{"value":{"blocks":[{"key":"3bekb","text":"Here 123 45","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"ammke\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here 123 45</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"33re1\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here 123 4</span></span></div></div></div>"}',
+            proposalId: '27423fe0-ea03-497b-9fc3-491cdd21f120',
+            updatedInPG: false,
+            cfProposalId: '9436b082-3ec3-4094-b6c4-7b62e4dae20a'
+          }
+        ],
+        questionOrder: 5,
+        visible: true,
+        locked: true,
+        milestoneNew: [],
+        hasDifferentSFanswer: false,
+        isCustomQuestion: true,
+        questionJSON: '',
+        questionHTML: '',
+        questionHintJSON: '',
+        questionHintHTML: '',
+        active: true,
+        integration: '',
+        events: '',
+        notApplicable: false,
+        questionApproval: false,
+        bidAnswerCopy: true,
+        latestAnsweredBidNo: 9,
+        bidType: 'Clinical_Bid'
+      },
+      approvals: mockData.approvals,
+      sections: mockData.sections,
+      query: 'Test Question 1',
+      notepadData: ['testing', 'data', 'notes'],
+      activeTab: 2,
+      isQuestionsFilterEnabled: false,
+      approvalFilters: mockData.approvalFilters,
+      unityTabFilters: mockData.unityTabFilters,
+      questionsForCustomersEnabled: true,
+      allTabs: mockData.allTabs,
+      filteredQuestionsMap: mockData.filteredQuestionsMap,
+      sectionsUnfiltered: mockData.sectionsUnfiltered,
+      allFlags: mockData.allFlags,
+      emailTemplates: mockData.emailTemplates
+    };
+    let searchResults = await getSearchResults(searchArr);
+
+    expect(searchResults.count).toBe(1);
+    expect(searchResults.results[0].searchIndex).toBe('question_ID_1');
   });
 });

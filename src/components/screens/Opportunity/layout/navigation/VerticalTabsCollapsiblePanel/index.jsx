@@ -58,7 +58,9 @@ const VerticalTab = styled(Tab)({
   },
   alignItems: 'center',
   borderBottom: '2px solid #e0e0e0',
-  paddingBottom: '7px'
+  paddingBottom: '2px',
+  paddingTop: '2px',
+  paddingRight: '2px'
 });
 
 function VerticalTabsCollapsiblePanel({
