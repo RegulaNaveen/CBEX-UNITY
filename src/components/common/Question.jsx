@@ -388,7 +388,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         this.context.updateDashboardSFValueWrapper(oppNo, sfField, ' ');
       }
     }
-    this.context.questionUnlockWrapper(questionId);
+    this.context?.questionUnlockWrapper(questionId);
 
     this.trackEventSubmitAnswer(textValue);
     this.setSelectRow(false);
@@ -556,7 +556,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       return dataResponse;
       // eslint-disable-next-line no-else-return
     } else {
-      this.context.questionUnlockWrapper(questionId);
+      this.context?.questionUnlockWrapper(questionId);
       this.trackEventSubmitAnswer(selectedValue);
       return null;
     }
@@ -903,7 +903,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
     };
     // onBlur for question concurrency
     const concurrencyBlurHandler = () => {
-      this.context.questionUnlockWrapper(this.props.questionId);
+      this.context?.questionUnlockWrapper(this.props.questionId);
       this.setSelectRow(false);
     };
     const onFocusCheckBox = () => {
@@ -1020,7 +1020,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                   this.setSelectRow(true);
                 }}
                 onBlur={() => {
-                  this.context.questionUnlockWrapper(this.props.questionId);
+                  this.context?.questionUnlockWrapper(this.props.questionId);
                   this.setSelectRow(false);
                 }}
                 onChange={this.handlePropsalChange}
@@ -1335,7 +1335,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     this.setSelectRow(true);
                   }}
                   onBlur={() => {
-                    this.context.questionUnlockWrapper(this.props.questionId);
+                    this.context?.questionUnlockWrapper(this.props.questionId);
                     this.setSelectRow(false);
                   }}
                   disabled={checkDisableFlag() || isNotApplicable}
@@ -1599,7 +1599,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                 this.setSelectRow(true);
               }}
               onBlur={() => {
-                this.context.questionUnlockWrapper(this.props.questionId);
+                this.context?.questionUnlockWrapper(this.props.questionId);
                 this.setSelectRow(false);
               }}
             />
