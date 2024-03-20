@@ -154,9 +154,8 @@ export const updateBidNoQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
     // New url
-    const newRelativePathQuery = `${
-      window.location.pathname
-    }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${window.location.pathname
+      }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -167,9 +166,8 @@ export const updateBidTypeQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
     // New url
-    const newRelativePathQuery = `${
-      window.location.pathname
-    }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${window.location.pathname
+      }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -405,7 +403,7 @@ export const setProposalAnswerData = (
         if (isPriceModelerQuestion(questionId, allQuestions)) {
           await getPriceModelerData(proposalId)(dispatch);
         }
-        await socketContext.questionAnswerUpdateWrapper(
+        await socketContext?.questionAnswerUpdateWrapper(
           questionId,
           data,
           proposalId
@@ -892,7 +890,7 @@ function applyUnAnsweredFilter(questions, flags) {
                 String(Answer[Answer.length - 1].answer).trim().length
               ) ||
                 Answer[Answer.length - 1].userName ===
-                  'UnityPredictedAnswer')) ||
+                'UnityPredictedAnswer')) ||
             !Boolean(Answer.length)
           );
         }
@@ -1524,8 +1522,7 @@ export const getOpportunity = (
         // navigate to current bid
         // replace URL with correct params
         history.replace(
-          `${history.location.pathname}?bidNo=${
-            currentProposal.proposal.proposalDetails.bidNo
+          `${history.location.pathname}?bidNo=${currentProposal.proposal.proposalDetails.bidNo
           }&bidType=${currentProposal.proposal.bidType || 'Clinical_Bid'}`
         );
       }
@@ -1667,9 +1664,8 @@ export const changeBid = (bid, viewType) => {
   } else {
     searchParams.delete('viewType');
   }
-  const newRelativePathQuery = `${
-    window.location.pathname
-  }?${searchParams.toString()}`;
+  const newRelativePathQuery = `${window.location.pathname
+    }?${searchParams.toString()}`;
   // Update URL without pageload
   window.history.pushState(null, '', newRelativePathQuery);
 
