@@ -1101,7 +1101,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         }
 
         if (!selectedRow) this.setSelectRow(true);
-        this.context.questionLockWrapper(this.props.questionId);
+        this.context?.questionLockWrapper(this.props.questionId);
       },
       onBlur: data => {
         let saveDate = false;
@@ -1140,7 +1140,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
         if (saveDate) {
           this.handleRichTextChange(data);
         }
-        this.context.questionUnlockWrapper(this.props.questionId);
+        this.context?.questionUnlockWrapper(this.props.questionId);
 
         this.setState({ enableRichtext: false });
 

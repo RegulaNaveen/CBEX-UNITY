@@ -1,9 +1,12 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { List, Map, OrderedMap } from 'immutable';
 import { store } from '../../../store';
+import { API } from '../../../constants';
+import { axiosInstance } from '../../../store';
 import Question from '../Question';
 import configureStore from 'redux-mock-store';
 import * as data from '../__tests__/data.json';
@@ -35,6 +38,7 @@ cloneData.proposal.editQuestionsData = editquestion;
 cloneData.proposal.getAnswerTypesDataF = jest.fn();
 cloneData.proposal.getRolesInfoF = jest.fn();
 cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+cloneData.proposal.questionsFilter = Map({});
 const initialState = {
   ssoAuth: Map(data.ssoAuth),
   proposal: Map(cloneData.proposal),
@@ -58,12 +62,17 @@ const initialState = {
   search: {
     query: null,
     isOpen: false,
-    currentResultIndex: -1,
+    currentResultIndex: 0,
     prevResult: null,
     totalResultsFound: 0,
     searching: false,
-    searchResults: [],
-    autoNavigatedToCurrentResult: true,
+    searchResults: [
+      {
+        searchIndex: 'f67947eb-f1fb-4024-8a27-cb6f9af3d928',
+        sectionName: 'RFP & Customer Background'
+      }
+    ],
+    autoNavigatedToCurrentResult: false,
     clearInputFlag: false,
     showModal: false,
     modalTitle: '',
@@ -120,7 +129,44 @@ const currentSFanswerMap = Map({
   time: '2023-02-08T09:47:45.821Z'
 });
 
+axiosInstance.put = jest.fn().mockImplementation(url => {
+  switch (url) {
+    case `${API.PROPOSAL.PROPOSAL_QUESTIONS_API_URL}/4e3e234c-606b-4289-836a-74e396e64f24/5b23339e-c750-4bff-82a8-95930b412733`:
+      return Promise.resolve({
+        status: 200,
+        data: {
+          "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
+          "answers": [
+            {
+              "user": "owner.owner@test.com",
+              "userName": "new owner",
+              "userRole": "Bid Grid Analyst",
+              "date": "2024-03-18T13:12:46.050Z",
+              "answer": "new owner(newowner@test.com)",
+              "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
+              "updatedInPG": true
+            }
+          ],
+          "modifiedQuestions": [],
+          "hasDifferentSFanswer": true
+        }
+      });
+    default:
+      return Promise.reject({ status: 404 });
+  }
+});
+
 describe('test for question component', () => {
+  window.scrollTo = jest.fn();
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   const defaultProps = {
     answers: answersList,
     questionText: 'Indication',
@@ -644,7 +690,6 @@ describe('test for question component', () => {
         <Question {...props} socketContext={socketContextObj} />
       </Provider>
     );
-    screen.debug();
     fireEvent.click(await findByText('alksdjf'));
   });
 
@@ -655,7 +700,8 @@ describe('test for question component', () => {
         plainPd: 'Proposal Detail',
         tb: 'ToolBar Menu',
         pg: 'Pagination',
-        crmNo: 'Proposal Detail (CRM#: LAB09095)'
+        crmNo: 'Proposal Detail (CRM#: LAB09095)',
+        pd: jest.fn()
       },
       userActions: {
         click: 'Clicked',
@@ -720,14 +766,14 @@ describe('test for question component', () => {
       proposalId: '0b845c8a-9e31-4e34-92b9-86b8f66ed734',
       answers: Map([
         {
-          user: 'AnswerPulledFromSalesforce',
-          userName: 'AnswerPulledFromSalesforce',
-          userRole: 'AnswerPulledFromSalesforce',
-          date: '2023-02-01T12:56:41.433Z',
-          answer: List(['Viral hepatitis C']),
-          formattedAnswer: ['Viral hepatitis C'],
-          proposalId: '93c77a01-5e31-4191-9b2f-cfac782a21af',
-          updatedInPG: false
+          "user": "AnswerPulledFromSalesforce",
+          "userName": "AnswerPulledFromSalesforce",
+          "userRole": "AnswerPulledFromSalesforce",
+          "date": "2024-01-16T12:54:10.184Z",
+          "answer": "Malignant tumor of testis",
+          "formattedAnswer": "Malignant tumor of testis",
+          "proposalId": "0b845c8a-9e31-4e34-92b9-86b8f66ed734",
+          "updatedInPG": false
         }
       ]),
       questionText: 'alksdjf',
@@ -1076,20 +1122,124 @@ describe('test for question component', () => {
       prevSearchResult: null,
       autoNavigatedToCurrentResult: true
     };
-    const socketContextObj = {
-      questionLockWrapper: jest.fn(),
-      questionUnlockWrapper: jest.fn()
-    };
-    let mockSocket = {
-      on: jest.fn(),
-      emit: jest.fn()
-    };
-    const { container, findByText, debug } = render(
-      <Provider store={mockstore}>
-        <Question {...props} socketContext={socketContextObj} />
-      </Provider>
+    act(() => {
+      render(
+        <Provider store={mockstore}>
+          <Question {...props} />
+        </Provider>
+      );
+    })
+    const textbox = screen.getByRole('textbox');
+    act(() => {
+      fireEvent.focus(textbox);
+      fireEvent.paste(textbox, {
+        clipboardData: {
+          getData: () => 'https://www.iqvia.com'
+        }
+      });
+      fireEvent.blur(textbox);
+    });
+  });
+
+  test('test question component proposal team type', async () => {
+    global.fetch = jest.fn().mockResolvedValue(
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            data: [
+              {
+                first_name: 'new',
+                last_name: 'owner',
+                email: 'newowner@test.com'
+              }
+            ]
+          })
+      })
     );
-    screen.debug();
-    fireEvent.click(await findByText('alksdjf'));
+    const props = {
+      eventCategories: {
+        pd: jest.fn()
+      },
+      "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
+      "questionId": "5b23339e-c750-4bff-82a8-95930b412733",
+      "section": Map({
+        "sectionOrder": 1,
+        "sectionName": "Proposal Team"
+      }),
+      "sectionName": "Proposal Team",
+      "questionText": "Global Analytics Lead",
+      "answerConfiguration": Map({
+        "type": "text",
+        "options": []
+      }),
+      "roleNames": [
+        "Executive Oversight"
+      ],
+      "answers": List([
+        Map({
+          "user": "sushil.munda@iqvia.com",
+          "userName": "Sushil Munda",
+          "userRole": "Bid Grid Analyst",
+          "date": "2024-03-18T13:12:46.050Z",
+          "answer": "Sushil Munda(sushil.munda@iqvia.com)",
+          "proposalId": "4e3e234c-606b-4289-836a-74e396e64f24",
+          "updatedInPG": true
+        })
+      ]),
+      "questionOrder": 34,
+      "visible": true,
+      "locked": false,
+      "sfObject": "pse__Resource_Request__c",
+      "sfField": "pse__Staffer_Resource__c",
+      "developerUsageComments": "AND SubGroup__c = 'Global Analytics' AND Regional_Analytics_Country__c='Strategic Analytics'",
+      "milestoneNew": List([
+        {
+          "Name": "Team",
+          "Color": "#595959"
+        },
+        {
+          "Name": "test-2",
+          "Color": "#008000"
+        },
+        {
+          "Name": "test",
+          "Color": "#0CEFC3"
+        }
+      ]),
+      "opportunityType": "Default Type,Non-Core Clinical Studies,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA)",
+      "hasDifferentSFanswer": false,
+      "currentSFanswer": Map({
+        "value": "",
+        "time": "2024-03-18T09:58:56.753Z"
+      }),
+      "isCustomQuestion": false,
+      "questionJSON": "{\"blocks\":[{\"key\":\"bbise\",\"text\":\"Global Analytics Lead\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      "questionHTML": "<div data-contents=\"true\"><div data-block=\"true\" data-editor=\"4ring\" data-offset-key=\"bbise-0-0\"><div data-offset-key=\"bbise-0-0\" class=\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\"><span data-offset-key=\"bbise-0-0\"><span data-text=\"true\">Global Analytics Lead</span></span></div></div></div>",
+      "questionHintJSON": "",
+      "questionHintHTML": "",
+      "active": true,
+      "integration": "",
+      "events": "",
+      "notApplicable": false,
+      "questionApproval": false,
+      "bidAnswerCopy": true,
+      "questionTableConfig": "{}",
+      "latestAnsweredBidNo": null,
+      "bidType": "RFI_Request"
+    };
+    act(() => {
+      render(
+        <Provider store={mockstore}>
+          <Question {...props} />
+        </Provider>
+      );
+    });
+    const combobox = screen.getByRole('combobox');
+    act(() => {
+      fireEvent.change(combobox, { target: { value: 'new' } });
+    });
+    await waitFor(() => {
+      fireEvent.click(screen.getByText('owner(newowner@test.com)'));
+    });
   });
 });
