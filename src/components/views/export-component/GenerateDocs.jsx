@@ -1,16 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import HighLight from '@tiptap/extension-highlight';
-import TextAlign from '@tiptap/extension-text-align';
-import Subscript from '@tiptap/extension-subscript';
-import Superscript from '@tiptap/extension-superscript';
-import CharacterCount from '@tiptap/extension-character-count';
-import Mention from '@tiptap/extension-mention';
-import Collaboration from '@tiptap/extension-collaboration';
 import { Packer } from 'docx';
 import { saveAs } from 'file-saver';
 import UserInputModal from './UserInputModal';
@@ -171,9 +160,6 @@ const GenerateDocs = () => {
           fileName: `${fileName}.pdf`,
           notepadJSON
         });
-        // exportBlob.then(blob => {
-        //   saveAs(blob, `${fileName}.pdf`);
-        // });
       } else if (fileType === docType.doc) {
         exportBlob = createWord({
           data: getSelectedBidData(),
