@@ -199,12 +199,8 @@ class MonthView extends React.Component {
               endLabel="End"
             />
           </div>
-          {moment(this.props.timelineDateRange[0])
-            .format('MMMM')
-            .toString() ===
-            moment(this.props.timelineDateRange[1])
-              .format('MMMM')
-              .toString() ? (
+          {moment(this.props.timelineDateRange[0]).format('MMMM').toString() ===
+          moment(this.props.timelineDateRange[1]).format('MMMM').toString() ? (
             <div className="month-range-label">{`${moment(
               this.props.timelineDateRange[1]
             ).format('MMMM YYYY')}`}</div>
@@ -389,7 +385,7 @@ class MonthView extends React.Component {
   }
 
   measureRowLimit() {
-    const customRowLimit = this.slotRowRef.current.getRowLimit() - 1;
+    const customRowLimit = this.slotRowRef?.current?.getRowLimit() - 1;
     this.setState({
       needLimitMeasure: false,
       rowLimit: customRowLimit
