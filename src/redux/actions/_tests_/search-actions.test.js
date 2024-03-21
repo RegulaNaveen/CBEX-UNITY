@@ -11,6 +11,14 @@ import {
   resetAutoNavigatedStateAfterDelay,
   resumeSearchAction
 } from '../search-actions';
+import * as datajson from '../../../components/screens/Opportunity/__tests__/mockdata/document.json';
+import { SEARCH } from '../../../constants/types';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import cloneDeep from 'lodash/cloneDeep';
+import { Map, fromJS } from 'immutable';
+import tabdata from '../../../components/views/modals/__test__/tabdata.json';
+import data from '../../../components/screens/Opportunity/__tests__/mockdata/question.json';
 
 describe('search-actions test', () => {
   test('openSearchAction', async () => {
@@ -33,13 +41,6 @@ describe('search-actions test', () => {
   });
   test('autoNavigationCompletedAction', async () => {
     await store.dispatch(autoNavigationCompletedAction());
-  });
-  // test('resetAutoNavigatedStateAfterDelay', async () => {
-  //   await store.dispatch(resetAutoNavigatedStateAfterDelay());
-  // });
-
-  test('doSearchAction', async () => {
-    await store.dispatch(doSearchAction());
   });
 
   test('navigateNextSearchAction ', async () => {
@@ -3280,5 +3281,218 @@ describe('search-actions test', () => {
       ]
     };
     await store.dispatch(resumeSearchAction(data));
+  });
+
+  test('doSearchAction', async () => {
+    const middlewares = [thunk];
+    const mockStore = configureStore(middlewares);
+
+    const filterDataMap = {
+      answerGroup: {
+        answered: Map({
+          checked: false,
+          label: 'Answered',
+          className: 'questions-filter__row1-col1'
+        }),
+        unanswered: Map({
+          checked: false,
+          label: 'Unanswered',
+          className: 'questions-filter__row1-col1'
+        }),
+        logic: 'OR'
+      },
+      rolegroup: {
+        myUserRole: Map({
+          checked: false,
+          label: 'Responsible',
+          className: 'questions-filter__row1-col1'
+        }),
+        interestedParty: Map({
+          checked: false,
+          label: 'Informed',
+          className: 'questions-filter__row2-col1'
+        }),
+        showInactiveQuestions: Map({
+          checked: false,
+          label: 'Include N/A Questions',
+          className: 'questions-filter__row3-col1'
+        }),
+        logic: 'AND'
+      },
+      milestoneGroup: {
+        Overview: Map({
+          checked: false,
+          label: 'Overview',
+          className: 'questions-filter__item'
+        }),
+        'Data Planning': Map({
+          checked: false,
+          label: 'Data Planning',
+          className: 'questions-filter__item'
+        }),
+        Text: Map({
+          checked: false,
+          label: 'Text',
+          className: 'questions-filter__item'
+        }),
+        Budget: Map({
+          checked: false,
+          label: 'Budget',
+          className: 'questions-filter__item'
+        }),
+        Team: Map({
+          checked: false,
+          label: 'Team',
+          className: 'questions-filter__item'
+        }),
+        'Follow-Up': Map({
+          checked: false,
+          label: 'Follow-Up',
+          className: 'questions-filter__item'
+        }),
+        logic: 'OR'
+      }
+    };
+
+    data.proposal.editQuestionsData = Map(data.proposal.editQuestionsData);
+    data.getBid = Map(data.getBid);
+    data.proposal.questionsFilter.answerGroup = Map(
+      data.proposal.questionsFilter.answerGroup
+    );
+    data.proposal.questionsFilter.rolegroup = Map(filterDataMap.rolegroup);
+    data.proposal.questionsFilter.milestoneGroup = Map(
+      filterDataMap.milestoneGroup
+    );
+    data.proposal.questionsFilter = Map(data.proposal.questionsFilter);
+    data.setQuestion = Map(data.setQuestion);
+    data.sidebar = Map(data.Sidebar);
+    data.proposal = Map(data.proposal).set(
+      'selectedBid',
+      fromJS(data.selectedBid)
+    );
+    data.emailTemplates = Map(data.emailTemplates);
+    data.ssoAuth = Map(data.ssoAuth);
+    data.selectedBid = fromJS(data.selectedBid);
+
+    const initialState = {
+      ...data,
+      approvals: tabdata.approvals,
+      unitytab: tabdata.unitytab,
+      emailTemplates: {
+        emailTemplatesList: [
+          {
+            EmailTemplateRecipientRule: {
+              RecipientRuleGroups: [],
+              RecipientRuleGroupOperator: 'Or'
+            },
+            EmailTemplateName: 'TPR',
+            EmailTemplateDescription: 'TPR desc',
+            EmailTemplateTORoles: [],
+            EmailTemplateCC: [],
+            EmailTemplateBody:
+              '<p>[atc1:3f6a57a9-940b-4c55-85c8-595bf5971419]</p><p>[atc2:e7cd61ae-1b11-4987-8b62-e482bd3fcf84]</p>',
+            EmailTemplateSubject: 'Table Placeholder resolve ',
+            EmailTemplateId: '0e7b2d10-2fd3-4b59-b20d-2f245d65dca8',
+            EmailTemplateTO: [
+              {
+                Value: 'srinivas.manchikatla@iqvia.com',
+                Type: 'Email'
+              }
+            ],
+            EmailTemplateOpportunityTypes: 'Default Type',
+            EmailTemplateCCRoles: []
+          },
+          {
+            EmailTemplateRecipientRule: {
+              RecipientRuleGroups: [],
+              RecipientRuleGroupOperator: 'Or'
+            },
+            EmailTemplateName: 'Table Template',
+            EmailTemplateDescription: 'Table Template Desc',
+            EmailTemplateTORoles: [],
+            EmailTemplateCC: [],
+            EmailTemplateBody:
+              '<p>[it_will_kick_out_at_first:76aced19-0af2-46a0-b468-f30d05d7ba59]</p><p>[table_empty_config:ec1ef246-0783-4ece-8d3e-39c1d809e1c9]</p><p>[table_check:78b4cdaf-7788-4369-ab01-32a0fa97f2d5]</p><p>[table_testing:457a8d78-e082-4860-9451-cd4b6eb57ef1]</p><p>[table_row_col_hide:91df9542-cd25-4b62-94b6-0ab051d348a8]</p>',
+            EmailTemplateSubject: 'Table Template Resolve placeholders',
+            EmailTemplateId: '11ddca8f-8476-4203-9f8d-3d294ccb7962',
+            EmailTemplateTO: [
+              {
+                Value: 'srinivas.manchikatla@iqvia.com',
+                Type: 'Email'
+              }
+            ],
+            EmailTemplateOpportunityTypes:
+              'Default Type,Core Opportunity Launch Call (APAC),Core Opportunity Launch Call (AMR/EMEA)',
+            EmailTemplateCCRoles: []
+          }
+        ],
+        fetchEmailTemplatesErrorMsg: '',
+        isLoadingEmailTemplates: false
+      },
+      tasks: {
+        tasks: [
+          {
+            no_of_units: 1,
+            description: 'task 1',
+            order: 1,
+            opportunity_types: 'Opportunity Launch Call (Pilot)',
+            expanded: true,
+            task_role: [
+              {
+                id: 3129,
+                task_list_id: 1122,
+                proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+                question_id: 'Proposal Team-A2W',
+                task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'roles',
+                updated_by: 'System',
+                updated_by_email: 'System',
+                created_date: '2024-03-11T09:18:40.628Z',
+                updated_date: '2024-03-11T09:18:40.628Z'
+              }
+            ]
+          },
+          {
+            no_of_units: 1,
+            description: 'task 1.1',
+            order: 2,
+            expanded: true,
+            opportunity_types: 'Opportunity Launch Call (Pilot)',
+            task_role: [
+              {
+                id: 3129,
+                task_list_id: 1122,
+                proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+                question_id: 'Proposal Team-A2W',
+                task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'roles',
+                updated_by: 'System',
+                updated_by_email: 'System',
+                created_date: '2024-03-11T09:18:40.628Z',
+                updated_date: '2024-03-11T09:18:40.628Z'
+              }
+            ]
+          }
+        ],
+        loading: false,
+        error: '',
+        taskHistory: [],
+        taskHistoryLoading: false,
+        showMine: true,
+        canReorder: false
+      }
+    };
+
+    let store;
+    const dispatch = jest.fn();
+    store = mockStore(initialState);
+
+    await store.dispatch(doSearchAction());
+    const actions = store.getActions();
+    expect(actions[0]).toEqual({ type: SEARCH.DO_SEARCH });
   });
 });

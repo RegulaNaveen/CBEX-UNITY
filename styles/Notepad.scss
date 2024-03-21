@@ -10,10 +10,16 @@
   max-height: calc(100vh - 57px);
   position: sticky;
   top: $toolbarHight;
-  //overflow: hidden;
+  overflow: hidden;
   padding-right: 25px;
   ::-webkit-scrollbar {
     width: 8px;
+  }
+
+  &.collapsed {
+    * {
+      min-width: 22px !important;
+    }
   }
 
   /* Track */
