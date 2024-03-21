@@ -91,6 +91,14 @@ const Timeline = () => {
   });
 
   useEffect(() => {
+    document.getElementsByTagName('body')[0].style.overflow = 'visible';
+
+    return () => {
+      document.getElementsByTagName('body')[0].style.overflow = 'auto';
+    };
+  }, []);
+
+  useEffect(() => {
     if (showAddModal) {
       setTimeout(() => dispatch(setShowAddModal(false)), 1000);
     }
