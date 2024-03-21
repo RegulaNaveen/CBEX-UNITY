@@ -32,7 +32,14 @@ const defaultProps = {
 };
 
 describe('unit testing for timeline index component', () => {
-  it.skip('render timline index component', () => {
+  test('renders Timeline component without crashing', () => {
+    render(
+      <Provider store={store}>
+        <Timeline />
+      </Provider>
+    );
+  });
+  test('render timline index component', () => {
     render(
       <Provider store={store}>
         <Timeline {...defaultProps} />
@@ -41,7 +48,7 @@ describe('unit testing for timeline index component', () => {
     // const ele = screen.getByTestId('Timeline-main-wrapper');
     // expect(ele).toBeInTheDocument();
   });
-  it.skip('Search component functionality', () => {
+  test('Search component functionality', () => {
     const { getByPlaceholderText, queryByTestId } = render(
       <Provider store={store}>
         <Timeline {...defaultProps} />

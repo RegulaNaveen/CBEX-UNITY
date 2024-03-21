@@ -39,7 +39,10 @@ import {
   updateChangeBidStatusOperation
 } from '../../../../redux/actions/proposal-actions';
 import { createMatomoObj, saveDataInMatomo } from '../../../../utils/utils';
-import { selectCurrentSearchResult } from '../../../../redux/selectors/search';
+import {
+  selectAutoNavigatedToCurrentResult,
+  selectCurrentSearchResult
+} from '../../../../redux/selectors/search';
 import { autoNavigationCompletedAction } from '../../../../redux/actions/search-actions';
 import lazyWithRetry from '../../../../utils/lazy';
 import VerticalTabsCollapsiblePanel from '../../../screens/Opportunity/layout/navigation/VerticalTabsCollapsiblePanel';
@@ -211,6 +214,10 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const notepadMaxWidthPx = isOpen
     ? notepadMinWidthPx
     : (window.innerWidth - minPixelToExclude) * (47 / 100); // 50% of the total screen size
+
+  const autoNavigatedToCurrentResult = useSelector(
+    selectAutoNavigatedToCurrentResult
+  );
 
   const calculateTab = val => {
     const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
@@ -586,7 +593,11 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         currentSearchResult.vTab >= 0 &&
         currentSearchResult.vTab <= 5
       ) {
-        if (!isNotepadOpen) {
+        if (
+          document
+            .getElementById('panel-notepad')
+            .classList.contains('collapsed')
+        ) {
           setSystemTriggeredClick(true);
         }
         if (currentSearchResult.vTab == 1) {
@@ -601,7 +612,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
         }
       }
     }
-  }, [currentSearchResult, panelRef]);
+  }, [currentSearchResult, panelRef, autoNavigatedToCurrentResult]);
 
   useEffect(() => {
     if (
