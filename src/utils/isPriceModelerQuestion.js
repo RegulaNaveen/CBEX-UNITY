@@ -12,7 +12,7 @@ const isPriceModelerQuestion = (
   ];
   if (Array.isArray(questions) && questions.length > 0) {
     const question = questions.find(item => item.questionId === questionId);
-    return PRICE_MODELER_SF_FIELDS.includes(question.sfField);
+    return PRICE_MODELER_SF_FIELDS.includes(question?.sfField);
   }
   return false;
 };

@@ -1,16 +1,26 @@
 /**
  * @jest-environment jsdom
  */
-import { 
-  getStyle, 
-  getFormattedTextStyles, 
-  getLastAnswer, 
-  getLastAnswerHtml, 
+import React from 'react';
+import { Provider } from 'react-redux';
+import {
+  getStyle,
+  getFormattedTextStyles,
+  getLastAnswer,
+  getLastAnswerHtml,
   getFilteredQuestion,
-  createWord 
+  createWord
 } from '../word-template';
-
+import { render } from '@testing-library/react';
 import * as data from '../../../screens/Proposal/__tests__/data.json';
+import GenerateDocs from '../GenerateDocs';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import { Map as IMap } from 'immutable';
+import * as datajson from '../../../screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../../views/modals/__test__/tabdata.json';
+import Logo from '../../../../../img/iqvia-main-logo.png';
+import cloneDeep from 'lodash/cloneDeep';
 
 describe('Word Template Library Test', () => {
   beforeAll(() => {});
@@ -154,7 +164,7 @@ describe('Word Template Library Test', () => {
       { start: 2, end: 5, style: 'ITALIC' },
       { start: 3, end: 6, style: 'fontSize14' },
       { start: 4, end: 7, style: 'color000000' },
-      { start: 5, end: 8, style: 'backgroundColorFFFFFF' },
+      { start: 5, end: 8, style: 'backgroundColorFFFFFF' }
     ];
     const index = 5;
     const expected = {
@@ -168,10 +178,10 @@ describe('Word Template Library Test', () => {
         shading: {
           fill: 'FFFFFF',
           type: 'clear',
-          color: 'auto',
-        },
+          color: 'auto'
+        }
       },
-      styleId: '(b)(i)(fs)(fc)(bc)',
+      styleId: '(b)(i)(fs)(fc)(bc)'
     };
 
     // Act
@@ -240,7 +250,11 @@ describe('getLastAnswerHtml', () => {
   });
 
   test('returns the html of the last answer in the array', () => {
-    const answers = [{ formattedAnswer: { html: '<p>First answer</p>' } }, { formattedAnswer: { html: '<p>Second answer</p>' } }, { formattedAnswer: { html: '<p>Last answer</p>' } }];
+    const answers = [
+      { formattedAnswer: { html: '<p>First answer</p>' } },
+      { formattedAnswer: { html: '<p>Second answer</p>' } },
+      { formattedAnswer: { html: '<p>Last answer</p>' } }
+    ];
     expect(getLastAnswerHtml(answers)).toBe('<p>Last answer</p>');
   });
 
@@ -251,55 +265,116 @@ describe('getLastAnswerHtml', () => {
 });
 
 const proposalQuestions = [
-  { question: 'Question 1', answers: [{answer: 'Answer 1'}], notApplicable: false, roleNames: ["Proposal Developer"] },
+  {
+    question: 'Question 1',
+    answers: [{ answer: 'Answer 1' }],
+    notApplicable: false,
+    roleNames: ['Proposal Developer']
+  },
   { question: 'Question 2', answers: [], notApplicable: true },
   { question: 'Question 3', answers: [], notApplicable: false },
-  { question: 'Question 4', answers: [{answer: 'Answer 4'}], notApplicable: false },
-  { question: 'Question 5', answers: [], notApplicable: false },
+  {
+    question: 'Question 4',
+    answers: [{ answer: 'Answer 4' }],
+    notApplicable: false
+  },
+  { question: 'Question 5', answers: [], notApplicable: false }
 ];
 
 describe('getFilteredQuestion', () => {
   it('should filter questions with answers if "answered" is true', () => {
-    const filterState = { answered: true, unanswered: false, myRole: false, interestedParties: 'All', milestones: [], includesNa: true };
+    const filterState = {
+      answered: true,
+      unanswered: false,
+      myRole: false,
+      interestedParties: 'All',
+      milestones: [],
+      includesNa: true
+    };
     const result = getFilteredQuestion(proposalQuestions, filterState);
     expect(result).toEqual([
-      { question: 'Question 1', answers: [{answer: 'Answer 1'}], notApplicable: false, roleNames: ["Proposal Developer"] },
-      { question: 'Question 4', answers: [{answer: 'Answer 4'}], notApplicable: false },
+      {
+        question: 'Question 1',
+        answers: [{ answer: 'Answer 1' }],
+        notApplicable: false,
+        roleNames: ['Proposal Developer']
+      },
+      {
+        question: 'Question 4',
+        answers: [{ answer: 'Answer 4' }],
+        notApplicable: false
+      }
     ]);
   });
 
   it('should filter questions without answers if "unanswered" is true', () => {
-    const filterState = { answered: false, unanswered: true, myRole: false, interestedParties: 'All', milestones: [], includesNa: true };
+    const filterState = {
+      answered: false,
+      unanswered: true,
+      myRole: false,
+      interestedParties: 'All',
+      milestones: [],
+      includesNa: true
+    };
     const result = getFilteredQuestion(proposalQuestions, filterState);
     expect(result).toEqual([
       { question: 'Question 2', answers: [], notApplicable: true },
       { question: 'Question 3', answers: [], notApplicable: false },
-      { question: 'Question 5', answers: [], notApplicable: false },
+      { question: 'Question 5', answers: [], notApplicable: false }
     ]);
   });
 
   it('should return an empty array if neither "answered" nor "unanswered" is true', () => {
-    const filterState = { answered: false, unanswered: false, myRole: false, interestedParties: 'All', milestones: [], includesNa: true };
+    const filterState = {
+      answered: false,
+      unanswered: false,
+      myRole: false,
+      interestedParties: 'All',
+      milestones: [],
+      includesNa: true
+    };
     const result = getFilteredQuestion(proposalQuestions, filterState);
     expect(result).toEqual([]);
   });
 
   it('should filter out questions marked as "not applicable" if "includesNa" is false', () => {
-    const filterState = { answered: true, unanswered: false, myRole: false, interestedParties: 'All', milestones: [], includesNa: false };
+    const filterState = {
+      answered: true,
+      unanswered: false,
+      myRole: false,
+      interestedParties: 'All',
+      milestones: [],
+      includesNa: false
+    };
     const result = getFilteredQuestion(proposalQuestions, filterState);
     expect(result).toEqual([
-      { question: 'Question 1', answers: [{answer: 'Answer 1'}], notApplicable: false, roleNames: ["Proposal Developer"] },
-      { question: 'Question 4', answers: [{answer: 'Answer 4'}], notApplicable: false },
+      {
+        question: 'Question 1',
+        answers: [{ answer: 'Answer 1' }],
+        notApplicable: false,
+        roleNames: ['Proposal Developer']
+      },
+      {
+        question: 'Question 4',
+        answers: [{ answer: 'Answer 4' }],
+        notApplicable: false
+      }
     ]);
   });
 
   it('should filter questions based on the user role if "myRole" is true', () => {
     localStorage.setItem('userRole', 'Proposal Developer');
-    const filterState = { answered: false, unanswered: false, myRole: true, interestedParties: 'Biostats', milestones: ['Budget', 'Data Planning', 'Follow-Up'], includesNa: true };
+    const filterState = {
+      answered: false,
+      unanswered: false,
+      myRole: true,
+      interestedParties: 'Biostats',
+      milestones: ['Budget', 'Data Planning', 'Follow-Up'],
+      includesNa: true
+    };
     const result = getFilteredQuestion(proposalQuestions, filterState);
     expect(result).toEqual([]);
   });
-
 });
 
 describe('createWord function', () => {
@@ -313,7 +388,14 @@ describe('createWord function', () => {
         }
       },
       notes: [],
-      filterState: { answered: true, unanswered: false, myRole: false, interestedParties: 'All', milestones: [], includesNa: true },
+      filterState: {
+        answered: true,
+        unanswered: false,
+        myRole: false,
+        interestedParties: 'All',
+        milestones: [],
+        includesNa: true
+      },
       image: null,
       editor: null
     };
@@ -324,3 +406,75 @@ describe('createWord function', () => {
   });
 });
 
+describe('GenerateDocs', () => {
+  test('render GenerateDocs', async () => {
+    const middlewares = [thunk];
+    const mockStore = configureStore(middlewares);
+    const cloneData = cloneDeep(datajson);
+    cloneData.proposal.unityTabQuestionLoading = IMap({
+      questionId: '',
+      value: false
+    });
+    cloneData.proposal.opportunityData = IMap({});
+    cloneData.proposal.proposalAnswerTypes = [
+      'text',
+      'date',
+      'number',
+      'table'
+    ];
+    cloneData.proposal.editQuestionsData = IMap({});
+    cloneData.proposal.getAnswerTypesDataF = jest.fn();
+    cloneData.proposal.getRolesInfoF = jest.fn();
+    cloneData.proposal.selectedBid = IMap(cloneData.proposal.selectedBid);
+    const initialState = {
+      ssoAuth: IMap(cloneData.ssoAuth),
+      proposal: IMap(cloneData.proposal),
+      selectedBid: IMap(cloneData.selectedBid),
+      proposalQuestion: cloneData.proposal.proposalQuestions,
+      currentsection: '',
+      onClose: jest.fn(),
+      sidebar: IMap({
+        isOpen: true
+      }),
+      notepad: IMap({
+        proposalID: '',
+        notes: [],
+        fetchingNotes: false,
+        fetchNotesErrorMsg: '',
+        uploadingNote: false,
+        uploadNoteErrorMsg: '',
+        notepadMode: 'notepad_mode_default'
+      }),
+      unitytab: tabdata.unitytab,
+      approvals: tabdata.approvals,
+      search: {
+        query: null,
+        isOpen: false,
+        currentResultIndex: -1,
+        prevResult: null,
+        totalResultsFound: 0,
+        searching: false,
+        searchResults: [],
+        autoNavigatedToCurrentResult: true,
+        clearInputFlag: false,
+        showModal: false,
+        modalTitle: '',
+        modalContent: ''
+      }
+    };
+    const sectionStore = mockStore(initialState);
+    global.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({}),
+        blob: () => Promise.resolve(Logo)
+      })
+    );
+    const { findByText, debug } = await render(
+      <Provider store={sectionStore}>
+        <GenerateDocs />
+      </Provider>
+    );
+    debug(undefined, Infinity);
+    // expect(findByText('File Name')).toBeInTheDocument();
+  });
+});
