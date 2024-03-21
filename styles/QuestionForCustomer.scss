@@ -21,6 +21,9 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     display: relative;
+    ul {
+      list-style-type: none;
+    }
   }
 
   @media screen and (max-height: 600px) {
