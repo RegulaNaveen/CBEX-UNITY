@@ -1,13 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import WS from 'jest-websocket-mock';
-import {
-  render,
-  waitFor,
-  cleanup,
-  getByTestId,
-  findByText
-} from '@testing-library/react';
+import { render, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import SocketContext from '../SocketContext';
@@ -31,6 +25,12 @@ import {
   onApprovalSectionDuplicatedAction,
   onApprovalSectionDuplicatingAction
 } from '../../redux/actions/approval-actions';
+import { cloneDeep } from 'lodash';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import { Map } from 'immutable';
+import * as datajson from '../../components/screens/Opportunity/__tests__/mockdata/document.json';
+import tabdata from '../../components/views/modals/__test__/tabdata.json';
 
 const PriceModelerWithSocketContext = () => (
   <Provider store={store}>
@@ -73,6 +73,291 @@ describe('Price Modeler concurrency', () => {
       </Provider>
     );
   };
+
+  const renderSocketContextWithData = () => {
+    const middlewares = [thunk];
+    const mockStore = configureStore(middlewares);
+    const cloneData = cloneDeep(datajson);
+
+    cloneData.proposal.unityTabQuestionLoading = Map({
+      questionId: '',
+      value: false
+    });
+    cloneData.proposal.opportunityData = Map({});
+    cloneData.proposal.proposalAnswerTypes = [
+      'text',
+      'date',
+      'number',
+      'table'
+    ];
+    cloneData.proposal.editQuestionsData = Map({});
+    cloneData.proposal.getAnswerTypesDataF = jest.fn();
+    cloneData.proposal.getRolesInfoF = jest.fn();
+    cloneData.proposal.selectedBid = Map(cloneData.proposal.selectedBid);
+    const initialState = {
+      ssoAuth: Map(data.ssoAuth),
+      proposal: Map(cloneData.proposal),
+      selectedBid: Map(cloneData.selectedBid),
+      proposalQuestion: cloneData.proposal.proposalQuestions,
+      currentsection: '',
+      onClose: jest.fn(),
+      sidebar: Map({
+        isOpen: true
+      }),
+      notepad: {
+        proposalID: '',
+        notes: [],
+        fetchingNotes: false,
+        fetchNotesErrorMsg: '',
+        uploadingNote: false,
+        uploadNoteErrorMsg: '',
+        notepadMode: 'notepad_mode_default'
+      },
+      unitytab: tabdata.unitytab,
+      approvals: tabdata.approvals,
+      search: {
+        query: null,
+        isOpen: false,
+        currentResultIndex: -1,
+        prevResult: null,
+        totalResultsFound: 0,
+        searching: false,
+        searchResults: [],
+        autoNavigatedToCurrentResult: true,
+        clearInputFlag: false,
+        showModal: false,
+        modalTitle: '',
+        modalContent: ''
+      },
+      tasks: {
+        tasks: [
+          {
+            no_of_units: 1,
+            description: 'task 1',
+            order: 1,
+            opportunity_types: 'Opportunity Launch Call (Pilot)',
+            expanded: true,
+            task_role: [
+              {
+                id: 3129,
+                task_list_id: 1122,
+                proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+                question_id: 'Proposal Team-A2W',
+                task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'roles',
+                updated_by: 'System',
+                updated_by_email: 'System',
+                created_date: '2024-03-11T09:18:40.628Z',
+                updated_date: '2024-03-11T09:18:40.628Z'
+              }
+            ]
+          },
+          {
+            no_of_units: 1,
+            description: 'task 1.1',
+            order: 2,
+            expanded: true,
+            opportunity_types: 'Opportunity Launch Call (Pilot)',
+            task_role: [
+              {
+                id: 3129,
+                task_list_id: 1122,
+                proposal_id: '86462966-7e94-4648-b1e7-fb908f48eaf0',
+                question_id: 'Proposal Team-A2W',
+                task_id: '5251961b-24a0-4762-8449-dade3f6064b4',
+                name: 'RAHUL TIWARI',
+                email: 'rahul.tiwari@iqvia.com',
+                type: 'roles',
+                updated_by: 'System',
+                updated_by_email: 'System',
+                created_date: '2024-03-11T09:18:40.628Z',
+                updated_date: '2024-03-11T09:18:40.628Z'
+              }
+            ]
+          }
+        ],
+        loading: false,
+        error: '',
+        taskHistory: [],
+        taskHistoryLoading: false,
+        showMine: true,
+        canReorder: false
+      }
+    };
+    const storewithData = mockStore(initialState);
+    render(
+      <Provider store={storewithData}>
+        <SocketContext>
+          <p>Socket test component</p>
+        </SocketContext>
+      </Provider>
+    );
+  };
+
+  const data = {
+    is_completed: false,
+    is_modified: false,
+    is_deleted: false,
+    is_freezed: false,
+    id: 1246,
+    proposal_id: 'e7a77d70-b7a1-4a98-8d6e-e1f1244b64f5',
+    description: 'new task',
+    no_of_units: 1,
+    task_id: 'd0333719-2c3e-4574-b8a8-c36268166071',
+    primary_condition: 'Bid History Creation',
+    operator: 'addition',
+    unit_type: 'Business Days',
+    opportunity_types: 'Core Opportunity Launch Call (APAC)',
+    order: 5,
+    is_custom: true,
+    updated_by: 'RAHUL TIWARI',
+    updated_by_email: 'rahul.tiwari@iqvia.com',
+    updated_date: '2024-03-18T07:21:58.534Z',
+    created_date: '2024-03-18T07:21:58.534Z'
+  };
+  it('should set task', async () => {
+    renderSocketContext();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data: { data, proposalId: data.proposal_id },
+        event: 'TASK_ADD'
+      })
+    );
+  });
+
+  it('should update task', async () => {
+    renderSocketContext();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data: { data, proposalId: data.proposal_id },
+        event: 'TASK_UPDATE'
+      })
+    );
+  });
+
+  it('should role update task', async () => {
+    renderSocketContext();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data: {
+          data: [
+            {
+              id: 3196,
+              task_list_id: 1246,
+              proposal_id: 'e7a77d70-b7a1-4a98-8d6e-e1f1244b64f5',
+              task_id: 'd0333719-2c3e-4574-b8a8-c36268166071',
+              question_id: 'a3c65fbb-9253-4646-8319-cdd2648e4697',
+              name: null,
+              email: null,
+              type: 'roles',
+              updated_by: 'System',
+              updated_by_email: 'System',
+              created_date: '2024-03-13T13:31:27.031Z',
+              updated_date: '2024-03-13T13:31:27.031Z'
+            }
+          ],
+          proposalId: data.proposal_id,
+          taskId: data.task_id
+        },
+        event: 'TASK_ROLE_UPDATE'
+      })
+    );
+  });
+
+  it('task lock', async () => {
+    renderSocketContextWithData();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data: {
+          data
+        },
+        event: 'TASK_LOCK'
+      })
+    );
+  });
+
+  it('task unlock', async () => {
+    renderSocketContextWithData();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data: {
+          data
+        },
+        event: 'TASK_UNLOCK'
+      })
+    );
+  });
+
+  it('task reorder', async () => {
+    renderSocketContextWithData();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data,
+        event: 'TASK_REORDER'
+      })
+    );
+  });
+
+  it('task move', async () => {
+    renderSocketContext();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        proposalId: data.proposal_id,
+        data: [
+          {
+            sourceTaskIds: [
+              {
+                task_id: 1
+              }
+            ],
+            source_no_of_units: [1, 2, 3],
+            targetTaskIds: [
+              {
+                task_id: 1
+              }
+            ],
+            target_no_of_units: [1, 2, 3]
+          }
+        ],
+        event: 'TASK_MOVE'
+      })
+    );
+  });
+
+  it('tasks', async () => {
+    const newData = cloneDeep(data);
+    newData.task_id = '123';
+    const payload = [newData];
+    store.dispatch({
+      type: REDUX_TYPES.TASKS.ADD_TASK,
+      payload: payload
+    });
+    renderSocketContextWithData();
+    await ws.connected;
+    await ws.send(
+      JSON.stringify({
+        data: [
+          {
+            taskId: data.task_id,
+            proposalId: data.proposal_id,
+            userId: data.updated_by,
+            userEmail: data.updated_by_email,
+            userName: data.updated_by
+          }
+        ],
+        event: 'TASK'
+      })
+    );
+  });
 
   test('shows loading indicator and tooltip on event "COST_ESTIMATE_CALCULATING"', async () => {
     const { getByText, findByTestId } = render(
@@ -432,8 +717,7 @@ describe('Price Modeler concurrency', () => {
               ],
               entityMap: {}
             },
-            html:
-              '<div data-contents="true"><div data-block="true" data-editor="2fqcf" data-offset-key="b2f55-0-0"><div data-offset-key="b2f55-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="b2f55-0-0"><span data-text="true">asdads blur out tttt qww</span></span></div></div></div>',
+            html: '<div data-contents="true"><div data-block="true" data-editor="2fqcf" data-offset-key="b2f55-0-0"><div data-offset-key="b2f55-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="b2f55-0-0"><span data-text="true">asdads blur out tttt qww</span></span></div></div></div>',
             htmlExport:
               '<div data-contents="true"><div data-block="true" data-editor="dn82e" data-offset-key="b2f55-0-0"><div data-offset-key="b2f55-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="b2f55-0-0"><span data-text="true">asdads blur out tttt qww</span></span></div></div></div>'
           },
@@ -698,8 +982,7 @@ describe('Price Modeler concurrency', () => {
               ],
               entityMap: {}
             },
-            html:
-              '<div data-contents="true"><div data-block="true" data-editor="2fqcf" data-offset-key="b2f55-0-0"><div data-offset-key="b2f55-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="b2f55-0-0"><span data-text="true">asdads blur out tttt qww</span></span></div></div></div>',
+            html: '<div data-contents="true"><div data-block="true" data-editor="2fqcf" data-offset-key="b2f55-0-0"><div data-offset-key="b2f55-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="b2f55-0-0"><span data-text="true">asdads blur out tttt qww</span></span></div></div></div>',
             htmlExport:
               '<div data-contents="true"><div data-block="true" data-editor="dn82e" data-offset-key="b2f55-0-0"><div data-offset-key="b2f55-0-0" class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"><span data-offset-key="b2f55-0-0"><span data-text="true">asdads blur out tttt qww</span></span></div></div></div>'
           },

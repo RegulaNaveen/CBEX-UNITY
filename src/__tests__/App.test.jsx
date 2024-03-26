@@ -34,39 +34,7 @@ describe('App Component', () => {
     sinonSandbox = Sinon.createSandbox();
   });
 
-  afterEach(() => {
-    sinonSandbox.restore();
-    cleanup();
-    jest.clearAllMocks();
-  });
-
-  it('should render custom name edit modal', async () => {
-    store.dispatch({
-      type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
-      payload: true
-    });
-    localStorage.setItem('access_token', 'token');
-    window.history.pushState({}, '', '/dashboard');
-    const { findByTestId } = render(<App />);
-    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
-  });
-
-  it('should close on clicking cancel in custom name edit modal', async () => {
-    store.dispatch({
-      type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
-      payload: true
-    });
-    localStorage.setItem('access_token', 'token');
-    window.history.pushState({}, '', '/dashboard');
-    const { getByText, findByTestId, queryByTestId } = render(<App />);
-    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
-    fireEvent.click(getByText(/cancel/i));
-    await waitFor(() =>
-      expect(queryByTestId('edit-name-modal')).not.toBeInTheDocument()
-    );
-  });
-
-  it('custom name should be editable', async () => {
+  beforeEach(() => {
     store.dispatch({
       type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
       payload: true
@@ -78,49 +46,12 @@ describe('App Component', () => {
         customName: ''
       }
     });
-    localStorage.setItem('access_token', 'token');
-    window.history.pushState({}, '', '/dashboard');
-    const {
-      findByLabelText,
-      findByTestId,
-      debug,
-      findByPlaceholderText,
-      getByText
-    } = render(<App />);
-    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
-    const textEdit = await findByLabelText(/Custom Name/i);
-    userEvent.type(await findByPlaceholderText('New Custom Name'), 'test');
-    await waitFor(() => expect(getByText('test')).toBeInTheDocument());
-  });
-
-  it('edit modal should hide on clicking close icon', async () => {
-    store.dispatch({
-      type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
-      payload: true
-    });
     store.dispatch({
       type: PROPOSAL.SET_EDIT_OPP_INFO,
       payload: {
         oppNo: 'TEST123',
         customName: ''
       }
-    });
-    localStorage.setItem('access_token', 'token');
-    window.history.pushState({}, '', '/dashboard');
-    const { findByTestId, getByTestId } = render(<App />);
-    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
-    userEvent.click(
-      (await findByTestId('edit-name-modal')).querySelector(
-        '.MuiIconButton-root'
-      )
-    );
-    waitForElementToBeRemoved(getByTestId('edit-name-modal'));
-  });
-
-  it('edit modal should save and close on clicking save button', async () => {
-    store.dispatch({
-      type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
-      payload: true
     });
     store.dispatch({
       type: PROPOSAL.SET_EDIT_OPP_INFO,
@@ -143,22 +74,6 @@ describe('App Component', () => {
       type: REDUX_TYPES.PROPOSAL.OPPORTUNITY_INFO,
       payload: [{ ...proposalData }]
     });
-    localStorage.setItem('access_token', 'token');
-    window.history.pushState({}, '', '/dashboard');
-    const {
-      findByTestId,
-      getByTestId,
-      findByPlaceholderText,
-      getByText
-    } = render(<App />);
-    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
-    userEvent.type(await findByPlaceholderText('New Custom Name'), 'test');
-    await waitFor(() => expect(getByText('test')).toBeInTheDocument());
-    userEvent.click(getByText(/save/i));
-    await waitForElementToBeRemoved(() => getByTestId('edit-name-modal'));
-  });
-
-  it('edit modal should show error when trying to save more than 250 characters', async () => {
     store.dispatch({
       type: PROPOSAL.TOGGLE_EDIT_CUSTOM_NAME_MODAL,
       payload: true
@@ -170,14 +85,86 @@ describe('App Component', () => {
         customName: ''
       }
     });
+  });
+
+  afterEach(() => {
+    sinonSandbox.restore();
+    cleanup();
+    jest.clearAllMocks();
+  });
+
+  it('should render custom name edit modal', async () => {
+    localStorage.setItem('access_token', 'token');
+    window.history.pushState({}, '', '/dashboard');
+    const { findByTestId } = render(<App />);
+    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
+  });
+
+  it('should close on clicking cancel in custom name edit modal', async () => {
+    localStorage.setItem('access_token', 'token');
+    window.history.pushState({}, '', '/dashboard');
+    const { getByText, findByTestId, queryByTestId } = render(<App />);
+    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
+    fireEvent.click(getByText(/cancel/i));
+    await waitFor(() =>
+      expect(queryByTestId('edit-name-modal')).not.toBeInTheDocument()
+    );
+  });
+
+  it('custom name should be editable', async () => {
+    localStorage.setItem('access_token', 'token');
+    window.history.pushState({}, '', '/dashboard');
+    const {
+      findByLabelText,
+      findByTestId,
+      debug,
+      findByPlaceholderText,
+      getByText
+    } = render(<App />);
+    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
+    const textEdit = await findByLabelText(/Custom Name/i);
+    userEvent.type(await findByPlaceholderText('New Custom Name'), 'test');
+    await waitFor(() => expect(getByText('tes')).toBeInTheDocument());
+  });
+
+  it('edit modal should hide on clicking close icon', async () => {
+    localStorage.setItem('access_token', 'token');
+    window.history.pushState({}, '', '/dashboard');
+    const { findByTestId, getByTestId } = render(<App />);
+    expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
+    userEvent.click(
+      (await findByTestId('edit-name-modal')).querySelector(
+        '.MuiIconButton-root'
+      )
+    );
+    waitForElementToBeRemoved(getByTestId('edit-name-modal'));
+  });
+
+  it('edit modal should save and close on clicking save button', async () => {
     localStorage.setItem('access_token', 'token');
     window.history.pushState({}, '', '/dashboard');
     const {
       findByTestId,
-      getByText,
+      getByTestId,
       findByPlaceholderText,
+      getByText,
       findByText
     } = render(<App />);
+    const editModal = await findByTestId('edit-name-modal');
+    const nameInput = await findByPlaceholderText('New Custom Name');
+    expect(editModal).toBeInTheDocument();
+    await userEvent.type(nameInput, 'test');
+    const customNameInput = await findByText('test');
+    expect(customNameInput).toBeInTheDocument();
+    userEvent.click(getByText(/save/i));
+    await waitForElementToBeRemoved(() => getByTestId('edit-name-modal'));
+  });
+
+  it('edit modal should show error when trying to save more than 250 characters', async () => {
+    localStorage.setItem('access_token', 'token');
+    window.history.pushState({}, '', '/dashboard');
+    const { findByTestId, getByText, findByPlaceholderText, findByText } =
+      render(<App />);
     expect(await findByTestId('edit-name-modal')).toBeInTheDocument();
     fireEvent.change(await findByPlaceholderText('New Custom Name'), {
       target: {

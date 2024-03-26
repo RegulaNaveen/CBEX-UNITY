@@ -14,11 +14,13 @@ import NotesIcon from '../../../../../svg/Notes';
 import QuestionsForCustomerIcon from '../../../../../svg/QuestionsForCustomer';
 import ProposalTeamIcon from '../../../../../svg/ProposalTeam';
 import EmailTemplatesIcon from '../../../../../svg/EmailTemplates';
+import { ClipboardCheck } from '../../../../../svg';
 import KeyMilestoneDeliverableTimelinesIcon from '../../../../../svg/KeyMilestoneDeliverableTimelines';
 import './styles.scss';
 import { selectActiveVTabIndex } from '../../../../../../redux/selectors/proposal';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { selectCurrentSearchResult } from '../../../../../../redux/selectors/search';
 
 function getTabNameFromIndex(index) {
   if (index === 0) {
@@ -31,6 +33,8 @@ function getTabNameFromIndex(index) {
     return 'keymilestonedeliverabletab';
   } else if (index === 4) {
     return 'emailtemplatestab';
+  } else if (index === 5) {
+    return 'tasklisttab';
   }
 }
 const VerticalTabs = styled(Tabs)({
@@ -54,7 +58,9 @@ const VerticalTab = styled(Tab)({
   },
   alignItems: 'center',
   borderBottom: '2px solid #e0e0e0',
-  paddingBottom: '7px'
+  paddingBottom: '2px',
+  paddingTop: '2px',
+  paddingRight: '2px'
 });
 
 function VerticalTabsCollapsiblePanel({
@@ -65,31 +71,14 @@ function VerticalTabsCollapsiblePanel({
   showKeyMilestoneDeliverableTab,
   showEmailTemplatesTab,
   activeVerticleTab,
+  showTasklistTab,
   onTabClick
 }) {
   const activeTabIndex = useSelector(selectActiveVTabIndex);
+  const currentSearchResult = useSelector(selectCurrentSearchResult);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!showQuestionsForCustomerTab) {
-      if (!showNotepadTab) {
-        dispatch(setVTabActiveIndexAction(2));
-      } else if (!showEmailTemplatesTab) {
-        dispatch(setVTabActiveIndexAction(1));
-      } else {
-        dispatch(setVTabActiveIndexAction(4));
-      }
-    } else {
-      dispatch(setVTabActiveIndexAction(3));
-    }
-  }, [
-    showQuestionsForCustomerTab,
-    showNotepadTab,
-    showProposalTeamTab,
-    showKeyMilestoneDeliverableTab,
-    showEmailTemplatesTab
-  ]);
   const tabArr = [
     { showQuestionsForCustomerTab },
     { showNotepadTab },
@@ -99,6 +88,32 @@ function VerticalTabsCollapsiblePanel({
   if (showEmailTemplatesTab) {
     tabArr.push({ showEmailTemplatesTab });
   }
+  if (showTasklistTab) {
+    tabArr.push({ showTasklistTab });
+  }
+
+  // Effect to set default vertical tab
+  // also prevent setting default vertical tab when currentSearchResult is not null
+  useEffect(() => {
+    if (currentSearchResult) {
+      return;
+    }
+    if (showKeyMilestoneDeliverableTab) {
+      dispatch(setVTabActiveIndexAction(3));
+    } else if (showQuestionsForCustomerTab) {
+      dispatch(setVTabActiveIndexAction(0));
+    } else if (showNotepadTab) {
+      dispatch(setVTabActiveIndexAction(1));
+    } else if (showProposalTeamTab) {
+      dispatch(setVTabActiveIndexAction(2));
+    } else if (showEmailTemplatesTab) {
+      dispatch(setVTabActiveIndexAction(4));
+    } else if (showTasklistTab) {
+      dispatch(setVTabActiveIndexAction(5));
+    } else {
+      dispatch(setVTabActiveIndexAction(-1));
+    }
+  }, []);
 
   function handleTabChange(event, newActiveTab) {
     dispatch(setVTabActiveIndexAction(newActiveTab));
@@ -215,6 +230,25 @@ function VerticalTabsCollapsiblePanel({
           </div>
         );
       }
+      if (v['showTasklistTab'] !== undefined && v['showTasklistTab'] !== null) {
+        return (
+          <div
+            onClick={e => handleTabChange(e, 5)}
+            key={`vTab-TaskList-${vIdx}`}
+            id="vTab-tasklist"
+          >
+            <VerticalTab
+              textColor="primary"
+              icon={
+                <ClipboardCheck
+                  active={getTabNameFromIndex(activeTabIndex) === 'tasklisttab'}
+                />
+              }
+              title="Task List"
+            />
+          </div>
+        );
+      }
     });
     return tabs;
   };
@@ -226,7 +260,8 @@ function VerticalTabsCollapsiblePanel({
         showNotepadTab ||
         showProposalTeamTab ||
         showKeyMilestoneDeliverableTab ||
-        showEmailTemplatesTab
+        showEmailTemplatesTab ||
+        showTasklistTab
           ? ''
           : 'hide'
       }`}
@@ -235,7 +270,8 @@ function VerticalTabsCollapsiblePanel({
         showNotepadTab ||
         showProposalTeamTab ||
         showKeyMilestoneDeliverableTab ||
-        showEmailTemplatesTab) && (
+        showEmailTemplatesTab ||
+        showTasklistTab) && (
         <>
           <VerticalTabs
             value={activeTabIndex}

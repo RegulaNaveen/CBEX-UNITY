@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from 'apollo-react/components/Typography';
 import Search from 'apollo-react/components/Search';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map as IMap } from 'immutable';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import TimelineCalender from './TimelineCalender';
@@ -30,16 +30,53 @@ import {
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
 
+export const generateSections = proposalQuestions => {
+  try {
+    let sectionsData = IMap();
+
+    proposalQuestions.forEach(question => {
+      const {
+        questionId,
+        section: { sectionName, sectionOrder }
+      } = question;
+
+      const createSections = () => {
+        let section = IMap({});
+        let questionsData =
+          sectionsData.getIn([sectionName, 'questions']) || IMap({});
+
+        questionsData = questionsData.set(questionId, fromJS(question));
+        questionsData = questionsData.sortBy(item => item.get('questionOrder'));
+
+        section = section
+          .set('sectionOrder', sectionOrder)
+          .set('sectionName', sectionName)
+          .set('questions', questionsData);
+
+        sectionsData = sectionsData.set(sectionName, section);
+      };
+
+      createSections();
+    });
+
+    sectionsData = sectionsData.sortBy(section => section.get('sectionOrder'));
+
+    return sectionsData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const Timeline = () => {
   const socketContext = useContext(SocketContext);
   const questions = useSelector(getProposalQuestions);
   const selectedBid = useSelector(getSelectedBid)?.toJS();
   const bidList = useSelector(getBidList);
   const [currentBidDetails, setCurrentBidDetails] = useState({});
-  const { proposalDate, isCurrent, isEditable } = selectedBid;
+  const { proposalDate, isEditable } = selectedBid;
   const [timelineEvents, setTimelineEvents] = useState([]);
   const [filteredSections, setFilteredSections] = useState(null);
-  const [sections, setSections] = useState(Map());
+  const [sections, setSections] = useState(IMap());
   const [searchKey, setSearchKey] = useState('');
   const isSetQuestionLoadingData = useSelector(isSetQuestionLoading);
   const [draggedQuestionData, setDraggedQuestionData] = useState(null);
@@ -54,51 +91,18 @@ const Timeline = () => {
   });
 
   useEffect(() => {
+    document.getElementsByTagName('body')[0].style.overflow = 'visible';
+
+    return () => {
+      document.getElementsByTagName('body')[0].style.overflow = 'auto';
+    };
+  }, []);
+
+  useEffect(() => {
     if (showAddModal) {
       setTimeout(() => dispatch(setShowAddModal(false)), 1000);
     }
   }, [isSetQuestionLoadingData]);
-
-  const generateSections = proposalQuestions => {
-    try {
-      let sectionsData = Map();
-
-      proposalQuestions.forEach(question => {
-        const {
-          questionId,
-          section: { sectionName, sectionOrder }
-        } = question;
-
-        const createSections = () => {
-          let section = Map({});
-          let questionsData =
-            sectionsData.getIn([sectionName, 'questions']) || Map({});
-
-          questionsData = questionsData.set(questionId, fromJS(question));
-          questionsData = questionsData.sortBy(item =>
-            item.get('questionOrder')
-          );
-
-          section = section
-            .set('sectionOrder', sectionOrder)
-            .set('sectionName', sectionName)
-            .set('questions', questionsData);
-
-          sectionsData = sectionsData.set(sectionName, section);
-        };
-
-        createSections();
-      });
-
-      sectionsData = sectionsData.sortBy(section =>
-        section.get('sectionOrder')
-      );
-
-      return sectionsData;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getFilteredSections = key => {
     const questionsToFilter = [...questions];

@@ -154,9 +154,8 @@ export const updateBidNoQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
     // New url
-    const newRelativePathQuery = `${
-      window.location.pathname
-    }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${window.location.pathname
+      }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -167,9 +166,8 @@ export const updateBidTypeQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
     // New url
-    const newRelativePathQuery = `${
-      window.location.pathname
-    }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${window.location.pathname
+      }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -405,7 +403,7 @@ export const setProposalAnswerData = (
         if (isPriceModelerQuestion(questionId, allQuestions)) {
           await getPriceModelerData(proposalId)(dispatch);
         }
-        await socketContext.questionAnswerUpdateWrapper(
+        await socketContext?.questionAnswerUpdateWrapper(
           questionId,
           data,
           proposalId
@@ -892,7 +890,7 @@ function applyUnAnsweredFilter(questions, flags) {
                 String(Answer[Answer.length - 1].answer).trim().length
               ) ||
                 Answer[Answer.length - 1].userName ===
-                  'UnityPredictedAnswer')) ||
+                'UnityPredictedAnswer')) ||
             !Boolean(Answer.length)
           );
         }
@@ -1524,8 +1522,7 @@ export const getOpportunity = (
         // navigate to current bid
         // replace URL with correct params
         history.replace(
-          `${history.location.pathname}?bidNo=${
-            currentProposal.proposal.proposalDetails.bidNo
+          `${history.location.pathname}?bidNo=${currentProposal.proposal.proposalDetails.bidNo
           }&bidType=${currentProposal.proposal.bidType || 'Clinical_Bid'}`
         );
       }
@@ -1562,13 +1559,13 @@ export const getOpportunity = (
       data[0].isCurrent =
         currentProposal.proposal.proposalId === data[0].proposal.proposalId;
       if (data && data.length && data[0].proposal?.switchTemplateStatus) {
-        dispatch({
-          type: SWITCH_TEMP_IN_PROGRESS,
-          payload: true
-        });
+        dispatch(updateSwitchInProgress(true, data[0].proposal.proposalId));
         dispatch({
           type: SWITCH_TEMP_STATUS,
-          payload: 'progress'
+          payload: {
+            data: 'progress',
+            proposalId: data[0].proposal.proposalId
+          }
         });
       }
       proposalsData.push(data[0]);
@@ -1667,9 +1664,8 @@ export const changeBid = (bid, viewType) => {
   } else {
     searchParams.delete('viewType');
   }
-  const newRelativePathQuery = `${
-    window.location.pathname
-  }?${searchParams.toString()}`;
+  const newRelativePathQuery = `${window.location.pathname
+    }?${searchParams.toString()}`;
   // Update URL without pageload
   window.history.pushState(null, '', newRelativePathQuery);
 
@@ -1696,6 +1692,16 @@ export const changeBid = (bid, viewType) => {
         }
       }
     });
+    if (response?.data && response?.data?.proposal?.switchTemplateStatus) {
+      dispatch(updateSwitchInProgress(true, response.data.proposal.proposalId));
+      dispatch({
+        type: SWITCH_TEMP_STATUS,
+        payload: {
+          data: 'progress',
+          proposalId: response.data.proposal.proposalId
+        }
+      });
+    }
     dispatch({
       type: UNITY_TABS.SET_UNITY_TABS,
       payload: response?.data.proposal?.customUnityTabs || []
@@ -1774,11 +1780,11 @@ export const fetchOTListData = () => async () => {
 /**
  * Switch Temp Status Update - Action
  */
-export const updateSwitchTempStatusFromWebSocket = data => {
+export const updateSwitchTempStatusFromWebSocket = (data, proposalId) => {
   return async dispatch => {
     dispatch({
       type: SWITCH_TEMP_STATUS,
-      payload: data
+      payload: { data, proposalId }
     });
   };
 };
@@ -1847,11 +1853,11 @@ export const changeOpportunityType = switchTempData => async () => {
 /**
  * Switch Temp In Progress - Action
  */
-export const updateSwitchInProgress = data => {
+export const updateSwitchInProgress = (status, proposalId) => {
   return async dispatch => {
     dispatch({
       type: SWITCH_TEMP_IN_PROGRESS,
-      payload: data
+      payload: { status, proposalId }
     });
   };
 };
@@ -1871,39 +1877,45 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB =
-  (proposalId, email, sectionOrder, sectionName) => async () => {
-    try {
-      // Api Response
-      const response = await deleteProposalUser(proposalId, {
-        email,
-        section: { sectionOrder, sectionName }
-      });
-      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-    } catch (error) {
-      // Error
-      console.log(error.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const deleteProposalUserFromDB = (
+  proposalId,
+  email,
+  sectionOrder,
+  sectionName
+) => async () => {
+  try {
+    // Api Response
+    const response = await deleteProposalUser(proposalId, {
+      email,
+      section: { sectionOrder, sectionName }
+    });
+    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+  } catch (error) {
+    // Error
+    console.log(error.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory =
-  (proposalId: string, questionId: string) => async () => {
-    try {
-      // Api Response
-      const response = await getProposalAnswer(proposalId, questionId);
-      return { status: true, title: DEFAULT.SUCCESS, data: response };
-    } catch (error) {
-      // Error
-      console.log(error?.response);
-      const msg = getErrorMessage(error);
-      return { status: false, title: DEFAULT.ALERT, msg };
-    }
-  };
+export const getProposalAnswerHistory = (
+  proposalId: string,
+  questionId: string
+) => async () => {
+  try {
+    // Api Response
+    const response = await getProposalAnswer(proposalId, questionId);
+    return { status: true, title: DEFAULT.SUCCESS, data: response };
+  } catch (error) {
+    // Error
+    console.log(error?.response);
+    const msg = getErrorMessage(error);
+    return { status: false, title: DEFAULT.ALERT, msg };
+  }
+};
 
 /**
  * Set Flag for Event Launcher

@@ -95,11 +95,10 @@ class MonthView extends React.Component {
   getDatesBetween = (startDate, endDate) => {
     if (!startDate || !endDate) return [new Date()];
     const dates = [];
-
-    const currentDate = new Date(startDate);
+    let currentDate = new Date(startDate);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
     }
     return dates;
   };
@@ -200,12 +199,8 @@ class MonthView extends React.Component {
               endLabel="End"
             />
           </div>
-          {moment(this.props.timelineDateRange[0])
-            .format('MMMM')
-            .toString() ===
-          moment(this.props.timelineDateRange[1])
-            .format('MMMM')
-            .toString() ? (
+          {moment(this.props.timelineDateRange[0]).format('MMMM').toString() ===
+          moment(this.props.timelineDateRange[1]).format('MMMM').toString() ? (
             <div className="month-range-label">{`${moment(
               this.props.timelineDateRange[1]
             ).format('MMMM YYYY')}`}</div>
@@ -390,7 +385,7 @@ class MonthView extends React.Component {
   }
 
   measureRowLimit() {
-    const customRowLimit = this.slotRowRef.current.getRowLimit() - 1;
+    const customRowLimit = this.slotRowRef?.current?.getRowLimit() - 1;
     this.setState({
       needLimitMeasure: false,
       rowLimit: customRowLimit

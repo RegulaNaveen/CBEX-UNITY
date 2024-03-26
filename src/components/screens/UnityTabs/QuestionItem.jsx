@@ -4,7 +4,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
-import { isEmpty, isString } from 'lodash';
+import { isEmpty } from 'lodash';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import InfoIcon from 'apollo-react-icons/Info';
@@ -15,7 +15,7 @@ import Typography from 'apollo-react/components/Typography';
 import Popover from 'apollo-react/components/Popover';
 import RichTextEditor from 'apollo-react/components/RichTextEditor';
 import IconButton from 'apollo-react/components/IconButton';
-import { Map, List, fromJS } from 'immutable';
+import { Map as IMap, List, fromJS } from 'immutable';
 import moment from 'moment';
 import { EditorState } from 'apollo-react/node_modules/draft-js';
 import QuestionLabel from './QuestionLabel';
@@ -39,7 +39,6 @@ import {
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
 import { selectCurrentSearchResult } from '../../../redux/selectors/search';
-import ChipView from '../../common/Chip/ChipView';
 import { parseMomentDate } from '../../../utils/DateUtils';
 import SystemIntegrations from '../../common/SystemIntegrations/SystemIntegrations';
 import EventLauncher from '../Opportunity/EventLauncher';
@@ -63,19 +62,15 @@ import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  SelectQuestion
-);
-const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
-  MultiSelectQuestion
-);
-const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
-  YesNoQuestion
-);
+const SelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(SelectQuestion);
+const MultiSelectQuestionWithIdleStateDetection =
+  withIdleStateDetection(MultiSelectQuestion);
+const YesNoQuestionWithIdleStateDetection =
+  withIdleStateDetection(YesNoQuestion);
 
-const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
-  CheckBoxQuestion
-);
+const CheckBoxQuestionWithIdleStateDetection =
+  withIdleStateDetection(CheckBoxQuestion);
 
 const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
 
@@ -189,7 +184,7 @@ const QuestionItem = ({
       // It prepares answer data for a specific answer type.
       // If possible move this logic inside AnswerHistory component to avoid duplication of code
       const answerConfigType = questionMap
-        .get('answerConfiguration', Map({ type: '' }))
+        .get('answerConfiguration', IMap({ type: '' }))
         .get('type', '');
       const sfObject = questionMap.get('sfObject', '');
       const sfField = questionMap.get('sfField', '');
@@ -319,7 +314,7 @@ const QuestionItem = ({
 
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
-    const lastAnswerMap = Map(lastAnswer);
+    const lastAnswerMap = IMap(lastAnswer);
     let isAnswerPredicted = false;
 
     let answerDate = 'Not Answered';
@@ -343,7 +338,7 @@ const QuestionItem = ({
       }
     }
 
-    const checkDisableFlag = () => locked;
+    const checkDisableFlag = () => locked || disabled;
     const {
       questionText,
       questionTableConfig: tableConfiguration,
@@ -539,7 +534,7 @@ const QuestionItem = ({
             tableConfiguration={jsonTableConfig}
             questionHint={questionHint}
             questionHintJSON={questionHintJSON}
-            section={Map(section)}
+            section={IMap(section)}
             sectionName={UnityTabSectionTitle}
             answers={answers}
             answered={isAnswered(lastAnswerMap, isAnswerPredicted)}
@@ -652,12 +647,7 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(
-        answer
-          .get('answer')
-          .toString()
-          .trim()
-      );
+      return Boolean(answer.get('answer').toString().trim());
     }
     return false;
   };
@@ -680,14 +670,14 @@ const QuestionItem = ({
     const loading =
       unityQuestionStatus?.questionId === questionId &&
       unityQuestionStatus?.value;
-    currentSFanswer = Map(currentSFanswer);
-    answers = answers.map(v => Map(v));
+    currentSFanswer = IMap(currentSFanswer);
+    answers = answers.map(v => IMap(v));
     answers = List(answers);
     const qID = answers.get('questionId');
     const qvicon = questionId;
     let checkSfAnswer = '';
     let lastAnswer = getLastAnswer(question);
-    lastAnswer = Map(lastAnswer);
+    lastAnswer = IMap(lastAnswer);
     let answerDate = 'Not Answered';
     let isAnswerPredicted = false;
     let integrationmatch;
@@ -740,7 +730,7 @@ const QuestionItem = ({
         lastAnswer = answers.get('answers')?.last();
       }
     }
-    lastAnswer = Map(lastAnswer);
+    lastAnswer = IMap(lastAnswer);
     if (lastAnswer) {
       if (
         lastAnswer.get &&
@@ -794,7 +784,7 @@ const QuestionItem = ({
         bidType={bidType}
         latestAnsweredBidNo={latestAnsweredBidNo}
         questionDataDestinations={questionDataDestinations}
-        answerConfiguration={Map(question.answerConfiguration)}
+        answerConfiguration={IMap(question.answerConfiguration)}
       />
     );
   };
@@ -867,7 +857,7 @@ const QuestionItem = ({
                     </div>
                     {question.events && (
                       <EventLauncher
-                        questionData={Map(question)}
+                        questionData={IMap(question)}
                         proposalDetail={proposalDetail}
                         eventCategories={eventCategories}
                         trackEventLauncher={c => trackEventLauncher(c)}

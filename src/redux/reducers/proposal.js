@@ -174,8 +174,8 @@ const INITIAL_STATE: Map = fromJS({
   lookUpOptions: {},
   boxAdditionalLink: {},
   boxOpportunityFolderId: '',
-  switchTempCallStatus: false,
-  switchTempInProgress: false,
+  switchTempCallStatus: { data: false, proposalId: null },
+  switchTempInProgress: { status: false, proposalId: null },
   eventflag: {},
   showNaCheckbox: false,
   priceModeler: fromJS({
@@ -359,10 +359,8 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${
-            proposal?.proposal?.proposalDetails
-              ?.earlyEngagementDevelopmentPlan || ''
-          }`
+          `${proposal?.proposal?.proposalDetails
+            ?.earlyEngagementDevelopmentPlan || ''}`
         )
         .set(
           'describeActivity',
@@ -1674,6 +1672,24 @@ const updateDashboardDetail = (state, action) => {
   }
 };
 
+const switchTempInProgress = (state, action) => {
+  const { payload } = action;
+  const selectedBid = state.getIn(['selectedBid', 'id']);
+  if (selectedBid === payload.proposalId) {
+    return state.set('switchTempInProgress', payload);
+  }
+  return state;
+};
+
+const switchTempCallStatus = (state, action) => {
+  const { payload } = action;
+  const selectedBid = state.getIn(['selectedBid', 'id']);
+  if (selectedBid === payload.proposalId) {
+    return state.set('switchTempCallStatus', payload);
+  }
+  return state;
+};
+
 const actionMap = {
   [PROPOSAL_INFO]: onProsalInfoLoaded,
   [PROPOSAL_INFO_LOADING]: onProposalLoading,
@@ -1682,8 +1698,7 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
-    onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1732,10 +1747,8 @@ const actionMap = {
   [BOX_ADDITIONAL_LINK]: fetchBoxAdditionalLink,
   [BOX_ADDITIONAL_LINK_ERROR]: onGettingfetchBoxAdditionalLinkError,
   [BOX_OPPORTUNITY_FOLDER_ID]: onBoxOpportunityFolderId,
-  [SWITCH_TEMP_STATUS]: (state, { payload }) =>
-    state.set('switchTempCallStatus', payload),
-  [SWITCH_TEMP_IN_PROGRESS]: (state, { payload }) =>
-    state.set('switchTempInProgress', payload),
+  [SWITCH_TEMP_STATUS]: switchTempCallStatus,
+  [SWITCH_TEMP_IN_PROGRESS]: switchTempInProgress,
   [RESET_PROPOSALID]: resetProposalId,
   [QUESTION_LOCK_BY_USER]: updateQuestionLockByUser,
   [QUESTION_UNLOCK_BY_USER]: updateQuestionUnlockByUser,
@@ -1772,7 +1785,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {

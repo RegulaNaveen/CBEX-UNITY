@@ -56,10 +56,9 @@
     width: 100%;
     th,
     td {
-      border: 1px solid black;
       width: 100px;
       text-align: left;
-      font-family: Proxima Nova;
+      font-family: $proximaNova;
       font-size: 13px;
       font-style: normal;
       padding: 8px;
@@ -150,7 +149,7 @@
           }
           .blank {
             font-style: italic;
-            font-family: 'Proxima Nova';
+            font-family: $proximaNova;
             font-weight: 300;
           }
         }

@@ -26,31 +26,23 @@ const processTextOrNumberOrDate = (
       case 'Equal':
       case '=':
         return firstArr.some(value => secondArr.includes(value));
-        break;
       case 'Not Equal':
       case '<>':
         return firstArr.some(value => !secondArr.includes(value));
-        break;
       case 'Contains':
       case 'CONTAINS':
         return firstArr.some(value => secondArr.includes(value));
-        break;
       case 'Does not Contain':
       case 'DOES NOT CONTAIN':
         return firstArr.some(value => !secondArr.includes(value));
-        break;
       case 'Is Blank':
         return firstArr.length === 0;
-        break;
       case 'Is Not Blank':
         return firstArr.length > 0;
-        break;
       case 'Less Than':
         return questionAnswer < recipientRuleAnswer;
-        break;
       case 'Greater Than':
         return questionAnswer > recipientRuleAnswer;
-        break;
       default:
         console.warn(`Unsupported filter: ${filter}`);
         break;
@@ -101,7 +93,6 @@ const processMultiDataTypeCondition = (
         } else {
           return firstArr.some(value => secondArr.includes(value));
         }
-        break;
       case 'Not Equal':
       case '<>':
         if (operator === 'AND' || operator === 'And') {
@@ -109,7 +100,6 @@ const processMultiDataTypeCondition = (
         } else {
           return firstArr.some(value => !secondArr.includes(value));
         }
-        break;
       case 'Contains':
       case 'CONTAINS':
         if (operator === 'AND' || operator === 'And') {
@@ -117,7 +107,6 @@ const processMultiDataTypeCondition = (
         } else {
           return firstArr.some(value => secondArr.includes(value));
         }
-        break;
       case 'Does not Contain':
       case 'DOES NOT CONTAIN':
         if (operator === 'AND' || operator === 'And') {
@@ -125,19 +114,14 @@ const processMultiDataTypeCondition = (
         } else {
           return firstArr.some(value => !secondArr.includes(value));
         }
-        break;
       case 'Is Blank':
         return firstArr.length === 0;
-        break;
       case 'Is Not Blank':
         return firstArr.length > 0;
-        break;
       case 'Less Than':
         return questionAnswer < recipientRuleAnswer;
-        break;
       case 'Greater Than':
         return questionAnswer > recipientRuleAnswer;
-        break;
       default:
         console.warn(`Unsupported filter: ${filter}`);
         break;
@@ -162,7 +146,6 @@ const processStatement = (
           filter,
           recipientRuleAnswer
         );
-        break;
       case 'select':
         return processMultiDataTypeCondition(
           questionAnswer,
@@ -171,7 +154,6 @@ const processStatement = (
           type,
           recipientRuleAnswer
         );
-        break;
       case 'multi-select':
         return processMultiDataTypeCondition(
           questionAnswer,
@@ -180,28 +162,24 @@ const processStatement = (
           type,
           recipientRuleAnswer
         );
-        break;
       case 'select-lookup':
         return processTextOrNumberOrDate(
           questionAnswer,
           filter,
           recipientRuleAnswer
         );
-        break;
       case 'multi-select-lookup':
         return processTextOrNumberOrDate(
           questionAnswer,
           filter,
           recipientRuleAnswer
         );
-        break;
       case 'yes-no':
         return processTextOrNumberOrDate(
           questionAnswer,
           filter,
           recipientRuleAnswer
         );
-        break;
       case 'number':
         if (
           operator === 'AND' ||
@@ -223,7 +201,6 @@ const processStatement = (
           filter,
           recipientRuleAnswer
         );
-        break;
       case 'date':
         const formatedDate = new Date(
           moment(recipientRuleAnswer?.join())?.format('D-MMM-yyyy')
@@ -232,21 +209,18 @@ const processStatement = (
         return processTextOrNumberOrDate([questionAnswerDate], filter, [
           formatedDate
         ]);
-        break;
       case 'radio':
         return processTextOrNumberOrDate(
           questionAnswer,
           filter,
           recipientRuleAnswer
         );
-        break;
       case 'checkbox':
         return processTextOrNumberOrDate(
           questionAnswer,
           filter,
           recipientRuleAnswer
         );
-        break;
       default:
         console.warn(`Unsupported types: ${type}`);
         break;

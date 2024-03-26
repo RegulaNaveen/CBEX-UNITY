@@ -146,6 +146,12 @@ const EMAIL_TEMPLATES = {
   PARAMETERS: 'Parameters'
 };
 
+const TASKS = {
+  DELETE_ALERT_MSG: 'Are you sure you want to delete this task item?',
+  DELETE_BTN_TEXT: 'Yes, Delete',
+  DELETING: 'Deleting'
+};
+
 export {
   DEFAULT,
   PROPOSAL,
@@ -156,5 +162,6 @@ export {
   BID_TYPES,
   EMAIL_TEMPLATES,
   SECTIONS,
-  TABLEANSWER
+  TABLEANSWER,
+  TASKS
 };

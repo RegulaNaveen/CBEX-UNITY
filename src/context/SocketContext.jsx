@@ -32,6 +32,14 @@ import {
   updateDashboardBid,
   syncDashboardOpportunity
 } from '../redux/actions/proposals-actions';
+import {
+  setTaskFromSocket,
+  editTaskFromSocket,
+  handleTaskLock,
+  handleTaskUnlock,
+  handleMultipleTaskLocks,
+  editRoleFromSocket
+} from '../redux/actions/tasksList-actions';
 import { updateProposalNotesFromWebSocket } from '../redux/actions/notepad-actions';
 import { setNotification } from '../redux/actions/notification-actions';
 import { getUserName, getUserEmail, getUserId } from '../SessionHandler';
@@ -45,6 +53,10 @@ import {
 } from '../redux/actions/approval-actions';
 import { updateFavourite } from '../redux/actions/sso-auth-actions';
 import { getSelectedBid } from '../redux/selectors';
+import {
+  updateTaskListOrderAction,
+  updateTaskListMoveAction
+} from '../redux/actions/tasksList-actions';
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -356,7 +368,7 @@ const SocketContextProvider = props => {
           body: {
             event: 'QUESTION_DELETE',
             data: {
-              questionId              
+              questionId
             }
           }
         })
@@ -460,6 +472,23 @@ const SocketContextProvider = props => {
     }
   };
 
+  // Get All Locked tasks
+  const getTaskLockDetails = ws => {
+    try {
+      if (!ws) {
+        ws = socket.current;
+      }
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: { event: 'TASK' }
+        })
+      );
+    } catch (error) {
+      console.log('getTaskLockDetails', error);
+    }
+  };
+
   /**
    * Function called after bid creation completed
    */
@@ -548,13 +577,20 @@ const SocketContextProvider = props => {
           updateDetailPage,
           deleteCustomTabCustomQuestionFromSocket,
           deleteApprovalCustomTabCustomQuestionFromSocket,
-          selectedBid
+          selectedBid,
+          updateTaskListOrderAction,
+          updateTaskListMoveAction,
+          setTaskFromSocket,
+          editTaskFromSocket,
+          handleTaskLockAction,
+          handleTaskUnlockAction,
+          handleMultipleTaskLocksAction,
+          editRoleFromSockets
         } = props;
 
         // On Message Recieve
         newSocket.addEventListener('message', async response => {
           const data = JSON.parse(response.data);
-
           switch (data.event) {
             case 'IN_PROGRESS':
               addNewBid(data.data);
@@ -576,16 +612,25 @@ const SocketContextProvider = props => {
               }
               break;
             case 'SWITCH_TEMPLATE_IN_PROGRESS':
-              if (setSwitchInProgress) setSwitchInProgress(true);
-              if (updateSwitchTempStatus) updateSwitchTempStatus('progress');
+              if (setSwitchInProgress) {
+                setSwitchInProgress(true, data.data.proposalId);
+              }
+              if (updateSwitchTempStatus) {
+                updateSwitchTempStatus('progress', data.data.proposalId);
+              }
               break;
             case 'SWITCH_TEMPLATE_COMPLETED':
               console.log('SWITCH_TEMPLATE_COMPLETED');
-              if (updateSwitchTempStatus) updateSwitchTempStatus('success');
+              if (updateSwitchTempStatus) {
+                updateSwitchTempStatus('success', data.data.proposalId);
+              }
+              setSwitchInProgress(false, data.data.proposalId);
               break;
             case 'SWITCH_TEMPLATE_ERROR':
-              if (setSwitchInProgress) setSwitchInProgress(false);
-              if (updateSwitchTempStatus) updateSwitchTempStatus('error');
+              if (setSwitchInProgress)
+                setSwitchInProgress(false, data.data.proposalId);
+              if (updateSwitchTempStatus)
+                updateSwitchTempStatus('error', data.data.proposalId);
               break;
             case 'IN_APP_NOTIFICATION_RECEIVED':
               updateNotification();
@@ -625,7 +670,10 @@ const SocketContextProvider = props => {
               break;
             case 'QUESTION_TEXT_UPDATE':
               if (data.data.questionData) {
-                editProposalQuestionfromSocket(data.data.questionData, data.data.proposalId);
+                editProposalQuestionfromSocket(
+                  data.data.questionData,
+                  data.data.proposalId
+                );
               }
               break;
 
@@ -659,10 +707,28 @@ const SocketContextProvider = props => {
               break;
             case 'ADD_QUESTION':
               if (data.data.questionData) {
-                setProposalQuestionFromSocket(data.data.questionData, data.data.proposalId);
+                setProposalQuestionFromSocket(
+                  data.data.questionData,
+                  data.data.proposalId
+                );
+              }
+              break;
+            case 'TASK_ADD':
+              if (data.data) {
+                setTaskFromSocket(data.data, data.proposalId);
+              }
+              break;
+            case 'TASK_UPDATE':
+              if (data.data) {
+                editTaskFromSocket(data.data, data.proposalId);
               }
               break;
 
+            case 'TASK_ROLE_UPDATE':
+              if (data.data) {
+                editRoleFromSockets(data.data, data.proposalId, data.taskId);
+              }
+              break;
             case 'QUESTIONS':
               // Get list of questions already locked by other users
               getQuestionLockDetails(data);
@@ -686,7 +752,7 @@ const SocketContextProvider = props => {
 
             case 'COST_ESTIMATE_CALCULATING':
               const currentBidID = selectedBid.toJS().id;
-              if(data?.data?.proposalId === currentBidID){
+              if (data?.data?.proposalId === currentBidID) {
                 setPriceModelerRecalculationStatus(true);
               }
               break;
@@ -696,7 +762,7 @@ const SocketContextProvider = props => {
             case 'WIDGET_UPDATE':
               const { proposalId, typeOfWidget } = data.data;
               widgetUpdate(proposalId, typeOfWidget);
-
+              break;
             case 'FAVOURITE':
               const { oppNumber, favourite, favouriteUpdatedDate } = data.data;
               updateFavouriteAction(
@@ -719,12 +785,33 @@ const SocketContextProvider = props => {
             case 'NEXT_MILESTONE_UPDATE':
               console.log('socket data', data);
               const { nextMilestone } = data.data;
-              updateNextMilestoneAction(data.oppId, nextMilestone, data.data.proposalId);
+              updateNextMilestoneAction(
+                data.oppId,
+                nextMilestone,
+                data.data.proposalId
+              );
               break;
 
             case 'CUSTOM_NAME_UPDATE':
               const { customName } = data.data;
               updateCustomNameAction(data.data.oppNumber, customName);
+              break;
+
+            case 'TASK_REORDER':
+              updateTaskListOrderAction(data);
+              break;
+
+            case 'TASK_MOVE':
+              updateTaskListMoveAction(data);
+              break;
+            case 'TASK':
+              handleMultipleTaskLocksAction(data.data);
+              break;
+            case 'TASK_LOCK':
+              handleTaskLockAction(data.data);
+              break;
+            case 'TASK_UNLOCK':
+              handleTaskUnlockAction(data.data);
               break;
             default:
               break;
@@ -878,7 +965,44 @@ const SocketContextProvider = props => {
     }
   };
 
-  const questionLockWrapper = (questionId) => {
+  // Lock a task for a user
+  const lockTask = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'TASK_LOCK',
+            data
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in locking a task: ', error);
+    }
+  };
+
+  // Unlock a task for a user
+  const unlockTask = data => {
+    try {
+      const ws = socket.current;
+      ws.send(
+        JSON.stringify({
+          action: 'TASK',
+          body: {
+            event: 'TASK_UNLOCK',
+            data,
+            clienttaskId: data.taskId
+          }
+        })
+      );
+    } catch (error) {
+      console.error('Error in locking a task: ', error);
+    }
+  };
+
+  const questionLockWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => resetLockTimer(questionId));
   };
   const questionUnlockWrapper = (questionId, answer) => {
@@ -920,7 +1044,9 @@ const SocketContextProvider = props => {
   const updateDashboardSFValueWrapper = (oppNo, sfField, answer) => {};
 
   const addQuestionWrapper = (questionData, proposalId) => {
-    waitForSocketConnectionMinInterval(() => addQuestion(questionData, null, proposalId));
+    waitForSocketConnectionMinInterval(() =>
+      addQuestion(questionData, null, proposalId)
+    );
   };
 
   const questionTextUpdateWrapper = (questionData, proposalId) => {
@@ -929,7 +1055,7 @@ const SocketContextProvider = props => {
     );
   };
 
-  const questionDeleteWrapper = (questionId) => {
+  const questionDeleteWrapper = questionId => {
     waitForSocketConnectionMinInterval(() => questionDelete(questionId, null));
   };
 
@@ -964,6 +1090,10 @@ const SocketContextProvider = props => {
     waitForSocketConnectionMinInterval(() => questionLockDetails(null));
   };
 
+  const getTaskLockDetailsWrapper = () => {
+    waitForSocketConnectionMinInterval(() => getTaskLockDetails(null));
+  };
+
   // Approval's Questions - duplicating - socket message wrapper
   // info - sectionId, duplicating(bool)
   const approvalSectionDuplicatingWrapper = data => {
@@ -986,6 +1116,14 @@ const SocketContextProvider = props => {
   // info - sectionId
   const approvalSectionDeletedWrapper = data => {
     waitForSocketConnectionMinInterval(() => approvalDeleted(data));
+  };
+
+  const lockTaskWrapper = data => {
+    waitForSocketConnectionMinInterval(() => lockTask(data));
+  };
+
+  const unlockTaskWrapper = data => {
+    waitForSocketConnectionMinInterval(() => unlockTask(data));
   };
 
   const refreshSocketConnection = () => {
@@ -1049,7 +1187,10 @@ const SocketContextProvider = props => {
         updateFavouriteWrapper,
         updateCustomNameWrapper,
         updateDashboardSFValueWrapper,
-        ApprovalCustomQuestionDeleteWrapper
+        ApprovalCustomQuestionDeleteWrapper,
+        getTaskLockDetailsWrapper,
+        lockTaskWrapper,
+        unlockTaskWrapper
       }}
     >
       {props.children}
@@ -1093,7 +1234,15 @@ const mapDispatchToProps = {
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
   deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  updateTaskListOrderAction,
+  updateTaskListMoveAction,
+  setTaskFromSocket: setTaskFromSocket,
+  editTaskFromSocket: editTaskFromSocket,
+  handleTaskLockAction: handleTaskLock,
+  handleTaskUnlockAction: handleTaskUnlock,
+  handleMultipleTaskLocksAction: handleMultipleTaskLocks,
+  editRoleFromSockets: editRoleFromSocket
 };
 
 export default connect(

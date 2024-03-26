@@ -16,6 +16,12 @@
     width: 8px;
   }
 
+  &.collapsed {
+    * {
+      min-width: 22px !important;
+    }
+  }
+
   /* Track */
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -43,6 +49,9 @@
       border-top: $border;
       .editor__header {
         border-bottom: $border;
+      }
+      .editor-scroll {
+        scrollbar-width: auto;
       }
     }
     .network-heading {
@@ -125,13 +134,13 @@
   padding: 12px 12px 4px;
 
   & > h3 {
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
     font-size: 22px;
     font-weight: 600;
     margin-bottom: 4px;
   }
   & > p {
-    font-family: $proximaNova;
+    font-family: $proximaNovaRegular;
     font-size: 14px;
   }
 }

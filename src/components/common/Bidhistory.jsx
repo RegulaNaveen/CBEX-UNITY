@@ -18,6 +18,9 @@ import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
+import TextField from 'apollo-react/components/TextField';
+import StatusDotOutline from 'apollo-react-icons/StatusDotOutline';
+import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -183,7 +186,21 @@ const BidHistory = () => {
                       ${isQuestionAnswered ? 'bid-switching-not-allowed' : ''}`}
                             key={item.bidId}
                           >
-                            <div>
+                            <div style={{ display: 'inline-flex' }}>
+                              {item.isEditable === true ? (
+                                <StatusDotOutline
+                                  data-testid="status-dotoutline"
+                                  className="statusdotoutline"
+                                  fontSize="extraSmall"
+                                  style={{ color: 'blue', marginRight: '2px' }}
+                                />
+                              ) : (
+                                <StatusDotSolid
+                                  className="status-dotsolid"
+                                  fontSize="extraSmall"
+                                  style={{ marginRight: '2px' }}
+                                />
+                              )}
                               {item.bidName.startsWith('Early Engagement')
                                 ? `EE Bid ${item.bidNo}`
                                 : item.bidName.startsWith('Post Award')
