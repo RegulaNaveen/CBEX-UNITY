@@ -193,7 +193,7 @@ const Timeline = () => {
               Available Dates
             </Typography>
             <Typography varient="body2" className="subtitle">
-              Drag onto calender to add
+              Drag onto calendar to add
             </Typography>
           </div>
           <div className="timeline-questions-container">
