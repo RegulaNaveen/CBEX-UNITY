@@ -407,7 +407,10 @@ export const getBidList = createSelector(
             bidNo: String(
               item.getIn(['proposal', 'proposalDetails', 'bidNo']) || ''
             ),
-            bidType: String(item.getIn(['proposal', 'bidType'], 'Clinical_Bid'))
+            bidType: String(
+              item.getIn(['proposal', 'bidType'], 'Clinical_Bid')
+            ),
+            nextMilestone: item.getIn(['proposal', 'nextMilestone'])
           });
         }
       });
