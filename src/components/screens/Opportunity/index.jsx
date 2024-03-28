@@ -390,7 +390,7 @@ export class Opportunity extends Component<Props, State> {
             bidStopStatus={bidStopStatus}
             favourite={favourite}
             customName={customName}
-            nextMilestone={filteredMilestones ? filteredMilestones : nextMilestone}
+            nextMilestone={filteredMilestones}
             opportunityName={opportunityName}
             opportunityStatus={opportunityStatus}
             handleEditCustomName={this.handleEditCustomName}
