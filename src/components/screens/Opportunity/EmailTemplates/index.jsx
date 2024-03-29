@@ -469,20 +469,29 @@ const EmailTemplates = () => {
         placeholderData,
         'body'
       );
+
+      const to = encodeURIComponent(EmailTemplateTORolesAnswer.join(','));
+      const cc = encodeURIComponent(EmailTemplateCCRoleAnswer.join(','));
+      const body = updatedBody
+        ? encodeURIComponent(
+            'Unity has copied the configured email content to your clipboard. Press Control + V to paste this content into the Body of this email.'
+          )
+        : '';
+      let mailtoLink = 'mailto:';
+      if (to) mailtoLink += `${to}`;
+      if (cc) mailtoLink += `?cc=${cc}`;
+      if (!cc && subjectStr) mailtoLink += `?subject=${subjectStr}`;
+      if (cc && subjectStr) mailtoLink += `&subject=${subjectStr}`;
+      if ((cc || subjectStr) && body) mailtoLink += `&body=${body}`;
+      if (!(cc || subjectStr) && body) mailtoLink += `?body=${body}`;
+
       if (updatedBody) {
         const blob = new Blob([updatedBody], { type: 'text/html' });
         const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
         await navigator.clipboard.write([clipboardItem]);
       }
 
-      window.open(
-        generateEmailTemplateEmail(
-          subjectStr,
-          EmailTemplateTORolesAnswer,
-          EmailTemplateCCRoleAnswer,
-          updatedBody
-        )
-      );
+      window.location.href = mailtoLink;
     } catch (error) {
       console.log('error', error);
     }
