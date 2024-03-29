@@ -12,10 +12,12 @@ const QuestionDatePicker = ({
   disabled = false,
   toggleWatch,
   onCascadeChange,
-  forceBlur
+  forceBlur,
+  isMandatory
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [resetsubmit, setresetsubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const datePickerRef = useRef(null);
   useEffect(() => {
     value = String(value)
@@ -95,7 +97,12 @@ const QuestionDatePicker = ({
             dte = `${yr.indexOf(dte[1]) + 1}/${dte[0]}/${dte[2]}`;
             handleDayChange(moment(dte).format('DD-MMM-YYYY'), value);
           }
-          if (!dte) handleDayChange(' ', value);
+          if (!dte) {
+            handleDayChange(' ', value);
+          } else {
+            setErrorMessage('');
+          }
+
           if (onCascadeChange) onCascadeChange();
         }}
         ref={datePickerRef}
@@ -105,7 +112,17 @@ const QuestionDatePicker = ({
           onClick={() => {
             setresetsubmit(false);
             setInputValue('');
-            resetDate();
+            if (inputValue.trim() !== '' && !isMandatory) {
+              // If inputValue is not empty, reset the date
+              resetDate();
+              setErrorMessage('');
+            }
+            if (isMandatory) {
+              // If the date is mandatory, show an error message when the date is removed
+              setErrorMessage(
+                'This is a mandatory field and it cannot be kept blank'
+              );
+            }
           }}
           style={{
             alignSelf: 'auto',
@@ -119,6 +136,9 @@ const QuestionDatePicker = ({
         >
           <CloseCircle fill="#444" />
         </button>
+      )}
+      {errorMessage && (
+        <div style={{ color: '#e20000', fontSize: '13px' }}>{errorMessage}</div>
       )}
     </div>
   );
