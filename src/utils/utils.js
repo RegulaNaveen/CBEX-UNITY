@@ -280,6 +280,23 @@ const replaceAnswerToQuestionsPlaceholders = (
     });
   }
 
+  if (updatedEventBodyStr.includes('<p></p>')) {
+    const regexEmptyPTag = /<p[^>]*><\/p>/g; // empty p tag regex
+    if (regexEmptyPTag.test(updatedEventBodyStr)) {
+      // check if empty p tag is present
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexEmptyPTag,
+        '<p style="height:26px;margin:0px;"></p>'
+      );
+    }
+  }
+
+  if (updatedEventBodyStr.includes('<hr>')) {
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      /<hr>/g,
+      "<hr style='margin: 2rem 0;'>"
+    );
+  }
   return updatedEventBodyStr;
 };
 
