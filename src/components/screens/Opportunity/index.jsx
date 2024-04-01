@@ -10,6 +10,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import isEmpty from 'lodash/isEmpty';
+import moment from 'moment';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -63,6 +64,7 @@ import {
   selectGetbidChangeLoader,
   selectTasksListFlag
 } from '../../../redux/selectors/proposal';
+import { getNextMilestone } from '../../../utils/utils';
 import {
   clearSearchAction,
   closeSearchAction
@@ -72,6 +74,7 @@ import {
   fetchTasksList,
   toggleCanReorder
 } from '../../../redux/actions/tasksList-actions';
+import { filter } from 'lodash';
 
 type State = {
   selectedView: string
@@ -122,7 +125,7 @@ export class Opportunity extends Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+   componentDidMount = async()=> {
     const {
       getOpportunityInfo,
       authData,
@@ -320,16 +323,36 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       favourite,
       customName,
-      nextMilestone,
-      getbidChangeLoader
+      getbidChangeLoader,
+      nextMilestone
     } = this.props;
     const {
       bidStatus,
       bidStopStatus,
       opportunityName,
       opportunityStatus,
-      isApprovalCountPresent
+      isApprovalCountPresent,
     } = selectedBid.toJS();
+   let sortedMilestones = selectedBid.toJS().nextMilestone ;
+   let filteredMilestones = ''
+    if(sortedMilestones && sortedMilestones.length > 0){
+       filteredMilestones = sortedMilestones.filter(milestone => moment(milestone.date, 'DD-MMM-YYYY').isSameOrAfter(moment(), 'd'))
+      .sort((milestoneA, milestoneB) => {
+        let diff = 0;
+        try {
+          diff =
+            moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
+            moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
+        } catch (e) {
+          console.error(
+            '[proposalUtils.getNextMilestone] Error in parsing date',
+            e
+          );
+        }
+        return diff;
+      });
+      filteredMilestones =  filteredMilestones[0]?.name ;
+    }
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -367,7 +390,7 @@ export class Opportunity extends Component<Props, State> {
             bidStopStatus={bidStopStatus}
             favourite={favourite}
             customName={customName}
-            nextMilestone={nextMilestone}
+            nextMilestone={filteredMilestones}
             opportunityName={opportunityName}
             opportunityStatus={opportunityStatus}
             handleEditCustomName={this.handleEditCustomName}
@@ -444,7 +467,6 @@ const mapStateToProps = (state: Map) => ({
   getbidChangeLoader: selectGetbidChangeLoader(state),
   tasksListFlag: selectTasksListFlag(state)
 });
-
 export default compose(
   withRouter,
   connect(mapStateToProps, {
