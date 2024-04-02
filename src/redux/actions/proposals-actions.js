@@ -19,6 +19,7 @@ import {
 } from '../selectors/sso-auth';
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
+import { getPage, getNumOfRows } from '../selectors/proposals';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -213,7 +214,9 @@ export const setPageAction = (page: Number) => {
 
 export const onFilteringProposals = (
   filters: FilteredData,
-  tabIndex: Number
+  tabIndex: Number,
+  from: number = 0,
+  size: number = 15
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
@@ -328,11 +331,9 @@ export const onFilteringProposals = (
           }
         } else {
           const userEmail = localStorage.getItem('userEmail') || '';
-          const paginationSize = getState().proposals.toJS().paginationSize;
-          const from = getState().proposals.toJS().from;
           const response = await onGetAllProposals({
-            from: from,
-            size: paginationSize,
+            from,
+            size,
             filter: {}
           });
           data = response.data.data;

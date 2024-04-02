@@ -43,7 +43,8 @@ class AllTabPagination extends Component<Props, State> {
   //   };
 
   handleDropdownClick = (newSize: number) => {
-    const { getMaxRows, setPaginationSize } = this.props;
+    const { getMaxRows, setPaginationSize, fetchProposals } = this.props;
+    const { currentPage } = this.state;
     setPaginationSize(newSize);
     this.setState({ maxRows: newSize }, () => {
       getMaxRows(this.state.maxRows);
@@ -52,7 +53,7 @@ class AllTabPagination extends Component<Props, State> {
   };
 
   getCurrentPage = (currentPage: number) => {
-    const { getCurrentPosition } = this.props;
+    const { getCurrentPosition, fetchProposals } = this.props;
     this.setState({ currentPage }, () => getCurrentPosition(currentPage));
   };
 
@@ -78,7 +79,7 @@ class AllTabPagination extends Component<Props, State> {
           <p>Show</p>
           <div className="cmplx__dd__container">
             <Dropwdown
-              value={maxRows.toString()}
+              value={maxRows}
               //   onClick={this.setMaxRows}
               onClick={this.handleDropdownClick}
               items={[15, 30, 45]}
@@ -89,7 +90,7 @@ class AllTabPagination extends Component<Props, State> {
         <p className="cmplx__items">{showCount()}</p>
         <Pagination
           maxRows={maxRows}
-          totalItems={totalItems}
+          totalItems={count}
           getCurrentPage={this.getCurrentPage}
         />
       </div>
@@ -213,18 +214,19 @@ class Pagination extends PureComponent {
     const { currentPage, currentChunk } = this.state;
     const { maxRows, totalItems, getCurrentPage } = this.props;
 
+    // every 4 page is a chunk
     this.chunks = chunk(
       [...Array.from(Array(Math.ceil(totalItems / maxRows)), (_, i) => i + 1)],
       4
     );
 
+    // page in an array
     const pages = chunk(
       [...Array.from(Array(totalItems), (_, i) => i + 1)],
       maxRows
     );
 
     let current = currentChunk;
-    console.log(pages, current, 'pages');
     if (!pages[currentPage - 1]) {
       current = 0;
       this.setState({ currentChunk: 0, currentPage: 1 }, () =>

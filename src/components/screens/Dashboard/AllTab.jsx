@@ -21,7 +21,8 @@ import {
   setPageAction,
   setNumberOfRowsAction,
   setPaginationSize,
-  setFrom
+  setFrom,
+  onFilteringProposals
 } from '../../../redux/actions/proposals-actions';
 import GridView from '../../views/GridView';
 import TableView from '../../views/TableView';
@@ -69,7 +70,7 @@ class AllTab extends Component<Props, State> {
       proposals,
       filteredProposals,
       isFilteringProposals,
-      count
+      filterProposals
     } = this.props;
     const contentChanged =
       prevProps.page !== page ||
@@ -83,6 +84,16 @@ class AllTab extends Component<Props, State> {
         numRows
       );
       this.setPageContent(pages[page - 1]);
+    }
+
+    if (prevProps.numRows != numRows || prevProps.page !== page) {
+      console.log({
+        prevRows: prevProps.numRows,
+        numRows,
+        prevPage: prevProps.page,
+        page
+      });
+      filterProposals({}, 3, page * numRows - numRows, numRows);
     }
   }
 
@@ -117,7 +128,7 @@ class AllTab extends Component<Props, State> {
     const showPagination = isFilteringProposals
       ? !isEmpty(filteredProposals)
       : !isEmpty(proposals);
-    return loading ? (
+    return loading && false ? (
       <Loader
         type="TailSpin"
         color="#297DFD"
@@ -168,7 +179,8 @@ const mapDispatchToProps = {
   setPage: setPageAction,
   setRows: setNumberOfRowsAction,
   setPaginationSize,
-  setFrom
+  setFrom,
+  filterProposals: onFilteringProposals
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
