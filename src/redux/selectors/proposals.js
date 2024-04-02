@@ -39,10 +39,18 @@ export const getProposalsFilters = (proposals: Map): Object =>
 
 export const getPage = (proposals: Map): Object => proposals.get('page');
 
-export const getNumOfRows = (proposals: Map): Object =>
-  proposals.get('numRows');
+export const getNumOfRows = (proposals: Map): Object => {
+  return proposals.get('numRows');
+};
 
 export const getAssignedTabNumOfRows = (proposals: Map): Object =>
   proposals.get('assignTabRows');
 export const getnoneditableField = (proposals: Map): Object =>
   proposals.get('nonEditableSF');
+
+export const getCount = (proposals: Map): Object => proposals.get('totalCount');
+
+export const getPaginationSize = (proposals: Map): Object =>
+  proposals.get('paginationSize');
+
+export const getFrom = (proposals: Map): Object => proposals.get('from');

@@ -34,7 +34,10 @@ const {
   ON_GET_FAVOURITE,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_DASHBOARD_BID,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  TOTAL_COUNT,
+  PAGINATION_SIZE,
+  FROM
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
@@ -113,16 +116,19 @@ const formatProposal = (
 export const getAllProposals = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
-
     try {
-      const { data } = await onGetAllProposals({ source: 'es' });
-
+      const { data } = await onGetAllProposals({
+        from: 0,
+        size: 15,
+        filter: {}
+      });
       if (!isEmpty(data)) {
         const { proposals } = data;
         const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
+      console.log('error', error);
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     }
   };
@@ -322,13 +328,26 @@ export const onFilteringProposals = (
           }
         } else {
           const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals(filterPayload, userEmail);
-          data = response.data;
+          const paginationSize = getState().proposals.toJS().paginationSize;
+          const from = getState().proposals.toJS().from;
+          const response = await onGetAllProposals({
+            from: from,
+            size: paginationSize,
+            filter: {}
+          });
+          data = response.data.data;
+          const count = response.data.count;
+          dispatch({ type: TOTAL_COUNT, payload: count });
         }
       }
-
       if (!isEmpty(data)) {
-        const { proposals } = data;
+        let proposals = [];
+        if (Number(tabIndex) === 3) {
+          proposals = data.map(item => item?.latestProposal);
+        } else {
+          proposals = data.proposals;
+          // const { proposals } = data;
+        }
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
 
@@ -376,7 +395,6 @@ export const onFilteringProposals = (
         }
       }
     } catch (error) {
-      console.log(error);
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     } finally {
       dispatch(setPageAction(1)); // resetting page to 1
@@ -483,3 +501,13 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
     console.log(error);
   }
 };
+
+export const setPaginationSize = size => ({
+  type: PAGINATION_SIZE,
+  payload: size
+});
+
+export const setFrom = from => ({
+  type: FROM,
+  payload: from
+});

@@ -10,14 +10,24 @@ import {
   getFilteredProposals,
   getIsFilteringProposals
 } from '../../../redux/selectors';
-import { getPage, getNumOfRows } from '../../../redux/selectors/proposals';
+import {
+  getPage,
+  getNumOfRows,
+  getCount,
+  getPaginationSize,
+  getFrom
+} from '../../../redux/selectors/proposals';
 import {
   setPageAction,
-  setNumberOfRowsAction
+  setNumberOfRowsAction,
+  setPaginationSize,
+  setFrom
 } from '../../../redux/actions/proposals-actions';
 import GridView from '../../views/GridView';
 import TableView from '../../views/TableView';
 import ComplexPagination from '../../common/ComplexPagination';
+import AllTabPagination from '../../common/AllTabPagination';
+import { onGetAllProposals } from '../../../api/proposals';
 
 type Props = {
   selectedViewType: 0 | 1,
@@ -29,7 +39,8 @@ type Props = {
   numRows: Number,
   setPage: Function,
   setRows: Function,
-  allFlags: object
+  allFlags: object,
+  count: Number
 };
 
 type State = {
@@ -57,7 +68,8 @@ class AllTab extends Component<Props, State> {
       numRows,
       proposals,
       filteredProposals,
-      isFilteringProposals
+      isFilteringProposals,
+      count
     } = this.props;
     const contentChanged =
       prevProps.page !== page ||
@@ -92,9 +104,13 @@ class AllTab extends Component<Props, State> {
       isFilteringProposals,
       filteredProposals,
       setPage,
-      setRows
+      setRows,
+      count,
+      from,
+      paginationSize,
+      setPaginationSize,
+      setFrom
     } = this.props;
-
     const proposalCount = isFilteringProposals
       ? filteredProposals.length
       : proposals.length;
@@ -114,13 +130,19 @@ class AllTab extends Component<Props, State> {
         <section id="all-tab" className="tab-content">
           {this.renderSelectedView()}
         </section>
-        {showPagination && proposalCount > 15 && (
-          <ComplexPagination
+        {showPagination && proposalCount >= 15 && (
+          <AllTabPagination
             totalItems={
               isFilteringProposals ? filteredProposals.length : proposals.length
             }
             getCurrentPosition={setPage}
             getMaxRows={setRows}
+            count={count}
+            setPaginationSize={setPaginationSize}
+            proposals={proposals}
+            setFrom={setFrom}
+            from={from}
+            paginationSize={paginationSize}
           />
         )}
       </>
@@ -136,12 +158,17 @@ const mapStateToProps = state => ({
   isFilteringProposals: getIsFilteringProposals(state),
 
   page: getPage(state.proposals),
-  numRows: getNumOfRows(state.proposals)
+  numRows: getNumOfRows(state.proposals),
+  count: getCount(state.proposals),
+  from: getFrom(state.proposals),
+  paginationSize: getPaginationSize(state.proposals)
 });
 
 const mapDispatchToProps = {
   setPage: setPageAction,
-  setRows: setNumberOfRowsAction
+  setRows: setNumberOfRowsAction,
+  setPaginationSize,
+  setFrom
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
