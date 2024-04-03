@@ -38,7 +38,8 @@ const {
   UPDATE_DASHBOARD_OPPORTUNITY,
   TOTAL_COUNT,
   PAGINATION_SIZE,
-  FROM
+  FROM,
+  SET_DASHBOARD_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
@@ -65,7 +66,7 @@ const formatProposalGrid = proposal => {
   return formatted;
 };
 
-const formatProposal = (
+export const formatProposal = (
   proposal: Object,
   favoritesMap: Object,
   customNameMap: Object = {}
@@ -185,7 +186,7 @@ type FilteredData = {
   teamMember: string
 };
 
-const getUserMail = lookupValue => {
+export const getUserMail = lookupValue => {
   const results = /\((.*)\)/.exec(lookupValue);
   if (results !== null) {
     return results[1];
@@ -193,7 +194,7 @@ const getUserMail = lookupValue => {
   return null;
 };
 
-const getDateRangeFormatted = range => {
+export const getDateRangeFormatted = range => {
   if (range) {
     return {
       s: moment(range.from).format('yyyy-MM-DD'),
@@ -512,3 +513,10 @@ export const setFrom = from => ({
   type: FROM,
   payload: from
 });
+
+export const setDashboardFilters = filters => async (dispatch, getState) => {
+  dispatch({
+    type: SET_DASHBOARD_FILTERS,
+    payload: filters
+  });
+};

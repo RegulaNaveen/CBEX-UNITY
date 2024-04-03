@@ -1,186 +1,225 @@
-// @flow
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { chunk, isEmpty } from 'lodash';
+import React, { useState, useEffect, useMemo } from 'react';
 import Loader from 'react-loader-spinner';
-import {
-  getProposalTypeView,
-  getProposals,
-  getProposalsLoading,
-  getFilteredProposals,
-  getIsFilteringProposals
-} from '../../../redux/selectors';
-import {
-  getPage,
-  getNumOfRows,
-  getCount,
-  getPaginationSize,
-  getFrom
-} from '../../../redux/selectors/proposals';
-import {
-  setPageAction,
-  setNumberOfRowsAction,
-  setPaginationSize,
-  setFrom,
-  onFilteringProposals
-} from '../../../redux/actions/proposals-actions';
-import GridView from '../../views/GridView';
+import { getProposalTypeView } from '../../../redux/selectors';
+import Dropdown from '../../common/atoms/inputs/Dropdown';
+import { useSelector } from 'react-redux';
+import Pagination from '../../common/AllTabPagination';
 import TableView from '../../views/TableView';
-import ComplexPagination from '../../common/ComplexPagination';
-import AllTabPagination from '../../common/AllTabPagination';
-import { onGetAllProposals } from '../../../api/proposals';
+import GridView from '../../views/GridView';
+import OpportunitiesApi from '../../../api/opportunity';
+import {
+  selectCustomNameMap,
+  selectFavourites
+} from '../../../redux/selectors/sso-auth';
+import {
+  formatProposal,
+  getDateRangeFormatted,
+  getUserMail
+} from '../../../redux/actions/proposals-actions';
+import { selectDashbordFilters } from '../../../redux/selectors/proposals';
 
-type Props = {
-  selectedViewType: 0 | 1,
-  proposals: [Object],
-  filteredProposals: [Object],
-  isFilteringProposals: boolean,
-  loading: boolean,
-  page: Number,
-  numRows: Number,
-  setPage: Function,
-  setRows: Function,
-  allFlags: object,
-  count: Number
-};
-
-type State = {
-  numRows: number,
-  page: number,
-  pageContent: Array<Object>
-};
-
-class AllTab extends Component<Props, State> {
-  constructor(props: Object) {
-    super(props);
-    this.state = {
-      pageContent: []
-    };
-  }
-
-  componentDidMount() {
-    const { setRows } = this.props;
-    setRows(15);
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      page,
-      numRows,
-      proposals,
-      filteredProposals,
-      isFilteringProposals,
-      filterProposals
-    } = this.props;
-    const contentChanged =
-      prevProps.page !== page ||
-      prevProps.numRows !== numRows ||
-      prevProps.proposals !== proposals ||
-      prevProps.filteredProposals !== filteredProposals;
-
-    if (contentChanged) {
-      const pages = chunk(
-        isFilteringProposals ? filteredProposals : proposals,
-        numRows
-      );
-      this.setPageContent(pages[page - 1]);
-    }
-
-    if (prevProps.numRows != numRows || prevProps.page !== page) {
-      console.log({
-        prevRows: prevProps.numRows,
-        numRows,
-        prevPage: prevProps.page,
-        page
-      });
-      filterProposals({}, 3, page * numRows - numRows, numRows);
-    }
-  }
-
-  renderSelectedView = () => {
-    const { selectedViewType, allFlags } = this.props;
-    const { pageContent } = this.state;
-
-    if (selectedViewType === 0) return <TableView data={pageContent} />;
-    return <GridView data={pageContent} allFlags={allFlags} />;
-  };
-
-  setPageContent = (pageContent: Array<Object>) =>
-    this.setState({ pageContent });
-
-  render() {
-    const {
-      proposals,
-      loading,
-      isFilteringProposals,
-      filteredProposals,
-      setPage,
-      setRows,
-      count,
-      from,
-      paginationSize,
-      setPaginationSize,
-      setFrom
-    } = this.props;
-    const proposalCount = isFilteringProposals
-      ? filteredProposals.length
-      : proposals.length;
-    const showPagination = isFilteringProposals
-      ? !isEmpty(filteredProposals)
-      : !isEmpty(proposals);
-    return loading && false ? (
-      <Loader
-        type="TailSpin"
-        color="#297DFD"
-        height={100}
-        width={100}
-        className="loading"
-      />
-    ) : (
-      <>
-        <section id="all-tab" className="tab-content">
-          {this.renderSelectedView()}
-        </section>
-        {showPagination && proposalCount >= 15 && (
-          <AllTabPagination
-            totalItems={
-              isFilteringProposals ? filteredProposals.length : proposals.length
-            }
-            getCurrentPosition={setPage}
-            getMaxRows={setRows}
-            count={count}
-            setPaginationSize={setPaginationSize}
-            proposals={proposals}
-            setFrom={setFrom}
-            from={from}
-            paginationSize={paginationSize}
-          />
-        )}
-      </>
-    );
-  }
+function RenderSelectedView({ viewType, items, allFlags }) {
+  if (viewType === 0) return <TableView data={items} />;
+  return <GridView data={items} allFlags={allFlags} />;
 }
 
-const mapStateToProps = state => ({
-  selectedViewType: getProposalTypeView(state),
-  proposals: getProposals(state),
-  loading: getProposalsLoading(state),
-  filteredProposals: getFilteredProposals(state),
-  isFilteringProposals: getIsFilteringProposals(state),
+function showCount({ page, maxRows, total }) {
+  return `Showing ${page * maxRows - maxRows + 1}-${page *
+    maxRows} of ${total}`;
+}
 
-  page: getPage(state.proposals),
-  numRows: getNumOfRows(state.proposals),
-  count: getCount(state.proposals),
-  from: getFrom(state.proposals),
-  paginationSize: getPaginationSize(state.proposals)
-});
+function PaginationSummary({
+  page,
+  maxRows,
+  total,
+  onMaxRowsChange,
+  onPageChange
+}) {
+  return (
+    <div className="pagination-container">
+      <div className="size-container">
+        <p>Show</p>
+        <div className="dd-container">
+          <Dropdown
+            value={maxRows}
+            onClick={onMaxRowsChange}
+            items={[15, 30, 45]}
+          />
+        </div>
+        <span style={{ paddingLeft: 5 }}>Opportunities per page</span>
+      </div>
+      <p>
+        {showCount({
+          page,
+          maxRows,
+          total
+        })}
+      </p>
+      <Pagination
+        maxRows={maxRows}
+        totalItems={total}
+        getCurrentPage={newPage => onPageChange(newPage)}
+      />
+    </div>
+  );
+}
 
-const mapDispatchToProps = {
-  setPage: setPageAction,
-  setRows: setNumberOfRowsAction,
-  setPaginationSize,
-  setFrom,
-  filterProposals: onFilteringProposals
-};
+function AllTab({ allFlags }) {
+  const [rows, setRows] = useState(15);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
+  const selectedViewType = useSelector(getProposalTypeView);
+  const favourites = useSelector(selectFavourites).toJS();
+  const customNameMap = useSelector(selectCustomNameMap).toJS();
+  const dashboardFilters = useSelector(selectDashbordFilters);
+
+  const favouritesMap = useMemo(
+    () =>
+      favourites.reduce((favMap, fav) => {
+        favMap[fav] = true;
+        return favMap;
+      }, {}),
+    [favourites]
+  );
+
+  async function fetchOpportunities(filters = {}, reset = false) {
+    try {
+      setLoading(true);
+      const response = await OpportunitiesApi.getOpportunities(
+        reset ? 0 : page * rows - rows,
+        rows,
+        filters
+      );
+      if (response.status === 200) {
+        setTotalItems(response.data.count);
+        setItems(
+          response.data.data.map(opportunity =>
+            formatProposal(
+              opportunity.latestProposal,
+              favouritesMap,
+              customNameMap
+            )
+          )
+        );
+      } else {
+        setTotalItems(0);
+        setItems([]);
+      }
+    } catch (error) {
+      console.error('Error fetching opportunities', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    // fetch all opportunities
+    fetchOpportunities();
+  }, [rows, page]);
+
+  useEffect(() => {
+    const sanitizedFilters = Object.entries(dashboardFilters).reduce(
+      (acc, [key, value]) => {
+        if (value && value.length !== 0) {
+          switch (key) {
+            case 'opportunity number':
+              acc.opportunityNumber = value;
+              break;
+            case 'opportunityName':
+              acc.opportunityName = value;
+              break;
+            case 'customer':
+              acc.customer = value;
+              break;
+            case 'protocol number':
+              acc.protocolNumber = value;
+              break;
+            case 'product':
+              acc.product = value;
+              break;
+            case 'verbatim indication':
+              acc.verbatimIndication = value;
+              break;
+            case 'phase':
+              acc.phase = value;
+              break;
+            case 'therapeuticArea':
+              acc.therapeuticArea = value;
+              break;
+            case 'opportunity status':
+              acc.opportunityStatus = value;
+              break;
+            case 'bid due date': {
+              const bidDueDate = getDateRangeFormatted(value);
+              if (bidDueDate) {
+                acc.bidDueDate = bidDueDate;
+              }
+              break;
+            }
+            case 'teamMember': {
+              const userMail = getUserMail(value);
+              if (userMail) {
+                acc.teamMember = userMail;
+              }
+              break;
+            }
+            case 'Customized opportunity name': {
+              acc.opportunityCustomname = value;
+              break;
+            }
+            default:
+              break;
+          }
+        }
+        return acc;
+      },
+      {}
+    );
+
+    fetchOpportunities(sanitizedFilters, true);
+  }, [dashboardFilters]);
+
+  function handleRowsChange(newMaxRows) {
+    if (rows !== newMaxRows) setRows(newMaxRows);
+  }
+
+  function handlePageChange(newPage) {
+    if (page !== newPage) setPage(newPage);
+  }
+
+  return (
+    <>
+      <section id="all-tab" className="tab-content">
+        {loading ? (
+          <Loader
+            type="TailSpin"
+            color="#297DFD"
+            height={100}
+            width={100}
+            className="loading"
+          />
+        ) : (
+          <RenderSelectedView
+            viewType={selectedViewType}
+            items={items}
+            allFlags={allFlags}
+          />
+        )}
+      </section>
+      {totalItems > 15 && (
+        <PaginationSummary
+          page={page}
+          maxRows={rows}
+          total={totalItems}
+          onMaxRowsChange={newMaxRows => handleRowsChange(newMaxRows)}
+          onPageChange={newPage => handlePageChange(newPage)}
+        />
+      )}
+    </>
+  );
+}
+
+export default AllTab;

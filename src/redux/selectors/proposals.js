@@ -1,6 +1,7 @@
 // @flow
 import { Map } from 'immutable'; // NOSONAR
 import { isEmpty } from 'lodash';
+import { createSelector } from 'reselect';
 
 export const getProposals = (proposals: Map): Array<Object> => {
   const notEmptyProposals = !isEmpty(proposals.get('proposals'))
@@ -54,3 +55,10 @@ export const getPaginationSize = (proposals: Map): Object =>
   proposals.get('paginationSize');
 
 export const getFrom = (proposals: Map): Object => proposals.get('from');
+
+const selectProposals = state => state.proposals;
+
+export const selectDashbordFilters = createSelector(
+  selectProposals,
+  proposals => proposals.get('dashboardFilters')
+);

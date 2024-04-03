@@ -25,7 +25,8 @@ const {
   UPDATE_PROPOSAL_DETAIL_SF,
   TOTAL_COUNT,
   PAGINATION_SIZE,
-  FROM
+  FROM,
+  SET_DASHBOARD_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -43,7 +44,21 @@ const INITIAL_STATE: Map = fromJS({
   nonEditableSF: [],
   totalCount: 0,
   paginationSize: 15,
-  from: 0
+  from: 0,
+  dashboardFilters: {
+    opportunityNumber: '',
+    opportunityName: '',
+    customer: '',
+    protocolNumber: '',
+    phase: '',
+    product: '',
+    therapeuticArea: '',
+    indication: '',
+    bidDueDate: '',
+    opportunityStatus: '',
+    teamMember: '',
+    opportunityCustomname: ''
+  }
 });
 
 const setProposals = (state: Map, action: Object): Map => {
@@ -319,7 +334,9 @@ const actionMap = {
   [TOTAL_COUNT]: (state, action) => state.set('totalCount', action.payload),
   [PAGINATION_SIZE]: (state, action) =>
     state.set('paginationSize', action.payload),
-  [FROM]: (state, action) => state.set('from', action.payload)
+  [FROM]: (state, action) => state.set('from', action.payload),
+  [SET_DASHBOARD_FILTERS]: (state, action) =>
+    state.set('dashboardFilters', action.payload)
 };
 
 export default function(
