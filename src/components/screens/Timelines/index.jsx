@@ -29,6 +29,7 @@ import {
   setShowAddModal,
   setTimelineDateRange
 } from '../../../redux/actions/timeline-actions';
+import { parseCorrectDate } from '../../../utils/DateUtils';
 
 export const generateSections = proposalQuestions => {
   try {
@@ -152,8 +153,14 @@ const Timeline = () => {
         const eventss = {
           id: question.questionId,
           title: question.questionText,
-          start: new Date(lastAnswer?.answer),
-          end: new Date(lastAnswer?.answer),
+          start:
+            lastAnswer?.userName === 'AnswerPulledFromSalesforce'
+              ? parseCorrectDate(lastAnswer?.answer)
+              : new Date(lastAnswer?.answer),
+          end:
+            lastAnswer?.userName === 'AnswerPulledFromSalesforce'
+              ? parseCorrectDate(lastAnswer?.answer)
+              : new Date(lastAnswer?.answer),
           isDraggable: isEditable,
           color:
             lastAnswer?.user === 'UnityPredictedAnswer' ? '#0768FD' : '#00C221',

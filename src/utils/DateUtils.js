@@ -31,10 +31,15 @@ export const getRemainingDays = (date: string): number | string => {
   return daysRemaing;
 };
 
+export function parseCorrectDate(DateString) {
+  const utc = new Date(DateString);
+  return new Date(utc.getTime() + utc.getTimezoneOffset() * 60000);
+};
+
 export const parseMomentDate = (date: Date | string) => {
   return !date || date === ' '
     ? date
-    : moment(new Date(date)).format('D-MMM-yyyy');
+    : moment(date).format('D-MMM-yyyy');
 };
 
 export const formatTheDate = (date: Date | string) => {
