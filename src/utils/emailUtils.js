@@ -219,39 +219,31 @@ export function generateApprovalEmailInfo(
         decisionQuestion.answers[decisionQuestion.answers.length - 1].answer;
     }
     // find decision answer
-    emailSubject = `${decisionAnswer ? decisionAnswer + ': ' : ''}${
-      approvalSection.ApprovalSectionTitle
-    } for ${proposalDetails['Customer'] || ''} ${
-      proposalDetails['Phase'] || ''
-    } ${proposalDetails['Therapeutic area'] || ''} (Opportunity ${
-      proposalDetails['CRM #'] || ''
-    } Bid ${proposalDetails['bidNo'] || ''})`;
+    emailSubject = `${decisionAnswer ? decisionAnswer + ': ' : ''}${approvalSection.ApprovalSectionTitle
+      } for ${proposalDetails['Customer'] || ''} ${proposalDetails['Phase'] || ''
+      } ${proposalDetails['Therapeutic area'] || ''} (Opportunity ${proposalDetails['CRM #'] || ''
+      } Bid ${proposalDetails['bidNo'] || ''})`;
     emailBody = `<div id="approval-email-content">
     <p>Hello,</p>`;
-    emailBody += `<p>Below is a summary of the ${
-      approvalSection.ApprovalSectionTitle
-    }${decisionAnswer ? ' - ' + decisionAnswer : ''}:</p>`;
+    emailBody += `<p>Below is a summary of the ${approvalSection.ApprovalSectionTitle
+      }${decisionAnswer ? ' - ' + decisionAnswer : ''}:</p>`;
     emailBody += `<br/><table cellpadding="0" cellspacing="0" class="summary-table">
     <tbody>
-      <tr><td><p>Customer</p></td><td><p>${
-        proposalDetails['Customer'] || ''
+      <tr><td><p>Customer</p></td><td><p>${proposalDetails['Customer'] || ''
       }</p></td></tr>
-      <tr><td>Protocol Title</td><td>${
-        proposalDetails['Product name'] || ''
+      <tr><td>Protocol Title</td><td>${proposalDetails['Product name'] || ''
       }</td></tr>
-      <tr><td>Indication</td><td>${
-        proposalDetails['Verbatim indication'] || ''
+      <tr><td>Indication</td><td>${proposalDetails['Verbatim indication'] || ''
       }</td></tr>
       <tr><td>Phase</td><td>${proposalDetails['Phase'] || ''}</td></tr>
       <tr><td>Bid Number</td><td>${proposalDetails['bidNo'] || ''}</td></tr>
-      <tr><td>Due Date</td><td>${
-        String(new Date(proposalDetails?.['Bid due date'] || '')).includes(
-          'Invalid'
-        ) || !String(proposalDetails?.['Bid due date'] || '').length
-          ? ''
-          : moment(proposalDetails?.['Bid due date'] || '').format(
-              'DD-MMM-YYYY'
-            )
+      <tr><td>Due Date</td><td>${String(new Date(proposalDetails?.['Bid due date'] || '')).includes(
+        'Invalid'
+      ) || !String(proposalDetails?.['Bid due date'] || '').length
+        ? ''
+        : moment(proposalDetails?.['Bid due date'] || '').format(
+          'DD-MMM-YYYY'
+        )
       }</td></tr>
     </tbody></table>`;
     emailBody += `<br/><table><thead>`;
@@ -385,9 +377,28 @@ export function generateEmailTemplateEmail(
 ) {
   return `https://outlook.office.com/?path=/mail/action/compose&to=${to.join(
     ','
-  )}?cc=${cc.join(',')}&subject=${subject}&body=${
-    body
-      ? `Unity%20has%20copied%20the%20configured%20email%20content%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20into%20the%20Body%20of%20this%20email.`
-      : ''
-  }&online=1`;
+  )}?cc=${cc.join(',')}&subject=${subject}&body=${body
+    ? `Unity%20has%20copied%20the%20configured%20email%20content%20to%20your%20clipboard.%20Press%20Control%20%2B%20V%20to%20paste%20this%20content%20into%20the%20Body%20of%20this%20email.`
+    : ''
+    }&online=1`;
+}
+
+export function generateEmailInClientApplication(body = '', subject = '', to = [], cc = []) {
+  const toEncode = encodeURIComponent(to.join(', '));
+  const ccEncode = encodeURIComponent(cc.join(', '));
+  const subjectEncode = encodeURIComponent(subject)
+  const bodyEncode = body
+    ? encodeURIComponent(
+      'Unity has copied the approval section details to your clipboard. Press Control + V to paste the content to include it in your mail and share it with your team.'
+    )
+    : '';
+  let mailtoLink = 'mailto:';
+  if (toEncode) mailtoLink += `${toEncode}`;
+  if (ccEncode) mailtoLink += `?cc=${ccEncode}`;
+  if (!ccEncode && subjectEncode) mailtoLink += `?subject=${subjectEncode}`;
+  if (ccEncode && subjectEncode) mailtoLink += `&subject=${subjectEncode}`;
+  if ((ccEncode || subjectEncode) && bodyEncode) mailtoLink += `&body=${bodyEncode}`;
+  if (!(ccEncode || subjectEncode) && bodyEncode) mailtoLink += `?body=${bodyEncode}`;
+
+  return mailtoLink;
 }

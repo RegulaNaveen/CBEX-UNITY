@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { debounce } from 'lodash';
 import {
   setProposalTypeView,
-  onFilteringProposals
+  onFilteringProposals,
+  setDashboardFilters
 } from '../../redux/actions/proposals-actions';
 import { SecondaryButton } from '../common/atoms/Buttons';
 import TabItem from '../common/atoms/TabItem';
@@ -56,8 +57,9 @@ class Tabbar extends Component<Props, State> {
 
     this.debounceFilterChange = debounce((id, value) => {
       const { filters } = this.state;
-      const { filterProposals } = this.props;
+      const { filterProposals, setDashboardFilters } = this.props;
       this.setState({ filters: { ...filters, [id]: value } }, () => {
+        setDashboardFilters(this.state.filters);
         const { filters: newFilters, selected } = this.state;
         filterProposals(newFilters, selected);
         this.fileterCount();
@@ -109,9 +111,10 @@ class Tabbar extends Component<Props, State> {
 
   onDropDownFilterChange = (id: string, value: string) => {
     const { filters } = this.state;
-    const { filterProposals } = this.props;
+    const { filterProposals, setDashboardFilters } = this.props;
 
     this.setState({ filters: { ...filters, [id]: value } }, () => {
+      setDashboardFilters(this.state.filters);
       const { filters: newFilters, selected } = this.state;
       filterProposals(newFilters, selected);
       this.fileterCount();
@@ -121,9 +124,10 @@ class Tabbar extends Component<Props, State> {
 
   onDateRangeChange = (id: string, range: Object) => {
     const { filters } = this.state;
-    const { filterProposals } = this.props;
+    const { filterProposals, setDashboardFilters } = this.props;
 
     this.setState({ filters: { ...filters, [id]: range } }, () => {
+      setDashboardFilters(this.state.filters);
       const { filters: newFilters, selected } = this.state;
       filterProposals(newFilters, selected);
       this.fileterCount();
@@ -139,7 +143,7 @@ class Tabbar extends Component<Props, State> {
   };
 
   clearFilter = () => {
-    const { filterProposals } = this.props;
+    const { filterProposals, setDashboardFilters } = this.props;
     this.setState(
       {
         filters: {
@@ -160,6 +164,7 @@ class Tabbar extends Component<Props, State> {
         }
       },
       () => {
+        setDashboardFilters(this.state.filters);
         const { selected } = this.state;
         if (document.getElementById('opportunity number')) {
           document.getElementById('opportunity number').value = '';
@@ -299,7 +304,8 @@ class Tabbar extends Component<Props, State> {
 
 const TabBarComponent = connect(null, {
   setProposalView: setProposalTypeView,
-  filterProposals: onFilteringProposals
+  filterProposals: onFilteringProposals,
+  setDashboardFilters: setDashboardFilters
 })(AnalyticsHOC(Tabbar));
 
 export default TabBarComponent;

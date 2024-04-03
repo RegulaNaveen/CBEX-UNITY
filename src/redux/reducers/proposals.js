@@ -22,7 +22,11 @@ const {
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_DASHBOARD_BID,
   UPDATE_DASHBOARD_OPPORTUNITY,
-  UPDATE_PROPOSAL_DETAIL_SF
+  UPDATE_PROPOSAL_DETAIL_SF,
+  TOTAL_COUNT,
+  PAGINATION_SIZE,
+  FROM,
+  SET_DASHBOARD_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 const INITIAL_STATE: Map = fromJS({
@@ -37,7 +41,24 @@ const INITIAL_STATE: Map = fromJS({
   page: 1,
   numRows: 15,
   assignTabRows: 15,
-  nonEditableSF: []
+  nonEditableSF: [],
+  totalCount: 0,
+  paginationSize: 15,
+  from: 0,
+  dashboardFilters: {
+    opportunityNumber: '',
+    opportunityName: '',
+    customer: '',
+    protocolNumber: '',
+    phase: '',
+    product: '',
+    therapeuticArea: '',
+    indication: '',
+    bidDueDate: '',
+    opportunityStatus: '',
+    teamMember: '',
+    opportunityCustomname: ''
+  }
 });
 
 const setProposals = (state: Map, action: Object): Map => {
@@ -309,10 +330,16 @@ const actionMap = {
   [UPDATE_DASHBOARD_BID]: updateDashboradBid,
   [UPDATE_DASHBOARD_OPPORTUNITY]: updateDasboardSF,
   [UPDATE_PROPOSAL_DETAIL_SF]: updateBidStopStatus,
-  [DASHBOARD_PROPOSAL_DETAIL]: updateBidStopStatus
+  [DASHBOARD_PROPOSAL_DETAIL]: updateBidStopStatus,
+  [TOTAL_COUNT]: (state, action) => state.set('totalCount', action.payload),
+  [PAGINATION_SIZE]: (state, action) =>
+    state.set('paginationSize', action.payload),
+  [FROM]: (state, action) => state.set('from', action.payload),
+  [SET_DASHBOARD_FILTERS]: (state, action) =>
+    state.set('dashboardFilters', action.payload)
 };
 
-export default function (
+export default function(
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {
