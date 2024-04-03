@@ -3,7 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getSelectedBid } from '../../../redux/selectors/proposal';
-import { parseMomentDate } from '../../../utils/DateUtils';
+import { parseMomentDate, parseCorrectDate } from '../../../utils/DateUtils';
 
 const CustomComponents = {
   dateCellWrapper: dateCellWrapperProps => {
@@ -11,11 +11,13 @@ const CustomComponents = {
     const { isCurrent } = selectedBid;
 
     const BidCreationDateAnnotation =
-      parseMomentDate(dateCellWrapperProps.value) ===
-      parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDate);
+      moment(dateCellWrapperProps.value).format('D-MMM-YYYY') ===
+      parseMomentDate(
+        parseCorrectDate(dateCellWrapperProps.currentBidDetails[0].bidDate)
+      );
 
     const BidDueDateAnnotation =
-      parseMomentDate(dateCellWrapperProps.value) ===
+      moment(dateCellWrapperProps.value).format('D-MMM-YYYY') ===
       parseMomentDate(dateCellWrapperProps.currentBidDetails[0].bidDueDate);
 
     const isPastDate =
