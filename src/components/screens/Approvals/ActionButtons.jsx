@@ -19,7 +19,8 @@ import {
 import { selectCanSendEmail } from '../../../redux/selectors/approvals';
 import {
   generateApprovalEmailInfo,
-  generateApprovalEmailURL
+  generateApprovalEmailURL,
+  generateEmailInClientApplication
 } from '../../../utils/emailUtils';
 import { getProposalDetails } from '../../../redux/selectors';
 import { APPROVALS, DEFAULT } from '../../../constants/app';
@@ -214,8 +215,12 @@ const ActionButtons = ({
         e
       );
     }
-    window.open(
-      generateApprovalEmailURL(emailInfo.subject, emailInfo.to, emailInfo.cc)
+
+    window.location.href = generateEmailInClientApplication(
+      emailInfo.body,
+      emailInfo.subject,
+      emailInfo.to,
+      emailInfo.cc
     );
   }
   const deleteAfterConfirmHandler = () => {
