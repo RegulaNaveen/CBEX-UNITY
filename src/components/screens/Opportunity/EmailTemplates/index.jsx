@@ -22,7 +22,6 @@ import {
   getSelectedBid,
   selectSections
 } from '../../../../redux/selectors';
-import { generateEmailTemplateEmail } from '../../../../utils/emailUtils';
 import { updateEventSubjectBody } from '../../../../utils/utils';
 import { isMap } from 'lodash';
 import {
@@ -470,8 +469,8 @@ const EmailTemplates = () => {
         'body'
       );
 
-      const to = encodeURIComponent(EmailTemplateTORolesAnswer.join(','));
-      const cc = encodeURIComponent(EmailTemplateCCRoleAnswer.join(','));
+      const to = encodeURIComponent(EmailTemplateTORolesAnswer.join(', '));
+      const cc = encodeURIComponent(EmailTemplateCCRoleAnswer.join(', '));
       const body = updatedBody
         ? encodeURIComponent(
             'Unity has copied the configured email content to your clipboard. Press Control + V to paste this content into the Body of this email.'
