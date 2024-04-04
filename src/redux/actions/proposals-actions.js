@@ -330,16 +330,6 @@ export const onFilteringProposals = (
             );
             data = response.data;
           }
-        } else {
-          const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals({
-            from,
-            size,
-            filter: {}
-          });
-          data = response.data.data;
-          const count = response.data.count;
-          dispatch({ type: TOTAL_COUNT, payload: count });
         }
       }
       if (!isEmpty(data)) {

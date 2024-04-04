@@ -36,10 +36,10 @@ function PaginationSummary({
   onPageChange
 }) {
   return (
-    <div className="pagination-container">
-      <div className="size-container">
+    <div className="cmplx" data-testid="complex-pagination">
+      <div className="cmplx__rows">
         <p>Show</p>
-        <div className="dd-container">
+        <div className="cmplx__dd__container">
           <Dropdown
             value={maxRows}
             onClick={onMaxRowsChange}
@@ -48,7 +48,7 @@ function PaginationSummary({
         </div>
         <span style={{ paddingLeft: 5 }}>Opportunities per page</span>
       </div>
-      <p>
+      <p className="cmplx__items">
         {showCount({
           page,
           maxRows,
@@ -56,6 +56,7 @@ function PaginationSummary({
         })}
       </p>
       <Pagination
+        page={page}
         maxRows={maxRows}
         totalItems={total}
         getCurrentPage={newPage => onPageChange(newPage)}
@@ -85,13 +86,70 @@ function AllTab({ allFlags }) {
     [favourites]
   );
 
-  async function fetchOpportunities(filters = {}, reset = false) {
+  async function fetchOpportunities(reset = false) {
     try {
       setLoading(true);
+      const sanitizedFilters = Object.entries(dashboardFilters).reduce(
+        (acc, [key, value]) => {
+          if (value && value.length !== 0) {
+            switch (key) {
+              case 'opportunity number':
+                acc.opportunityNumber = value;
+                break;
+              case 'opportunityName':
+                acc.opportunityName = value;
+                break;
+              case 'customer':
+                acc.customer = value;
+                break;
+              case 'protocol number':
+                acc.protocolNumber = value;
+                break;
+              case 'product':
+                acc.product = value;
+                break;
+              case 'verbatim indication':
+                acc.verbatimIndication = value;
+                break;
+              case 'phase':
+                acc.phase = value;
+                break;
+              case 'therapeuticArea':
+                acc.therapeuticArea = value;
+                break;
+              case 'opportunity status':
+                acc.opportunityStatus = value;
+                break;
+              case 'bid due date': {
+                const bidDueDate = getDateRangeFormatted(value);
+                if (bidDueDate) {
+                  acc.bidDueDate = bidDueDate;
+                }
+                break;
+              }
+              case 'teamMember': {
+                const userMail = getUserMail(value);
+                if (userMail) {
+                  acc.teamMember = userMail;
+                }
+                break;
+              }
+              case 'Customized opportunity name': {
+                acc.opportunityCustomname = value;
+                break;
+              }
+              default:
+                break;
+            }
+          }
+          return acc;
+        },
+        {}
+      );
       const response = await OpportunitiesApi.getOpportunities(
         reset ? 0 : page * rows - rows,
         rows,
-        filters
+        sanitizedFilters
       );
       if (response.status === 200) {
         setTotalItems(response.data.count);
@@ -179,7 +237,8 @@ function AllTab({ allFlags }) {
       {}
     );
 
-    fetchOpportunities(sanitizedFilters, true);
+    fetchOpportunities(true);
+    setPage(1);
   }, [dashboardFilters]);
 
   function handleRowsChange(newMaxRows) {
