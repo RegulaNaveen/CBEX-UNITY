@@ -384,23 +384,23 @@ export const onFilteringProposals = (
   };
 };
 
-export const getFilteringValues = (): ThunkAction<String, Object> => async (
-  dispatch: Dispatch<Object, Object>
-) => {
-  try {
-    const { data } = await onGetFilterValues();
+export const getFilteringValues =
+  (): ThunkAction<String, Object> =>
+  async (dispatch: Dispatch<Object, Object>) => {
+    try {
+      const { data } = await onGetFilterValues();
 
-    if (data) {
-      const { acceptanceCriteriaValues } = data;
-      dispatch({
-        type: ON_SET_PROPOSALS_FILTERS,
-        payload: { proposalsFilters: acceptanceCriteriaValues }
-      });
+      if (data) {
+        const { acceptanceCriteriaValues } = data;
+        dispatch({
+          type: ON_SET_PROPOSALS_FILTERS,
+          payload: { proposalsFilters: acceptanceCriteriaValues }
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
 export const setProposalTypeView = (
   typeView: 0 | 1
@@ -427,59 +427,88 @@ export const setAssignedTabNumberOfRowsAction = (rowsCount: Number) => {
   };
 };
 
-export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
-  dispatch: Dispatch<Object, Object>
-) => {
-  try {
-    const { data } = await onGetSFNonEditabelField();
-    if (data) {
-      dispatch({
-        type: NON_EDITABLE_SF_FIELD,
-        payload: data
-      });
+export const getSFNonEditabelField =
+  (): ThunkAction<String, Object> =>
+  async (dispatch: Dispatch<Object, Object>) => {
+    try {
+      const { data } = await onGetSFNonEditabelField();
+      if (data) {
+        dispatch({
+          type: NON_EDITABLE_SF_FIELD,
+          payload: data
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
-export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
-  dispatch,
-  getState
-) => {
-  try {
-    let proposalsFavourite = getFavouriteProposals(getState());
-    let proposals = getProposals(getState());
-    const proposalIndex = proposals.findIndex(
-      proposal => proposal['opportunity number'] === oppNumber
-    );
-    if (proposalIndex > -1) {
-      proposals[proposalIndex]['isFavourite'] = favourite;
-      dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
-    }
-
-    const proposalCheck = proposalsFavourite.some(
-      proposal => proposal['opportunity number'] === oppNumber
-    );
-    if (!proposalCheck && favourite) {
-      delete proposalDetails.favourite;
-      const { dataFromGrid } = proposalDetails;
-      proposalDetails['isFavourite'] = favourite;
-      proposals[proposalIndex]
-        ? proposalsFavourite.unshift(proposals[proposalIndex])
-        : dataFromGrid
-        ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails))
-        : proposalsFavourite.unshift(proposalDetails);
-      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
-    }
-    if (proposalCheck && !favourite) {
-      let index = proposalsFavourite.findIndex(
+export const updateProposal =
+  (oppNumber, favourite, proposalDetails) => async (dispatch, getState) => {
+    try {
+      let proposalsFavourite = getFavouriteProposals(getState());
+      let proposals = getProposals(getState());
+      const proposalIndex = proposals.findIndex(
         proposal => proposal['opportunity number'] === oppNumber
       );
-      proposalsFavourite.splice(index, 1);
-      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['isFavourite'] = favourite;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+
+      const proposalCheck = proposalsFavourite.some(
+        proposal => proposal['opportunity number'] === oppNumber
+      );
+      if (!proposalCheck && favourite) {
+        delete proposalDetails.favourite;
+        const { dataFromGrid } = proposalDetails;
+        proposalDetails['isFavourite'] = favourite;
+        proposals[proposalIndex]
+          ? proposalsFavourite.unshift(proposals[proposalIndex])
+          : dataFromGrid
+          ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails))
+          : proposalsFavourite.unshift(proposalDetails);
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+      if (proposalCheck && !favourite) {
+        let index = proposalsFavourite.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        proposalsFavourite.splice(index, 1);
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
+  };
+
+export const updateDashboardNextMilestone = (
+  oppNumber,
+  nextMilestone,
+  proposalId
+) => {
+  return async (dispatch, getState) => {
+    try {
+      let proposals = getProposals(getState());
+      let proposalsFavourite = getFavouriteProposals(getState());
+      const proposalIndex = proposals.findIndex(
+        proposal => proposal['proposalId'] === proposalId
+      );
+      const favouriteIndex = proposalsFavourite.findIndex(
+        proposal => proposal['proposalId'] === proposalId
+      );
+
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+
+      if (favouriteIndex > -1) {
+        proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 };
