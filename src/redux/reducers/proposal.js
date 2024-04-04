@@ -7,6 +7,7 @@ import { getUniqueMilestones } from '../selectors/proposal';
 import { getQuestionsFilterApplied } from '../actions/proposal-actions';
 import { OpportunitySFUpDATE } from '../../constants/app';
 import moment from 'moment';
+import { getNextMilestone } from '../../utils/utils';
 const {
   PROPOSAL_INFO,
   PROPOSAL_INFO_LOADING,
@@ -481,7 +482,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     bidStopStatus,
     isApprovalCountPresent,
     proposalDate,
-    bidType
+    bidType,
+    nextMilestone = []
   } = bidProposal;
 
   let selectedBid = Map({
@@ -504,7 +506,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     opportunityId: proposalDetails['opportunityId'],
     proposalDate,
     typeOfWidget: payload.bid?.typeOfWidget || '',
-    nextMilestone: payload.bid.nextMilestone || '',
+    nextMilestone: getNextMilestone(nextMilestone) || '',
     typeOfActivity: proposalDetails['typeOfActivity'],
     describeActivity: proposalDetails['describeActivity'],
     requestDetail: proposalDetails['requestDetail'],
@@ -537,6 +539,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
       .set('questionsFilter', questionsFilter)
       .set('isProposalLoading', false)
       .set('selectedBid', selectedBid)
+      .set('nextMilestone', nextMilestone)
       .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal])
       .set('changebidloader', false);
   }
@@ -544,6 +547,7 @@ const onChangeBid = (state: Map, action: Object): Map => {
     .set('proposalDetails', proposalDetails)
     .set('isProposalLoading', false)
     .set('selectedBid', selectedBid)
+    .set('nextMilestone', nextMilestone)
     .setIn(['opportunityData', payload.bid.bidId, 'proposal', bidProposal])
     .set('changebidloader', false);
 };
