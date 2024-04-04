@@ -19,6 +19,7 @@ import {
 } from '../selectors/sso-auth';
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
+import { getPage, getNumOfRows } from '../selectors/proposals';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -37,7 +38,8 @@ const {
   UPDATE_DASHBOARD_OPPORTUNITY,
   TOTAL_COUNT,
   PAGINATION_SIZE,
-  FROM
+  FROM,
+  SET_DASHBOARD_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
@@ -64,7 +66,7 @@ const formatProposalGrid = proposal => {
   return formatted;
 };
 
-const formatProposal = (
+export const formatProposal = (
   proposal: Object,
   favoritesMap: Object,
   customNameMap: Object = {}
@@ -184,7 +186,7 @@ type FilteredData = {
   teamMember: string
 };
 
-const getUserMail = lookupValue => {
+export const getUserMail = lookupValue => {
   const results = /\((.*)\)/.exec(lookupValue);
   if (results !== null) {
     return results[1];
@@ -192,7 +194,7 @@ const getUserMail = lookupValue => {
   return null;
 };
 
-const getDateRangeFormatted = range => {
+export const getDateRangeFormatted = range => {
   if (range) {
     return {
       s: moment(range.from).format('yyyy-MM-DD'),
@@ -213,7 +215,9 @@ export const setPageAction = (page: Number) => {
 
 export const onFilteringProposals = (
   filters: FilteredData,
-  tabIndex: Number
+  tabIndex: Number,
+  from: number = 0,
+  size: number = 15
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
@@ -326,18 +330,6 @@ export const onFilteringProposals = (
             );
             data = response.data;
           }
-        } else {
-          const userEmail = localStorage.getItem('userEmail') || '';
-          const paginationSize = getState().proposals.toJS().paginationSize;
-          const from = getState().proposals.toJS().from;
-          const response = await onGetAllProposals({
-            from: from,
-            size: paginationSize,
-            filter: {}
-          });
-          data = response.data.data;
-          const count = response.data.count;
-          dispatch({ type: TOTAL_COUNT, payload: count });
         }
       }
       if (!isEmpty(data)) {
@@ -511,3 +503,10 @@ export const setFrom = from => ({
   type: FROM,
   payload: from
 });
+
+export const setDashboardFilters = filters => async (dispatch, getState) => {
+  dispatch({
+    type: SET_DASHBOARD_FILTERS,
+    payload: filters
+  });
+};
