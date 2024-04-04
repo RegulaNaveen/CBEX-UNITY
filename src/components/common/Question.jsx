@@ -577,20 +577,24 @@ export class TaskRow extends React.PureComponent<Props, State> {
         parseMomentDate(lastAnswer.trim()) !==
           parseMomentDate(selectedDay.trim()) &&
         selectedDay
-      )
-        setProposalAnswer(
-          this.context,
-          proposalId,
-          questionId,
-          formatTheDate(selectedDay),
-          userData
-        );
-      if (sfField && this.context) {
-        this.context.updateDashboardSFValueWrapper(
-          oppNo,
-          sfField,
-          formatTheDate(selectedDay)
-        );
+      ) {
+        if (selectedDay.trim() !== '') {
+          // Only make the API call if selectedDay is not empty
+          setProposalAnswer(
+            this.context,
+            proposalId,
+            questionId,
+            formatTheDate(selectedDay),
+            userData
+          );
+          if (sfField && this.context) {
+            this.context.updateDashboardSFValueWrapper(
+              oppNo,
+              sfField,
+              formatTheDate(selectedDay)
+            );
+          }
+        }
       }
     });
     this.trackEventSubmitAnswer(selectedDay);
