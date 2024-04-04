@@ -253,7 +253,7 @@ const AUTH = {
 };
 
 const PROPOSAL_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals`;
-const PROPOSAL_API_ALL = `${PROPOSAL_API_URL}/all`;
+const PROPOSAL_API_ALL = `${PROPOSAL_API_URL}/v2/all`;
 const NON_EDITABLE_SF_FIELD_URL = `${PROPOSAL_API_ENDPOINT}/api/questions/noneditablesffield`;
 const PROPOSAL_API_ALL_BY_STATUS = `${PROPOSAL_API_URL}/all-by-status`;
 const PROPOSAL_QUESTIONS_API_URL = `${PROPOSAL_API_ENDPOINT}/api/questions`;

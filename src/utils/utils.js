@@ -119,8 +119,7 @@ export const getTableView = tableConfig => {
     text-align: left !important;
     font-size: 16px;
     border: 1px solid #e9e9e9 !important;
-    background-color: #f8f9fb;color:#000000'>${
-      column?.header ? column?.header : ''
+    background-color: #f8f9fb;color:#000000'>${column?.header ? column?.header : ''
       }</th>`
   )}
   </tr>
@@ -129,16 +128,14 @@ export const getTableView = tableConfig => {
   ${tableConfig?.rows.map(
     row =>
       `<tr>
-      ${
-        !row?.hidden &&
+      ${!row?.hidden &&
       `<td  style='width: 200px;
       padding: 10px 0px 10px 10px;
       text-align: left;
       font-size: 16px;
       border: 1px solid #e9e9e9 !important;
       border-right: 1px solid #e9e9e9 !important;
-      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`
-      }
+      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`}
       ${tableConfig.columns.map(
         column =>
           column?.accessor !== 'header' &&
@@ -148,8 +145,7 @@ export const getTableView = tableConfig => {
         text-align: left;
         font-size: 16px;
         border: 1px solid #e9e9e9 !important;
-        border-right: 1px solid #e9e9e9 !important;'>${
-          row[column?.accessor] ? row[column?.accessor] : ''
+        border-right: 1px solid #e9e9e9 !important;'>${row[column?.accessor] ? row[column?.accessor] : ''
           }</td>`
       )}
       </tr>`
@@ -292,7 +288,7 @@ const replaceAnswerToQuestionsPlaceholders = (
       // check if empty p tag is present
       updatedEventBodyStr = updatedEventBodyStr.replace(
         regexEmptyPTag,
-        '<p style="height:26px;margin:0px;"></p>'
+        '<p><br /></p>'
       );
     }
   }
@@ -319,16 +315,14 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ? relevantQuestions
       ?.map(
         q =>
-          `${q.questionText ?? ''} \r\n${
-              q.answers?.slice(-1)[0]?.answer ?? ''
-          } \r\n`
+          `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+          ''} \r\n`
       )
       .join('')
     : `<ul>${relevantQuestions
       ?.map(
         q =>
-          `<li>${q.questionHTML}</li>${
-              getAnswer(q.answers)
+          `<li>${q.questionHTML}</li>${getAnswer(q.answers)
             ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
             : ''
           }`

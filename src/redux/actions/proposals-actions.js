@@ -19,6 +19,7 @@ import {
 } from '../selectors/sso-auth';
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
+import { getPage, getNumOfRows } from '../selectors/proposals';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -34,7 +35,11 @@ const {
   ON_GET_FAVOURITE,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_DASHBOARD_BID,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  TOTAL_COUNT,
+  PAGINATION_SIZE,
+  FROM,
+  SET_DASHBOARD_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
@@ -61,7 +66,7 @@ const formatProposalGrid = proposal => {
   return formatted;
 };
 
-const formatProposal = (
+export const formatProposal = (
   proposal: Object,
   favoritesMap: Object,
   customNameMap: Object = {}
@@ -113,16 +118,19 @@ const formatProposal = (
 export const getAllProposals = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
-
     try {
-      const { data } = await onGetAllProposals({ source: 'es' });
-
+      const { data } = await onGetAllProposals({
+        from: 0,
+        size: 15,
+        filter: {}
+      });
       if (!isEmpty(data)) {
         const { proposals } = data;
         const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
+      console.log('error', error);
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     }
   };
@@ -178,7 +186,7 @@ type FilteredData = {
   teamMember: string
 };
 
-const getUserMail = lookupValue => {
+export const getUserMail = lookupValue => {
   const results = /\((.*)\)/.exec(lookupValue);
   if (results !== null) {
     return results[1];
@@ -186,7 +194,7 @@ const getUserMail = lookupValue => {
   return null;
 };
 
-const getDateRangeFormatted = range => {
+export const getDateRangeFormatted = range => {
   if (range) {
     return {
       s: moment(range.from).format('yyyy-MM-DD'),
@@ -207,7 +215,9 @@ export const setPageAction = (page: Number) => {
 
 export const onFilteringProposals = (
   filters: FilteredData,
-  tabIndex: Number
+  tabIndex: Number,
+  from: number = 0,
+  size: number = 15
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
@@ -322,13 +332,24 @@ export const onFilteringProposals = (
           }
         } else {
           const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals(filterPayload, userEmail);
-          data = response.data;
+          const response = await onGetAllProposals({
+            from,
+            size,
+            filter: {}
+          });
+          data = response.data.data;
+          const count = response.data.count;
+          dispatch({ type: TOTAL_COUNT, payload: count });
         }
       }
-
       if (!isEmpty(data)) {
-        const { proposals } = data;
+        let proposals = [];
+        if (Number(tabIndex) === 3) {
+          proposals = data.map(item => item?.latestProposal);
+        } else {
+          proposals = data.proposals;
+          // const { proposals } = data;
+        }
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
 
@@ -376,7 +397,6 @@ export const onFilteringProposals = (
         }
       }
     } catch (error) {
-      console.log(error);
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     } finally {
       dispatch(setPageAction(1)); // resetting page to 1
@@ -482,4 +502,21 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   } catch (error) {
     console.log(error);
   }
+};
+
+export const setPaginationSize = size => ({
+  type: PAGINATION_SIZE,
+  payload: size
+});
+
+export const setFrom = from => ({
+  type: FROM,
+  payload: from
+});
+
+export const setDashboardFilters = filters => async (dispatch, getState) => {
+  dispatch({
+    type: SET_DASHBOARD_FILTERS,
+    payload: filters
+  });
 };
