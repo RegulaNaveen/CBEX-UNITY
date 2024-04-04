@@ -359,8 +359,10 @@ const setOpportunityInfo = (state, action) => {
         .set('bidType', `Bid ${proposal?.proposal?.bidType || ''}`)
         .set(
           'earlyEngagementDevelopmentPlan',
-          `${proposal?.proposal?.proposalDetails
-            ?.earlyEngagementDevelopmentPlan || ''}`
+          `${
+            proposal?.proposal?.proposalDetails
+              ?.earlyEngagementDevelopmentPlan || ''
+          }`
         )
         .set(
           'describeActivity',
@@ -400,6 +402,10 @@ const setOpportunityInfo = (state, action) => {
           recentProposalsByType.includes(proposal?.proposal?.proposalId)
         )
         .set('bidStatus', proposal.proposal['inProgress'] || false)
+        .set(
+          'Bid due date',
+          proposal.proposal.proposalDetails['Bid due date'] || ''
+        )
         .set('agreementId', proposal.proposal['agreementId'] || '')
         .set('accountId', proposal.proposal['accountId'] || '')
         .set(
@@ -501,7 +507,8 @@ const onChangeBid = (state: Map, action: Object): Map => {
     nextMilestone: payload.bid.nextMilestone || '',
     typeOfActivity: proposalDetails['typeOfActivity'],
     describeActivity: proposalDetails['describeActivity'],
-    requestDetail: proposalDetails['requestDetail']
+    requestDetail: proposalDetails['requestDetail'],
+    'Bid due date': proposalDetails['Bid due date']
   });
 
   const proposalQuestions = payload.proposalDetails.proposalQuestions;
@@ -606,6 +613,7 @@ const addNewBid = (state: Map, action: Object): Map => {
       'opportunityStatus',
       data.proposal.opportunityOverview['OpportunityStatus'] || ''
     )
+    .set('Bid due date', data.proposal.proposalDetails['Bid due date'] || '')
     .set('isCurrent', true)
     .set('isEditable', true) // new bid is editable
     .set('bidStatus', data.proposal['inProgress'] || false)
@@ -1698,7 +1706,8 @@ const actionMap = {
   [PROPOSAL_ANSWER_LOADING]: onProposalAnswerLoading,
   [UPDATE_NOT_APPLICABLE_PROGRESS]: onProposalNAQuestionLoading,
   [UPDATE_NOT_APPLICABLE_DONE]: onUpdateProposalNAQuestionDone,
-  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]: onUpdateProposalNAQuestionFromSocketDone,
+  [UPDATE_NOT_APPLICABLE_FROM_SOCKET_DONE]:
+    onUpdateProposalNAQuestionFromSocketDone,
   [ERROR_UPDATE_NOT_APPLICABLE]: onErrorUpdateNotApplicable,
   [PROPOSAL_ANSWER_ERROR]: onProposalAnswerError,
   [QUESTION_SECTION_INFO]: onQuestionSectionInfoLoaded,
@@ -1785,7 +1794,7 @@ const actionMap = {
     state.set('changebidloader', payload)
 };
 
-export default function(
+export default function (
   state: Map<string, any> = INITIAL_STATE,
   action: ApiAction<any, any>
 ): Map {
