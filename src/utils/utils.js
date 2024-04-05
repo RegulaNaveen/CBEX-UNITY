@@ -80,8 +80,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-        : name?.trim();
+          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+          : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -119,9 +119,8 @@ export const getTableView = tableConfig => {
     text-align: left !important;
     font-size: 16px;
     border: 1px solid #e9e9e9 !important;
-    background-color: #f8f9fb;color:#000000'>${
-      column?.header ? column?.header : ''
-    }</th>`
+    background-color: #f8f9fb;color:#000000'>${column?.header ? column?.header : ''
+      }</th>`
   )}
   </tr>
   </thead>
@@ -130,7 +129,7 @@ export const getTableView = tableConfig => {
     row =>
       `<tr>
       ${!row?.hidden &&
-        `<td  style='width: 200px;
+      `<td  style='width: 200px;
       padding: 10px 0px 10px 10px;
       text-align: left;
       font-size: 16px;
@@ -146,9 +145,8 @@ export const getTableView = tableConfig => {
         text-align: left;
         font-size: 16px;
         border: 1px solid #e9e9e9 !important;
-        border-right: 1px solid #e9e9e9 !important;'>${
-          row[column?.accessor] ? row[column?.accessor] : ''
-        }</td>`
+        border-right: 1px solid #e9e9e9 !important;'>${row[column?.accessor] ? row[column?.accessor] : ''
+          }</td>`
       )}
       </tr>`
   )}
@@ -276,6 +274,12 @@ const replaceAnswerToQuestionsPlaceholders = (
       const formattedDate = moment(match).format('DD-MMM-YYYY');
       return formattedDate;
     });
+
+    const regexMarkTag = /<mark>.*?<\/mark>/g;
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      regexMarkTag,
+      `<span style="background-color: #FFFF00">$&</span>`
+    );
   }
 
   if (updatedEventBodyStr.includes('<p></p>')) {
@@ -309,22 +313,21 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ?.sort((a, b) => a.questionOrder - b.questionOrder);
   return isSubjectUpdate
     ? relevantQuestions
-        ?.map(
-          q =>
-            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
-              ''} \r\n`
-        )
-        .join('')
+      ?.map(
+        q =>
+          `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+          ''} \r\n`
+      )
+      .join('')
     : `<ul>${relevantQuestions
-        ?.map(
-          q =>
-            `<li>${q.questionHTML}</li>${
-              getAnswer(q.answers)
-                ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
-                : ''
-            }`
-        )
-        .join('')}</ul>`;
+      ?.map(
+        q =>
+          `<li>${q.questionHTML}</li>${getAnswer(q.answers)
+            ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
+            : ''
+          }`
+      )
+      .join('')}</ul>`;
 };
 
 const parseUrlText = (crm, url = '') => {
@@ -375,8 +378,8 @@ function updateEventSubjectBody(
     '[unity_link]':
       updateField === 'body'
         ? `<a href=${window.location.href}>${parseUrlText(
-            proposalDetail['CRM #']
-          )}</a>`
+          proposalDetail['CRM #']
+        )}</a>`
         : `${window.location.href}`,
     '[todays_date]': `${formatTheDate(new Date())}`,
     '[full_proposal_team]': getFullProposalTeamString(
@@ -424,7 +427,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function(data) {
+  lobMapping.forEach(function (data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {

@@ -13,6 +13,7 @@ import unityTabsReducer from './unityTabs';
 import timelineReducer from './timeline';
 import emailTemplatesReducer from './emailTemplates';
 import tasksReducer from './tasks';
+import opportunitiesReducer from './opportunities';
 
 const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
   unitytab: unityTabsReducer,
   timeline: timelineReducer,
   emailTemplates: emailTemplatesReducer,
-  tasks: tasksReducer
+  tasks: tasksReducer,
+  opportunities: opportunitiesReducer
 });
 
 export default rootReducer;

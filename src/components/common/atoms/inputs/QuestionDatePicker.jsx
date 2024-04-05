@@ -19,6 +19,7 @@ const QuestionDatePicker = ({
   const [resetsubmit, setresetsubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const datePickerRef = useRef(null);
+
   useEffect(() => {
     value = String(value)
       .trimStart()
@@ -99,6 +100,12 @@ const QuestionDatePicker = ({
           }
           if (!dte) {
             handleDayChange(' ', value);
+            if (isMandatory) {
+              // If the date is mandatory, show an error message when the date is removed
+              setErrorMessage(
+                'This is a mandatory field and it cannot be kept blank'
+              );
+            }
           } else {
             setErrorMessage('');
           }

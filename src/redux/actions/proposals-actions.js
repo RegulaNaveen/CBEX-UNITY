@@ -1,5 +1,5 @@
 // @flow
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import moment from 'moment';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../../constants';
@@ -20,6 +20,8 @@ import {
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
 import { getPage, getNumOfRows } from '../selectors/proposals';
+import { setOpportunities, updateFilters } from './opportunities';
+import { selectOpportunitiesList } from '../selectors/opportunities';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -215,9 +217,7 @@ export const setPageAction = (page: Number) => {
 
 export const onFilteringProposals = (
   filters: FilteredData,
-  tabIndex: Number,
-  from: number = 0,
-  size: number = 15
+  tabIndex: Number
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
@@ -331,15 +331,7 @@ export const onFilteringProposals = (
             data = response.data;
           }
         } else {
-          const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals({
-            from,
-            size,
-            filter: {}
-          });
-          data = response.data.data;
-          const count = response.data.count;
-          dispatch({ type: TOTAL_COUNT, payload: count });
+          dispatch(updateFilters(omit(filterPayload, ['source'])));
         }
       }
       if (!isEmpty(data)) {
@@ -470,14 +462,23 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   try {
     let proposalsFavourite = getFavouriteProposals(getState());
     let proposals = getProposals(getState());
+    let opportunities = selectOpportunitiesList(getState());
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNumber
+    );
+    const opportunityIndex = opportunities.findIndex(
+      opportunity => opportunity['opportunity number'] === oppNumber
     );
     if (proposalIndex > -1) {
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
 
+    console.log({ opportunityIndex, oppNumber, favourite });
+    if (opportunityIndex > -1) {
+      opportunities[opportunityIndex]['isFavourite'] = favourite;
+      dispatch(setOpportunities(opportunities));
+    }
     const proposalCheck = proposalsFavourite.some(
       proposal => proposal['opportunity number'] === oppNumber
     );
@@ -496,12 +497,67 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
       let index = proposalsFavourite.findIndex(
         proposal => proposal['opportunity number'] === oppNumber
       );
-      proposalsFavourite.splice(index, 1);
-      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['isFavourite'] = favourite;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+
+      const proposalCheck = proposalsFavourite.some(
+        proposal => proposal['opportunity number'] === oppNumber
+      );
+      if (!proposalCheck && favourite) {
+        delete proposalDetails.favourite;
+        const { dataFromGrid } = proposalDetails;
+        proposalDetails['isFavourite'] = favourite;
+        proposals[proposalIndex]
+          ? proposalsFavourite.unshift(proposals[proposalIndex])
+          : dataFromGrid
+          ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails))
+          : proposalsFavourite.unshift(proposalDetails);
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+      if (proposalCheck && !favourite) {
+        let index = proposalsFavourite.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        proposalsFavourite.splice(index, 1);
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
     }
   } catch (error) {
     console.log(error);
   }
+};
+
+export const updateDashboardNextMilestone = (
+  oppNumber,
+  nextMilestone,
+  proposalId
+) => {
+  return async (dispatch, getState) => {
+    try {
+      let proposals = getProposals(getState());
+      let proposalsFavourite = getFavouriteProposals(getState());
+      const proposalIndex = proposals.findIndex(
+        proposal => proposal['proposalId'] === proposalId
+      );
+      const favouriteIndex = proposalsFavourite.findIndex(
+        proposal => proposal['proposalId'] === proposalId
+      );
+
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+
+      if (favouriteIndex > -1) {
+        proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 };
 
 export const setPaginationSize = size => ({
