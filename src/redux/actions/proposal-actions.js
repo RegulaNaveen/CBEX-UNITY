@@ -54,6 +54,8 @@ import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import featureFlags from '../../constants/featureFlags';
 import proposal from '../reducers/proposal';
+import { selectOpportunitiesList } from '../selectors/opportunities';
+import { setOpportunities } from './opportunities';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -154,8 +156,9 @@ export const updateBidNoQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
     // New url
-    const newRelativePathQuery = `${window.location.pathname
-      }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -166,8 +169,9 @@ export const updateBidTypeQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
     // New url
-    const newRelativePathQuery = `${window.location.pathname
-      }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -890,7 +894,7 @@ function applyUnAnsweredFilter(questions, flags) {
                 String(Answer[Answer.length - 1].answer).trim().length
               ) ||
                 Answer[Answer.length - 1].userName ===
-                'UnityPredictedAnswer')) ||
+                  'UnityPredictedAnswer')) ||
             !Boolean(Answer.length)
           );
         }
@@ -1522,7 +1526,8 @@ export const getOpportunity = (
         // navigate to current bid
         // replace URL with correct params
         history.replace(
-          `${history.location.pathname}?bidNo=${currentProposal.proposal.proposalDetails.bidNo
+          `${history.location.pathname}?bidNo=${
+            currentProposal.proposal.proposalDetails.bidNo
           }&bidType=${currentProposal.proposal.bidType || 'Clinical_Bid'}`
         );
       }
@@ -1664,8 +1669,9 @@ export const changeBid = (bid, viewType) => {
   } else {
     searchParams.delete('viewType');
   }
-  const newRelativePathQuery = `${window.location.pathname
-    }?${searchParams.toString()}`;
+  const newRelativePathQuery = `${
+    window.location.pathname
+  }?${searchParams.toString()}`;
   // Update URL without pageload
   window.history.pushState(null, '', newRelativePathQuery);
 
@@ -2034,14 +2040,22 @@ export const onSaveCustomName = (oppNo, customName) => {
         type: UI.SHOW_SNACKBAR
       });
       let proposals = getProposals(getState());
+      let opportunities = selectOpportunitiesList(getState());
       let proposalInfo = getProposalDetails(getState());
       let proposalsFavourite = getFavouriteProposals(getState());
       const proposalIndex = proposals.findIndex(
         proposal => proposal['opportunity number'] === oppNo
       );
+      const opportunityIndex = opportunities.findIndex(
+        opportunity => opportunity['opportunity number'] === oppNo
+      );
       if (proposalIndex > -1) {
         proposals[proposalIndex]['customName'] = customName;
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+      if (opportunityIndex > -1) {
+        opportunities[opportunityIndex]['customName'] = customName;
+        dispatch(setOpportunities(opportunities));
       }
 
       const favouriteIndex = proposalsFavourite.findIndex(
@@ -2071,14 +2085,23 @@ export const updateNextMilestone = (oppNumber, nextMilestone, proposalId) => {
     if (selectedBid?.id === proposalId) {
       try {
         let proposals = getProposals(getState());
+        let opportunities = selectOpportunitiesList(getState());
         let proposalInfo = getProposalDetails(getState());
         let proposalsFavourite = getFavouriteProposals(getState());
         const proposalIndex = proposals.findIndex(
           proposal => proposal['opportunity number'] === oppNumber
         );
+        const opportunityIndex = opportunities.findIndex(
+          opportunity => opportunity['opportunity number'] === oppNumber
+        );
         if (proposalIndex > -1) {
           proposals[proposalIndex]['nextMilestone'] = nextMilestone;
           dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+        }
+
+        if (opportunityIndex > -1) {
+          opportunities[opportunityIndex]['nextMilestone'] = nextMilestone;
+          dispatch(setOpportunities(opportunities));
         }
 
         const favouriteIndex = proposalsFavourite.findIndex(
@@ -2105,6 +2128,7 @@ export const updateNextMilestone = (oppNumber, nextMilestone, proposalId) => {
 export const updateCustomNameAction = (oppNo, customName) => {
   return async (dispatch, getState) => {
     let proposals = getProposals(getState());
+    let opportunities = selectOpportunitiesList(getState());
     let proposalInfo = getProposalDetails(getState());
     let proposalsFavourite = getFavouriteProposals(getState());
     let customNameMap = selectCustomNameMap(getState()).toJS();
@@ -2113,9 +2137,17 @@ export const updateCustomNameAction = (oppNo, customName) => {
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNo
     );
+    const opportunityIndex = opportunities.findIndex(
+      opportunity => opportunity['opportunity number'] === oppNo
+    );
     if (proposalIndex > -1) {
       proposals[proposalIndex]['customName'] = customName;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+
+    if (opportunityIndex > -1) {
+      opportunities[opportunityIndex]['customName'] = customName;
+      dispatch(setOpportunities(opportunities));
     }
 
     const favouriteIndex = proposalsFavourite.findIndex(

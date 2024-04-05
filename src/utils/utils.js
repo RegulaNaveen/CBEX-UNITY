@@ -119,9 +119,8 @@ export const getTableView = tableConfig => {
     text-align: left !important;
     font-size: 16px;
     border: 1px solid #e9e9e9 !important;
-    background-color: #f8f9fb;color:#000000'>${
-      column?.header ? column?.header : ''
-    }</th>`
+    background-color: #f8f9fb;color:#000000'>${column?.header ? column?.header : ''
+      }</th>`
   )}
   </tr>
   </thead>
@@ -129,16 +128,14 @@ export const getTableView = tableConfig => {
   ${tableConfig?.rows.map(
     row =>
       `<tr>
-      ${
-        !row?.hidden &&
-        `<td  style='width: 200px;
+      ${!row?.hidden &&
+      `<td  style='width: 200px;
       padding: 10px 0px 10px 10px;
       text-align: left;
       font-size: 16px;
       border: 1px solid #e9e9e9 !important;
       border-right: 1px solid #e9e9e9 !important;
-      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`
-      }
+      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`}
       ${tableConfig.columns.map(
         column =>
           column?.accessor !== 'header' &&
@@ -148,9 +145,8 @@ export const getTableView = tableConfig => {
         text-align: left;
         font-size: 16px;
         border: 1px solid #e9e9e9 !important;
-        border-right: 1px solid #e9e9e9 !important;'>${
-          row[column?.accessor] ? row[column?.accessor] : ''
-        }</td>`
+        border-right: 1px solid #e9e9e9 !important;'>${row[column?.accessor] ? row[column?.accessor] : ''
+          }</td>`
       )}
       </tr>`
   )}
@@ -278,8 +274,31 @@ const replaceAnswerToQuestionsPlaceholders = (
       const formattedDate = moment(match).format('DD-MMM-YYYY');
       return formattedDate;
     });
+
+    const regexMarkTag = /<mark>.*?<\/mark>/g;
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      regexMarkTag,
+      `<span style="background-color: #FFFF00">$&</span>`
+    );
   }
 
+  if (updatedEventBodyStr.includes('<p></p>')) {
+    const regexEmptyPTag = /<p[^>]*><\/p>/g; // empty p tag regex
+    if (regexEmptyPTag.test(updatedEventBodyStr)) {
+      // check if empty p tag is present
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexEmptyPTag,
+        '<p><br /></p>'
+      );
+    }
+  }
+
+  if (updatedEventBodyStr.includes('<hr>')) {
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      /<hr>/g,
+      "<hr style='margin: 2rem 0;'>"
+    );
+  }
   return updatedEventBodyStr;
 };
 
@@ -294,23 +313,21 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ?.sort((a, b) => a.questionOrder - b.questionOrder);
   return isSubjectUpdate
     ? relevantQuestions
-        ?.map(
-          q =>
-            `${q.questionText ?? ''} \r\n${
-              q.answers?.slice(-1)[0]?.answer ?? ''
-            } \r\n`
-        )
-        .join('')
+      ?.map(
+        q =>
+          `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+          ''} \r\n`
+      )
+      .join('')
     : `<ul>${relevantQuestions
-        ?.map(
-          q =>
-            `<li>${q.questionHTML}</li>${
-              getAnswer(q.answers)
-                ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
-                : ''
-            }`
-        )
-        .join('')}</ul>`;
+      ?.map(
+        q =>
+          `<li>${q.questionHTML}</li>${getAnswer(q.answers)
+            ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
+            : ''
+          }`
+      )
+      .join('')}</ul>`;
 };
 
 const parseUrlText = (crm, url = '') => {
@@ -361,8 +378,8 @@ function updateEventSubjectBody(
     '[unity_link]':
       updateField === 'body'
         ? `<a href=${window.location.href}>${parseUrlText(
-            proposalDetail['CRM #']
-          )}</a>`
+          proposalDetail['CRM #']
+        )}</a>`
         : `${window.location.href}`,
     '[todays_date]': `${formatTheDate(new Date())}`,
     '[full_proposal_team]': getFullProposalTeamString(

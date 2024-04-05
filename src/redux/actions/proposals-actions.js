@@ -1,5 +1,5 @@
 // @flow
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, omit } from 'lodash';
 import moment from 'moment';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../../constants';
@@ -19,6 +19,9 @@ import {
 } from '../selectors/sso-auth';
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
+import { getPage, getNumOfRows } from '../selectors/proposals';
+import { setOpportunities, updateFilters } from './opportunities';
+import { selectOpportunitiesList } from '../selectors/opportunities';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -34,7 +37,11 @@ const {
   ON_GET_FAVOURITE,
   DASHBOARD_PROPOSAL_DETAIL,
   UPDATE_DASHBOARD_BID,
-  UPDATE_DASHBOARD_OPPORTUNITY
+  UPDATE_DASHBOARD_OPPORTUNITY,
+  TOTAL_COUNT,
+  PAGINATION_SIZE,
+  FROM,
+  SET_DASHBOARD_FILTERS
 } = REDUX_TYPES.PROPOSALS;
 
 function removeDuplicates(arr) {
@@ -61,7 +68,7 @@ const formatProposalGrid = proposal => {
   return formatted;
 };
 
-const formatProposal = (
+export const formatProposal = (
   proposal: Object,
   favoritesMap: Object,
   customNameMap: Object = {}
@@ -113,16 +120,19 @@ const formatProposal = (
 export const getAllProposals = (): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<Object, Object>) => {
     dispatch({ type: ON_PROPOSALS_LOADING, payload: {} });
-
     try {
-      const { data } = await onGetAllProposals({ source: 'es' });
-
+      const { data } = await onGetAllProposals({
+        from: 0,
+        size: 15,
+        filter: {}
+      });
       if (!isEmpty(data)) {
         const { proposals } = data;
         const formatted = proposals.map(proposal => formatProposal(proposal));
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals: formatted } });
       }
     } catch (error) {
+      console.log('error', error);
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     }
   };
@@ -178,7 +188,7 @@ type FilteredData = {
   teamMember: string
 };
 
-const getUserMail = lookupValue => {
+export const getUserMail = lookupValue => {
   const results = /\((.*)\)/.exec(lookupValue);
   if (results !== null) {
     return results[1];
@@ -186,7 +196,7 @@ const getUserMail = lookupValue => {
   return null;
 };
 
-const getDateRangeFormatted = range => {
+export const getDateRangeFormatted = range => {
   if (range) {
     return {
       s: moment(range.from).format('yyyy-MM-DD'),
@@ -321,13 +331,17 @@ export const onFilteringProposals = (
             data = response.data;
           }
         } else {
-          const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals(filterPayload, userEmail);
-          data = response.data;
+          dispatch(updateFilters(omit(filterPayload, ['source'])));
         }
       }
       if (!isEmpty(data)) {
-        const { proposals } = data;
+        let proposals = [];
+        if (Number(tabIndex) === 3) {
+          proposals = data.map(item => item?.latestProposal);
+        } else {
+          proposals = data.proposals;
+          // const { proposals } = data;
+        }
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
         const favouritesMap = favourites.reduce((favMap, fav) => {
@@ -389,7 +403,6 @@ export const onFilteringProposals = (
         }
       }
     } catch (error) {
-      console.log(error);
       dispatch({ type: ERROR_ON_GET_PROPOSALS, payload: { error } });
     } finally {
       dispatch(setPageAction(1)); // resetting page to 1
@@ -461,14 +474,23 @@ export const updateProposal =
     try {
       let proposalsFavourite = getFavouriteProposals(getState());
       let proposals = getProposals(getState());
+      let opportunities = selectOpportunitiesList(getState());
       const proposalIndex = proposals.findIndex(
         proposal => proposal['opportunity number'] === oppNumber
+      );
+      const opportunityIndex = opportunities.findIndex(
+        opportunity => opportunity['opportunity number'] === oppNumber
       );
       if (proposalIndex > -1) {
         proposals[proposalIndex]['isFavourite'] = favourite;
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
       }
 
+      console.log({ opportunityIndex, oppNumber, favourite });
+      if (opportunityIndex > -1) {
+        opportunities[opportunityIndex]['isFavourite'] = favourite;
+        dispatch(setOpportunities(opportunities));
+      }
       const proposalCheck = proposalsFavourite.some(
         proposal => proposal['opportunity number'] === oppNumber
       );
@@ -487,8 +509,32 @@ export const updateProposal =
         let index = proposalsFavourite.findIndex(
           proposal => proposal['opportunity number'] === oppNumber
         );
-        proposalsFavourite.splice(index, 1);
-        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+        if (proposalIndex > -1) {
+          proposals[proposalIndex]['isFavourite'] = favourite;
+          dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+        }
+
+        const proposalCheck = proposalsFavourite.some(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        if (!proposalCheck && favourite) {
+          delete proposalDetails.favourite;
+          const { dataFromGrid } = proposalDetails;
+          proposalDetails['isFavourite'] = favourite;
+          proposals[proposalIndex]
+            ? proposalsFavourite.unshift(proposals[proposalIndex])
+            : dataFromGrid
+            ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails))
+            : proposalsFavourite.unshift(proposalDetails);
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+        }
+        if (proposalCheck && !favourite) {
+          let index = proposalsFavourite.findIndex(
+            proposal => proposal['opportunity number'] === oppNumber
+          );
+          proposalsFavourite.splice(index, 1);
+          dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -524,4 +570,21 @@ export const updateDashboardNextMilestone = (
       console.error(error);
     }
   };
+};
+
+export const setPaginationSize = size => ({
+  type: PAGINATION_SIZE,
+  payload: size
+});
+
+export const setFrom = from => ({
+  type: FROM,
+  payload: from
+});
+
+export const setDashboardFilters = filters => async (dispatch, getState) => {
+  dispatch({
+    type: SET_DASHBOARD_FILTERS,
+    payload: filters
+  });
 };

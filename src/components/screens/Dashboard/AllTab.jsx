@@ -1,147 +1,119 @@
-// @flow
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { chunk, isEmpty } from 'lodash';
+import React, { useState, useEffect, useMemo } from 'react';
 import Loader from 'react-loader-spinner';
-import {
-  getProposalTypeView,
-  getProposals,
-  getProposalsLoading,
-  getFilteredProposals,
-  getIsFilteringProposals
-} from '../../../redux/selectors';
-import { getPage, getNumOfRows } from '../../../redux/selectors/proposals';
-import {
-  setPageAction,
-  setNumberOfRowsAction
-} from '../../../redux/actions/proposals-actions';
-import GridView from '../../views/GridView';
+import { getProposalTypeView } from '../../../redux/selectors';
+import Dropdown from '../../common/atoms/inputs/Dropdown';
+import { useSelector } from 'react-redux';
+import Pagination from '../../common/AllTabPagination';
 import TableView from '../../views/TableView';
-import ComplexPagination from '../../common/ComplexPagination';
+import GridView from '../../views/GridView';
+import {
+  selectOpportunitiesItemsPerPage,
+  selectOpportunitiesList,
+  selectOpportunitiesLoading,
+  selectOpportunitiesPage,
+  selectOpportunitiesTotal
+} from '../../../redux/selectors/opportunities';
+import { useDispatch } from 'react-redux';
+import {
+  updateItemsPerPage,
+  updatePage,
+  fetchOpportunities
+} from '../../../redux/actions/opportunities';
 
-type Props = {
-  selectedViewType: 0 | 1,
-  proposals: [Object],
-  filteredProposals: [Object],
-  isFilteringProposals: boolean,
-  loading: boolean,
-  page: Number,
-  numRows: Number,
-  setPage: Function,
-  setRows: Function,
-  allFlags: object
-};
-
-type State = {
-  numRows: number,
-  page: number,
-  pageContent: Array<Object>
-};
-
-class AllTab extends Component<Props, State> {
-  constructor(props: Object) {
-    super(props);
-    this.state = {
-      pageContent: []
-    };
-  }
-
-  componentDidMount() {
-    const { setRows } = this.props;
-    setRows(15);
-  }
-
-  componentDidUpdate(prevProps) {
-    const {
-      page,
-      numRows,
-      proposals,
-      filteredProposals,
-      isFilteringProposals
-    } = this.props;
-    const contentChanged =
-      prevProps.page !== page ||
-      prevProps.numRows !== numRows ||
-      prevProps.proposals !== proposals ||
-      prevProps.filteredProposals !== filteredProposals;
-
-    if (contentChanged) {
-      const pages = chunk(
-        isFilteringProposals ? filteredProposals : proposals,
-        numRows
-      );
-      this.setPageContent(pages[page - 1]);
-    }
-  }
-
-  renderSelectedView = () => {
-    const { selectedViewType, allFlags } = this.props;
-    const { pageContent } = this.state;
-
-    if (selectedViewType === 0) return <TableView data={pageContent} />;
-    return <GridView data={pageContent} allFlags={allFlags} />;
-  };
-
-  setPageContent = (pageContent: Array<Object>) =>
-    this.setState({ pageContent });
-
-  render() {
-    const {
-      proposals,
-      loading,
-      isFilteringProposals,
-      filteredProposals,
-      setPage,
-      setRows
-    } = this.props;
-
-    const proposalCount = isFilteringProposals
-      ? filteredProposals.length
-      : proposals.length;
-    const showPagination = isFilteringProposals
-      ? !isEmpty(filteredProposals)
-      : !isEmpty(proposals);
-    return loading ? (
-      <Loader
-        type="TailSpin"
-        color="#297DFD"
-        height={100}
-        width={100}
-        className="loading"
-      />
-    ) : (
-      <>
-        <section id="all-tab" className="tab-content">
-          {this.renderSelectedView()}
-        </section>
-        {showPagination && proposalCount > 15 && (
-          <ComplexPagination
-            totalItems={
-              isFilteringProposals ? filteredProposals.length : proposals.length
-            }
-            getCurrentPosition={setPage}
-            getMaxRows={setRows}
-          />
-        )}
-      </>
-    );
-  }
+function RenderSelectedView({ viewType, items, allFlags }) {
+  if (viewType === 0) return <TableView data={items} />;
+  return <GridView data={items} allFlags={allFlags} />;
 }
 
-const mapStateToProps = state => ({
-  selectedViewType: getProposalTypeView(state),
-  proposals: getProposals(state),
-  loading: getProposalsLoading(state),
-  filteredProposals: getFilteredProposals(state),
-  isFilteringProposals: getIsFilteringProposals(state),
+function showCount({ page, maxRows, total }) {
+  return `Showing ${page * maxRows - maxRows + 1}-${page *
+    maxRows} of ${total}`;
+}
 
-  page: getPage(state.proposals),
-  numRows: getNumOfRows(state.proposals)
-});
+function PaginationSummary({ onMaxRowsChange, onPageChange }) {
+  const page = useSelector(selectOpportunitiesPage);
+  const maxRows = useSelector(selectOpportunitiesItemsPerPage);
+  const total = useSelector(selectOpportunitiesTotal);
 
-const mapDispatchToProps = {
-  setPage: setPageAction,
-  setRows: setNumberOfRowsAction
-};
+  return (
+    <div className="cmplx" data-testid="complex-pagination">
+      <div className="cmplx__rows">
+        <p>Show</p>
+        <div className="cmplx__dd__container">
+          <Dropdown
+            value={maxRows}
+            onClick={onMaxRowsChange}
+            items={[15, 30, 45]}
+          />
+        </div>
+        <span style={{ paddingLeft: 5 }}>Opportunities per page</span>
+      </div>
+      <p className="cmplx__items">
+        {showCount({
+          page,
+          maxRows,
+          total
+        })}
+      </p>
+      <Pagination
+        page={page}
+        maxRows={maxRows}
+        totalItems={total}
+        getCurrentPage={newPage => onPageChange(newPage)}
+      />
+    </div>
+  );
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllTab);
+function AllTab({ allFlags }) {
+  const rows = useSelector(selectOpportunitiesItemsPerPage);
+  const page = useSelector(selectOpportunitiesPage);
+  const totalItems = useSelector(selectOpportunitiesTotal);
+  const items = useSelector(selectOpportunitiesList);
+  const loading = useSelector(selectOpportunitiesLoading);
+  const selectedViewType = useSelector(getProposalTypeView);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchOpportunities());
+  }, []);
+
+  function handleRowsChange(newMaxRows) {
+    if (rows !== newMaxRows) dispatch(updateItemsPerPage(newMaxRows));
+  }
+
+  function handlePageChange(newPage) {
+    if (page !== newPage) dispatch(updatePage(newPage));
+  }
+
+  return (
+    <>
+      <section id="all-tab" className="tab-content">
+        {loading ? (
+          <Loader
+            type="TailSpin"
+            color="#297DFD"
+            height={100}
+            width={100}
+            className="loading"
+          />
+        ) : (
+          <RenderSelectedView
+            viewType={selectedViewType}
+            items={items}
+            allFlags={allFlags}
+          />
+        )}
+      </section>
+      {totalItems > 15 && (
+        <PaginationSummary
+          onMaxRowsChange={newMaxRows => handleRowsChange(newMaxRows)}
+          onPageChange={newPage => handlePageChange(newPage)}
+        />
+      )}
+    </>
+  );
+}
+
+export default AllTab;
