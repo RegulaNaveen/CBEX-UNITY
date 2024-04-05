@@ -275,7 +275,6 @@ export const onFilteringProposals = (
       });
       const allFlags = getfetchAllFlags(getState());
       let data = { proposals: [] };
-      console.log('tabIndex', tabIndex);
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
@@ -342,9 +341,16 @@ export const onFilteringProposals = (
           let favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(
             getState()
           ).toJS();
-          console.log('formatted', formatted);
-          console.log('favouritesUpdatedDateMap', favouritesUpdatedDateMap);
-          favouritesUpdatedDateMap
+          const favDataWithDate = [];
+          const oldfavDataWithoutDate = [];
+          favouritesUpdatedDateMap.forEach(val => {
+            if (!val['updated date']) {
+              oldfavDataWithoutDate.push(val);
+            } else {
+              favDataWithDate.push(val);
+            }
+          });
+          favDataWithDate
             .sort((a, b) =>
               a['updated date'] > b['updated date']
                 ? 1
@@ -353,12 +359,16 @@ export const onFilteringProposals = (
                 : 0
             )
             .reverse();
-          const uniqueFavourites = favouritesUpdatedDateMap;
+          const uniqueFavourites = [
+            ...favDataWithDate,
+            ...oldfavDataWithoutDate
+          ];
           let orderedProposal = [];
           const oppNoObj = {};
           formatted.forEach(val => {
             oppNoObj[val['opportunity number']] = val;
           });
+          console.log('uniqueFavourites', uniqueFavourites);
           for (const favorite of uniqueFavourites) {
             if (
               favorite['opportunity number'] &&
@@ -367,7 +377,6 @@ export const onFilteringProposals = (
               orderedProposal.push(oppNoObj[favorite['opportunity number']]);
             }
           }
-          console.log('oppNoObj', oppNoObj);
           dispatch({
             type: ON_GET_FAVOURITE,
             payload: { proposalsFavourite: orderedProposal }
