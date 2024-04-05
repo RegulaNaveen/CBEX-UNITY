@@ -13,9 +13,20 @@ class Pagination extends PureComponent {
     super(props);
 
     this.state = {
-      currentPage: 1,
+      currentPage: props.page || 1,
       currentChunk: 0
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { page } = this.props;
+    if (prevProps.page !== page) {
+      if (page === 1) {
+        this.setState({ currentPage: page, currentChunk: 0 });
+      } else {
+        this.setState({ currentPage: page });
+      }
+    }
   }
 
   setCurrentPage = event => {

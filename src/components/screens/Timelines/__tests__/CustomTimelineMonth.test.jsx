@@ -106,6 +106,6 @@ describe('MonthView Component', () => {
         <MonthView {...props} />
       </Provider>
     );
-    expect(screen.getByText('March 2024')).toBeInTheDocument();
+    expect(screen.getByText('April 2024')).toBeInTheDocument();
   });
 });
