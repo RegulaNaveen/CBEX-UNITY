@@ -1,5 +1,5 @@
 // @flow
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import moment from 'moment';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../../constants';
@@ -275,6 +275,7 @@ export const onFilteringProposals = (
       });
       const allFlags = getfetchAllFlags(getState());
       let data = { proposals: [] };
+      console.log('tabIndex', tabIndex);
       if (Number(tabIndex) === 0) {
         const userEmail = localStorage.getItem('userEmail') || '';
         if (Object.keys(filterPayload).length > 1) {
@@ -298,7 +299,7 @@ export const onFilteringProposals = (
           filterPayload,
           userEmail
         );
-        data = response.data;
+        data = cloneDeep(response.data);
       } else {
         let checkTab = allFlags.favouriteFlag
           ? Number(tabIndex) === 2
@@ -326,12 +327,10 @@ export const onFilteringProposals = (
           data = response.data;
         }
       }
-
       if (!isEmpty(data)) {
         const { proposals } = data;
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
-
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
@@ -339,11 +338,12 @@ export const onFilteringProposals = (
         const formatted = proposals.map(proposal =>
           formatProposal(proposal, favouritesMap, customNameMap)
         );
-
         if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
-          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(
+          let favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(
             getState()
           ).toJS();
+          console.log('formatted', formatted);
+          console.log('favouritesUpdatedDateMap', favouritesUpdatedDateMap);
           favouritesUpdatedDateMap
             .sort((a, b) =>
               a['updated date'] > b['updated date']
@@ -353,17 +353,21 @@ export const onFilteringProposals = (
                 : 0
             )
             .reverse();
-          const uniqueFavourites = removeDuplicates(favouritesUpdatedDateMap);
+          const uniqueFavourites = favouritesUpdatedDateMap;
           let orderedProposal = [];
+          const oppNoObj = {};
+          formatted.forEach(val => {
+            oppNoObj[val['opportunity number']] = val;
+          });
           for (const favorite of uniqueFavourites) {
-            for (const proposal of formatted) {
-              if (
-                proposal['opportunity number'] ===
-                favorite['opportunity number']
-              )
-                orderedProposal.push(proposal);
+            if (
+              favorite['opportunity number'] &&
+              oppNoObj[favorite['opportunity number']]
+            ) {
+              orderedProposal.push(oppNoObj[favorite['opportunity number']]);
             }
           }
+          console.log('oppNoObj', oppNoObj);
           dispatch({
             type: ON_GET_FAVOURITE,
             payload: { proposalsFavourite: orderedProposal }
