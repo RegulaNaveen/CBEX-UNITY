@@ -396,23 +396,23 @@ export const onFilteringProposals = (
   };
 };
 
-export const getFilteringValues =
-  (): ThunkAction<String, Object> =>
-  async (dispatch: Dispatch<Object, Object>) => {
-    try {
-      const { data } = await onGetFilterValues();
+export const getFilteringValues = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, Object>
+) => {
+  try {
+    const { data } = await onGetFilterValues();
 
-      if (data) {
-        const { acceptanceCriteriaValues } = data;
-        dispatch({
-          type: ON_SET_PROPOSALS_FILTERS,
-          payload: { proposalsFilters: acceptanceCriteriaValues }
-        });
-      }
-    } catch (error) {
-      console.log(error);
+    if (data) {
+      const { acceptanceCriteriaValues } = data;
+      dispatch({
+        type: ON_SET_PROPOSALS_FILTERS,
+        payload: { proposalsFilters: acceptanceCriteriaValues }
+      });
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const setProposalTypeView = (
   typeView: 0 | 1
@@ -439,21 +439,21 @@ export const setAssignedTabNumberOfRowsAction = (rowsCount: Number) => {
   };
 };
 
-export const getSFNonEditabelField =
-  (): ThunkAction<String, Object> =>
-  async (dispatch: Dispatch<Object, Object>) => {
-    try {
-      const { data } = await onGetSFNonEditabelField();
-      if (data) {
-        dispatch({
-          type: NON_EDITABLE_SF_FIELD,
-          payload: data
-        });
-      }
-    } catch (error) {
-      console.log(error);
+export const getSFNonEditabelField = (): ThunkAction<String, Object> => async (
+  dispatch: Dispatch<Object, Object>
+) => {
+  try {
+    const { data } = await onGetSFNonEditabelField();
+    if (data) {
+      dispatch({
+        type: NON_EDITABLE_SF_FIELD,
+        payload: data
+      });
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   dispatch,
@@ -523,10 +523,11 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
         proposalsFavourite.splice(index, 1);
         dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
       }
-    } catch (error) {
-      console.log(error);
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const updateDashboardNextMilestone = (
   oppNumber,
