@@ -103,6 +103,7 @@ const SeeOwners = ({
   }, [proposalTeamQuestions, task, isModalOpen, isNewTask]);
 
   const handleChange = (event, newValue) => {
+    console.log('i run second');
     const splitName = newValue.label.split('(');
     const name = splitName[0].trim();
     const email = splitName[1].substring(0, splitName[1].length - 1).trim();
@@ -110,11 +111,14 @@ const SeeOwners = ({
       ...selectedUsers,
       { name, email, type: 'user', new: true }
     ];
+    console.log('usersList', usersList);
     setSelectedUsers(usersList);
+    console.log('selectedUsers', selectedUsers);
     setHandlePayload([
       ...handlePayload,
       { name, email, type: 'user', event: 'add' }
     ]);
+    console.log('handlePayload', handlePayload);
     setValue('');
     setInputValue('');
     setShowInput(false);
@@ -169,12 +173,19 @@ const SeeOwners = ({
   }, []);
 
   const handleCancel = () => {
+    console.log('i run third');
+    console.log('inputValue', inputValue);
     setIsModalOpen(false);
     setShowInput(false);
     setButtonDisabled(false);
     if (isNewTask && isNewTask?.isNew) {
+      console.log('i am here');
       setIsNewTask({ result: isNewTask?.result, isNew: false });
+      setInputValue('');
     }
+    setInputValue('');
+    //setSelectedUsers([]); // clear selectedUsers state
+    //setHandlePayload([]);
   };
 
   const handleOk = () => {
@@ -235,6 +246,7 @@ const SeeOwners = ({
   };
 
   const handleInputChange = (event, value) => {
+    console.log('i run first');
     setInputValue(value);
     if (value) {
       getData(value);
