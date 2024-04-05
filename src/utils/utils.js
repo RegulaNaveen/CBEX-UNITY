@@ -80,8 +80,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-          : name?.trim();
+        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+        : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -129,16 +129,14 @@ export const getTableView = tableConfig => {
   ${tableConfig?.rows.map(
     row =>
       `<tr>
-      ${
-        !row?.hidden &&
+      ${!row?.hidden &&
         `<td  style='width: 200px;
       padding: 10px 0px 10px 10px;
       text-align: left;
       font-size: 16px;
       border: 1px solid #e9e9e9 !important;
       border-right: 1px solid #e9e9e9 !important;
-      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`
-      }
+      background-color: #f8f9fb; font-weight: bold;'>${row?.header}</td>`}
       ${tableConfig.columns.map(
         column =>
           column?.accessor !== 'header' &&
@@ -280,6 +278,23 @@ const replaceAnswerToQuestionsPlaceholders = (
     });
   }
 
+  if (updatedEventBodyStr.includes('<p></p>')) {
+    const regexEmptyPTag = /<p[^>]*><\/p>/g; // empty p tag regex
+    if (regexEmptyPTag.test(updatedEventBodyStr)) {
+      // check if empty p tag is present
+      updatedEventBodyStr = updatedEventBodyStr.replace(
+        regexEmptyPTag,
+        '<p><br /></p>'
+      );
+    }
+  }
+
+  if (updatedEventBodyStr.includes('<hr>')) {
+    updatedEventBodyStr = updatedEventBodyStr.replace(
+      /<hr>/g,
+      "<hr style='margin: 2rem 0;'>"
+    );
+  }
   return updatedEventBodyStr;
 };
 
@@ -296,9 +311,8 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ? relevantQuestions
         ?.map(
           q =>
-            `${q.questionText ?? ''} \r\n${
-              q.answers?.slice(-1)[0]?.answer ?? ''
-            } \r\n`
+            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+              ''} \r\n`
         )
         .join('')
     : `<ul>${relevantQuestions
@@ -410,7 +424,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function (data) {
+  lobMapping.forEach(function(data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
