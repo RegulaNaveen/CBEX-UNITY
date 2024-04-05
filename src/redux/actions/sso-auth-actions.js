@@ -15,6 +15,8 @@ import {
 import { updateProposal } from './proposals-actions';
 import { getProposalDetails, getProposals } from '../selectors';
 import { cloneDeep } from 'lodash';
+import { selectOpportunitiesList } from '../selectors/opportunities';
+import { setOpportunities } from './opportunities';
 
 const {
   ON_USER_LOGIN,
@@ -156,11 +158,12 @@ export const fetchUserOpportunityPrefs = () => {
           payload: cloneDeep(userFavouritesUpdatedDateMap)
         });
         let proposals = getProposals(getState());
+        let opportunities = selectOpportunitiesList(getState());
+        const favouritesMap = userFavouritesArr.reduce((favMap, fav) => {
+          favMap[fav] = true;
+          return favMap;
+        }, {});
         if (proposals.length > 0) {
-          const favouritesMap = userFavouritesArr.reduce((favMap, fav) => {
-            favMap[fav] = true;
-            return favMap;
-          }, {});
           let updatedProposals = proposals.map(proposal => {
             if (proposal && proposal['opportunity number']) {
               return {
@@ -184,6 +187,25 @@ export const fetchUserOpportunityPrefs = () => {
             type: ON_GET_PROPOSALS,
             payload: { proposals: updatedProposals }
           });
+        }
+        if (opportunities.length > 0) {
+          let updatedOpportunities = opportunities.map(opp => {
+            if (opp && opp['opportunity number']) {
+              return {
+                ...opp,
+                isFavourite: !!favouritesMap[`${opp['opportunity number']}`],
+                customName:
+                  userCustomOppNameMap[`${opp['opportunity number']}`] || ''
+              };
+            } else {
+              return {
+                ...opp,
+                isFavourite: false,
+                customName: ''
+              };
+            }
+          });
+          dispatch(setOpportunities(updatedOpportunities));
         }
       }
     } catch (error) {
