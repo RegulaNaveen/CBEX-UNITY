@@ -46,6 +46,7 @@ const SeeOwners = ({
   const [userToRemoveIndex, setUserToRemoveIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [saveBtnDisabled, setSaveBtnDisabled] = useState(false);
+  const [userSelected, setUserSelected] = useState(false);
 
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const tasks = useSelector(selectTasksList);
@@ -103,7 +104,6 @@ const SeeOwners = ({
   }, [proposalTeamQuestions, task, isModalOpen, isNewTask]);
 
   const handleChange = (event, newValue) => {
-    console.log('i run second');
     const splitName = newValue.label.split('(');
     const name = splitName[0].trim();
     const email = splitName[1].substring(0, splitName[1].length - 1).trim();
@@ -111,18 +111,16 @@ const SeeOwners = ({
       ...selectedUsers,
       { name, email, type: 'user', new: true }
     ];
-    console.log('usersList', usersList);
     setSelectedUsers(usersList);
-    console.log('selectedUsers', selectedUsers);
     setHandlePayload([
       ...handlePayload,
       { name, email, type: 'user', event: 'add' }
     ]);
-    console.log('handlePayload', handlePayload);
+    setButtonDisabled(false);
     setValue('');
     setInputValue('');
     setShowInput(false);
-    setButtonDisabled(false);
+    setUserSelected(true);
     setAddOwnerBtn(false);
   };
 
@@ -162,6 +160,7 @@ const SeeOwners = ({
       if (isNewTask && isNewTask?.isNew) {
         setIsNewTask({ result: {}, isNew: false });
       }
+      setUserSelected(true);
       setIsModalOpen(false);
     });
   };
@@ -173,19 +172,17 @@ const SeeOwners = ({
   }, []);
 
   const handleCancel = () => {
-    console.log('i run third');
-    console.log('inputValue', inputValue);
     setIsModalOpen(false);
     setShowInput(false);
     setButtonDisabled(false);
     if (isNewTask && isNewTask?.isNew) {
-      console.log('i am here');
       setIsNewTask({ result: isNewTask?.result, isNew: false });
       setInputValue('');
     }
     setInputValue('');
-    //setSelectedUsers([]); // clear selectedUsers state
-    //setHandlePayload([]);
+    setSelectedUsers([]); // clear selectedUsers state
+    setHandlePayload([]);
+    setUserSelected(false);
   };
 
   const handleOk = () => {
@@ -207,6 +204,7 @@ const SeeOwners = ({
     if (isNewTask && isNewTask?.isNew) {
       setIsNewTask({ result: {}, isNew: false });
     }
+    setUserSelected(false);
   };
 
   const handleCloseInnerModal = () => {
@@ -246,7 +244,6 @@ const SeeOwners = ({
   };
 
   const handleInputChange = (event, value) => {
-    console.log('i run first');
     setInputValue(value);
     if (value) {
       getData(value);
@@ -357,10 +354,13 @@ const SeeOwners = ({
   };
 
   useEffect(() => {
-    if (isNewTask && isNewTask?.isNew) {
+    if ((isNewTask && isNewTask?.isNew) || ownersCount === 0) {
       setShowInput(true);
+    } else {
+      setShowInput(false);
+      setUserSelected(true);
     }
-  }, [isNewTask]);
+  }, [isNewTask, ownersCount, isModalOpen]);
 
   return (
     <>
@@ -386,7 +386,8 @@ const SeeOwners = ({
                     isButtonDisabled ||
                     task?.is_completed ||
                     addOwnerBtn ||
-                    !editable
+                    !editable ||
+                    !userSelected
                   }
                   onClick={() => {
                     setShowInput(true);
