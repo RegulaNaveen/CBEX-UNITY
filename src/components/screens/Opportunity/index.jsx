@@ -10,6 +10,7 @@ import Loader from 'react-loader-spinner';
 import classNames from 'classnames';
 import { compose } from 'redux';
 import isEmpty from 'lodash/isEmpty';
+import moment from 'moment';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -63,6 +64,7 @@ import {
   selectGetbidChangeLoader,
   selectTasksListFlag
 } from '../../../redux/selectors/proposal';
+import { getNextMilestone } from '../../../utils/utils';
 import {
   clearSearchAction,
   closeSearchAction
@@ -72,6 +74,7 @@ import {
   fetchTasksList,
   toggleCanReorder
 } from '../../../redux/actions/tasksList-actions';
+import { filter } from 'lodash';
 
 type State = {
   selectedView: string
@@ -122,7 +125,7 @@ export class Opportunity extends Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const {
       getOpportunityInfo,
       authData,
@@ -206,7 +209,7 @@ export class Opportunity extends Component<Props, State> {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
     const {
@@ -272,12 +275,8 @@ export class Opportunity extends Component<Props, State> {
   };
 
   trackEventTabs = tab => {
-    const {
-      eventCategories,
-      userActions,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+    const { eventCategories, userActions, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,
@@ -300,12 +299,8 @@ export class Opportunity extends Component<Props, State> {
   };
 
   handleEditCustomName = () => {
-    const {
-      toggleEditCustomNameModal,
-      onEditCustomName,
-      customName,
-      details
-    } = this.props;
+    const { toggleEditCustomNameModal, onEditCustomName, customName, details } =
+      this.props;
     onEditCustomName(details['CRM #'], customName);
     toggleEditCustomNameModal(true);
   };
@@ -320,8 +315,8 @@ export class Opportunity extends Component<Props, State> {
       match: { params },
       favourite,
       customName,
-      nextMilestone,
-      getbidChangeLoader
+      getbidChangeLoader,
+      nextMilestone = ''
     } = this.props;
     const {
       bidStatus,
@@ -386,17 +381,10 @@ export class Opportunity extends Component<Props, State> {
   };
 
   render() {
-    const {
-      isSidebarOpen,
-      selectedBid,
-      newbidflag,
-      closeNewbidflag
-    } = this.props;
-    const {
-      questionTemplateVersionNumber,
-      opportunityType,
-      bidStatus
-    } = selectedBid.toJS();
+    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } =
+      this.props;
+    const { questionTemplateVersionNumber, opportunityType, bidStatus } =
+      selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -444,7 +432,6 @@ const mapStateToProps = (state: Map) => ({
   getbidChangeLoader: selectGetbidChangeLoader(state),
   tasksListFlag: selectTasksListFlag(state)
 });
-
 export default compose(
   withRouter,
   connect(mapStateToProps, {

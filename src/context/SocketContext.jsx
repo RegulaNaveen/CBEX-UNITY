@@ -30,7 +30,8 @@ import {
 } from '../redux/actions/proposal-actions';
 import {
   updateDashboardBid,
-  syncDashboardOpportunity
+  syncDashboardOpportunity,
+  updateDashboardNextMilestone
 } from '../redux/actions/proposals-actions';
 import {
   setTaskFromSocket,
@@ -571,6 +572,7 @@ const SocketContextProvider = props => {
           widgetUpdate,
           updateFavouriteAction,
           updateNextMilestoneAction,
+          updateDashboardNextMilestoneAction,
           updateCustomNameAction,
           syncdashboard,
           syncBidDashboard,
@@ -760,7 +762,7 @@ const SocketContextProvider = props => {
               updatePriceModelerEstimate(data.data);
               break;
             case 'WIDGET_UPDATE':
-              const { proposalId, typeOfWidget } = data.data;
+              const { proposalId, typeOfWidget = '' } = data.data;
               widgetUpdate(proposalId, typeOfWidget);
               break;
             case 'FAVOURITE':
@@ -783,9 +785,13 @@ const SocketContextProvider = props => {
               updateDetailPage(data);
               break;
             case 'NEXT_MILESTONE_UPDATE':
-              console.log('socket data', data);
               const { nextMilestone } = data.data;
               updateNextMilestoneAction(
+                data.oppId,
+                nextMilestone,
+                data.data.proposalId
+              );
+              updateDashboardNextMilestoneAction(
                 data.oppId,
                 nextMilestone,
                 data.data.proposalId
@@ -1229,12 +1235,15 @@ const mapDispatchToProps = {
   widgetUpdate,
   updateFavouriteAction: updateFavourite,
   updateNextMilestoneAction: updateNextMilestone,
+  updateDashboardNextMilestoneAction: updateDashboardNextMilestone,
   updateCustomNameAction,
   syncBidDashboard: updateDashboardBid,
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
-  deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  deleteCustomTabCustomQuestionFromSocket:
+    deleteProposalCustomTabQuestionFromSocket,
+  deleteApprovalCustomTabCustomQuestionFromSocket:
+    deleteApprovalCustomTabCustomQuestionFromSocketAction,
   updateTaskListOrderAction,
   updateTaskListMoveAction,
   setTaskFromSocket: setTaskFromSocket,

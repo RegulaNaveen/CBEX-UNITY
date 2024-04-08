@@ -6,7 +6,7 @@ import { isEmpty, keysIn, head } from 'lodash';
 import classNames from 'classnames';
 import moment from 'moment';
 import { objectToString } from '../../utils/helpers';
-import { parseMomentDate } from '../../utils/DateUtils';
+import { parseMomentDate, parseCorrectDate } from '../../utils/DateUtils';
 import { OPPORTUNITY } from '../../routes';
 import { toggleFavourite } from '../../api/sso-auth';
 import { updateFavourite } from '../../redux/actions/sso-auth-actions';
@@ -315,9 +315,10 @@ const TableView = ({ data, hideStatus }: Props) => {
               );
 
             case 'bid due date':
+              console.log('row[col]', row[col]);
               const bidDueDate = row[col];
               const tooltipData = bidDueDate
-                ? parseMomentDate(bidDueDate)
+                ? parseMomentDate(parseCorrectDate(bidDueDate))
                 : 'No data';
 
               return (
@@ -328,7 +329,9 @@ const TableView = ({ data, hideStatus }: Props) => {
                         'no-data-placeholder': !bidDueDate
                       })}
                     >
-                      {bidDueDate ? parseMomentDate(bidDueDate) : 'No data'}
+                      {bidDueDate
+                        ? parseMomentDate(parseCorrectDate(bidDueDate))
+                        : 'No data'}
                     </p>
                   </Tooltip>
                 </div>

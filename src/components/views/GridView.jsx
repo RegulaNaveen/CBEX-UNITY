@@ -4,7 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
-import { parseMomentDate, getRemainingDays } from '../../utils/DateUtils';
+import {
+  parseMomentDate,
+  getRemainingDays,
+  parseCorrectDate
+} from '../../utils/DateUtils';
 import { getNextMilestone } from '../../utils/utils';
 
 type Props = {
@@ -15,7 +19,7 @@ type Props = {
 
 const formatProposal = (proposal: Object) => {
   const placeholder = 'No data';
-  const dueDate = parseMomentDate(proposal['bid due date']);
+  const dueDate = parseMomentDate(parseCorrectDate(proposal['bid due date']));
   const daysRemain = getRemainingDays(dueDate);
 
   const formatted = {
