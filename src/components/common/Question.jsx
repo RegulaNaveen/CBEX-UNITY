@@ -591,7 +591,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
             this.context.updateDashboardSFValueWrapper(
               oppNo,
               sfField,
-              formatTheDate(selectedDay)
+              new Date(selectedDay)
             );
           }
         }
