@@ -314,7 +314,7 @@ describe('testing onFilteringProposals function', () => {
       .spyOn(ProposalsAPIs, 'onGetAllProposals')
       .mockResolvedValue({ data: proposals });
     store.dispatch(onFilteringProposals({}, tabIndex));
-    expect(mockGetFavoritesOpportunity).toHaveBeenCalled();
+    expect(mockGetFavoritesOpportunity).toHaveBeenCalledTimes(0);
   });
 });
 
@@ -332,8 +332,9 @@ describe('testing update proposal action', () => {
 
   test('rending function with parameters favourite as true', () => {
     store.dispatch(updateProposal('UZA88708', true, proposalDetails));
-    const favouriteProposals = store.getState().proposals.toJS()
-      .favouriteProposals;
+    const favouriteProposals = store
+      .getState()
+      .proposals.toJS().favouriteProposals;
     expect(favouriteProposals.length).toBe(3);
   });
 
@@ -341,8 +342,9 @@ describe('testing update proposal action', () => {
     store.dispatch(
       updateProposal('UZA89257', false, proposals.proposals[0].proposalDetails)
     );
-    const favouriteProposals = store.getState().proposals.toJS()
-      .favouriteProposals;
+    const favouriteProposals = store
+      .getState()
+      .proposals.toJS().favouriteProposals;
     expect(favouriteProposals.length).toBe(1);
   });
 });

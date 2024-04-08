@@ -72,7 +72,7 @@ const BidHistory = () => {
     for (const [key, value] of Object.entries(allOppData)) {
       const {
         isCurrent,
-        proposal: { typeOfWidget }
+        proposal: { typeOfWidget = '' }
       } = value;
 
       if (isCurrent && typeOfWidget === 'Bid_Cost') {
