@@ -1,5 +1,5 @@
 // @flow
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, omit } from 'lodash';
 import moment from 'moment';
 import type { Dispatch, ThunkAction } from './action-types';
 import { REDUX_TYPES } from '../../constants';
@@ -20,6 +20,8 @@ import {
 import { getProposals, getFavouriteProposals } from '../selectors';
 import { getfetchAllFlags } from '../selectors/proposal';
 import { getPage, getNumOfRows } from '../selectors/proposals';
+import { setOpportunities, updateFilters } from './opportunities';
+import { selectOpportunitiesList } from '../selectors/opportunities';
 
 const {
   SET_PROPOSAL_VIEW_TYPE,
@@ -137,20 +139,88 @@ export const getAllProposals = (): ThunkAction<string, Object> => {
 };
 
 export const updateDashboardBid = (data): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: UPDATE_DASHBOARD_BID,
-      payload: data
-    });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    try {
+      const state = getState();
+      const { data: bidData, oppId } = data;
+      let opportunities = selectOpportunitiesList(state);
+      if (bidData && bidData?.newBid && !bidData?.data?.bidStatusKey) {
+        const opportunityIndex = opportunities.findIndex(
+          opp => opp['opportunity number'] === oppId
+        );
+        if (opportunityIndex > -1) {
+          opportunities[opportunityIndex].proposalId = bidData.proposalId;
+          opportunities[opportunityIndex].bidNo = bidData.proposalDetails.bidNo
+            ? bidData?.proposalDetails?.bidNo
+            : parseInt(opportunities[opportunityIndex].bidNo);
+          opportunities[opportunityIndex]['bid due date'] = moment(
+            bidData?.proposalDetails?.['Bid due date']
+          ).format('YYYY-MM-DD');
+          dispatch(setOpportunities(opportunities));
+        }
+      }
+    } catch (e) {
+      console.error('Error in updateDashboardBid action: ', e);
+    } finally {
+      dispatch({
+        type: UPDATE_DASHBOARD_BID,
+        payload: data
+      });
+    }
   };
 };
 
 export const syncDashboardOpportunity = (data): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: UPDATE_DASHBOARD_OPPORTUNITY,
-      payload: data
-    });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    try {
+      const state = getState();
+      let opportunities = selectOpportunitiesList(state);
+
+      if (
+        opportunities &&
+        Array.isArray(opportunities) &&
+        opportunities.length &&
+        !data?.data?.bidStatusKey
+      ) {
+        const opportunityIndex = opportunities.findIndex(
+          opp => opp['opportunity number'] === data.proposalId
+        );
+        if (opportunityIndex > -1) {
+          opportunities[opportunityIndex]['bid due date'] =
+            data.proposalDetails?.['Bid due date'] || '';
+          opportunities[opportunityIndex]['verbatim indication'] =
+            data.proposalDetails['Verbatim indication'] || '';
+          opportunities[opportunityIndex]['therapeuticArea'] =
+            data.proposalDetails?.['Therapeutic area'] || '';
+          opportunities[opportunityIndex]['phase'] =
+            data.proposalDetails['Phase'] || '';
+          opportunities[opportunityIndex]['protocol number'] =
+            data.proposalDetails?.['Protocol number'] || '';
+          opportunities[opportunityIndex]['product'] =
+            data.proposalDetails?.['Product name'] || '';
+          opportunities[opportunityIndex]['customer'] =
+            data.proposalDetails?.Customer || '';
+          opportunities[opportunityIndex]['bidNo'] =
+            data.proposalDetails?.bidNo || '';
+          if (data.proposalDetails?.['opportunity status']) {
+            opportunities[opportunityIndex]['opportunity status'] =
+              data.proposalDetails?.['opportunity status'] || '';
+          }
+          if (data.proposalDetails?.['opportunityName']) {
+            opportunities[opportunityIndex]['opportunityName'] =
+              data.proposalDetails?.['opportunityName'] || '';
+          }
+          dispatch(setOpportunities(opportunities));
+        }
+      }
+    } catch (e) {
+      console.error('Error in updateDashboardBid action: ', e);
+    } finally {
+      dispatch({
+        type: UPDATE_DASHBOARD_OPPORTUNITY,
+        payload: data
+      });
+    }
   };
 };
 
@@ -215,9 +285,7 @@ export const setPageAction = (page: Number) => {
 
 export const onFilteringProposals = (
   filters: FilteredData,
-  tabIndex: Number,
-  from: number = 0,
-  size: number = 15
+  tabIndex: Number
 ): ThunkAction<string, Object> => {
   return async (dispatch: Dispatch<string, Object>, getState) => {
     try {
@@ -308,7 +376,7 @@ export const onFilteringProposals = (
           filterPayload,
           userEmail
         );
-        data = response.data;
+        data = cloneDeep(response.data);
       } else {
         let checkTab = allFlags.favouriteFlag
           ? Number(tabIndex) === 2
@@ -331,15 +399,7 @@ export const onFilteringProposals = (
             data = response.data;
           }
         } else {
-          const userEmail = localStorage.getItem('userEmail') || '';
-          const response = await onGetAllProposals({
-            from,
-            size,
-            filter: {}
-          });
-          data = response.data.data;
-          const count = response.data.count;
-          dispatch({ type: TOTAL_COUNT, payload: count });
+          dispatch(updateFilters(omit(filterPayload, ['source'])));
         }
       }
       if (!isEmpty(data)) {
@@ -352,7 +412,6 @@ export const onFilteringProposals = (
         }
         const favourites = selectFavourites(getState()).toJS();
         const customNameMap = selectCustomNameMap(getState()).toJS();
-
         const favouritesMap = favourites.reduce((favMap, fav) => {
           favMap[fav] = true;
           return favMap;
@@ -360,12 +419,20 @@ export const onFilteringProposals = (
         const formatted = proposals.map(proposal =>
           formatProposal(proposal, favouritesMap, customNameMap)
         );
-
         if (allFlags.favouriteFlag && Number(tabIndex) === 1) {
-          const favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(
+          let favouritesUpdatedDateMap = selectFavouritesUpdatedDateMap(
             getState()
           ).toJS();
-          favouritesUpdatedDateMap
+          const favDataWithDate = [];
+          const oldfavDataWithoutDate = [];
+          favouritesUpdatedDateMap.forEach(val => {
+            if (!val['updated date']) {
+              oldfavDataWithoutDate.push(val);
+            } else {
+              favDataWithDate.push(val);
+            }
+          });
+          favDataWithDate
             .sort((a, b) =>
               a['updated date'] > b['updated date']
                 ? 1
@@ -374,15 +441,22 @@ export const onFilteringProposals = (
                 : 0
             )
             .reverse();
-          const uniqueFavourites = removeDuplicates(favouritesUpdatedDateMap);
+          const uniqueFavourites = [
+            ...favDataWithDate,
+            ...oldfavDataWithoutDate
+          ];
           let orderedProposal = [];
+          const oppNoObj = {};
+          formatted.forEach(val => {
+            oppNoObj[val['opportunity number']] = val;
+          });
+          console.log('uniqueFavourites', uniqueFavourites);
           for (const favorite of uniqueFavourites) {
-            for (const proposal of formatted) {
-              if (
-                proposal['opportunity number'] ===
-                favorite['opportunity number']
-              )
-                orderedProposal.push(proposal);
+            if (
+              favorite['opportunity number'] &&
+              oppNoObj[favorite['opportunity number']]
+            ) {
+              orderedProposal.push(oppNoObj[favorite['opportunity number']]);
             }
           }
           dispatch({
@@ -470,14 +544,23 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
   try {
     let proposalsFavourite = getFavouriteProposals(getState());
     let proposals = getProposals(getState());
+    let opportunities = selectOpportunitiesList(getState());
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNumber
+    );
+    const opportunityIndex = opportunities.findIndex(
+      opportunity => opportunity['opportunity number'] === oppNumber
     );
     if (proposalIndex > -1) {
       proposals[proposalIndex]['isFavourite'] = favourite;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
 
+    console.log({ opportunityIndex, oppNumber, favourite });
+    if (opportunityIndex > -1) {
+      opportunities[opportunityIndex]['isFavourite'] = favourite;
+      dispatch(setOpportunities(opportunities));
+    }
     const proposalCheck = proposalsFavourite.some(
       proposal => proposal['opportunity number'] === oppNumber
     );
@@ -496,12 +579,67 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
       let index = proposalsFavourite.findIndex(
         proposal => proposal['opportunity number'] === oppNumber
       );
-      proposalsFavourite.splice(index, 1);
-      dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['isFavourite'] = favourite;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+
+      const proposalCheck = proposalsFavourite.some(
+        proposal => proposal['opportunity number'] === oppNumber
+      );
+      if (!proposalCheck && favourite) {
+        delete proposalDetails.favourite;
+        const { dataFromGrid } = proposalDetails;
+        proposalDetails['isFavourite'] = favourite;
+        proposals[proposalIndex]
+          ? proposalsFavourite.unshift(proposals[proposalIndex])
+          : dataFromGrid
+          ? proposalsFavourite.unshift(formatProposalGrid(proposalDetails))
+          : proposalsFavourite.unshift(proposalDetails);
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+      if (proposalCheck && !favourite) {
+        let index = proposalsFavourite.findIndex(
+          proposal => proposal['opportunity number'] === oppNumber
+        );
+        proposalsFavourite.splice(index, 1);
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
     }
   } catch (error) {
     console.log(error);
   }
+};
+
+export const updateDashboardNextMilestone = (
+  oppNumber,
+  nextMilestone,
+  proposalId
+) => {
+  return async (dispatch, getState) => {
+    try {
+      let proposals = getProposals(getState());
+      let proposalsFavourite = getFavouriteProposals(getState());
+      const proposalIndex = proposals.findIndex(
+        proposal => proposal['proposalId'] === proposalId
+      );
+      const favouriteIndex = proposalsFavourite.findIndex(
+        proposal => proposal['proposalId'] === proposalId
+      );
+
+      if (proposalIndex > -1) {
+        proposals[proposalIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+
+      if (favouriteIndex > -1) {
+        proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
+        dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 };
 
 export const setPaginationSize = size => ({
