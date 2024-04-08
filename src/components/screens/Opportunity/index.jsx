@@ -125,7 +125,7 @@ export class Opportunity extends Component<Props, State> {
     };
   }
 
-   componentDidMount = async()=> {
+  componentDidMount = async () => {
     const {
       getOpportunityInfo,
       authData,
@@ -209,7 +209,7 @@ export class Opportunity extends Component<Props, State> {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   componentDidUpdate(prevProps, prevState) {
     const {
@@ -275,12 +275,8 @@ export class Opportunity extends Component<Props, State> {
   };
 
   trackEventTabs = tab => {
-    const {
-      eventCategories,
-      userActions,
-      proposalDetail,
-      trackEvent
-    } = this.props;
+    const { eventCategories, userActions, proposalDetail, trackEvent } =
+      this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,
@@ -303,12 +299,8 @@ export class Opportunity extends Component<Props, State> {
   };
 
   handleEditCustomName = () => {
-    const {
-      toggleEditCustomNameModal,
-      onEditCustomName,
-      customName,
-      details
-    } = this.props;
+    const { toggleEditCustomNameModal, onEditCustomName, customName, details } =
+      this.props;
     onEditCustomName(details['CRM #'], customName);
     toggleEditCustomNameModal(true);
   };
@@ -324,35 +316,15 @@ export class Opportunity extends Component<Props, State> {
       favourite,
       customName,
       getbidChangeLoader,
-      nextMilestone
+      nextMilestone = ''
     } = this.props;
     const {
       bidStatus,
       bidStopStatus,
       opportunityName,
       opportunityStatus,
-      isApprovalCountPresent,
+      isApprovalCountPresent
     } = selectedBid.toJS();
-   let sortedMilestones = selectedBid.toJS().nextMilestone ;
-   let filteredMilestones = ''
-    if(sortedMilestones && sortedMilestones.length > 0){
-       filteredMilestones = sortedMilestones.filter(milestone => moment(milestone.date, 'DD-MMM-YYYY').isSameOrAfter(moment(), 'd'))
-      .sort((milestoneA, milestoneB) => {
-        let diff = 0;
-        try {
-          diff =
-            moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
-            moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
-        } catch (e) {
-          console.error(
-            '[proposalUtils.getNextMilestone] Error in parsing date',
-            e
-          );
-        }
-        return diff;
-      });
-      filteredMilestones =  filteredMilestones[0]?.name ;
-    }
     if (isLoading)
       return (
         <div className="proposal-loader">
@@ -390,7 +362,7 @@ export class Opportunity extends Component<Props, State> {
             bidStopStatus={bidStopStatus}
             favourite={favourite}
             customName={customName}
-            nextMilestone={filteredMilestones}
+            nextMilestone={nextMilestone}
             opportunityName={opportunityName}
             opportunityStatus={opportunityStatus}
             handleEditCustomName={this.handleEditCustomName}
@@ -409,17 +381,10 @@ export class Opportunity extends Component<Props, State> {
   };
 
   render() {
-    const {
-      isSidebarOpen,
-      selectedBid,
-      newbidflag,
-      closeNewbidflag
-    } = this.props;
-    const {
-      questionTemplateVersionNumber,
-      opportunityType,
-      bidStatus
-    } = selectedBid.toJS();
+    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } =
+      this.props;
+    const { questionTemplateVersionNumber, opportunityType, bidStatus } =
+      selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {

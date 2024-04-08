@@ -14,7 +14,7 @@ import {
 } from '../selectors/sso-auth';
 import { updateProposal } from './proposals-actions';
 import { getProposalDetails, getProposals } from '../selectors';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, uniqBy } from 'lodash';
 import { selectOpportunitiesList } from '../selectors/opportunities';
 import { setOpportunities } from './opportunities';
 
@@ -127,21 +127,28 @@ export const fetchUserOpportunityPrefs = () => {
       ) {
         let userFavourites = new Set(),
           userFavouritesUpdatedDateMap = [],
+          oldFavouriteDataMap = [],
           userCustomOppNameMap = {},
           userFavouritesArr = [];
         opportuntityPrefsRes.preferences.forEach(pref => {
-          if (pref.favourite) {
+          if (pref.favourite && pref.favourite_updated_date) {
             userFavourites.add(pref.opp_number);
-
-            if (pref.favourite_updated_date) {
-              userFavouritesUpdatedDateMap.push({
-                'opportunity number': pref.opp_number,
-                'updated date': pref.favourite_updated_date
-              });
-            }
+            userFavouritesUpdatedDateMap.push({
+              'opportunity number': pref.opp_number,
+              'updated date': pref.favourite_updated_date
+            });
           }
           if (pref.custom_header_tab) {
             userCustomOppNameMap[pref.opp_number] = pref.custom_header_tab;
+          }
+        });
+        opportuntityPrefsRes.preferences.forEach(pref => {
+          if (pref.favourite && !pref.favourite_updated_date) {
+            userFavourites.add(pref.opp_number);
+            oldFavouriteDataMap.push({
+              'opportunity number': pref.opp_number,
+              'updated date': pref.favourite_updated_date
+            });
           }
         });
         userFavouritesArr = new Array(...userFavourites);
@@ -153,9 +160,18 @@ export const fetchUserOpportunityPrefs = () => {
           type: SET_CUSTOM_NAME_MAP,
           payload: cloneDeep(userCustomOppNameMap)
         });
+        userFavouritesUpdatedDateMap = uniqBy(
+          userFavouritesUpdatedDateMap,
+          'opportunity number'
+        );
+        oldFavouriteDataMap = uniqBy(oldFavouriteDataMap, 'opportunity number');
+        const finalPayload = [
+          ...userFavouritesUpdatedDateMap,
+          ...oldFavouriteDataMap
+        ];
         dispatch({
           type: SET_FAVOURITES_UPDATED_DATE,
-          payload: cloneDeep(userFavouritesUpdatedDateMap)
+          payload: cloneDeep(finalPayload)
         });
         let proposals = getProposals(getState());
         let opportunities = selectOpportunitiesList(getState());
@@ -168,9 +184,8 @@ export const fetchUserOpportunityPrefs = () => {
             if (proposal && proposal['opportunity number']) {
               return {
                 ...proposal,
-                isFavourite: !!favouritesMap[
-                  `${proposal['opportunity number']}`
-                ],
+                isFavourite:
+                  !!favouritesMap[`${proposal['opportunity number']}`],
                 customName:
                   userCustomOppNameMap[`${proposal['opportunity number']}`] ||
                   ''
@@ -260,6 +275,7 @@ export const updateFavourite = (
         type: SET_FAVOURITES_UPDATED_DATE,
         payload: favouritesUpdatedDate
       });
+      console.log('favouritesUpdatedDate', favouritesUpdatedDate);
       await dispatch(updateProposal(oppNumber, favourite, proposalDetails));
       if (proposalInfo['CRM #']) {
         const favouritesMap = favourites.reduce((favMap, fav) => {

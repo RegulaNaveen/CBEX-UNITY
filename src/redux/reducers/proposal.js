@@ -1429,7 +1429,7 @@ const setVTabUserPreference = (state, action) => {
 };
 
 const setWidgetUpdate = (state, action) => {
-  const { proposalId, typeOfWidget } = action.payload;
+  const { proposalId, typeOfWidget = '' } = action.payload;
 
   const currentWidget =
     typeOfWidget === 'Bid_Cost' ? 'BidCostDetail' : 'PriceModeler';
