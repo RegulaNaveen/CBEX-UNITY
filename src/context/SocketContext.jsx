@@ -762,7 +762,7 @@ const SocketContextProvider = props => {
               updatePriceModelerEstimate(data.data);
               break;
             case 'WIDGET_UPDATE':
-              const { proposalId, typeOfWidget } = data.data;
+              const { proposalId, typeOfWidget = '' } = data.data;
               widgetUpdate(proposalId, typeOfWidget);
               break;
             case 'FAVOURITE':
