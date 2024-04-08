@@ -45,7 +45,11 @@ import {
   getOpportunityData
 } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
-import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
+import {
+  DEFAULT,
+  DashboardSFUpDATE,
+  SEARCH as SEARCH_CONSTANTS
+} from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
 import { SEARCH, UI, UNITY_TABS } from '../../constants/types';
@@ -751,11 +755,58 @@ export const getQuestionLockDetailsAll = (
 export const updateProposalDetailFromWebSocket = (
   data
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: UPDATE_PROPOSAL_DETAIL_SF,
-      payload: data
-    });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    try {
+      const mapper = DashboardSFUpDATE;
+      let opportunities = selectOpportunitiesList(getState());
+      if (data && data?.data && data?.data?.questionSfField && opportunities) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            if (
+              data?.data?.questionSfField === 'Name' &&
+              data?.data?.questionsfObject === 'Opportunity'
+            ) {
+              value['opportunityName'] = data.data.answer;
+            } else {
+              value[mapper[data?.data?.questionSfField]] = data.data.answer;
+            }
+          }
+          return value;
+        });
+      }
+
+      if (
+        opportunities &&
+        data &&
+        data?.data &&
+        data?.data?.bidStatusKey &&
+        data?.data?.proposalDetails
+      ) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            value['bidStopStatus'] = data.data.bidStopStatus || '';
+          }
+          return value;
+        });
+      }
+
+      dispatch(setOpportunities(opportunities));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      dispatch({
+        type: UPDATE_PROPOSAL_DETAIL_SF,
+        payload: data
+      });
+    }
   };
 };
 
@@ -1807,11 +1858,56 @@ export const updateDashboardProposal = (data): ThunkAction<string, Object> => {
 export const updateOpportunityDashboardProposal = (
   data
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: UPDATE_DASHBOARD_OPPORTUNITY,
-      payload: data
-    });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    try {
+      const state = getState();
+      let opportunities = selectOpportunitiesList(state);
+
+      if (
+        opportunities &&
+        Array.isArray(opportunities) &&
+        opportunities.length &&
+        !data?.data?.bidStatusKey
+      ) {
+        const opportunityIndex = opportunities.findIndex(
+          opp => opp['opportunity number'] === data.oppId
+        );
+        if (opportunityIndex > -1) {
+          opportunities[opportunityIndex]['bid due date'] =
+            data.data.proposalDetails?.['Bid due date'] || '';
+          opportunities[opportunityIndex]['verbatim indication'] =
+            data.data.proposalDetails['Verbatim indication'] || '';
+          opportunities[opportunityIndex]['therapeuticArea'] =
+            data.data.proposalDetails?.['Therapeutic area'] || '';
+          opportunities[opportunityIndex]['phase'] =
+            data.data.proposalDetails['Phase'] || '';
+          opportunities[opportunityIndex]['protocol number'] =
+            data.data.proposalDetails?.['Protocol number'] || '';
+          opportunities[opportunityIndex]['product'] =
+            data.data.proposalDetails?.['Product name'] || '';
+          opportunities[opportunityIndex]['customer'] =
+            data.data.proposalDetails?.Customer || '';
+          opportunities[opportunityIndex]['bidNo'] =
+            data.data.proposalDetails?.bidNo || '';
+          if (data.data.proposalDetails?.['opportunity status']) {
+            opportunities[opportunityIndex]['opportunity status'] =
+              data.data.proposalDetails?.['opportunity status'] || '';
+          }
+          if (data.data.proposalDetails?.['opportunityName']) {
+            opportunities[opportunityIndex]['opportunityName'] =
+              data.data.proposalDetails?.['opportunityName'] || '';
+          }
+          dispatch(setOpportunities(opportunities));
+        }
+      }
+    } catch (e) {
+      console.error('Error in updateDashboardBid action: ', e);
+    } finally {
+      dispatch({
+        type: UPDATE_DASHBOARD_OPPORTUNITY,
+        payload: data
+      });
+    }
   };
 };
 
