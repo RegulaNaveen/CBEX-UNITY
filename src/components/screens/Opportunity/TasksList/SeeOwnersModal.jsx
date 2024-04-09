@@ -46,6 +46,7 @@ const SeeOwners = ({
   const [userToRemoveIndex, setUserToRemoveIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [saveBtnDisabled, setSaveBtnDisabled] = useState(false);
+  const [userSelected, setUserSelected] = useState(false);
 
   const proposalTeamQuestions = useSelector(selectActiveTeamQuestions);
   const tasks = useSelector(selectTasksList);
@@ -115,10 +116,11 @@ const SeeOwners = ({
       ...handlePayload,
       { name, email, type: 'user', event: 'add' }
     ]);
+    setButtonDisabled(false);
     setValue('');
     setInputValue('');
     setShowInput(false);
-    setButtonDisabled(false);
+    setUserSelected(true);
     setAddOwnerBtn(false);
   };
 
@@ -158,6 +160,7 @@ const SeeOwners = ({
       if (isNewTask && isNewTask?.isNew) {
         setIsNewTask({ result: {}, isNew: false });
       }
+      setUserSelected(true);
       setIsModalOpen(false);
     });
   };
@@ -174,7 +177,12 @@ const SeeOwners = ({
     setButtonDisabled(false);
     if (isNewTask && isNewTask?.isNew) {
       setIsNewTask({ result: isNewTask?.result, isNew: false });
+      setInputValue('');
     }
+    setInputValue('');
+    setSelectedUsers([]); // clear selectedUsers state
+    setHandlePayload([]);
+    setUserSelected(false);
   };
 
   const handleOk = () => {
@@ -196,6 +204,7 @@ const SeeOwners = ({
     if (isNewTask && isNewTask?.isNew) {
       setIsNewTask({ result: {}, isNew: false });
     }
+    setUserSelected(false);
   };
 
   const handleCloseInnerModal = () => {
@@ -345,10 +354,13 @@ const SeeOwners = ({
   };
 
   useEffect(() => {
-    if (isNewTask && isNewTask?.isNew) {
+    if ((isNewTask && isNewTask?.isNew) || ownersCount === 0) {
       setShowInput(true);
+    } else {
+      setShowInput(false);
+      setUserSelected(true);
     }
-  }, [isNewTask]);
+  }, [isNewTask, ownersCount, isModalOpen]);
 
   return (
     <>
@@ -374,7 +386,8 @@ const SeeOwners = ({
                     isButtonDisabled ||
                     task?.is_completed ||
                     addOwnerBtn ||
-                    !editable
+                    !editable ||
+                    !userSelected
                   }
                   onClick={() => {
                     setShowInput(true);
