@@ -96,6 +96,14 @@ class MonthView extends React.Component {
     if (!startDate || !endDate) return [new Date()];
     const dates = [];
     let currentDate = new Date(startDate);
+    if (startDate > endDate) {
+      this.setState(prevState => {
+        if (!prevState.showDateRangeError) {
+          return { showDateRangeError: true };
+        }
+      });
+      return [];
+    }
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
@@ -194,13 +202,19 @@ class MonthView extends React.Component {
               }}
               placeholder="DD-MMM-YY"
               dateFormat="DD-MMM-YY"
-              helperText=""
+              helperText={
+                this.state.showDateRangeError ? 'Invalid date range' : ''
+              }
               startLabel="Start"
               endLabel="End"
             />
           </div>
-          {moment(this.props.timelineDateRange[0]).format('MMMM').toString() ===
-          moment(this.props.timelineDateRange[1]).format('MMMM').toString() ? (
+          {moment(this.props.timelineDateRange[0])
+            .format('MMMM')
+            .toString() ===
+          moment(this.props.timelineDateRange[1])
+            .format('MMMM')
+            .toString() ? (
             <div className="month-range-label">{`${moment(
               this.props.timelineDateRange[1]
             ).format('MMMM YYYY')}`}</div>
@@ -331,6 +345,7 @@ class MonthView extends React.Component {
   };
 
   renderHeaders(row) {
+    if (!row) return null;
     let { localizer, components } = this.props;
     let first = row[0];
     let last = row[row.length - 1];
