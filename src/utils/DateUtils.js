@@ -39,7 +39,7 @@ export function parseCorrectDate(DateString) {
 export const parseMomentDate = (date: Date | string) => {
   return !date || date === ' '
     ? date
-    : moment(date).format('D-MMM-yyyy');
+    : moment(date).format('DD-MMM-YYYY');
 };
 
 export const formatTheDate = (date: Date | string) => {
