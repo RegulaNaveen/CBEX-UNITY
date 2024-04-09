@@ -19,7 +19,7 @@ type Props = {
 
 const formatProposal = (proposal: Object) => {
   const placeholder = 'No data';
-  const dueDate = parseMomentDate(parseCorrectDate(proposal['bid due date']));
+  const dueDate = parseMomentDate(proposal['bid due date']);
   const daysRemain = getRemainingDays(dueDate);
 
   const formatted = {
@@ -64,7 +64,6 @@ class GridView extends Component<Props> {
       >
         {data.map(proposal => {
           const formatted = formatProposal(proposal);
-
           return (
             <ProposalCard
               key={uuidv4()}
