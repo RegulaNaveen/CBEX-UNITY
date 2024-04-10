@@ -1847,11 +1847,58 @@ export const updateSwitchTempStatusFromWebSocket = (data, proposalId) => {
 };
 
 export const updateDashboardProposal = (data): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: DASHBOARD_PROPOSAL_DETAIL,
-      payload: data
-    });
+  return async (dispatch, getState) => {
+    try {
+      const mapper = DashboardSFUpDATE;
+      let opportunities = selectOpportunitiesList(getState());
+      if (data && data?.data && data?.data?.questionSfField && opportunities) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            if (
+              data?.data?.questionSfField === 'Name' &&
+              data?.data?.questionsfObject === 'Opportunity'
+            ) {
+              value['opportunityName'] = data.data.answer;
+            } else {
+              value[mapper[data?.data?.questionSfField]] = data.data.answer;
+            }
+          }
+          return value;
+        });
+      }
+
+      if (
+        opportunities &&
+        data &&
+        data?.data &&
+        data?.data?.bidStatusKey &&
+        data?.data?.proposalDetails
+      ) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            value['bidStopStatus'] = data.data.bidStopStatus || '';
+          }
+          return value;
+        });
+      }
+
+      dispatch(setOpportunities(opportunities));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      dispatch({
+        type: DASHBOARD_PROPOSAL_DETAIL,
+        payload: data
+      });
+    }
   };
 };
 
