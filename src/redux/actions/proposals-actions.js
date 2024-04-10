@@ -556,7 +556,6 @@ export const updateProposal = (oppNumber, favourite, proposalDetails) => async (
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
     }
 
-    console.log({ opportunityIndex, oppNumber, favourite });
     if (opportunityIndex > -1) {
       opportunities[opportunityIndex]['isFavourite'] = favourite;
       dispatch(setOpportunities(opportunities));
@@ -619,9 +618,13 @@ export const updateDashboardNextMilestone = (
   return async (dispatch, getState) => {
     try {
       let proposals = getProposals(getState());
+      let opportunities = selectOpportunitiesList(getState());
       let proposalsFavourite = getFavouriteProposals(getState());
       const proposalIndex = proposals.findIndex(
         proposal => proposal['proposalId'] === proposalId
+      );
+      const opportunityIndex = opportunities.findIndex(
+        opportunity => opportunity['opportunity number'] === oppNumber
       );
       const favouriteIndex = proposalsFavourite.findIndex(
         proposal => proposal['proposalId'] === proposalId
@@ -635,6 +638,10 @@ export const updateDashboardNextMilestone = (
       if (favouriteIndex > -1) {
         proposalsFavourite[favouriteIndex]['nextMilestone'] = nextMilestone;
         dispatch({ type: ON_GET_FAVOURITE, payload: { proposalsFavourite } });
+      }
+      if (opportunityIndex > -1) {
+        opportunities[opportunityIndex]['nextMilestone'] = nextMilestone;
+        dispatch(setOpportunities(opportunities));
       }
     } catch (error) {
       console.error(error);
