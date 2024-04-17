@@ -577,20 +577,24 @@ export class TaskRow extends React.PureComponent<Props, State> {
         parseMomentDate(lastAnswer.trim()) !==
           parseMomentDate(selectedDay.trim()) &&
         selectedDay
-      )
-        setProposalAnswer(
-          this.context,
-          proposalId,
-          questionId,
-          formatTheDate(selectedDay),
-          userData
-        );
-      if (sfField && this.context) {
-        this.context.updateDashboardSFValueWrapper(
-          oppNo,
-          sfField,
-          formatTheDate(selectedDay)
-        );
+      ) {
+        if (selectedDay.trim() !== '') {
+          // Only make the API call if selectedDay is not empty
+          setProposalAnswer(
+            this.context,
+            proposalId,
+            questionId,
+            formatTheDate(selectedDay),
+            userData
+          );
+          if (sfField && this.context) {
+            this.context.updateDashboardSFValueWrapper(
+              oppNo,
+              sfField,
+              new Date(selectedDay)
+            );
+          }
+        }
       }
     });
     this.trackEventSubmitAnswer(selectedDay);
@@ -1304,6 +1308,10 @@ export class TaskRow extends React.PureComponent<Props, State> {
         );
 
       case 'date':
+        const isMandatoryDate =
+          this.props.sfObject === 'Bid_History__c' &&
+          this.props.sfField === 'Bid_Due_Date__c';
+
         return (
           <SFAnswerValidationWrapper
             hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
@@ -1339,6 +1347,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
                     this.setSelectRow(false);
                   }}
                   disabled={checkDisableFlag() || isNotApplicable}
+                  isMandatory={isMandatoryDate}
                 />
               </span>
             </span>
@@ -1720,6 +1729,7 @@ export class TaskRow extends React.PureComponent<Props, State> {
       latestAnsweredBidNo,
       questionDataDestinations
     } = this.props;
+
     let { answers } = this.props;
     let conditionBlankPredicted = false;
     answers = answers.reverse();

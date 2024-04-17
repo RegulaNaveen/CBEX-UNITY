@@ -45,7 +45,11 @@ import {
   getOpportunityData
 } from '../selectors/proposal';
 import { getErrorMessage, getProposalIdlist } from '../../utils/utils';
-import { DEFAULT, SEARCH as SEARCH_CONSTANTS } from '../../constants/app';
+import {
+  DEFAULT,
+  DashboardSFUpDATE,
+  SEARCH as SEARCH_CONSTANTS
+} from '../../constants/app';
 import isPriceModelerQuestion from '../../utils/isPriceModelerQuestion';
 import { fetchAllApprovals } from './approval-actions';
 import { SEARCH, UI, UNITY_TABS } from '../../constants/types';
@@ -54,6 +58,8 @@ import { selectQuery } from '../selectors/search';
 import { selectFavourites, selectCustomNameMap } from '../selectors/sso-auth';
 import featureFlags from '../../constants/featureFlags';
 import proposal from '../reducers/proposal';
+import { selectOpportunitiesList } from '../selectors/opportunities';
+import { setOpportunities } from './opportunities';
 
 const { PROPOSAL_API_URL } = API.PROPOSAL;
 const {
@@ -154,8 +160,9 @@ export const updateBidNoQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidNo', bidNo);
     // New url
-    const newRelativePathQuery = `${window.location.pathname
-      }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -166,8 +173,9 @@ export const updateBidTypeQueryparam = bidNo => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('bidType', bidNo);
     // New url
-    const newRelativePathQuery = `${window.location.pathname
-      }?${searchParams.toString()}`;
+    const newRelativePathQuery = `${
+      window.location.pathname
+    }?${searchParams.toString()}`;
     // Update URL without pageload
     window.history.pushState(null, '', newRelativePathQuery);
   }
@@ -747,11 +755,58 @@ export const getQuestionLockDetailsAll = (
 export const updateProposalDetailFromWebSocket = (
   data
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: UPDATE_PROPOSAL_DETAIL_SF,
-      payload: data
-    });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    try {
+      const mapper = DashboardSFUpDATE;
+      let opportunities = selectOpportunitiesList(getState());
+      if (data && data?.data && data?.data?.questionSfField && opportunities) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            if (
+              data?.data?.questionSfField === 'Name' &&
+              data?.data?.questionsfObject === 'Opportunity'
+            ) {
+              value['opportunityName'] = data.data.answer;
+            } else {
+              value[mapper[data?.data?.questionSfField]] = data.data.answer;
+            }
+          }
+          return value;
+        });
+      }
+
+      if (
+        opportunities &&
+        data &&
+        data?.data &&
+        data?.data?.bidStatusKey &&
+        data?.data?.proposalDetails
+      ) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            value['bidStopStatus'] = data.data.bidStopStatus || '';
+          }
+          return value;
+        });
+      }
+
+      dispatch(setOpportunities(opportunities));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      dispatch({
+        type: UPDATE_PROPOSAL_DETAIL_SF,
+        payload: data
+      });
+    }
   };
 };
 
@@ -890,7 +945,7 @@ function applyUnAnsweredFilter(questions, flags) {
                 String(Answer[Answer.length - 1].answer).trim().length
               ) ||
                 Answer[Answer.length - 1].userName ===
-                'UnityPredictedAnswer')) ||
+                  'UnityPredictedAnswer')) ||
             !Boolean(Answer.length)
           );
         }
@@ -1522,7 +1577,8 @@ export const getOpportunity = (
         // navigate to current bid
         // replace URL with correct params
         history.replace(
-          `${history.location.pathname}?bidNo=${currentProposal.proposal.proposalDetails.bidNo
+          `${history.location.pathname}?bidNo=${
+            currentProposal.proposal.proposalDetails.bidNo
           }&bidType=${currentProposal.proposal.bidType || 'Clinical_Bid'}`
         );
       }
@@ -1664,8 +1720,9 @@ export const changeBid = (bid, viewType) => {
   } else {
     searchParams.delete('viewType');
   }
-  const newRelativePathQuery = `${window.location.pathname
-    }?${searchParams.toString()}`;
+  const newRelativePathQuery = `${
+    window.location.pathname
+  }?${searchParams.toString()}`;
   // Update URL without pageload
   window.history.pushState(null, '', newRelativePathQuery);
 
@@ -1790,22 +1847,114 @@ export const updateSwitchTempStatusFromWebSocket = (data, proposalId) => {
 };
 
 export const updateDashboardProposal = (data): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: DASHBOARD_PROPOSAL_DETAIL,
-      payload: data
-    });
+  return async (dispatch, getState) => {
+    try {
+      const mapper = DashboardSFUpDATE;
+      let opportunities = selectOpportunitiesList(getState());
+      if (data && data?.data && data?.data?.questionSfField && opportunities) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            if (
+              data?.data?.questionSfField === 'Name' &&
+              data?.data?.questionsfObject === 'Opportunity'
+            ) {
+              value['opportunityName'] = data.data.answer;
+            } else {
+              value[mapper[data?.data?.questionSfField]] = data.data.answer;
+            }
+          }
+          return value;
+        });
+      }
+
+      if (
+        opportunities &&
+        data &&
+        data?.data &&
+        data?.data?.bidStatusKey &&
+        data?.data?.proposalDetails
+      ) {
+        opportunities = opportunities.map(value => {
+          if (
+            data &&
+            data?.data &&
+            data?.data?.proposalId === value['proposalId']
+          ) {
+            value['bidStopStatus'] = data.data.bidStopStatus || '';
+          }
+          return value;
+        });
+      }
+
+      dispatch(setOpportunities(opportunities));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      dispatch({
+        type: DASHBOARD_PROPOSAL_DETAIL,
+        payload: data
+      });
+    }
   };
 };
 
 export const updateOpportunityDashboardProposal = (
   data
 ): ThunkAction<string, Object> => {
-  return async (dispatch: Dispatch<string, Object>) => {
-    dispatch({
-      type: UPDATE_DASHBOARD_OPPORTUNITY,
-      payload: data
-    });
+  return async (dispatch: Dispatch<string, Object>, getState) => {
+    try {
+      const state = getState();
+      let opportunities = selectOpportunitiesList(state);
+
+      if (
+        opportunities &&
+        Array.isArray(opportunities) &&
+        opportunities.length &&
+        !data?.data?.bidStatusKey
+      ) {
+        const opportunityIndex = opportunities.findIndex(
+          opp => opp['opportunity number'] === data.oppId
+        );
+        if (opportunityIndex > -1) {
+          opportunities[opportunityIndex]['bid due date'] =
+            data.data.proposalDetails?.['Bid due date'] || '';
+          opportunities[opportunityIndex]['verbatim indication'] =
+            data.data.proposalDetails['Verbatim indication'] || '';
+          opportunities[opportunityIndex]['therapeuticArea'] =
+            data.data.proposalDetails?.['Therapeutic area'] || '';
+          opportunities[opportunityIndex]['phase'] =
+            data.data.proposalDetails['Phase'] || '';
+          opportunities[opportunityIndex]['protocol number'] =
+            data.data.proposalDetails?.['Protocol number'] || '';
+          opportunities[opportunityIndex]['product'] =
+            data.data.proposalDetails?.['Product name'] || '';
+          opportunities[opportunityIndex]['customer'] =
+            data.data.proposalDetails?.Customer || '';
+          opportunities[opportunityIndex]['bidNo'] =
+            data.data.proposalDetails?.bidNo || '';
+          if (data.data.proposalDetails?.['opportunity status']) {
+            opportunities[opportunityIndex]['opportunity status'] =
+              data.data.proposalDetails?.['opportunity status'] || '';
+          }
+          if (data.data.proposalDetails?.['opportunityName']) {
+            opportunities[opportunityIndex]['opportunityName'] =
+              data.data.proposalDetails?.['opportunityName'] || '';
+          }
+          dispatch(setOpportunities(opportunities));
+        }
+      }
+    } catch (e) {
+      console.error('Error in updateDashboardBid action: ', e);
+    } finally {
+      dispatch({
+        type: UPDATE_DASHBOARD_OPPORTUNITY,
+        payload: data
+      });
+    }
   };
 };
 
@@ -2034,14 +2183,22 @@ export const onSaveCustomName = (oppNo, customName) => {
         type: UI.SHOW_SNACKBAR
       });
       let proposals = getProposals(getState());
+      let opportunities = selectOpportunitiesList(getState());
       let proposalInfo = getProposalDetails(getState());
       let proposalsFavourite = getFavouriteProposals(getState());
       const proposalIndex = proposals.findIndex(
         proposal => proposal['opportunity number'] === oppNo
       );
+      const opportunityIndex = opportunities.findIndex(
+        opportunity => opportunity['opportunity number'] === oppNo
+      );
       if (proposalIndex > -1) {
         proposals[proposalIndex]['customName'] = customName;
         dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+      }
+      if (opportunityIndex > -1) {
+        opportunities[opportunityIndex]['customName'] = customName;
+        dispatch(setOpportunities(opportunities));
       }
 
       const favouriteIndex = proposalsFavourite.findIndex(
@@ -2071,14 +2228,23 @@ export const updateNextMilestone = (oppNumber, nextMilestone, proposalId) => {
     if (selectedBid?.id === proposalId) {
       try {
         let proposals = getProposals(getState());
+        let opportunities = selectOpportunitiesList(getState());
         let proposalInfo = getProposalDetails(getState());
         let proposalsFavourite = getFavouriteProposals(getState());
         const proposalIndex = proposals.findIndex(
           proposal => proposal['opportunity number'] === oppNumber
         );
+        const opportunityIndex = opportunities.findIndex(
+          opportunity => opportunity['opportunity number'] === oppNumber
+        );
         if (proposalIndex > -1) {
           proposals[proposalIndex]['nextMilestone'] = nextMilestone;
           dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+        }
+
+        if (opportunityIndex > -1) {
+          opportunities[opportunityIndex]['nextMilestone'] = nextMilestone;
+          dispatch(setOpportunities(opportunities));
         }
 
         const favouriteIndex = proposalsFavourite.findIndex(
@@ -2105,6 +2271,7 @@ export const updateNextMilestone = (oppNumber, nextMilestone, proposalId) => {
 export const updateCustomNameAction = (oppNo, customName) => {
   return async (dispatch, getState) => {
     let proposals = getProposals(getState());
+    let opportunities = selectOpportunitiesList(getState());
     let proposalInfo = getProposalDetails(getState());
     let proposalsFavourite = getFavouriteProposals(getState());
     let customNameMap = selectCustomNameMap(getState()).toJS();
@@ -2113,9 +2280,17 @@ export const updateCustomNameAction = (oppNo, customName) => {
     const proposalIndex = proposals.findIndex(
       proposal => proposal['opportunity number'] === oppNo
     );
+    const opportunityIndex = opportunities.findIndex(
+      opportunity => opportunity['opportunity number'] === oppNo
+    );
     if (proposalIndex > -1) {
       proposals[proposalIndex]['customName'] = customName;
       dispatch({ type: ON_GET_PROPOSALS, payload: { proposals } });
+    }
+
+    if (opportunityIndex > -1) {
+      opportunities[opportunityIndex]['customName'] = customName;
+      dispatch(setOpportunities(opportunities));
     }
 
     const favouriteIndex = proposalsFavourite.findIndex(

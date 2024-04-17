@@ -16,7 +16,26 @@ import {
   updateBidNoQueryparam,
   updateBidTypeQueryparam,
   updateChangeBidStatusOperation,
-  updateSwitchInProgress
+  updateSwitchInProgress,
+  getProposalByID,
+  setNotApplicableQuestionFromSocket,
+  onQuestionsFilterApplied,
+  getPriceModelerData,
+  setApprovalQuestionLoading,
+  setUnityTabQuestionLoading,
+  setPriceModelerRecalculationStatusAction,
+  activateProposalLoading,
+  setVTabUserPreferenceAction,
+  getQuestionSection,
+  getAnswerTypesInfo,
+  getIntegrationsData,
+  setProposalQuestion,
+  setProposalQuestionFromSocket,
+  getProposalUpdated,
+  updateQuestionLockByUser,
+  getQuestionLockDetailsAll,
+  updateQuestionUnlockByUser,
+  onGetProposalBoxId
 } from '../proposal-actions';
 import { waitFor } from '@testing-library/react';
 import * as ProposalApi from '../../../api/proposal';
@@ -32,6 +51,7 @@ import * as data from '../../../components/screens/Opportunity/__tests__/mockdat
 import thunk from 'redux-thunk';
 import cloneDeep from 'lodash/cloneDeep';
 import * as proposalSelecter from '../../selectors';
+import { UNITY_TABS } from '../../../constants/types';
 
 jest.mock('axios', () => {
   const jestOriginal = jest.requireActual('axios');
@@ -994,5 +1014,594 @@ describe('proposal-actions test', () => {
     store.dispatch(
       updateSwitchInProgress(true, '9aa9dfe2-1222-4dff-8977-f06f45656a4b')
     );
+  });
+
+  test('dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { proposalQuestions: [] };
+    const mockMilestones = ['milestone1', 'milestone2'];
+
+    const getProposalInfoSpy = jest
+      .spyOn(ProposalApi, 'getProposalInfo')
+      .mockResolvedValueOnce(mockData);
+    const getUniqueMilestonesSpy = jest
+      .spyOn(proposalReducer, 'getUniqueMilestones')
+      .mockReturnValueOnce(mockMilestones);
+
+    await getProposal('test-id')(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO,
+      payload: {
+        ...mockData,
+        milestones: mockMilestones
+      }
+    });
+    getProposalInfoSpy.mockRestore();
+    getUniqueMilestonesSpy.mockRestore();
+  });
+
+  test('dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+
+    const getProposalInfoSpy = jest
+      .spyOn(ProposalApi, 'getProposalInfo')
+      .mockRejectedValueOnce(mockError);
+
+    await getProposal('test-id')(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_ERROR,
+      payload: mockError
+    });
+
+    getProposalInfoSpy.mockRestore();
+  });
+
+  test('getProposalByID dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { proposalQuestions: [] };
+
+    const getProposalInfoSpy = jest
+      .spyOn(ProposalApi, 'getProposalInfo')
+      .mockResolvedValueOnce(mockData);
+
+    const result = await getProposalByID('test-id')(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+    expect(result).toEqual(mockData);
+    getProposalInfoSpy.mockRestore();
+  });
+
+  test('getProposalByID dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+
+    const getProposalInfoSpy = jest
+      .spyOn(ProposalApi, 'getProposalInfo')
+      .mockRejectedValueOnce(mockError);
+
+    try {
+      await getProposalByID('test-id')(mockDispatch);
+    } catch (err) {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+        payload: {}
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_ERROR,
+        payload: mockError
+      });
+      expect(err).toEqual(mockError);
+    }
+    getProposalInfoSpy.mockRestore();
+  });
+
+  test('getPriceModelerData action creator', async () => {
+    const mockDispatch = jest.fn();
+    const mockResponse = { data: 'test data' };
+
+    const getProposalInfoSpy = jest
+      .spyOn(ProposalApi, 'priceModelerApi')
+      .mockResolvedValueOnce(mockResponse);
+
+    // priceModelerApi.mockResolvedValueOnce(mockResponse);
+
+    await getPriceModelerData('test-id')(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.SET_PRICE_MODELER_FIELDS,
+      payload: mockResponse.data
+    });
+    getProposalInfoSpy.mockRestore();
+  });
+
+  test('getPriceModelerData logs an error on failed execution', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+    const getProposalInfoSpy = jest
+      .spyOn(ProposalApi, 'priceModelerApi')
+      .mockRejectedValueOnce(mockError);
+    try {
+      await getPriceModelerData('test-id')(mockDispatch);
+    } catch (err) {
+      expect(console.error).toHaveBeenCalledWith(mockError);
+    }
+    getProposalInfoSpy.mockRestore();
+  });
+
+  test('dispatches the correct action', async () => {
+    const mockDispatch = jest.fn();
+    const mockQuestionId = 'test-id';
+    const mockValue = true;
+
+    await setApprovalQuestionLoading(mockQuestionId, mockValue)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.SET_APPROVAL_QUESTION_LOADING,
+      payload: { questionId: mockQuestionId, value: mockValue }
+    });
+  });
+
+  test('logs an error on failed execution', async () => {
+    const mockDispatch = jest.fn(() => {
+      throw new Error('test error');
+    });
+    const mockQuestionId = 'test-id';
+    const mockValue = true;
+
+    console.error = jest.fn();
+
+    try {
+      await setApprovalQuestionLoading(mockQuestionId, mockValue)(mockDispatch);
+    } catch (err) {
+      expect(console.error).toHaveBeenCalledWith(new Error('test error'));
+    }
+  });
+
+  test('setUnityTabQuestionLoading dispatches the correct action', async () => {
+    const mockDispatch = jest.fn();
+    const mockQuestionId = 'test-id';
+    const mockValue = true;
+
+    await setUnityTabQuestionLoading(mockQuestionId, mockValue)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.SET_UNITY_TAB_QUESTION_LOADING,
+      payload: { questionId: mockQuestionId, value: mockValue }
+    });
+  });
+
+  test('setUnityTabQuestionLoading logs an error on failed execution', async () => {
+    const mockDispatch = jest.fn(() => {
+      throw new Error('test error');
+    });
+    const mockQuestionId = 'test-id';
+    const mockValue = true;
+
+    console.error = jest.fn();
+
+    try {
+      await setUnityTabQuestionLoading(mockQuestionId, mockValue)(mockDispatch);
+    } catch (err) {
+      expect(console.error).toHaveBeenCalledWith(new Error('test error'));
+    }
+  });
+
+  test('setPriceModelerRecalculationStatusAction dispatches the correct action', async () => {
+    const mockDispatch = jest.fn();
+    const isRecalculating = false;
+
+    await setPriceModelerRecalculationStatusAction(isRecalculating)(
+      mockDispatch
+    );
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.SET_PRICE_MODELER_RECALCULATING,
+      payload: isRecalculating
+    });
+  });
+
+  test('setPriceModelerRecalculationStatusAction logs an error on failed execution', async () => {
+    const mockDispatch = jest.fn(() => {
+      throw new Error('test error');
+    });
+    const isRecalculating = false;
+
+    console.error = jest.fn();
+
+    try {
+      await setPriceModelerRecalculationStatusAction(isRecalculating)(
+        mockDispatch
+      );
+    } catch (err) {
+      expect(console.error).toHaveBeenCalledWith(new Error('test error'));
+    }
+  });
+
+  test('activateProposalLoading dispatches the correct action', async () => {
+    const mockDispatch = jest.fn();
+
+    await activateProposalLoading()(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+  });
+
+  test('setVTabUserPreferenceAction dispatches the correct action', async () => {
+    const mockDispatch = jest.fn();
+    const mockTabIndex = 1;
+    const mockCollapsed = true;
+    await setVTabUserPreferenceAction(
+      mockTabIndex,
+      mockCollapsed
+    )(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.SET_V_TAB_USER_PREFERENCE,
+      payload: { tabIndex: mockTabIndex, collapsed: mockCollapsed }
+    });
+  });
+
+  test('getQuestionSection dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { data: 'test' };
+
+    const getQuestionSectionInfoSpy = jest
+      .spyOn(ProposalApi, 'getQuestionSectionInfo')
+      .mockResolvedValueOnce(mockData);
+
+    // getQuestionSectionInfo.mockResolvedValueOnce(mockData);
+
+    await getQuestionSection()(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.QUESTION_SECTION_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.QUESTION_SECTION_INFO,
+      payload: mockData
+    });
+    getQuestionSectionInfoSpy.mockRestore();
+  });
+
+  test('getQuestionSection dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+
+    const getQuestionSectionInfoSpy = jest
+      .spyOn(ProposalApi, 'getQuestionSectionInfo')
+      .mockRejectedValueOnce(mockError);
+
+    try {
+      await getQuestionSection()(mockDispatch);
+    } catch (err) {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.QUESTION_SECTION_LOADING,
+        payload: {}
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.QUESTION_SECTION_ERROR,
+        payload: mockError
+      });
+      expect(err).toEqual(mockError);
+    }
+    getQuestionSectionInfoSpy.mockRestore();
+  });
+
+  test('getAnswerTypesInfo dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { data: 'test' };
+
+    const getAnswerTypesInfoSpy = jest
+      .spyOn(ProposalApi, 'getAnswerTypes')
+      .mockResolvedValueOnce(mockData);
+
+    await getAnswerTypesInfo()(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.ANSWER_TYPES_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.ANSWER_TYPES_INFO,
+      payload: mockData
+    });
+    getAnswerTypesInfoSpy.mockRestore();
+  });
+
+  test('getAnswerTypesInfo dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+
+    const getAnswerTypesInfoSpy = jest
+      .spyOn(ProposalApi, 'getAnswerTypes')
+      .mockRejectedValueOnce(mockError);
+
+    try {
+      await getAnswerTypesInfo()(mockDispatch);
+    } catch (err) {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.ANSWER_TYPES_LOADING,
+        payload: {}
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.ANSWER_TYPES_ERROR,
+        payload: mockError
+      });
+      expect(err).toEqual(mockError);
+    }
+    getAnswerTypesInfoSpy.mockRestore();
+  });
+
+  test('getIntegrationsData dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { data: 'test' };
+
+    const getIntegrationsDataSpy = jest
+      .spyOn(ProposalApi, 'getIntegrations')
+      .mockResolvedValueOnce(mockData);
+
+    await getIntegrationsData()(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.INTEGRATIONS_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.INTEGRATIONS_INFO,
+      payload: mockData
+    });
+    getIntegrationsDataSpy.mockRestore();
+  });
+
+  test('getIntegrationsData dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+
+    const getIntegrationsDataSpy = jest
+      .spyOn(ProposalApi, 'getIntegrations')
+      .mockRejectedValueOnce(mockError);
+
+    try {
+      await getIntegrationsData()(mockDispatch);
+    } catch (err) {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.INTEGRATIONS_LOADING,
+        payload: {}
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.INTEGRATIONS_ERROR,
+        payload: mockError
+      });
+      expect(err).toEqual(mockError);
+    }
+    getIntegrationsDataSpy.mockRestore();
+  });
+
+  test('setProposalQuestion dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { data: 'test' };
+    const mockProposalId = 'test-id';
+    const mockQuestionData = { question: 'test' };
+    const mockSocketContext = {
+      addQuestionWrapper: jest.fn()
+    };
+
+    const setProposalQuestionSpy = jest
+      .spyOn(ProposalApi, 'setProposalQuestionData')
+      .mockResolvedValueOnce(mockData);
+
+    await setProposalQuestion(
+      mockProposalId,
+      mockQuestionData,
+      mockSocketContext
+    )(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_SET_QUESTION,
+      payload: mockData
+    });
+    setProposalQuestionSpy.mockRestore();
+  });
+
+  test('setProposalQuestion dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+    const mockProposalId = 'test-id';
+    const mockQuestionData = { question: 'test' };
+    const mockSocketContext = {
+      addQuestionWrapper: jest.fn()
+    };
+
+    const setProposalQuestionSpy = jest
+      .spyOn(ProposalApi, 'setProposalQuestionData')
+      .mockRejectedValueOnce(mockError);
+
+    try {
+      await setProposalQuestion(
+        mockProposalId,
+        mockQuestionData,
+        mockSocketContext
+      )(mockDispatch);
+    } catch (err) {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.PROPOSAL_SET_QUESTION_LOADING,
+        payload: {}
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.PROPOSAL_SET_QUESTION_ERROR,
+        payload: mockError
+      });
+      expect(err).toEqual(mockError);
+    }
+    setProposalQuestionSpy.mockRestore();
+  });
+
+  test.skip('setProposalQuestionFromSocket dispatches the correct actions', async () => {
+    const mockDispatch = jest.fn();
+    const mockData = { data: 'test' };
+    const proposalId = 'test-id';
+    const mockSelectedBid = { id: '1' };
+
+    const getSelectedBidSpy = jest
+      .spyOn(proposalReducer, 'getSelectedBid')
+      .mockReturnValueOnce({ toJS: () => mockSelectedBid });
+
+    await setProposalQuestionFromSocket(mockData)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_SET_QUESTION_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_SET_QUESTION,
+      payload: mockData
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: UNITY_TABS.SET_CUSTOM_QUESTION_CUSTOM_TAB,
+      payload: mockData
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.APPROVALS.SET_APPROVAL_QUESTION_APPROVALS_TAB,
+      payload: mockData
+    });
+    getSelectedBidSpy.mockRestore();
+  });
+
+  test('getProposalUpdated dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockId = '1';
+    const getProposalUpdatedSpy = jest
+      .spyOn(ProposalApi, 'getProposalInfoUpdated')
+      .mockResolvedValueOnce(mockId);
+
+    await getProposalUpdated(mockId)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO,
+      payload: mockId
+    });
+    getProposalUpdatedSpy.mockRestore();
+  });
+
+  test('getProposalUpdated dispatches the correct actions on failed fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockError = new Error('test error');
+    const mockId = '1';
+    const getProposalUpdatedSpy = jest
+      .spyOn(ProposalApi, 'getProposalInfoUpdated')
+      .mockRejectedValueOnce(mockError);
+
+    try {
+      await getProposalUpdated(mockId)(mockDispatch);
+    } catch (err) {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_LOADING,
+        payload: {}
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: REDUX_TYPES.PROPOSAL.PROPOSAL_INFO_ERROR,
+        payload: mockError
+      });
+      expect(err).toEqual(mockError);
+    }
+    getProposalUpdatedSpy.mockRestore();
+  });
+
+  test('updateQuestionLockByUser dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const data = 'test';
+
+    await updateQuestionLockByUser(data)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.QUESTION_LOCK_BY_USER,
+      payload: data
+    });
+  });
+
+  test('getQuestionLockDetailsAll dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const data = 'test';
+
+    await getQuestionLockDetailsAll(data)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.QUESTION_LOCK_DETAILS_ALL,
+      payload: data
+    });
+  });
+
+  test('updateQuestionLockByUser dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const data = 'test';
+
+    await updateQuestionUnlockByUser(data)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.QUESTION_UNLOCK_BY_USER,
+      payload: data
+    });
+  });
+
+  test('onGetProposalBoxId dispatches the correct actions on successful fetch', async () => {
+    const mockDispatch = jest.fn();
+    const mockId = '1';
+    const mockData = {
+      proposal: {
+        proposalDetails: {
+          BoxId: '123'
+        }
+      }
+    };
+
+    const getProposlBoxIdSpy = jest
+      .spyOn(ProposalApi, 'getProposlBoxId')
+      .mockResolvedValueOnce({ data: mockData });
+
+    await onGetProposalBoxId(mockId)(mockDispatch);
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_BOX_ID_LOADING,
+      payload: {}
+    });
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: REDUX_TYPES.PROPOSAL.PROPOSAL_BOX_ID,
+      payload: { boxId: mockData.proposal.proposalDetails.BoxId }
+    });
+    getProposlBoxIdSpy.mockRestore();
   });
 });

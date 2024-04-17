@@ -4,7 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import classNames from 'classnames';
 import ProposalCard from './ProposalCard';
-import { parseMomentDate, getRemainingDays } from '../../utils/DateUtils';
+import {
+  parseMomentDate,
+  getRemainingDays,
+  parseCorrectDate
+} from '../../utils/DateUtils';
 import { getNextMilestone } from '../../utils/utils';
 
 type Props = {
@@ -60,7 +64,6 @@ class GridView extends Component<Props> {
       >
         {data.map(proposal => {
           const formatted = formatProposal(proposal);
-
           return (
             <ProposalCard
               key={uuidv4()}
