@@ -79,7 +79,7 @@ class Toolbar extends Component<{}, State> {
               }
             >
               <a className="toolbar-space" href={UBUILD_V2}>
-                <p className="ubuild-title">U-Build V2</p>
+                <p className="ubuild-title">U-Build v2</p>
               </a>
             </div>
           </>
