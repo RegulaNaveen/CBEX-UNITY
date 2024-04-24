@@ -13,6 +13,7 @@ import {
   PROPOSALS,
   DASHBOARD,
   UBUILD,
+  UBUILD_V2,
   OPPORTUNITYS,
   PROFILE,
   RECENT_ACTIVITY
@@ -23,6 +24,7 @@ import ProposalComponent from './components/screens/Proposal';
 import OpportunityComponent from './components/screens/Opportunity';
 import DashboardComponent from './components/screens/Dashboard';
 import UbuildShellComponent from './components/screens/Ubuild';
+import UbuildShellComponentV2 from './components/screens/Ubuild/ubuild_v2';
 import ProfileComponent from './components/screens/Profile/AccountPreferences';
 import RecentActivityComponent from './components/screens/Profile/RecentActivity';
 import '../styles/App.scss';
@@ -164,6 +166,10 @@ const App = () => (
                 exact
                 path={UBUILD}
                 component={UbuildShellComponent}
+              />
+              <PrivateRoute
+                path={`${UBUILD_V2}*`}
+                component={UbuildShellComponentV2}
               />
               <Route path="/" component={Home} />
               <Redirect to={LOGIN} />

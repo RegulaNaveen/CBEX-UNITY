@@ -19,6 +19,7 @@ let REDIRECTION_URL = '';
 //* Ubuild feature flag
 let UBUILD_ENABLED = false;
 let UBUILD_ARTIFACT = '';
+let UBUILD_ARTIFACT_V2 = '';
 let SF_HOST_URL = '';
 let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
@@ -39,6 +40,7 @@ switch (environment) {
     CLIENT_ID = '1h21m7sdoq1jr4tb00mkljn1m';
     REDIRECTION_URL = 'https://uat-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://uat-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://uat-ubuild.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--uat.sandbox.lightning.force.com/';
     SOCKET_URL =
       'wss://l3p8o0zg48.execute-api.us-east-1.amazonaws.com/production';
@@ -59,6 +61,7 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev2-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev2-ubuild.dev.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://dev2-ubuild.dev.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
     SOCKET_URL =
       'wss://bgh4swo5j8.execute-api.us-east-1.amazonaws.com/production';
@@ -78,6 +81,7 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev3-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev3-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://dev3-ubuild.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--dev.lightning.force.com/';
     SOCKET_URL =
       'wss://bgh4swo5j8.execute-api.us-east-1.amazonaws.com/production';
@@ -97,6 +101,7 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev3-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev3-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://dev3-ubuild.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--dev.lightning.force.com/';
     SOCKET_URL =
       'wss://3g2rh5rdnf.execute-api.us-east-1.amazonaws.com/production';
@@ -112,6 +117,7 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://demo-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://demo-ubuild.dev.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://demo-ubuild.dev.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--hotfix.lightning.force.com/';
     SOCKET_URL =
       'wss://ld700ndvyb.execute-api.us-east-1.amazonaws.com/production';
@@ -131,6 +137,7 @@ switch (environment) {
     CLIENT_ID = 'tc1tih0kcrifpoqrdsqo26467';
     REDIRECTION_URL = 'https://unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://ubuild.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia.my.salesforce.com/';
     SOCKET_URL =
       'wss://29nghekakl.execute-api.us-east-1.amazonaws.com/production';
@@ -153,6 +160,7 @@ switch (environment) {
     CLIENT_ID = '65ie0siehm65hisi4n1avlaa0r';
     REDIRECTION_URL = 'https://qa-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://qa-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://qa-ubuild.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--staging.sandbox.lightning.force.com/';
     SOCKET_URL =
       'wss://nthe94se04.execute-api.us-east-1.amazonaws.com/production';
@@ -174,6 +182,7 @@ switch (environment) {
     CLIENT_ID = '5cal3rohkqshgv9iufmpafu4cr';
     REDIRECTION_URL = 'https://l4-unity.iqvia.app/';
     UBUILD_ARTIFACT = 'https://l4-ubuild.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://l4-ubuild.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--uthfixchk.lightning.force.com/';
     SOCKET_URL =
       'wss://j3xgedpk7j.execute-api.us-east-1.amazonaws.com/production';
@@ -198,6 +207,7 @@ switch (environment) {
     // REDIRECTION_URL = 'http://localhost:8080';
 
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://dev-ubuild.dev.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
@@ -219,6 +229,7 @@ switch (environment) {
     CLIENT_ID = 'uf2jbhv4jcprcdiqc5rupg665';
     REDIRECTION_URL = 'https://dev-unity.dev.iqvia.app/';
     UBUILD_ARTIFACT = 'https://dev-ubuild.dev.iqvia.app/main.js';
+    UBUILD_ARTIFACT_V2 = 'https://dev-ubuild.dev.iqvia.app/v2/main.js';
     SF_HOST_URL = 'https://iqvia--crm.lightning.force.com/';
     SOCKET_URL =
       'wss://sgag59jkn1.execute-api.us-east-1.amazonaws.com/production';
@@ -325,6 +336,7 @@ export {
   NOTEPAD,
   UBUILD_ENABLED,
   UBUILD_ARTIFACT,
+  UBUILD_ARTIFACT_V2,
   SF_HOST_URL,
   SOCKET_URL,
   PROFILE,

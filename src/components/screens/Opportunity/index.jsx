@@ -52,7 +52,7 @@ import BidDoneBanner from '../../views/BidDoneBanner';
 import GenerateDocs from '../../views/export-component/GenerateDocs';
 import { SocketContext } from '../../../context/SocketContext';
 import * as notificationActions from '../../../redux/actions/notification-actions';
-import { UBUILD, DASHBOARD } from '../../../routes';
+import { UBUILD, DASHBOARD, UBUILD_V2 } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
 import {
@@ -183,6 +183,11 @@ export class Opportunity extends Component<Props, State> {
         this.context.updateSocketOppId(params.id, proposalId);
       else this.context.updateSocketOppId(null, null);
     }
+    if ((this.props && location && location?.pathname) !== UBUILD_V2) {
+      if (location?.pathname !== DASHBOARD)
+        this.context.updateSocketOppId(params.id, proposalId);
+      else this.context.updateSocketOppId(null, null);
+    }
     window.addEventListener('resize', this.handleResize);
     // const windowSize = window.innerWidth;
 
@@ -235,6 +240,10 @@ export class Opportunity extends Component<Props, State> {
         toggleCanReorder(false);
       }
       if ((this.props && location && location?.pathname) !== UBUILD) {
+        this.context.updateSocketOppId(params.id, thisProposalId);
+        localStorage.setItem('proposalId', thisProposalId);
+      }
+      if ((this.props && location && location?.pathname) !== UBUILD_V2) {
         this.context.updateSocketOppId(params.id, thisProposalId);
         localStorage.setItem('proposalId', thisProposalId);
       }
