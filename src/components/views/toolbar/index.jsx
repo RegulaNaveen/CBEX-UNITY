@@ -147,7 +147,9 @@ class Toolbar extends Component<{}, State> {
                   aria-hidden="true"
                   style={{ cursor: 'pointer' }}
                   className={
-                    (this.props && location && location?.pathname) === UBUILD_V2
+                    (this.props && location && location?.pathname).startsWith(
+                      UBUILD_V2
+                    )
                       ? 'ubuild-linkactive'
                       : 'ubuild-link'
                   }

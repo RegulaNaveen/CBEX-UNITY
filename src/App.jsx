@@ -168,8 +168,7 @@ const App = () => (
                 component={UbuildShellComponent}
               />
               <PrivateRoute
-                exact
-                path={UBUILD_V2}
+                path={`${UBUILD_V2}*`}
                 component={UbuildShellComponentV2}
               />
               <Route path="/" component={Home} />
