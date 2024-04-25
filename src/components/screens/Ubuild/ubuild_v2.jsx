@@ -39,7 +39,7 @@ export class UbuildShell extends Component {
     return (
       <div className="ubuild-wrapper">
         <Toolbar />
-        <u-build />
+        <u-build-v2 />
       </div>
     );
   }
