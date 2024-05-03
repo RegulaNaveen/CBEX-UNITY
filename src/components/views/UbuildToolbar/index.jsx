@@ -7,7 +7,7 @@ import Avatar from 'apollo-react/components/Avatar';
 import ArrowUp from 'apollo-react-icons/ArrowUp';
 import ArrowDown from 'apollo-react-icons/ArrowDown';
 import ToolbarMenu from './ToolbarMenu';
-import { DASHBOARD, UBUILD } from '../../../routes';
+import { DASHBOARD, UBUILD, UBUILD_V2 } from '../../../routes';
 import { isUserUbuildAdmin } from '../../../utils/utils';
 import { getUserName } from '../../../SessionHandler';
 
@@ -59,17 +59,32 @@ class Toolbar extends Component<{}, State> {
           <p className="toolbar-title">Unity</p>
         </a>
         {results && (
-          <div
-            className={
-              (this.props && location && location?.pathname) === UBUILD
-                ? 'ubuild-linkactive'
-                : 'ubuild-link'
-            }
-          >
-            <a className="toolbar-space" href={UBUILD}>
-              <p className="ubuild-title">U-Build</p>
-            </a>
-          </div>
+          <>
+            <div
+              className={
+                (this.props && location && location?.pathname) === UBUILD
+                  ? 'ubuild-linkactive'
+                  : 'ubuild-link'
+              }
+            >
+              <a className="toolbar-space" href={UBUILD}>
+                <p className="ubuild-title">U-Build</p>
+              </a>
+            </div>
+            <div
+              className={
+                (this.props && location && location?.pathname).startsWith(
+                  UBUILD_V2
+                )
+                  ? 'ubuild-linkactive'
+                  : 'ubuild-link'
+              }
+            >
+              <a className="toolbar-space" href={UBUILD_V2}>
+                <p className="ubuild-title">U-Build v2</p>
+              </a>
+            </div>
+          </>
         )}
         <div className="toolbar-account-spacer">
           <div ref={this.wrapperRef} className="toolbar-account-wrapper">
