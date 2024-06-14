@@ -1,0 +1,107 @@
+#root {
+  $fullscreen-margin-left-inputbox: 0px;
+  $fullscreen-min-width-inputbox: 100%;
+}
+.chat-bot-ui-fullscreen {
+  width: 95vw !important;
+}
+
+.chat-bot-ui-container {
+  position: sticky;
+  right: 0;
+  bottom: 0;
+  margin-right: 24px;
+  margin-bottom: 24px;
+  z-index: 99999999;
+  .chat-bot-ui {
+    right: 0;
+    bottom: 24px;
+    border-bottom-right-radius: 0;
+    background: linear-gradient(180deg, #51006d 0%, #ad0062 100%);
+    position: absolute;
+    width: 550px;
+    height: 600px;
+    border-radius: 16px;
+    border-bottom-right-radius: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    .chat-bot-header {
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+    .chat-bot-bubbles-container-fullscreen {
+      margin-left: 17vw;
+      margin-right: 17vw;
+    }
+    .chat-bot-bubbles-container {
+      flex-grow: 1;
+      padding: 24px;
+      overflow-x: scroll;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      & > div {
+        margin-bottom: 24px;
+      }
+      .chat-bubble-actions {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        color: white;
+        gap: 5px;
+        justify-content: baseline;
+        margin-top: 5px;
+        font-size: 16px;
+        .copy-icon {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+        }
+        .copied {
+          color: gray;
+        }
+      }
+    }
+    .chat-bot-footer-container {
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      border-radius: 0 0 0 16px;
+      .chat-bot-footer {
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        margin-left: var(--fullscreen-margin-left-inputbox);
+        min-width: var(--fullscreen-min-width-inputbox);
+        & > div > div > div {
+          box-sizing: content-box;
+        }
+      }
+      .chat-bot-info {
+        display: flex;
+        align-items: center;
+        position: relative;
+        margin-top: 8px;
+        color: white;
+        align-self: center;
+        justify-self: baseline;
+        font-size: 14px;
+        top: -15px;
+        .chat-bot-info-link {
+          margin-left: 8px;
+          margin-right: 8px;
+          color: white;
+        }
+      }
+    }
+  }
+  div:has(#chat-bot) {
+    margin-right: 0;
+  }
+  #chat-bot {
+    & > div {
+      box-sizing: content-box;
+    }
+  }
+}

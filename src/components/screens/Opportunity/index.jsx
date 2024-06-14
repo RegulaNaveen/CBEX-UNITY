@@ -75,6 +75,8 @@ import {
   toggleCanReorder
 } from '../../../redux/actions/tasksList-actions';
 import { filter } from 'lodash';
+import ChatBot from '../../views/ChatBot';
+import ApolloThemeProvider2 from 'apollo-react-4.19.0/utils/ApolloThemeProvider';
 
 type State = {
   selectedView: string
@@ -275,8 +277,12 @@ export class Opportunity extends Component<Props, State> {
   };
 
   trackEventTabs = tab => {
-    const { eventCategories, userActions, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,
@@ -299,8 +305,12 @@ export class Opportunity extends Component<Props, State> {
   };
 
   handleEditCustomName = () => {
-    const { toggleEditCustomNameModal, onEditCustomName, customName, details } =
-      this.props;
+    const {
+      toggleEditCustomNameModal,
+      onEditCustomName,
+      customName,
+      details
+    } = this.props;
     onEditCustomName(details['CRM #'], customName);
     toggleEditCustomNameModal(true);
   };
@@ -381,10 +391,17 @@ export class Opportunity extends Component<Props, State> {
   };
 
   render() {
-    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } =
-      this.props;
-    const { questionTemplateVersionNumber, opportunityType, bidStatus } =
-      selectedBid.toJS();
+    const {
+      isSidebarOpen,
+      selectedBid,
+      newbidflag,
+      closeNewbidflag
+    } = this.props;
+    const {
+      questionTemplateVersionNumber,
+      opportunityType,
+      bidStatus
+    } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -407,7 +424,9 @@ export class Opportunity extends Component<Props, State> {
             message="A new Bid is being created based on CRM data"
           />
         )}
-
+        <ApolloThemeProvider2>
+          <ChatBot />
+        </ApolloThemeProvider2>
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}
