@@ -6,31 +6,16 @@ import ChatBubble from './ChatBubble';
 import './styles.scss';
 import classNames from 'classnames';
 import ChatBotInfo from './ChatBotInfo';
+import { useSelector } from 'react-redux';
+import { selectChatBotBubbles } from '../../../redux/selectors/chatbot';
+import { useDispatch } from 'react-redux';
+import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const [bubbles, setBubbles] = useState([
-    {
-      variant: 'systemWithContent',
-      copyContent:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
-      children:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
-      replySuggestionMessage: 'Here are some things I can do:',
-      buttonProps: [
-        {
-          label: 'Show me the eCOA recommended services'
-        },
-        {
-          label: 'See Regulatory Updates'
-        },
-        {
-          label: 'Continue last topic: Enrolling a new Patient'
-        }
-      ]
-    }
-  ]);
+  const dispatch = useDispatch();
+  const bubbles = useSelector(selectChatBotBubbles);
   const [expanded, setExpanded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [disableFooter, setDisableFooter] = useState(false);
@@ -56,6 +41,12 @@ const ChatBot = () => {
       root?.style.setProperty('--fullscreen-min-width-inputbox', '100%');
     }
   }, [fullscreen]);
+
+  useEffect(() => {
+    if (!disableFooter && inputRef.current) {
+      inputRef.current.value = '';
+    }
+  }, [disableFooter]);
 
   return (
     <div
@@ -113,36 +104,11 @@ const ChatBot = () => {
               disabled={disableFooter}
               onSendClick={() => {
                 setDisableFooter(true);
-                inputRef.current.value = '';
-                const newBubble = {
-                  variant: 'user',
-                  copyContent: inputRef.current.value,
-                  children: inputRef.current.value
-                };
-                setBubbles(prev => [...prev, newBubble]);
-                setTimeout(() => {
-                  const newBubble = {
-                    variant: 'systemWithContent',
-                    copyContent:
-                      "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
-                    children:
-                      "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
-                    replySuggestionMessage: 'Here are some things I can do:',
-                    buttonProps: [
-                      {
-                        label: 'Show me the eCOA recommended services'
-                      },
-                      {
-                        label: 'See Regulatory Updates'
-                      },
-                      {
-                        label: 'Continue last topic: Enrolling a new Patient'
-                      }
-                    ]
-                  };
-                  setBubbles(prev => [...prev, newBubble]);
-                  setDisableFooter(false);
-                }, 3000);
+                dispatch(
+                  addChatBotBubble(inputRef.current.value, () =>
+                    setDisableFooter(false)
+                  )
+                );
               }}
               onActionClick={() => console.log('onActionClick')}
               placeholder="Ask me something..."
