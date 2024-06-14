@@ -12,12 +12,12 @@ const ChatBot = () => {
   const inputRef = useRef(null);
   const [bubbles, setBubbles] = useState([
     {
-      variant: 'SystemWithContent',
-      replySuggestionMessage: 'Here are some things I can do:',
-      children:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects.",
+      variant: 'systemWithContent',
       copyContent:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects.",
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
+      children:
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
+      replySuggestionMessage: 'Here are some things I can do:',
       buttonProps: [
         {
           label: 'Show me the eCOA recommended services'
@@ -29,16 +29,11 @@ const ChatBot = () => {
           label: 'Continue last topic: Enrolling a new Patient'
         }
       ]
-    },
-    {
-      variant: 'user',
-      children: 'How can I help you?',
-      copyContent: 'How can I help you?'
     }
   ]);
-  const [inputText, setInputText] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [disableFooter, setDisableFooter] = useState(false);
   const handleClose = useCallback(() => setExpanded(false), []);
   const handleOpen = useCallback(() => {
     setExpanded(true);
@@ -115,7 +110,10 @@ const ChatBot = () => {
             })}
           >
             <ChatBotFooter
+              disabled={disableFooter}
               onSendClick={() => {
+                setDisableFooter(true);
+                inputRef.current.value = '';
                 const newBubble = {
                   variant: 'user',
                   copyContent: inputRef.current.value,
@@ -125,32 +123,25 @@ const ChatBot = () => {
                 setTimeout(() => {
                   const newBubble = {
                     variant: 'systemWithContent',
-                    copyContent: 'Hii from India',
-                    children: 'Hii from India',
+                    copyContent:
+                      "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
+                    children:
+                      "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
                     replySuggestionMessage: 'Here are some things I can do:',
                     buttonProps: [
                       {
-                        label: 'Show me the eCOA recommended services',
-                        onClick: () =>
-                          console.log(
-                            'Show me the eCOA recommended services clicked'
-                          )
+                        label: 'Show me the eCOA recommended services'
                       },
                       {
-                        label: 'See Regulatory Updates',
-                        onClick: () =>
-                          console.log('See Regulatory Updates clicked')
+                        label: 'See Regulatory Updates'
                       },
                       {
-                        label: 'Continue last topic: Enrolling a new Patient',
-                        onClick: () =>
-                          console.log(
-                            'Continue last topic: Enrolling a new Patient clicked'
-                          )
+                        label: 'Continue last topic: Enrolling a new Patient'
                       }
                     ]
                   };
                   setBubbles(prev => [...prev, newBubble]);
+                  setDisableFooter(false);
                 }, 3000);
               }}
               onActionClick={() => console.log('onActionClick')}
