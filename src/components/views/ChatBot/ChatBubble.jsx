@@ -7,7 +7,12 @@ const ChatBubbleActions = ({ variant = 'user', content }) => {
   const [copied, setCopied] = useState(false);
 
   return (
-    <div className="chat-bubble-actions">
+    <div
+      className={classNames({
+        'chat-bubble-actions': true,
+        'chat-bubble-actions-reverse': variant === 'user'
+      })}
+    >
       <span>{variant === 'user' ? 'You' : 'BidAssist'}</span>
       <div
         onClick={() => {

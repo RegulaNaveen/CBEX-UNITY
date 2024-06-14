@@ -45,6 +45,9 @@
       & > div {
         margin-bottom: 24px;
       }
+      .chat-bubble-actions-reverse {
+        flex-direction: row-reverse !important;
+      }
       .chat-bubble-actions {
         display: flex;
         flex-direction: row;
