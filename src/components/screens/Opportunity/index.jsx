@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { compose } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
+import ApolloThemeProvider from 'apollo-react/utils/ApolloThemeProvider';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -76,7 +77,6 @@ import {
 } from '../../../redux/actions/tasksList-actions';
 import { filter } from 'lodash';
 import ChatBot from '../../views/ChatBot';
-import ApolloThemeProvider2 from 'apollo-react-4.19.0/utils/ApolloThemeProvider';
 
 type State = {
   selectedView: string
@@ -424,9 +424,9 @@ export class Opportunity extends Component<Props, State> {
             message="A new Bid is being created based on CRM data"
           />
         )}
-        <ApolloThemeProvider2>
+        <ApolloThemeProvider>
           <ChatBot />
-        </ApolloThemeProvider2>
+        </ApolloThemeProvider>
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}

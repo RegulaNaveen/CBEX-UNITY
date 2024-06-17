@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ChatBotFab from 'apollo-react-4.19.0/components/ChatBotFab';
 import ChatBotHeader from 'apollo-react-4.19.0/components/ChatBotHeader';
 import ChatBotFooter from 'apollo-react-4.19.0/components/ChatBotFooter';
-import { StylesProvider, createGenerateClassName } from '@mui/styles';
 import ChatBubble from './ChatBubble';
 import './styles.scss';
 import classNames from 'classnames';
@@ -11,10 +10,6 @@ import { useSelector } from 'react-redux';
 import { selectChatBotBubbles } from '../../../redux/selectors/chatbot';
 import { useDispatch } from 'react-redux';
 import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
-
-const generateClassName = createGenerateClassName({
-  seed: 'unity-chatbot'
-});
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
@@ -54,90 +49,88 @@ const ChatBot = () => {
   }, [disableFooter]);
 
   return (
-    <StylesProvider generateClassName={generateClassName}>
-      <div
-        className={classNames({
-          'chat-bot-ui-container': true,
-          expanded
-        })}
-      >
-        {expanded ? (
+    <div
+      className={classNames({
+        'chat-bot-ui-container': true,
+        expanded
+      })}
+    >
+      {expanded ? (
+        <div
+          className={classNames({
+            'chat-bot-ui': true,
+            'chat-bot-ui-fullscreen': fullscreen
+          })}
+        >
+          <ChatBotHeader
+            headerText="BidAssist"
+            menuItems={[]}
+            onExpand={() => setFullscreen(prev => !prev)}
+            onClose={handleClose}
+            open
+            className="chat-bot-header"
+          />
           <div
             className={classNames({
-              'chat-bot-ui': true,
-              'chat-bot-ui-fullscreen': fullscreen
+              'chat-bot-bubbles-container': true,
+              'chat-bot-bubbles-container-fullscreen': fullscreen
+            })}
+            ref={bubblesContainerRef}
+          >
+            {bubbles.map((bubble, index) => (
+              <ChatBubble
+                key={index}
+                variant={bubble.variant}
+                copyContent={bubble.copyContent}
+                replySuggestionMessage={bubble.replySuggestionMessage}
+                buttonProps={
+                  bubble?.buttonProps?.map((button, i) => ({
+                    label: button.label,
+                    onClick: () => console.log(button.label)
+                  })) || []
+                }
+              >
+                {bubble.children}
+              </ChatBubble>
+            ))}
+          </div>
+          <div
+            className={classNames({
+              'chat-bot-footer-container': true,
+              'chat-bot-footer-container-fullscreen': fullscreen
             })}
           >
-            <ChatBotHeader
-              headerText="BidAssist"
-              menuItems={[]}
-              onExpand={() => setFullscreen(prev => !prev)}
-              onClose={handleClose}
-              open
-              className="chat-bot-header"
+            <ChatBotFooter
+              disabled={disableFooter}
+              onSendClick={() => {
+                setDisableFooter(true);
+                dispatch(
+                  addChatBotBubble(inputRef.current.value, () =>
+                    setDisableFooter(false)
+                  )
+                );
+              }}
+              onActionClick={() => console.log('onActionClick')}
+              placeholder="Ask me something..."
+              className="chat-bot-footer"
+              InputProps={{
+                inputRef
+              }}
             />
-            <div
+            <ChatBotInfo
               className={classNames({
-                'chat-bot-bubbles-container': true,
-                'chat-bot-bubbles-container-fullscreen': fullscreen
+                'chat-bot-info': true,
+                'chat-bot-info-fullscreen': fullscreen
               })}
-              ref={bubblesContainerRef}
-            >
-              {bubbles.map((bubble, index) => (
-                <ChatBubble
-                  key={index}
-                  variant={bubble.variant}
-                  copyContent={bubble.copyContent}
-                  replySuggestionMessage={bubble.replySuggestionMessage}
-                  buttonProps={
-                    bubble?.buttonProps?.map((button, i) => ({
-                      label: button.label,
-                      onClick: () => console.log(button.label)
-                    })) || []
-                  }
-                >
-                  {bubble.children}
-                </ChatBubble>
-              ))}
-            </div>
-            <div
-              className={classNames({
-                'chat-bot-footer-container': true,
-                'chat-bot-footer-container-fullscreen': fullscreen
-              })}
-            >
-              <ChatBotFooter
-                disabled={disableFooter}
-                onSendClick={() => {
-                  setDisableFooter(true);
-                  dispatch(
-                    addChatBotBubble(inputRef.current.value, () =>
-                      setDisableFooter(false)
-                    )
-                  );
-                }}
-                onActionClick={() => console.log('onActionClick')}
-                placeholder="Ask me something..."
-                className="chat-bot-footer"
-                InputProps={{
-                  inputRef
-                }}
-              />
-              <ChatBotInfo
-                className={classNames({
-                  'chat-bot-info': true,
-                  'chat-bot-info-fullscreen': fullscreen
-                })}
-              />
-            </div>
+            />
           </div>
-        ) : (
-          <ChatBotFab id="chat-bot" onClick={handleOpen}>
-            {'BidAssist'}
-          </ChatBotFab>
-        )}
-      </div>
-    </StylesProvider>
+        </div>
+      ) : (
+        <ChatBotFab id="chat-bot" onClick={handleOpen}>
+          {'BidAssist'}
+        </ChatBotFab>
+      )}
+    </div>
   );
 };
 
