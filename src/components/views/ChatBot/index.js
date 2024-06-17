@@ -14,6 +14,7 @@ import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
+  const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
   const [expanded, setExpanded] = useState(false);
@@ -41,12 +42,6 @@ const ChatBot = () => {
       root?.style.setProperty('--fullscreen-min-width-inputbox', '100%');
     }
   }, [fullscreen]);
-
-  useEffect(() => {
-    if (!disableFooter && inputRef.current) {
-      inputRef.current.value = '';
-    }
-  }, [disableFooter]);
 
   return (
     <div
@@ -107,6 +102,7 @@ const ChatBot = () => {
                   return;
                 }
                 setDisableFooter(true);
+                setInputText('');
                 dispatch(
                   addChatBotBubble(inputRef.current.value, () =>
                     setDisableFooter(false)
@@ -117,7 +113,9 @@ const ChatBot = () => {
               placeholder="Ask me something..."
               className="chat-bot-footer"
               InputProps={{
-                inputRef
+                inputRef,
+                value: inputText,
+                onChange: e => setInputText(e.target.value)
               }}
             />
             <ChatBotInfo
