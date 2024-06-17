@@ -12,21 +12,9 @@ export function addChatBotBubble(queryText, callback = () => {}) {
       const newBubble = {
         variant: 'systemWithContent',
         copyContent:
-          "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
+          'Lorem ipsum dolor sit amet. Eos sunt possimus sed mollitia voluptatem sit minima nobis. Ut sapiente asperiores sed atque corporis qui nesciunt quia eum atque voluptas hic quia aliquid qui eveniet quidem.',
         children:
-          "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
-        replySuggestionMessage: 'Here are some things I can do:',
-        buttonProps: [
-          {
-            label: 'Show me the eCOA recommended services'
-          },
-          {
-            label: 'See Regulatory Updates'
-          },
-          {
-            label: 'Continue last topic: Enrolling a new Patient'
-          }
-        ]
+          'Lorem ipsum dolor sit amet. Eos sunt possimus sed mollitia voluptatem sit minima nobis. Ut sapiente asperiores sed atque corporis qui nesciunt quia eum atque voluptas hic quia aliquid qui eveniet quidem.'
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
       callback();
