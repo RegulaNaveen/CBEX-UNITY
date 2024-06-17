@@ -102,8 +102,12 @@
   }
   div:has(#chat-bot) {
     margin-right: 0;
+    box-sizing: content-box;
   }
   #chat-bot {
+    color: white;
+    font-weight: 500;
+    height: 40px;
     & > div {
       box-sizing: content-box;
     }
