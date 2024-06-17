@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { compose } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
+import ApolloThemeProvider from 'apollo-react/utils/ApolloThemeProvider';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -75,6 +76,7 @@ import {
   toggleCanReorder
 } from '../../../redux/actions/tasksList-actions';
 import { filter } from 'lodash';
+import ChatBot from '../../views/ChatBot';
 
 type State = {
   selectedView: string
@@ -284,8 +286,12 @@ export class Opportunity extends Component<Props, State> {
   };
 
   trackEventTabs = tab => {
-    const { eventCategories, userActions, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,
@@ -308,8 +314,12 @@ export class Opportunity extends Component<Props, State> {
   };
 
   handleEditCustomName = () => {
-    const { toggleEditCustomNameModal, onEditCustomName, customName, details } =
-      this.props;
+    const {
+      toggleEditCustomNameModal,
+      onEditCustomName,
+      customName,
+      details
+    } = this.props;
     onEditCustomName(details['CRM #'], customName);
     toggleEditCustomNameModal(true);
   };
@@ -390,10 +400,17 @@ export class Opportunity extends Component<Props, State> {
   };
 
   render() {
-    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } =
-      this.props;
-    const { questionTemplateVersionNumber, opportunityType, bidStatus } =
-      selectedBid.toJS();
+    const {
+      isSidebarOpen,
+      selectedBid,
+      newbidflag,
+      closeNewbidflag
+    } = this.props;
+    const {
+      questionTemplateVersionNumber,
+      opportunityType,
+      bidStatus
+    } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -416,7 +433,9 @@ export class Opportunity extends Component<Props, State> {
             message="A new Bid is being created based on CRM data"
           />
         )}
-
+        <ApolloThemeProvider>
+          <ChatBot />
+        </ApolloThemeProvider>
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}

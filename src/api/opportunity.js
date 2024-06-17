@@ -1,4 +1,3 @@
-import { isFinite } from 'lodash';
 import { axiosInstance } from '../store';
 import { getAccessTokenFromLocalStorage } from '../SessionHandler';
 import { API } from '../constants';
