@@ -103,6 +103,9 @@ const ChatBot = () => {
             <ChatBotFooter
               disabled={disableFooter}
               onSendClick={() => {
+                if (!inputRef.current.value) {
+                  return;
+                }
                 setDisableFooter(true);
                 dispatch(
                   addChatBotBubble(inputRef.current.value, () =>
