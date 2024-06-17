@@ -10,7 +10,7 @@ export function addChatBotBubble(queryText, callback = () => {}) {
     });
     setTimeout(() => {
       const newBubble = {
-        variant: 'systemWithContent',
+        variant: 'system',
         copyContent:
           'Lorem ipsum dolor sit amet. Eos sunt possimus sed mollitia voluptatem sit minima nobis. Ut sapiente asperiores sed atque corporis qui nesciunt quia eum atque voluptas hic quia aliquid qui eveniet quidem.',
         children:
