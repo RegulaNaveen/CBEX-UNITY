@@ -1,0 +1,22 @@
+import { axiosInstance } from '../store';
+import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
+import { API } from '../constants';
+
+const { CHATBOT_API_URL } = API;
+const { API_KEY } = API.PROPOSAL;
+
+export function fetchChatBotReplyApi(text) {
+  const config = {
+    headers: {
+      'x-api-key': API_KEY,
+      'x-access-token': getAccessToken()
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .post(`${CHATBOT_API_URL}/chat`, { text }, config)
+      .then(response => resolve(response.data))
+      .catch(err => reject(err));
+  });
+}

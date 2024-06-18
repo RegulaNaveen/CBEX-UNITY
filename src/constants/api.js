@@ -24,7 +24,7 @@ let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
 let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
 let ANALYTICS_API_URL = '';
-
+let CHATBOT_API_URL = '';
 switch (environment) {
   case 'UAT':
     PROPOSAL_API_ENDPOINT =
@@ -205,6 +205,7 @@ switch (environment) {
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     ANALYTICS_API_URL =
       'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
+    CHATBOT_API_URL = 'https://chatbot-api-dev.gdev-car3-k8s.work.iqvia.com';
     break;
   default:
     // DEV Data
@@ -226,6 +227,7 @@ switch (environment) {
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     ANALYTICS_API_URL =
       'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
+    CHATBOT_API_URL = 'https://chatbot-api-dev.gdev-car3-k8s.work.iqvia.com';
     break;
 }
 
@@ -336,5 +338,6 @@ export {
   CUSTOM_QUESTIONS_DELETE_API_URL,
   ANALYTICS_URL,
   EMAILTEMPLATES,
-  TASKSLIST
+  TASKSLIST,
+  CHATBOT_API_URL
 };
