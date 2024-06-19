@@ -125,3 +125,90 @@
   > div:nth-child(1) {
   display: none;
 }
+
+@media (min-width: 601px) and (max-width: 1280px) {
+  #root {
+    $fullscreen-margin-left-inputbox: 0px;
+    $fullscreen-min-width-inputbox: 100%;
+  }
+  .chat-bot-ui-fullscreen {
+    width: 95vw !important;
+    height: 85vh !important;
+  }
+
+  .chat-bot-ui-container {
+    position: sticky;
+    right: 0;
+    bottom: 10px;
+    margin-right: 24px;
+    margin-bottom: 0px;
+
+    .chat-bot-ui {
+      width: 36vw;
+      height: 85vh;
+      .chat-bot-bubbles-container-fullscreen {
+        margin-left: 12vw;
+        margin-right: 12vw;
+      }
+      .chat-bot-bubbles-container {
+        font-size: 12px;
+      }
+      .chat-bot-bubbles-container > div > div:nth-child() > div {
+        gap: 10px !important;
+        padding: 2px 0px 12px 0px !important;
+      }
+      .chat-bot-bubbles-container > div > div:nth-child(1) > span {
+        font-size: 12px;
+      }
+      .chat-bot-bubbles-container > div > div:nth-child(1) > div > button {
+        font-size: 12px;
+      }
+    }
+  }
+  .chat-bot-footer-fullscreen {
+    margin-left: 12vw !important;
+    max-width: 70vw !important;
+    & > div > div > div {
+      box-sizing: content-box;
+    }
+  }
+  .chat-bot-footer {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+  .chat-bot-info {
+    top: -5px !important;
+  }
+  .chat-bot-footer > div:nth-child(2) > div > div > div > textarea {
+    height: 24px !important;
+    font-size: 12px;
+  }
+  .chat-bot-footer > div:nth-child(2) > div > div > div:nth-child(2) {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+  .chat-bot-info > span {
+    font-size: 12px;
+  }
+  .chat-bubble-actions > span {
+    font-size: 12px;
+  }
+  .chat-bubble-actions > div > svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  .chat-bot-bubbles-container > div:nth-child(1) {
+    padding: 5px;
+  }
+  .chat-bot-header > button > svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+  .chat-bot-header > div > p {
+    font-size: 15px !important;
+    padding-top: 10px;
+  }
+  .chat-bot-header {
+    padding: 2px !important;
+  }
+}

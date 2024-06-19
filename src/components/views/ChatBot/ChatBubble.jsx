@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ApolloChatBubble from 'apollo-react-4.19.0/components/ChatBubble';
 import { Copy } from 'apollo-react-icons';
 import classNames from 'classnames';
+import moment from 'moment';
 
 const ChatBubbleActions = ({ variant = 'user', content }) => {
   const [copied, setCopied] = useState(false);
@@ -14,6 +15,7 @@ const ChatBubbleActions = ({ variant = 'user', content }) => {
       })}
     >
       <span>{variant === 'user' ? 'You' : 'BidAssist'}</span>
+      {variant !== 'user' && <span>{`- ${moment().fromNow()}`}</span>}
       <div
         onClick={() => {
           navigator.clipboard.writeText(content);

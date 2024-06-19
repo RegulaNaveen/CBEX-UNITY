@@ -84,6 +84,7 @@ const ChatBot = () => {
                     onClick: () => console.log(button.label)
                   })) || []
                 }
+                className="chat-bot-bubble"
               >
                 {bubble.children}
               </ChatBubble>
@@ -111,7 +112,10 @@ const ChatBot = () => {
               }}
               onActionClick={() => console.log('onActionClick')}
               placeholder="Ask me something..."
-              className="chat-bot-footer"
+              className={classNames({
+                'chat-bot-footer': true,
+                'chat-bot-footer-fullscreen': fullscreen
+              })}
               InputProps={{
                 inputRef,
                 value: inputText,
