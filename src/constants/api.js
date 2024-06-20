@@ -24,7 +24,6 @@ let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
 let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
 let ANALYTICS_API_URL = '';
-let CHATBOT_API_URL = '';
 switch (environment) {
   case 'UAT':
     PROPOSAL_API_ENDPOINT =
@@ -205,7 +204,6 @@ switch (environment) {
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     ANALYTICS_API_URL =
       'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
-    CHATBOT_API_URL = 'https://chatbot-api-dev.gdev-car3-k8s.work.iqvia.com';
     break;
   default:
     // DEV Data
@@ -227,7 +225,6 @@ switch (environment) {
       'wss://g3ukgizvkl.execute-api.us-east-1.amazonaws.com/production';
     ANALYTICS_API_URL =
       'https://4ge59gajp4.execute-api.us-east-1.amazonaws.com';
-    CHATBOT_API_URL = 'https://chatbot-api-dev.gdev-car3-k8s.work.iqvia.com';
     break;
 }
 
@@ -295,6 +292,7 @@ const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 const EMAILTEMPLATES_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals/emailTemplates`;
 const TASKSLIST_API_URL = `${PROPOSAL_API_ENDPOINT}/api/tasks`;
+const CHAT_BOT_API_URL = `${PROPOSAL_API_ENDPOINT}/api/chat-bot`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
@@ -314,6 +312,10 @@ const EMAILTEMPLATES = {
 
 const TASKSLIST = {
   TASKSLIST_API_URL
+};
+
+const CHATBOT = {
+  CHAT_ENDPOINT: `${CHAT_BOT_API_URL}/chat`
 };
 
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
@@ -339,5 +341,5 @@ export {
   ANALYTICS_URL,
   EMAILTEMPLATES,
   TASKSLIST,
-  CHATBOT_API_URL
+  CHATBOT
 };

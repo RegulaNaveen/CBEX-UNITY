@@ -2,10 +2,10 @@ import { axiosInstance } from '../store';
 import { getAccessTokenFromLocalStorage as getAccessToken } from '../SessionHandler';
 import { API } from '../constants';
 
-const { CHATBOT_API_URL } = API;
+const { CHATBOT } = API;
 const { API_KEY } = API.PROPOSAL;
 
-export function fetchChatBotReplyApi(text) {
+export function fetchChatBotReplyApi(text, opportunityNumber) {
   const config = {
     headers: {
       'x-api-key': API_KEY,
@@ -15,7 +15,7 @@ export function fetchChatBotReplyApi(text) {
 
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT_API_URL}/chat`, { text }, config)
+      .post(`${CHATBOT.CHAT_ENDPOINT}`, { text, opportunityNumber }, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
   });
