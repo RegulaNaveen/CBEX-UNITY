@@ -10,6 +10,11 @@ import { useSelector } from 'react-redux';
 import { selectChatBotBubbles } from '../../../redux/selectors/chatbot';
 import { useDispatch } from 'react-redux';
 import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
+import { welcomeBubble } from '../../../redux/reducers/chatbot';
+import { REDUX_TYPES } from '../../../constants';
+import { useLocation, useRouteMatch } from 'react-router-dom';
+
+const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
@@ -23,7 +28,14 @@ const ChatBot = () => {
   const handleClose = useCallback(() => setExpanded(false), []);
   const handleOpen = useCallback(() => {
     setExpanded(true);
-  }, []);
+    if (bubbles.length === 0) {
+      dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
+    }
+  }, [bubbles]);
+
+  const {
+    params: { id }
+  } = useRouteMatch();
 
   useEffect(() => {
     if (expanded) {
@@ -60,10 +72,9 @@ const ChatBot = () => {
           <ChatBotHeader
             headerText="BidAssist"
             menuItems={[]}
-            onExpand={() => setFullscreen(prev => !prev)}
             onClose={handleClose}
             open
-            className="chat-bot-header"
+            onExpand={() => setFullscreen(prev => !prev)}
           />
           <div
             className={classNames({
@@ -78,12 +89,19 @@ const ChatBot = () => {
                 variant={bubble.variant}
                 copyContent={bubble.copyContent}
                 replySuggestionMessage={bubble.replySuggestionMessage}
+                sentOrReceivedAt={bubble.sentOrReceivedAt}
                 buttonProps={
                   bubble?.buttonProps?.map((button, i) => ({
                     label: button.label,
-                    onClick: () => console.log(button.label)
+                    onClick: () =>
+                      dispatch(
+                        addChatBotBubble(button.label, id, () =>
+                          setDisableFooter(false)
+                        )
+                      )
                   })) || []
                 }
+                className="chat-bot-bubble"
               >
                 {bubble.children}
               </ChatBubble>
@@ -104,14 +122,17 @@ const ChatBot = () => {
                 setDisableFooter(true);
                 setInputText('');
                 dispatch(
-                  addChatBotBubble(inputRef.current.value, () =>
+                  addChatBotBubble(inputRef.current.value, id, () =>
                     setDisableFooter(false)
                   )
                 );
               }}
               onActionClick={() => console.log('onActionClick')}
               placeholder="Ask me something..."
-              className="chat-bot-footer"
+              className={classNames({
+                'chat-bot-footer': true,
+                'chat-bot-footer-fullscreen': fullscreen
+              })}
               InputProps={{
                 inputRef,
                 value: inputText,
