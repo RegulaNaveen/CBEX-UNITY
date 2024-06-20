@@ -24,7 +24,6 @@ let SOCKET_URL = '';
 let NOTES_SOCKET_URL = '';
 let LAUNCH_DARKLY_CLIENT_ID = '630712f317eece1138e5445c';
 let ANALYTICS_API_URL = '';
-
 switch (environment) {
   case 'UAT':
     PROPOSAL_API_ENDPOINT =
@@ -293,6 +292,7 @@ const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 const EMAILTEMPLATES_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals/emailTemplates`;
 const TASKSLIST_API_URL = `${PROPOSAL_API_ENDPOINT}/api/tasks`;
+const CHAT_BOT_API_URL = `${PROPOSAL_API_ENDPOINT}/api/chat-bot`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
@@ -312,6 +312,10 @@ const EMAILTEMPLATES = {
 
 const TASKSLIST = {
   TASKSLIST_API_URL
+};
+
+const CHATBOT = {
+  CHAT_ENDPOINT: `${CHAT_BOT_API_URL}/chat`
 };
 
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
@@ -336,5 +340,6 @@ export {
   CUSTOM_QUESTIONS_DELETE_API_URL,
   ANALYTICS_URL,
   EMAILTEMPLATES,
-  TASKSLIST
+  TASKSLIST,
+  CHATBOT
 };
