@@ -19,6 +19,8 @@ const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
+  const search = useLocation().search;
+  const searchParams = new URLSearchParams(search);
   const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
@@ -95,8 +97,11 @@ const ChatBot = () => {
                     label: button.label,
                     onClick: () =>
                       dispatch(
-                        addChatBotBubble(button.label, id, () =>
-                          setDisableFooter(false)
+                        addChatBotBubble(
+                          button.label,
+                          id,
+                          searchParams.get('bidNo'),
+                          () => setDisableFooter(false)
                         )
                       )
                   })) || []
