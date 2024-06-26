@@ -1,4 +1,5 @@
 import ApolloChatBubble from 'apollo-react-4.19.0/components/ChatBubble';
+import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import React, { useState } from 'react';
 import { Copy } from 'apollo-react-icons';
 import IconButton from 'apollo-react/components/IconButton';
@@ -10,8 +11,21 @@ import ThumbsDown from '../../svg/ThumbsDown';
 const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
 
-  const handleCopyClick = () => {
+  const createClipBoardContent = () => {
+    let html = '<html><body>';
+    // Replace \n with <br /> for HTML line breaks
+    const formattedContent = content.replace(/\n/g, '<br />');
+    html += `${formattedContent}`;
+    html += '</body></html>';
+    return html;
+  };
+
+  const copyToClipBoard = () => {
     setShowCopySnack(true);
+    const content = createClipBoardContent();
+    const blob = new Blob([content], { type: 'text/html' });
+    const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+    navigator.clipboard.write([clipboardItem]);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -38,21 +52,24 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
       )}
       {variant !== 'user' && (
         <>
-          <IconButton size="small" onClick={() => handleCopyClick()} darkMode>
-            <Copy />
-          </IconButton>
-          <IconButton
-            size="small"
-            onClick={() => console.info('Thumbs down icon clicked!')}
-            darkMode
-          >
-            <ThumbsDown />
-          </IconButton>
+          <div>
+            <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
+              <Copy />
+            </IconButton>
+            <IconButton
+              size="small"
+              onClick={() => console.info('Thumbs down icon clicked!')}
+              darkMode
+            >
+              <ThumbsDown />
+            </IconButton>
+          </div>
         </>
       )}
       <Snackbar
+        className="custom-snackbar"
         open={showCopySnack}
-        autoHideDuration={300000}
+        autoHideDuration={2000}
         onClose={handleSnackbarClose}
         message="Copied to clipboard"
         // action={action}
