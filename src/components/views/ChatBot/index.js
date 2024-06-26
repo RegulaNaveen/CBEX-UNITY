@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ChatBotFab from 'apollo-react-4.19.0/components/ChatBotFab';
 import ChatBotHeader from 'apollo-react-4.19.0/components/ChatBotHeader';
 import ChatBotFooter from 'apollo-react-4.19.0/components/ChatBotFooter';
+import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import ChatBubble from './ChatBubble';
 import './styles.scss';
 import classNames from 'classnames';
@@ -22,6 +23,7 @@ const ChatBot = () => {
   const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
+  const loading = useSelector(state => state.chatbot.loading);
   const [expanded, setExpanded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [disableFooter, setDisableFooter] = useState(false);
@@ -106,6 +108,16 @@ const ChatBot = () => {
                 {bubble.children}
               </ChatBubble>
             ))}
+            {loading && (
+              <div className="chat-bot-loader">
+                <ApolloProgress
+                  className="apollo-custom-progress-indicator"
+                  statusText="BidAssist is responding..."
+                  textAlignment="left"
+                  solid
+                />
+              </div>
+            )}
           </div>
           <div
             className={classNames({

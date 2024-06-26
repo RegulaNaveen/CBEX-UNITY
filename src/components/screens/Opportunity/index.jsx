@@ -63,7 +63,8 @@ import {
   selectCustomName,
   selectNextMilestone,
   selectGetbidChangeLoader,
-  selectTasksListFlag
+  selectTasksListFlag,
+  selectChatBotFlag
 } from '../../../redux/selectors/proposal';
 import { getNextMilestone } from '../../../utils/utils';
 import {
@@ -404,7 +405,8 @@ export class Opportunity extends Component<Props, State> {
       isSidebarOpen,
       selectedBid,
       newbidflag,
-      closeNewbidflag
+      closeNewbidflag,
+      chatBotFlag
     } = this.props;
     const {
       questionTemplateVersionNumber,
@@ -433,9 +435,11 @@ export class Opportunity extends Component<Props, State> {
             message="A new Bid is being created based on CRM data"
           />
         )}
-        <ApolloThemeProvider>
-          <ChatBot />
-        </ApolloThemeProvider>
+        {chatBotFlag && (
+          <ApolloThemeProvider>
+            <ChatBot />
+          </ApolloThemeProvider>
+        )}
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}
@@ -458,7 +462,8 @@ const mapStateToProps = (state: Map) => ({
   customName: selectCustomName(state),
   nextMilestone: selectNextMilestone(state),
   getbidChangeLoader: selectGetbidChangeLoader(state),
-  tasksListFlag: selectTasksListFlag(state)
+  tasksListFlag: selectTasksListFlag(state),
+  chatBotFlag: selectChatBotFlag(state)
 });
 export default compose(
   withRouter,
