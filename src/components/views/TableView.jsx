@@ -315,7 +315,6 @@ const TableView = ({ data, hideStatus }: Props) => {
               );
 
             case 'bid due date':
-              console.log('row[col]', row[col]);
               const bidDueDate = row[col];
               const tooltipData = bidDueDate
                 ? parseMomentDate(parseCorrectDate(bidDueDate))
