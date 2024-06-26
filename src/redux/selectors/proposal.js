@@ -551,3 +551,19 @@ export const selectTasksListFlag = createSelector(
   getfetchAllFlags,
   flags => !!flags['tasksListFlag']
 );
+
+// Other flags selectors
+export const selectChatBotFlag = createSelector(
+  getfetchAllFlags,
+  flags => !!flags['ChatBot']
+);
+
+export const selectChatBotFeedbackFlag = createSelector(
+  getfetchAllFlags,
+  flags => !!flags['ChatBotFeedback']
+);
+
+export const selectChatBotContextCount = createSelector(
+  getfetchAllFlags,
+  flags => flags['ChatBotContextCount'] || 0
+);
