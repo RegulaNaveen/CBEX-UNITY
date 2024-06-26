@@ -7,9 +7,12 @@ import classNames from 'classnames';
 import moment from 'moment';
 import Snackbar from '@mui/material/Snackbar';
 import ThumbsDown from '../../svg/ThumbsDown';
+import { useSelector } from 'react-redux';
+import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
 
 const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
+  const chatBotFeedbackFlag = useSelector(selectChatBotFeedbackFlag);
 
   const createClipBoardContent = () => {
     let html = '<html><body>';
@@ -56,13 +59,15 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
             <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
               <Copy />
             </IconButton>
-            <IconButton
-              size="small"
-              onClick={() => console.info('Thumbs down icon clicked!')}
-              darkMode
-            >
-              <ThumbsDown />
-            </IconButton>
+            {chatBotFeedbackFlag && (
+              <IconButton
+                size="small"
+                onClick={() => console.info('Thumbs down icon clicked!')}
+                darkMode
+              >
+                <ThumbsDown />
+              </IconButton>
+            )}
           </div>
         </>
       )}
