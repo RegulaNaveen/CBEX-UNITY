@@ -127,8 +127,11 @@ const ChatBot = () => {
                 setDisableFooter(true);
                 setInputText('');
                 dispatch(
-                  addChatBotBubble(inputRef.current.value, id, () =>
-                    setDisableFooter(false)
+                  addChatBotBubble(
+                    inputRef.current.value,
+                    id,
+                    searchParams.get('bidNo'),
+                    () => setDisableFooter(false)
                   )
                 );
               }}
