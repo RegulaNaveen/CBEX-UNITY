@@ -19,7 +19,7 @@ export function addChatBotBubble(
       }
     });
     const ERROR_DEFAULT_REPLY =
-      'Unable to process your query. Please rephrase and try again';
+      'Unable to process your query. Please rephrase and try again.';
     let data;
     try {
       data = await fetchChatBotReplyApi({

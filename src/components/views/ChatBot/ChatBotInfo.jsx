@@ -5,7 +5,7 @@ import Typography from 'apollo-react/components/Typography';
 const ChatBotInfo = ({ className = 'chat-bot-info' }) => (
   <div className={className}>
     <Typography variant="bodySmall">
-      {'BidAssist uses AI. Check for errors.'}
+      {'BidAssist uses AI; please check for errors.'}
     </Typography>
   </div>
 );
