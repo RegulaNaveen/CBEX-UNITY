@@ -124,10 +124,12 @@
         & > div:first-child {
           display: none;
         }
+
         & > div:last-child {
           div {
             & > div {
               padding: 4px;
+              outline-color: #013d98;
               .MuiInputBase-root {
                 border-top-left-radius: 24px;
                 border-top-right-radius: 24px;
@@ -135,8 +137,14 @@
                 padding-top: 8px !important;
                 margin: 0;
                 height: 36px !important;
+                display: flex;
+                flex-direction: column;
                 textarea {
                   font-size: 12px;
+                  max-height: 35px !important;
+                  &::-webkit-scrollbar {
+                    display: none;
+                  }
                 }
               }
             }
@@ -218,6 +226,14 @@
           }
         }
       }
+    }
+  }
+}
+
+@media (max-height: 600px) {
+  .chat-bot-ui-container {
+    .chat-bot-ui {
+      min-height: 420px;
     }
   }
 }
