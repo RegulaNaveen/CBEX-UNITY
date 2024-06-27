@@ -24,7 +24,8 @@ export const welcomeBubble = {
       label: 'Continue last topic: Enrolling a new Patient'
     }
   ],
-  sentOrReceivedAt: Date.now()
+  sentOrReceivedAt: Date.now(),
+  type: 'WELCOME_MSG'
 };
 
 const INITIAL_STATE = {

@@ -10,25 +10,32 @@ import ThumbsDown from '../../svg/ThumbsDown';
 import { useSelector } from 'react-redux';
 import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
 
-const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
+const ChatBubbleActions = ({
+  variant = 'user',
+  content,
+  sentOrReceivedAt,
+  isWelcomeBubble
+}) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
   const chatBotFeedbackFlag = useSelector(selectChatBotFeedbackFlag);
 
-  const createClipBoardContent = () => {
-    let html = '<html><body>';
-    // Replace \n with <br /> for HTML line breaks
-    const formattedContent = content.replace(/\n/g, '<br />');
-    html += `${formattedContent}`;
-    html += '</body></html>';
-    return html;
-  };
+  // REQUIRED TO SUPPORT HTML COPY TO CLIPBOARD
+  // const createClipBoardContent = () => {
+  //   let html = '<html><body>';
+  //   // Replace \n with <br /> for HTML line breaks
+  //   const formattedContent = content.replace(/\n/g, '<br />');
+  //   html += `${formattedContent}`;
+  //   html += '</body></html>';
+  //   return html;
+  // };
 
   const copyToClipBoard = () => {
+    // REQUIRED TO SUPPORT HTML COPY TO CLIPBOARD
+    // const htmlContent = createClipBoardContent();
+    // const blob = new Blob([htmlContent], { type: 'text/html' });
+    // const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+    navigator.clipboard.writeText(content);
     setShowCopySnack(true);
-    const content = createClipBoardContent();
-    const blob = new Blob([content], { type: 'text/html' });
-    const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
-    navigator.clipboard.write([clipboardItem]);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -50,10 +57,10 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
       {variant !== 'user' && (
         <span>
           &nbsp;
-          {` - ${moment(sentOrReceivedAt).format('MMM D H:mm')}`}
+          {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm')}`}
         </span>
       )}
-      {variant !== 'user' && (
+      {variant !== 'user' && !isWelcomeBubble && (
         <>
           <div>
             <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
@@ -90,7 +97,8 @@ const ChatBubble = ({
   children,
   copyContent,
   className = '',
-  sentOrReceivedAt
+  sentOrReceivedAt,
+  isWelcomeBubble
 }) => (
   <ApolloChatBubble
     variant={variant}
@@ -99,6 +107,7 @@ const ChatBubble = ({
         variant={variant}
         content={copyContent}
         sentOrReceivedAt={sentOrReceivedAt}
+        isWelcomeBubble={isWelcomeBubble}
       />
     }
     replySuggestionMessage={replySuggestionMessage}
