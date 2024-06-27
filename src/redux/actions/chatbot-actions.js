@@ -1,4 +1,4 @@
-import { fetchChatBotReplyApi } from '../../api/chatbot';
+import { fetchChatBotReplyApi, submitFeedbackApi } from '../../api/chatbot';
 import { REDUX_TYPES } from '../../constants';
 
 const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
@@ -6,7 +6,7 @@ const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
 export function addChatBotBubble(
   queryText,
   opportunityNumber,
-  callback = () => {}
+  callback = () => { }
 ) {
   return async dispatch => {
     dispatch({
@@ -31,6 +31,18 @@ export function addChatBotBubble(
         sentOrReceivedAt: Date.now()
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
+      callback();
+    }
+  };
+}
+
+export function submitFeedback(feedback, callback = () => { }) {
+  return async dispatch => {
+    // eslint-disable-next-line no-console
+    try {
+      const response = await submitFeedbackApi(feedback);
+      return response;
+    } finally {
       callback();
     }
   };

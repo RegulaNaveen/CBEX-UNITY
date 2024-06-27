@@ -6,9 +6,12 @@ import classNames from 'classnames';
 import moment from 'moment';
 import Snackbar from '@mui/material/Snackbar';
 import ThumbsDown from '../../svg/ThumbsDown';
+import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
 
 const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   const handleCopyClick = () => {
     setShowCopySnack(true);
@@ -20,6 +23,10 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
     }
 
     setShowCopySnack(false);
+  };
+
+  const handleThumbsDownClick = () => {
+    setShowFeedbackModal(true);
   };
 
   return (
@@ -41,11 +48,7 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
           <IconButton size="small" onClick={() => handleCopyClick()} darkMode>
             <Copy />
           </IconButton>
-          <IconButton
-            size="small"
-            onClick={() => console.info('Thumbs down icon clicked!')}
-            darkMode
-          >
+          <IconButton size="small" onClick={handleThumbsDownClick} darkMode>
             <ThumbsDown />
           </IconButton>
         </>
@@ -57,6 +60,21 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
         message="Copied to clipboard"
         // action={action}
       />
+      {/* Feedback Modal */}
+      {showFeedbackModal && (
+        <FeedbackModal
+          open={showFeedbackModal}
+          setShowSubmitModal={setShowSubmitModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      )}
+      {/* Feedback Submit Modal */}
+      {showSubmitModal && (
+        <FeedbackSubmitModal
+          open={showSubmitModal}
+          onClose={() => setShowSubmitModal(false)}
+        />
+      )}
     </div>
   );
 };
