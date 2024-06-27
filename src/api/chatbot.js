@@ -5,7 +5,12 @@ import { API } from '../constants';
 const { CHATBOT } = API;
 const { API_KEY } = API.PROPOSAL;
 
-export function fetchChatBotReplyApi(query, oppurtunity_no) {
+export function fetchChatBotReplyApi({
+  query,
+  oppurtunity_no,
+  bidNo,
+  bidType
+}) {
   const config = {
     headers: {
       'x-api-key': API_KEY,
@@ -15,8 +20,12 @@ export function fetchChatBotReplyApi(query, oppurtunity_no) {
 
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT.CHAT_ENDPOINT}`, { query, oppurtunity_no }, config)
+      .post(
+        `${CHATBOT.CHAT_ENDPOINT}`,
+        { query, oppurtunity_no, bidNo, bidType },
+        config
+      )
       .then(response => resolve(response.data))
-      .catch(err => reject(err));
+      .catch(err => reject({ error: true, message: err }));
   });
 }
