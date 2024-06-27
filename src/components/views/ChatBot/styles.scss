@@ -164,6 +164,16 @@
         font-weight: 400;
       }
     }
+
+    .chat-bot-loader {
+      .apollo-custom-progress-indicator > div > span > span {
+        background-color: white;
+      }
+      .apollo-custom-progress-indicator > p {
+        white-space: nowrap;
+        color: white;
+      }
+    }
   }
   div:has(#chat-bot) {
     margin-right: 0;
@@ -228,6 +238,14 @@
       }
     }
   }
+}
+
+.custom-snackbar > div {
+  padding-right: 10px !important;
+  min-height: 38px !important;
+  padding-left: 10px !important;
+  min-width: unset;
+  border-radius: 10px !important;
 }
 
 @media (max-height: 600px) {
