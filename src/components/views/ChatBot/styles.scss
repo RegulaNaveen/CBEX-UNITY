@@ -9,7 +9,7 @@
   bottom: 18px;
   margin-right: 24px;
   margin-bottom: 24px;
-  z-index: 99999999;
+  z-index: 999;
   .chat-bot-ui {
     display: flex;
     flex-direction: column;
@@ -107,6 +107,7 @@
       }
       & > div > div:nth-child(1) > span {
         font-size: 12px;
+        white-space: pre-line;
       }
       & > div > div:nth-child(1) > div > button {
         font-size: 12px;
@@ -238,4 +239,14 @@
   padding-left: 10px !important;
   min-width: unset;
   border-radius: 10px !important;
+}
+
+#myTooltip > div {
+  & > div {
+    color: green;
+  }
+  & > div > div {
+    display: flex;
+    align-items: center;
+  }
 }
