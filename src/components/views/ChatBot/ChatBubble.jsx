@@ -69,7 +69,7 @@ const ChatBubbleActions = ({
         <>
           <div>
             <Tooltip
-              id="myTooltip"
+              id="copy-tooltip"
               variant="light"
               title={
                 <div>
