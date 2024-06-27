@@ -40,6 +40,9 @@ const ChatBot = () => {
   } = useRouteMatch();
 
   useEffect(() => {
+    if (bubbles.length <= 1) {
+      return;
+    }
     if (expanded) {
       bubblesContainerRef.current.scrollTop =
         bubblesContainerRef.current.scrollHeight;
