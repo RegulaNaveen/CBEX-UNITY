@@ -3,6 +3,8 @@ import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import React, { useState } from 'react';
 import { Copy } from 'apollo-react-icons';
 import IconButton from 'apollo-react/components/IconButton';
+import StatusCheck from 'apollo-react-icons/StatusCheck';
+import Tooltip from 'apollo-react/components/Tooltip';
 import classNames from 'classnames';
 import moment from 'moment';
 import Snackbar from '@mui/material/Snackbar';
@@ -17,6 +19,7 @@ const ChatBubbleActions = ({
   isWelcomeBubble
 }) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
+  const [copied, setCopied] = useState(false);
   const chatBotFeedbackFlag = useSelector(selectChatBotFeedbackFlag);
 
   // REQUIRED TO SUPPORT HTML COPY TO CLIPBOARD
@@ -34,8 +37,10 @@ const ChatBubbleActions = ({
     // const htmlContent = createClipBoardContent();
     // const blob = new Blob([htmlContent], { type: 'text/html' });
     // const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+    setCopied(true);
     navigator.clipboard.writeText(content);
     setShowCopySnack(true);
+    setTimeout(() => setCopied(false), 1000);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -63,9 +68,27 @@ const ChatBubbleActions = ({
       {variant !== 'user' && !isWelcomeBubble && (
         <>
           <div>
-            <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
-              <Copy />
-            </IconButton>
+            <Tooltip
+              id="copy-tooltip"
+              variant="light"
+              title={
+                <div>
+                  <StatusCheck fontSize="extraSmall" />
+                  Copied
+                </div>
+              }
+              placement="top"
+              open={copied}
+            >
+              <IconButton
+                title="Copy"
+                size="small"
+                onClick={() => copyToClipBoard()}
+                darkMode
+              >
+                <Copy />
+              </IconButton>
+            </Tooltip>
             {chatBotFeedbackFlag && (
               <IconButton
                 size="small"
