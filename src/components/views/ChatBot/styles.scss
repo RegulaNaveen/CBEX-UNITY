@@ -20,7 +20,7 @@
     min-width: 360px;
     min-height: 520px;
     width: 30vw;
-    height: 65vh;
+    height: 70vh;
     max-height: 650px;
     max-width: 598px;
     border-radius: 16px;
@@ -35,8 +35,9 @@
       border-top-left-radius: 16px;
       border-top-right-radius: 16px;
       p.MuiTypography-root {
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 400;
+        letter-spacing: 0.4px;
       }
       button.MuiButtonBase-root {
         width: 24px;
@@ -125,10 +126,12 @@
         & > div:first-child {
           display: none;
         }
+
         & > div:last-child {
           div {
             & > div {
               padding: 4px;
+              outline-color: #013d98;
               .MuiInputBase-root {
                 border-top-left-radius: 24px;
                 border-top-right-radius: 24px;
@@ -136,8 +139,14 @@
                 padding-top: 8px !important;
                 margin: 0;
                 height: 36px !important;
+                display: flex;
+                flex-direction: column;
                 textarea {
                   font-size: 12px;
+                  max-height: 35px !important;
+                  &::-webkit-scrollbar {
+                    display: none;
+                  }
                 }
               }
             }
@@ -198,6 +207,7 @@
 @media (min-width: 1240px) {
   .chat-bot-ui-container {
     .chat-bot-ui {
+      min-height: 500px !important;
       .chat-bot-bubbles-container {
         font-size: 14px;
         & > div {
@@ -249,4 +259,23 @@
     display: flex;
     align-items: center;
   }
+}
+@media (min-height: 601px) and (max-height: 720px) {
+  .chat-bot-ui-container {
+    .chat-bot-ui {
+      min-height: 500px !important;
+    }
+  }
+}
+
+@media (max-height: 600px) {
+  .chat-bot-ui-container {
+    .chat-bot-ui {
+      min-height: 445px;
+    }
+  }
+}
+
+.makeStyles-userBubble-54 {
+  word-break: break-all;
 }
