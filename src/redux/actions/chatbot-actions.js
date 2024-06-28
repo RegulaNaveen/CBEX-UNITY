@@ -28,6 +28,8 @@ export function addChatBotBubble(
         bidNo,
         bidType
       });
+    } catch (e) {
+      data = e;
     } finally {
       const newBubble = {
         variant: 'system',
