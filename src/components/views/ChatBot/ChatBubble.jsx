@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
 
 const ChatBubbleActions = ({
+  info,
   variant = 'user',
   content,
   sentOrReceivedAt,

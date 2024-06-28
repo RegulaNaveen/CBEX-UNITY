@@ -292,7 +292,7 @@ const PROFILE_API_URL = `${PROPOSAL_API_ENDPOINT}/api/user`;
 const NOTIFICATION_API_URL = `${PROPOSAL_API_ENDPOINT}/api/app-notification`;
 const EMAILTEMPLATES_API_URL = `${PROPOSAL_API_ENDPOINT}/api/proposals/emailTemplates`;
 const TASKSLIST_API_URL = `${PROPOSAL_API_ENDPOINT}/api/tasks`;
-const CHAT_BOT_API_URL = `${PROPOSAL_API_ENDPOINT}/api`;
+const CHAT_BOT_API_URL = `${PROPOSAL_API_ENDPOINT}/api/chat-bot`;
 
 const NOTEPAD = {
   NOTEPAD_API_URL
@@ -316,7 +316,7 @@ const TASKSLIST = {
 
 const CHATBOT = {
   CHAT_ENDPOINT: `${CHAT_BOT_API_URL}/chat`,
-  FEEDBACK_ENDPOINT: `${CHAT_BOT_API_URL}/chat-bot/history-feedback`
+  FEEDBACK_ENDPOINT: `${CHAT_BOT_API_URL}/history-feedback`
 };
 
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;

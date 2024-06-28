@@ -1,7 +1,7 @@
 import { fetchChatBotReplyApi, submitFeedbackApi } from '../../api/chatbot';
 import { REDUX_TYPES } from '../../constants';
 
-const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
+const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE, UPDATE_BUBBLE } = REDUX_TYPES.CHATBOT;
 
 export function addChatBotBubble(
   { query: queryText, id: opportunityNumber, bidNo, bidType },
@@ -51,9 +51,11 @@ export function addChatBotBubble(
 
 export function submitFeedback(feedback, callback = () => { }) {
   return async dispatch => {
-    // eslint-disable-next-line no-console
     try {
       const response = await submitFeedbackApi(feedback);
+      if (response.status === 200) {
+        dispatch({ type: UPDATE_BUBBLE, payload: response.data });
+      }
       return response;
     } finally {
       callback();
