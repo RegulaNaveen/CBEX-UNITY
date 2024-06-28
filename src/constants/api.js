@@ -315,7 +315,8 @@ const TASKSLIST = {
 };
 
 const CHATBOT = {
-  CHAT_ENDPOINT: `${CHAT_BOT_API_URL}/chat`
+  CHAT_ENDPOINT: `${CHAT_BOT_API_URL}/chat`,
+  FEEDBACK_ENDPOINT: `${CHAT_BOT_API_URL}/history-feedback`
 };
 
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;
