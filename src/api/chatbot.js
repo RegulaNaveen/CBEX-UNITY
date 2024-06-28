@@ -25,7 +25,13 @@ export function fetchChatBotReplyApi({
         { query, oppurtunity_no, bidNo, bidType },
         config
       )
-      .then(response => resolve(response.data))
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject({ error: true, message: response });
+        }
+      })
       .catch(err => reject({ error: true, message: err }));
   });
 }
