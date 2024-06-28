@@ -4,8 +4,7 @@ import { REDUX_TYPES } from '../../constants';
 const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
 export function addChatBotBubble(
-  queryText,
-  opportunityNumber,
+  { query: queryText, id: opportunityNumber, bidNo, bidType },
   callback = () => { }
 ) {
   return async dispatch => {
@@ -20,16 +19,28 @@ export function addChatBotBubble(
       }
     });
     const ERROR_DEFAULT_REPLY =
-      'Unable to process your query. Please rephrase and try again';
+      'Unable to process your query. Please rephrase and try again.';
     let data;
     try {
-      data = await fetchChatBotReplyApi(queryText, opportunityNumber);
+      data = await fetchChatBotReplyApi({
+        query: queryText,
+        oppurtunity_no: opportunityNumber,
+        bidNo,
+        bidType
+      });
+    } catch (e) {
+      data = e;
     } finally {
       const newBubble = {
         variant: 'system',
-        copyContent: data?.result?.result || ERROR_DEFAULT_REPLY,
-        children: data?.result?.result || ERROR_DEFAULT_REPLY,
-        sentOrReceivedAt: Date.now()
+        copyContent: !data.error
+          ? data.response || ERROR_DEFAULT_REPLY
+          : ERROR_DEFAULT_REPLY,
+        children: !data.error
+          ? data.response || ERROR_DEFAULT_REPLY
+          : ERROR_DEFAULT_REPLY,
+        sentOrReceivedAt: Date.now(),
+        info: !data.error ? data : {}
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
       dispatch({ type: SET_LOADING_STATE, payload: false }); // Set loading state to false

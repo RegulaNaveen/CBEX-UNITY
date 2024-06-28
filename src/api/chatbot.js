@@ -12,12 +12,27 @@ const config = {
   }
 };
 
-export function fetchChatBotReplyApi(query, oppurtunity_no) {
+export function fetchChatBotReplyApi({
+  query,
+  oppurtunity_no,
+  bidNo,
+  bidType
+}) {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT.CHAT_ENDPOINT}`, { query, oppurtunity_no }, config)
-      .then(response => resolve(response.data))
-      .catch(err => reject(err));
+      .post(
+        `${CHATBOT.CHAT_ENDPOINT}`,
+        { query, oppurtunity_no, bidNo, bidType },
+        config
+      )
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject({ error: true, message: response });
+        }
+      })
+      .catch(err => reject({ error: true, message: err }));
   });
 }
 
