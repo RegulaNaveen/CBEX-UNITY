@@ -1,6 +1,6 @@
 import ApolloChatBubble from 'apollo-react-4.19.0/components/ChatBubble';
 import ApolloProgress from 'apollo-react/components/ApolloProgress';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Copy } from 'apollo-react-icons';
 import IconButton from 'apollo-react/components/IconButton';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
@@ -121,24 +121,86 @@ const ChatBubble = ({
   copyContent,
   className = '',
   sentOrReceivedAt,
-  isWelcomeBubble
-}) => (
-  <ApolloChatBubble
-    variant={variant}
-    senderName={
-      <ChatBubbleActions
-        variant={variant}
-        content={copyContent}
-        sentOrReceivedAt={sentOrReceivedAt}
-        isWelcomeBubble={isWelcomeBubble}
-      />
-    }
-    replySuggestionMessage={replySuggestionMessage}
-    buttonProps={buttonProps}
-    className={className}
-  >
-    {children}
-  </ApolloChatBubble>
-);
+  isWelcomeBubble,
+  sourceDocuments
+}) => {
+  const sourceDocs = sourceDocuments.filter(
+    src => src.metadata.doc_class !== 'unity'
+  );
+  const [showTooltip, setShowTooltip] = useState(
+    Array(sourceDocs.length).fill(false)
+  );
+  const tooltipRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+        setShowTooltip(Array(sourceDocs.length).fill(false));
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sourceDocs.length]);
+
+  const handleTooltipClick = index => e => {
+    e.preventDefault();
+    setShowTooltip(showTooltip.map((val, i) => (i === index ? true : false)));
+  };
+
+  const renderSourceDocument = () => {
+    if (sourceDocs.length === 0) return null;
+    return (
+      <div>
+        {sourceDocs.map((docs, index) => (
+          <div ref={tooltipRef} tabIndex={0}>
+            <Tooltip
+              id="answer-tooltip"
+              title={
+                <div>
+                  <div>{docs?.metadata?.source}</div>
+                  <div>Page: {docs?.metadata?.page}</div>
+                </div>
+              }
+              body={docs?.page_content}
+              placement="top-start"
+              variant="light"
+              open={showTooltip[index]}
+            >
+              <span
+                className="tooltip-index"
+                onClick={handleTooltipClick(index)}
+                style={{ cursor: 'pointer' }}
+              >
+                [{index + 1}]
+              </span>
+            </Tooltip>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  return (
+    <ApolloChatBubble
+      variant={variant}
+      senderName={
+        <ChatBubbleActions
+          variant={variant}
+          content={copyContent}
+          sentOrReceivedAt={sentOrReceivedAt}
+          isWelcomeBubble={isWelcomeBubble}
+        />
+      }
+      replySuggestionMessage={replySuggestionMessage}
+      buttonProps={buttonProps}
+      className={className}
+    >
+      {children}
+      {renderSourceDocument()}
+    </ApolloChatBubble>
+  );
+};
 
 export default ChatBubble;

@@ -29,6 +29,7 @@ export function addChatBotBubble(
         variant: 'system',
         copyContent: data?.result?.result || ERROR_DEFAULT_REPLY,
         children: data?.result?.result || ERROR_DEFAULT_REPLY,
+        source_documents: data?.result?.source_documents || ERROR_DEFAULT_REPLY,
         sentOrReceivedAt: Date.now()
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });

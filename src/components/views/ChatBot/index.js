@@ -93,6 +93,7 @@ const ChatBot = () => {
                 replySuggestionMessage={bubble.replySuggestionMessage}
                 sentOrReceivedAt={bubble.sentOrReceivedAt}
                 isWelcomeBubble={bubble.type === 'WELCOME_MSG'}
+                sourceDocuments={bubble?.source_documents || []}
                 buttonProps={
                   bubble?.buttonProps?.map((button, i) => ({
                     label: button.label,
