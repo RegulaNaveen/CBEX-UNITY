@@ -13,16 +13,20 @@ import { useDispatch } from 'react-redux';
 import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
 import { welcomeBubble } from '../../../redux/reducers/chatbot';
 import { REDUX_TYPES } from '../../../constants';
-import { useLocation, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
+import { changeBid } from '../../../redux/actions/proposal-actions';
+import { getBidList } from '../../../redux/selectors/proposal';
 
 const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
+  const history = useHistory();
   const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
+  const bidList = useSelector(getBidList);
   const loading = useSelector(state => state.chatbot.loading);
   const [expanded, setExpanded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -64,6 +68,34 @@ const ChatBot = () => {
       root?.style.setProperty('--fullscreen-min-width-inputbox', '100%');
     }
   }, [fullscreen]);
+
+  const handleGotoQuestion = useCallback(
+    (bidNo, questionText) => {
+      const filterList = bidList.filter(bid => bid.bidNo == bidNo);
+      if (filterList.length == 0) {
+        return;
+      }
+      const bidObj = filterList[0];
+      dispatch(
+        changeBid(bidObj, null, () => {
+          setExpanded(false);
+          history.replace(
+            `?bidNo=${bidNo}&bidType=${bidObj.bidType}&search_q_text=${questionText}`
+          );
+        })
+      );
+    },
+    [bidList, dispatch]
+  );
+
+  const handleReviewDoc = useCallback(fileId => {
+    const newWindow = window.open(
+      `https://app.box.com/file/${fileId}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+    if (newWindow) newWindow.opener = null;
+  }, []);
 
   return (
     <div
