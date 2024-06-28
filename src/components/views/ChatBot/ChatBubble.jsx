@@ -78,6 +78,7 @@ const ChatBubbleActions = ({
                 size="small"
                 onClick={() => handleThumbsDownClick()}
                 darkMode
+                disabled={!info.id || info.feedback}
               >
                 <ThumbsDown />
               </IconButton>
@@ -96,6 +97,8 @@ const ChatBubbleActions = ({
       {/* Feedback Modal */}
       {showFeedbackModal && (
         <FeedbackModal
+          id={info?.id}
+          answer={content}
           open={showFeedbackModal}
           setShowSubmitModal={setShowSubmitModal}
           onClose={() => setShowFeedbackModal(false)}
@@ -113,6 +116,7 @@ const ChatBubbleActions = ({
 };
 
 const ChatBubble = ({
+  info,
   variant,
   replySuggestionMessage = '',
   buttonProps = [],
@@ -126,6 +130,7 @@ const ChatBubble = ({
     variant={variant}
     senderName={
       <ChatBubbleActions
+        info={info}
         variant={variant}
         content={copyContent}
         sentOrReceivedAt={sentOrReceivedAt}

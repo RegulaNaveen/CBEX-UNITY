@@ -88,6 +88,7 @@ const ChatBot = () => {
             {bubbles.map((bubble, index) => (
               <ChatBubble
                 key={index}
+                info={bubble?.info}
                 variant={bubble.variant}
                 copyContent={bubble.copyContent}
                 replySuggestionMessage={bubble.replySuggestionMessage}

@@ -32,7 +32,7 @@ export function FeedbackSubmitModal({ open, onClose }) {
   );
 }
 
-function FeedbackModal({ open, onClose, answer, setShowSubmitModal }) {
+function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [error, setError] = useState(false);
@@ -42,7 +42,7 @@ function FeedbackModal({ open, onClose, answer, setShowSubmitModal }) {
   function handleFeedbackSubmit() {
     try {
       const payload = {
-        id: 'f202f76f-9f58-420d-8d76-e23d12af8e2d',
+        id: id,
         feedback: value
       };
       dispatch(submitFeedback(payload)).then(res => {
@@ -129,12 +129,14 @@ function FeedbackModal({ open, onClose, answer, setShowSubmitModal }) {
 }
 
 FeedbackModal.propTypes = {
+  id: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   answer: PropTypes.string.isRequired
 };
 
 FeedbackModal.defaultProps = {
+  id: '',
   answer: '',
   open: false,
   onClose: () => {}
