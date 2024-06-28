@@ -1,6 +1,10 @@
 import { REDUX_TYPES } from '../../constants';
 
-const { SET_CHATBOT_BUBBLES, ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
+const {
+  SET_CHATBOT_BUBBLES,
+  ADD_CHATBOT_BUBBLE,
+  SET_LOADING_STATE
+} = REDUX_TYPES.CHATBOT;
 
 export const welcomeBubble = {
   variant: 'systemWithContent',
@@ -20,11 +24,13 @@ export const welcomeBubble = {
       label: 'Continue last topic: Enrolling a new Patient'
     }
   ],
-  sentOrReceivedAt: Date.now()
+  sentOrReceivedAt: Date.now(),
+  type: 'WELCOME_MSG'
 };
 
 const INITIAL_STATE = {
-  bubbles: []
+  bubbles: [],
+  loading: false
 };
 
 function onSetBubbles(state, action) {
@@ -41,9 +47,17 @@ function onAddBubble(state, action) {
   };
 }
 
+function onLoading(state, action) {
+  return {
+    ...state,
+    loading: action.payload
+  };
+}
+
 const actionMap = {
   [SET_CHATBOT_BUBBLES]: onSetBubbles,
-  [ADD_CHATBOT_BUBBLE]: onAddBubble
+  [ADD_CHATBOT_BUBBLE]: onAddBubble,
+  [SET_LOADING_STATE]: onLoading
 };
 
 export default function(state = INITIAL_STATE, action) {

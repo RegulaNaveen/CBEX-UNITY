@@ -12,10 +12,10 @@ const config = {
   }
 };
 
-export function fetchChatBotReplyApi(text, opportunityNumber) {
+export function fetchChatBotReplyApi(query, oppurtunity_no) {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT.CHAT_ENDPOINT}`, { text, opportunityNumber }, config)
+      .post(`${CHATBOT.CHAT_ENDPOINT}`, { query, oppurtunity_no }, config)
       .then(response => resolve(response.data))
       .catch(err => reject(err));
   });

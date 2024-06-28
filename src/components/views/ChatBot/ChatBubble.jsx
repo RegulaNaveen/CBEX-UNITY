@@ -1,4 +1,5 @@
 import ApolloChatBubble from 'apollo-react-4.19.0/components/ChatBubble';
+import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import React, { useState } from 'react';
 import { Copy } from 'apollo-react-icons';
 import IconButton from 'apollo-react/components/IconButton';
@@ -7,13 +8,36 @@ import moment from 'moment';
 import Snackbar from '@mui/material/Snackbar';
 import ThumbsDown from '../../svg/ThumbsDown';
 import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
+import { useSelector } from 'react-redux';
+import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
 
-const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
+const ChatBubbleActions = ({
+  variant = 'user',
+  content,
+  sentOrReceivedAt,
+  isWelcomeBubble
+}) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const chatBotFeedbackFlag = useSelector(selectChatBotFeedbackFlag);
 
-  const handleCopyClick = () => {
+  // REQUIRED TO SUPPORT HTML COPY TO CLIPBOARD
+  // const createClipBoardContent = () => {
+  //   let html = '<html><body>';
+  //   // Replace \n with <br /> for HTML line breaks
+  //   const formattedContent = content.replace(/\n/g, '<br />');
+  //   html += `${formattedContent}`;
+  //   html += '</body></html>';
+  //   return html;
+  // };
+
+  const copyToClipBoard = () => {
+    // REQUIRED TO SUPPORT HTML COPY TO CLIPBOARD
+    // const htmlContent = createClipBoardContent();
+    // const blob = new Blob([htmlContent], { type: 'text/html' });
+    // const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
+    navigator.clipboard.writeText(content);
     setShowCopySnack(true);
   };
 
@@ -40,22 +64,31 @@ const ChatBubbleActions = ({ variant = 'user', content, sentOrReceivedAt }) => {
       {variant !== 'user' && (
         <span>
           &nbsp;
-          {` - ${moment(sentOrReceivedAt).format('MMM D H:mm')}`}
+          {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm')}`}
         </span>
       )}
-      {variant !== 'user' && (
+      {variant !== 'user' && !isWelcomeBubble && (
         <>
-          <IconButton size="small" onClick={() => handleCopyClick()} darkMode>
-            <Copy />
-          </IconButton>
-          <IconButton size="small" onClick={handleThumbsDownClick} darkMode>
-            <ThumbsDown />
-          </IconButton>
+          <div>
+            <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
+              <Copy />
+            </IconButton>
+            {chatBotFeedbackFlag && (
+              <IconButton
+                size="small"
+                onClick={() => handleThumbsDownClick()}
+                darkMode
+              >
+                <ThumbsDown />
+              </IconButton>
+            )}
+          </div>
         </>
       )}
       <Snackbar
+        className="custom-snackbar"
         open={showCopySnack}
-        autoHideDuration={300000}
+        autoHideDuration={2000}
         onClose={handleSnackbarClose}
         message="Copied to clipboard"
         // action={action}
@@ -86,7 +119,8 @@ const ChatBubble = ({
   children,
   copyContent,
   className = '',
-  sentOrReceivedAt
+  sentOrReceivedAt,
+  isWelcomeBubble
 }) => (
   <ApolloChatBubble
     variant={variant}
@@ -95,6 +129,7 @@ const ChatBubble = ({
         variant={variant}
         content={copyContent}
         sentOrReceivedAt={sentOrReceivedAt}
+        isWelcomeBubble={isWelcomeBubble}
       />
     }
     replySuggestionMessage={replySuggestionMessage}
