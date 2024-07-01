@@ -68,6 +68,24 @@
         margin: 8px;
         padding-right: 8px;
       }
+      &.relaive {
+        position: relative;
+      }
+      .chat-bot-loader-overlay {
+        max-width: 100%;
+        background-color: transparent;
+        .chat-bot-loader {
+          div {
+            span {
+              width: 30px;
+              height: 30px;
+              &:last-child {
+                color: #ffffff;
+              }
+            }
+          }
+        }
+      }
       overflow-y: auto;
       &::-webkit-scrollbar {
         width: 5px;

@@ -1,11 +1,26 @@
-import { fetchChatBotReplyApi, submitFeedbackApi } from '../../api/chatbot';
+import jwt_decode from 'jwt-decode';
+import {
+  fetchChatBotReplyApi,
+  fetchChatHistoryApi,
+  submitFeedbackApi
+} from '../../api/chatbot';
 import { REDUX_TYPES } from '../../constants';
+import { welcomeBubble } from '../reducers/chatbot';
+import { CHATBOT } from '../../constants/app';
+import { getAccessTokenFromLocalStorage } from '../../SessionHandler';
+import moment from 'moment';
 
-const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE, UPDATE_BUBBLE } = REDUX_TYPES.CHATBOT;
+const {
+  ADD_CHATBOT_BUBBLE,
+  SET_LOADING_STATE,
+  UPDATE_BUBBLE,
+  FETCHING_HISTORY,
+  SET_CHATBOT_BUBBLES
+} = REDUX_TYPES.CHATBOT;
 
 export function addChatBotBubble(
   { query: queryText, id: opportunityNumber, bidNo, bidType },
-  callback = () => { }
+  callback = () => {}
 ) {
   return async dispatch => {
     dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
@@ -34,10 +49,16 @@ export function addChatBotBubble(
       const newBubble = {
         variant: 'system',
         copyContent: !data.error
-          ? data.response || ERROR_DEFAULT_REPLY
+          ? (data.response &&
+              data.response.result &&
+              data.response.result.result) ||
+            ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
         children: !data.error
-          ? data.response || ERROR_DEFAULT_REPLY
+          ? (data.response &&
+              data.response.result &&
+              data.response.result.result) ||
+            ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
         sentOrReceivedAt: Date.now(),
         info: !data.error ? data : {}
@@ -49,7 +70,7 @@ export function addChatBotBubble(
   };
 }
 
-export function submitFeedback(feedback, callback = () => { }) {
+export function submitFeedback(feedback, callback = () => {}) {
   return async dispatch => {
     try {
       const response = await submitFeedbackApi(feedback);
@@ -59,6 +80,77 @@ export function submitFeedback(feedback, callback = () => { }) {
       return response;
     } finally {
       callback();
+    }
+  };
+}
+
+export function fetchHistory(opportunityNumber) {
+  return async dispatch => {
+    try {
+      await dispatch({ type: FETCHING_HISTORY, payload: true });
+      const response = await fetchChatHistoryApi(opportunityNumber);
+      if (response && Array.isArray(response.data)) {
+        if (response.data.length === 0) {
+          await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
+        } else {
+          const history = [];
+          response.data.forEach(bubble => {
+            history.push({
+              info: {
+                id: bubble.id,
+                feedback: bubble.feedback
+              },
+              variant: 'user',
+              copyContent: bubble.user_query,
+              children: bubble.user_query,
+              sentOrReceivedAt: new Date(bubble.created_at).getTime(),
+              replySuggestionMessage: '',
+              isWelcomeBubble: false
+            });
+            history.push({
+              info: {
+                id: bubble.id,
+                feedback: bubble.feedback
+              },
+              variant: 'system',
+              copyContent:
+                (bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              children:
+                (bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              sentOrReceivedAt: new Date(bubble.created_at).getTime(),
+              replySuggestionMessage: '',
+              isWelcomeBubble: false
+            });
+          });
+          await dispatch({ type: SET_CHATBOT_BUBBLES, payload: history });
+          const lastHistory = history[history.length - 1];
+          const tokenInfo = jwt_decode(getAccessTokenFromLocalStorage());
+          const isLastChatHappenedInCurrentSession = moment(
+            new Date(lastHistory.sentOrReceivedAt)
+          ).isBetween(
+            moment(new Date(tokenInfo.auth_time * 1000)),
+            moment(new Date(tokenInfo.exp * 1000))
+          );
+          if (!isLastChatHappenedInCurrentSession) {
+            await dispatch({
+              type: ADD_CHATBOT_BUBBLE,
+              payload: welcomeBubble
+            });
+          }
+        }
+      } else {
+        await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
+      }
+    } catch (e) {
+      console.log('[CHATBOT] Error fetching chat history: ', e);
+    } finally {
+      await dispatch({ type: FETCHING_HISTORY, payload: false });
     }
   };
 }
