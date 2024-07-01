@@ -1,13 +1,11 @@
 import ApolloChatBubble from 'apollo-react-4.19.0/components/ChatBubble';
-import ApolloProgress from 'apollo-react/components/ApolloProgress';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Copy } from 'apollo-react-icons';
 import IconButton from 'apollo-react/components/IconButton';
 import StatusCheck from 'apollo-react-icons/StatusCheck';
 import Tooltip from 'apollo-react/components/Tooltip';
 import classNames from 'classnames';
 import moment from 'moment';
-import Snackbar from '@mui/material/Snackbar';
 import ThumbsDown from '../../svg/ThumbsDown';
 import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
 import { useSelector } from 'react-redux';
@@ -20,7 +18,6 @@ const ChatBubbleActions = ({
   sentOrReceivedAt,
   isWelcomeBubble
 }) => {
-  const [showCopySnack, setShowCopySnack] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -43,16 +40,7 @@ const ChatBubbleActions = ({
     // const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     setCopied(true);
     navigator.clipboard.writeText(content);
-    setShowCopySnack(true);
     setTimeout(() => setCopied(false), 1000);
-  };
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setShowCopySnack(false);
   };
 
   const handleThumbsDownClick = () => {
@@ -110,14 +98,6 @@ const ChatBubbleActions = ({
           </div>
         </>
       )}
-      <Snackbar
-        className="custom-snackbar"
-        open={showCopySnack}
-        autoHideDuration={2000}
-        onClose={handleSnackbarClose}
-        message="Copied to clipboard"
-        // action={action}
-      />
       {/* Feedback Modal */}
       {showFeedbackModal && (
         <FeedbackModal
@@ -148,25 +128,101 @@ const ChatBubble = ({
   copyContent,
   className = '',
   sentOrReceivedAt,
-  isWelcomeBubble
-}) => (
-  <ApolloChatBubble
-    variant={variant}
-    senderName={
-      <ChatBubbleActions
-        info={info}
-        variant={variant}
-        content={copyContent}
-        sentOrReceivedAt={sentOrReceivedAt}
-        isWelcomeBubble={isWelcomeBubble}
-      />
-    }
-    replySuggestionMessage={replySuggestionMessage}
-    buttonProps={buttonProps}
-    className={className}
-  >
-    {children}
-  </ApolloChatBubble>
-);
+  isWelcomeBubble,
+  sourceDocuments
+}) => {
+  const sourceDocs = sourceDocuments.filter(
+    src => src.metadata.doc_class !== 'unity'
+  );
+  const [showTooltip, setShowTooltip] = useState(
+    Array(sourceDocs.length).fill(false)
+  );
+  const tooltipRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      // Check if the click is on the scrollbar
+      const isScrollbarClick =
+        event.offsetX > event.target.clientWidth ||
+        event.offsetY > event.target.clientHeight;
+
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target) &&
+        !isScrollbarClick
+      ) {
+        setShowTooltip(Array(sourceDocs.length).fill(false));
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sourceDocs.length]);
+
+  const handleTooltipClick = index => e => {
+    e.preventDefault();
+    setShowTooltip(showTooltip.map((val, i) => (i === index ? true : false)));
+  };
+
+  const renderSourceDocument = () => {
+    if (sourceDocs.length === 0) return null;
+    return (
+      <>
+        {sourceDocs.map((docs, index) => (
+          <span ref={tooltipRef} tabIndex={0}>
+            <Tooltip
+              id="answer-tooltip"
+              title={
+                <div>
+                  <div>
+                    {docs?.metadata?.source.replace(
+                      /^\/usr\/src\/app\/api\/data\//,
+                      ''
+                    )}
+                  </div>
+                  <div>Page: {docs?.metadata?.page}</div>
+                </div>
+              }
+              body={docs?.page_content}
+              placement="top-start"
+              variant="light"
+              open={showTooltip[index]}
+            >
+              <span
+                className="tooltip-index"
+                onClick={handleTooltipClick(index)}
+                style={{ cursor: 'pointer' }}
+              >
+                [{index + 1}]
+              </span>
+            </Tooltip>
+          </span>
+        ))}
+      </>
+    );
+  };
+  return (
+    <ApolloChatBubble
+      variant={variant}
+      senderName={
+        <ChatBubbleActions
+          info={info}
+          variant={variant}
+          content={copyContent}
+          sentOrReceivedAt={sentOrReceivedAt}
+          isWelcomeBubble={isWelcomeBubble}
+        />
+      }
+      replySuggestionMessage={replySuggestionMessage}
+      buttonProps={buttonProps}
+      className={className}
+    >
+      {children}
+      {renderSourceDocument()}
+    </ApolloChatBubble>
+  );
+};
 
 export default ChatBubble;

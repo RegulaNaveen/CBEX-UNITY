@@ -101,7 +101,6 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
-
   return (
     <>
       {bidList.length ? (
@@ -213,7 +212,11 @@ const BidHistory = () => {
                                 ? '(processing)'
                                 : item.isCurrent && ' (Current)'}
                             </div>
-                            <div>{parseMomentDate(item.bidDueDate)}</div>
+                            <div>
+                              {item.isCurrent
+                                ? item.bidDueDate
+                                : parseMomentDate(item.bidDueDate)}
+                            </div>
                             {item.bidId === selectedBid.get('id') && (
                               <Checkmark
                                 className="selected-bid-check"
