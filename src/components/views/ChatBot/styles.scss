@@ -30,6 +30,7 @@
     &.chat-bot-ui-fullscreen {
       max-height: 100vh;
       max-width: 100vw;
+      margin: auto;
     }
     & > div:first-child {
       border-top-left-radius: 16px;
@@ -55,13 +56,18 @@
     }
     .chat-bot-bubbles-container-fullscreen {
       margin-left: 17vw;
-      margin-right: 17vw;
+      margin-right: 8px;
+      padding-right: 17vw;
+      margin-top: 8px;
+      margin-bottom: 8px;
     }
     .chat-bot-bubbles-container {
       font-size: 12px;
       flex-grow: 1;
-      padding: 12px;
-      margin-right: 8px;
+      &:not(.chat-bot-bubbles-container-fullscreen) {
+        margin: 8px;
+        padding-right: 8px;
+      }
       overflow-y: auto;
       &::-webkit-scrollbar {
         width: 5px;
