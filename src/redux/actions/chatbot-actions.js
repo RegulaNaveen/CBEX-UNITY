@@ -1,11 +1,15 @@
 import { fetchChatBotReplyApi, submitFeedbackApi } from '../../api/chatbot';
 import { REDUX_TYPES } from '../../constants';
 
-const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE, UPDATE_BUBBLE } = REDUX_TYPES.CHATBOT;
+const {
+  ADD_CHATBOT_BUBBLE,
+  SET_LOADING_STATE,
+  UPDATE_BUBBLE
+} = REDUX_TYPES.CHATBOT;
 
 export function addChatBotBubble(
   { query: queryText, id: opportunityNumber, bidNo, bidType },
-  callback = () => { }
+  callback = () => {}
 ) {
   return async dispatch => {
     dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
@@ -39,6 +43,7 @@ export function addChatBotBubble(
         children: !data.error
           ? data.response || ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
+        source_documents: !data.error ? data.source_documents || [] : [],
         sentOrReceivedAt: Date.now(),
         info: !data.error ? data : {}
       };
@@ -49,7 +54,7 @@ export function addChatBotBubble(
   };
 }
 
-export function submitFeedback(feedback, callback = () => { }) {
+export function submitFeedback(feedback, callback = () => {}) {
   return async dispatch => {
     try {
       const response = await submitFeedbackApi(feedback);
