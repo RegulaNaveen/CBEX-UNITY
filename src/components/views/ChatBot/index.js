@@ -18,7 +18,7 @@ import {
   fetchHistory
 } from '../../../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../../../constants';
-import { useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, useLocation } from 'react-router-dom';
 import featureFlags from '../../../constants/featureFlags';
 import Loader from 'apollo-react/components/Loader';
 
