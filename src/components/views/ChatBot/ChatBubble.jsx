@@ -9,16 +9,20 @@ import classNames from 'classnames';
 import moment from 'moment';
 import Snackbar from '@mui/material/Snackbar';
 import ThumbsDown from '../../svg/ThumbsDown';
+import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
 import { useSelector } from 'react-redux';
 import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
 
 const ChatBubbleActions = ({
+  info,
   variant = 'user',
   content,
   sentOrReceivedAt,
   isWelcomeBubble
 }) => {
   const [showCopySnack, setShowCopySnack] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [copied, setCopied] = useState(false);
   const chatBotFeedbackFlag = useSelector(selectChatBotFeedbackFlag);
 
@@ -49,6 +53,10 @@ const ChatBubbleActions = ({
     }
 
     setShowCopySnack(false);
+  };
+
+  const handleThumbsDownClick = () => {
+    setShowFeedbackModal(true);
   };
 
   return (
@@ -92,8 +100,9 @@ const ChatBubbleActions = ({
             {chatBotFeedbackFlag && (
               <IconButton
                 size="small"
-                onClick={() => console.info('Thumbs down icon clicked!')}
+                onClick={() => handleThumbsDownClick()}
                 darkMode
+                disabled={!info.id || info.feedback}
               >
                 <ThumbsDown />
               </IconButton>
@@ -109,11 +118,29 @@ const ChatBubbleActions = ({
         message="Copied to clipboard"
         // action={action}
       />
+      {/* Feedback Modal */}
+      {showFeedbackModal && (
+        <FeedbackModal
+          id={info?.id}
+          answer={content}
+          open={showFeedbackModal}
+          setShowSubmitModal={setShowSubmitModal}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      )}
+      {/* Feedback Submit Modal */}
+      {showSubmitModal && (
+        <FeedbackSubmitModal
+          open={showSubmitModal}
+          onClose={() => setShowSubmitModal(false)}
+        />
+      )}
     </div>
   );
 };
 
 const ChatBubble = ({
+  info,
   variant,
   replySuggestionMessage = '',
   buttonProps = [],
@@ -134,7 +161,16 @@ const ChatBubble = ({
 
   useEffect(() => {
     const handleClickOutside = event => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+      // Check if the click is on the scrollbar
+      const isScrollbarClick =
+        event.offsetX > event.target.clientWidth ||
+        event.offsetY > event.target.clientHeight;
+
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target) &&
+        !isScrollbarClick
+      ) {
         setShowTooltip(Array(sourceDocs.length).fill(false));
       }
     };
@@ -153,14 +189,19 @@ const ChatBubble = ({
   const renderSourceDocument = () => {
     if (sourceDocs.length === 0) return null;
     return (
-      <div>
+      <>
         {sourceDocs.map((docs, index) => (
-          <div ref={tooltipRef} tabIndex={0}>
+          <span ref={tooltipRef} tabIndex={0}>
             <Tooltip
               id="answer-tooltip"
               title={
                 <div>
-                  <div>{docs?.metadata?.source}</div>
+                  <div>
+                    {docs?.metadata?.source.replace(
+                      /^\/usr\/src\/app\/api\/data\//,
+                      ''
+                    )}
+                  </div>
                   <div>Page: {docs?.metadata?.page}</div>
                 </div>
               }
@@ -177,9 +218,9 @@ const ChatBubble = ({
                 [{index + 1}]
               </span>
             </Tooltip>
-          </div>
+          </span>
         ))}
-      </div>
+      </>
     );
   };
   return (
@@ -187,6 +228,7 @@ const ChatBubble = ({
       variant={variant}
       senderName={
         <ChatBubbleActions
+          info={info}
           variant={variant}
           content={copyContent}
           sentOrReceivedAt={sentOrReceivedAt}

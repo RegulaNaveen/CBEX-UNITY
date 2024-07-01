@@ -35,11 +35,19 @@ const ChatBot = () => {
     }
   }, [bubbles]);
 
+  const winLocationSearch = window.location.search;
+  const queryparams = new URLSearchParams(winLocationSearch);
+  const bidNo = queryparams.get('bidNo');
+  const bidType = queryparams.get('bidType');
+
   const {
     params: { id }
   } = useRouteMatch();
 
   useEffect(() => {
+    if (bubbles.length <= 1) {
+      return;
+    }
     if (expanded) {
       bubblesContainerRef.current.scrollTop =
         bubblesContainerRef.current.scrollHeight;
@@ -88,6 +96,7 @@ const ChatBot = () => {
             {bubbles.map((bubble, index) => (
               <ChatBubble
                 key={index}
+                info={bubble?.info}
                 variant={bubble.variant}
                 copyContent={bubble.copyContent}
                 replySuggestionMessage={bubble.replySuggestionMessage}
@@ -99,8 +108,9 @@ const ChatBot = () => {
                     label: button.label,
                     onClick: () =>
                       dispatch(
-                        addChatBotBubble(button.label, id, () =>
-                          setDisableFooter(false)
+                        addChatBotBubble(
+                          { query: button.label, id, bidNo, bidType },
+                          () => setDisableFooter(false)
                         )
                       )
                   })) || []
@@ -136,8 +146,9 @@ const ChatBot = () => {
                 setDisableFooter(true);
                 setInputText('');
                 dispatch(
-                  addChatBotBubble(inputRef.current.value, id, () =>
-                    setDisableFooter(false)
+                  addChatBotBubble(
+                    { query: inputRef.current.value, id, bidNo, bidType },
+                    () => setDisableFooter(false)
                   )
                 );
               }}

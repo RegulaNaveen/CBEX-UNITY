@@ -3,7 +3,8 @@ import { REDUX_TYPES } from '../../constants';
 const {
   SET_CHATBOT_BUBBLES,
   ADD_CHATBOT_BUBBLE,
-  SET_LOADING_STATE
+  SET_LOADING_STATE,
+  UPDATE_BUBBLE
 } = REDUX_TYPES.CHATBOT;
 
 export const welcomeBubble = {
@@ -54,12 +55,26 @@ function onLoading(state, action) {
   };
 }
 
+function onUpdateBubble(state, action) {
+  const { id, feedback } = action.payload;
+  const bubbles = [...state.bubbles];
+  const bubble = bubbles.find(b => b.info && b.info.id === id);
+  if (bubble) {
+    bubble.info.feedback = feedback;
+  }
+  return {
+    ...state,
+    bubbles
+  };
+}
+
 const actionMap = {
   [SET_CHATBOT_BUBBLES]: onSetBubbles,
   [ADD_CHATBOT_BUBBLE]: onAddBubble,
-  [SET_LOADING_STATE]: onLoading
+  [SET_LOADING_STATE]: onLoading,
+  [UPDATE_BUBBLE]: onUpdateBubble
 };
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }
