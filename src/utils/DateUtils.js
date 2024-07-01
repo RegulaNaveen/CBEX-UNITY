@@ -4,13 +4,12 @@ import dateFnsFormat from 'date-fns/format';
 import dateFnsParse from 'date-fns/parse';
 import moment from 'moment';
 
-export const parseDate = (date: string, format: string) => {
+export const parseDate = (date, format) => {
   const parsed = dateFnsParse(date, format, new Date(), {});
   return DateUtils.isDate(parsed) ? parsed : undefined;
 };
 
-export const formatDate = (date: Date, format: string) =>
-  dateFnsFormat(date, format, {});
+export const formatDate = (date, format) => dateFnsFormat(date, format, {});
 // commented unused code
 // export const remainingDays = (date: string): number | string => {
 //   if (!date) return '-';
@@ -22,7 +21,7 @@ export const formatDate = (date: Date, format: string) =>
 //   return daysRemaing < 0 ? 0 : daysRemaing;
 // };
 
-export const getRemainingDays = (date: string): number | string => {
+export const getRemainingDays = date => {
   if (!date) return '-';
 
   const eventdate = moment(date, 'D-MMM-yyyy');
@@ -34,14 +33,14 @@ export const getRemainingDays = (date: string): number | string => {
 export function parseCorrectDate(DateString) {
   const utc = new Date(DateString);
   return new Date(utc.getTime() + utc.getTimezoneOffset() * 60000);
-};
+}
 
-export const parseMomentDate = (date: Date | string) => {
+export const parseMomentDate = date => {
   return !date || date === ' '
     ? date
-    : moment(date).format('DD-MMM-YYYY');
+    : moment(parseCorrectDate(date)).format('DD-MMM-YYYY');
 };
 
-export const formatTheDate = (date: Date | string) => {
+export const formatTheDate = date => {
   return !date ? date : moment(date).format('DD-MMM-YYYY');
 };

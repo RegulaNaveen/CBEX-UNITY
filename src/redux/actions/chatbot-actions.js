@@ -1,7 +1,11 @@
-import { fetchChatBotReplyApi } from '../../api/chatbot';
+import { fetchChatBotReplyApi, submitFeedbackApi } from '../../api/chatbot';
 import { REDUX_TYPES } from '../../constants';
 
-const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
+const {
+  ADD_CHATBOT_BUBBLE,
+  SET_LOADING_STATE,
+  UPDATE_BUBBLE
+} = REDUX_TYPES.CHATBOT;
 
 function extractContext(bubbles, maxNumOfCount) {
   const context = [];
@@ -24,12 +28,11 @@ function extractContext(bubbles, maxNumOfCount) {
 }
 
 export function addChatBotBubble(
-  queryText,
-  opportunityNumber,
-  bidNo,
+  { query: queryText, id: opportunityNumber, bidNo, bidType },
   callback = () => {}
 ) {
   return async (dispatch, getState) => {
+    dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
     const bubbles = getState().chatbot.bubbles;
     const NUM_NUM_OF_BUBBLES = 2;
     const context = extractContext(bubbles, NUM_NUM_OF_BUBBLES);
@@ -45,29 +48,50 @@ export function addChatBotBubble(
     });
 
     const ERROR_DEFAULT_REPLY =
-      'Unable to process your query. Please rephrase and try again';
+      'Unable to process your query. Please rephrase and try again.';
     let data;
     try {
       const params = {
         query: queryText,
         oppurtunity_no: opportunityNumber,
         context,
-        bid_no: 1
+        bid_no: '1'
       };
       if (bidNo && bidNo != 'undefined') {
         params.bid_no = bidNo;
       }
       data = await fetchChatBotReplyApi(params);
+    } catch (e) {
+      data = e;
     } finally {
       const newBubble = {
         variant: 'system',
-        copyContent:
-          data?.result?.result || data?.result || ERROR_DEFAULT_REPLY,
-        children: data?.result?.result || data?.result || ERROR_DEFAULT_REPLY,
+        copyContent: !data.error
+          ? data?.result || ERROR_DEFAULT_REPLY
+          : ERROR_DEFAULT_REPLY,
+        children: !data.error
+          ? data?.result || ERROR_DEFAULT_REPLY
+          : ERROR_DEFAULT_REPLY,
         sentOrReceivedAt: Date.now(),
+        info: !data.error ? data : {},
         sourceDocs: data?.result?.source_documents || []
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
+      dispatch({ type: SET_LOADING_STATE, payload: false }); // Set loading state to false
+      callback();
+    }
+  };
+}
+
+export function submitFeedback(feedback, callback = () => {}) {
+  return async dispatch => {
+    try {
+      const response = await submitFeedbackApi(feedback);
+      if (response.status === 200) {
+        dispatch({ type: UPDATE_BUBBLE, payload: response.data });
+      }
+      return response;
+    } finally {
       callback();
     }
   };
