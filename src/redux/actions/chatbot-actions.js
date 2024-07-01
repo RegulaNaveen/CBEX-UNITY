@@ -27,34 +27,14 @@ function extractContext(bubbles, maxNumOfCount) {
   return context;
 }
 
-function getBidNo(number, bidType) {
-  let pre = '';
-  switch (bidType) {
-    case 'RFI_Request': {
-      pre = 'RFI_';
-      break;
-    }
-    case 'Post_Award_Bid': {
-      pre = 'PA_';
-      break;
-    }
-    case 'Early_Engagement_Bid': {
-      pre = 'EE_';
-      break;
-    }
-  }
-  return `${pre}${number}`;
-}
-
 export function addChatBotBubble(
-  { query: queryText, id: opportunityNumber, bidNo, bidType },
+  { query: queryText, id: opportunityNumber, bidNo, bidType, maxContextCount },
   callback = () => {}
 ) {
   return async (dispatch, getState) => {
     dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
     const bubbles = getState().chatbot.bubbles;
-    const NUM_NUM_OF_BUBBLES = 2;
-    const context = extractContext(bubbles, NUM_NUM_OF_BUBBLES);
+    const context = extractContext(bubbles, maxContextCount);
 
     dispatch({
       type: ADD_CHATBOT_BUBBLE,
@@ -74,10 +54,11 @@ export function addChatBotBubble(
         query: queryText,
         oppurtunity_no: opportunityNumber,
         context,
-        bid_no: getBidNo('1', bidType)
+        bidNo: 1,
+        bidType
       };
       if (bidNo && bidNo != 'undefined') {
-        params.bid_no = getBidNo(bidNo, bidType);
+        params.bidNo = parseInt(bidNo);
       }
       data = await fetchChatBotReplyApi(params);
     } catch (e) {

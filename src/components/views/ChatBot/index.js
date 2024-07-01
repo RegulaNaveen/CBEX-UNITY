@@ -14,12 +14,14 @@ import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
 import { welcomeBubble } from '../../../redux/reducers/chatbot';
 import { REDUX_TYPES } from '../../../constants';
 import { useLocation, useRouteMatch } from 'react-router-dom';
+import featureFlags from '../../../constants/featureFlags';
 
 const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
   const search = useLocation().search;
   const searchParams = new URLSearchParams(search);
   const [inputText, setInputText] = useState('');
@@ -110,7 +112,14 @@ const ChatBot = () => {
                     onClick: () =>
                       dispatch(
                         addChatBotBubble(
-                          { query: button.label, id, bidNo, bidType },
+                          {
+                            query: button.label,
+                            id,
+                            bidNo,
+                            bidType,
+                            maxContextCount:
+                              flags[featureFlags.CHATBOT_CONTENT_COUNT]
+                          },
                           () => setDisableFooter(false)
                         )
                       )
@@ -148,7 +157,13 @@ const ChatBot = () => {
                 setInputText('');
                 dispatch(
                   addChatBotBubble(
-                    { query: inputRef.current.value, id, bidNo, bidType },
+                    {
+                      query: inputRef.current.value,
+                      id,
+                      bidNo,
+                      bidType,
+                      maxContextCount: flags[featureFlags.CHATBOT_CONTENT_COUNT]
+                    },
                     () => setDisableFooter(false)
                   )
                 );
