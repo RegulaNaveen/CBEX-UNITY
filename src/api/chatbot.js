@@ -35,3 +35,21 @@ export function submitFeedbackApi(feedback) {
       .catch(err => reject(err));
   });
 }
+
+export function fetchChatHistoryApi(opportunityNumber) {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(
+        `${CHATBOT.CHAT_HISTORY_ENDPOINT}?opportunityNumber=${opportunityNumber}`,
+        config
+      )
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject({ error: true, message: response });
+        }
+      })
+      .catch(err => reject({ error: true, message: err }));
+  });
+}

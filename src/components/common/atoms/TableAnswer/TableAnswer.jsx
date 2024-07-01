@@ -585,6 +585,7 @@ function TableAnswer({
   }, []);
 
   const handleSaveClick = useCallback(() => {
+    setSaveDisable(true);
     toggleModal(false);
     if (toggleWatch) toggleWatch(false);
     if (onBlur) onBlur();
@@ -607,8 +608,6 @@ function TableAnswer({
     onChange({ rows, columns: newColumns }, lastAnswer);
     duplicateCheck(rowHeaders, columnHeaders);
   }, [toggleWatch, onBlur, rows, columns]);
-
-  const debouncedSaveClick = debounce(handleSaveClick, 600);
 
   function handleEdit(valueType, values) {
     if (valueType === 'column') {
@@ -707,7 +706,7 @@ function TableAnswer({
           {
             label: 'Save',
             'data-testid': 'saveButton',
-            onClick: () => debouncedSaveClick(),
+            onClick: () => handleSaveClick(),
             disabled: saveDisable
           }
         ]}
