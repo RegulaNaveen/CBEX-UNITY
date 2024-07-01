@@ -343,3 +343,13 @@
 .makeStyles-userBubble-54 {
   word-break: break-all;
 }
+
+.multi-res-chat {
+  margin-left: 5px;
+  & ol > li {
+    margin-top: 5px;
+    & > button {
+      margin: 5px;
+    }
+  }
+}
