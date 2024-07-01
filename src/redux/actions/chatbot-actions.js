@@ -27,6 +27,25 @@ function extractContext(bubbles, maxNumOfCount) {
   return context;
 }
 
+function getBidNo(number, bidType) {
+  let pre = '';
+  switch (bidType) {
+    case 'RFI_Request': {
+      pre = 'RFI_';
+      break;
+    }
+    case 'Post_Award_Bid': {
+      pre = 'PA_';
+      break;
+    }
+    case 'Early_Engagement_Bid': {
+      pre = 'EE_';
+      break;
+    }
+  }
+  return `${pre}${number}`;
+}
+
 export function addChatBotBubble(
   { query: queryText, id: opportunityNumber, bidNo, bidType },
   callback = () => {}
@@ -55,10 +74,10 @@ export function addChatBotBubble(
         query: queryText,
         oppurtunity_no: opportunityNumber,
         context,
-        bid_no: '1'
+        bid_no: getBidNo('1', bidType)
       };
       if (bidNo && bidNo != 'undefined') {
-        params.bid_no = bidNo;
+        params.bid_no = getBidNo(bidNo, bidType);
       }
       data = await fetchChatBotReplyApi(params);
     } catch (e) {
