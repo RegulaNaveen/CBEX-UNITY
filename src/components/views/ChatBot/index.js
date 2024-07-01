@@ -19,11 +19,15 @@ import {
 } from '../../../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../../../constants';
 import { useRouteMatch } from 'react-router-dom';
+import featureFlags from '../../../constants/featureFlags';
 import Loader from 'apollo-react/components/Loader';
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
+  const flags = useSelector(state => state.proposal.get('eventflag'));
+  const search = useLocation().search;
+  const searchParams = new URLSearchParams(search);
   const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
@@ -124,7 +128,14 @@ const ChatBot = () => {
                         onClick: () =>
                           dispatch(
                             addChatBotBubble(
-                              { query: button.label, id, bidNo, bidType },
+                              {
+                                query: button.label,
+                                id,
+                                bidNo,
+                                bidType,
+                                maxContextCount:
+                                  flags[featureFlags.CHATBOT_CONTENT_COUNT]
+                              },
                               () => setDisableFooter(false)
                             )
                           )
@@ -164,7 +175,13 @@ const ChatBot = () => {
                 setInputText('');
                 dispatch(
                   addChatBotBubble(
-                    { query: inputRef.current.value, id, bidNo, bidType },
+                    {
+                      query: inputRef.current.value,
+                      id,
+                      bidNo,
+                      bidType,
+                      maxContextCount: flags[featureFlags.CHATBOT_CONTENT_COUNT]
+                    },
                     () => setDisableFooter(false)
                   )
                 );

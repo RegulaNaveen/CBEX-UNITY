@@ -12,19 +12,10 @@ const config = {
   }
 };
 
-export function fetchChatBotReplyApi({
-  query,
-  oppurtunity_no,
-  bidNo,
-  bidType
-}) {
+export function fetchChatBotReplyApi(params) {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(
-        `${CHATBOT.CHAT_ENDPOINT}`,
-        { query, oppurtunity_no, bidNo, bidType },
-        config
-      )
+      .post(`${CHATBOT.CHAT_ENDPOINT}`, params, config)
       .then(response => {
         if (response.status === 200) {
           resolve(response.data);

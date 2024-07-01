@@ -18,12 +18,35 @@ const {
   SET_CHATBOT_BUBBLES
 } = REDUX_TYPES.CHATBOT;
 
+function extractContext(bubbles, maxNumOfCount) {
+  const context = [];
+  let count = 0;
+  if (!bubbles) return context;
+  for (let i = bubbles.length - 1; i > 0; i--) {
+    if (count >= maxNumOfCount) break;
+
+    const bubble = bubbles[i];
+    if (bubble.variant === 'user') {
+      context.push({
+        question: bubble.children,
+        answer: bubbles[i + 1].children
+      });
+      count++;
+    }
+  }
+
+  return context;
+}
+
 export function addChatBotBubble(
-  { query: queryText, id: opportunityNumber, bidNo, bidType },
+  { query: queryText, id: opportunityNumber, bidNo, bidType, maxContextCount },
   callback = () => {}
 ) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
+    const bubbles = getState().chatbot.bubbles;
+    const context = extractContext(bubbles, maxContextCount);
+
     dispatch({
       type: ADD_CHATBOT_BUBBLE,
       payload: {
@@ -33,16 +56,22 @@ export function addChatBotBubble(
         sentOrReceivedAt: Date.now()
       }
     });
+
     const ERROR_DEFAULT_REPLY =
       'Unable to process your query. Please rephrase and try again.';
     let data;
     try {
-      data = await fetchChatBotReplyApi({
+      const params = {
         query: queryText,
         oppurtunity_no: opportunityNumber,
-        bidNo,
+        context,
+        bidNo: 1,
         bidType
-      });
+      };
+      if (bidNo && bidNo != 'undefined') {
+        params.bidNo = parseInt(bidNo);
+      }
+      data = await fetchChatBotReplyApi(params);
     } catch (e) {
       data = e;
     } finally {
@@ -62,7 +91,8 @@ export function addChatBotBubble(
           : ERROR_DEFAULT_REPLY,
         source_documents: !data.error ? data.source_documents || [] : [],
         sentOrReceivedAt: Date.now(),
-        info: !data.error ? data : {}
+        info: !data.error ? data : {},
+        sourceDocs: data?.result?.source_documents || []
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
       dispatch({ type: SET_LOADING_STATE, payload: false }); // Set loading state to false
