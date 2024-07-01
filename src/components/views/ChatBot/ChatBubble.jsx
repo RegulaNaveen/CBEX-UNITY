@@ -1,5 +1,4 @@
 import ApolloChatBubble from 'apollo-react-4.19.0/components/ChatBubble';
-import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import React, { useEffect, useRef, useState } from 'react';
 import { Copy } from 'apollo-react-icons';
 import IconButton from 'apollo-react/components/IconButton';
@@ -7,7 +6,6 @@ import StatusCheck from 'apollo-react-icons/StatusCheck';
 import Tooltip from 'apollo-react/components/Tooltip';
 import classNames from 'classnames';
 import moment from 'moment';
-import Snackbar from '@mui/material/Snackbar';
 import ThumbsDown from '../../svg/ThumbsDown';
 import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
 import { useSelector } from 'react-redux';
@@ -20,7 +18,6 @@ const ChatBubbleActions = ({
   sentOrReceivedAt,
   isWelcomeBubble
 }) => {
-  const [showCopySnack, setShowCopySnack] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -43,16 +40,7 @@ const ChatBubbleActions = ({
     // const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     setCopied(true);
     navigator.clipboard.writeText(content);
-    setShowCopySnack(true);
     setTimeout(() => setCopied(false), 1000);
-  };
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setShowCopySnack(false);
   };
 
   const handleThumbsDownClick = () => {
@@ -110,14 +98,6 @@ const ChatBubbleActions = ({
           </div>
         </>
       )}
-      <Snackbar
-        className="custom-snackbar"
-        open={showCopySnack}
-        autoHideDuration={2000}
-        onClose={handleSnackbarClose}
-        message="Copied to clipboard"
-        // action={action}
-      />
       {/* Feedback Modal */}
       {showFeedbackModal && (
         <FeedbackModal
