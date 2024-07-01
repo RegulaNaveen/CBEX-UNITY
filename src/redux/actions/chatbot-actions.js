@@ -60,6 +60,7 @@ export function addChatBotBubble(
               data.response.result.result) ||
             ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
+        source_documents: !data.error ? data.source_documents || [] : [],
         sentOrReceivedAt: Date.now(),
         info: !data.error ? data : {}
       };

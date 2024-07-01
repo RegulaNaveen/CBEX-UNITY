@@ -55,7 +55,7 @@
   thead {
     th {
       height: inherit;
-      padding: 0.5rem 1rem;
+      // padding: 0.5rem 1rem;
       white-space: nowrap; /* Prevent text wrapping */
       overflow: hidden;
       text-overflow: ellipsis;
@@ -71,15 +71,20 @@
         font-size: 14px;
         height: 32px;
       }
+      &:last-child {
+        padding: 0.1rem 0.3rem;
+      }
     }
   }
   tbody {
     tr {
       td {
         height: inherit;
+        padding: 8px 4px;
         &:first-child {
           background-color: #f8f9fb;
           font-weight: 600;
+          padding: 0px;
         }
         &:not(:last-child) {
           border-right: 1px solid #e9e9e9;

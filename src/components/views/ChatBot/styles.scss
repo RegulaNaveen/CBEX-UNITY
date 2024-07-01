@@ -142,6 +142,12 @@
       & > div > div:nth-child(1) > span {
         font-size: 12px;
         white-space: pre-line;
+
+        & span {
+          color: #0557d5;
+          font-weight: 600;
+          margin: 1px;
+        }
       }
       & > div > div:nth-child(1) > div > button {
         font-size: 12px;
@@ -366,4 +372,29 @@
 
 .makeStyles-userBubble-54 {
   word-break: break-all;
+}
+
+#answer-tooltip {
+  & > div {
+    max-width: 300px;
+    height: 300px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 5px;
+    }
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #c1c1c1;
+    }
+  }
 }
