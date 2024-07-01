@@ -8,14 +8,18 @@ import './styles.scss';
 import classNames from 'classnames';
 import ChatBotInfo from './ChatBotInfo';
 import { useSelector } from 'react-redux';
-import { selectChatBotBubbles } from '../../../redux/selectors/chatbot';
+import {
+  selectChatBotBubbles,
+  selectChatBotFetchingHistory
+} from '../../../redux/selectors/chatbot';
 import { useDispatch } from 'react-redux';
-import { addChatBotBubble } from '../../../redux/actions/chatbot-actions';
-import { welcomeBubble } from '../../../redux/reducers/chatbot';
+import {
+  addChatBotBubble,
+  fetchHistory
+} from '../../../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../../../constants';
-import { useLocation, useRouteMatch } from 'react-router-dom';
-
-const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
+import { useRouteMatch } from 'react-router-dom';
+import Loader from 'apollo-react/components/Loader';
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
@@ -27,13 +31,11 @@ const ChatBot = () => {
   const [expanded, setExpanded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [disableFooter, setDisableFooter] = useState(false);
+  const fetchingHistory = useSelector(selectChatBotFetchingHistory);
   const handleClose = useCallback(() => setExpanded(false), []);
   const handleOpen = useCallback(() => {
     setExpanded(true);
-    if (bubbles.length === 0) {
-      dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
-    }
-  }, [bubbles]);
+  }, [dispatch]);
 
   const winLocationSearch = window.location.search;
   const queryparams = new URLSearchParams(winLocationSearch);
@@ -43,6 +45,10 @@ const ChatBot = () => {
   const {
     params: { id }
   } = useRouteMatch();
+
+  useEffect(() => {
+    dispatch(fetchHistory(id));
+  }, [id]);
 
   useEffect(() => {
     if (bubbles.length <= 1) {
@@ -89,46 +95,57 @@ const ChatBot = () => {
           <div
             className={classNames({
               'chat-bot-bubbles-container': true,
-              'chat-bot-bubbles-container-fullscreen': fullscreen
+              'chat-bot-bubbles-container-fullscreen': fullscreen,
+              relative: true
             })}
             ref={bubblesContainerRef}
           >
-            {bubbles.map((bubble, index) => (
-              <ChatBubble
-                key={index}
-                info={bubble?.info}
-                variant={bubble.variant}
-                copyContent={bubble.copyContent}
-                replySuggestionMessage={bubble.replySuggestionMessage}
-                sentOrReceivedAt={bubble.sentOrReceivedAt}
-                isWelcomeBubble={bubble.type === 'WELCOME_MSG'}
-                sourceDocuments={bubble?.source_documents || []}
-                buttonProps={
-                  bubble?.buttonProps?.map((button, i) => ({
-                    label: button.label,
-                    onClick: () =>
-                      dispatch(
-                        addChatBotBubble(
-                          { query: button.label, id, bidNo, bidType },
-                          () => setDisableFooter(false)
-                        )
-                      )
-                  })) || []
-                }
-                className="chat-bot-bubble"
-              >
-                {bubble.children}
-              </ChatBubble>
-            ))}
-            {loading && (
-              <div className="chat-bot-loader">
-                <ApolloProgress
-                  className="apollo-custom-progress-indicator"
-                  statusText="BidAssist is responding..."
-                  textAlignment="left"
-                  solid
-                />
-              </div>
+            {fetchingHistory ? (
+              <Loader
+                isInner
+                className="chat-bot-loader"
+                overlayClassName="chat-bot-loader-overlay"
+              />
+            ) : (
+              <>
+                {bubbles.map((bubble, index) => (
+                  <ChatBubble
+                    key={index}
+                    info={bubble?.info}
+                    variant={bubble.variant}
+                    copyContent={bubble.copyContent}
+                    replySuggestionMessage={bubble.replySuggestionMessage}
+                    sentOrReceivedAt={bubble.sentOrReceivedAt}
+                    isWelcomeBubble={bubble.type === 'WELCOME_MSG'}
+                    sourceDocuments={bubble?.source_documents || []}
+                    buttonProps={
+                      bubble?.buttonProps?.map((button, i) => ({
+                        label: button.label,
+                        onClick: () =>
+                          dispatch(
+                            addChatBotBubble(
+                              { query: button.label, id, bidNo, bidType },
+                              () => setDisableFooter(false)
+                            )
+                          )
+                      })) || []
+                    }
+                    className="chat-bot-bubble"
+                  >
+                    {bubble.children}
+                  </ChatBubble>
+                ))}
+                {loading && (
+                  <div className="chat-bot-loader">
+                    <ApolloProgress
+                      className="apollo-custom-progress-indicator"
+                      statusText="BidAssist is responding..."
+                      textAlignment="left"
+                      solid
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
           <div
@@ -138,7 +155,7 @@ const ChatBot = () => {
             })}
           >
             <ChatBotFooter
-              disabled={disableFooter}
+              disabled={disableFooter || fetchingHistory}
               onSendClick={() => {
                 if (!inputRef.current.value) {
                   return;
