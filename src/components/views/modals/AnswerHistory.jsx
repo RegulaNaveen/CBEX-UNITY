@@ -850,7 +850,7 @@ class AnswerHistory extends Component<Props> {
     if (questionType === ANSWER_TYPES.TABLE) {
       // group answers by date
       const groupedAnswersByDate = answers.groupBy(answer =>
-        moment(answer.get('date')).format('DD MMM YYYY')
+        parseMomentDate(answer.get('date'))
       );
 
       return Object.entries(groupedAnswersByDate.toJS()).map(
@@ -1553,58 +1553,6 @@ class AnswerHistory extends Component<Props> {
               }
             );
           }
-          const showDate = (answer, nextAnswer, indx) => {
-            const tmp = answers.toJS();
-            let styleClass =
-              !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
-            if (new Date(answer) == 'Invalid Date') {
-              return renderWord('Invalid Date', 'removed');
-            }
-            // Dont add styles if answers are same
-            // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
-            if (
-              String(answer).substring(0, 10) ===
-              String(nextAnswer).substring(0, 10)
-            ) {
-              nextAnswer = '';
-              styleClass = undefined;
-            }
-            const newdate = renderWord(
-              String(
-                // eslint-disable-next-line no-nested-ternary
-                answer === 'N/A'
-                  ? 'N/A'
-                  : answer === ''
-                  ? ''
-                  : parseMomentDate(answer)
-              ),
-              styleClass
-            );
-            let nextdate = '';
-            if (indx + 1 === tmp.length) {
-              nextdate = '';
-            } else if (
-              nextAnswer &&
-              String(nextAnswer).trim().length &&
-              tmp.length > 1
-            ) {
-              nextdate = renderWord(
-                String(
-                  nextAnswer === 'N/A'
-                    ? 'N/A'
-                    : answer === ''
-                    ? ''
-                    : parseMomentDate(nextAnswer)
-                ),
-                'removed'
-              );
-            }
-            return (
-              <>
-                {nextdate} {newdate}
-              </>
-            );
-          };
           if (
             questionType === 'select' ||
             questionType === 'select-lookup' ||
@@ -1660,6 +1608,52 @@ class AnswerHistory extends Component<Props> {
             }
             return combinedAnswer() || renderWord(answer, '');
           }
+
+          const showDate = (answer, nextAnswer, indx) => {
+            const tmp = answers.toJS();
+            let styleClass =
+              !isOnlyOneAnswer && !isLastItem ? 'changed' : undefined;
+            if (new Date(answer) == 'Invalid Date') {
+              return renderWord('Invalid Date', 'removed');
+            }
+            // Dont add styles if answers are same
+            // We use .substring(0, 10) to get only the yyyy-mm-dd out of a String like '2022-04-30T00:00:00+05:30'
+            if (
+              String(answer).substring(0, 10) ===
+              String(nextAnswer).substring(0, 10)
+            ) {
+              nextAnswer = '';
+              styleClass = undefined;
+            }
+            const newdate = renderWord(
+              String(
+                // eslint-disable-next-line no-nested-ternary
+                answer === 'N/A' ? 'N/A' : answer === '' ? '' : answer
+              ),
+              styleClass
+            );
+            let nextdate = '';
+            if (indx + 1 === tmp.length) {
+              nextdate = '';
+            } else if (
+              nextAnswer &&
+              String(nextAnswer).trim().length &&
+              tmp.length > 1
+            ) {
+              nextdate = renderWord(
+                String(
+                  nextAnswer === 'N/A' ? 'N/A' : answer === '' ? '' : nextAnswer
+                ),
+                'removed'
+              );
+            }
+            return (
+              <>
+                {nextdate} {newdate}
+              </>
+            );
+          };
+
           if (questionType === 'date') {
             answer = String(answer)
               .trimStart()
