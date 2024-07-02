@@ -3,7 +3,9 @@ import ChatBotFab from 'apollo-react-4.19.0/components/ChatBotFab';
 import ChatBotHeader from 'apollo-react-4.19.0/components/ChatBotHeader';
 import ChatBotFooter from 'apollo-react-4.19.0/components/ChatBotFooter';
 import ApolloProgress from 'apollo-react/components/ApolloProgress';
+import Typography from 'apollo-react/components/Typography';
 import ChatBubble from './ChatBubble';
+import CustomModal from '../../common/CustomModal';
 import './styles.scss';
 import classNames from 'classnames';
 import ChatBotInfo from './ChatBotInfo';
@@ -28,24 +30,24 @@ import { getBidList } from '../../../redux/selectors/proposal';
 const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
 
 function extractBidInfo(bidNo) {
-  let bidType = '';
-  let number = '';
+  let targetBidType = '';
+  let targetBidNumber = '';
 
   if (bidNo.startsWith('RFI_')) {
-    bidType = 'RFI_Request';
-    number = bidNo.slice(4);
+    targetBidType = 'RFI_Request';
+    targetBidNumber = bidNo.slice(4);
   } else if (bidNo.startsWith('PA_')) {
-    bidType = 'Post_Award_Bid';
-    number = bidNo.slice(3);
+    targetBidType = 'Post_Award_Bid';
+    targetBidNumber = bidNo.slice(3);
   } else if (bidNo.startsWith('EE_')) {
-    bidType = 'Early_Engagement_Bid';
-    number = bidNo.slice(3);
+    targetBidType = 'Early_Engagement_Bid';
+    targetBidNumber = bidNo.slice(3);
   } else {
-    bidType = 'Clinical_Bid';
-    number = bidNo;
+    targetBidType = 'Clinical_Bid';
+    targetBidNumber = bidNo;
   }
 
-  return { number: parseInt(number), bidType };
+  return { targetBidNumber, targetBidType };
 }
 
 const ChatBot = () => {
@@ -56,6 +58,8 @@ const ChatBot = () => {
   const searchParams = new URLSearchParams(search);
   const history = useHistory();
   const [inputText, setInputText] = useState('');
+  const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
+  const [gotoQuestionData, setGotoQuestionData] = useState({});
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
   const bidList = useSelector(getBidList);
@@ -103,11 +107,10 @@ const ChatBot = () => {
     }
   }, [fullscreen]);
 
-  const handleGotoQuestion = useCallback(
-    (bidNo, questionText) => {
-      const { bidType, number } = extractBidInfo(bidNo);
+  const findBidObjAndChangeBid = useCallback(
+    ({ targetBidNumber, targetBidType, questionText }) => {
       const filterList = bidList.filter(
-        bid => bid.bidNo == number && bid.bidType == bidType
+        bid => bid.bidNo == targetBidNumber && bid.bidType == targetBidType
       );
       if (filterList.length == 0) {
         return;
@@ -117,12 +120,31 @@ const ChatBot = () => {
         changeBid(bidObj, null, () => {
           setExpanded(false);
           history.replace(
-            `?bidNo=${number}&bidType=${bidType}&search_q_text=${questionText}`
+            `?bidNo=${targetBidNumber}&bidType=${targetBidType}&search_q_text=${questionText}`
           );
         })
       );
     },
     [bidList, dispatch]
+  );
+
+  const handleGotoQuestion = useCallback(
+    (paramBidNo, questionText) => {
+      const { targetBidNumber, targetBidType } = extractBidInfo(paramBidNo);
+      if (bidNo == targetBidNumber && bidType == targetBidType) {
+        findBidObjAndChangeBid({
+          targetBidNumber,
+          targetBidType,
+          questionText
+        });
+      } else {
+        setOpenDifferentBidModal(() => {
+          setGotoQuestionData({ targetBidNumber, targetBidType, questionText });
+          return true;
+        });
+      }
+    },
+    [bidList, dispatch, openDifferentBidModal, findBidObjAndChangeBid]
   );
 
   const handleReviewDoc = useCallback(fileId => {
@@ -134,6 +156,16 @@ const ChatBot = () => {
     if (newWindow) newWindow.opener = null;
   }, []);
 
+  const onCloseDifferentBidModal = useCallback(
+    () => setOpenDifferentBidModal(false),
+    [openDifferentBidModal]
+  );
+
+  const onclickDifferentBidModal = useCallback(() => {
+    setOpenDifferentBidModal(false);
+    findBidObjAndChangeBid({ ...gotoQuestionData });
+  }, [gotoQuestionData, findBidObjAndChangeBid]);
+
   return (
     <div
       className={classNames({
@@ -141,6 +173,24 @@ const ChatBot = () => {
         expanded
       })}
     >
+      <CustomModal
+        open={openDifferentBidModal}
+        onClose={onCloseDifferentBidModal}
+        title="Visit Different Bid"
+        buttonProps={[
+          {},
+          {
+            label: 'OK',
+            'data-testid': 'ok-button',
+            onClick: onclickDifferentBidModal
+          }
+        ]}
+      >
+        <Typography>
+          This answer is part of a different bid. Do you want to continue and
+          change to that bid?
+        </Typography>
+      </CustomModal>
       {expanded ? (
         <div
           className={classNames({
