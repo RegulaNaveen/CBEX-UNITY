@@ -53,3 +53,18 @@ export function fetchChatHistoryApi(opportunityNumber) {
       .catch(err => reject({ error: true, message: err }));
   });
 }
+
+export function sendDataTriggerApi(data) {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .post(`${CHATBOT.SEND_DATA_TRIGGER}`, data, config)
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject({ error: true, message: response });
+        }
+      })
+      .catch(err => reject({ error: true, message: err }));
+  });
+}
