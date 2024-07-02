@@ -373,6 +373,9 @@
 .makeStyles-userBubble-54 {
   word-break: break-all;
 }
+.makeStyles-systemBubble-55 {
+  padding: 10px !important;
+}
 
 #answer-tooltip {
   & > div {
@@ -402,12 +405,15 @@
 .multiresponse-list {
   display: flex;
   flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .source-doc-btn {
   width: 14px !important;
   height: 14px !important;
   display: inline;
+  margin: 0 !important;
   padding: 0 !important;
 }
 .src-doc-btn-label {
@@ -417,7 +423,8 @@
 .src-doc-list {
   display: inline-flex;
   flex-direction: row;
-  margin-left: 5px;
+  margin: 0 0 0 5px !important;
+  padding: 0 !important;
 }
 
 .chatbot-action-btn {
