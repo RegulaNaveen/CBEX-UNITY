@@ -21,10 +21,32 @@ import { REDUX_TYPES } from '../../../constants';
 import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import featureFlags from '../../../constants/featureFlags';
 import Loader from 'apollo-react/components/Loader';
+import { MultiResponseChat } from './MultiResponseChat';
 import { changeBid } from '../../../redux/actions/proposal-actions';
 import { getBidList } from '../../../redux/selectors/proposal';
 
 const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
+
+function extractBidInfo(bidNo) {
+  let bidType = '';
+  let number = '';
+
+  if (bidNo.startsWith('RFI_')) {
+    bidType = 'RFI_Request';
+    number = bidNo.slice(4);
+  } else if (bidNo.startsWith('PA_')) {
+    bidType = 'Post_Award_Bid';
+    number = bidNo.slice(3);
+  } else if (bidNo.startsWith('EE_')) {
+    bidType = 'Early_Engagement_Bid';
+    number = bidNo.slice(3);
+  } else {
+    bidType = 'Clinical_Bid';
+    number = bidNo;
+  }
+
+  return { number: parseInt(number), bidType };
+}
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
@@ -83,7 +105,10 @@ const ChatBot = () => {
 
   const handleGotoQuestion = useCallback(
     (bidNo, questionText) => {
-      const filterList = bidList.filter(bid => bid.bidNo == bidNo);
+      const { bidType, number } = extractBidInfo(bidNo);
+      const filterList = bidList.filter(
+        bid => bid.bidNo == number && bid.bidType == bidType
+      );
       if (filterList.length == 0) {
         return;
       }
@@ -92,7 +117,7 @@ const ChatBot = () => {
         changeBid(bidObj, null, () => {
           setExpanded(false);
           history.replace(
-            `?bidNo=${bidNo}&bidType=${bidObj.bidType}&search_q_text=${questionText}`
+            `?bidNo=${number}&bidType=${bidType}&search_q_text=${questionText}`
           );
         })
       );
@@ -177,7 +202,19 @@ const ChatBot = () => {
                     }
                     className="chat-bot-bubble"
                   >
-                    {bubble.children}
+                    {bubble.variant.startsWith('system') ? (
+                      <MultiResponseChat
+                        list={
+                          Array.isArray(bubble?.info?.result)
+                            ? bubble?.info?.result
+                            : [bubble?.info?.result]
+                        }
+                        handleGotoQuestion={handleGotoQuestion}
+                        handleReviewDoc={handleReviewDoc}
+                      />
+                    ) : (
+                      bubble.children
+                    )}
                   </ChatBubble>
                 ))}
                 {loading && (

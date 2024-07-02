@@ -399,12 +399,27 @@
   }
 }
 
-.multi-res-chat {
+.multiresponse-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.source-doc-btn {
+  width: 14px !important;
+  height: 14px !important;
+  display: inline;
+  padding: 0 !important;
+}
+.src-doc-btn-label {
+  font-weight: 500 !important;
+  font-size: 14px;
+}
+.src-doc-list {
+  display: inline-flex;
+  flex-direction: row;
   margin-left: 5px;
-  & ol > li {
-    margin-top: 5px;
-    & > button {
-      margin: 5px;
-    }
-  }
+}
+
+.chatbot-action-btn {
+  margin-top: 5px;
 }

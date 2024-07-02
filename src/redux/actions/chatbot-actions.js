@@ -91,7 +91,7 @@ export function addChatBotBubble(
           : ERROR_DEFAULT_REPLY,
         source_documents: !data.error ? data.source_documents || [] : [],
         sentOrReceivedAt: Date.now(),
-        info: !data.error ? data : {},
+        info: !data.error ? data.response : {},
         sourceDocs: data?.result?.source_documents || []
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
@@ -141,7 +141,8 @@ export function fetchHistory(opportunityNumber) {
             history.push({
               info: {
                 id: bubble.id,
-                feedback: bubble.feedback
+                feedback: bubble.feedback,
+                ...bubble.response
               },
               variant: 'system',
               copyContent:
