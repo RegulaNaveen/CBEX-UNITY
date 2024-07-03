@@ -55,7 +55,8 @@
   thead {
     th {
       height: inherit;
-      // padding: 0.5rem 1rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
       white-space: nowrap; /* Prevent text wrapping */
       overflow: hidden;
       text-overflow: ellipsis;
@@ -117,6 +118,8 @@
       height: 100%;
     }
     &.h-100 {
+      padding-top: 7px;
+      padding-bottom: 8px;
       textarea {
         height: 100% !important;
       }

@@ -286,8 +286,10 @@
   }
 }
 
-.MuiModal-root {
-  z-index: 99999999 !important;
+.bid-assit-feedback {
+  .MuiModal-root {
+    z-index: 99999999 !important;
+  }
 }
 
 .feedback-modal {
