@@ -15,7 +15,8 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   addChatBotBubble,
-  fetchHistory
+  fetchHistory,
+  sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../../../constants';
 import { useRouteMatch, useLocation } from 'react-router-dom';
@@ -53,7 +54,7 @@ const ChatBot = () => {
   }, [id, bidNo, bidType, dispatch]);
 
   const handleWindowFocus = useCallback(() => {
-    dispatch(fetchHistory(id, true));
+    // dispatch(fetchHistory(id, true));
   }, [id, dispatch]);
 
   useEffect(() => {
