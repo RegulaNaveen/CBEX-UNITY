@@ -8,7 +8,7 @@ const SourceDocument = ({ className = '', buttonLabel, title, content }) => (
       variant="light"
       title={title}
       subtitle={content}
-      placement="top"
+      placement="left-start"
     >
       <span className="src-doc-btn-label">{buttonLabel}</span>
     </Tooltip>
