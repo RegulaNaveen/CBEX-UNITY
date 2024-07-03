@@ -1,6 +1,7 @@
 import Button from 'apollo-react/components/Button';
 import React from 'react';
 import SourceDocument from './SourceDocument';
+import { sanitizeResponse } from './utils';
 
 function getSourceDocNameFromPath(path = '') {
   const splited = path.split('\\');
@@ -8,7 +9,7 @@ function getSourceDocNameFromPath(path = '') {
 }
 
 export const MultiResponseChat = ({
-  className = '',
+  className = 'multi-response-chat',
   list,
   handleGotoQuestion = () => {},
   handleReviewDoc = () => {}
@@ -30,7 +31,10 @@ export const MultiResponseChat = ({
                       title={getSourceDocNameFromPath(
                         sourceDoc.metadata.source
                       )}
-                      content={sourceDoc.page_content}
+                      content={sanitizeResponse(
+                        sourceDoc.page_content,
+                        sourceDoc.metadata.section_name || ''
+                      )}
                       buttonLabel={`[${i + 1}]`}
                       className="source-doc-btn"
                     />
@@ -38,29 +42,52 @@ export const MultiResponseChat = ({
               </div>
             </p>
             {response?.source_documents?.map((sourceDoc, i) => {
-              if (sourceDoc?.type != 'Document' && sourceDoc?.type != 'Unity') {
-                return null;
-              }
-              return (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  className="chatbot-action-btn"
-                  onClick={() => {
-                    if (sourceDoc.type == 'Document') {
-                      handleReviewDoc(sourceDoc.metadata.box_file_id);
-                    } else if (sourceDoc.type == 'Unity') {
-                      handleGotoQuestion(sourceDoc.bid_no, sourceDoc.content);
+              if (
+                sourceDoc &&
+                sourceDoc.metadata &&
+                sourceDoc.metadata.doc_class.toLowerCase() === 'unity'
+              ) {
+                return (
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    className="chatbot-action-btn"
+                    onClick={() =>
+                      handleGotoQuestion(
+                        sourceDoc.metadata.bidNo,
+                        sanitizeResponse(
+                          sourceDoc.page_content,
+                          sourceDoc.metadata.section_name || ''
+                        )
+                      )
                     }
-                  }}
-                >
-                  {sourceDoc.type == 'Document'
-                    ? `Review ${getSourceDocNameFromPath(
-                        sourceDoc.metadata.source
-                      )}`
-                    : 'Go to Unity Question'}
-                </Button>
-              );
+                    title={`Go to Unity Question`}
+                  >
+                    Go to Unity Question
+                  </Button>
+                );
+              } else if (
+                sourceDoc &&
+                sourceDoc.metadata &&
+                sourceDoc.metadata.box_file_id
+              ) {
+                return (
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    className="chatbot-action-btn"
+                    onClick={() =>
+                      handleReviewDoc(sourceDoc.metadata.box_file_id)
+                    }
+                    title={`Review ${getSourceDocNameFromPath(
+                      sourceDoc.metadata.source
+                    )}`}
+                  >
+                    Review {getSourceDocNameFromPath(sourceDoc.metadata.source)}
+                  </Button>
+                );
+              }
+              return null;
             })}
           </div>
         ))}

@@ -101,6 +101,9 @@
       & > div {
         margin-bottom: 8px;
         max-width: 95%;
+        & > div {
+          max-width: 100%;
+        }
         & > div:first-child {
           hr {
             margin: 4px -16px;
@@ -284,6 +287,9 @@
       }
     }
   }
+  .chatbot-action-btn {
+    font-size: 14px;
+  }
 }
 
 .MuiModal-root {
@@ -379,7 +385,7 @@
 }
 
 div[class*='makeStyles-systemBubble-'] {
-  padding: 8px !important;
+  padding: 16px !important;
 }
 
 @mixin tooltip {
@@ -437,6 +443,11 @@ div[class*='makeStyles-systemBubble-'] {
 }
 
 .chatbot-action-btn {
+  font-size: 12px;
+  max-width: 100%;
   margin-top: 5px;
   display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
