@@ -15,7 +15,8 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   addChatBotBubble,
-  fetchHistory
+  fetchHistory,
+  sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../../../constants';
 import { useRouteMatch, useLocation } from 'react-router-dom';
