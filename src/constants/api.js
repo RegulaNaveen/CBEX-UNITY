@@ -328,7 +328,8 @@ const TASKSLIST = {
 const CHATBOT = {
   CHAT_ENDPOINT: `${CHAT_BOT_API_URL}/chat`,
   FEEDBACK_ENDPOINT: `${CHAT_BOT_API_URL}/history-feedback`,
-  CHAT_HISTORY_ENDPOINT: `${CHAT_BOT_API_URL}/history`
+  CHAT_HISTORY_ENDPOINT: `${CHAT_BOT_API_URL}/history`,
+  SEND_DATA_TRIGGER: `${CHAT_BOT_API_URL}/unity-data-trigger`
 };
 
 const APPROVALS_URL = `${PROPOSAL_API_URL}/approvals`;

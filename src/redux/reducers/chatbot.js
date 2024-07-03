@@ -17,17 +17,23 @@ export const welcomeBubble = {
   replySuggestionMessage: 'Here are some things I can do:',
   buttonProps: [
     {
-      label: 'Show me the eCOA recommended services'
+      label: 'List relevant eCOA assessments'
     },
     {
-      label: 'See Regulatory Updates'
+      label: 'Provide overview of appropriate Connected Devices'
     },
     {
-      label: 'Continue last topic: Enrolling a new Patient'
+      label: 'Summarize this Opportunity'
     }
   ],
   sentOrReceivedAt: Date.now(),
-  type: 'WELCOME_MSG'
+  type: 'WELCOME_MSG',
+  info: {
+    result: {
+      result:
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. "
+    }
+  }
 };
 
 const INITIAL_STATE = {
@@ -63,10 +69,11 @@ function onUpdateBubble(state, action) {
   const bubble = bubbles.find(b => b.info && b.info.id === id);
   if (bubble) {
     bubble.info.feedback = feedback;
+    bubbles[bubbles.indexOf(bubble)] = bubble;
   }
   return {
     ...state,
-    bubbles
+    bubbles: bubbles
   };
 }
 
@@ -85,6 +92,6 @@ const actionMap = {
   [FETCHING_HISTORY]: setFetchingHistory
 };
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }
