@@ -19,7 +19,6 @@ import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
 import StatusDotOutline from 'apollo-react-icons/StatusDotOutline';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
-import { parseMomentDate } from '../../utils/DateUtils';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -55,7 +54,6 @@ const BidHistory = () => {
   const currentWidget = useSelector(selectCurrentWidget);
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
-
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -211,7 +209,7 @@ const BidHistory = () => {
                                 ? '(processing)'
                                 : item.isCurrent && ' (Current)'}
                             </div>
-                            <div>{parseMomentDate(item.bidDueDate)}</div>
+                            <div>{item.bidDueDate}</div>
                             {item.bidId === selectedBid.get('id') && (
                               <Checkmark
                                 className="selected-bid-check"
