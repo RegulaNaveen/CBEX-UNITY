@@ -12,13 +12,11 @@ import {
   selectCurrentWidget,
   getOpportunityData
 } from '../../redux/selectors/proposal';
-import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
-import TextField from 'apollo-react/components/TextField';
 import StatusDotOutline from 'apollo-react-icons/StatusDotOutline';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
 
@@ -101,7 +99,6 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
-
   return (
     <>
       {bidList.length ? (
@@ -213,7 +210,7 @@ const BidHistory = () => {
                                 ? '(processing)'
                                 : item.isCurrent && ' (Current)'}
                             </div>
-                            <div>{parseMomentDate(item.bidDueDate)}</div>
+                            <div>{item.bidDueDate}</div>
                             {item.bidId === selectedBid.get('id') && (
                               <Checkmark
                                 className="selected-bid-check"

@@ -152,6 +152,11 @@ const TASKS = {
   DELETING: 'Deleting'
 };
 
+const CHATBOT = {
+  DEFAULT_ERROR_REPLY:
+    'Unable to process your query. Please rephrase and try again.'
+};
+
 export {
   DEFAULT,
   PROPOSAL,
@@ -163,5 +168,6 @@ export {
   EMAIL_TEMPLATES,
   SECTIONS,
   TABLEANSWER,
-  TASKS
+  TASKS,
+  CHATBOT
 };
