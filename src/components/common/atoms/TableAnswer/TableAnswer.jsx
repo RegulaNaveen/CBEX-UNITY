@@ -158,7 +158,7 @@ function Header({
     <div
       className={classNames({
         'table-header': true,
-        'h-100': !isLongest
+        'h-100': true
       })}
     >
       {canEdit && !disabled ? (
