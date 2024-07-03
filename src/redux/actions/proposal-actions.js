@@ -1707,7 +1707,7 @@ export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
-export const changeBid = (bid, viewType) => {
+export const changeBid = (bid, viewType, callback) => {
   const searchParams = new URLSearchParams(window.location.search);
   if (bid?.bidNo) {
     searchParams.set('bidNo', bid?.bidNo);
@@ -1773,6 +1773,9 @@ export const changeBid = (bid, viewType) => {
         response?.data?.proposal?.typeOfWidget
       )
     );
+    if (callback) {
+      callback();
+    }
   };
 };
 

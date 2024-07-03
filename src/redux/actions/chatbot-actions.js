@@ -105,10 +105,8 @@ export function addChatBotBubble(
               data.response.result.result) ||
             ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
-        source_documents: !data.error ? data.source_documents || [] : [],
         sentOrReceivedAt: Date.now(),
-        info: !data.error ? data : {},
-        sourceDocs: data?.result?.source_documents || []
+        info: !data.error ? data.response : {}
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
       dispatch({ type: SET_LOADING_STATE, payload: false }); // Set loading state to false

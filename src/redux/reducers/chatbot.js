@@ -27,7 +27,13 @@ export const welcomeBubble = {
     }
   ],
   sentOrReceivedAt: Date.now(),
-  type: 'WELCOME_MSG'
+  type: 'WELCOME_MSG',
+  info: {
+    result: {
+      result:
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. "
+    }
+  }
 };
 
 const INITIAL_STATE = {

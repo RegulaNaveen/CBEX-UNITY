@@ -3,7 +3,9 @@ import ChatBotFab from 'apollo-react-4.19.0/components/ChatBotFab';
 import ChatBotHeader from 'apollo-react-4.19.0/components/ChatBotHeader';
 import ChatBotFooter from 'apollo-react-4.19.0/components/ChatBotFooter';
 import ApolloProgress from 'apollo-react/components/ApolloProgress';
+import Typography from 'apollo-react/components/Typography';
 import ChatBubble from './ChatBubble';
+import CustomModal from '../../common/CustomModal';
 import './styles.scss';
 import classNames from 'classnames';
 import ChatBotInfo from './ChatBotInfo';
@@ -19,9 +21,35 @@ import {
   sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../../../constants';
-import { useRouteMatch, useLocation } from 'react-router-dom';
+import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import featureFlags from '../../../constants/featureFlags';
 import Loader from 'apollo-react/components/Loader';
+import { MultiResponseChat } from './MultiResponseChat';
+import { changeBid } from '../../../redux/actions/proposal-actions';
+import { getBidList } from '../../../redux/selectors/proposal';
+
+const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
+
+function extractBidInfo(bidNo) {
+  let targetBidType = '';
+  let targetBidNumber = '';
+
+  if (bidNo.startsWith('RFI_')) {
+    targetBidType = 'RFI_Request';
+    targetBidNumber = bidNo.slice(4);
+  } else if (bidNo.startsWith('PA_')) {
+    targetBidType = 'Post_Award_Bid';
+    targetBidNumber = bidNo.slice(3);
+  } else if (bidNo.startsWith('EE_')) {
+    targetBidType = 'Early_Engagement_Bid';
+    targetBidNumber = bidNo.slice(3);
+  } else {
+    targetBidType = 'Clinical_Bid';
+    targetBidNumber = bidNo;
+  }
+
+  return { targetBidNumber, targetBidType };
+}
 
 const ChatBot = () => {
   const bubblesContainerRef = useRef(null);
@@ -29,9 +57,13 @@ const ChatBot = () => {
   const flags = useSelector(state => state.proposal.get('eventflag'));
   const search = useLocation().search;
   const searchParams = new URLSearchParams(search);
+  const history = useHistory();
   const [inputText, setInputText] = useState('');
+  const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
+  const [gotoQuestionData, setGotoQuestionData] = useState({});
   const dispatch = useDispatch();
   const bubbles = useSelector(selectChatBotBubbles);
+  const bidList = useSelector(getBidList);
   const loading = useSelector(state => state.chatbot.loading);
   const [expanded, setExpanded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -88,6 +120,65 @@ const ChatBot = () => {
     }
   }, [fullscreen]);
 
+  const findBidObjAndChangeBid = useCallback(
+    ({ targetBidNumber, targetBidType, questionText }) => {
+      const filterList = bidList.filter(
+        bid => bid.bidNo == targetBidNumber && bid.bidType == targetBidType
+      );
+      if (filterList.length == 0) {
+        return;
+      }
+      const bidObj = filterList[0];
+      dispatch(
+        changeBid(bidObj, null, () => {
+          setExpanded(false);
+          history.replace(
+            `?bidNo=${targetBidNumber}&bidType=${targetBidType}&search_q_text=${questionText}`
+          );
+        })
+      );
+    },
+    [bidList, dispatch]
+  );
+
+  const handleGotoQuestion = useCallback(
+    (paramBidNo, questionText) => {
+      const { targetBidNumber, targetBidType } = extractBidInfo(paramBidNo);
+      if (bidNo == targetBidNumber && bidType == targetBidType) {
+        findBidObjAndChangeBid({
+          targetBidNumber,
+          targetBidType,
+          questionText
+        });
+      } else {
+        setOpenDifferentBidModal(() => {
+          setGotoQuestionData({ targetBidNumber, targetBidType, questionText });
+          return true;
+        });
+      }
+    },
+    [bidList, dispatch, openDifferentBidModal, findBidObjAndChangeBid]
+  );
+
+  const handleReviewDoc = useCallback(fileId => {
+    const newWindow = window.open(
+      `https://app.box.com/file/${fileId}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
+    if (newWindow) newWindow.opener = null;
+  }, []);
+
+  const onCloseDifferentBidModal = useCallback(
+    () => setOpenDifferentBidModal(false),
+    [openDifferentBidModal]
+  );
+
+  const onclickDifferentBidModal = useCallback(() => {
+    setOpenDifferentBidModal(false);
+    findBidObjAndChangeBid({ ...gotoQuestionData });
+  }, [gotoQuestionData, findBidObjAndChangeBid]);
+
   return (
     <div
       className={classNames({
@@ -95,6 +186,26 @@ const ChatBot = () => {
         expanded
       })}
     >
+      <CustomModal
+        open={openDifferentBidModal}
+        onClose={onCloseDifferentBidModal}
+        title="Visit Different Bid"
+        buttonProps={[
+          {
+            label: 'Cancel'
+          },
+          {
+            label: 'View Question',
+            'data-testid': 'ok-button',
+            onClick: onclickDifferentBidModal
+          }
+        ]}
+      >
+        <Typography>
+          This answer is part of a different bid. Do you want to continue and
+          change to that bid?
+        </Typography>
+      </CustomModal>
       {expanded ? (
         <div
           className={classNames({
@@ -156,7 +267,19 @@ const ChatBot = () => {
                     }
                     className="chat-bot-bubble"
                   >
-                    {bubble.children}
+                    {bubble.variant.startsWith('system') ? (
+                      <MultiResponseChat
+                        list={
+                          Array.isArray(bubble?.info?.result)
+                            ? bubble?.info?.result
+                            : [bubble?.info?.result]
+                        }
+                        handleGotoQuestion={handleGotoQuestion}
+                        handleReviewDoc={handleReviewDoc}
+                      />
+                    ) : (
+                      bubble.children
+                    )}
                   </ChatBubble>
                 ))}
                 {loading && (
