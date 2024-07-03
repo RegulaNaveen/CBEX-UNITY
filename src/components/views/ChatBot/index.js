@@ -69,9 +69,6 @@ const ChatBot = () => {
   const [disableFooter, setDisableFooter] = useState(false);
   const fetchingHistory = useSelector(selectChatBotFetchingHistory);
   const handleClose = useCallback(() => setExpanded(false), []);
-  const handleOpen = useCallback(() => {
-    setExpanded(true);
-  }, [dispatch]);
 
   const winLocationSearch = window.location.search;
   const queryparams = new URLSearchParams(winLocationSearch);
@@ -81,6 +78,21 @@ const ChatBot = () => {
   const {
     params: { id }
   } = useRouteMatch();
+
+  const handleOpen = useCallback(() => {
+    setExpanded(true);
+    dispatch(sendDataTrigger({ opportunityNumber: id, bidNo, bidType }));
+  }, [id, bidNo, bidType, dispatch]);
+
+  const handleWindowFocus = useCallback(() => {
+    dispatch(fetchHistory(id, true));
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    window.addEventListener('focus', handleWindowFocus);
+
+    return () => window.removeEventListener('focus', handleWindowFocus);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchHistory(id));
