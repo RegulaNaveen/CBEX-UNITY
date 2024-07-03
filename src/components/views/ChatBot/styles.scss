@@ -64,6 +64,9 @@
     .chat-bot-bubbles-container {
       font-size: 12px;
       flex-grow: 1;
+      & > div > div:nth-child(1) {
+        padding: 8px 12px 8px 12px !important;
+      }
       &:not(.chat-bot-bubbles-container-fullscreen) {
         margin: 8px;
         padding-right: 8px;
@@ -372,10 +375,6 @@
 
 .makeStyles-userBubble-54 {
   word-break: break-all;
-}
-
-div[class*='makeStyles-systemBubble-'] {
-  padding: 8px !important;
 }
 
 @mixin tooltip {
