@@ -190,9 +190,11 @@ const ChatBot = () => {
         onClose={onCloseDifferentBidModal}
         title="Visit Different Bid"
         buttonProps={[
-          {},
           {
-            label: 'OK',
+            label: 'Cancel'
+          },
+          {
+            label: 'View Question',
             'data-testid': 'ok-button',
             onClick: onclickDifferentBidModal
           }
