@@ -13,7 +13,7 @@ export function FeedbackSubmitModal({ open, onClose }) {
       open={open}
       onClose={onClose}
       title="BidAssist Feedback"
-      subtitle="Feedback sent succeesfully!"
+      subtitle="Feedback sent successfully!"
       buttonProps={[
         { className: 'display-none' },
         {
@@ -25,7 +25,7 @@ export function FeedbackSubmitModal({ open, onClose }) {
       className="feedback-submit-modal"
     >
       <Typography>
-        We recieve your comments and will use that information to further
+        We receive your comments and will use that information to further
         improve our model.
       </Typography>
     </CustomModal>
@@ -76,7 +76,7 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
   }, []);
 
   return (
-    <>
+    <div className="bid-assit-feedback">
       <CustomModal
         open={open}
         onClose={onClose}
@@ -99,6 +99,7 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
           }
         ]}
         className="feedback-modal"
+        disableBackdropClick
       >
         {loader && <Loader isInner />}
         <TextField
@@ -109,6 +110,7 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
           placeholder="Please give all the details you can"
           onChange={e => handleTextChange(e.target.value)}
           minHeight={125}
+          minWidth={550}
         />
         <Typography>The answer you mark is the following:</Typography>
         <div className="feedback-answer">{answer}</div>
@@ -124,7 +126,7 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
           buttonProps={[{ className: 'hidden' }, { label: 'Close' }]}
         />
       )}
-    </>
+    </div>
   );
 }
 

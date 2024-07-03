@@ -69,10 +69,11 @@ function onUpdateBubble(state, action) {
   const bubble = bubbles.find(b => b.info && b.info.id === id);
   if (bubble) {
     bubble.info.feedback = feedback;
+    bubbles[bubbles.indexOf(bubble)] = bubble;
   }
   return {
     ...state,
-    bubbles
+    bubbles: bubbles
   };
 }
 
@@ -91,6 +92,6 @@ const actionMap = {
   [FETCHING_HISTORY]: setFetchingHistory
 };
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }
