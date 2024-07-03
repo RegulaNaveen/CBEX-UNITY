@@ -54,7 +54,7 @@ const ChatBot = () => {
   }, [id, bidNo, bidType, dispatch]);
 
   const handleWindowFocus = useCallback(() => {
-    dispatch(fetchHistory(id, true));
+    // dispatch(fetchHistory(id, true));
   }, [id, dispatch]);
 
   useEffect(() => {
