@@ -24,7 +24,8 @@ function extractContext(bubbles, maxNumOfCount) {
   const context = [];
   let count = 0;
   if (!bubbles) return context;
-  if (bubbles[bubbles.length - 1].is_ecoa_or_cd) return context;
+  if (bubbles[bubbles.length - 1] && bubbles[bubbles.length - 1].is_ecoa_or_cd)
+    return context;
   if (
     bubbles[bubbles.length - 1].type &&
     bubbles[bubbles.length - 1].type === 'WELCOME_MSG'
@@ -33,7 +34,11 @@ function extractContext(bubbles, maxNumOfCount) {
   for (let i = bubbles.length - 2; i >= 0; i -= 2) {
     if (count >= maxNumOfCount) break;
 
-    if (bubbles[bubbles.length - 1].is_ecoa_or_cd) break;
+    if (
+      bubbles[bubbles.length - 1] &&
+      bubbles[bubbles.length - 1].is_ecoa_or_cd
+    )
+      break;
 
     const bubble = bubbles[i];
     if (bubble)
