@@ -3,7 +3,13 @@ import Tooltip from 'apollo-react/components/Tooltip';
 
 const SourceDocument = ({ className = '', buttonLabel, title, content }) => (
   <div className={className}>
-    <Tooltip variant="light" title={title} subtitle={content} placement="top">
+    <Tooltip
+      id="answer-tooltip"
+      variant="light"
+      title={title}
+      subtitle={content}
+      placement="top"
+    >
       <span className="src-doc-btn-label">{buttonLabel}</span>
     </Tooltip>
   </div>

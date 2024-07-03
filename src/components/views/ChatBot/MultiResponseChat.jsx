@@ -15,9 +15,6 @@ export const MultiResponseChat = ({
 }) => {
   return (
     <div className={className}>
-      {list.length > 1 && (
-        <p>It seems there are multiple answers for this request!</p>
-      )}
       <div className="multiresponse-list">
         {list?.map((response, i) => (
           <div>

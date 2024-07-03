@@ -373,11 +373,12 @@
 .makeStyles-userBubble-54 {
   word-break: break-all;
 }
-.makeStyles-systemBubble-55 {
-  padding: 10px !important;
+
+div[class*='makeStyles-systemBubble-'] {
+  padding: 8px !important;
 }
 
-#answer-tooltip {
+@mixin tooltip {
   & > div {
     max-width: 300px;
     height: 300px;
@@ -400,6 +401,10 @@
       background: #c1c1c1;
     }
   }
+}
+
+#answer-tooltip {
+  @include tooltip;
 }
 
 .multiresponse-list {
