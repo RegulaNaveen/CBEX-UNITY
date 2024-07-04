@@ -101,6 +101,9 @@
       & > div {
         margin-bottom: 8px;
         max-width: 95%;
+        & > div {
+          max-width: 100%;
+        }
         & > div:first-child {
           hr {
             margin: 4px -16px;
@@ -203,6 +206,10 @@
         font-size: 12px;
         padding-bottom: 8px;
         font-weight: 400;
+        .chat-bot-info-link {
+          color: white;
+          text-decoration: underline;
+        }
       }
     }
 
@@ -280,10 +287,15 @@
       }
     }
   }
+  .chatbot-action-btn {
+    font-size: 14px;
+  }
 }
 
-.MuiModal-root {
-  z-index: 99999999 !important;
+.bid-assit-feedback {
+  .MuiModal-root {
+    z-index: 99999999 !important;
+  }
 }
 
 .feedback-modal {
@@ -374,7 +386,11 @@
   word-break: break-all;
 }
 
-#answer-tooltip {
+div[class*='makeStyles-systemBubble-'] {
+  padding: 16px !important;
+}
+
+@mixin tooltip {
   & > div {
     max-width: 300px;
     height: 300px;
@@ -397,4 +413,43 @@
       background: #c1c1c1;
     }
   }
+}
+
+#answer-tooltip {
+  @include tooltip;
+}
+
+.multiresponse-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.source-doc-btn {
+  width: 14px !important;
+  height: 14px !important;
+  display: inline;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.src-doc-btn-label {
+  font-weight: 500 !important;
+  font-size: 14px;
+}
+.src-doc-list {
+  display: inline-flex;
+  flex-direction: row;
+  margin: 0 0 0 5px !important;
+  padding: 0 !important;
+}
+
+.chatbot-action-btn {
+  font-size: 12px;
+  max-width: 100%;
+  margin-top: 5px;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

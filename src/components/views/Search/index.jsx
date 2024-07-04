@@ -9,7 +9,7 @@ import CloseIcon from 'apollo-react-icons/Close';
 import ChevronLeftIcon from 'apollo-react-icons/ChevronLeft';
 import ChevronRightIcon from 'apollo-react-icons/ChevronRight';
 import CircularProgress from 'apollo-react/components/CircularProgress';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import {
   selectIsOpen,
@@ -45,8 +45,9 @@ import CustomModal from '../../common/CustomModal';
 
 export default function Search() {
   const [searchInput, setSearchInput] = useState('');
-  const [isApprovalFiltersEnabled, setIsApprovalFiltersEnabled] =
-    useState(false);
+  const [isApprovalFiltersEnabled, setIsApprovalFiltersEnabled] = useState(
+    false
+  );
 
   const isOpen = useSelector(selectIsOpen);
   const query = useSelector(selectQuery);
@@ -206,6 +207,7 @@ export default function Search() {
       const winLocationSearch = window.location.search;
       const queryparams = new URLSearchParams(winLocationSearch);
       const search_q_param = queryparams.get('search_q');
+      const search_q_text_param = queryparams.get('search_q_text');
       if (search_q_param) {
         const question = proposalQuestions.find(
           q => q.questionId === search_q_param
@@ -221,9 +223,23 @@ export default function Search() {
         history.replace({
           search: queryparams.toString()
         });
+      } else if (search_q_text_param) {
+        dispatch(openSearchAction());
+        setSearchInput(search_q_text_param);
+        dispatch(updateQuerySearchAction(search_q_text_param));
+        dispatch(doSearchAction());
+        queryparams.delete('search_q_text');
+        history.replace({
+          search: queryparams.toString()
+        });
       }
     }
-  }, [doesDataPrerequisiteSatisfied, searchFlag, proposalQuestions]);
+  }, [
+    doesDataPrerequisiteSatisfied,
+    searchFlag,
+    proposalQuestions,
+    location.search
+  ]);
 
   if (!searchFlag) {
     return null;
