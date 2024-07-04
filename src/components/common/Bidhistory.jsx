@@ -54,7 +54,6 @@ const BidHistory = () => {
   const currentWidget = useSelector(selectCurrentWidget);
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
-
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };

@@ -31,8 +31,8 @@ export const getRemainingDays = date => {
 };
 
 export function parseCorrectDate(DateString) {
-  const utc = new Date(DateString);
-  return new Date(utc.getTime() + utc.getTimezoneOffset() * 60000);
+  const date = new Date(DateString);
+  return new Date(date.toLocaleString());
 }
 
 export const parseMomentDate = date => {
