@@ -8,13 +8,13 @@ function getSourceDocNameFromPath(path = '') {
 }
 
 export const MultiResponseChat = ({
-  className = '',
+  className = 'multiresponse-list',
   list,
   handleGotoQuestion = () => {},
   handleReviewDoc = () => {}
 }) => {
   return (
-    <div className="multiresponse-list">
+    <div className={className}>
       {list?.map((response, i) => (
         <div>
           {' '}
