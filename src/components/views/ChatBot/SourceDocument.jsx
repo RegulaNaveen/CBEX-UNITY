@@ -13,10 +13,14 @@ const SourceDocument = ({
       id="answer-tooltip"
       variant="light"
       title={
-        <div className="tooltip-title">
-          <div>{title.replace(/^\/usr\/src\/app\/api\/data\//, '')}</div>
-          <div>Page: {pageNo}</div>
-        </div>
+        title ? (
+          <div className="tooltip-title">
+            <div>{title}</div>
+            {pageNo && <div>Page: {pageNo}</div>}
+          </div>
+        ) : (
+          ''
+        )
       }
       subtitle={content}
       placement="left-start"

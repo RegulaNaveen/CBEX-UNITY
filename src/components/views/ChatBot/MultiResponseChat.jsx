@@ -4,8 +4,11 @@ import SourceDocument from './SourceDocument';
 import { sanitizeResponse } from './utils';
 
 function getSourceDocNameFromPath(path = '') {
-  const splited = path.split('\\');
-  return splited[splited.length - 1];
+  const splitedByBackSlash = path.split('\\');
+  const splitedByForwardSlash = splitedByBackSlash[
+    splitedByBackSlash.length - 1
+  ].split('/');
+  return splitedByForwardSlash[splitedByForwardSlash.length - 1];
 }
 
 export const MultiResponseChat = ({
@@ -43,7 +46,8 @@ export const MultiResponseChat = ({
             if (
               sourceDoc &&
               sourceDoc.metadata &&
-              sourceDoc.metadata.doc_class.toLowerCase() === 'unity'
+              sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
+              sourceDoc.metadata.section_name !== 'priceModular'
             ) {
               return (
                 <Button
