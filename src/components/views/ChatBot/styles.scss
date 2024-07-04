@@ -183,20 +183,30 @@
                 padding-left: 8px !important;
                 padding-top: 8px !important;
                 margin: 0;
-                height: 36px !important;
                 display: flex;
                 flex-direction: column;
                 textarea {
                   font-size: 12px;
-                  max-height: 35px !important;
                   &::-webkit-scrollbar {
-                    display: none;
+                    width: 8px;
+                  }
+                  /* Track */
+                  &::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                  }
+                  /* Handle */
+                  &::-webkit-scrollbar-thumb {
+                    background: #c1c1c1;
+                    border-radius: 5px;
+                  }
+                  /* Handle on hover */
+                  &::-webkit-scrollbar-thumb:hover {
+                    background: #c1c1c1;
                   }
                 }
               }
             }
             & > div:last-child {
-              height: 32px;
               padding: 0;
               padding-right: 4px;
             }
