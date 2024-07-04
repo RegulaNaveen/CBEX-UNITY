@@ -64,6 +64,14 @@
     .chat-bot-bubbles-container {
       font-size: 12px;
       flex-grow: 1;
+      .MuiButtonBase-root.MuiButton-root.MuiButton-outlined {
+        font-size: 12px;
+        max-width: 100%;
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
       &:not(.chat-bot-bubbles-container-fullscreen) {
         margin: 8px;
         padding-right: 8px;
