@@ -1028,6 +1028,9 @@ function applyAnsweredFilter(questions, flags) {
       })
       .toJS();
   }
+  if(filteredQuestions){
+    filteredQuestions = filteredQuestions.filter(obj => !obj.notApplicable);
+  }
   return filteredQuestions;
 }
 
