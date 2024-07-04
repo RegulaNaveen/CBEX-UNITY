@@ -24,7 +24,8 @@ function extractContext(bubbles, maxNumOfCount) {
   const context = [];
   let count = 0;
   if (!bubbles) return context;
-  if (bubbles[bubbles.length - 1].is_ecoa_or_cd) return context;
+  if (bubbles[bubbles.length - 1] && bubbles[bubbles.length - 1].is_ecoa_or_cd)
+    return context;
   if (
     bubbles[bubbles.length - 1].type &&
     bubbles[bubbles.length - 1].type === 'WELCOME_MSG'
@@ -33,7 +34,11 @@ function extractContext(bubbles, maxNumOfCount) {
   for (let i = bubbles.length - 2; i >= 0; i -= 2) {
     if (count >= maxNumOfCount) break;
 
-    if (bubbles[bubbles.length - 1].is_ecoa_or_cd) break;
+    if (
+      bubbles[bubbles.length - 1] &&
+      bubbles[bubbles.length - 1].is_ecoa_or_cd
+    )
+      break;
 
     const bubble = bubbles[i];
     if (bubble)
@@ -51,7 +56,7 @@ function extractContext(bubbles, maxNumOfCount) {
 
 export function addChatBotBubble(
   { query: queryText, id: opportunityNumber, bidNo, bidType, maxContextCount },
-  callback = () => {}
+  callback = () => { }
 ) {
   return async (dispatch, getState) => {
     dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
@@ -86,22 +91,31 @@ export function addChatBotBubble(
     } catch (e) {
       data = e;
     } finally {
+      /**
+       * info key should contain id and feedback
+       * to enable/disable thumbs down button
+       */
       const newBubble = {
         variant: 'system',
         copyContent: !data.error
           ? (data.response &&
-              data.response.result &&
-              data.response.result.result) ||
-            ERROR_DEFAULT_REPLY
+            data.response.result &&
+            data.response.result.result) ||
+          ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
         children: !data.error
           ? (data.response &&
-              data.response.result &&
-              data.response.result.result) ||
-            ERROR_DEFAULT_REPLY
+            data.response.result &&
+            data.response.result.result) ||
+          ERROR_DEFAULT_REPLY
           : ERROR_DEFAULT_REPLY,
         sentOrReceivedAt: Date.now(),
-        info: !data.error ? data.response : {}
+        info: !data.error ? {
+          id: data.id,
+          feedback: data.feedback,
+          is_ecoa_or_cd: data.is_ecoa_or_cd,
+          ...data.response
+        } : {}
       };
       dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
       dispatch({ type: SET_LOADING_STATE, payload: false }); // Set loading state to false
@@ -110,7 +124,7 @@ export function addChatBotBubble(
   };
 }
 
-export function submitFeedback(feedback, callback = () => {}) {
+export function submitFeedback(feedback, callback = () => { }) {
   return async dispatch => {
     try {
       const response = await submitFeedbackApi(feedback);

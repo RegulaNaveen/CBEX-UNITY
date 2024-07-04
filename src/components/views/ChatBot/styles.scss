@@ -104,6 +104,9 @@
       & > div {
         margin-bottom: 8px;
         max-width: 95%;
+        & > div {
+          max-width: 100%;
+        }
         & > div:first-child {
           hr {
             margin: 4px -16px;
@@ -206,6 +209,10 @@
         font-size: 12px;
         padding-bottom: 8px;
         font-weight: 400;
+        .chat-bot-info-link {
+          color: white;
+          text-decoration: underline;
+        }
       }
     }
 
@@ -283,10 +290,15 @@
       }
     }
   }
+  .chatbot-action-btn {
+    font-size: 14px;
+  }
 }
 
-.MuiModal-root {
-  z-index: 99999999 !important;
+.bid-assit-feedback {
+  .MuiModal-root {
+    z-index: 99999999 !important;
+  }
 }
 
 .feedback-modal {
@@ -432,8 +444,13 @@
 }
 
 .chatbot-action-btn {
+  font-size: 12px;
+  max-width: 100%;
   margin-top: 5px;
   display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .tooltip-title {

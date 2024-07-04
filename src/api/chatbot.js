@@ -57,7 +57,12 @@ export function fetchChatHistoryApi(opportunityNumber) {
 export function sendDataTriggerApi(data) {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT.SEND_DATA_TRIGGER}`, data, config)
+      .post(`${CHATBOT.SEND_DATA_TRIGGER}`, data, {
+        headers: {
+          'x-api-key': API_KEY,
+          'x-access-token': getAccessToken()
+        }
+      })
       .then(response => {
         if (response.status === 200) {
           resolve(response.data);
