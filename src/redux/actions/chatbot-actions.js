@@ -76,12 +76,12 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       (bubble.response &&
                         bubble.response.result &&
                         bubble.response.result.result) ||
-                      CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
+                      CHATBOT.DEFAULT_ERROR_REPLY,
                     children:
                       (bubble.response &&
                         bubble.response.result &&
                         bubble.response.result.result) ||
-                      CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
+                      CHATBOT.DEFAULT_ERROR_REPLY,
                     sentOrReceivedAt: new Date(bubble.created_at).getTime(),
                     replySuggestionMessage: '',
                     isWelcomeBubble: false
@@ -124,12 +124,12 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   (bubble.response &&
                     bubble.response.result &&
                     bubble.response.result.result) ||
-                  CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
+                  CHATBOT.DEFAULT_ERROR_REPLY,
                 children:
                   (bubble.response &&
                     bubble.response.result &&
                     bubble.response.result.result) ||
-                  CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
+                  CHATBOT.DEFAULT_ERROR_REPLY,
                 sentOrReceivedAt: new Date(bubble.created_at).getTime(),
                 replySuggestionMessage: '',
                 isWelcomeBubble: false
