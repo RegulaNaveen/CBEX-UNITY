@@ -156,6 +156,7 @@
       & > div > div:nth-child(1) > span {
         font-size: 12px;
         white-space: pre-line;
+        word-wrap: break-word;
 
         & span {
           color: #0557d5;
