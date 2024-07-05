@@ -2,7 +2,13 @@ import React from 'react';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react';
 import FeedbackModal, {
   FeedbackSubmitModal
 } from '../../ChatBot/FeedbackModal';
@@ -52,7 +58,7 @@ describe('FeedbackModal', () => {
     fireEvent.click(screen.getByTestId('submit-button'));
   });
 
-  it('should render with error', () => {
+  it('should render with error', async () => {
     ChatboatApi.submitFeedbackApi = jest.fn().mockImplementation(() => {
       return {
         status: 500,
@@ -67,7 +73,9 @@ describe('FeedbackModal', () => {
     fireEvent.change(textbox, { target: { value: 'Feedback for Error' } });
 
     fireEvent.click(screen.getByTestId('submit-button'));
-    expect(screen.getByText('Something went wrong!')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Something went wrong!')).toBeInTheDocument();
+    });
   });
 });
 
@@ -78,6 +86,6 @@ describe('FeedbackSubmitModal', () => {
         <FeedbackSubmitModal open onClose={() => {}} />
       </Provider>
     );
-    expect(screen.getByText('Feedback sent succeesfully!')).toBeInTheDocument();
+    expect(screen.getByText('Feedback sent successfully!')).toBeInTheDocument();
   });
 });
