@@ -2,6 +2,7 @@ import Button from 'apollo-react/components/Button';
 import React from 'react';
 import SourceDocument from './SourceDocument';
 import { sanitizeResponse } from './utils';
+import { CHATBOT } from '../../../constants/app';
 
 function getSourceDocNameFromPath(path = '') {
   const splitedByBackSlash = path.split('\\');
@@ -27,7 +28,9 @@ export const MultiResponseChat = ({
             {response?.result}
             <div className="src-doc-list">
               {response?.source_documents
-                ?.filter(obj => obj.type == 'Document')
+                ?.filter(
+                  obj => obj.type && obj.type.toLowerCase() === 'document'
+                )
                 .map((sourceDoc, i) => (
                   <SourceDocument
                     title={getSourceDocNameFromPath(sourceDoc.metadata.source)}
@@ -46,8 +49,12 @@ export const MultiResponseChat = ({
             if (
               sourceDoc &&
               sourceDoc.metadata &&
+              sourceDoc.metadata.doc_class &&
               sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
-              sourceDoc.metadata.section_name !== 'priceModular'
+              sourceDoc.metadata.section_name &&
+              Object.keys(CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP).includes(
+                sourceDoc.metadata.section_name.toLowerCase()
+              )
             ) {
               return (
                 <Button
@@ -59,7 +66,9 @@ export const MultiResponseChat = ({
                       sourceDoc.metadata.bidNo,
                       sanitizeResponse(
                         sourceDoc.page_content,
-                        sourceDoc.metadata.section_name || ''
+                        CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                          sourceDoc.metadata.section_name.toLowerCase()
+                        ]
                       )
                     )
                   }
