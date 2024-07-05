@@ -64,6 +64,14 @@
     .chat-bot-bubbles-container {
       font-size: 12px;
       flex-grow: 1;
+      .MuiButtonBase-root.MuiButton-root.MuiButton-outlined {
+        font-size: 12px;
+        max-width: 100%;
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
       & > div > div:nth-child(1):has(span > .multiresponse-list) {
         padding: 12px !important;
       }
