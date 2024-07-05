@@ -25,7 +25,7 @@
     max-width: 598px;
     border-radius: 16px;
     border-bottom-right-radius: 0;
-    background: linear-gradient(180deg, #51006d 0%, #ad0062 100%);
+    background: linear-gradient(180deg, #270056 0%, #ad0062 100%);
     border-bottom-right-radius: 0;
     &.chat-bot-ui-fullscreen {
       max-height: 100vh;
@@ -64,6 +64,17 @@
     .chat-bot-bubbles-container {
       font-size: 12px;
       flex-grow: 1;
+      .MuiButtonBase-root.MuiButton-root.MuiButton-outlined {
+        font-size: 12px;
+        max-width: 100%;
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      & > div > div:nth-child(1):has(span > .multiresponse-list) {
+        padding: 12px !important;
+      }
       &:not(.chat-bot-bubbles-container-fullscreen) {
         margin: 8px;
         padding-right: 8px;
@@ -145,6 +156,7 @@
       & > div > div:nth-child(1) > span {
         font-size: 12px;
         white-space: pre-line;
+        word-wrap: break-word;
 
         & span {
           color: #0557d5;
@@ -180,20 +192,30 @@
                 padding-left: 8px !important;
                 padding-top: 8px !important;
                 margin: 0;
-                height: 36px !important;
                 display: flex;
                 flex-direction: column;
                 textarea {
                   font-size: 12px;
-                  max-height: 35px !important;
                   &::-webkit-scrollbar {
-                    display: none;
+                    width: 8px;
+                  }
+                  /* Track */
+                  &::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                  }
+                  /* Handle */
+                  &::-webkit-scrollbar-thumb {
+                    background: #c1c1c1;
+                    border-radius: 5px;
+                  }
+                  /* Handle on hover */
+                  &::-webkit-scrollbar-thumb:hover {
+                    background: #c1c1c1;
                   }
                 }
               }
             }
             & > div:last-child {
-              height: 32px;
               padding: 0;
               padding-right: 4px;
             }
@@ -386,16 +408,12 @@
   word-break: break-all;
 }
 
-div[class*='makeStyles-systemBubble-'] {
-  padding: 16px !important;
-}
-
 @mixin tooltip {
   & > div {
     max-width: 300px;
-    height: 300px;
+    max-height: 300px;
     overflow-y: auto;
-
+    overflow-x: hidden;
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -452,4 +470,8 @@ div[class*='makeStyles-systemBubble-'] {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.tooltip-title {
+  margin-bottom: 10px;
 }
