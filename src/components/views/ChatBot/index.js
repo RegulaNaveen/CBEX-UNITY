@@ -262,7 +262,8 @@ const ChatBot = () => {
                               },
                               () => setDisableFooter(false)
                             )
-                          )
+                          ),
+                        title: button.label
                       })) || []
                     }
                     className="chat-bot-bubble"
