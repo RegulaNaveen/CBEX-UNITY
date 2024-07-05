@@ -1,9 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import ChatBotFab from 'apollo-react-4.19.0/components/ChatBotFab';
 import ChatBotHeader from 'apollo-react-4.19.0/components/ChatBotHeader';
 import ChatBotFooter from 'apollo-react-4.19.0/components/ChatBotFooter';
 import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import Typography from 'apollo-react/components/Typography';
+import { v4 as uuidv4 } from 'uuid';
 import ChatBubble from './ChatBubble';
 import CustomModal from '../../common/CustomModal';
 import './styles.scss';
@@ -16,60 +23,48 @@ import {
 } from '../../../redux/selectors/chatbot';
 import { useDispatch } from 'react-redux';
 import {
-  addChatBotBubble,
   fetchHistory,
   sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
-import { REDUX_TYPES } from '../../../constants';
-import { useLocation, useRouteMatch, useHistory } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 import featureFlags from '../../../constants/featureFlags';
 import Loader from 'apollo-react/components/Loader';
 import { MultiResponseChat } from './MultiResponseChat';
 import { changeBid } from '../../../redux/actions/proposal-actions';
 import { getBidList } from '../../../redux/selectors/proposal';
+import { extractBidInfo, extractContext } from './utils';
+import { SocketContext } from '../../../context/SocketContext';
+import { REDUX_TYPES } from '../../../constants';
+import { CHATBOT } from '../../../constants/app';
 
-const { ADD_CHATBOT_BUBBLE } = REDUX_TYPES.CHATBOT;
-
-function extractBidInfo(bidNo) {
-  let targetBidType = '';
-  let targetBidNumber = '';
-
-  if (bidNo.startsWith('RFI_')) {
-    targetBidType = 'RFI_Request';
-    targetBidNumber = bidNo.slice(4);
-  } else if (bidNo.startsWith('PA_')) {
-    targetBidType = 'Post_Award_Bid';
-    targetBidNumber = bidNo.slice(3);
-  } else if (bidNo.startsWith('EE_')) {
-    targetBidType = 'Early_Engagement_Bid';
-    targetBidNumber = bidNo.slice(3);
-  } else {
-    targetBidType = 'Clinical_Bid';
-    targetBidNumber = bidNo;
-  }
-
-  return { targetBidNumber, targetBidType };
-}
+const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
 const ChatBot = () => {
+  const [expanded, setExpanded] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const [gotoQuestionData, setGotoQuestionData] = useState({});
+  const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
+
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const flags = useSelector(state => state.proposal.get('eventflag'));
-  const search = useLocation().search;
-  const searchParams = new URLSearchParams(search);
+
   const history = useHistory();
-  const [inputText, setInputText] = useState('');
-  const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
-  const [gotoQuestionData, setGotoQuestionData] = useState({});
+
   const dispatch = useDispatch();
+
+  const flags = useSelector(state => state.proposal.get('eventflag'));
   const bubbles = useSelector(selectChatBotBubbles);
   const bidList = useSelector(getBidList);
   const loading = useSelector(state => state.chatbot.loading);
-  const [expanded, setExpanded] = useState(false);
-  const [fullscreen, setFullscreen] = useState(false);
-  const [disableFooter, setDisableFooter] = useState(false);
   const fetchingHistory = useSelector(selectChatBotFetchingHistory);
+
   const handleClose = useCallback(() => setExpanded(false), []);
+
+  const {
+    socket: { current: socketInstance },
+    initiateConnection
+  } = useContext(SocketContext);
 
   const winLocationSearch = window.location.search;
   const queryparams = new URLSearchParams(winLocationSearch);
@@ -85,15 +80,53 @@ const ChatBot = () => {
     dispatch(sendDataTrigger({ opportunityNumber: id, bidNo, bidType }));
   }, [id, bidNo, bidType, dispatch]);
 
-  const handleWindowFocus = useCallback(() => {
-    // dispatch(fetchHistory(id, true));
-  }, [id, dispatch]);
-
   useEffect(() => {
-    window.addEventListener('focus', handleWindowFocus);
+    if (socketInstance) {
+      console.info(`[CHATBOT] Socket instance available!`);
+      socketInstance.addEventListener('message', message => {
+        const data = JSON.parse(message.data);
+        // Handle event ONLY if data.event_group is 'CHATBOT'
+        if (data.event_group === 'CHATBOT') {
+          switch (data.event_name) {
+            case 'CHATBOT_USER_QUERY_RESPONSE':
+              console.info(`[CHATBOT] Event: ${data.event_name}`);
+              dispatch({
+                type: ADD_CHATBOT_BUBBLE,
+                payload: {
+                  variant: 'system',
+                  copyContent:
+                    (data.event_data &&
+                      data.event_data.response &&
+                      data.event_data.response.result &&
+                      data.event_data.response.result.result) ||
+                    CHATBOT.DEFAULT_ERROR_REPLY,
 
-    return () => window.removeEventListener('focus', handleWindowFocus);
-  }, []);
+                  children:
+                    (data.event_data &&
+                      data.event_data.response &&
+                      data.event_data.response.result &&
+                      data.event_data.response.result.result) ||
+                    CHATBOT.DEFAULT_ERROR_REPLY,
+                  sentOrReceivedAt: new Date(
+                    data.event_data.created_at
+                  ).getTime(),
+                  info: {
+                    ...data.event_data.response
+                  }
+                }
+              });
+              dispatch({ type: SET_LOADING_STATE, payload: false });
+              break;
+            default:
+              console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
+              break;
+          }
+        }
+      });
+    } else {
+      console.info(`[CHATBOT] Socket instance not available!`);
+    }
+  }, [socketInstance]);
 
   useEffect(() => {
     dispatch(fetchHistory(id));
@@ -119,6 +152,49 @@ const ChatBot = () => {
       root?.style.setProperty('--fullscreen-min-width-inputbox', '100%');
     }
   }, [fullscreen]);
+
+  // TODO: add context to the query
+  const handleSendMsgBtnClick = useCallback(
+    async payload => {
+      // if socketInstance is not available establish new connection and send message
+      let socket = socketInstance;
+      if (!socket) {
+        socket = await initiateConnection();
+        if (!socket) {
+          console.error(`[CHATBOT] Socket connection failed!`);
+          return;
+        }
+      }
+      socket.send(
+        JSON.stringify({
+          event_group: 'CHATBOT',
+          event_name: 'CHATBOT_USER_QUERY',
+          event_data: {
+            ...payload,
+            query_id: uuidv4(),
+            context: extractContext(
+              bubbles,
+              flags[featureFlags.CHATBOT_CONTENT_COUNT]
+            )
+          }
+        })
+      );
+      await dispatch({ type: SET_LOADING_STATE, payload: true });
+      await dispatch({
+        type: ADD_CHATBOT_BUBBLE,
+        payload: {
+          variant: 'user',
+          copyContent: payload.query,
+          children: payload.query,
+          sentOrReceivedAt: Date.now()
+        }
+      });
+      // TODO: Set a timer to check if the response is not received in <n> seconds
+      // and show a message to the user that the response is taking longer than expected
+      // give UI control to the user to poll the server for the response
+    },
+    [dispatch, socketInstance, initiateConnection, bubbles, flags]
+  );
 
   const findBidObjAndChangeBid = useCallback(
     ({ targetBidNumber, targetBidType, questionText }) => {
@@ -250,19 +326,12 @@ const ChatBot = () => {
                       bubble?.buttonProps?.map((button, i) => ({
                         label: button.label,
                         onClick: () =>
-                          dispatch(
-                            addChatBotBubble(
-                              {
-                                query: button.label,
-                                id,
-                                bidNo,
-                                bidType,
-                                maxContextCount:
-                                  flags[featureFlags.CHATBOT_CONTENT_COUNT]
-                              },
-                              () => setDisableFooter(false)
-                            )
-                          ),
+                          handleSendMsgBtnClick({
+                            query: button.label,
+                            id,
+                            bidNo,
+                            bidType
+                          }),
                         title: button.label
                       })) || []
                     }
@@ -303,25 +372,18 @@ const ChatBot = () => {
             })}
           >
             <ChatBotFooter
-              disabled={disableFooter || fetchingHistory}
+              disabled={loading || fetchingHistory}
               onSendClick={() => {
                 if (!inputRef.current.value) {
                   return;
                 }
-                setDisableFooter(true);
                 setInputText('');
-                dispatch(
-                  addChatBotBubble(
-                    {
-                      query: inputRef.current.value,
-                      id,
-                      bidNo,
-                      bidType,
-                      maxContextCount: flags[featureFlags.CHATBOT_CONTENT_COUNT]
-                    },
-                    () => setDisableFooter(false)
-                  )
-                );
+                handleSendMsgBtnClick({
+                  query: inputRef.current.value,
+                  id,
+                  bidNo,
+                  bidType
+                });
               }}
               onActionClick={() => console.log('onActionClick')}
               placeholder="Ask me something..."

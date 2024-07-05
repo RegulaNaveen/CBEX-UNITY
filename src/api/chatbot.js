@@ -64,7 +64,7 @@ export function sendDataTriggerApi(data) {
         }
       })
       .then(response => {
-        if (response.status === 200) {
+        if (response.status === 202) {
           resolve(response.data);
         } else {
           reject({ error: true, message: response });
