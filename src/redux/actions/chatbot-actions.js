@@ -20,111 +20,7 @@ const {
   SET_CHATBOT_BUBBLES
 } = REDUX_TYPES.CHATBOT;
 
-function extractContext(bubbles, maxNumOfCount) {
-  const context = [];
-  let count = 0;
-  if (!bubbles) return context;
-  if (bubbles[bubbles.length - 1] && bubbles[bubbles.length - 1].is_ecoa_or_cd)
-    return context;
-  if (
-    bubbles[bubbles.length - 1].type &&
-    bubbles[bubbles.length - 1].type === 'WELCOME_MSG'
-  )
-    return context;
-  for (let i = bubbles.length - 2; i >= 0; i -= 2) {
-    if (count >= maxNumOfCount) break;
-
-    if (
-      bubbles[bubbles.length - 1] &&
-      bubbles[bubbles.length - 1].is_ecoa_or_cd
-    )
-      break;
-
-    const bubble = bubbles[i];
-    if (bubble)
-      if (bubble.variant === 'user') {
-        context.push({
-          question: bubble.children,
-          answer: bubbles[i + 1].children
-        });
-        count++;
-      }
-  }
-
-  return context;
-}
-
-export function addChatBotBubble(
-  { query: queryText, id: opportunityNumber, bidNo, bidType, maxContextCount },
-  callback = () => { }
-) {
-  return async (dispatch, getState) => {
-    dispatch({ type: SET_LOADING_STATE, payload: true }); // Set loading state to true
-    const bubbles = getState().chatbot.bubbles;
-    const context = extractContext(bubbles, maxContextCount);
-
-    dispatch({
-      type: ADD_CHATBOT_BUBBLE,
-      payload: {
-        variant: 'user',
-        copyContent: queryText,
-        children: queryText,
-        sentOrReceivedAt: Date.now()
-      }
-    });
-
-    const ERROR_DEFAULT_REPLY =
-      'Unable to process your query. Please rephrase and try again.';
-    let data;
-    try {
-      const params = {
-        query: queryText,
-        oppurtunity_no: opportunityNumber,
-        context,
-        bidNo: 1,
-        bidType
-      };
-      if (bidNo && bidNo != 'undefined') {
-        params.bidNo = parseInt(bidNo);
-      }
-      data = await fetchChatBotReplyApi(params);
-    } catch (e) {
-      data = e;
-    } finally {
-      /**
-       * info key should contain id and feedback
-       * to enable/disable thumbs down button
-       */
-      const newBubble = {
-        variant: 'system',
-        copyContent: !data.error
-          ? (data.response &&
-            data.response.result &&
-            data.response.result.result) ||
-          ERROR_DEFAULT_REPLY
-          : ERROR_DEFAULT_REPLY,
-        children: !data.error
-          ? (data.response &&
-            data.response.result &&
-            data.response.result.result) ||
-          ERROR_DEFAULT_REPLY
-          : ERROR_DEFAULT_REPLY,
-        sentOrReceivedAt: Date.now(),
-        info: !data.error ? {
-          id: data.id,
-          feedback: data.feedback,
-          is_ecoa_or_cd: data.is_ecoa_or_cd,
-          ...data.response
-        } : {}
-      };
-      dispatch({ type: ADD_CHATBOT_BUBBLE, payload: newBubble });
-      dispatch({ type: SET_LOADING_STATE, payload: false }); // Set loading state to false
-      callback();
-    }
-  };
-}
-
-export function submitFeedback(feedback, callback = () => { }) {
+export function submitFeedback(feedback, callback = () => {}) {
   return async dispatch => {
     try {
       const response = await submitFeedbackApi(feedback);
@@ -180,12 +76,12 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       (bubble.response &&
                         bubble.response.result &&
                         bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY,
+                      CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
                     children:
                       (bubble.response &&
                         bubble.response.result &&
                         bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY,
+                      CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
                     sentOrReceivedAt: new Date(bubble.created_at).getTime(),
                     replySuggestionMessage: '',
                     isWelcomeBubble: false
@@ -228,12 +124,12 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   (bubble.response &&
                     bubble.response.result &&
                     bubble.response.result.result) ||
-                  CHATBOT.DEFAULT_ERROR_REPLY,
+                  CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
                 children:
                   (bubble.response &&
                     bubble.response.result &&
                     bubble.response.result.result) ||
-                  CHATBOT.DEFAULT_ERROR_REPLY,
+                  CHATBOT.CHATBOT.DEFAULT_ERROR_REPLY,
                 sentOrReceivedAt: new Date(bubble.created_at).getTime(),
                 replySuggestionMessage: '',
                 isWelcomeBubble: false

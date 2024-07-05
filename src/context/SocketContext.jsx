@@ -835,6 +835,7 @@ const SocketContextProvider = props => {
         };
         socket.current = newSocket;
       }
+      return socket.current;
     } catch (err) {
       console.log('initiateConnection error', err);
     }
@@ -1240,10 +1241,8 @@ const mapDispatchToProps = {
   syncBidDashboard: updateDashboardBid,
   syncdashboard: syncDashboardOpportunity,
   updateDetailPage: updateOpportunityDashboardProposal,
-  deleteCustomTabCustomQuestionFromSocket:
-    deleteProposalCustomTabQuestionFromSocket,
-  deleteApprovalCustomTabCustomQuestionFromSocket:
-    deleteApprovalCustomTabCustomQuestionFromSocketAction,
+  deleteCustomTabCustomQuestionFromSocket: deleteProposalCustomTabQuestionFromSocket,
+  deleteApprovalCustomTabCustomQuestionFromSocket: deleteApprovalCustomTabCustomQuestionFromSocketAction,
   updateTaskListOrderAction,
   updateTaskListMoveAction,
   setTaskFromSocket: setTaskFromSocket,
