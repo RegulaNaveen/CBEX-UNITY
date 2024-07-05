@@ -27,7 +27,7 @@ export const MultiResponseChat = ({
             {response?.result}
             <div className="src-doc-list">
               {response?.source_documents
-                ?.filter(obj => obj.type == 'Document')
+                ?.filter(obj => obj.type.toLowerCase() === 'document')
                 .map((sourceDoc, i) => (
                   <SourceDocument
                     title={getSourceDocNameFromPath(sourceDoc.metadata.source)}
