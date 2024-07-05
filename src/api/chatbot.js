@@ -5,17 +5,17 @@ import { API } from '../constants';
 const { CHATBOT } = API;
 const { API_KEY } = API.PROPOSAL;
 
-const config = {
+const config = () => ({
   headers: {
     'x-api-key': API_KEY,
     'x-access-token': getAccessToken()
   }
-};
+});
 
 export function fetchChatBotReplyApi(params) {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT.CHAT_ENDPOINT}`, params, config)
+      .post(`${CHATBOT.CHAT_ENDPOINT}`, params, config())
       .then(response => {
         if (response.status === 200) {
           resolve(response.data);
@@ -30,7 +30,7 @@ export function fetchChatBotReplyApi(params) {
 export function submitFeedbackApi(feedback) {
   return new Promise((resolve, reject) => {
     axiosInstance
-      .post(`${CHATBOT.FEEDBACK_ENDPOINT}`, feedback, config)
+      .post(`${CHATBOT.FEEDBACK_ENDPOINT}`, feedback, config())
       .then(response => resolve(response))
       .catch(err => reject(err));
   });
@@ -41,7 +41,7 @@ export function fetchChatHistoryApi(opportunityNumber) {
     axiosInstance
       .get(
         `${CHATBOT.CHAT_HISTORY_ENDPOINT}?opportunityNumber=${opportunityNumber}`,
-        config
+        config()
       )
       .then(response => {
         if (response.status === 200) {
