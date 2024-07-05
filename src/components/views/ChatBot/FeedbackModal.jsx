@@ -113,7 +113,17 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
           minWidth={550}
         />
         <Typography>The answer you mark is the following:</Typography>
-        <div className="feedback-answer">{answer}</div>
+        {Array.isArray(answer) ? (
+          <div className="feedback-answer">
+            {answer
+              .filter(ans => ans.result)
+              .map((ans, i) => (
+                <div key={i}>{ans.result}</div>
+              ))}
+          </div>
+        ) : (
+          <div className="feedback-answer">{answer}</div>
+        )}
       </CustomModal>
       {/* Error Modal */}
       {error && (
