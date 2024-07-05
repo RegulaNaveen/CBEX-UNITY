@@ -17,13 +17,13 @@ export const welcomeBubble = {
   replySuggestionMessage: 'Here are some things I can do:',
   buttonProps: [
     {
-      label: 'Show me the eCOA recommended services'
+      label: 'List relevant eCOA assessments'
     },
     {
-      label: 'See Regulatory Updates'
+      label: 'Provide overview of appropriate Connected Devices'
     },
     {
-      label: 'Continue last topic: Enrolling a new Patient'
+      label: 'Summarize this Opportunity'
     }
   ],
   sentOrReceivedAt: Date.now(),
