@@ -154,7 +154,11 @@ const TASKS = {
 
 const CHATBOT = {
   DEFAULT_ERROR_REPLY:
-    'Unable to process your query. Please rephrase and try again.'
+    'Unable to process your query. Please rephrase and try again.',
+  SUPPORTED_GO_TO_UNITY_SECTIONS_MAP: {
+    notepad: 'notepad',
+    questions: 'question_id'
+  }
 };
 
 export {
