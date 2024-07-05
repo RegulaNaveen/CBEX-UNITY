@@ -340,8 +340,10 @@ const ChatBot = () => {
                     {bubble.variant.startsWith('system') ? (
                       <MultiResponseChat
                         list={
-                          Array.isArray(bubble?.info?.result)
-                            ? bubble?.info?.result
+                          bubble?.info &&
+                          bubble?.info.result &&
+                          Array.isArray(bubble?.info?.result.result)
+                            ? bubble?.info?.result.result
                             : [bubble?.info?.result]
                         }
                         handleGotoQuestion={handleGotoQuestion}
