@@ -1,4 +1,5 @@
 function sanitizeResponse(response, prefix = null) {
+function sanitizeResponse(response, prefix = null) {
   let sanitizedResponse = response;
   if (prefix) {
     sanitizedResponse = sanitizedResponse.replace(
@@ -65,4 +66,20 @@ function extractContext(bubbles, maxNumOfCount) {
   return context;
 }
 
-export { sanitizeResponse, extractBidInfo, extractContext };
+function getContentAsText(content) {
+  if (Array.isArray(content)) {
+    let text = '';
+    content.forEach((item, idx) => {
+      if (item.result) {
+        text += `${idx + 1}. ${getContentAsText(item.result)}\n`;
+      }
+    });
+    return text;
+  } else if (typeof content === 'object') {
+    return content.text;
+  } else {
+    return content;
+  }
+}
+
+export { sanitizeResponse, extractBidInfo, extractContext, getContentAsText };
