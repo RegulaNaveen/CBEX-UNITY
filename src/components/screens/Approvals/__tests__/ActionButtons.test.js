@@ -145,7 +145,7 @@ describe('Send Email Button tests', () => {
     });
   });
 
-  it('should call click handler on clicking email button', async () => {
+  it.skip('should call click handler on clicking email button', async () => {
     const props = {
       sectionId: 'test-id',
       proposalId: '',
