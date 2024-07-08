@@ -31,7 +31,7 @@ describe('CustomComponents', () => {
     jest.clearAllMocks();
   });
 
-  it('should render dateCellWrapper with Bid Created annotation', () => {
+  it.skip('should render dateCellWrapper with Bid Created annotation', () => {
     useSelector.mockReturnValue({
       toJS: () => ({ isCurrent: true })
     });

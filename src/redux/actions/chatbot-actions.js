@@ -55,7 +55,14 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       id: bubble.id,
                       feedback: bubble.feedback,
                       is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                      ...bubble.response
+                      ...bubble.response,
+                      result: {
+                        result:
+                          (bubble.response &&
+                            bubble.response.result &&
+                            bubble.response.result.result) ||
+                          CHATBOT.DEFAULT_ERROR_REPLY
+                      }
                     },
                     variant: 'user',
                     copyContent: bubble.user_query,
@@ -69,7 +76,14 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       id: bubble.id,
                       feedback: bubble.feedback,
                       is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                      ...bubble.response
+                      ...bubble.response,
+                      result: {
+                        result:
+                          (bubble.response &&
+                            bubble.response.result &&
+                            bubble.response.result.result) ||
+                          CHATBOT.DEFAULT_ERROR_REPLY
+                      }
                     },
                     variant: 'system',
                     copyContent:
@@ -103,7 +117,14 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   id: bubble.id,
                   feedback: bubble.feedback,
                   is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                  ...bubble.response
+                  ...bubble.response,
+                  result: {
+                    result:
+                      (bubble.response &&
+                        bubble.response.result &&
+                        bubble.response.result.result) ||
+                      CHATBOT.DEFAULT_ERROR_REPLY
+                  }
                 },
                 variant: 'user',
                 copyContent: bubble.user_query,
@@ -117,7 +138,14 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   id: bubble.id,
                   feedback: bubble.feedback,
                   is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                  ...bubble.response
+                  ...bubble.response,
+                  result: {
+                    result:
+                      (bubble.response &&
+                        bubble.response.result &&
+                        bubble.response.result.result) ||
+                      CHATBOT.DEFAULT_ERROR_REPLY
+                  }
                 },
                 variant: 'system',
                 copyContent:
@@ -176,6 +204,40 @@ export function sendDataTrigger({ opportunityNumber, bidNo, bidType }) {
       await sendDataTriggerApi(requestPayload);
     } catch (e) {
       console.error('[CHATBOT] Error sending data trigger: ', e);
+    }
+  };
+}
+
+export function handleChatBotQueryWSMsg(message) {
+  return async (dispatch, getState) => {
+    try {
+      if (message.query_id) {
+        const bubbles = await selectChatBotBubbles(getState());
+        if (
+          bubbles.findIndex(
+            bubble => bubble && bubble.info.id === message.query_id
+          ) > -1
+        ) {
+          return;
+        }
+        await dispatch({
+          type: ADD_CHATBOT_BUBBLE,
+          payload: {
+            info: {
+              id: message.query_id,
+              feedback: ''
+            },
+            variant: 'user',
+            copyContent: message.query,
+            children: message.query,
+            sentOrReceivedAt: Date.now(),
+            isWelcomeBubble: false
+          }
+        });
+        await dispatch({ type: SET_LOADING_STATE, payload: true });
+      }
+    } catch (e) {
+      console.error('[CHATBOT] Error handling chatbot query WS message: ', e);
     }
   };
 }

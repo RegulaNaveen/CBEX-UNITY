@@ -24,6 +24,7 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   fetchHistory,
+  handleChatBotQueryWSMsg,
   sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { useRouteMatch, useHistory } from 'react-router-dom';
@@ -54,6 +55,7 @@ const ChatBot = () => {
   const dispatch = useDispatch();
 
   const flags = useSelector(state => state.proposal.get('eventflag'));
+
   const bubbles = useSelector(selectChatBotBubbles);
   const bidList = useSelector(getBidList);
   const loading = useSelector(state => state.chatbot.loading);
@@ -111,11 +113,18 @@ const ChatBot = () => {
                     data.event_data.created_at
                   ).getTime(),
                   info: {
+                    id: data.event_data.id,
+                    feedback: data.event_data.feedback,
+                    is_ecoa_or_cd: data.event_data.is_ecoa_or_cd,
                     ...data.event_data.response
                   }
                 }
               });
               dispatch({ type: SET_LOADING_STATE, payload: false });
+              break;
+            case 'CHATBOT_USER_QUERY':
+              console.info(`[CHATBOT] Event: ${data.event_name}`);
+              dispatch(handleChatBotQueryWSMsg(data.event_data));
               break;
             default:
               console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
@@ -143,17 +152,23 @@ const ChatBot = () => {
   }, [expanded, bubbles]);
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (fullscreen) {
-      root?.style.setProperty('--fullscreen-margin-left-inputbox', '17vw');
-      root?.style.setProperty('--fullscreen-min-width-inputbox', '60vw');
-    } else {
-      root?.style.setProperty('--fullscreen-margin-left-inputbox', '0px');
-      root?.style.setProperty('--fullscreen-min-width-inputbox', '100%');
+    if (inputText) {
+      const numOfsplits = inputText.split('\n')?.length;
+      let height = '21px';
+      if (numOfsplits <= 1) {
+        height = '21px';
+      } else if (numOfsplits == 2) {
+        height = `${21 * 2}px`;
+      } else if (numOfsplits == 3) {
+        height = `${21 * 3}px`;
+      } else if (numOfsplits > 3) {
+        height = `${21 * 4}px`;
+      }
+      const root = document.documentElement;
+      root?.style.setProperty('--chatbot-input-height', height);
     }
-  }, [fullscreen]);
+  }, [inputText]);
 
-  // TODO: add context to the query
   const handleSendMsgBtnClick = useCallback(
     async payload => {
       // if socketInstance is not available establish new connection and send message
@@ -340,8 +355,10 @@ const ChatBot = () => {
                     {bubble.variant.startsWith('system') ? (
                       <MultiResponseChat
                         list={
-                          Array.isArray(bubble?.info?.result)
-                            ? bubble?.info?.result
+                          bubble?.info &&
+                          bubble?.info.result &&
+                          Array.isArray(bubble?.info?.result.result)
+                            ? bubble?.info?.result.result
                             : [bubble?.info?.result]
                         }
                         handleGotoQuestion={handleGotoQuestion}

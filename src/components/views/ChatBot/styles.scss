@@ -1,6 +1,5 @@
-#root {
-  $fullscreen-margin-left-inputbox: 0px;
-  $fullscreen-min-width-inputbox: 100%;
+:root {
+  --chatbot-input-height: 21px;
 }
 
 .chat-bot-ui-container {
@@ -194,8 +193,11 @@
                 margin: 0;
                 display: flex;
                 flex-direction: column;
+                height: var(--chatbot-input-height + 14px) !important;
+                max-height: var(--chatbot-input-height + 14px) !important;
                 textarea {
                   font-size: 12px;
+                  max-height: var(--chatbot-input-height) !important;
                   &::-webkit-scrollbar {
                     width: 8px;
                   }
@@ -454,7 +456,7 @@
   font-size: 14px;
 }
 .src-doc-list {
-  display: inline-flex;
+  display: inline;
   flex-direction: row;
   margin: 0 0 0 5px !important;
   padding: 0 !important;
