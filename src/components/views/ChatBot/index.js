@@ -152,15 +152,23 @@ const ChatBot = () => {
   }, [expanded, bubbles]);
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (fullscreen) {
-      root?.style.setProperty('--fullscreen-margin-left-inputbox', '17vw');
-      root?.style.setProperty('--fullscreen-min-width-inputbox', '60vw');
-    } else {
-      root?.style.setProperty('--fullscreen-margin-left-inputbox', '0px');
-      root?.style.setProperty('--fullscreen-min-width-inputbox', '100%');
+    if (inputText) {
+      const numOfsplits = inputText.split('\n')?.length;
+      let height = '21px';
+      if (numOfsplits <= 1) {
+        height = '21px';
+      } else if (numOfsplits == 2) {
+        height = `${21 * 2}px`;
+      } else if (numOfsplits == 3) {
+        height = `${21 * 3}px`;
+      } else if (numOfsplits > 3) {
+        height = `${21 * 4}px`;
+      }
+      const root = document.documentElement;
+      console.log({ numOfsplits, height });
+      root?.style.setProperty('--chatbot-input-height', height);
     }
-  }, [fullscreen]);
+  }, [inputText]);
 
   const handleSendMsgBtnClick = useCallback(
     async payload => {
