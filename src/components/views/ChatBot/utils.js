@@ -1,4 +1,5 @@
 function sanitizeResponse(response, prefix = null) {
+function sanitizeResponse(response, prefix = null) {
   let sanitizedResponse = response;
   if (prefix) {
     sanitizedResponse = sanitizedResponse.replace(
