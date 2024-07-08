@@ -5,19 +5,11 @@ import React, {
   useRef,
   useState
 } from 'react';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
 import ChatBotFab from 'apollo-react-4.19.0/components/ChatBotFab';
 import ChatBotHeader from 'apollo-react-4.19.0/components/ChatBotHeader';
 import ChatBotFooter from 'apollo-react-4.19.0/components/ChatBotFooter';
 import ApolloProgress from 'apollo-react/components/ApolloProgress';
 import Typography from 'apollo-react/components/Typography';
-import { v4 as uuidv4 } from 'uuid';
 import { v4 as uuidv4 } from 'uuid';
 import ChatBubble from './ChatBubble';
 import CustomModal from '../../common/CustomModal';
@@ -36,18 +28,11 @@ import {
   sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { useRouteMatch, useHistory } from 'react-router-dom';
-import { useRouteMatch, useHistory } from 'react-router-dom';
 import featureFlags from '../../../constants/featureFlags';
 import Loader from 'apollo-react/components/Loader';
 import { MultiResponseChat } from './MultiResponseChat';
 import { changeBid } from '../../../redux/actions/proposal-actions';
 import { getBidList } from '../../../redux/selectors/proposal';
-import { extractBidInfo, extractContext } from './utils';
-import { SocketContext } from '../../../context/SocketContext';
-import { REDUX_TYPES } from '../../../constants';
-import { CHATBOT } from '../../../constants/app';
-
-const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 import { extractBidInfo, extractContext } from './utils';
 import { SocketContext } from '../../../context/SocketContext';
 import { REDUX_TYPES } from '../../../constants';
@@ -62,35 +47,21 @@ const ChatBot = () => {
   const [gotoQuestionData, setGotoQuestionData] = useState({});
   const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
 
-  const [expanded, setExpanded] = useState(false);
-  const [fullscreen, setFullscreen] = useState(false);
-  const [inputText, setInputText] = useState('');
-  const [gotoQuestionData, setGotoQuestionData] = useState({});
-  const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
-
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
 
-
   const history = useHistory();
-
 
   const dispatch = useDispatch();
 
   const flags = useSelector(state => state.proposal.get('eventflag'));
 
-  const flags = useSelector(state => state.proposal.get('eventflag'));
   const bubbles = useSelector(selectChatBotBubbles);
   const bidList = useSelector(getBidList);
   const loading = useSelector(state => state.chatbot.loading);
   const fetchingHistory = useSelector(selectChatBotFetchingHistory);
 
   const handleClose = useCallback(() => setExpanded(false), []);
-
-  const {
-    socket: { current: socketInstance },
-    initiateConnection
-  } = useContext(SocketContext);
 
   const {
     socket: { current: socketInstance },
@@ -369,12 +340,6 @@ const ChatBot = () => {
                             bidNo,
                             bidType
                           }),
-                          handleSendMsgBtnClick({
-                            query: button.label,
-                            id,
-                            bidNo,
-                            bidType
-                          }),
                         title: button.label
                       })) || []
                     }
@@ -383,10 +348,6 @@ const ChatBot = () => {
                     {bubble.variant.startsWith('system') ? (
                       <MultiResponseChat
                         list={
-                          bubble?.info &&
-                          bubble?.info.result &&
-                          Array.isArray(bubble?.info?.result.result)
-                            ? bubble?.info?.result.result
                           bubble?.info &&
                           bubble?.info.result &&
                           Array.isArray(bubble?.info?.result.result)
@@ -427,12 +388,6 @@ const ChatBot = () => {
                   return;
                 }
                 setInputText('');
-                handleSendMsgBtnClick({
-                  query: inputRef.current.value,
-                  id,
-                  bidNo,
-                  bidType
-                });
                 handleSendMsgBtnClick({
                   query: inputRef.current.value,
                   id,
