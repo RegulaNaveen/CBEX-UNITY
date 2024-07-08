@@ -24,6 +24,7 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   fetchHistory,
+  handleChatBotQueryWSMsg,
   sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { useRouteMatch, useHistory } from 'react-router-dom';
@@ -111,11 +112,18 @@ const ChatBot = () => {
                     data.event_data.created_at
                   ).getTime(),
                   info: {
+                    id: data.event_data.id,
+                    feedback: data.event_data.feedback,
+                    is_ecoa_or_cd: data.event_data.is_ecoa_or_cd,
                     ...data.event_data.response
                   }
                 }
               });
               dispatch({ type: SET_LOADING_STATE, payload: false });
+              break;
+            case 'CHATBOT_USER_QUERY':
+              console.info(`[CHATBOT] Event: ${data.event_name}`);
+              dispatch(handleChatBotQueryWSMsg(data.event_data));
               break;
             default:
               console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
@@ -153,7 +161,6 @@ const ChatBot = () => {
     }
   }, [fullscreen]);
 
-  // TODO: add context to the query
   const handleSendMsgBtnClick = useCallback(
     async payload => {
       // if socketInstance is not available establish new connection and send message
