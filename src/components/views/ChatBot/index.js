@@ -165,7 +165,6 @@ const ChatBot = () => {
         height = `${21 * 4}px`;
       }
       const root = document.documentElement;
-      console.log({ numOfsplits, height });
       root?.style.setProperty('--chatbot-input-height', height);
     }
   }, [inputText]);
