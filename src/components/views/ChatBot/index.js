@@ -82,6 +82,16 @@ const ChatBot = () => {
     dispatch(sendDataTrigger({ opportunityNumber: id, bidNo, bidType }));
   }, [id, bidNo, bidType, dispatch]);
 
+  const doAutoScroll = useCallback(() => {
+    if (bubbles.length <= 1) {
+      return;
+    }
+    if (expanded) {
+      bubblesContainerRef.current.scrollTop =
+        bubblesContainerRef.current.scrollHeight;
+    }
+  }, [bubbles, expanded]);
+
   useEffect(() => {
     if (socketInstance) {
       console.info(`[CHATBOT] Socket instance available!`);
@@ -138,18 +148,12 @@ const ChatBot = () => {
   }, [socketInstance]);
 
   useEffect(() => {
-    dispatch(fetchHistory(id));
+    dispatch(fetchHistory(id, null, () => doAutoScroll()));
   }, [id]);
 
   useEffect(() => {
-    if (bubbles.length <= 1) {
-      return;
-    }
-    if (expanded) {
-      bubblesContainerRef.current.scrollTop =
-        bubblesContainerRef.current.scrollHeight;
-    }
-  }, [expanded, bubbles]);
+    doAutoScroll();
+  }, [expanded, bubbles, fullscreen, id]);
 
   useEffect(() => {
     if (inputText) {
