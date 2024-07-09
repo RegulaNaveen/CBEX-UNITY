@@ -63,7 +63,7 @@ export const MultiResponseChat = ({
                   className="chatbot-action-btn"
                   onClick={() =>
                     handleGotoQuestion(
-                      sourceDoc.metadata.bidNo,
+                      sourceDoc.metadata.bid_no,
                       sanitizeResponse(
                         sourceDoc.page_content,
                         CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
