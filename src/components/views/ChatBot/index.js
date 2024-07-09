@@ -173,6 +173,13 @@ const ChatBot = () => {
     }
   }, [inputText]);
 
+  useEffect(() => {
+    if (loading || fetchingHistory) {
+      const root = document.documentElement;
+      root?.style.setProperty('--chatbot-input-disabled-color', 'transparent');
+    }
+  }, [loading, fetchingHistory]);
+
   const handleSendMsgBtnClick = useCallback(
     async payload => {
       // if socketInstance is not available establish new connection and send message

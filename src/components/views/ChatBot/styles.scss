@@ -1,5 +1,6 @@
 :root {
   --chatbot-input-height: 21px;
+  --chatbot-input-disabled-color: white;
 }
 
 .chat-bot-ui-container {
@@ -195,6 +196,9 @@
                 flex-direction: column;
                 height: var(--chatbot-input-height + 14px) !important;
                 max-height: var(--chatbot-input-height + 14px) !important;
+                background-color: var(
+                  --chatbot-input-disabled-color
+                ) !important;
                 textarea {
                   font-size: 12px;
                   max-height: var(--chatbot-input-height) !important;
