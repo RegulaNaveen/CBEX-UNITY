@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'apollo-react/components/Link';
+import { Link } from '@mui/material';
 import Typography from 'apollo-react/components/Typography';
 
 const ChatBotInfo = ({ className = 'chat-bot-info' }) => (
@@ -13,6 +13,7 @@ const ChatBotInfo = ({ className = 'chat-bot-info' }) => (
       className="chat-bot-info-link"
       target="_blank"
       rel="noopener noreferrer"
+      underline="none"
     >
       <Typography variant="bodySmall"> {'FAQ.'} </Typography>
     </Link>
