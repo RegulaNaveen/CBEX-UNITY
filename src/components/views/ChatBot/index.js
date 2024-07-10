@@ -222,7 +222,7 @@ const ChatBot = () => {
       // and show a message to the user that the response is taking longer than expected
       // give UI control to the user to poll the server for the response
     },
-    [dispatch, socketInstance, initiateConnection, bubbles, flags]
+    [dispatch, socketInstance, initiateConnection, bubbles, flags, loading]
   );
 
   const findBidObjAndChangeBid = useCallback(
