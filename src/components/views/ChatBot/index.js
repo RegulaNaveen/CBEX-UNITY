@@ -148,7 +148,7 @@ const ChatBot = () => {
   }, [socketInstance]);
 
   useEffect(() => {
-    dispatch(fetchHistory(id, null, () => doAutoScroll()));
+    dispatch(fetchHistory(id));
   }, [id]);
 
   useEffect(() => {

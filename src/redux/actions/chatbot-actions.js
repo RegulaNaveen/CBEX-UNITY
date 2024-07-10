@@ -34,11 +34,7 @@ export function submitFeedback(feedback, callback = () => {}) {
   };
 }
 
-export function fetchHistory(
-  opportunityNumber,
-  appendRecents = false,
-  callback
-) {
+export function fetchHistory(opportunityNumber, appendRecents = false) {
   return async (dispatch, getState) => {
     try {
       await dispatch({ type: FETCHING_HISTORY, payload: true });
@@ -193,9 +189,6 @@ export function fetchHistory(
       console.log('[CHATBOT] Error fetching chat history: ', e);
     } finally {
       await dispatch({ type: FETCHING_HISTORY, payload: false });
-      if (callback) {
-        callback();
-      }
     }
   };
 }
