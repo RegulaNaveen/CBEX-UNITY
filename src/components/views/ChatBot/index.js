@@ -85,14 +85,14 @@ const ChatBot = () => {
   useEffect(() => {
     if (socketInstance) {
       console.info(`[CHATBOT] Socket instance available!`);
-      socketInstance.addEventListener('message', message => {
+      socketInstance.addEventListener('message', async message => {
         const data = JSON.parse(message.data);
         // Handle event ONLY if data.event_group is 'CHATBOT'
         if (data.event_group === 'CHATBOT') {
           switch (data.event_name) {
             case 'CHATBOT_USER_QUERY_RESPONSE':
               console.info(`[CHATBOT] Event: ${data.event_name}`);
-              dispatch({
+              await dispatch({
                 type: ADD_CHATBOT_BUBBLE,
                 payload: {
                   variant: 'system',
@@ -120,11 +120,11 @@ const ChatBot = () => {
                   }
                 }
               });
-              dispatch({ type: SET_LOADING_STATE, payload: false });
+              await dispatch({ type: SET_LOADING_STATE, payload: false });
               break;
             case 'CHATBOT_USER_QUERY':
               console.info(`[CHATBOT] Event: ${data.event_name}`);
-              dispatch(handleChatBotQueryWSMsg(data.event_data));
+              await dispatch(handleChatBotQueryWSMsg(data.event_data));
               break;
             default:
               console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
@@ -180,6 +180,7 @@ const ChatBot = () => {
           return;
         }
       }
+      const query_created_at = Date.now();
       socket.send(
         JSON.stringify({
           event_group: 'CHATBOT',
@@ -187,6 +188,7 @@ const ChatBot = () => {
           event_data: {
             ...payload,
             query_id: uuidv4(),
+            query_created_at,
             context: extractContext(
               bubbles,
               flags[featureFlags.CHATBOT_CONTENT_COUNT]
@@ -201,7 +203,7 @@ const ChatBot = () => {
           variant: 'user',
           copyContent: payload.query,
           children: payload.query,
-          sentOrReceivedAt: Date.now()
+          sentOrReceivedAt: query_created_at
         }
       });
       // TODO: Set a timer to check if the response is not received in <n> seconds
@@ -315,7 +317,8 @@ const ChatBot = () => {
             className={classNames({
               'chat-bot-bubbles-container': true,
               'chat-bot-bubbles-container-fullscreen': fullscreen,
-              relative: true
+              relative: true,
+              error: bubbles.length === 0
             })}
             ref={bubblesContainerRef}
           >
@@ -327,6 +330,9 @@ const ChatBot = () => {
               />
             ) : (
               <>
+                {bubbles.length === 0 && (
+                  <p className="error-msg">{CHATBOT.RESTART_DISCLAIMER}</p>
+                )}
                 {bubbles.map((bubble, index) => (
                   <ChatBubble
                     key={index}
@@ -336,7 +342,6 @@ const ChatBot = () => {
                     replySuggestionMessage={bubble.replySuggestionMessage}
                     sentOrReceivedAt={bubble.sentOrReceivedAt}
                     isWelcomeBubble={bubble.type === 'WELCOME_MSG'}
-                    sourceDocuments={bubble?.source_documents || []}
                     buttonProps={
                       bubble?.buttonProps?.map((button, i) => ({
                         label: button.label,
@@ -363,6 +368,7 @@ const ChatBot = () => {
                         }
                         handleGotoQuestion={handleGotoQuestion}
                         handleReviewDoc={handleReviewDoc}
+                        bubbleId={bubble.info.id}
                       />
                     ) : (
                       bubble.children

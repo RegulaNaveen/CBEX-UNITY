@@ -57,6 +57,10 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       is_ecoa_or_cd: bubble.is_ecoa_or_cd,
                       ...bubble.response,
                       result: {
+                        ...((bubble.response &&
+                          bubble.response.result &&
+                          bubble.response.result) ||
+                          {}),
                         result:
                           (bubble.response &&
                             bubble.response.result &&
@@ -67,7 +71,10 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                     variant: 'user',
                     copyContent: bubble.user_query,
                     children: bubble.user_query,
-                    sentOrReceivedAt: new Date(bubble.created_at).getTime(),
+                    sentOrReceivedAt:
+                      user_query_created_at !== null
+                        ? new Date(bubble.user_query_created_at).getTime()
+                        : null,
                     replySuggestionMessage: '',
                     isWelcomeBubble: false
                   });
@@ -78,6 +85,10 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       is_ecoa_or_cd: bubble.is_ecoa_or_cd,
                       ...bubble.response,
                       result: {
+                        ...((bubble.response &&
+                          bubble.response.result &&
+                          bubble.response.result) ||
+                          {}),
                         result:
                           (bubble.response &&
                             bubble.response.result &&
@@ -119,6 +130,10 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   is_ecoa_or_cd: bubble.is_ecoa_or_cd,
                   ...bubble.response,
                   result: {
+                    ...((bubble.response &&
+                      bubble.response.result &&
+                      bubble.response.result) ||
+                      {}),
                     result:
                       (bubble.response &&
                         bubble.response.result &&
@@ -129,7 +144,10 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                 variant: 'user',
                 copyContent: bubble.user_query,
                 children: bubble.user_query,
-                sentOrReceivedAt: new Date(bubble.created_at).getTime(),
+                sentOrReceivedAt:
+                  bubble.user_query_created_at !== null
+                    ? new Date(bubble.user_query_created_at).getTime()
+                    : null,
                 replySuggestionMessage: '',
                 isWelcomeBubble: false
               });
@@ -140,6 +158,10 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   is_ecoa_or_cd: bubble.is_ecoa_or_cd,
                   ...bubble.response,
                   result: {
+                    ...((bubble.response &&
+                      bubble.response.result &&
+                      bubble.response.result) ||
+                      {}),
                     result:
                       (bubble.response &&
                         bubble.response.result &&
@@ -164,20 +186,21 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
               });
             });
             await dispatch({ type: SET_CHATBOT_BUBBLES, payload: history });
-            const lastHistory = history[history.length - 1];
-            const tokenInfo = jwt_decode(getAccessTokenFromLocalStorage());
-            const isLastChatHappenedInCurrentSession = moment(
-              new Date(lastHistory.sentOrReceivedAt)
-            ).isBetween(
-              moment(new Date(tokenInfo.auth_time * 1000)),
-              moment(new Date(tokenInfo.exp * 1000))
-            );
-            if (!isLastChatHappenedInCurrentSession) {
-              await dispatch({
-                type: ADD_CHATBOT_BUBBLE,
-                payload: welcomeBubble
-              });
-            }
+            /**
+             * Logic to restore welcome message on new session
+             */
+            // const lastHistory = history[history.length - 1];
+            // const tokenInfo = jwt_decode(getAccessTokenFromLocalStorage());
+            // const isLastChatHappenedInCurrentSession = moment(
+            //   new Date(lastHistory.sentOrReceivedAt)
+            // ).isBetween(
+            //   moment(new Date(tokenInfo.auth_time * 1000)),
+            //   moment(new Date(tokenInfo.exp * 1000))
+            // );
+            await dispatch({
+              type: ADD_CHATBOT_BUBBLE,
+              payload: welcomeBubble
+            });
           }
         }
       } else {
