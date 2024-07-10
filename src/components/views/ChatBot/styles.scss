@@ -1,5 +1,6 @@
 :root {
   --chatbot-input-height: 21px;
+  --chatbot-input-disabled-color: white;
 }
 
 .chat-bot-ui-container {
@@ -80,6 +81,15 @@
       }
       &.relaive {
         position: relative;
+      }
+      &.error {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .error-msg {
+          color: #fff;
+          font-size: 14px;
+        }
       }
       .chat-bot-loader-overlay {
         max-width: 100%;
@@ -195,6 +205,9 @@
                 flex-direction: column;
                 height: var(--chatbot-input-height + 14px) !important;
                 max-height: var(--chatbot-input-height + 14px) !important;
+                background-color: var(
+                  --chatbot-input-disabled-color
+                ) !important;
                 textarea {
                   font-size: 12px;
                   max-height: var(--chatbot-input-height) !important;
@@ -338,13 +351,16 @@
   .feedback-answer {
     overflow: auto;
     margin-top: 8px;
-    font-size: 14px;
     max-width: 580px;
     max-height: 132px;
     border-radius: 4px;
     white-space: pre-wrap;
-    border: 1px solid #d9d9d9;
     padding: 8px 16px 12px 16px;
+    font-style: italic;
+    line-height: 24px;
+    font-size: 14px;
+    color: #444444;
+    font-weight: 400;
 
     &::-webkit-scrollbar {
       width: 8px;

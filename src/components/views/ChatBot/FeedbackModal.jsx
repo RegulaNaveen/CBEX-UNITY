@@ -6,6 +6,7 @@ import CustomModal from '../../common/CustomModal';
 import TextField from 'apollo-react/components/TextField';
 import Typography from 'apollo-react/components/Typography';
 import { submitFeedback } from '../../../redux/actions/chatbot-actions';
+import { CHATBOT } from '../../../constants/app';
 
 export function FeedbackSubmitModal({ open, onClose }) {
   return (
@@ -112,7 +113,7 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
           minHeight={125}
           minWidth={550}
         />
-        <Typography>The answer you mark is the following:</Typography>
+        <Typography>You are providing feedback on:</Typography>
         {Array.isArray(answer) ? (
           <div className="feedback-answer">
             {answer
@@ -129,8 +130,8 @@ function FeedbackModal({ id, open, onClose, answer, setShowSubmitModal }) {
       {error && (
         <CustomModal
           open={error}
-          title="Something went wrong!"
-          message="Unable to process your query. Please rephrase and try again."
+          title=""
+          message={CHATBOT.FEEDBACK_ERROR_MSG}
           variant="error"
           onClose={() => setError(false)}
           buttonProps={[{ className: 'hidden' }, { label: 'Close' }]}
