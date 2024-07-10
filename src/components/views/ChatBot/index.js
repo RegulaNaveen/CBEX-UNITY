@@ -153,7 +153,7 @@ const ChatBot = () => {
 
   useEffect(() => {
     doAutoScroll();
-  }, [expanded, bubbles, fullscreen, id]);
+  }, [expanded, bubbles, fullscreen, id, fetchingHistory]);
 
   useEffect(() => {
     if (inputText) {
