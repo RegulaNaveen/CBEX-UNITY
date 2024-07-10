@@ -171,6 +171,7 @@ const ChatBot = () => {
 
   const handleSendMsgBtnClick = useCallback(
     async payload => {
+      if (loading) return;
       // if socketInstance is not available establish new connection and send message
       let socket = socketInstance;
       if (!socket) {
