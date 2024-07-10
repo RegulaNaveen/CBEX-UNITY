@@ -82,6 +82,16 @@ const ChatBot = () => {
     dispatch(sendDataTrigger({ opportunityNumber: id, bidNo, bidType }));
   }, [id, bidNo, bidType, dispatch]);
 
+  const doAutoScroll = useCallback(() => {
+    if (bubbles.length <= 1) {
+      return;
+    }
+    if (expanded) {
+      bubblesContainerRef.current.scrollTop =
+        bubblesContainerRef.current.scrollHeight;
+    }
+  }, [bubbles, expanded]);
+
   useEffect(() => {
     if (socketInstance) {
       console.info(`[CHATBOT] Socket instance available!`);
@@ -142,14 +152,8 @@ const ChatBot = () => {
   }, [id]);
 
   useEffect(() => {
-    if (bubbles.length <= 1) {
-      return;
-    }
-    if (expanded) {
-      bubblesContainerRef.current.scrollTop =
-        bubblesContainerRef.current.scrollHeight;
-    }
-  }, [expanded, bubbles]);
+    doAutoScroll();
+  }, [expanded, bubbles, fullscreen, id]);
 
   useEffect(() => {
     if (inputText) {
@@ -168,6 +172,13 @@ const ChatBot = () => {
       root?.style.setProperty('--chatbot-input-height', height);
     }
   }, [inputText]);
+
+  useEffect(() => {
+    if (loading || fetchingHistory) {
+      const root = document.documentElement;
+      root?.style.setProperty('--chatbot-input-disabled-color', 'transparent');
+    }
+  }, [loading, fetchingHistory]);
 
   const handleSendMsgBtnClick = useCallback(
     async payload => {
