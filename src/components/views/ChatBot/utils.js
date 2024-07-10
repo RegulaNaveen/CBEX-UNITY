@@ -68,9 +68,15 @@ function extractContext(bubbles, maxNumOfCount) {
 function getContentAsText(content) {
   if (Array.isArray(content)) {
     let text = '';
-    content.forEach((item, idx) => {
+    content.forEach((item, idx, arr) => {
       if (item.result) {
-        text += `${idx + 1}. ${getContentAsText(item.result)}\n`;
+        if (arr.length > 1) {
+          text += `${idx + 1}. `;
+        }
+        text += `${getContentAsText(item.result)}`;
+        if (arr.length > 1) {
+          text += `\n`;
+        }
       }
     });
     return text;
@@ -81,4 +87,32 @@ function getContentAsText(content) {
   }
 }
 
-export { sanitizeResponse, extractBidInfo, extractContext, getContentAsText };
+function getSourceDocTooltipInfo(source) {
+  let title = '';
+  let content = '';
+  let page = '';
+
+  if (source) {
+    if (source.metadata && source.metadata.doc_class) {
+      if (source.metadata.doc_class.toLowerCase() === 'unity') {
+        title = 'Unity';
+      } else {
+        title = source.metadata.source || '';
+        page = source.metadata.page || '';
+      }
+    }
+    if (source.page_content) {
+      content = source.page_content;
+    }
+  }
+
+  return { title, content, page };
+}
+
+export {
+  sanitizeResponse,
+  extractBidInfo,
+  extractContext,
+  getContentAsText,
+  getSourceDocTooltipInfo
+};
