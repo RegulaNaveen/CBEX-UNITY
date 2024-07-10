@@ -11,9 +11,9 @@ const {
 export const welcomeBubble = {
   variant: 'systemWithContent',
   copyContent:
-    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
+    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
   children:
-    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. ",
+    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
   replySuggestionMessage: 'Here are some things I can do:',
   buttonProps: [
     {
@@ -31,7 +31,7 @@ export const welcomeBubble = {
   info: {
     result: {
       result:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. For best results, start a new topic when changing tasks or subjects. "
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. "
     }
   }
 };
@@ -92,6 +92,6 @@ const actionMap = {
   [FETCHING_HISTORY]: setFetchingHistory
 };
 
-export default function (state = INITIAL_STATE, action) {
+export default function(state = INITIAL_STATE, action) {
   return actionMap[action.type] ? actionMap[action.type](state, action) : state;
 }

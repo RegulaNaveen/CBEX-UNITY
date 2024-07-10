@@ -153,12 +153,20 @@ const TASKS = {
 };
 
 const CHATBOT = {
-  DEFAULT_ERROR_REPLY:
-    'Unable to process your query. Please rephrase and try again.',
+  DEFAULT_ERROR_REPLY: '',
   SUPPORTED_GO_TO_UNITY_SECTIONS_MAP: {
     notepad: 'notepad',
     questions: 'question_id'
-  }
+  },
+  ECOA_CD_BOLD_MATCHES: [
+    'iqvia-matched assessments:',
+    'full list of assessments:',
+    'I apologize, but it appears'
+  ],
+  FEEDBACK_ERROR_MSG:
+    "We've noticed that feedback wasn't successfully submitted. Your input is valuable to us, and we'd love to hear your thoughts. Please attempt to provide feedback again.",
+  RESTART_DISCLAIMER:
+    'Oops! It seems we need to refresh our connection to serve you better. Please close and restart the chat to re-sync with the latest data. This will help ensure the most accurate and up-to-date information is available. Thank you for your understanding.'
 };
 
 export {
