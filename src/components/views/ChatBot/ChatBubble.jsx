@@ -48,6 +48,61 @@ const ChatBubbleActions = ({
     setShowFeedbackModal(true);
   };
 
+  const actions = [
+    <span>{variant === 'user' ? 'You' : 'BidAssist'}</span>,
+    sentOrReceivedAt !== null ? (
+      <span>
+        &nbsp;
+        {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm')}`}
+      </span>
+    ) : (
+      <></>
+    ),
+    variant !== 'user' && !isWelcomeBubble ? (
+      <>
+        <div>
+          <Tooltip
+            id="copy-tooltip"
+            variant="light"
+            title={
+              <div>
+                <StatusCheck fontSize="extraSmall" />
+                Copied
+              </div>
+            }
+            placement="top"
+            open={copied}
+          >
+            <IconButton
+              title="Copy"
+              size="small"
+              onClick={() => copyToClipBoard()}
+              darkMode
+            >
+              <Copy />
+            </IconButton>
+          </Tooltip>
+          {chatBotFeedbackFlag ? (
+            <IconButton
+              size="small"
+              onClick={() => handleThumbsDownClick()}
+              darkMode
+              disabled={!info.id || info.feedback}
+            >
+              <ThumbsDown />
+            </IconButton>
+          ) : null}
+        </div>
+      </>
+    ) : (
+      <></>
+    )
+  ];
+
+  if (variant === 'user') {
+    actions.reverse();
+  }
+
   return (
     <div
       className={classNames({
@@ -55,50 +110,7 @@ const ChatBubbleActions = ({
         'chat-bubble-actions-reverse': variant === 'user'
       })}
     >
-      <span>{variant === 'user' ? 'You' : 'BidAssist'}</span>
-      {variant !== 'user' && (
-        <span>
-          &nbsp;
-          {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm')}`}
-        </span>
-      )}
-      {variant !== 'user' && !isWelcomeBubble && (
-        <>
-          <div>
-            <Tooltip
-              id="copy-tooltip"
-              variant="light"
-              title={
-                <div>
-                  <StatusCheck fontSize="extraSmall" />
-                  Copied
-                </div>
-              }
-              placement="top"
-              open={copied}
-            >
-              <IconButton
-                title="Copy"
-                size="small"
-                onClick={() => copyToClipBoard()}
-                darkMode
-              >
-                <Copy />
-              </IconButton>
-            </Tooltip>
-            {chatBotFeedbackFlag && (
-              <IconButton
-                size="small"
-                onClick={() => handleThumbsDownClick()}
-                darkMode
-                disabled={!info.id || info.feedback}
-              >
-                <ThumbsDown />
-              </IconButton>
-            )}
-          </div>
-        </>
-      )}
+      {actions}
       {/* Feedback Modal */}
       {showFeedbackModal && (
         <FeedbackModal
@@ -130,7 +142,7 @@ const ChatBubble = ({
   className = '',
   sentOrReceivedAt,
   isWelcomeBubble,
-  sourceDocuments
+  sourceDocuments = []
 }) => {
   const sourceDocs = sourceDocuments.filter(
     src => src.metadata.doc_class !== 'unity'

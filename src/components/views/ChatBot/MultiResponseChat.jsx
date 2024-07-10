@@ -1,7 +1,8 @@
 import Button from 'apollo-react/components/Button';
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import SourceDocument from './SourceDocument';
-import { sanitizeResponse } from './utils';
+import { getSourceDocTooltipInfo, sanitizeResponse } from './utils';
 import { CHATBOT } from '../../../constants/app';
 
 function getSourceDocNameFromPath(path = '') {
@@ -16,7 +17,8 @@ export const MultiResponseChat = ({
   className = 'multiresponse-list',
   list,
   handleGotoQuestion = () => {},
-  handleReviewDoc = () => {}
+  handleReviewDoc = () => {},
+  bubbleId = uuidv4()
 }) => {
   return (
     <div className={className}>
@@ -25,24 +27,22 @@ export const MultiResponseChat = ({
           {' '}
           <p>
             {list.length > 1 && `${i + 1}. `}
-            {response?.result}
+            {response.result}
             <div className="src-doc-list">
-              {response?.source_documents
-                ?.filter(
-                  obj => obj.type && obj.type.toLowerCase() === 'document'
-                )
-                .map((sourceDoc, i) => (
-                  <SourceDocument
-                    title={getSourceDocNameFromPath(sourceDoc.metadata.source)}
-                    content={sanitizeResponse(
-                      sourceDoc.page_content,
-                      sourceDoc.metadata.section_name || ''
-                    )}
-                    buttonLabel={`[${i + 1}]`}
-                    className="source-doc-btn"
-                    pageNo={sourceDoc?.metadata?.page}
-                  />
-                ))}
+              {Array.isArray(response.source_documents) &&
+                response.source_documents.map((sourceDoc, i) => {
+                  const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
+                  return (
+                    <SourceDocument
+                      key={`source-doc-${bubbleId}-${i}`}
+                      title={sourceInfo.title}
+                      content={sanitizeResponse(sourceInfo.content, '')}
+                      buttonLabel={`[${i + 1}]`}
+                      className="source-doc-btn"
+                      pageNo={sourceInfo.page}
+                    />
+                  );
+                })}
             </div>
           </p>
           {response?.source_documents?.map((sourceDoc, i) => {
@@ -63,7 +63,7 @@ export const MultiResponseChat = ({
                   className="chatbot-action-btn"
                   onClick={() =>
                     handleGotoQuestion(
-                      sourceDoc.metadata.bidNo,
+                      sourceDoc.metadata.bid_no,
                       sanitizeResponse(
                         sourceDoc.page_content,
                         CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
