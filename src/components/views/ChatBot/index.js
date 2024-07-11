@@ -63,6 +63,8 @@ const ChatBot = () => {
 
   const handleClose = useCallback(() => setExpanded(false), []);
 
+  const bubblesLength = bubbles.length;
+
   const {
     socket: { current: socketInstance },
     initiateConnection
@@ -153,19 +155,26 @@ const ChatBot = () => {
 
   useEffect(() => {
     doAutoScroll();
-  }, [expanded, bubbles, fullscreen, id, fetchingHistory]);
+  }, [expanded, bubblesLength, fullscreen, id, fetchingHistory]);
 
   useEffect(() => {
     if (inputText) {
       const numOfsplits = inputText.split('\n')?.length;
       let height = '21px';
-      if (numOfsplits <= 1) {
+      const inputElement = document.querySelector(
+        '.chat-bot-footer > div:last-child > div > div > .MuiInputBase-root > textarea'
+      );
+      const numOfLines = Math.min(
+        Math.ceil(inputElement.scrollHeight / inputElement.clientHeight) +
+          Math.ceil(inputElement.scrollWidth / inputElement.clientWidth) +
+          numOfsplits,
+        4
+      );
+      if (numOfLines <= 1) {
         height = '21px';
-      } else if (numOfsplits == 2) {
+      } else if (numOfLines == 2) {
         height = `${21 * 2}px`;
-      } else if (numOfsplits == 3) {
-        height = `${21 * 3}px`;
-      } else if (numOfsplits > 3) {
+      } else if (numOfLines >= 3) {
         height = `${21 * 4}px`;
       }
       const root = document.documentElement;

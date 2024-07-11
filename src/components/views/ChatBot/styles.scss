@@ -126,7 +126,7 @@
         }
         & > div:first-child {
           hr {
-            margin: 4px -16px;
+            margin: 4px -12px;
           }
           div {
             padding-top: 4px;
@@ -235,6 +235,14 @@
               padding-right: 4px;
             }
           }
+        }
+
+        &.chat-bot-footer-fullscreen {
+          margin-left: 17vw;
+          margin-right: 8px;
+          padding-right: 17vw;
+          padding-left: 0;
+          max-width: 100%;
         }
       }
       .chat-bot-info {
