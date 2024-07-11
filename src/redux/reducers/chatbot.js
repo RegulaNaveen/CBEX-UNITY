@@ -66,10 +66,11 @@ function onLoading(state, action) {
 function onUpdateBubble(state, action) {
   const { id, feedback } = action.payload;
   const bubbles = [...state.bubbles];
-  const bubble = bubbles.find(b => b.info && b.info.id === id);
-  if (bubble) {
-    bubble.info.feedback = feedback;
-    bubbles[bubbles.indexOf(bubble)] = bubble;
+  const bubbleIndex = bubbles.findIndex(
+    b => b.info && b.info.id === id && b.variant === 'system'
+  );
+  if (bubbleIndex > -1) {
+    bubbles[bubbleIndex].info.feedback = feedback;
   }
   return {
     ...state,
