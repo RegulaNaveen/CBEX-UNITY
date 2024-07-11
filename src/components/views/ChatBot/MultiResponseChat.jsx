@@ -27,7 +27,7 @@ export const MultiResponseChat = ({
           {' '}
           <p>
             {list.length > 1 && `${i + 1}. `}
-            {response.result}
+            {response.result.replace(/\"$/, '')}
             <div className="src-doc-list">
               {Array.isArray(response.source_documents) &&
                 response.source_documents.map((sourceDoc, i) => {
@@ -80,7 +80,9 @@ export const MultiResponseChat = ({
             } else if (
               sourceDoc &&
               sourceDoc.metadata &&
-              sourceDoc.metadata.box_file_id
+              sourceDoc.metadata.box_file_id &&
+              sourceDoc.metadata.box_file_id.trim() &&
+              !Number.isNaN(sourceDoc.metadata.box_file_id)
             ) {
               return (
                 <Button
