@@ -63,6 +63,8 @@ const ChatBot = () => {
 
   const handleClose = useCallback(() => setExpanded(false), []);
 
+  const bubblesLength = bubbles.length;
+
   const {
     socket: { current: socketInstance },
     initiateConnection
@@ -153,7 +155,7 @@ const ChatBot = () => {
 
   useEffect(() => {
     doAutoScroll();
-  }, [expanded, bubbles, fullscreen, id, fetchingHistory]);
+  }, [expanded, bubblesLength, fullscreen, id, fetchingHistory]);
 
   useEffect(() => {
     if (inputText) {
