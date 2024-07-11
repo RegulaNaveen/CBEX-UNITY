@@ -187,10 +187,6 @@ const ChatBot = () => {
     }
   }, [loading, fetchingHistory]);
 
-  useEffect(() => {
-    console.log({ bubbles });
-  }, [bubbles]);
-
   const handleSendMsgBtnClick = useCallback(
     async payload => {
       if (loading) return;
