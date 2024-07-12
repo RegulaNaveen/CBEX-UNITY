@@ -53,7 +53,7 @@ const ChatBubbleActions = ({
     sentOrReceivedAt !== null ? (
       <span>
         &nbsp;
-        {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm')}`}
+        {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm:ss')}`}
       </span>
     ) : (
       <></>
