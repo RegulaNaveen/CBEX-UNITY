@@ -238,7 +238,8 @@ export function handleChatBotQueryWSMsg(message) {
         const bubbles = await selectChatBotBubbles(getState());
         if (
           bubbles.findIndex(
-            bubble => bubble && bubble.info.id === message.query_id
+            bubble =>
+              bubble && bubble.info && bubble.info.id === message.query_id
           ) > -1
         ) {
           return;
