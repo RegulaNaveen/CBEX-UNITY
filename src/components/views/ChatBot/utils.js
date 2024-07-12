@@ -99,6 +99,13 @@ function getSourceDocTooltipInfo(source) {
       } else {
         title = source.metadata.source || '';
         page = source.metadata.page || '';
+        if (
+          source.metadata.box_file_id &&
+          source.metadata.box_file_id.trim() &&
+          !Number.isNaN(Number(source.metadata.box_file_id))
+        ) {
+          title = source.metadata.source.split('/').slice(-1)[0] || '';
+        }
       }
     }
     if (source.page_content) {

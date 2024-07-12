@@ -5,12 +5,15 @@ import SourceDocument from './SourceDocument';
 import { getSourceDocTooltipInfo, sanitizeResponse } from './utils';
 import { CHATBOT } from '../../../constants/app';
 
-function getSourceDocNameFromPath(path = '') {
-  const splitedByBackSlash = path.split('\\');
-  const splitedByForwardSlash = splitedByBackSlash[
-    splitedByBackSlash.length - 1
-  ].split('/');
-  return splitedByForwardSlash[splitedByForwardSlash.length - 1];
+function getSourceDocNameFromPath(source) {
+  if (
+    source.metadata.box_file_id &&
+    source.metadata.box_file_id.trim() &&
+    !Number.isNaN(Number(source.metadata.box_file_id))
+  ) {
+    return source.metadata.source.split('/').slice(-1)[0] || '';
+  }
+  return '';
 }
 
 export const MultiResponseChat = ({
@@ -82,7 +85,7 @@ export const MultiResponseChat = ({
               sourceDoc.metadata &&
               sourceDoc.metadata.box_file_id &&
               sourceDoc.metadata.box_file_id.trim() &&
-              !Number.isNaN(sourceDoc.metadata.box_file_id)
+              !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
             ) {
               return (
                 <Button
@@ -92,11 +95,9 @@ export const MultiResponseChat = ({
                   onClick={() =>
                     handleReviewDoc(sourceDoc.metadata.box_file_id)
                   }
-                  title={`Review ${getSourceDocNameFromPath(
-                    sourceDoc.metadata.source
-                  )}`}
+                  title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
                 >
-                  Review {getSourceDocNameFromPath(sourceDoc.metadata.source)}
+                  Review {getSourceDocNameFromPath(sourceDoc)}
                 </Button>
               );
             }

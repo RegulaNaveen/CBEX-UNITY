@@ -1,8 +1,10 @@
+import { cloneDeep } from 'lodash';
 import { REDUX_TYPES } from '../../constants';
 
 const {
   SET_CHATBOT_BUBBLES,
   ADD_CHATBOT_BUBBLE,
+  UPDATE_CHATBOT_BUBBLE,
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
   FETCHING_HISTORY
@@ -85,12 +87,26 @@ function setFetchingHistory(state, action) {
   };
 }
 
+function onUpdateChatbotBubble(state, action) {
+  const { index, data } = action.payload;
+  const bubbles = cloneDeep(state.bubbles);
+  if (index > -1 && index <= bubbles.length - 1) {
+    bubbles[index] = data;
+  }
+
+  return {
+    ...state,
+    bubbles
+  };
+}
+
 const actionMap = {
   [SET_CHATBOT_BUBBLES]: onSetBubbles,
   [ADD_CHATBOT_BUBBLE]: onAddBubble,
   [SET_LOADING_STATE]: onLoading,
   [UPDATE_BUBBLE]: onUpdateBubble,
-  [FETCHING_HISTORY]: setFetchingHistory
+  [FETCHING_HISTORY]: setFetchingHistory,
+  [UPDATE_CHATBOT_BUBBLE]: onUpdateChatbotBubble
 };
 
 export default function(state = INITIAL_STATE, action) {
