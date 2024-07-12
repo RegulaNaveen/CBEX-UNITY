@@ -456,6 +456,9 @@
     &::-webkit-scrollbar-thumb:hover {
       background: #c1c1c1;
     }
+    & > span {
+      display: none;
+    }
   }
 }
 

@@ -23,6 +23,7 @@ import {
 } from '../../../redux/selectors/chatbot';
 import { useDispatch } from 'react-redux';
 import {
+  addResponseToChat,
   fetchHistory,
   handleChatBotQueryWSMsg,
   sendDataTrigger
@@ -84,6 +85,30 @@ const ChatBot = () => {
     dispatch(sendDataTrigger({ opportunityNumber: id, bidNo, bidType }));
   }, [id, bidNo, bidType, dispatch]);
 
+  const handleWSEvents = useCallback(
+    async message => {
+      const data = JSON.parse(message.data);
+      // Handle event ONLY if data.event_group is 'CHATBOT'
+      if (data.event_group === 'CHATBOT') {
+        switch (data.event_name) {
+          case 'CHATBOT_USER_QUERY_RESPONSE':
+            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            await dispatch(addResponseToChat(data.event_data));
+            await dispatch({ type: SET_LOADING_STATE, payload: false });
+            break;
+          case 'CHATBOT_USER_QUERY':
+            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            await dispatch(handleChatBotQueryWSMsg(data.event_data));
+            break;
+          default:
+            console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
+            break;
+        }
+      }
+    },
+    [dispatch]
+  );
+
   const doAutoScroll = useCallback(() => {
     if (bubbles.length <= 1) {
       return;
@@ -97,56 +122,16 @@ const ChatBot = () => {
   useEffect(() => {
     if (socketInstance) {
       console.info(`[CHATBOT] Socket instance available!`);
-      socketInstance.addEventListener('message', async message => {
-        const data = JSON.parse(message.data);
-        // Handle event ONLY if data.event_group is 'CHATBOT'
-        if (data.event_group === 'CHATBOT') {
-          switch (data.event_name) {
-            case 'CHATBOT_USER_QUERY_RESPONSE':
-              console.info(`[CHATBOT] Event: ${data.event_name}`);
-              await dispatch({
-                type: ADD_CHATBOT_BUBBLE,
-                payload: {
-                  variant: 'system',
-                  copyContent:
-                    (data.event_data &&
-                      data.event_data.response &&
-                      data.event_data.response.result &&
-                      data.event_data.response.result.result) ||
-                    CHATBOT.DEFAULT_ERROR_REPLY,
-
-                  children:
-                    (data.event_data &&
-                      data.event_data.response &&
-                      data.event_data.response.result &&
-                      data.event_data.response.result.result) ||
-                    CHATBOT.DEFAULT_ERROR_REPLY,
-                  sentOrReceivedAt: new Date(
-                    data.event_data.created_at
-                  ).getTime(),
-                  info: {
-                    id: data.event_data.id,
-                    feedback: data.event_data.feedback,
-                    is_ecoa_or_cd: data.event_data.is_ecoa_or_cd,
-                    ...data.event_data.response
-                  }
-                }
-              });
-              await dispatch({ type: SET_LOADING_STATE, payload: false });
-              break;
-            case 'CHATBOT_USER_QUERY':
-              console.info(`[CHATBOT] Event: ${data.event_name}`);
-              await dispatch(handleChatBotQueryWSMsg(data.event_data));
-              break;
-            default:
-              console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
-              break;
-          }
-        }
-      });
+      socketInstance.addEventListener('message', handleWSEvents);
     } else {
       console.info(`[CHATBOT] Socket instance not available!`);
     }
+
+    return () => {
+      if (socketInstance) {
+        socketInstance.removeEventListener('message', handleWSEvents);
+      }
+    };
   }, [socketInstance]);
 
   useEffect(() => {
@@ -202,13 +187,14 @@ const ChatBot = () => {
         }
       }
       const query_created_at = Date.now();
+      const query_id = uuidv4();
       socket.send(
         JSON.stringify({
           event_group: 'CHATBOT',
           event_name: 'CHATBOT_USER_QUERY',
           event_data: {
             ...payload,
-            query_id: uuidv4(),
+            query_id,
             query_created_at,
             context: extractContext(
               bubbles,
@@ -224,7 +210,11 @@ const ChatBot = () => {
           variant: 'user',
           copyContent: payload.query,
           children: payload.query,
-          sentOrReceivedAt: query_created_at
+          sentOrReceivedAt: query_created_at,
+          info: {
+            id: query_id,
+            feedback: null
+          }
         }
       });
       // TODO: Set a timer to check if the response is not received in <n> seconds
