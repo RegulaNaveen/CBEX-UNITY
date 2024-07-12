@@ -53,7 +53,7 @@ const ChatBubbleActions = ({
     sentOrReceivedAt !== null ? (
       <span>
         &nbsp;
-        {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm')}`}
+        {` - ${moment(sentOrReceivedAt).format('MMM D HH:mm:ss')}`}
       </span>
     ) : (
       <></>
@@ -73,12 +73,7 @@ const ChatBubbleActions = ({
             placement="top"
             open={copied}
           >
-            <IconButton
-              title="Copy"
-              size="small"
-              onClick={() => copyToClipBoard()}
-              darkMode
-            >
+            <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
               <Copy />
             </IconButton>
           </Tooltip>

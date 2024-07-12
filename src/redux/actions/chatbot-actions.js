@@ -14,6 +14,7 @@ import { selectChatBotBubbles } from '../selectors/chatbot';
 
 const {
   ADD_CHATBOT_BUBBLE,
+  UPDATE_CHATBOT_BUBBLE,
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
   FETCHING_HISTORY,
@@ -48,7 +49,7 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
             const lastChat = await selectChatBotBubbles(getState()).pop();
             if (lastChat && lastChat.info && lastChat.info.id) {
               const history = [];
-              response.data.forEach(bubble => {
+              response.data.reverse().forEach(bubble => {
                 if (new Date(bubble.created_at) > lastChat.sentOrReceivedAt) {
                   history.push({
                     info: {
@@ -122,7 +123,7 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
           } else {
             // Replace the existing bubbles with the chat history
             const history = [];
-            response.data.forEach(bubble => {
+            response.data.reverse().forEach(bubble => {
               history.push({
                 info: {
                   id: bubble.id,
@@ -238,7 +239,8 @@ export function handleChatBotQueryWSMsg(message) {
         const bubbles = await selectChatBotBubbles(getState());
         if (
           bubbles.findIndex(
-            bubble => bubble && bubble.info.id === message.query_id
+            bubble =>
+              bubble && bubble.info && bubble.info.id === message.query_id
           ) > -1
         ) {
           return;
@@ -261,6 +263,81 @@ export function handleChatBotQueryWSMsg(message) {
       }
     } catch (e) {
       console.error('[CHATBOT] Error handling chatbot query WS message: ', e);
+    }
+  };
+}
+
+export function addResponseToChat(responseData) {
+  return async (dispatch, getState) => {
+    try {
+      const bubbles = await selectChatBotBubbles(getState());
+      const responseBubbleIndex = bubbles.findIndex(
+        bubble =>
+          bubble &&
+          bubble.info &&
+          bubble.info.id === responseData.id &&
+          bubble.variant === 'system'
+      );
+      if (responseBubbleIndex > -1) {
+        await dispatch({
+          type: UPDATE_CHATBOT_BUBBLE,
+          payload: {
+            data: {
+              variant: 'system',
+              copyContent:
+                (responseData &&
+                  responseData.response &&
+                  responseData.response.result &&
+                  responseData.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+
+              children:
+                (responseData &&
+                  responseData.response &&
+                  responseData.response.result &&
+                  responseData.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              sentOrReceivedAt: new Date(responseData.created_at).getTime(),
+              info: {
+                id: responseData.id,
+                feedback: responseData.feedback,
+                is_ecoa_or_cd: responseData.is_ecoa_or_cd,
+                ...responseData.response
+              }
+            },
+            index: responseBubbleIndex
+          }
+        });
+      } else {
+        await dispatch({
+          type: ADD_CHATBOT_BUBBLE,
+          payload: {
+            variant: 'system',
+            copyContent:
+              (responseData &&
+                responseData.response &&
+                responseData.response.result &&
+                responseData.response.result.result) ||
+              CHATBOT.DEFAULT_ERROR_REPLY,
+
+            children:
+              (responseData &&
+                responseData.response &&
+                responseData.response.result &&
+                responseData.response.result.result) ||
+              CHATBOT.DEFAULT_ERROR_REPLY,
+            sentOrReceivedAt: new Date(responseData.created_at).getTime(),
+            info: {
+              id: responseData.id,
+              feedback: responseData.feedback,
+              is_ecoa_or_cd: responseData.is_ecoa_or_cd,
+              ...responseData.response
+            }
+          }
+        });
+      }
+    } catch (e) {
+      console.log('[CHATBOT] Error adding response to chat: ', e);
     }
   };
 }

@@ -195,7 +195,6 @@ const ProposalCard = ({
                   })}
                   style={{ paddingRight: '.5rem' }}
                   noWrap
-                  title={customName || ''}
                 >
                   {customName || 'New Custom Name'}
                 </Typography>
