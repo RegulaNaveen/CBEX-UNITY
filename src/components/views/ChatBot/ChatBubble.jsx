@@ -73,12 +73,7 @@ const ChatBubbleActions = ({
             placement="top"
             open={copied}
           >
-            <IconButton
-              title="Copy"
-              size="small"
-              onClick={() => copyToClipBoard()}
-              darkMode
-            >
+            <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
               <Copy />
             </IconButton>
           </Tooltip>
