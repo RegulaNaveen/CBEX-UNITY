@@ -1,6 +1,7 @@
 import Button from 'apollo-react/components/Button';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import classNames from 'classnames';
 import SourceDocument from './SourceDocument';
 import { getSourceDocTooltipInfo, sanitizeResponse } from './utils';
 import { CHATBOT } from '../../../constants/app';
@@ -28,9 +29,20 @@ export const MultiResponseChat = ({
       {list?.map((response, i) => (
         <div>
           {' '}
-          <p>
+          <p
+            className={classNames({
+              error:
+                ((response &&
+                  response.result &&
+                  response.result.replace(/\"$/, '')) ||
+                  '') === ''
+            })}
+          >
             {list.length > 1 && `${i + 1}. `}
-            {response.result.replace(/\"$/, '')}
+            {(response &&
+              response.result &&
+              response.result.replace(/\"$/, '')) ||
+              'We sincerely apologize for the inconvenience caused please reload or rephrase the question.'}
             <div className="src-doc-list">
               {Array.isArray(response.source_documents) &&
                 response.source_documents.map((sourceDoc, i) => {

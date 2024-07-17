@@ -440,6 +440,7 @@
     max-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
+    margin: 0 !important;
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -471,6 +472,9 @@
   flex-direction: column;
   margin: 0 !important;
   padding: 0 !important;
+  p.error {
+    color: red;
+  }
 }
 
 .source-doc-btn {
