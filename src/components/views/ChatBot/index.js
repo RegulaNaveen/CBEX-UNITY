@@ -261,7 +261,14 @@ const ChatBot = () => {
         });
       }
     },
-    [bidList, dispatch, openDifferentBidModal, findBidObjAndChangeBid]
+    [
+      bidNo,
+      bidType,
+      bidList,
+      dispatch,
+      openDifferentBidModal,
+      findBidObjAndChangeBid
+    ]
   );
 
   const handleReviewDoc = useCallback(fileId => {
