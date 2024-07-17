@@ -1,3 +1,7 @@
+import jwt_decode from 'jwt-decode';
+import { getAccessTokenFromLocalStorage } from '../../../SessionHandler';
+import moment from 'moment';
+
 function sanitizeResponse(response, prefix = null) {
   let sanitizedResponse = response;
   if (prefix) {
@@ -6,7 +10,7 @@ function sanitizeResponse(response, prefix = null) {
       ''
     );
   }
-  sanitizedResponse = sanitizedResponse.replace('\n', ' ');
+  sanitizedResponse = sanitizedResponse.split(/\n/).join(' ');
   return sanitizedResponse.trim();
 }
 
@@ -34,14 +38,25 @@ function extractBidInfo(bidNo) {
 function extractContext(bubbles, maxNumOfCount) {
   const context = [];
   let count = 0;
-  if (!bubbles) return context;
+  if (!bubbles) return [];
   if (bubbles[bubbles.length - 1] && bubbles[bubbles.length - 1].is_ecoa_or_cd)
-    return context;
+    return [];
   if (
     bubbles[bubbles.length - 1].type &&
     bubbles[bubbles.length - 1].type === 'WELCOME_MSG'
   )
-    return context;
+    return [];
+  const lastHistory = bubbles[bubbles.length - 1];
+  const tokenInfo = jwt_decode(getAccessTokenFromLocalStorage());
+  const isLastChatHappenedInCurrentSession = moment(
+    new Date(lastHistory.sentOrReceivedAt)
+  ).isBetween(
+    moment(new Date(tokenInfo.auth_time * 1000)),
+    moment(new Date(tokenInfo.exp * 1000))
+  );
+  if (!isLastChatHappenedInCurrentSession) {
+    return [];
+  }
   for (let i = bubbles.length - 2; i >= 0; i -= 2) {
     if (count >= maxNumOfCount) break;
 
@@ -96,6 +111,17 @@ function getSourceDocTooltipInfo(source) {
     if (source.metadata && source.metadata.doc_class) {
       if (source.metadata.doc_class.toLowerCase() === 'unity') {
         title = 'Unity';
+        if (
+          source.metadata.section_name &&
+          source.metadata.section_name.toLowerCase() === 'notepad'
+        ) {
+          title = 'Unity Notepad';
+        } else if (
+          source.metadata.section_name &&
+          source.metadata.section_name.toLowerCase() === 'questions'
+        ) {
+          title = 'Unity Question';
+        }
       } else {
         title = source.metadata.source || '';
         page = source.metadata.page || '';
