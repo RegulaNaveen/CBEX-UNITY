@@ -108,7 +108,9 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                         bubble.response.result &&
                         bubble.response.result.result) ||
                       CHATBOT.DEFAULT_ERROR_REPLY,
-                    sentOrReceivedAt: new Date(bubble.created_at).getTime(),
+                    sentOrReceivedAt: bubble.response_received_at
+                      ? new Date(bubble.response_received_at).getTime()
+                      : new Date(bubble.created_at).getTime(),
                     replySuggestionMessage: '',
                     isWelcomeBubble: false
                   });
@@ -181,7 +183,9 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                     bubble.response.result &&
                     bubble.response.result.result) ||
                   CHATBOT.DEFAULT_ERROR_REPLY,
-                sentOrReceivedAt: new Date(bubble.created_at).getTime(),
+                sentOrReceivedAt: bubble.response_received_at
+                  ? new Date(bubble.response_received_at).getTime()
+                  : new Date(bubble.created_at).getTime(),
                 replySuggestionMessage: '',
                 isWelcomeBubble: false
               });
@@ -297,7 +301,9 @@ export function addResponseToChat(responseData) {
                   responseData.response.result &&
                   responseData.response.result.result) ||
                 CHATBOT.DEFAULT_ERROR_REPLY,
-              sentOrReceivedAt: new Date(responseData.created_at).getTime(),
+              sentOrReceivedAt: responseData.response_received_at
+                ? new Date(responseData.response_received_at).getTime()
+                : new Date(responseData.created_at).getTime(),
               info: {
                 id: responseData.id,
                 feedback: responseData.feedback,
@@ -326,7 +332,9 @@ export function addResponseToChat(responseData) {
                 responseData.response.result &&
                 responseData.response.result.result) ||
               CHATBOT.DEFAULT_ERROR_REPLY,
-            sentOrReceivedAt: new Date(responseData.created_at).getTime(),
+            sentOrReceivedAt: responseData.response_received_at
+              ? new Date(responseData.response_received_at)
+              : new Date(responseData.created_at).getTime(),
             info: {
               id: responseData.id,
               feedback: responseData.feedback,

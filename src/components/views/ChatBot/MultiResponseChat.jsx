@@ -39,7 +39,7 @@ export const MultiResponseChat = ({
                     <SourceDocument
                       key={`source-doc-${bubbleId}-${i}`}
                       title={sourceInfo.title}
-                      content={sanitizeResponse(sourceInfo.content, '')}
+                      content={sanitizeResponse(sourceInfo.content, null)}
                       buttonLabel={`[${i + 1}]`}
                       className="source-doc-btn"
                       pageNo={sourceInfo.page}
@@ -48,61 +48,62 @@ export const MultiResponseChat = ({
                 })}
             </div>
           </p>
-          {response?.source_documents?.map((sourceDoc, i) => {
-            if (
-              sourceDoc &&
-              sourceDoc.metadata &&
-              sourceDoc.metadata.doc_class &&
-              sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
-              sourceDoc.metadata.section_name &&
-              Object.keys(CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP).includes(
-                sourceDoc.metadata.section_name.toLowerCase()
-              )
-            ) {
-              return (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  className="chatbot-action-btn"
-                  onClick={() =>
-                    handleGotoQuestion(
-                      sourceDoc.metadata.bid_no,
-                      sanitizeResponse(
-                        sourceDoc.page_content,
-                        CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                          sourceDoc.metadata.section_name.toLowerCase()
-                        ]
+          {Array.isArray(response.source_documents) &&
+            response.source_documents.map((sourceDoc, i) => {
+              if (
+                sourceDoc &&
+                sourceDoc.metadata &&
+                sourceDoc.metadata.doc_class &&
+                sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
+                sourceDoc.metadata.section_name &&
+                Object.keys(
+                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP
+                ).includes(sourceDoc.metadata.section_name.toLowerCase())
+              ) {
+                return (
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    className="chatbot-action-btn"
+                    onClick={() =>
+                      handleGotoQuestion(
+                        sourceDoc.metadata.bid_no,
+                        sanitizeResponse(
+                          sourceDoc.page_content || '',
+                          CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                            sourceDoc.metadata.section_name.toLowerCase()
+                          ]
+                        )
                       )
-                    )
-                  }
-                  title={`Go to Unity Question`}
-                >
-                  Go to Unity Question
-                </Button>
-              );
-            } else if (
-              sourceDoc &&
-              sourceDoc.metadata &&
-              sourceDoc.metadata.box_file_id &&
-              sourceDoc.metadata.box_file_id.trim() &&
-              !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
-            ) {
-              return (
-                <Button
-                  variant="secondary"
-                  size="small"
-                  className="chatbot-action-btn"
-                  onClick={() =>
-                    handleReviewDoc(sourceDoc.metadata.box_file_id)
-                  }
-                  title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
-                >
-                  Review {getSourceDocNameFromPath(sourceDoc)}
-                </Button>
-              );
-            }
-            return null;
-          })}
+                    }
+                    title={`Go to Unity Question`}
+                  >
+                    Go to Unity Question
+                  </Button>
+                );
+              } else if (
+                sourceDoc &&
+                sourceDoc.metadata &&
+                sourceDoc.metadata.box_file_id &&
+                sourceDoc.metadata.box_file_id.trim() &&
+                !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
+              ) {
+                return (
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    className="chatbot-action-btn"
+                    onClick={() =>
+                      handleReviewDoc(sourceDoc.metadata.box_file_id)
+                    }
+                    title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
+                  >
+                    Review {getSourceDocNameFromPath(sourceDoc)}
+                  </Button>
+                );
+              }
+              return null;
+            })}
         </div>
       ))}
     </div>
