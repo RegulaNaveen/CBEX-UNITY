@@ -12,7 +12,6 @@ const SourceDocument = ({
   const tooltipRef = useRef(null);
 
   const handleTooltipClick = e => {
-    e.preventDefault();
     setShowTooltip(showing => !showing);
   };
 
@@ -22,15 +21,12 @@ const SourceDocument = ({
 
   useEffect(() => {
     const handleClickOutside = event => {
-      // Check if the click is on the scrollbar
-      const isScrollbarClick =
-        event.offsetX > event.target.clientWidth ||
-        event.offsetY > event.target.clientHeight;
+      const tooltipContainer = document.getElementById('answer-tooltip');
 
       if (
         tooltipRef.current &&
         !tooltipRef.current.contains(event.target) &&
-        !isScrollbarClick
+        !tooltipContainer.contains(event.target)
       ) {
         setShowTooltip(false);
       }
@@ -40,7 +36,7 @@ const SourceDocument = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [content]);
+  }, [content, tooltipRef.current]);
 
   useEffect(() => {
     if (showTooltip && tooltipRef.current) {

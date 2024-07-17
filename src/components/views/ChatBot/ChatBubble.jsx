@@ -58,7 +58,7 @@ const ChatBubbleActions = ({
     ) : (
       <></>
     ),
-    variant !== 'user' && !isWelcomeBubble ? (
+    variant !== 'user' && !isWelcomeBubble && content ? (
       <>
         <div>
           <Tooltip
