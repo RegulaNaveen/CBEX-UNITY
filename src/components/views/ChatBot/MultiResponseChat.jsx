@@ -3,7 +3,11 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import classNames from 'classnames';
 import SourceDocument from './SourceDocument';
-import { getSourceDocTooltipInfo, sanitizeResponse } from './utils';
+import {
+  getSourceDocTooltipInfo,
+  parseQuestionReference,
+  sanitizeResponse
+} from './utils';
 import { CHATBOT } from '../../../constants/app';
 
 function getSourceDocNameFromPath(source) {
@@ -80,12 +84,22 @@ export const MultiResponseChat = ({
                     onClick={() =>
                       handleGotoQuestion(
                         sourceDoc.metadata.bid_no,
-                        sanitizeResponse(
-                          sourceDoc.page_content || '',
-                          CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                            sourceDoc.metadata.section_name.toLowerCase()
-                          ]
-                        )
+                        sourceDoc.metadata.section_name.toLowerCase() ===
+                          'questions'
+                          ? parseQuestionReference(
+                              sanitizeResponse(
+                                sourceDoc.page_content || '',
+                                CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                  sourceDoc.metadata.section_name.toLowerCase()
+                                ]
+                              )
+                            )
+                          : sanitizeResponse(
+                              sourceDoc.page_content || '',
+                              CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                sourceDoc.metadata.section_name.toLowerCase()
+                              ]
+                            )
                       )
                     }
                     title={`Go to Unity Question`}

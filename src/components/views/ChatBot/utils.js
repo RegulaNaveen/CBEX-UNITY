@@ -2,6 +2,35 @@ import jwt_decode from 'jwt-decode';
 import { getAccessTokenFromLocalStorage } from '../../../SessionHandler';
 import moment from 'moment';
 
+function parseQuestionReference(response) {
+  // find if response has : and then extract the text before it
+  let questionReference = '';
+  if (response.includes(':')) {
+    questionReference = response.split(':')[0];
+  }
+  // check if questionReference is empty and if empty continue to check if it has ? and extract the text before it
+  if (!questionReference && response.includes('?')) {
+    questionReference = response.split('?')[0];
+  }
+  // if questionReference is not empty and it's first character is ' then remove it
+  if (questionReference && questionReference[0] === "'") {
+    questionReference = questionReference.slice(1);
+  }
+  // if questionReference is not empty and it's last character is ' then remove it
+  if (
+    questionReference &&
+    questionReference[questionReference.length - 1] === "'"
+  ) {
+    questionReference = questionReference.slice(0, -1);
+  }
+  // check if questionReference is still empty, set it to response and return
+  if (!questionReference) {
+    questionReference = response;
+  }
+
+  return questionReference;
+}
+
 function sanitizeResponse(response, prefix = null) {
   let sanitizedResponse = response;
   if (prefix) {
@@ -143,6 +172,7 @@ function getSourceDocTooltipInfo(source) {
 }
 
 export {
+  parseQuestionReference,
   sanitizeResponse,
   extractBidInfo,
   extractContext,
