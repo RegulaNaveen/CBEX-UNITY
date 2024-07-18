@@ -415,7 +415,11 @@ const ChatBot = () => {
             <ChatBotFooter
               disabled={loading || fetchingHistory}
               onSendClick={() => {
-                if (!inputRef.current.value) {
+                if (
+                  !inputRef.current.value ||
+                  inputRef.current.value.trim() === '' ||
+                  inputRef.current.value.trim().length < 3
+                ) {
                   return;
                 }
                 setInputText('');
