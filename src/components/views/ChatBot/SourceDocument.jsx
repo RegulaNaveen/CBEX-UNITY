@@ -26,6 +26,7 @@ const SourceDocument = ({
       if (
         tooltipRef.current &&
         !tooltipRef.current.contains(event.target) &&
+        tooltipContainer &&
         !tooltipContainer.contains(event.target)
       ) {
         setShowTooltip(false);
