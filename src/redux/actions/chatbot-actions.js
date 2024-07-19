@@ -249,6 +249,7 @@ export function handleChatBotQueryWSMsg(message) {
         ) {
           return;
         }
+        const sentOrReceivedAt = new Date(Number(message.query_created_at));
         await dispatch({
           type: ADD_CHATBOT_BUBBLE,
           payload: {
@@ -259,7 +260,10 @@ export function handleChatBotQueryWSMsg(message) {
             variant: 'user',
             copyContent: message.query,
             children: message.query,
-            sentOrReceivedAt: Date.now(),
+            sentOrReceivedAt:
+              sentOrReceivedAt !== 'Invalid Date'
+                ? sentOrReceivedAt
+                : Date.now(),
             isWelcomeBubble: false
           }
         });
