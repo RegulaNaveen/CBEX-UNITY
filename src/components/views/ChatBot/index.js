@@ -387,6 +387,7 @@ const ChatBot = () => {
                         handleGotoQuestion={handleGotoQuestion}
                         handleReviewDoc={handleReviewDoc}
                         bubbleId={bubble.info.id}
+                        query={bubble.info.user_query}
                       />
                     ) : (
                       bubble.children

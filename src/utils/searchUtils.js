@@ -1343,33 +1343,41 @@ export function updateSearchMatchesInTable({
 //   }
 // }
 
-export function extractTextFromProseMirrorJSON(
-  data,
-  results = [],
-  prefix = null
-) {
-  if (prefix !== null) {
-    results.push(prefix);
+export function extractTextFromProseMirrorJSON(data, results = []) {
+  if (data && data.type === 'hardBreak') {
+    results.push(' ');
   }
-  if (typeof data === 'object' && Array.isArray(data.content)) {
-    data.content.forEach((content, index) => {
-      if (content.type === 'listItem') {
-        extractTextFromProseMirrorJSON(content, results, '  ');
-      } else if (index !== 0 && content.type === 'paragraph') {
-        extractTextFromProseMirrorJSON(content, results, '  ');
-      } else {
-        extractTextFromProseMirrorJSON(content, results);
-      }
-    });
-  } else if (typeof data === 'object' && data.type === 'mention') {
+  if (data && data.type === 'listItem') {
+    results.push('  ');
+  }
+  if (data && data.type === 'horizontalRule') {
+    results.push(' ');
+  }
+  if (data && data.type === 'text') {
+    results.push(data.text);
+    return;
+  } else if (typeof data === 'object' && data.type && data.type === 'mention') {
     if (data.attrs && data.attrs.label) {
       results.push(data.attrs.label);
     }
     return;
-  } else if (data.type && data.type === 'text') {
-    results.push(data.text);
-    return;
+  } else if (typeof data === 'object' && Array.isArray(data.content)) {
+    data.content.forEach(content => {
+      extractTextFromProseMirrorJSON(content, results);
+    });
+  } else if (typeof data === 'object' && typeof data.content === 'object') {
+    extractTextFromProseMirrorJSON(data.content, results);
   }
+  if (
+    data &&
+    (data.type === 'paragraph' ||
+      data.type === 'heading' ||
+      data.type === 'bulletList' ||
+      data.type === 'orderedList')
+  ) {
+    results.push('  ');
+  }
+
   return results;
 }
 
