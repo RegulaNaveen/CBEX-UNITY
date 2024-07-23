@@ -26,7 +26,8 @@ export const MultiResponseChat = ({
   list,
   handleGotoQuestion = () => {},
   handleReviewDoc = () => {},
-  bubbleId = uuidv4()
+  bubbleId = uuidv4(),
+  query = ''
 }) => {
   return (
     <div className={className}>
@@ -76,6 +77,10 @@ export const MultiResponseChat = ({
                   CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP
                 ).includes(sourceDoc.metadata.section_name.toLowerCase())
               ) {
+                const btnLabel =
+                  sourceDoc.metadata.section_name.toLowerCase() === 'notepad'
+                    ? 'Go to Unity'
+                    : 'Go to Unity Question';
                 return (
                   <Button
                     variant="secondary"
@@ -102,9 +107,9 @@ export const MultiResponseChat = ({
                             )
                       )
                     }
-                    title={`Go to Unity Question`}
+                    title={btnLabel}
                   >
-                    Go to Unity Question
+                    {btnLabel}
                   </Button>
                 );
               } else if (
