@@ -66,6 +66,8 @@ export const MultiResponseChat = ({
             </div>
           </p>
           {Array.isArray(response.source_documents) &&
+            query &&
+            query.toLowerCase() !== 'summarize this opportunity' &&
             response.source_documents.map((sourceDoc, i) => {
               if (
                 sourceDoc &&
