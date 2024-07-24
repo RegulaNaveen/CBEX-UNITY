@@ -91,8 +91,13 @@ export const MultiResponseChat = ({
                     onClick={() =>
                       handleGotoQuestion(
                         sourceDoc.metadata.bid_no,
-                        sourceDoc.metadata.section_name.toLowerCase() ===
-                          'questions'
+                        [
+                          'questions',
+                          'custom_questions',
+                          'question_for_customers'
+                        ].includes(
+                          sourceDoc.metadata.section_name.toLowerCase()
+                        )
                           ? parseQuestionReference(
                               sanitizeResponse(
                                 sourceDoc.page_content || '',
