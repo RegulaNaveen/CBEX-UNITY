@@ -156,7 +156,9 @@ const CHATBOT = {
   DEFAULT_ERROR_REPLY: '',
   SUPPORTED_GO_TO_UNITY_SECTIONS_MAP: {
     notepad: 'notepad',
-    questions: 'question_id'
+    questions: 'question_id',
+    custom_questions: '',
+    question_for_customers: ''
   },
   ECOA_CD_BOLD_MATCHES: [
     'iqvia-matched assessments:',
