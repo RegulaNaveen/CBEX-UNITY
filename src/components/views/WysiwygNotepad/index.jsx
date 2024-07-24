@@ -498,6 +498,15 @@ const WysiwygNotepad = ({
       currentSearchResult.searchIndex !== NOTEPAD_UI_ID
     ) {
       !editor.isDestroyed && editor.commands.reset();
+    } else if (
+      (editor &&
+        query !== null &&
+        query.length >= 3 &&
+        dataSynced &&
+        !currentSearchResult) ||
+      (editor && query === null)
+    ) {
+      !editor.isDestroyed && editor.commands.reset();
     }
   }, [query, currentSearchResult, editor, dataSynced]);
 
