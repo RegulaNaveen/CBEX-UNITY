@@ -35,185 +35,95 @@ export function submitFeedback(feedback, callback = () => {}) {
   };
 }
 
-export function fetchHistory(opportunityNumber, appendRecents = false) {
+export function fetchHistory(opportunityNumber) {
+  console.log(`[CHATBOT] Fetching chat history for ${opportunityNumber}`);
   return async (dispatch, getState) => {
     try {
       await dispatch({ type: FETCHING_HISTORY, payload: true });
       const response = await fetchChatHistoryApi(opportunityNumber);
       if (response && Array.isArray(response.data)) {
-        if (response.data.length === 0 && !appendRecents) {
-          await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
+        if (response.data.length === 0) {
+          await dispatch({
+            type: SET_CHATBOT_BUBBLES,
+            payload: [welcomeBubble]
+          });
         } else {
-          // Append chat history to the existing bubbles
-          if (appendRecents) {
-            const lastChat = await selectChatBotBubbles(getState()).pop();
-            if (lastChat && lastChat.info && lastChat.info.id) {
-              const history = [];
-              response.data.reverse().forEach(bubble => {
-                if (new Date(bubble.created_at) > lastChat.sentOrReceivedAt) {
-                  history.push({
-                    info: {
-                      id: bubble.id,
-                      feedback: bubble.feedback,
-                      is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                      ...bubble.response,
-                      result: {
-                        ...((bubble.response &&
-                          bubble.response.result &&
-                          bubble.response.result) ||
-                          {}),
-                        result:
-                          (bubble.response &&
-                            bubble.response.result &&
-                            bubble.response.result.result) ||
-                          CHATBOT.DEFAULT_ERROR_REPLY
-                      }
-                    },
-                    variant: 'user',
-                    copyContent: bubble.user_query,
-                    children: bubble.user_query,
-                    sentOrReceivedAt:
-                      user_query_created_at !== null
-                        ? new Date(bubble.user_query_created_at).getTime()
-                        : null,
-                    replySuggestionMessage: '',
-                    isWelcomeBubble: false
-                  });
-                  history.push({
-                    info: {
-                      id: bubble.id,
-                      feedback: bubble.feedback,
-                      is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                      user_query: bubble.user_query,
-                      ...bubble.response,
-                      result: {
-                        ...((bubble.response &&
-                          bubble.response.result &&
-                          bubble.response.result) ||
-                          {}),
-                        result:
-                          (bubble.response &&
-                            bubble.response.result &&
-                            bubble.response.result.result) ||
-                          CHATBOT.DEFAULT_ERROR_REPLY
-                      }
-                    },
-                    variant: 'system',
-                    copyContent:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY,
-                    children:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY,
-                    sentOrReceivedAt: bubble.response_received_at
-                      ? new Date(bubble.response_received_at).getTime()
-                      : new Date(bubble.created_at).getTime(),
-                    replySuggestionMessage: '',
-                    isWelcomeBubble: false
-                  });
+          // Replace the existing bubbles with the chat history
+          const history = [];
+          response.data.reverse().forEach(bubble => {
+            history.push({
+              info: {
+                id: bubble.id,
+                feedback: bubble.feedback,
+                is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+                ...bubble.response,
+                result: {
+                  ...((bubble.response &&
+                    bubble.response.result &&
+                    bubble.response.result) ||
+                    {}),
+                  result:
+                    (bubble.response &&
+                      bubble.response.result &&
+                      bubble.response.result.result) ||
+                    CHATBOT.DEFAULT_ERROR_REPLY
                 }
-              });
-              await Promise.all(
-                history.map(item =>
-                  dispatch({ type: ADD_CHATBOT_BUBBLE, payload: item })
-                )
-              );
-            }
-          } else {
-            // Replace the existing bubbles with the chat history
-            const history = [];
-            response.data.reverse().forEach(bubble => {
-              history.push({
-                info: {
-                  id: bubble.id,
-                  feedback: bubble.feedback,
-                  is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                  ...bubble.response,
-                  result: {
-                    ...((bubble.response &&
-                      bubble.response.result &&
-                      bubble.response.result) ||
-                      {}),
-                    result:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY
-                  }
-                },
-                variant: 'user',
-                copyContent: bubble.user_query,
-                children: bubble.user_query,
-                sentOrReceivedAt:
-                  bubble.user_query_created_at !== null
-                    ? new Date(bubble.user_query_created_at).getTime()
-                    : null,
-                replySuggestionMessage: '',
-                isWelcomeBubble: false
-              });
-              history.push({
-                info: {
-                  id: bubble.id,
-                  feedback: bubble.feedback,
-                  is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                  ...bubble.response,
-                  user_query: bubble.user_query,
-                  result: {
-                    ...((bubble.response &&
-                      bubble.response.result &&
-                      bubble.response.result) ||
-                      {}),
-                    result:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY
-                  }
-                },
-                variant: 'system',
-                copyContent:
-                  (bubble.response &&
-                    bubble.response.result &&
-                    bubble.response.result.result) ||
-                  CHATBOT.DEFAULT_ERROR_REPLY,
-                children:
-                  (bubble.response &&
-                    bubble.response.result &&
-                    bubble.response.result.result) ||
-                  CHATBOT.DEFAULT_ERROR_REPLY,
-                sentOrReceivedAt: bubble.response_received_at
-                  ? new Date(bubble.response_received_at).getTime()
-                  : new Date(bubble.created_at).getTime(),
-                replySuggestionMessage: '',
-                isWelcomeBubble: false
-              });
+              },
+              variant: 'user',
+              copyContent: bubble.user_query,
+              children: bubble.user_query,
+              sentOrReceivedAt:
+                bubble.user_query_created_at !== null
+                  ? new Date(bubble.user_query_created_at).getTime()
+                  : null,
+              replySuggestionMessage: '',
+              isWelcomeBubble: false
             });
-            await dispatch({ type: SET_CHATBOT_BUBBLES, payload: history });
-            /**
-             * Logic to restore welcome message on new session
-             */
-            // const lastHistory = history[history.length - 1];
-            // const tokenInfo = jwt_decode(getAccessTokenFromLocalStorage());
-            // const isLastChatHappenedInCurrentSession = moment(
-            //   new Date(lastHistory.sentOrReceivedAt)
-            // ).isBetween(
-            //   moment(new Date(tokenInfo.auth_time * 1000)),
-            //   moment(new Date(tokenInfo.exp * 1000))
-            // );
-            await dispatch({
-              type: ADD_CHATBOT_BUBBLE,
-              payload: welcomeBubble
+            history.push({
+              info: {
+                id: bubble.id,
+                feedback: bubble.feedback,
+                is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+                ...bubble.response,
+                user_query: bubble.user_query,
+                result: {
+                  ...((bubble.response &&
+                    bubble.response.result &&
+                    bubble.response.result) ||
+                    {}),
+                  result:
+                    (bubble.response &&
+                      bubble.response.result &&
+                      bubble.response.result.result) ||
+                    CHATBOT.DEFAULT_ERROR_REPLY
+                }
+              },
+              variant: 'system',
+              copyContent:
+                (bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              children:
+                (bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              sentOrReceivedAt: bubble.response_received_at
+                ? new Date(bubble.response_received_at).getTime()
+                : new Date(bubble.created_at).getTime(),
+              replySuggestionMessage: '',
+              isWelcomeBubble: false
             });
-          }
+          });
+          await dispatch({ type: SET_CHATBOT_BUBBLES, payload: history });
+          await dispatch({
+            type: ADD_CHATBOT_BUBBLE,
+            payload: welcomeBubble
+          });
         }
       } else {
-        if (!appendRecents) {
-          await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
-        }
+        await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
       }
     } catch (e) {
       console.log('[CHATBOT] Error fetching chat history: ', e);
