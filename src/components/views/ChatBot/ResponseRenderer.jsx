@@ -31,19 +31,11 @@ function ResponseRenderer({ response }) {
                 break;
               default:
             }
-            return (
-              <>
-                {heading}
-                <br />
-              </>
-            );
+            return <>{heading}</>;
+          } else if (line.trim() === '') {
+            return <>{'\n'}</>;
           } else {
-            return (
-              <>
-                {line}
-                <br />
-              </>
-            );
+            return <>{line + '\n'}</>;
           }
         })
       );
