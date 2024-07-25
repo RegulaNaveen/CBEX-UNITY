@@ -9,6 +9,7 @@ import {
   sanitizeResponse
 } from './utils';
 import { CHATBOT } from '../../../constants/app';
+import ResponseRenderer from './ResponseRenderer';
 
 function getSourceDocNameFromPath(source) {
   if (
@@ -44,10 +45,14 @@ export const MultiResponseChat = ({
             })}
           >
             {list.length > 1 && `${i + 1}. `}
-            {(response &&
-              response.result &&
-              response.result.replace(/\"$/, '')) ||
-              'We sincerely apologize for the inconvenience caused please reload or rephrase the question.'}
+            <ResponseRenderer
+              response={
+                (response &&
+                  response.result &&
+                  response.result.replace(/\"$/, '')) ||
+                ''
+              }
+            />
             <div className="src-doc-list">
               {Array.isArray(response.source_documents) &&
                 response.source_documents.map((sourceDoc, i) => {
