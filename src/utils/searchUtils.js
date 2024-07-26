@@ -50,7 +50,10 @@ export async function getSearchResults({
     count: 0,
     results: []
   };
-  const regexp = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const regexp = new RegExp(
+    query.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+    'gi'
+  );
   let verticalTabSearched = false;
 
   // search in active tab
@@ -951,11 +954,15 @@ export function searchInNotepad(
   tabName,
   tab
 ) {
+  let concatenatedNotepadData = '';
+  for (let line of notepadData) {
+    concatenatedNotepadData += line.replaceAll(/\t/g, '\\t');
+  }
   // searching in notepad
-  if (notepadData.length > 0) {
+  if (concatenatedNotepadData.length > 0) {
     updateSearchMatches({
       regexp,
-      inputText: notepadData.join(''),
+      inputText: concatenatedNotepadData,
       index: NOTEPAD_UI_ID,
       finalResult,
       tab,

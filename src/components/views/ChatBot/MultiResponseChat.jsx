@@ -9,6 +9,7 @@ import {
   sanitizeResponse
 } from './utils';
 import { CHATBOT } from '../../../constants/app';
+import ResponseRenderer from './ResponseRenderer';
 
 function getSourceDocNameFromPath(source) {
   if (
@@ -44,10 +45,14 @@ export const MultiResponseChat = ({
             })}
           >
             {list.length > 1 && `${i + 1}. `}
-            {(response &&
-              response.result &&
-              response.result.replace(/\"$/, '')) ||
-              'We sincerely apologize for the inconvenience caused please reload or rephrase the question.'}
+            <ResponseRenderer
+              response={
+                (response &&
+                  response.result &&
+                  response.result.replace(/\"$/, '')) ||
+                ''
+              }
+            />
             <div className="src-doc-list">
               {Array.isArray(response.source_documents) &&
                 response.source_documents.map((sourceDoc, i) => {
@@ -66,82 +71,92 @@ export const MultiResponseChat = ({
             </div>
           </p>
           {Array.isArray(response.source_documents) &&
-            query &&
-            query.toLowerCase() !== 'summarize this opportunity' &&
-            response.source_documents.map((sourceDoc, i) => {
-              if (
-                sourceDoc &&
-                sourceDoc.metadata &&
-                sourceDoc.metadata.doc_class &&
-                sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
-                sourceDoc.metadata.section_name &&
-                Object.keys(
-                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP
-                ).includes(sourceDoc.metadata.section_name.toLowerCase())
-              ) {
-                const btnLabel =
-                  sourceDoc.metadata.section_name.toLowerCase() === 'notepad'
-                    ? 'Go to Unity'
-                    : 'Go to Unity Question';
-                return (
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    className="chatbot-action-btn"
-                    onClick={() =>
-                      handleGotoQuestion(
-                        sourceDoc.metadata.bid_no,
-                        [
-                          'questions',
-                          'custom_questions',
-                          'question_for_customers'
-                        ].includes(
-                          sourceDoc.metadata.section_name.toLowerCase()
-                        )
-                          ? parseQuestionReference(
-                              sanitizeResponse(
+            response.source_documents
+              .filter(sourceDoc => {
+                // Do not show Go to Unity button when query is 'Summarize this opportunity'
+                return !(
+                  sourceDoc &&
+                  sourceDoc.metadata &&
+                  sourceDoc.metadata.doc_class &&
+                  sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
+                  query &&
+                  query.toLowerCase() === 'summarize this opportunity'
+                );
+              })
+              .map((sourceDoc, i) => {
+                if (
+                  sourceDoc &&
+                  sourceDoc.metadata &&
+                  sourceDoc.metadata.doc_class &&
+                  sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
+                  sourceDoc.metadata.section_name &&
+                  Object.keys(
+                    CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP
+                  ).includes(sourceDoc.metadata.section_name.toLowerCase())
+                ) {
+                  const btnLabel =
+                    sourceDoc.metadata.section_name.toLowerCase() === 'notepad'
+                      ? 'Go to Unity'
+                      : 'Go to Unity Question';
+                  return (
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      className="chatbot-action-btn"
+                      onClick={() =>
+                        handleGotoQuestion(
+                          sourceDoc.metadata.bid_no,
+                          [
+                            'questions',
+                            'custom_questions',
+                            'question_for_customers'
+                          ].includes(
+                            sourceDoc.metadata.section_name.toLowerCase()
+                          )
+                            ? parseQuestionReference(
+                                sanitizeResponse(
+                                  sourceDoc.page_content || '',
+                                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                    sourceDoc.metadata.section_name.toLowerCase()
+                                  ]
+                                )
+                              )
+                            : sanitizeResponse(
                                 sourceDoc.page_content || '',
                                 CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
                                   sourceDoc.metadata.section_name.toLowerCase()
                                 ]
                               )
-                            )
-                          : sanitizeResponse(
-                              sourceDoc.page_content || '',
-                              CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                                sourceDoc.metadata.section_name.toLowerCase()
-                              ]
-                            )
-                      )
-                    }
-                    title={btnLabel}
-                  >
-                    {btnLabel}
-                  </Button>
-                );
-              } else if (
-                sourceDoc &&
-                sourceDoc.metadata &&
-                sourceDoc.metadata.box_file_id &&
-                sourceDoc.metadata.box_file_id.trim() &&
-                !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
-              ) {
-                return (
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    className="chatbot-action-btn"
-                    onClick={() =>
-                      handleReviewDoc(sourceDoc.metadata.box_file_id)
-                    }
-                    title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
-                  >
-                    Review {getSourceDocNameFromPath(sourceDoc)}
-                  </Button>
-                );
-              }
-              return null;
-            })}
+                        )
+                      }
+                      title={btnLabel}
+                    >
+                      {btnLabel}
+                    </Button>
+                  );
+                } else if (
+                  sourceDoc &&
+                  sourceDoc.metadata &&
+                  sourceDoc.metadata.box_file_id &&
+                  sourceDoc.metadata.box_file_id.trim() &&
+                  !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
+                ) {
+                  return (
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      className="chatbot-action-btn"
+                      onClick={() =>
+                        handleReviewDoc(sourceDoc.metadata.box_file_id)
+                      }
+                      title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
+                    >
+                      Review {getSourceDocNameFromPath(sourceDoc)}
+                    </Button>
+                  );
+                }
+                return null;
+              })}
         </div>
       ))}
     </div>
