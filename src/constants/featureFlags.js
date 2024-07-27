@@ -14,5 +14,6 @@ export default {
   CUSTOM_NAME_FLAG: 'customOpportunityNameFlag',
   EARLY_ENGAGEMENT_BID_HISTORY: 'earlyEngagementInBidHistory',
   POST_AWARD_BID_HISTORY: 'postAwardInBidHistory',
-  RFI_BID_HISTORY: 'RFIInBidHistory'
+  RFI_BID_HISTORY: 'RFIInBidHistory',
+  CHATBOT_CONTENT_COUNT: 'ChatBotContextCount'
 };

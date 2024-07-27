@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { compose } from 'redux';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
+import ApolloThemeProvider from 'apollo-react/utils/ApolloThemeProvider';
 import {
   UpdateNewBid,
   expandAllSectionsAction,
@@ -53,7 +54,7 @@ import BidDoneBanner from '../../views/BidDoneBanner';
 import GenerateDocs from '../../views/export-component/GenerateDocs';
 import { SocketContext } from '../../../context/SocketContext';
 import * as notificationActions from '../../../redux/actions/notification-actions';
-import { UBUILD, DASHBOARD } from '../../../routes';
+import { UBUILD, DASHBOARD, UBUILD_V2 } from '../../../routes';
 import featureFlags from '../../../constants/featureFlags';
 import launchDarkly from '../../../utils/launchDarkly';
 import {
@@ -62,7 +63,8 @@ import {
   selectCustomName,
   selectNextMilestone,
   selectGetbidChangeLoader,
-  selectTasksListFlag
+  selectTasksListFlag,
+  selectChatBotFlag
 } from '../../../redux/selectors/proposal';
 import { getNextMilestone } from '../../../utils/utils';
 import {
@@ -75,6 +77,7 @@ import {
   toggleCanReorder
 } from '../../../redux/actions/tasksList-actions';
 import { filter } from 'lodash';
+import ChatBot from '../../views/ChatBot';
 
 type State = {
   selectedView: string
@@ -186,6 +189,11 @@ export class Opportunity extends Component<Props, State> {
         this.context.updateSocketOppId(params.id, proposalId);
       else this.context.updateSocketOppId(null, null);
     }
+    if ((this.props && location && location?.pathname) !== UBUILD_V2) {
+      if (location?.pathname !== DASHBOARD)
+        this.context.updateSocketOppId(params.id, proposalId);
+      else this.context.updateSocketOppId(null, null);
+    }
     window.addEventListener('resize', this.handleResize);
     // const windowSize = window.innerWidth;
 
@@ -241,6 +249,10 @@ export class Opportunity extends Component<Props, State> {
         this.context.updateSocketOppId(params.id, thisProposalId);
         localStorage.setItem('proposalId', thisProposalId);
       }
+      if ((this.props && location && location?.pathname) !== UBUILD_V2) {
+        this.context.updateSocketOppId(params.id, thisProposalId);
+        localStorage.setItem('proposalId', thisProposalId);
+      }
     } else if (prevOpportunityType !== thisOpportunityType) {
       if (tasksListFlag && thisProposalId !== '') {
         fetchTasksList(thisProposalId);
@@ -275,8 +287,12 @@ export class Opportunity extends Component<Props, State> {
   };
 
   trackEventTabs = tab => {
-    const { eventCategories, userActions, proposalDetail, trackEvent } =
-      this.props;
+    const {
+      eventCategories,
+      userActions,
+      proposalDetail,
+      trackEvent
+    } = this.props;
     trackEvent({
       category: eventCategories.pd(this.props),
       action: `Tab: ${userActions.click} On ${tab}`,
@@ -299,8 +315,12 @@ export class Opportunity extends Component<Props, State> {
   };
 
   handleEditCustomName = () => {
-    const { toggleEditCustomNameModal, onEditCustomName, customName, details } =
-      this.props;
+    const {
+      toggleEditCustomNameModal,
+      onEditCustomName,
+      customName,
+      details
+    } = this.props;
     onEditCustomName(details['CRM #'], customName);
     toggleEditCustomNameModal(true);
   };
@@ -381,10 +401,18 @@ export class Opportunity extends Component<Props, State> {
   };
 
   render() {
-    const { isSidebarOpen, selectedBid, newbidflag, closeNewbidflag } =
-      this.props;
-    const { questionTemplateVersionNumber, opportunityType, bidStatus } =
-      selectedBid.toJS();
+    const {
+      isSidebarOpen,
+      selectedBid,
+      newbidflag,
+      closeNewbidflag,
+      chatBotFlag
+    } = this.props;
+    const {
+      questionTemplateVersionNumber,
+      opportunityType,
+      bidStatus
+    } = selectedBid.toJS();
     return (
       <div
         className={classNames('proposal-wrapper', {
@@ -407,7 +435,11 @@ export class Opportunity extends Component<Props, State> {
             message="A new Bid is being created based on CRM data"
           />
         )}
-
+        {chatBotFlag && (
+          <ApolloThemeProvider>
+            <ChatBot />
+          </ApolloThemeProvider>
+        )}
         <UnityFooter
           questionTemplateVersionNumber={questionTemplateVersionNumber || ''}
           opportunityType={opportunityType || ''}
@@ -430,7 +462,8 @@ const mapStateToProps = (state: Map) => ({
   customName: selectCustomName(state),
   nextMilestone: selectNextMilestone(state),
   getbidChangeLoader: selectGetbidChangeLoader(state),
-  tasksListFlag: selectTasksListFlag(state)
+  tasksListFlag: selectTasksListFlag(state),
+  chatBotFlag: selectChatBotFlag(state)
 });
 export default compose(
   withRouter,

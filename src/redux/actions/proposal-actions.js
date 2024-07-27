@@ -1175,6 +1175,7 @@ export function onQuestionsFilterApplied(questionsFilter) {
       payload: { questionsFilter }
     });
     let filteredQuestions = cloneDeep(selectProposalQuestions(state));
+    let naFilterChecked = false;
 
     questionsFilter.entrySeq().forEach(([groupName, group]) => {
       let withinGroupFilteredQuestions = [];
@@ -1185,8 +1186,10 @@ export function onQuestionsFilterApplied(questionsFilter) {
       group.entrySeq().forEach(([filterName, filter]) => {
         // Do not process for logic key or the filter is not checked
         if (filterName === 'logic' || !filter.get('checked')) return;
-
         considerGroup = true;
+        if (filterName === 'showInactiveQuestions') {
+          naFilterChecked = true;
+        }
 
         switch (filterName) {
           case 'myUserRole':
@@ -1260,6 +1263,10 @@ export function onQuestionsFilterApplied(questionsFilter) {
 
       considerGroup = false;
     });
+
+    if (!naFilterChecked) {
+      filteredQuestions = filteredQuestions.filter(obj => !obj?.notApplicable);
+    }
 
     dispatch({
       type: ON_QUESTIONS_FILTERED,
@@ -1707,7 +1714,7 @@ export const resetProposalId = () => {
   return dispatch => dispatch({ type: RESET_PROPOSALID, payload: {} });
 };
 
-export const changeBid = (bid, viewType) => {
+export const changeBid = (bid, viewType, callback) => {
   const searchParams = new URLSearchParams(window.location.search);
   if (bid?.bidNo) {
     searchParams.set('bidNo', bid?.bidNo);
@@ -1773,6 +1780,9 @@ export const changeBid = (bid, viewType) => {
         response?.data?.proposal?.typeOfWidget
       )
     );
+    if (callback) {
+      callback();
+    }
   };
 };
 
@@ -2026,45 +2036,39 @@ export const setProposalAnswerLoading = (questionId, loading) => {
 /**
  * Delete Proposal User from Selected Answer
  */
-export const deleteProposalUserFromDB = (
-  proposalId,
-  email,
-  sectionOrder,
-  sectionName
-) => async () => {
-  try {
-    // Api Response
-    const response = await deleteProposalUser(proposalId, {
-      email,
-      section: { sectionOrder, sectionName }
-    });
-    return { status: true, title: DEFAULT.SUCCESS, data: response.data };
-  } catch (error) {
-    // Error
-    console.log(error.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const deleteProposalUserFromDB =
+  (proposalId, email, sectionOrder, sectionName) => async () => {
+    try {
+      // Api Response
+      const response = await deleteProposalUser(proposalId, {
+        email,
+        section: { sectionOrder, sectionName }
+      });
+      return { status: true, title: DEFAULT.SUCCESS, data: response.data };
+    } catch (error) {
+      // Error
+      console.log(error.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Get Proposal Answers History
  */
-export const getProposalAnswerHistory = (
-  proposalId: string,
-  questionId: string
-) => async () => {
-  try {
-    // Api Response
-    const response = await getProposalAnswer(proposalId, questionId);
-    return { status: true, title: DEFAULT.SUCCESS, data: response };
-  } catch (error) {
-    // Error
-    console.log(error?.response);
-    const msg = getErrorMessage(error);
-    return { status: false, title: DEFAULT.ALERT, msg };
-  }
-};
+export const getProposalAnswerHistory =
+  (proposalId: string, questionId: string) => async () => {
+    try {
+      // Api Response
+      const response = await getProposalAnswer(proposalId, questionId);
+      return { status: true, title: DEFAULT.SUCCESS, data: response };
+    } catch (error) {
+      // Error
+      console.log(error?.response);
+      const msg = getErrorMessage(error);
+      return { status: false, title: DEFAULT.ALERT, msg };
+    }
+  };
 
 /**
  * Set Flag for Event Launcher

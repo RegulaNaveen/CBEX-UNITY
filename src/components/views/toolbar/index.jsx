@@ -10,7 +10,7 @@ import ArrowDown from 'apollo-react-icons/ArrowDown';
 import ArrowUp from 'apollo-react-icons/ArrowUp';
 
 import ToolbarMenu from './ToolbarMenu';
-import { DASHBOARD, OPPORTUNITYS, UBUILD } from '../../../routes';
+import { DASHBOARD, OPPORTUNITYS, UBUILD, UBUILD_V2 } from '../../../routes';
 import { isUserUbuildAdmin } from '../../../utils/utils';
 import {
   getUserName,
@@ -124,23 +124,44 @@ class Toolbar extends Component<{}, State> {
               <p className="toolbar-title">Unity</p>
             </Link>
             {results && (
-              <div
-                onClick={() => window.location.replace('/ubuild')}
-                aria-hidden="true"
-                style={{ cursor: 'pointer' }}
-                className={
-                  (this.props && location && location?.pathname) === UBUILD
-                    ? 'ubuild-linkactive'
-                    : 'ubuild-link'
-                }
-              >
-                <div className="toolbar-space">
-                  <p className="ubuild-title">U-Build</p>
+              <>
+                <div
+                  onClick={() => window.location.replace('/ubuild')}
+                  aria-hidden="true"
+                  style={{ cursor: 'pointer' }}
+                  className={
+                    (this.props && location && location?.pathname) === UBUILD
+                      ? 'ubuild-linkactive'
+                      : 'ubuild-link'
+                  }
+                >
+                  <div className="toolbar-space">
+                    <p className="ubuild-title">U-Build</p>
+                  </div>
+                  {/* <Link to={UBUILD} replace  className='toolbar-space'>
+                    <p className='ubuild-title'>U-Build</p>
+                  </Link> */}
                 </div>
+                {/* <div
+                  onClick={() => window.location.replace('/ubuild/v2')}
+                  aria-hidden="true"
+                  style={{ cursor: 'pointer' }}
+                  className={
+                    (this.props && location && location?.pathname).startsWith(
+                      UBUILD_V2
+                    )
+                      ? 'ubuild-linkactive'
+                      : 'ubuild-link'
+                  }
+                > */}
+                {/* <div className="toolbar-space">
+                    <p className="ubuild-title">U-Build v2</p>
+                  </div> */}
                 {/* <Link to={UBUILD} replace  className='toolbar-space'>
-                  <p className='ubuild-title'>U-Build</p>
-                </Link> */}
-              </div>
+                    <p className='ubuild-title'>U-Build</p>
+                  </Link> */}
+                {/* </div> */}
+              </>
             )}
             <div style={{ flexGrow: 1 }}>
               <PrivateRoute path={OPPORTUNITYS} component={Search} />

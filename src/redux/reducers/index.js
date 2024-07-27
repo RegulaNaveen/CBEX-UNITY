@@ -14,6 +14,7 @@ import timelineReducer from './timeline';
 import emailTemplatesReducer from './emailTemplates';
 import tasksReducer from './tasks';
 import opportunitiesReducer from './opportunities';
+import chatbotReducer from './chatbot';
 
 const rootReducer = combineReducers({
   ssoAuth: ssoAuthReducer,
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
   timeline: timelineReducer,
   emailTemplates: emailTemplatesReducer,
   tasks: tasksReducer,
-  opportunities: opportunitiesReducer
+  opportunities: opportunitiesReducer,
+  chatbot: chatbotReducer
 });
 
 export default rootReducer;

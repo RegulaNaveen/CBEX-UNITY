@@ -69,6 +69,10 @@
   }
 }
 
+.loader-overlay {
+  z-index: 998 !important;
+}
+
 @media screen and (max-width: 1200px) and (min-width: 300px) {
   .proposal-wrapper {
     height: 100%;
