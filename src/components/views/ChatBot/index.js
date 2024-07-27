@@ -23,6 +23,7 @@ import {
 } from '../../../redux/selectors/chatbot';
 import { useDispatch } from 'react-redux';
 import {
+  addResponseToChat,
   fetchHistory,
   handleChatBotQueryWSMsg,
   sendDataTrigger
@@ -63,6 +64,8 @@ const ChatBot = () => {
 
   const handleClose = useCallback(() => setExpanded(false), []);
 
+  const bubblesLength = bubbles.length;
+
   const {
     socket: { current: socketInstance },
     initiateConnection
@@ -82,6 +85,30 @@ const ChatBot = () => {
     dispatch(sendDataTrigger({ opportunityNumber: id, bidNo, bidType }));
   }, [id, bidNo, bidType, dispatch]);
 
+  const handleWSEvents = useCallback(
+    async message => {
+      const data = JSON.parse(message.data);
+      // Handle event ONLY if data.event_group is 'CHATBOT'
+      if (data.event_group === 'CHATBOT') {
+        switch (data.event_name) {
+          case 'CHATBOT_USER_QUERY_RESPONSE':
+            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            await dispatch(addResponseToChat(data.event_data));
+            await dispatch({ type: SET_LOADING_STATE, payload: false });
+            break;
+          case 'CHATBOT_USER_QUERY':
+            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            await dispatch(handleChatBotQueryWSMsg(data.event_data));
+            break;
+          default:
+            console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
+            break;
+        }
+      }
+    },
+    [dispatch]
+  );
+
   const doAutoScroll = useCallback(() => {
     if (bubbles.length <= 1) {
       return;
@@ -95,56 +122,16 @@ const ChatBot = () => {
   useEffect(() => {
     if (socketInstance) {
       console.info(`[CHATBOT] Socket instance available!`);
-      socketInstance.addEventListener('message', async message => {
-        const data = JSON.parse(message.data);
-        // Handle event ONLY if data.event_group is 'CHATBOT'
-        if (data.event_group === 'CHATBOT') {
-          switch (data.event_name) {
-            case 'CHATBOT_USER_QUERY_RESPONSE':
-              console.info(`[CHATBOT] Event: ${data.event_name}`);
-              await dispatch({
-                type: ADD_CHATBOT_BUBBLE,
-                payload: {
-                  variant: 'system',
-                  copyContent:
-                    (data.event_data &&
-                      data.event_data.response &&
-                      data.event_data.response.result &&
-                      data.event_data.response.result.result) ||
-                    CHATBOT.DEFAULT_ERROR_REPLY,
-
-                  children:
-                    (data.event_data &&
-                      data.event_data.response &&
-                      data.event_data.response.result &&
-                      data.event_data.response.result.result) ||
-                    CHATBOT.DEFAULT_ERROR_REPLY,
-                  sentOrReceivedAt: new Date(
-                    data.event_data.created_at
-                  ).getTime(),
-                  info: {
-                    id: data.event_data.id,
-                    feedback: data.event_data.feedback,
-                    is_ecoa_or_cd: data.event_data.is_ecoa_or_cd,
-                    ...data.event_data.response
-                  }
-                }
-              });
-              await dispatch({ type: SET_LOADING_STATE, payload: false });
-              break;
-            case 'CHATBOT_USER_QUERY':
-              console.info(`[CHATBOT] Event: ${data.event_name}`);
-              await dispatch(handleChatBotQueryWSMsg(data.event_data));
-              break;
-            default:
-              console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
-              break;
-          }
-        }
-      });
+      socketInstance.addEventListener('message', handleWSEvents);
     } else {
       console.info(`[CHATBOT] Socket instance not available!`);
     }
+
+    return () => {
+      if (socketInstance) {
+        socketInstance.removeEventListener('message', handleWSEvents);
+      }
+    };
   }, [socketInstance]);
 
   useEffect(() => {
@@ -153,19 +140,26 @@ const ChatBot = () => {
 
   useEffect(() => {
     doAutoScroll();
-  }, [expanded, bubbles, fullscreen, id, fetchingHistory]);
+  }, [expanded, bubblesLength, fullscreen, id, fetchingHistory]);
 
   useEffect(() => {
     if (inputText) {
       const numOfsplits = inputText.split('\n')?.length;
       let height = '21px';
-      if (numOfsplits <= 1) {
+      const inputElement = document.querySelector(
+        '.chat-bot-footer > div:last-child > div > div > .MuiInputBase-root > textarea'
+      );
+      const numOfLines = Math.min(
+        Math.ceil(inputElement.scrollHeight / inputElement.clientHeight) +
+          Math.ceil(inputElement.scrollWidth / inputElement.clientWidth) +
+          numOfsplits,
+        4
+      );
+      if (numOfLines <= 1) {
         height = '21px';
-      } else if (numOfsplits == 2) {
+      } else if (numOfLines == 2) {
         height = `${21 * 2}px`;
-      } else if (numOfsplits == 3) {
-        height = `${21 * 3}px`;
-      } else if (numOfsplits > 3) {
+      } else if (numOfLines >= 3) {
         height = `${21 * 4}px`;
       }
       const root = document.documentElement;
@@ -193,13 +187,14 @@ const ChatBot = () => {
         }
       }
       const query_created_at = Date.now();
+      const query_id = uuidv4();
       socket.send(
         JSON.stringify({
           event_group: 'CHATBOT',
           event_name: 'CHATBOT_USER_QUERY',
           event_data: {
             ...payload,
-            query_id: uuidv4(),
+            query_id,
             query_created_at,
             context: extractContext(
               bubbles,
@@ -215,7 +210,11 @@ const ChatBot = () => {
           variant: 'user',
           copyContent: payload.query,
           children: payload.query,
-          sentOrReceivedAt: query_created_at
+          sentOrReceivedAt: query_created_at,
+          info: {
+            id: query_id,
+            feedback: null
+          }
         }
       });
       // TODO: Set a timer to check if the response is not received in <n> seconds
@@ -262,7 +261,14 @@ const ChatBot = () => {
         });
       }
     },
-    [bidList, dispatch, openDifferentBidModal, findBidObjAndChangeBid]
+    [
+      bidNo,
+      bidType,
+      bidList,
+      dispatch,
+      openDifferentBidModal,
+      findBidObjAndChangeBid
+    ]
   );
 
   const handleReviewDoc = useCallback(fileId => {
@@ -381,6 +387,7 @@ const ChatBot = () => {
                         handleGotoQuestion={handleGotoQuestion}
                         handleReviewDoc={handleReviewDoc}
                         bubbleId={bubble.info.id}
+                        query={bubble.info.user_query}
                       />
                     ) : (
                       bubble.children
@@ -409,7 +416,11 @@ const ChatBot = () => {
             <ChatBotFooter
               disabled={loading || fetchingHistory}
               onSendClick={() => {
-                if (!inputRef.current.value) {
+                if (
+                  !inputRef.current.value ||
+                  inputRef.current.value.trim() === '' ||
+                  inputRef.current.value.trim().length < 3
+                ) {
                   return;
                 }
                 setInputText('');

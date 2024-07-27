@@ -71,7 +71,7 @@ class Toolbar extends Component<{}, State> {
                 <p className="ubuild-title">U-Build</p>
               </a>
             </div>
-            <div
+            {/* <div
               className={
                 (this.props && location && location?.pathname).startsWith(
                   UBUILD_V2
@@ -83,7 +83,7 @@ class Toolbar extends Component<{}, State> {
               <a className="toolbar-space" href={UBUILD_V2}>
                 <p className="ubuild-title">U-Build v2</p>
               </a>
-            </div>
+            </div> */}
           </>
         )}
         <div className="toolbar-account-spacer">
