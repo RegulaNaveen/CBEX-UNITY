@@ -84,6 +84,7 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                       id: bubble.id,
                       feedback: bubble.feedback,
                       is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+                      user_query: bubble.user_query,
                       ...bubble.response,
                       result: {
                         ...((bubble.response &&
@@ -160,6 +161,7 @@ export function fetchHistory(opportunityNumber, appendRecents = false) {
                   feedback: bubble.feedback,
                   is_ecoa_or_cd: bubble.is_ecoa_or_cd,
                   ...bubble.response,
+                  user_query: bubble.user_query,
                   result: {
                     ...((bubble.response &&
                       bubble.response.result &&
@@ -343,6 +345,7 @@ export function addResponseToChat(responseData) {
               id: responseData.id,
               feedback: responseData.feedback,
               is_ecoa_or_cd: responseData.is_ecoa_or_cd,
+              user_query: responseData.user_query,
               ...responseData.response
             }
           }

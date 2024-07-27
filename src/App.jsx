@@ -167,10 +167,10 @@ const App = () => (
                 path={UBUILD}
                 component={UbuildShellComponent}
               />
-              <PrivateRoute
+              {/* <PrivateRoute
                 path={`${UBUILD_V2}*`}
                 component={UbuildShellComponentV2}
-              />
+              /> */}
               <Route path="/" component={Home} />
               <Redirect to={LOGIN} />
             </Switch>
