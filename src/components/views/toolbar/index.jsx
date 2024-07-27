@@ -142,7 +142,7 @@ class Toolbar extends Component<{}, State> {
                     <p className='ubuild-title'>U-Build</p>
                   </Link> */}
                 </div>
-                <div
+                {/* <div
                   onClick={() => window.location.replace('/ubuild/v2')}
                   aria-hidden="true"
                   style={{ cursor: 'pointer' }}
@@ -153,14 +153,14 @@ class Toolbar extends Component<{}, State> {
                       ? 'ubuild-linkactive'
                       : 'ubuild-link'
                   }
-                >
-                  <div className="toolbar-space">
+                > */}
+                {/* <div className="toolbar-space">
                     <p className="ubuild-title">U-Build v2</p>
-                  </div>
-                  {/* <Link to={UBUILD} replace  className='toolbar-space'>
+                  </div> */}
+                {/* <Link to={UBUILD} replace  className='toolbar-space'>
                     <p className='ubuild-title'>U-Build</p>
                   </Link> */}
-                </div>
+                {/* </div> */}
               </>
             )}
             <div style={{ flexGrow: 1 }}>

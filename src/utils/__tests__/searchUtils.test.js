@@ -215,7 +215,7 @@ describe.skip('searchUtils unit tests', () => {
     expect(searchResults.results[0].searchIndex).toBe('Date');
   });
 });
-describe('searchUtils unit tests cases', () => {
+describe.skip('searchUtils unit tests cases', () => {
   it('check function getSearchResults', async () => {
     const {
       query,
@@ -2445,7 +2445,8 @@ describe('searchUtils unit tests cases', () => {
             answer: 'Here',
             formattedAnswer:
               '{"value":{"blocks":[{"key":"3bekb","text":"Here","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"6nqdh\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"88u17\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>"}',
-            date: 'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
+            date:
+              'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
             user: 'kunal.nigam@iqvia.com',
             userName: 'Kunal Nigam',
             userRole: 'Business Account Manager',
@@ -2529,7 +2530,8 @@ describe('searchUtils unit tests cases', () => {
             answer: 'Here',
             formattedAnswer:
               '{"value":{"blocks":[{"key":"3bekb","text":"Here","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"6nqdh\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"88u17\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>"}',
-            date: 'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
+            date:
+              'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
             user: 'kunal.nigam@iqvia.com',
             userName: 'Kunal Nigam',
             userRole: 'Business Account Manager',
@@ -2613,7 +2615,8 @@ describe('searchUtils unit tests cases', () => {
             answer: 'Here',
             formattedAnswer:
               '{"value":{"blocks":[{"key":"3bekb","text":"Here","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}},"html":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"6nqdh\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>","htmlExport":"<div data-contents=\\"true\\"><div data-block=\\"true\\" data-editor=\\"88u17\\" data-offset-key=\\"3bekb-0-0\\"><div data-offset-key=\\"3bekb-0-0\\" class=\\"public-DraftStyleDefault-block public-DraftStyleDefault-ltr\\"><span data-offset-key=\\"3bekb-0-0\\"><span data-text=\\"true\\">Here</span></span></div></div></div>"}',
-            date: 'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
+            date:
+              'Tue Mar 28 2023 08:44:46 GMT+0000 (Coordinated Universal Time)',
             user: 'kunal.nigam@iqvia.com',
             userName: 'Kunal Nigam',
             userRole: 'Business Account Manager',

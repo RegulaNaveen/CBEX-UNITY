@@ -1,8 +1,10 @@
+import { cloneDeep } from 'lodash';
 import { REDUX_TYPES } from '../../constants';
 
 const {
   SET_CHATBOT_BUBBLES,
   ADD_CHATBOT_BUBBLE,
+  UPDATE_CHATBOT_BUBBLE,
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
   FETCHING_HISTORY
@@ -66,10 +68,11 @@ function onLoading(state, action) {
 function onUpdateBubble(state, action) {
   const { id, feedback } = action.payload;
   const bubbles = [...state.bubbles];
-  const bubble = bubbles.find(b => b.info && b.info.id === id);
-  if (bubble) {
-    bubble.info.feedback = feedback;
-    bubbles[bubbles.indexOf(bubble)] = bubble;
+  const bubbleIndex = bubbles.findIndex(
+    b => b.info && b.info.id === id && b.variant === 'system'
+  );
+  if (bubbleIndex > -1) {
+    bubbles[bubbleIndex].info.feedback = feedback;
   }
   return {
     ...state,
@@ -84,12 +87,26 @@ function setFetchingHistory(state, action) {
   };
 }
 
+function onUpdateChatbotBubble(state, action) {
+  const { index, data } = action.payload;
+  const bubbles = cloneDeep(state.bubbles);
+  if (index > -1 && index <= bubbles.length - 1) {
+    bubbles[index] = data;
+  }
+
+  return {
+    ...state,
+    bubbles
+  };
+}
+
 const actionMap = {
   [SET_CHATBOT_BUBBLES]: onSetBubbles,
   [ADD_CHATBOT_BUBBLE]: onAddBubble,
   [SET_LOADING_STATE]: onLoading,
   [UPDATE_BUBBLE]: onUpdateBubble,
-  [FETCHING_HISTORY]: setFetchingHistory
+  [FETCHING_HISTORY]: setFetchingHistory,
+  [UPDATE_CHATBOT_BUBBLE]: onUpdateChatbotBubble
 };
 
 export default function(state = INITIAL_STATE, action) {

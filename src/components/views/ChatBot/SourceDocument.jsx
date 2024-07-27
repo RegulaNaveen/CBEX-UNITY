@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Tooltip from 'apollo-react/components/Tooltip';
 
 const SourceDocument = ({
@@ -12,21 +12,22 @@ const SourceDocument = ({
   const tooltipRef = useRef(null);
 
   const handleTooltipClick = e => {
-    e.preventDefault();
     setShowTooltip(showing => !showing);
   };
 
+  const handleScroll = useCallback(() => {
+    if (showTooltip) setShowTooltip(false);
+  }, [showTooltip, tooltipRef.current]);
+
   useEffect(() => {
     const handleClickOutside = event => {
-      // Check if the click is on the scrollbar
-      const isScrollbarClick =
-        event.offsetX > event.target.clientWidth ||
-        event.offsetY > event.target.clientHeight;
+      const tooltipContainer = document.getElementById('answer-tooltip');
 
       if (
         tooltipRef.current &&
         !tooltipRef.current.contains(event.target) &&
-        !isScrollbarClick
+        tooltipContainer &&
+        !tooltipContainer.contains(event.target)
       ) {
         setShowTooltip(false);
       }
@@ -36,7 +37,56 @@ const SourceDocument = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [content]);
+  }, [content, tooltipRef.current]);
+
+  useEffect(() => {
+    if (showTooltip && tooltipRef.current) {
+      if (
+        tooltipRef.current.parentElement &&
+        tooltipRef.current.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement.parentElement.parentElement
+      ) {
+        tooltipRef.current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.addEventListener(
+          'scroll',
+          handleScroll
+        );
+      }
+    }
+
+    return () => {
+      if (
+        tooltipRef.current &&
+        tooltipRef.current.parentElement &&
+        tooltipRef.current.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement.parentElement &&
+        tooltipRef.current.parentElement.parentElement.parentElement
+          .parentElement.parentElement.parentElement.parentElement.parentElement
+      ) {
+        tooltipRef.current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.removeEventListener(
+          'scroll',
+          handleScroll
+        );
+      }
+    };
+  }, [tooltipRef.current, showTooltip]);
 
   return (
     <span ref={tooltipRef} tabIndex={0}>
