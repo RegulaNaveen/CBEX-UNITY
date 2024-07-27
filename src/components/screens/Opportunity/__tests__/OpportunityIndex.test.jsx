@@ -10,6 +10,13 @@ import { SocketContext } from '../../../../context/SocketContext';
 import * as SessionHandler from '../../../../SessionHandler';
 import Opportunity from '../index';
 
+jest.mock('apollo-react-4.19.0/components/ChatBotFab', () => {
+  return {
+    __esModule: true,
+    default: () => <div>ChatBotFab</div>
+  };
+});
+
 jest.mock('../../../../utils/launchDarkly', () => ({
   __esModule: true,
   default: () => Promise.resolve({ favouriteFlag: true })
