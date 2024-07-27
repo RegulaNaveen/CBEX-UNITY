@@ -12,15 +12,14 @@ import {
   selectCurrentWidget,
   getOpportunityData
 } from '../../redux/selectors/proposal';
-import { parseMomentDate } from '../../utils/DateUtils';
 import { Checkmark } from '../svg';
 import { changeBid } from '../../redux/actions/proposal-actions';
 import PriceModeler from './PriceModeler';
 import BidCostDetails from './BidCostDetails';
 import { getfetchUserTagFlag } from '../../redux/selectors';
-import TextField from 'apollo-react/components/TextField';
 import StatusDotOutline from 'apollo-react-icons/StatusDotOutline';
 import StatusDotSolid from 'apollo-react-icons/StatusDotSolid';
+import { parseMomentDate } from '../../utils/DateUtils';
 
 const BidHistory = () => {
   const winLocationSearch = window.location.search;
@@ -56,7 +55,6 @@ const BidHistory = () => {
   const currentWidget = useSelector(selectCurrentWidget);
   const proposalQuestion = useSelector(getProposalQuestions);
   const allOppData = useSelector(getOpportunityData)?.toJS();
-
   const handleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -101,7 +99,6 @@ const BidHistory = () => {
       setShowHoverText(false);
     }
   }, [isQuestionAnswered]);
-
   return (
     <>
       {bidList.length ? (

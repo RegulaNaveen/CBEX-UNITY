@@ -6,6 +6,7 @@ import moment from 'moment';
 import { shouldInclude } from '../../components/views/export-component/word-template';
 import { extractEmails } from '../../utils/helpers';
 import { getBidNameByType } from '../../utils/utils';
+import { formatTheDate } from '../../utils/DateUtils';
 
 const generateMilestone = (proposalQuestions: Object) => {
   const flag = proposalQuestions.filter(question => question?.milestone);
@@ -373,9 +374,14 @@ export const getBidList = createSelector(
             item.getIn(['proposal', 'bidType']) !== 'RFI_Request') ||
             flags['RFIInBidHistory'])
         ) {
+          const bidduedate = item.getIn([
+            'proposal',
+            'proposalDetails',
+            'Bid due date'
+          ]);
+          const modifiedDate = formatTheDate(bidduedate) || '';
           bidList.push({
-            bidDueDate:
-              item.getIn(['proposal', 'proposalDetails', 'Bid due date']) || '',
+            bidDueDate: modifiedDate,
             bidDate: item.getIn(['proposal', 'proposalDate']),
             bidId: item.getIn(['proposal', 'proposalId']),
             isCurrent: item.get('isCurrent'),
@@ -550,4 +556,20 @@ export const selectShowEditCustomNameModal = createSelector(
 export const selectTasksListFlag = createSelector(
   getfetchAllFlags,
   flags => !!flags['tasksListFlag']
+);
+
+// Other flags selectors
+export const selectChatBotFlag = createSelector(
+  getfetchAllFlags,
+  flags => !!flags['ChatBot']
+);
+
+export const selectChatBotFeedbackFlag = createSelector(
+  getfetchAllFlags,
+  flags => !!flags['ChatBotFeedback']
+);
+
+export const selectChatBotContextCount = createSelector(
+  getfetchAllFlags,
+  flags => flags['ChatBotContextCount'] || 0
 );

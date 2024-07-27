@@ -80,8 +80,8 @@ const getFullProposalTeamString = (updateField, questions) => {
       const uniqueName = isSubjectUpdate
         ? name?.trim()?.replace(/\s*\([^)]*\)/g, '')
         : emailWithoutParenthesis
-          ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
-          : name?.trim();
+        ? `<a href="https://outlook.office.com/mail/deeplink/compose?to=${emailWithoutParenthesis}">${name?.trim()}</a>`
+        : name?.trim();
 
       if (!uniqueNames.has(uniqueName)) {
         uniqueNames.add(uniqueName);
@@ -119,8 +119,9 @@ export const getTableView = tableConfig => {
     text-align: left !important;
     font-size: 16px;
     border: 1px solid #e9e9e9 !important;
-    background-color: #f8f9fb;color:#000000'>${column?.header ? column?.header : ''
-      }</th>`
+    background-color: #f8f9fb;color:#000000'>${
+      column?.header ? column?.header : ''
+    }</th>`
   )}
   </tr>
   </thead>
@@ -129,7 +130,7 @@ export const getTableView = tableConfig => {
     row =>
       `<tr>
       ${!row?.hidden &&
-      `<td  style='width: 200px;
+        `<td  style='width: 200px;
       padding: 10px 0px 10px 10px;
       text-align: left;
       font-size: 16px;
@@ -145,8 +146,9 @@ export const getTableView = tableConfig => {
         text-align: left;
         font-size: 16px;
         border: 1px solid #e9e9e9 !important;
-        border-right: 1px solid #e9e9e9 !important;'>${row[column?.accessor] ? row[column?.accessor] : ''
-          }</td>`
+        border-right: 1px solid #e9e9e9 !important;'>${
+          row[column?.accessor] ? row[column?.accessor] : ''
+        }</td>`
       )}
       </tr>`
   )}
@@ -313,21 +315,22 @@ const getQuestionsForTheCustomer = (questions, updateField) => {
     ?.sort((a, b) => a.questionOrder - b.questionOrder);
   return isSubjectUpdate
     ? relevantQuestions
-      ?.map(
-        q =>
-          `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
-          ''} \r\n`
-      )
-      .join('')
+        ?.map(
+          q =>
+            `${q.questionText ?? ''} \r\n${q.answers?.slice(-1)[0]?.answer ??
+              ''} \r\n`
+        )
+        .join('')
     : `<ul>${relevantQuestions
-      ?.map(
-        q =>
-          `<li>${q.questionHTML}</li>${getAnswer(q.answers)
-            ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
-            : ''
-          }`
-      )
-      .join('')}</ul>`;
+        ?.map(
+          q =>
+            `<li>${q.questionHTML}</li>${
+              getAnswer(q.answers)
+                ? `<ul><li>${getAnswer(q.answers)}</li></ul>`
+                : ''
+            }`
+        )
+        .join('')}</ul>`;
 };
 
 const parseUrlText = (crm, url = '') => {
@@ -378,8 +381,8 @@ function updateEventSubjectBody(
     '[unity_link]':
       updateField === 'body'
         ? `<a href=${window.location.href}>${parseUrlText(
-          proposalDetail['CRM #']
-        )}</a>`
+            proposalDetail['CRM #']
+          )}</a>`
         : `${window.location.href}`,
     '[todays_date]': `${formatTheDate(new Date())}`,
     '[full_proposal_team]': getFullProposalTeamString(
@@ -427,7 +430,7 @@ function getLineOfBusinessAsPerLogic(
   salesForceLobIsFSP
 ) {
   let finalLOB = '';
-  lobMapping.forEach(function (data) {
+  lobMapping.forEach(function(data) {
     if (finalLOB !== '') return false;
     const { name } = data;
     data.values.forEach(d => {
@@ -678,18 +681,22 @@ const createMatomoObj = (proposalDetails, userEmail, userRole, action) => {
 
 const getNextMilestone = milestones => {
   if (Array.isArray(milestones) && milestones.length > 0) {
-    let sortedMilestones = milestones.sort((milestoneA, milestoneB) => {
-      let diff = 0;
-      try {
-        diff =
-          moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
-          moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
-      } catch (e) {
-        console.error('[Utils.getNextMilestone] Error in parsing date', e);
-      }
-      return diff;
-    });
-    return sortedMilestones[0].name;
+    let sortedMilestones = milestones
+      .filter(milestone =>
+        moment(milestone.date, 'DD-MMM-YYYY').isSameOrAfter(moment(), 'd')
+      )
+      .sort((milestoneA, milestoneB) => {
+        let diff = 0;
+        try {
+          diff =
+            moment(milestoneA.date, 'DD-MMM-YYYY').valueOf() -
+            moment(milestoneB.date, 'DD-MMM-YYYY').valueOf();
+        } catch (e) {
+          console.error('[Utils.getNextMilestone] Error in parsing date', e);
+        }
+        return diff;
+      });
+    return sortedMilestones[0]?.name;
   }
   return '';
 };
