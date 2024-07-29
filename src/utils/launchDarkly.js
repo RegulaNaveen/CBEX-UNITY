@@ -3,7 +3,7 @@ import deviceParser from 'ua-parser-js';
 import { LAUNCH_DARKLY_CLIENT_ID } from '../constants/api';
 
 const main = async (flagKey: string, defaultValue: any) => {
-  const email = localStorage.getItem('userEmail').toLocaleLowerCase();
+  const email = localStorage.getItem('userEmail').toLowerCase();
   const name = localStorage.getItem('userName');
   const role = localStorage.getItem('userRole');
 
