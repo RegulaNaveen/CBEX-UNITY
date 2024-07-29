@@ -114,8 +114,10 @@ const ChatBot = () => {
       return;
     }
     if (expanded) {
-      bubblesContainerRef.current.scrollTop =
-        bubblesContainerRef.current.scrollHeight;
+      setTimeout(() => {
+        bubblesContainerRef.current.scrollTop =
+          bubblesContainerRef.current.scrollHeight;
+      }, 100);
     }
   }, [bubbles, expanded]);
 
