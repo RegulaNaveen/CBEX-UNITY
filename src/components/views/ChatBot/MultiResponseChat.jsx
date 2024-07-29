@@ -137,6 +137,8 @@ export const MultiResponseChat = ({
                 } else if (
                   sourceDoc &&
                   sourceDoc.metadata &&
+                  sourceDoc.metadata.doc_class &&
+                  sourceDoc.metadata.doc_class.toLowerCase() !== 'unity' &&
                   sourceDoc.metadata.box_file_id &&
                   sourceDoc.metadata.box_file_id.trim() &&
                   !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
