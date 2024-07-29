@@ -37,7 +37,7 @@ import { getBidList } from '../../../redux/selectors/proposal';
 import { extractBidInfo, extractContext } from './utils';
 import { SocketContext } from '../../../context/SocketContext';
 import { REDUX_TYPES } from '../../../constants';
-import { CHATBOT } from '../../../constants/app';
+import { BID_TYPES, CHATBOT } from '../../../constants/app';
 
 const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
@@ -313,8 +313,13 @@ const ChatBot = () => {
         ]}
       >
         <Typography>
-          This answer is part of a different bid. Do you want to continue and
-          change to that bid?
+          Unity answer is from Bid Type{' '}
+          {BID_TYPES[gotoQuestionData.targetBidType] === 'Bid'
+            ? 'Clinical'
+            : BID_TYPES[gotoQuestionData.targetBidType]}{' '}
+          and Bid Number {gotoQuestionData.targetBidNumber}.
+          <br />
+          Do you want to continue and change to that bid?
         </Typography>
       </CustomModal>
       {expanded ? (

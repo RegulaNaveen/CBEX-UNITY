@@ -29,6 +29,8 @@ export function submitFeedback(feedback, callback = () => {}) {
         dispatch({ type: UPDATE_BUBBLE, payload: response.data });
       }
       return response;
+    } catch (e) {
+      return { statue: 500, message: 'Error submitting feedback' };
     } finally {
       callback();
     }
