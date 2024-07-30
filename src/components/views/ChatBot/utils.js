@@ -64,6 +64,17 @@ function extractBidInfo(bidNo) {
   return { targetBidNumber, targetBidType };
 }
 
+function getAnswerAsText(answer) {
+  if (Array.isArray(answer)) {
+    return answer.reduce((acc, item, idx) => {
+      if (idx === 0) return acc + item.result;
+      else return acc + '\n' + item.result;
+    }, '');
+  } else {
+    return answer;
+  }
+}
+
 function extractContext(bubbles, maxNumOfCount) {
   const context = [];
   let count = 0;
@@ -100,7 +111,7 @@ function extractContext(bubbles, maxNumOfCount) {
       if (bubble.variant === 'user') {
         context.push({
           question: bubble.children,
-          answer: bubbles[i + 1].children
+          answer: getAnswerAsText(bubbles[i + 1].children)
         });
         count++;
       }
