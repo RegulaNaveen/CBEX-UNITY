@@ -93,7 +93,7 @@ const SourceDocument = ({
       <Tooltip
         id="answer-tooltip"
         title={
-          <div>
+          <div className="tooltip-title">
             <div>{title}</div>
             <div>{pageNo !== '' ? `Page: ${pageNo}` : ''}</div>
           </div>

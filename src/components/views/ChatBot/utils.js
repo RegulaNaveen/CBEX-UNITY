@@ -39,6 +39,7 @@ function sanitizeResponse(response, prefix = null) {
       ''
     );
   }
+  sanitizedResponse = sanitizedResponse.replaceAll(/\\n/g, '\n');
   sanitizedResponse = sanitizedResponse.split(/\n/).join(' ');
   return sanitizedResponse.trim();
 }

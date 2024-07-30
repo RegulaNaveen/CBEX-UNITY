@@ -145,9 +145,9 @@ const ChatBot = () => {
   }, [expanded, bubblesLength, fullscreen, id, fetchingHistory]);
 
   useEffect(() => {
+    let height = '21px';
     if (inputText) {
       const numOfsplits = inputText.split('\n')?.length;
-      let height = '21px';
       const inputElement = document.querySelector(
         '.chat-bot-footer > div:last-child > div > div > .MuiInputBase-root > textarea'
       );
@@ -164,9 +164,9 @@ const ChatBot = () => {
       } else if (numOfLines >= 3) {
         height = `${21 * 4}px`;
       }
-      const root = document.documentElement;
-      root?.style.setProperty('--chatbot-input-height', height);
     }
+    const root = document.documentElement;
+    root?.style.setProperty('--chatbot-input-height', height);
   }, [inputText]);
 
   useEffect(() => {
