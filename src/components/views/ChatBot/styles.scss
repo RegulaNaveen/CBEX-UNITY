@@ -438,6 +438,12 @@
 }
 
 @mixin tooltip {
+  * {
+    font-size: 12px;
+  }
+  .tooltip-title * {
+    font-size: 14px;
+  }
   & > div {
     max-width: 300px;
     max-height: 300px;
