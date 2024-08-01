@@ -146,7 +146,7 @@ function getContentAsText(content) {
 function getSourceDocTooltipInfo(source) {
   let title = '';
   let content = '';
-  let page = '';
+  let subtitle = '';
 
   if (source) {
     if (source.metadata && source.metadata.doc_class) {
@@ -162,10 +162,19 @@ function getSourceDocTooltipInfo(source) {
           source.metadata.section_name.toLowerCase() === 'questions'
         ) {
           title = 'Unity Question';
+        } else if (
+          source.metadata.section_name &&
+          source.metadata.section_name.toLowerCase() === 'pricemodular'
+        ) {
+          title = 'Unity';
+          subtitle = 'Retrieved from price modeler section';
+        } else {
+          title = 'Unity';
+          subtitle = 'Retrieved from opportunity info';
         }
       } else {
         title = source.metadata.source || '';
-        page = source.metadata.page || '';
+        subtitle = source.metadata.page ? `Page: ${source.metadata.page}` : '';
         if (
           source.metadata.box_file_id &&
           source.metadata.box_file_id.trim() &&
@@ -180,7 +189,7 @@ function getSourceDocTooltipInfo(source) {
     }
   }
 
-  return { title, content, page };
+  return { title, content, subtitle };
 }
 
 export {
