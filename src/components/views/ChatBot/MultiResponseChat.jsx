@@ -63,13 +63,13 @@ export const MultiResponseChat = ({
                       <SourceDocument
                         key={`source-doc-${bubbleId}-${i}`}
                         title={sourceInfo.title}
+                        subTitle={sourceInfo.subtitle}
                         content={sanitizeResponse(sourceInfo.content, null)}
                         buttonLabel={(() => {
                           sourceIndex++;
                           return `[${sourceIndex}]`;
                         })()}
                         className="source-doc-btn"
-                        pageNo={sourceInfo.page}
                       />
                     );
                   })}
