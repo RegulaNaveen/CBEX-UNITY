@@ -90,15 +90,16 @@ const ChatBot = () => {
     async message => {
       const data = JSON.parse(message.data);
       // Handle event ONLY if data.event_group is 'CHATBOT'
+      // Below code will be put in default event listener as well
       if (data.event_group === 'CHATBOT') {
         switch (data.event_name) {
           case 'CHATBOT_USER_QUERY_RESPONSE':
-            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            console.info(`[CHATBOT] Event: [${Date.now()}] ${data.event_name}`);
             await dispatch(addResponseToChat(data.event_data));
             await dispatch({ type: SET_LOADING_STATE, payload: false });
             break;
           case 'CHATBOT_USER_QUERY':
-            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            console.info(`[CHATBOT] Event: [${Date.now()}] ${data.event_name}`);
             await dispatch(handleChatBotQueryWSMsg(data.event_data));
             break;
           default:

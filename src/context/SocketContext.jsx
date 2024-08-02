@@ -58,6 +58,14 @@ import {
   updateTaskListOrderAction,
   updateTaskListMoveAction
 } from '../redux/actions/tasksList-actions';
+import { useDispatch } from 'react-redux';
+import {
+  addResponseToChat,
+  handleChatBotQueryWSMsg
+} from '../redux/actions/chatbot-actions';
+import { REDUX_TYPES } from '../constants';
+
+const { SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
 const currentOppNo = {
   get: localStorage.getItem('oppNo') || null,
@@ -68,6 +76,7 @@ export const SocketContext = createContext();
 
 const SocketContextProvider = props => {
   const socket = useRef(null);
+  const dispatch = useDispatch();
   let refreshInterval = null;
   /**
    * Checks for socket connection
@@ -593,6 +602,28 @@ const SocketContextProvider = props => {
         // On Message Recieve
         newSocket.addEventListener('message', async response => {
           const data = JSON.parse(response.data);
+
+          if (data.event_group === 'CHATBOT') {
+            switch (data.event_name) {
+              case 'CHATBOT_USER_QUERY_RESPONSE':
+                console.info(
+                  `[CHATBOT] Event: [${Date.now()}] ${data.event_name}`
+                );
+                await dispatch(addResponseToChat(data.event_data));
+                await dispatch({ type: SET_LOADING_STATE, payload: false });
+                break;
+              case 'CHATBOT_USER_QUERY':
+                console.info(
+                  `[CHATBOT] Event: [${Date.now()}] ${data.event_name}`
+                );
+                await dispatch(handleChatBotQueryWSMsg(data.event_data));
+                break;
+              default:
+                console.info(`[CHATBOT] Unknown Event: ${data.event_name}`);
+                break;
+            }
+          }
+
           switch (data.event) {
             case 'IN_PROGRESS':
               addNewBid(data.data);
