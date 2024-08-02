@@ -38,6 +38,7 @@ import { extractBidInfo, extractContext } from './utils';
 import { SocketContext } from '../../../context/SocketContext';
 import { REDUX_TYPES } from '../../../constants';
 import { BID_TYPES, CHATBOT } from '../../../constants/app';
+import { getUserId } from '../../../SessionHandler';
 
 const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
@@ -198,6 +199,7 @@ const ChatBot = () => {
             ...payload,
             query_id,
             query_created_at,
+            query_created_by: getUserId(),
             context: extractContext(
               bubbles,
               flags[featureFlags.CHATBOT_CONTENT_COUNT]
