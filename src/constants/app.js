@@ -169,8 +169,10 @@ const CHATBOT = {
   FEEDBACK_ERROR_MSG:
     "We've noticed that feedback wasn't successfully submitted. Your input is valuable to us, and we'd love to hear your thoughts. Please attempt to provide feedback again.",
   RESTART_DISCLAIMER:
-    'Oops! It seems we need to refresh our connection to serve you better. Please close and restart the chat to re-sync with the latest data. This will help ensure the most accurate and up-to-date information is available. Thank you for your understanding.',
-  MESSAGE_WATCHER_TIMEOUT: 5 * 60 * 1000
+    "Unfortunately, we've encountered a disruption in our server connection. I'm unable to process your request at the moment. Please close and reopen the window and try again shortly. Your patience is appreciated!",
+  TIMEOUT_ERROR_MSG:
+    "It seems our conversation took a bit too long, and we've hit a timeout. I apologize for the inconvenience. Please close and reopen the chatbot to resume your conversation.",
+  MESSAGE_WATCHER_TIMEOUT: 295 * 1000 // 4m 55s
 };
 
 export {

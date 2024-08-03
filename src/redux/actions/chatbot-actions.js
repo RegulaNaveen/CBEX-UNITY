@@ -325,7 +325,7 @@ function onWatchTimeout(messageId, userQuery) {
           result: {
             result: [
               {
-                result: CHATBOT.RESTART_DISCLAIMER
+                result: CHATBOT.TIMEOUT_ERROR_MSG
               }
             ]
           }
