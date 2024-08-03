@@ -55,9 +55,9 @@ export const MultiResponseChat = ({
                   ''
                 }
               />
-              <div className="src-doc-list">
-                {Array.isArray(response.source_documents) &&
-                  response.source_documents.map((sourceDoc, i) => {
+              {Array.isArray(response.source_documents) && (
+                <div className="src-doc-list">
+                  {response.source_documents.map((sourceDoc, i) => {
                     const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
                     return (
                       <SourceDocument
@@ -73,7 +73,8 @@ export const MultiResponseChat = ({
                       />
                     );
                   })}
-              </div>
+                </div>
+              )}
             </p>
             {Array.isArray(response.source_documents) &&
               response.source_documents
