@@ -1,16 +1,17 @@
-import jwt_decode from 'jwt-decode';
 import {
-  fetchChatBotReplyApi,
   fetchChatHistoryApi,
+  getHistoryItemById,
   sendDataTriggerApi,
   submitFeedbackApi
 } from '../../api/chatbot';
 import { REDUX_TYPES } from '../../constants';
 import { welcomeBubble } from '../reducers/chatbot';
 import { CHATBOT } from '../../constants/app';
-import { getAccessTokenFromLocalStorage } from '../../SessionHandler';
-import moment from 'moment';
-import { selectChatBotBubbles } from '../selectors/chatbot';
+import {
+  selectChatBotBubbles,
+  selectMessageWatchersMap
+} from '../selectors/chatbot';
+import { cloneDeep } from 'lodash';
 
 const {
   ADD_CHATBOT_BUBBLE,
@@ -18,7 +19,8 @@ const {
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
   FETCHING_HISTORY,
-  SET_CHATBOT_BUBBLES
+  SET_CHATBOT_BUBBLES,
+  SET_MESSAGE_WATCHERS_MAP
 } = REDUX_TYPES.CHATBOT;
 
 export function submitFeedback(feedback, callback = () => {}) {
@@ -193,6 +195,25 @@ export function addResponseToChat(responseData) {
   return async (dispatch, getState) => {
     try {
       const bubbles = await selectChatBotBubbles(getState());
+      const messageWatchersMap = cloneDeep(
+        selectMessageWatchersMap(getState())
+      );
+      if (messageWatchersMap && messageWatchersMap[responseData.id]) {
+        clearTimeout(messageWatchersMap[responseData.id]);
+        console.info(
+          `[CHATBOT] Removed message watcher for ${responseData.id}`
+        );
+        delete messageWatchersMap[responseData.id];
+        await dispatch({
+          type: SET_MESSAGE_WATCHERS_MAP,
+          payload: messageWatchersMap
+        });
+        console.info(
+          `[CHATBOT] message watchers list: ${JSON.stringify(
+            messageWatchersMap
+          )}`
+        );
+      }
       const responseBubbleIndex = bubbles.findIndex(
         bubble =>
           bubble &&
@@ -265,6 +286,104 @@ export function addResponseToChat(responseData) {
       }
     } catch (e) {
       console.log('[CHATBOT] Error adding response to chat: ', e);
+    }
+  };
+}
+
+function onWatchTimeout(messageId, userQuery) {
+  return async (dispatch, getState) => {
+    try {
+      const state = getState();
+      const messageWatchersMap = cloneDeep(selectMessageWatchersMap(state));
+      if (messageWatchersMap && messageWatchersMap[messageId]) {
+        clearTimeout(messageWatchersMap[messageId]);
+        console.info(`[CHATBOT] Removed message watcher for ${messageId}`);
+        delete messageWatchersMap[messageId];
+        await dispatch({
+          type: SET_MESSAGE_WATCHERS_MAP,
+          payload: messageWatchersMap
+        });
+        console.info(
+          `[CHATBOT] message watchers list: ${JSON.stringify(
+            messageWatchersMap
+          )}`
+        );
+      }
+      const bubbles = cloneDeep(selectChatBotBubbles(state));
+      const userBubbleIndex = bubbles.findIndex(
+        bubble =>
+          bubble &&
+          bubble.info &&
+          bubble.info.id === messageId &&
+          bubble.variant === 'user'
+      );
+      if (userBubbleIndex > -1) {
+        const queryResponse = await getHistoryItemById(messageId);
+        const response = (queryResponse &&
+          queryResponse.data &&
+          queryResponse.data.response) || {
+          result: {
+            result: [
+              {
+                result: CHATBOT.RESTART_DISCLAIMER
+              }
+            ]
+          }
+        };
+        bubbles.splice(userBubbleIndex + 1, 0, {
+          variant: 'system',
+          copyContent: CHATBOT.DEFAULT_ERROR_REPLY,
+          children: CHATBOT.DEFAULT_ERROR_REPLY,
+          sentOrReceivedAt: Date.now(),
+          info: {
+            id: messageId,
+            feedback: '',
+            user_query: userQuery,
+            ...response
+          }
+        });
+        await dispatch({ type: SET_CHATBOT_BUBBLES, payload: bubbles });
+      }
+      await dispatch({ type: SET_LOADING_STATE, payload: false });
+    } catch (e) {
+      console.info('[CHATBOT] Error in handle message wacth timeout' + e);
+    }
+  };
+}
+
+export function attachWatcher(messageId, userQuery) {
+  return async (dispatch, getState) => {
+    try {
+      console.info(`[CHATBOT] Attaching watcher for message id: ${messageId}`);
+      const state = getState();
+      const bubbles = selectChatBotBubbles(state);
+      const userBubbleIndex = bubbles.findIndex(
+        bubble =>
+          bubble &&
+          bubble.info &&
+          bubble.info.id === messageId &&
+          bubble.variant === 'user'
+      );
+      if (userBubbleIndex > -1) {
+        const messageWatchersMap = cloneDeep(selectMessageWatchersMap(state));
+        if (messageWatchersMap && !messageWatchersMap[messageId]) {
+          messageWatchersMap[messageId] = setTimeout(
+            () => dispatch(onWatchTimeout(messageId, userQuery)),
+            CHATBOT.MESSAGE_WATCHER_TIMEOUT
+          );
+          dispatch({
+            type: SET_MESSAGE_WATCHERS_MAP,
+            payload: messageWatchersMap
+          });
+          console.info(
+            `[CHATBOT] watcher for message id: ${messageId} attached`
+          );
+        }
+      } else {
+        console.info(`[CHATBOT] message id: ${messageId} not found`);
+      }
+    } catch (e) {
+      console.log(`[CHATBOT] Error attaching watcher to ${messageId} ` + e);
     }
   };
 }

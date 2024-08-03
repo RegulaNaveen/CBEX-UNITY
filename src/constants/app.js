@@ -169,7 +169,8 @@ const CHATBOT = {
   FEEDBACK_ERROR_MSG:
     "We've noticed that feedback wasn't successfully submitted. Your input is valuable to us, and we'd love to hear your thoughts. Please attempt to provide feedback again.",
   RESTART_DISCLAIMER:
-    'Oops! It seems we need to refresh our connection to serve you better. Please close and restart the chat to re-sync with the latest data. This will help ensure the most accurate and up-to-date information is available. Thank you for your understanding.'
+    'Oops! It seems we need to refresh our connection to serve you better. Please close and restart the chat to re-sync with the latest data. This will help ensure the most accurate and up-to-date information is available. Thank you for your understanding.',
+  MESSAGE_WATCHER_TIMEOUT: 5 * 60 * 1000
 };
 
 export {

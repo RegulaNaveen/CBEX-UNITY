@@ -24,6 +24,7 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   addResponseToChat,
+  attachWatcher,
   fetchHistory,
   handleChatBotQueryWSMsg,
   sendDataTrigger
@@ -222,6 +223,7 @@ const ChatBot = () => {
           }
         }
       });
+      await dispatch(attachWatcher(query_id, payload.query));
       // TODO: Set a timer to check if the response is not received in <n> seconds
       // and show a message to the user that the response is taking longer than expected
       // give UI control to the user to poll the server for the response

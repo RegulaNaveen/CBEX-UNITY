@@ -7,7 +7,8 @@ const {
   UPDATE_CHATBOT_BUBBLE,
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
-  FETCHING_HISTORY
+  FETCHING_HISTORY,
+  SET_MESSAGE_WATCHERS_MAP
 } = REDUX_TYPES.CHATBOT;
 
 export const welcomeBubble = {
@@ -41,7 +42,8 @@ export const welcomeBubble = {
 const INITIAL_STATE = {
   bubbles: [],
   loading: false,
-  fetchingHistory: false
+  fetchingHistory: false,
+  messageWatchersMap: {}
 };
 
 function onSetBubbles(state, action) {
@@ -100,13 +102,21 @@ function onUpdateChatbotBubble(state, action) {
   };
 }
 
+function onSetMessageWatchersMap(state, action) {
+  return {
+    ...state,
+    messageWatchersMap: action.payload
+  };
+}
+
 const actionMap = {
   [SET_CHATBOT_BUBBLES]: onSetBubbles,
   [ADD_CHATBOT_BUBBLE]: onAddBubble,
   [SET_LOADING_STATE]: onLoading,
   [UPDATE_BUBBLE]: onUpdateBubble,
   [FETCHING_HISTORY]: setFetchingHistory,
-  [UPDATE_CHATBOT_BUBBLE]: onUpdateChatbotBubble
+  [UPDATE_CHATBOT_BUBBLE]: onUpdateChatbotBubble,
+  [SET_MESSAGE_WATCHERS_MAP]: onSetMessageWatchersMap
 };
 
 export default function(state = INITIAL_STATE, action) {
