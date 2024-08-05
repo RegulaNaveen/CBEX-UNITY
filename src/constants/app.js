@@ -166,6 +166,8 @@ const CHATBOT = {
     'full list of assessments:',
     'I apologize, but it appears'
   ],
+  NO_ANSWER_MSG:
+    "I apologize, but it appears I'm unable to find a match for your query in the documents I have access to. To assist you better, could you please rephrase your question? Alternatively, you can ensure the required documents are stored in appropriate Box folders. If something doesn't seem right, let us know with a 'thumbs down' feedback. Your input helps us improve!",
   FEEDBACK_ERROR_MSG:
     "We've noticed that feedback wasn't successfully submitted. Your input is valuable to us, and we'd love to hear your thoughts. Please attempt to provide feedback again.",
   RESTART_DISCLAIMER:
