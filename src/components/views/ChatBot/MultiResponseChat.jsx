@@ -10,6 +10,8 @@ import {
 } from './utils';
 import { CHATBOT } from '../../../constants/app';
 import ResponseRenderer from './ResponseRenderer';
+import { setVTabActiveIndexAction } from '../../../redux/actions/proposal-actions';
+import { useDispatch } from 'react-redux';
 
 function getSourceDocNameFromPath(source) {
   if (
@@ -31,6 +33,8 @@ export const MultiResponseChat = ({
   query = ''
 }) => {
   let sourceIndex = 0;
+  const dispatch = useDispatch();
+
   return (
     <div className={className}>
       {list?.map((response, i) => {
@@ -110,7 +114,13 @@ export const MultiResponseChat = ({
                         variant="secondary"
                         size="small"
                         className="chatbot-action-btn"
-                        onClick={() =>
+                        onClick={() => {
+                          // Open notepad
+                          if (
+                            sourceDoc.metadata.section_name.toLowerCase() ===
+                            'notepad'
+                          )
+                            dispatch(setVTabActiveIndexAction(1));
                           handleGotoQuestion(
                             sourceDoc.metadata.bid_no,
                             [
@@ -134,8 +144,8 @@ export const MultiResponseChat = ({
                                     sourceDoc.metadata.section_name.toLowerCase()
                                   ]
                                 )
-                          )
-                        }
+                          );
+                        }}
                         title={btnLabel}
                       >
                         {btnLabel}
