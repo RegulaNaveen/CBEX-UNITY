@@ -41,15 +41,7 @@ export const MultiResponseChat = ({
         return (
           <div>
             {' '}
-            <p
-              className={classNames({
-                error:
-                  ((response &&
-                    response.result &&
-                    response.result.replace(/\"$/, '')) ||
-                    '') === ''
-              })}
-            >
+            <p>
               {list.length > 1 && `${i + 1}. `}
               <ResponseRenderer
                 response={

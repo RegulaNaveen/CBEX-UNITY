@@ -40,12 +40,7 @@ function ResponseRenderer({ response }) {
         })
       );
     } else {
-      setBreakDowns([
-        <>
-          We sincerely apologize for the inconvenience caused please reload or
-          rephrase the question.
-        </>
-      ]);
+      setBreakDowns([<>{CHATBOT.NO_ANSWER_MSG}</>]);
     }
   }, [response]);
 
