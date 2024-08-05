@@ -14,9 +14,9 @@ const {
 export const welcomeBubble = {
   variant: 'systemWithContent',
   copyContent:
-    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
+    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Be aware that I specialize in Unity's Clinical Bids; other bid types may result in incomplete responses. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
   children:
-    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
+    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Be aware that I specialize in Unity's Clinical Bids; other bid types may result in incomplete responses. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate.",
   replySuggestionMessage: 'Here are some things I can do:',
   buttonProps: [
     {
@@ -34,7 +34,7 @@ export const welcomeBubble = {
   info: {
     result: {
       result:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. "
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Be aware that I specialize in Unity's Clinical Bids; other bid types may result in incomplete responses. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate."
     }
   }
 };
