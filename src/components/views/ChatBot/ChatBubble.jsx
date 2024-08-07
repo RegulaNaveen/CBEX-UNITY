@@ -82,7 +82,7 @@ const ChatBubbleActions = ({
                 } else if (line.trim() === '') {
                   return '\n';
                 } else {
-                  return line + '\n';
+                  return `${line}<br/>`;
                 }
               })
               .join('')

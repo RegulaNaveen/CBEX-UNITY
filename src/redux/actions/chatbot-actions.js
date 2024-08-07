@@ -4,7 +4,7 @@ import {
   sendDataTriggerApi,
   submitFeedbackApi
 } from '../../api/chatbot';
-import { REDUX_TYPES } from '../../constants';
+import { API, REDUX_TYPES } from '../../constants';
 import { welcomeBubble } from '../reducers/chatbot';
 import { CHATBOT } from '../../constants/app';
 import {
@@ -12,6 +12,8 @@ import {
   selectMessageWatchersMap
 } from '../selectors/chatbot';
 import { cloneDeep } from 'lodash';
+import { LOGIN, ROOT } from '../../routes';
+import { saveRedirectURL } from '../../utils/StorageUtils';
 
 const {
   ADD_CHATBOT_BUBBLE,
@@ -22,6 +24,8 @@ const {
   SET_CHATBOT_BUBBLES,
   SET_MESSAGE_WATCHERS_MAP
 } = REDUX_TYPES.CHATBOT;
+
+const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 
 export function submitFeedback(feedback, callback = () => {}) {
   return async dispatch => {
@@ -247,6 +251,7 @@ export function addResponseToChat(responseData) {
                 id: responseData.id,
                 feedback: responseData.feedback,
                 is_ecoa_or_cd: responseData.is_ecoa_or_cd,
+                user_query: responseData.user_query,
                 ...responseData.response
               }
             },
@@ -290,7 +295,7 @@ export function addResponseToChat(responseData) {
   };
 }
 
-function onWatchTimeout(messageId, userQuery) {
+function onWatchTimeout(messageId, userQuery, attempt = null) {
   return async (dispatch, getState) => {
     try {
       const state = getState();
@@ -318,7 +323,23 @@ function onWatchTimeout(messageId, userQuery) {
           bubble.variant === 'user'
       );
       if (userBubbleIndex > -1) {
+        console.info(
+          `[CHATBOT] Attempt${attempt} trying to fetch response from DB`
+        );
         const queryResponse = await getHistoryItemById(messageId);
+        if (
+          !(queryResponse && queryResponse.data && queryResponse.data.response)
+        ) {
+          if (attempt !== null && attempt <= 10) {
+            await attachWatcher(messageId, userQuery, attempt);
+            return;
+          } else {
+            console.info('[CHATBOT] Maximum retry attempts reached!');
+          }
+        } else {
+          console.info('[CHATBOT] Successfully fetched response from DB!');
+        }
+
         const response = (queryResponse &&
           queryResponse.data &&
           queryResponse.data.response) || {
@@ -346,12 +367,12 @@ function onWatchTimeout(messageId, userQuery) {
       }
       await dispatch({ type: SET_LOADING_STATE, payload: false });
     } catch (e) {
-      console.info('[CHATBOT] Error in handle message wacth timeout' + e);
+      console.info('[CHATBOT] Error in handle message watch timeout' + e);
     }
   };
 }
 
-export function attachWatcher(messageId, userQuery) {
+export function attachWatcher(messageId, userQuery, attempt = 0) {
   return async (dispatch, getState) => {
     try {
       console.info(`[CHATBOT] Attaching watcher for message id: ${messageId}`);
@@ -368,7 +389,7 @@ export function attachWatcher(messageId, userQuery) {
         const messageWatchersMap = cloneDeep(selectMessageWatchersMap(state));
         if (messageWatchersMap && !messageWatchersMap[messageId]) {
           messageWatchersMap[messageId] = setTimeout(
-            () => dispatch(onWatchTimeout(messageId, userQuery)),
+            () => dispatch(onWatchTimeout(messageId, userQuery, attempt++)),
             CHATBOT.MESSAGE_WATCHER_TIMEOUT
           );
           dispatch({
@@ -386,4 +407,18 @@ export function attachWatcher(messageId, userQuery) {
       console.log(`[CHATBOT] Error attaching watcher to ${messageId} ` + e);
     }
   };
+}
+
+export function onInvalidToken(socket) {
+  localStorage.clear();
+  const pathname = window.location.pathname;
+  if (pathname !== LOGIN && pathname !== ROOT) {
+    saveRedirectURL(pathname);
+  }
+  if (socket instanceof WebSocket) {
+    socket.close();
+  }
+  window.location.assign(
+    `${COGNITO_HOST}/logout?client_id=${CLIENT_ID}&logout_uri=${REDIRECTION_URL}`
+  );
 }

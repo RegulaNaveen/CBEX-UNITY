@@ -174,7 +174,8 @@ const CHATBOT = {
     "Unfortunately, we've encountered a disruption in our server connection. I'm unable to process your request at the moment. Please close and reopen the window and try again shortly. Your patience is appreciated!",
   TIMEOUT_ERROR_MSG:
     "It seems our conversation took a bit too long, and we've hit a timeout. I apologize for the inconvenience. Please close and reopen the chatbot to resume your conversation.",
-  MESSAGE_WATCHER_TIMEOUT: 295 * 1000 // 4m 55s
+  MESSAGE_WATCHER_TIMEOUT: 30 * 1000, // 30s
+  MAX_HISTORY: 30
 };
 
 export {
