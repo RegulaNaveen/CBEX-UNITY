@@ -82,7 +82,7 @@ export const MultiResponseChat = ({
                     sourceDoc.metadata.doc_class &&
                     sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
                     query &&
-                    query.toLowerCase() === 'summarize this opportunity'
+                    query.toLowerCase().trim() === 'summarize this opportunity'
                   );
                 })
                 .map((sourceDoc, i) => {
