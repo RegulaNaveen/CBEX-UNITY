@@ -395,7 +395,7 @@ const ChatBot = () => {
                       bubble &&
                       bubble.info &&
                       bubble.info.user_query &&
-                      bubble.info.user_query.toLowerCase() ===
+                      bubble.info.user_query.toLowerCase().trim() ===
                         'summarize this opportunity'
                         ? 'text/html'
                         : 'text/plain'
