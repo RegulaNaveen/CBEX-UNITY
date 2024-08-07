@@ -718,6 +718,17 @@ const getBidNameByType = bidType => {
   return bidName;
 };
 
+function getOppNoFromPathname(pathname) {
+  const paths = pathname.split('/');
+  const oppPathIndex = paths
+    .map(path => path.toLowerCase())
+    .findIndex(path => path === 'opportunities');
+  if (oppPathIndex > -1 && oppPathIndex < paths.length - 1) {
+    return paths[paths.length - 1];
+  }
+  return null;
+}
+
 export {
   getCountriesNameForCode,
   getCountryOptions,
@@ -735,5 +746,6 @@ export {
   createMatomoObj,
   getApprovalCount,
   getNextMilestone,
-  getBidNameByType
+  getBidNameByType,
+  getOppNoFromPathname
 };

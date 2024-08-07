@@ -64,6 +64,7 @@ import {
   handleChatBotQueryWSMsg
 } from '../redux/actions/chatbot-actions';
 import { REDUX_TYPES } from '../constants';
+import { getOppNoFromPathname } from '../utils/utils';
 
 const { SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
@@ -542,8 +543,8 @@ const SocketContextProvider = props => {
             if (![UBUILD, DASHBOARD].includes(location)) {
               setTimeout(() => {
                 sendUpdateConnection(
-                  localStorage.getItem('oppNo'),
-                  localStorage.getItem('proposalId'),
+                  getOppNoFromPathname(location),
+                  localStorage.getItem('proposalId'), // SHOULD NOT READ FROM LOCALSTORAGE
                   newSocket
                 );
               }, 1000);

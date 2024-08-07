@@ -41,7 +41,7 @@ export const MultiResponseChat = ({
         return (
           <div>
             {' '}
-            <p>
+            <>
               {list.length > 1 && `${i + 1}. `}
               <ResponseRenderer
                 response={
@@ -71,7 +71,7 @@ export const MultiResponseChat = ({
                   })}
                 </div>
               )}
-            </p>
+            </>
             {Array.isArray(response.source_documents) &&
               response.source_documents
                 .filter(sourceDoc => {

@@ -125,7 +125,7 @@ function getContentAsText(content) {
   if (Array.isArray(content)) {
     let text = '';
     content.forEach((item, idx, arr) => {
-      if (item.result) {
+      if (typeof item.result === 'string' && item.result.length > 0) {
         if (arr.length > 1) {
           text += `${idx + 1}. `;
         }
@@ -192,11 +192,76 @@ function getSourceDocTooltipInfo(source) {
   return { title, content, subtitle };
 }
 
+function isConnected(socket) {
+  if (socket instanceof WebSocket) {
+    return socket.readyState === WebSocket.OPEN;
+  } else {
+    console.info('[CHATBOT] socket is not an instance of WebSocket Object.');
+    return null;
+  }
+}
+
+function isConnecting(socket) {
+  if (socket instanceof WebSocket) {
+    return socket.readyState === WebSocket.CONNECTING;
+  } else {
+    console.info('[CHATBOT] socket is not an instance of WebSocket Object.');
+    return null;
+  }
+}
+
+async function sendWSMsgWithRetry(
+  socket,
+  message,
+  initiateConnection,
+  attempt = 0
+) {
+  if (attempt <= 10) {
+    try {
+      if (isConnected(socket)) {
+        socket.send(message);
+        return Promise.resolve(socket);
+      } else if (isConnecting(socket)) {
+        console.info(`[CHATBOT] Waiting for ${(1000 * (attempt + 1)) / 1000}s`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+        console.info(`[CHATBOT] Retrying...`);
+        return await sendWSMsgWithRetry(
+          socket,
+          message,
+          initiateConnection,
+          attempt++
+        );
+      } else {
+        // Either WebSocket.CLOSING or WebSocket.CLOSED
+        // Reconnect and retry again
+        console.info(`[CHATBOT] Waiting for ${(1000 * (attempt + 1)) / 1000}s`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+        console.info(`[CHATBOT] Retrying...`);
+        return await sendWSMsgWithRetry(
+          initiateConnection(),
+          message,
+          initiateConnection,
+          attempt++
+        );
+      }
+    } catch (e) {
+      console.info('[CHATBOT] Error in sending msg through Websocket: ', e);
+      return Promise.resolve(null);
+    }
+  } else {
+    console.info(
+      '[CHATBOT] Maximum retry achieved. Could not send msg through WebSocket.'
+    );
+    return Promise.resolve(null);
+  }
+}
+
 export {
   parseQuestionReference,
   sanitizeResponse,
   extractBidInfo,
   extractContext,
   getContentAsText,
-  getSourceDocTooltipInfo
+  getSourceDocTooltipInfo,
+  sendWSMsgWithRetry
 };
