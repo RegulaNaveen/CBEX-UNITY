@@ -51,6 +51,7 @@ const ChatBot = () => {
   const [inputText, setInputText] = useState('');
   const [gotoQuestionData, setGotoQuestionData] = useState({});
   const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
+  const [disableChat, setDisableChat] = useState(false);
 
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -175,65 +176,78 @@ const ChatBot = () => {
   }, [inputText]);
 
   useEffect(() => {
-    if (loading || fetchingHistory) {
+    if (loading || fetchingHistory || disableChat) {
       const root = document.documentElement;
       root?.style.setProperty('--chatbot-input-disabled-color', 'transparent');
     }
-  }, [loading, fetchingHistory]);
+  }, [loading, disableChat, fetchingHistory]);
 
   const handleSendMsgBtnClick = useCallback(
     async payload => {
-      if (loading) return;
-
-      const tokenValid = await validateToken(
-        localStorage.getItem('access_token')
-      );
-      if (!tokenValid) {
-        onInvalidToken(socketInstance);
-        return;
-      }
-
-      const query_created_at = Date.now();
-      const query_id = uuidv4();
-      const wsQueryMsg = JSON.stringify({
-        event_group: 'CHATBOT',
-        event_name: 'CHATBOT_USER_QUERY',
-        event_data: {
-          ...payload,
-          query_id,
-          query_created_at,
-          query_created_by: getUserId(),
-          context: extractContext(
-            bubbles,
-            flags[featureFlags.CHATBOT_CONTENT_COUNT]
-          )
+      if (loading || disableChat) return;
+      try {
+        setDisableChat(true);
+        const tokenValid = await validateToken(
+          localStorage.getItem('access_token')
+        );
+        if (!tokenValid) {
+          onInvalidToken(socketInstance);
+          return;
         }
-      });
-      const socket = await sendWSMsgWithRetry(
-        socketInstance,
-        wsQueryMsg,
-        initiateConnection
-      );
-      console.info('[CHATBOT] Socket instance: ', socket);
-      if (socket !== null) {
-        await dispatch({ type: SET_LOADING_STATE, payload: true });
-        await dispatch({
-          type: ADD_CHATBOT_BUBBLE,
-          payload: {
-            variant: 'user',
-            copyContent: payload.query,
-            children: payload.query,
-            sentOrReceivedAt: query_created_at,
-            info: {
-              id: query_id,
-              feedback: null
-            }
+
+        const query_created_at = Date.now();
+        const query_id = uuidv4();
+        const wsQueryMsg = JSON.stringify({
+          event_group: 'CHATBOT',
+          event_name: 'CHATBOT_USER_QUERY',
+          event_data: {
+            ...payload,
+            query_id,
+            query_created_at,
+            query_created_by: getUserId(),
+            context: extractContext(
+              bubbles,
+              flags[featureFlags.CHATBOT_CONTENT_COUNT]
+            )
           }
         });
-        await dispatch(attachWatcher(query_id, payload.query));
+        const socket = await sendWSMsgWithRetry(
+          socketInstance,
+          wsQueryMsg,
+          initiateConnection
+        );
+        console.info('[CHATBOT] Socket instance: ', socket);
+        if (socket !== null) {
+          await dispatch({ type: SET_LOADING_STATE, payload: true });
+          await dispatch({
+            type: ADD_CHATBOT_BUBBLE,
+            payload: {
+              variant: 'user',
+              copyContent: payload.query,
+              children: payload.query,
+              sentOrReceivedAt: query_created_at,
+              info: {
+                id: query_id,
+                feedback: null
+              }
+            }
+          });
+          await dispatch(attachWatcher(query_id, payload.query));
+        }
+      } catch (e) {
+      } finally {
+        setDisableChat(false);
       }
     },
-    [dispatch, socketInstance, initiateConnection, bubbles, flags, loading]
+    [
+      disableChat,
+      dispatch,
+      socketInstance,
+      initiateConnection,
+      bubbles,
+      flags,
+      loading
+    ]
   );
 
   const findBidObjAndChangeBid = useCallback(
@@ -440,7 +454,7 @@ const ChatBot = () => {
             })}
           >
             <ChatBotFooter
-              disabled={loading || fetchingHistory}
+              disabled={loading || fetchingHistory || disableChat}
               onSendClick={() => {
                 if (
                   !inputRef.current.value ||
