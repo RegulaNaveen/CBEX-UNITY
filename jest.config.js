@@ -6,10 +6,7 @@ module.exports = {
   verbose: true,
   setupFilesAfterEnv: ['./setUpTests.js'],
   snapshotSerializers: [],
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/dist',
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/dist'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!**/node_modules/**',
@@ -22,7 +19,8 @@ module.exports = {
   moduleDirectories: ['node_modules', __dirname],
   coverageDirectory: '<rootDir>/coverage',
   moduleNameMapper: {
-    '\\.(css|scss|less)$': 'identity-obj-proxy'
+    '\\.(css|scss|less)$': 'identity-obj-proxy',
+    '\\.(svg)$': '<rootDir>/fileTransformer.js'
   },
   transformIgnorePatterns: [
     'node_modules/(?!' +
