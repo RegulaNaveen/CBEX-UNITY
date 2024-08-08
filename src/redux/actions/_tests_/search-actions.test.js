@@ -3370,6 +3370,7 @@ describe('search-actions test', () => {
       'selectedBid',
       fromJS(data.selectedBid)
     );
+    data.proposal.filteredProposalQuestions = [];
     data.emailTemplates = Map(data.emailTemplates);
     data.ssoAuth = Map(data.ssoAuth);
     data.selectedBid = fromJS(data.selectedBid);
