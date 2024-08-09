@@ -191,8 +191,9 @@
         }
 
         & > div:last-child {
-          div {
+          & > div {
             & > div {
+              min-height: 40px;
               padding: 4px;
               outline-color: #013d98;
               .MuiInputBase-root {
@@ -231,8 +232,10 @@
               }
             }
             & > div:last-child {
+              height: 30px;
               padding: 0;
               padding-right: 4px;
+              padding-top: 2px;
             }
           }
         }
@@ -435,6 +438,12 @@
 }
 
 @mixin tooltip {
+  * {
+    font-size: 12px;
+  }
+  .tooltip-title * {
+    font-size: 14px;
+  }
   & > div {
     max-width: 300px;
     max-height: 300px;

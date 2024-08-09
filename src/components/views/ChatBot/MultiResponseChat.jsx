@@ -9,6 +9,9 @@ import {
   sanitizeResponse
 } from './utils';
 import { CHATBOT } from '../../../constants/app';
+import ResponseRenderer from './ResponseRenderer';
+import { setVTabActiveIndexAction } from '../../../redux/actions/proposal-actions';
+import { useDispatch } from 'react-redux';
 
 function getSourceDocNameFromPath(source) {
   if (
@@ -29,121 +32,145 @@ export const MultiResponseChat = ({
   bubbleId = uuidv4(),
   query = ''
 }) => {
+  let sourceIndex = 0;
+  const dispatch = useDispatch();
+
   return (
     <div className={className}>
-      {list?.map((response, i) => (
-        <div>
-          {' '}
-          <p
-            className={classNames({
-              error:
-                ((response &&
-                  response.result &&
-                  response.result.replace(/\"$/, '')) ||
-                  '') === ''
-            })}
-          >
-            {list.length > 1 && `${i + 1}. `}
-            {(response &&
-              response.result &&
-              response.result.replace(/\"$/, '')) ||
-              'We sincerely apologize for the inconvenience caused please reload or rephrase the question.'}
-            <div className="src-doc-list">
-              {Array.isArray(response.source_documents) &&
-                response.source_documents.map((sourceDoc, i) => {
-                  const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
-                  return (
-                    <SourceDocument
-                      key={`source-doc-${bubbleId}-${i}`}
-                      title={sourceInfo.title}
-                      content={sanitizeResponse(sourceInfo.content, null)}
-                      buttonLabel={`[${i + 1}]`}
-                      className="source-doc-btn"
-                      pageNo={sourceInfo.page}
-                    />
+      {list?.map((response, i) => {
+        return (
+          <div>
+            {' '}
+            <>
+              {list.length > 1 && `${i + 1}. `}
+              <ResponseRenderer
+                response={
+                  (response &&
+                    response.result &&
+                    response.result.replace(/\"$/, '')) ||
+                  ''
+                }
+              />
+              {Array.isArray(response.source_documents) && (
+                <div className="src-doc-list">
+                  {response.source_documents.map((sourceDoc, i) => {
+                    const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
+                    return (
+                      <SourceDocument
+                        key={`source-doc-${bubbleId}-${i}`}
+                        title={sourceInfo.title}
+                        subTitle={sourceInfo.subtitle}
+                        content={sanitizeResponse(sourceInfo.content, null)}
+                        buttonLabel={(() => {
+                          sourceIndex++;
+                          return `[${sourceIndex}]`;
+                        })()}
+                        className="source-doc-btn"
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </>
+            {Array.isArray(response.source_documents) &&
+              response.source_documents
+                .filter(sourceDoc => {
+                  // Do not show Go to Unity button when query is 'Summarize this opportunity'
+                  return !(
+                    sourceDoc &&
+                    sourceDoc.metadata &&
+                    sourceDoc.metadata.doc_class &&
+                    sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
+                    query &&
+                    query.toLowerCase().trim() === 'summarize this opportunity'
                   );
+                })
+                .map((sourceDoc, i) => {
+                  if (
+                    sourceDoc &&
+                    sourceDoc.metadata &&
+                    sourceDoc.metadata.doc_class &&
+                    sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
+                    sourceDoc.metadata.section_name &&
+                    Object.keys(
+                      CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP
+                    ).includes(sourceDoc.metadata.section_name.toLowerCase())
+                  ) {
+                    const btnLabel =
+                      sourceDoc.metadata.section_name.toLowerCase() ===
+                      'notepad'
+                        ? 'Go to Unity'
+                        : 'Go to Unity Question';
+                    return (
+                      <Button
+                        variant="secondary"
+                        size="small"
+                        className="chatbot-action-btn"
+                        onClick={() => {
+                          // Open notepad
+                          if (
+                            sourceDoc.metadata.section_name.toLowerCase() ===
+                            'notepad'
+                          )
+                            dispatch(setVTabActiveIndexAction(1));
+                          handleGotoQuestion(
+                            sourceDoc.metadata.bid_no,
+                            [
+                              'questions',
+                              'custom_questions',
+                              'question_for_customers'
+                            ].includes(
+                              sourceDoc.metadata.section_name.toLowerCase()
+                            )
+                              ? parseQuestionReference(
+                                  sanitizeResponse(
+                                    sourceDoc.page_content || '',
+                                    CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                      sourceDoc.metadata.section_name.toLowerCase()
+                                    ]
+                                  )
+                                )
+                              : sanitizeResponse(
+                                  sourceDoc.page_content || '',
+                                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                    sourceDoc.metadata.section_name.toLowerCase()
+                                  ]
+                                )
+                          );
+                        }}
+                        title={btnLabel}
+                      >
+                        {btnLabel}
+                      </Button>
+                    );
+                  } else if (
+                    sourceDoc &&
+                    sourceDoc.metadata &&
+                    sourceDoc.metadata.doc_class &&
+                    sourceDoc.metadata.doc_class.toLowerCase() !== 'unity' &&
+                    sourceDoc.metadata.box_file_id &&
+                    sourceDoc.metadata.box_file_id.trim() &&
+                    !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
+                  ) {
+                    return (
+                      <Button
+                        variant="secondary"
+                        size="small"
+                        className="chatbot-action-btn"
+                        onClick={() =>
+                          handleReviewDoc(sourceDoc.metadata.box_file_id)
+                        }
+                        title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
+                      >
+                        Review {getSourceDocNameFromPath(sourceDoc)}
+                      </Button>
+                    );
+                  }
+                  return null;
                 })}
-            </div>
-          </p>
-          {Array.isArray(response.source_documents) &&
-            query &&
-            query.toLowerCase() !== 'summarize this opportunity' &&
-            response.source_documents.map((sourceDoc, i) => {
-              if (
-                sourceDoc &&
-                sourceDoc.metadata &&
-                sourceDoc.metadata.doc_class &&
-                sourceDoc.metadata.doc_class.toLowerCase() === 'unity' &&
-                sourceDoc.metadata.section_name &&
-                Object.keys(
-                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP
-                ).includes(sourceDoc.metadata.section_name.toLowerCase())
-              ) {
-                const btnLabel =
-                  sourceDoc.metadata.section_name.toLowerCase() === 'notepad'
-                    ? 'Go to Unity'
-                    : 'Go to Unity Question';
-                return (
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    className="chatbot-action-btn"
-                    onClick={() =>
-                      handleGotoQuestion(
-                        sourceDoc.metadata.bid_no,
-                        [
-                          'questions',
-                          'custom_questions',
-                          'question_for_customers'
-                        ].includes(
-                          sourceDoc.metadata.section_name.toLowerCase()
-                        )
-                          ? parseQuestionReference(
-                              sanitizeResponse(
-                                sourceDoc.page_content || '',
-                                CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                                  sourceDoc.metadata.section_name.toLowerCase()
-                                ]
-                              )
-                            )
-                          : sanitizeResponse(
-                              sourceDoc.page_content || '',
-                              CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                                sourceDoc.metadata.section_name.toLowerCase()
-                              ]
-                            )
-                      )
-                    }
-                    title={btnLabel}
-                  >
-                    {btnLabel}
-                  </Button>
-                );
-              } else if (
-                sourceDoc &&
-                sourceDoc.metadata &&
-                sourceDoc.metadata.box_file_id &&
-                sourceDoc.metadata.box_file_id.trim() &&
-                !Number.isNaN(Number(sourceDoc.metadata.box_file_id))
-              ) {
-                return (
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    className="chatbot-action-btn"
-                    onClick={() =>
-                      handleReviewDoc(sourceDoc.metadata.box_file_id)
-                    }
-                    title={`Review ${getSourceDocNameFromPath(sourceDoc)}`}
-                  >
-                    Review {getSourceDocNameFromPath(sourceDoc)}
-                  </Button>
-                );
-              }
-              return null;
-            })}
-        </div>
-      ))}
+          </div>
+        );
+      })}
     </div>
   );
 };
