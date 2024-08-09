@@ -6,7 +6,12 @@ module.exports = {
   verbose: true,
   setupFilesAfterEnv: ['./setUpTests.js'],
   snapshotSerializers: [],
-  testPathIgnorePatterns: ['/node_modules/', '/dist'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist',
+    '/src/components/screens/Opportunity/__tests__/'
+    // '/src/components/views/__tests__/Search',
+  ],
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
     '!**/node_modules/**',

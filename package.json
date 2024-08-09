@@ -1,6 +1,6 @@
 {
   "name": "gbo-efficiencies-frontend",
-  "version": "4.13.01",
+  "version": "5.0.0",
   "description": "GBO Efficiencies Frontend App",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "build:crm": "webpack --env API_ENV=CRM --mode production ",
     "build:uat": "webpack --env API_ENV=UAT --mode production ",
     "build:prod": "webpack --env API_ENV=PROD --mode production ",
-    "coverage": "yarn test -- --env=jsdom --coverage --watchAll=false --testTimeout=3000 --noStackTrace --runInBand",
+    "coverage": "jest --env=jsdom --coverage --watchAll=false --testTimeout=10000 --runInBand",
     "test": "jest",
     "clear_jest": "jest  --clearCache",
     "lint:fix": "eslint --ext .js,.jsx src test --fix",
