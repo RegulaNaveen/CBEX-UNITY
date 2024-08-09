@@ -1,16 +1,19 @@
-import jwt_decode from 'jwt-decode';
 import {
-  fetchChatBotReplyApi,
   fetchChatHistoryApi,
+  getHistoryItemById,
   sendDataTriggerApi,
   submitFeedbackApi
 } from '../../api/chatbot';
-import { REDUX_TYPES } from '../../constants';
+import { API, REDUX_TYPES } from '../../constants';
 import { welcomeBubble } from '../reducers/chatbot';
 import { CHATBOT } from '../../constants/app';
-import { getAccessTokenFromLocalStorage } from '../../SessionHandler';
-import moment from 'moment';
-import { selectChatBotBubbles } from '../selectors/chatbot';
+import {
+  selectChatBotBubbles,
+  selectMessageWatchersMap
+} from '../selectors/chatbot';
+import { cloneDeep } from 'lodash';
+import { LOGIN, ROOT } from '../../routes';
+import { saveRedirectURL } from '../../utils/StorageUtils';
 
 const {
   ADD_CHATBOT_BUBBLE,
@@ -18,8 +21,11 @@ const {
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
   FETCHING_HISTORY,
-  SET_CHATBOT_BUBBLES
+  SET_CHATBOT_BUBBLES,
+  SET_MESSAGE_WATCHERS_MAP
 } = REDUX_TYPES.CHATBOT;
+
+const { COGNITO_HOST, REDIRECTION_URL, CLIENT_ID } = API.AUTH;
 
 export function submitFeedback(feedback, callback = () => {}) {
   return async dispatch => {
@@ -29,191 +35,103 @@ export function submitFeedback(feedback, callback = () => {}) {
         dispatch({ type: UPDATE_BUBBLE, payload: response.data });
       }
       return response;
+    } catch (e) {
+      return { statue: 500, message: 'Error submitting feedback' };
     } finally {
       callback();
     }
   };
 }
 
-export function fetchHistory(opportunityNumber, appendRecents = false) {
+export function fetchHistory(opportunityNumber) {
+  console.log(`[CHATBOT] Fetching chat history for ${opportunityNumber}`);
   return async (dispatch, getState) => {
     try {
       await dispatch({ type: FETCHING_HISTORY, payload: true });
       const response = await fetchChatHistoryApi(opportunityNumber);
       if (response && Array.isArray(response.data)) {
-        if (response.data.length === 0 && !appendRecents) {
-          await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
+        if (response.data.length === 0) {
+          await dispatch({
+            type: SET_CHATBOT_BUBBLES,
+            payload: [welcomeBubble]
+          });
         } else {
-          // Append chat history to the existing bubbles
-          if (appendRecents) {
-            const lastChat = await selectChatBotBubbles(getState()).pop();
-            if (lastChat && lastChat.info && lastChat.info.id) {
-              const history = [];
-              response.data.reverse().forEach(bubble => {
-                if (new Date(bubble.created_at) > lastChat.sentOrReceivedAt) {
-                  history.push({
-                    info: {
-                      id: bubble.id,
-                      feedback: bubble.feedback,
-                      is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                      ...bubble.response,
-                      result: {
-                        ...((bubble.response &&
-                          bubble.response.result &&
-                          bubble.response.result) ||
-                          {}),
-                        result:
-                          (bubble.response &&
-                            bubble.response.result &&
-                            bubble.response.result.result) ||
-                          CHATBOT.DEFAULT_ERROR_REPLY
-                      }
-                    },
-                    variant: 'user',
-                    copyContent: bubble.user_query,
-                    children: bubble.user_query,
-                    sentOrReceivedAt:
-                      user_query_created_at !== null
-                        ? new Date(bubble.user_query_created_at).getTime()
-                        : null,
-                    replySuggestionMessage: '',
-                    isWelcomeBubble: false
-                  });
-                  history.push({
-                    info: {
-                      id: bubble.id,
-                      feedback: bubble.feedback,
-                      is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                      user_query: bubble.user_query,
-                      ...bubble.response,
-                      result: {
-                        ...((bubble.response &&
-                          bubble.response.result &&
-                          bubble.response.result) ||
-                          {}),
-                        result:
-                          (bubble.response &&
-                            bubble.response.result &&
-                            bubble.response.result.result) ||
-                          CHATBOT.DEFAULT_ERROR_REPLY
-                      }
-                    },
-                    variant: 'system',
-                    copyContent:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY,
-                    children:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY,
-                    sentOrReceivedAt: bubble.response_received_at
-                      ? new Date(bubble.response_received_at).getTime()
-                      : new Date(bubble.created_at).getTime(),
-                    replySuggestionMessage: '',
-                    isWelcomeBubble: false
-                  });
+          // Replace the existing bubbles with the chat history
+          const history = [];
+          response.data.reverse().forEach(bubble => {
+            history.push({
+              info: {
+                id: bubble.id,
+                feedback: bubble.feedback,
+                is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+                ...bubble.response,
+                result: {
+                  ...((bubble.response &&
+                    bubble.response.result &&
+                    bubble.response.result) ||
+                    {}),
+                  result:
+                    (bubble.response &&
+                      bubble.response.result &&
+                      bubble.response.result.result) ||
+                    CHATBOT.DEFAULT_ERROR_REPLY
                 }
-              });
-              await Promise.all(
-                history.map(item =>
-                  dispatch({ type: ADD_CHATBOT_BUBBLE, payload: item })
-                )
-              );
-            }
-          } else {
-            // Replace the existing bubbles with the chat history
-            const history = [];
-            response.data.reverse().forEach(bubble => {
-              history.push({
-                info: {
-                  id: bubble.id,
-                  feedback: bubble.feedback,
-                  is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                  ...bubble.response,
-                  result: {
-                    ...((bubble.response &&
-                      bubble.response.result &&
-                      bubble.response.result) ||
-                      {}),
-                    result:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY
-                  }
-                },
-                variant: 'user',
-                copyContent: bubble.user_query,
-                children: bubble.user_query,
-                sentOrReceivedAt:
-                  bubble.user_query_created_at !== null
-                    ? new Date(bubble.user_query_created_at).getTime()
-                    : null,
-                replySuggestionMessage: '',
-                isWelcomeBubble: false
-              });
-              history.push({
-                info: {
-                  id: bubble.id,
-                  feedback: bubble.feedback,
-                  is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                  ...bubble.response,
-                  user_query: bubble.user_query,
-                  result: {
-                    ...((bubble.response &&
-                      bubble.response.result &&
-                      bubble.response.result) ||
-                      {}),
-                    result:
-                      (bubble.response &&
-                        bubble.response.result &&
-                        bubble.response.result.result) ||
-                      CHATBOT.DEFAULT_ERROR_REPLY
-                  }
-                },
-                variant: 'system',
-                copyContent:
-                  (bubble.response &&
-                    bubble.response.result &&
-                    bubble.response.result.result) ||
-                  CHATBOT.DEFAULT_ERROR_REPLY,
-                children:
-                  (bubble.response &&
-                    bubble.response.result &&
-                    bubble.response.result.result) ||
-                  CHATBOT.DEFAULT_ERROR_REPLY,
-                sentOrReceivedAt: bubble.response_received_at
-                  ? new Date(bubble.response_received_at).getTime()
-                  : new Date(bubble.created_at).getTime(),
-                replySuggestionMessage: '',
-                isWelcomeBubble: false
-              });
+              },
+              variant: 'user',
+              copyContent: bubble.user_query,
+              children: bubble.user_query,
+              sentOrReceivedAt:
+                bubble.user_query_created_at !== null
+                  ? new Date(bubble.user_query_created_at).getTime()
+                  : null,
+              replySuggestionMessage: '',
+              isWelcomeBubble: false
             });
-            await dispatch({ type: SET_CHATBOT_BUBBLES, payload: history });
-            /**
-             * Logic to restore welcome message on new session
-             */
-            // const lastHistory = history[history.length - 1];
-            // const tokenInfo = jwt_decode(getAccessTokenFromLocalStorage());
-            // const isLastChatHappenedInCurrentSession = moment(
-            //   new Date(lastHistory.sentOrReceivedAt)
-            // ).isBetween(
-            //   moment(new Date(tokenInfo.auth_time * 1000)),
-            //   moment(new Date(tokenInfo.exp * 1000))
-            // );
-            await dispatch({
-              type: ADD_CHATBOT_BUBBLE,
-              payload: welcomeBubble
+            history.push({
+              info: {
+                id: bubble.id,
+                feedback: bubble.feedback,
+                is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+                ...bubble.response,
+                user_query: bubble.user_query,
+                result: {
+                  ...((bubble.response &&
+                    bubble.response.result &&
+                    bubble.response.result) ||
+                    {}),
+                  result:
+                    (bubble.response &&
+                      bubble.response.result &&
+                      bubble.response.result.result) ||
+                    CHATBOT.DEFAULT_ERROR_REPLY
+                }
+              },
+              variant: 'system',
+              copyContent:
+                (bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              children:
+                (bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result.result) ||
+                CHATBOT.DEFAULT_ERROR_REPLY,
+              sentOrReceivedAt: bubble.response_received_at
+                ? new Date(bubble.response_received_at).getTime()
+                : new Date(bubble.created_at).getTime(),
+              replySuggestionMessage: '',
+              isWelcomeBubble: false
             });
-          }
+          });
+          await dispatch({ type: SET_CHATBOT_BUBBLES, payload: history });
+          await dispatch({
+            type: ADD_CHATBOT_BUBBLE,
+            payload: welcomeBubble
+          });
         }
       } else {
-        if (!appendRecents) {
-          await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
-        }
+        await dispatch({ type: ADD_CHATBOT_BUBBLE, payload: welcomeBubble });
       }
     } catch (e) {
       console.log('[CHATBOT] Error fetching chat history: ', e);
@@ -281,6 +199,25 @@ export function addResponseToChat(responseData) {
   return async (dispatch, getState) => {
     try {
       const bubbles = await selectChatBotBubbles(getState());
+      const messageWatchersMap = cloneDeep(
+        selectMessageWatchersMap(getState())
+      );
+      if (messageWatchersMap && messageWatchersMap[responseData.id]) {
+        clearTimeout(messageWatchersMap[responseData.id]);
+        console.info(
+          `[CHATBOT] Removed message watcher for ${responseData.id}`
+        );
+        delete messageWatchersMap[responseData.id];
+        await dispatch({
+          type: SET_MESSAGE_WATCHERS_MAP,
+          payload: messageWatchersMap
+        });
+        console.info(
+          `[CHATBOT] message watchers list: ${JSON.stringify(
+            messageWatchersMap
+          )}`
+        );
+      }
       const responseBubbleIndex = bubbles.findIndex(
         bubble =>
           bubble &&
@@ -314,6 +251,7 @@ export function addResponseToChat(responseData) {
                 id: responseData.id,
                 feedback: responseData.feedback,
                 is_ecoa_or_cd: responseData.is_ecoa_or_cd,
+                user_query: responseData.user_query,
                 ...responseData.response
               }
             },
@@ -355,4 +293,132 @@ export function addResponseToChat(responseData) {
       console.log('[CHATBOT] Error adding response to chat: ', e);
     }
   };
+}
+
+function onWatchTimeout(messageId, userQuery, attempt = null) {
+  return async (dispatch, getState) => {
+    try {
+      const state = getState();
+      const messageWatchersMap = cloneDeep(selectMessageWatchersMap(state));
+      if (messageWatchersMap && messageWatchersMap[messageId]) {
+        clearTimeout(messageWatchersMap[messageId]);
+        console.info(`[CHATBOT] Removed message watcher for ${messageId}`);
+        delete messageWatchersMap[messageId];
+        await dispatch({
+          type: SET_MESSAGE_WATCHERS_MAP,
+          payload: messageWatchersMap
+        });
+        console.info(
+          `[CHATBOT] message watchers list: ${JSON.stringify(
+            messageWatchersMap
+          )}`
+        );
+      }
+      const bubbles = cloneDeep(selectChatBotBubbles(state));
+      const userBubbleIndex = bubbles.findIndex(
+        bubble =>
+          bubble &&
+          bubble.info &&
+          bubble.info.id === messageId &&
+          bubble.variant === 'user'
+      );
+      if (userBubbleIndex > -1) {
+        console.info(
+          `[CHATBOT] Attempt${attempt} trying to fetch response from DB`
+        );
+        const queryResponse = await getHistoryItemById(messageId);
+        if (
+          !(queryResponse && queryResponse.data && queryResponse.data.response)
+        ) {
+          if (attempt !== null && attempt <= 10) {
+            await attachWatcher(messageId, userQuery, attempt);
+            return;
+          } else {
+            console.info('[CHATBOT] Maximum retry attempts reached!');
+          }
+        } else {
+          console.info('[CHATBOT] Successfully fetched response from DB!');
+        }
+
+        const response = (queryResponse &&
+          queryResponse.data &&
+          queryResponse.data.response) || {
+          result: {
+            result: [
+              {
+                result: CHATBOT.TIMEOUT_ERROR_MSG
+              }
+            ]
+          }
+        };
+        bubbles.splice(userBubbleIndex + 1, 0, {
+          variant: 'system',
+          copyContent: CHATBOT.DEFAULT_ERROR_REPLY,
+          children: CHATBOT.DEFAULT_ERROR_REPLY,
+          sentOrReceivedAt: Date.now(),
+          info: {
+            id: messageId,
+            feedback: '',
+            user_query: userQuery,
+            ...response
+          }
+        });
+        await dispatch({ type: SET_CHATBOT_BUBBLES, payload: bubbles });
+      }
+      await dispatch({ type: SET_LOADING_STATE, payload: false });
+    } catch (e) {
+      console.info('[CHATBOT] Error in handle message watch timeout' + e);
+    }
+  };
+}
+
+export function attachWatcher(messageId, userQuery, attempt = 0) {
+  return async (dispatch, getState) => {
+    try {
+      console.info(`[CHATBOT] Attaching watcher for message id: ${messageId}`);
+      const state = getState();
+      const bubbles = selectChatBotBubbles(state);
+      const userBubbleIndex = bubbles.findIndex(
+        bubble =>
+          bubble &&
+          bubble.info &&
+          bubble.info.id === messageId &&
+          bubble.variant === 'user'
+      );
+      if (userBubbleIndex > -1) {
+        const messageWatchersMap = cloneDeep(selectMessageWatchersMap(state));
+        if (messageWatchersMap && !messageWatchersMap[messageId]) {
+          messageWatchersMap[messageId] = setTimeout(
+            () => dispatch(onWatchTimeout(messageId, userQuery, attempt++)),
+            CHATBOT.MESSAGE_WATCHER_TIMEOUT
+          );
+          dispatch({
+            type: SET_MESSAGE_WATCHERS_MAP,
+            payload: messageWatchersMap
+          });
+          console.info(
+            `[CHATBOT] watcher for message id: ${messageId} attached`
+          );
+        }
+      } else {
+        console.info(`[CHATBOT] message id: ${messageId} not found`);
+      }
+    } catch (e) {
+      console.log(`[CHATBOT] Error attaching watcher to ${messageId} ` + e);
+    }
+  };
+}
+
+export function onInvalidToken(socket) {
+  localStorage.clear();
+  const pathname = window.location.pathname;
+  if (pathname !== LOGIN && pathname !== ROOT) {
+    saveRedirectURL(pathname);
+  }
+  if (socket instanceof WebSocket) {
+    socket.close();
+  }
+  window.location.assign(
+    `${COGNITO_HOST}/logout?client_id=${CLIENT_ID}&logout_uri=${REDIRECTION_URL}`
+  );
 }

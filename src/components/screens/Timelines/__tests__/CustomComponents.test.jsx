@@ -16,11 +16,11 @@ describe('CustomComponents', () => {
 
   beforeEach(() => {
     dateCellWrapperProps = {
-      value: moment('2022-01-01'),
+      value: moment('2022-01-11'),
       currentBidDetails: [
         {
-          bidDate: moment('2022-01-01'),
-          bidDueDate: moment('2022-01-02')
+          bidDate: moment('2022-01-11'),
+          bidDueDate: moment('2022-01-22')
         }
       ],
       children: <div>Children</div>
@@ -45,10 +45,7 @@ describe('CustomComponents', () => {
     useSelector.mockReturnValue({
       toJS: () => ({ isCurrent: true })
     });
-    dateCellWrapperProps.value = moment(new Date('2022-01-11'));
-    dateCellWrapperProps.currentBidDetails[0].bidDueDate = moment(
-      new Date('2022-01-11')
-    );
+    dateCellWrapperProps.value = '2022-01-22';
     const wrapper = shallow(
       <CustomComponents.dateCellWrapper {...dateCellWrapperProps} />
     );

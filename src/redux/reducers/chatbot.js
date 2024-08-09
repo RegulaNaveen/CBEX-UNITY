@@ -7,15 +7,16 @@ const {
   UPDATE_CHATBOT_BUBBLE,
   SET_LOADING_STATE,
   UPDATE_BUBBLE,
-  FETCHING_HISTORY
+  FETCHING_HISTORY,
+  SET_MESSAGE_WATCHERS_MAP
 } = REDUX_TYPES.CHATBOT;
 
 export const welcomeBubble = {
   variant: 'systemWithContent',
   copyContent:
-    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
+    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Be aware that I specialize in Unity's Clinical Bids; other bid types may result in incomplete responses. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
   children:
-    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. ",
+    "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Be aware that I specialize in Unity's Clinical Bids; other bid types may result in incomplete responses. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate.",
   replySuggestionMessage: 'Here are some things I can do:',
   buttonProps: [
     {
@@ -33,7 +34,7 @@ export const welcomeBubble = {
   info: {
     result: {
       result:
-        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate. "
+        "Hello, I'm BidAssist, your AI-powered assistant, ready to help you create a proposal. Currently, I am able to read the following file types in Box.com: .doc, .docx, .pptx, & .pdf. Be aware that I specialize in Unity's Clinical Bids; other bid types may result in incomplete responses. Please note that while I strive to provide helpful information, my responses are created using generative AI and may be inaccurate."
     }
   }
 };
@@ -41,7 +42,8 @@ export const welcomeBubble = {
 const INITIAL_STATE = {
   bubbles: [],
   loading: false,
-  fetchingHistory: false
+  fetchingHistory: false,
+  messageWatchersMap: {}
 };
 
 function onSetBubbles(state, action) {
@@ -100,13 +102,21 @@ function onUpdateChatbotBubble(state, action) {
   };
 }
 
+function onSetMessageWatchersMap(state, action) {
+  return {
+    ...state,
+    messageWatchersMap: action.payload
+  };
+}
+
 const actionMap = {
   [SET_CHATBOT_BUBBLES]: onSetBubbles,
   [ADD_CHATBOT_BUBBLE]: onAddBubble,
   [SET_LOADING_STATE]: onLoading,
   [UPDATE_BUBBLE]: onUpdateBubble,
   [FETCHING_HISTORY]: setFetchingHistory,
-  [UPDATE_CHATBOT_BUBBLE]: onUpdateChatbotBubble
+  [UPDATE_CHATBOT_BUBBLE]: onUpdateChatbotBubble,
+  [SET_MESSAGE_WATCHERS_MAP]: onSetMessageWatchersMap
 };
 
 export default function(state = INITIAL_STATE, action) {
