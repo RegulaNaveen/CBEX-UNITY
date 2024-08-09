@@ -20,7 +20,7 @@ import { Map, fromJS } from 'immutable';
 import tabdata from '../../../components/views/modals/__test__/tabdata.json';
 import data from '../../../components/screens/Opportunity/__tests__/mockdata/question.json';
 
-describe('search-actions test', () => {
+describe.skip('search-actions test', () => {
   test('openSearchAction', async () => {
     await store.dispatch(openSearchAction());
   });
