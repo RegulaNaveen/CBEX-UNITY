@@ -11,13 +11,15 @@ import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
 import { useSelector } from 'react-redux';
 import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
 import { getContentAsText } from './utils';
+import { CHATBOT } from '../../../constants/app';
 
 const ChatBubbleActions = ({
   info,
   variant = 'user',
   content,
   sentOrReceivedAt,
-  isWelcomeBubble
+  isWelcomeBubble,
+  copyType
 }) => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
@@ -35,14 +37,77 @@ const ChatBubbleActions = ({
   // };
 
   const copyToClipBoard = () => {
-    // REQUIRED TO SUPPORT HTML COPY TO CLIPBOARD
-    // const htmlContent = createClipBoardContent();
-    // const blob = new Blob([htmlContent], { type: 'text/html' });
-    // const clipboardItem = new window.ClipboardItem({ 'text/html': blob });
     setCopied(true);
     navigator.clipboard.writeText(getContentAsText(content));
     setTimeout(() => setCopied(false), 1000);
   };
+
+  function copyAsHTMLToClipboard() {
+    if (!window.navigator) {
+      console.log('[CHATBOT] window.navigator not found.');
+      return;
+    } else if (!window.navigator.clipboard) {
+      console.log('[CHATBOT] Clipboard API not supported.');
+      return;
+    } else {
+      try {
+        const responseHtmlBlob = new Blob(
+          [
+            getContentAsText(content)
+              .split('\n')
+              .map(line => {
+                const headingInfo = CHATBOT.HEADINGS_REGEXP.exec(line);
+                if (headingInfo !== null) {
+                  const headingLevel = headingInfo.groups['hcnt'].length;
+                  let heading = `<h6>${headingInfo.groups['hname']}</h6>`;
+                  switch (headingLevel) {
+                    case 1:
+                      heading = `<h1>${headingInfo.groups['hname']}</h1>`;
+                      break;
+                    case 2:
+                      heading = `<h2>${headingInfo.groups['hname']}</h2>`;
+                      break;
+                    case 3:
+                      heading = `<h3>${headingInfo.groups['hname']}</h3>`;
+                      break;
+                    case 4:
+                      heading = `<h4>${headingInfo.groups['hname']}</h4>`;
+                      break;
+                    case 5:
+                      heading = `<h5>${headingInfo.groups['hname']}</h5>`;
+                      break;
+                    default:
+                  }
+                  return heading;
+                } else if (line.trim() === '') {
+                  return '\n';
+                } else {
+                  return `${line}<br/>`;
+                }
+              })
+              .join('')
+          ],
+          { type: 'text/html' }
+        );
+        const clipboardItem = new ClipboardItem({
+          'text/html': responseHtmlBlob
+        });
+        window.navigator.clipboard.write([clipboardItem]);
+      } catch (e) {
+        console.log('[CHATBOT] Error copying to clipboard:', e);
+      }
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1000);
+  }
+
+  function handleCopyBtnClick() {
+    if (copyType === 'text/html') {
+      copyAsHTMLToClipboard();
+    } else {
+      copyToClipBoard();
+    }
+  }
 
   const handleThumbsDownClick = () => {
     setShowFeedbackModal(true);
@@ -73,7 +138,11 @@ const ChatBubbleActions = ({
             placement="top"
             open={copied}
           >
-            <IconButton size="small" onClick={() => copyToClipBoard()} darkMode>
+            <IconButton
+              size="small"
+              onClick={() => handleCopyBtnClick()}
+              darkMode
+            >
               <Copy />
             </IconButton>
           </Tooltip>
@@ -137,7 +206,8 @@ const ChatBubble = ({
   className = '',
   sentOrReceivedAt,
   isWelcomeBubble,
-  sourceDocuments = []
+  sourceDocuments = [],
+  copyType = 'text/plain'
 }) => {
   const sourceDocs = sourceDocuments.filter(
     src => src.metadata.doc_class !== 'unity'
@@ -221,6 +291,7 @@ const ChatBubble = ({
           content={copyContent}
           sentOrReceivedAt={sentOrReceivedAt}
           isWelcomeBubble={isWelcomeBubble}
+          copyType={copyType}
         />
       }
       replySuggestionMessage={replySuggestionMessage}

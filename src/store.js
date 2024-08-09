@@ -26,7 +26,8 @@ axiosInstance.interceptors.response.use(
     if (
       (res?.status === 500 && res?.data?.message === 'Invalid Access Token') ||
       res?.data?.message === 'Access Token has expired' ||
-      res?.data?.message?.includes('accessToken')
+      res?.data?.message?.includes('accessToken') ||
+      res.status === 401
     ) {
       dispatch(logout());
       window.location.reload();

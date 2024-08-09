@@ -96,13 +96,15 @@ export const SearchHighlight = Mark.create({
             .selectAll()
             .unsetMark(this.name);
           const { texts, mentionIndices } = extractTextFromDoc(state.doc);
+          let wholeText = '';
+          for (let chunk of texts) {
+            wholeText += chunk.replaceAll(/\t/g, '\\t');
+          }
           let results = [];
           let matchResults = [
-            ...texts
-              .join('')
-              .matchAll(
-                new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
-              )
+            ...wholeText.matchAll(
+              new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
+            )
           ];
           matchResults.forEach(match => {
             let originalSelection = {

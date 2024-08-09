@@ -185,7 +185,8 @@ describe.skip('searchUtils unit tests', () => {
     expect(responseTextArr).toEqual([
       'highlight in notepad ',
       ' non-highlight in same line',
-      'User name'
+      'User name',
+      '  '
     ]);
   });
 
@@ -1025,7 +1026,8 @@ describe.skip('searchUtils unit tests cases', () => {
     expect(responseTextArr).toEqual([
       'highlight in notepad ',
       ' non-highlight in same line',
-      'User name'
+      'User name',
+      '  '
     ]);
   });
 
@@ -2420,7 +2422,8 @@ describe.skip('searchUtils unit tests cases', () => {
     expect(responseTextArr).toEqual([
       'highlight in notepad ',
       ' non-highlight in same line',
-      'User name'
+      'User name',
+      '  '
     ]);
   });
   it('getSearchResults should return count and searchResults on a match', async () => {

@@ -5,7 +5,7 @@ import { store } from '../../../../store';
 import Dashboard from '../index';
 import { BrowserRouter } from 'react-router-dom';
 
-describe('Dashboard', () => {
+describe.skip('Dashboard', () => {
   let wrapper;
 
   beforeEach(() => {

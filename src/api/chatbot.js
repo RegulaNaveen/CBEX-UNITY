@@ -64,7 +64,27 @@ export function sendDataTriggerApi(data) {
         }
       })
       .then(response => {
-        if (response.status === 202) {
+        if (response.status === 200) {
+          resolve(response.data);
+        } else {
+          reject({ error: true, message: response });
+        }
+      })
+      .catch(err => reject({ error: true, message: err }));
+  });
+}
+
+export function getHistoryItemById(messageId) {
+  return new Promise((resolve, reject) => {
+    axiosInstance
+      .get(`${CHATBOT.CHAT_HISTORY_ENDPOINT}/${messageId}`, {
+        headers: {
+          'x-api-key': API_KEY,
+          'x-access-token': getAccessToken()
+        }
+      })
+      .then(response => {
+        if (response.status === 200) {
           resolve(response.data);
         } else {
           reject({ error: true, message: response });

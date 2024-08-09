@@ -24,8 +24,10 @@ import {
 import { useDispatch } from 'react-redux';
 import {
   addResponseToChat,
+  attachWatcher,
   fetchHistory,
   handleChatBotQueryWSMsg,
+  onInvalidToken,
   sendDataTrigger
 } from '../../../redux/actions/chatbot-actions';
 import { useRouteMatch, useHistory } from 'react-router-dom';
@@ -34,10 +36,12 @@ import Loader from 'apollo-react/components/Loader';
 import { MultiResponseChat } from './MultiResponseChat';
 import { changeBid } from '../../../redux/actions/proposal-actions';
 import { getBidList } from '../../../redux/selectors/proposal';
-import { extractBidInfo, extractContext } from './utils';
+import { extractBidInfo, extractContext, sendWSMsgWithRetry } from './utils';
 import { SocketContext } from '../../../context/SocketContext';
 import { REDUX_TYPES } from '../../../constants';
-import { CHATBOT } from '../../../constants/app';
+import { BID_TYPES, CHATBOT } from '../../../constants/app';
+import { getUserId } from '../../../SessionHandler';
+import { validateToken } from '../../../api/sso-auth';
 
 const { ADD_CHATBOT_BUBBLE, SET_LOADING_STATE } = REDUX_TYPES.CHATBOT;
 
@@ -47,6 +51,7 @@ const ChatBot = () => {
   const [inputText, setInputText] = useState('');
   const [gotoQuestionData, setGotoQuestionData] = useState({});
   const [openDifferentBidModal, setOpenDifferentBidModal] = useState(false);
+  const [disableChat, setDisableChat] = useState(false);
 
   const bubblesContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -89,15 +94,16 @@ const ChatBot = () => {
     async message => {
       const data = JSON.parse(message.data);
       // Handle event ONLY if data.event_group is 'CHATBOT'
+      // Below code will be put in default event listener as well
       if (data.event_group === 'CHATBOT') {
         switch (data.event_name) {
           case 'CHATBOT_USER_QUERY_RESPONSE':
-            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            console.info(`[CHATBOT] Event: [${Date.now()}] ${data.event_name}`);
             await dispatch(addResponseToChat(data.event_data));
             await dispatch({ type: SET_LOADING_STATE, payload: false });
             break;
           case 'CHATBOT_USER_QUERY':
-            console.info(`[CHATBOT] Event: ${data.event_name}`);
+            console.info(`[CHATBOT] Event: [${Date.now()}] ${data.event_name}`);
             await dispatch(handleChatBotQueryWSMsg(data.event_data));
             break;
           default:
@@ -114,8 +120,10 @@ const ChatBot = () => {
       return;
     }
     if (expanded) {
-      bubblesContainerRef.current.scrollTop =
-        bubblesContainerRef.current.scrollHeight;
+      setTimeout(() => {
+        bubblesContainerRef.current.scrollTop =
+          bubblesContainerRef.current.scrollHeight;
+      }, 100);
     }
   }, [bubbles, expanded]);
 
@@ -143,9 +151,9 @@ const ChatBot = () => {
   }, [expanded, bubblesLength, fullscreen, id, fetchingHistory]);
 
   useEffect(() => {
+    let height = '21px';
     if (inputText) {
       const numOfsplits = inputText.split('\n')?.length;
-      let height = '21px';
       const inputElement = document.querySelector(
         '.chat-bot-footer > div:last-child > div > div > .MuiInputBase-root > textarea'
       );
@@ -162,66 +170,84 @@ const ChatBot = () => {
       } else if (numOfLines >= 3) {
         height = `${21 * 4}px`;
       }
-      const root = document.documentElement;
-      root?.style.setProperty('--chatbot-input-height', height);
     }
+    const root = document.documentElement;
+    root?.style.setProperty('--chatbot-input-height', height);
   }, [inputText]);
 
   useEffect(() => {
-    if (loading || fetchingHistory) {
+    if (loading || fetchingHistory || disableChat) {
       const root = document.documentElement;
       root?.style.setProperty('--chatbot-input-disabled-color', 'transparent');
     }
-  }, [loading, fetchingHistory]);
+  }, [loading, disableChat, fetchingHistory]);
 
   const handleSendMsgBtnClick = useCallback(
     async payload => {
-      if (loading) return;
-      // if socketInstance is not available establish new connection and send message
-      let socket = socketInstance;
-      if (!socket) {
-        socket = await initiateConnection();
-        if (!socket) {
-          console.error(`[CHATBOT] Socket connection failed!`);
+      if (loading || disableChat) return;
+      try {
+        setDisableChat(true);
+        const tokenValid = await validateToken(
+          localStorage.getItem('access_token')
+        );
+        if (!tokenValid) {
+          onInvalidToken(socketInstance);
           return;
         }
-      }
-      const query_created_at = Date.now();
-      const query_id = uuidv4();
-      socket.send(
-        JSON.stringify({
+
+        const query_created_at = Date.now();
+        const query_id = uuidv4();
+        const wsQueryMsg = JSON.stringify({
           event_group: 'CHATBOT',
           event_name: 'CHATBOT_USER_QUERY',
           event_data: {
             ...payload,
             query_id,
             query_created_at,
+            query_created_by: getUserId(),
             context: extractContext(
               bubbles,
               flags[featureFlags.CHATBOT_CONTENT_COUNT]
             )
           }
-        })
-      );
-      await dispatch({ type: SET_LOADING_STATE, payload: true });
-      await dispatch({
-        type: ADD_CHATBOT_BUBBLE,
-        payload: {
-          variant: 'user',
-          copyContent: payload.query,
-          children: payload.query,
-          sentOrReceivedAt: query_created_at,
-          info: {
-            id: query_id,
-            feedback: null
-          }
+        });
+        const socket = await sendWSMsgWithRetry(
+          socketInstance,
+          wsQueryMsg,
+          initiateConnection
+        );
+        console.info('[CHATBOT] Socket instance: ', socket);
+        if (socket !== null) {
+          await dispatch({ type: SET_LOADING_STATE, payload: true });
+          await dispatch({
+            type: ADD_CHATBOT_BUBBLE,
+            payload: {
+              variant: 'user',
+              copyContent: payload.query,
+              children: payload.query,
+              sentOrReceivedAt: query_created_at,
+              info: {
+                id: query_id,
+                feedback: null
+              }
+            }
+          });
+          await dispatch(attachWatcher(query_id, payload.query));
         }
-      });
-      // TODO: Set a timer to check if the response is not received in <n> seconds
-      // and show a message to the user that the response is taking longer than expected
-      // give UI control to the user to poll the server for the response
+      } catch (e) {
+      } finally {
+        setDisableChat(false);
+      }
     },
-    [dispatch, socketInstance, initiateConnection, bubbles, flags, loading]
+    [
+      disableChat,
+      dispatch,
+      socketInstance,
+      initiateConnection,
+      bubbles,
+      flags,
+      loading
+    ]
   );
 
   const findBidObjAndChangeBid = useCallback(
@@ -313,8 +339,13 @@ const ChatBot = () => {
         ]}
       >
         <Typography>
-          This answer is part of a different bid. Do you want to continue and
-          change to that bid?
+          Unity answer is from Bid Type{' '}
+          {BID_TYPES[gotoQuestionData.targetBidType] === 'Bid'
+            ? 'Clinical'
+            : BID_TYPES[gotoQuestionData.targetBidType]}{' '}
+          and Bid Number {gotoQuestionData.targetBidNumber}.
+          <br />
+          Do you want to continue and change to that bid?
         </Typography>
       </CustomModal>
       {expanded ? (
@@ -360,6 +391,15 @@ const ChatBot = () => {
                     replySuggestionMessage={bubble.replySuggestionMessage}
                     sentOrReceivedAt={bubble.sentOrReceivedAt}
                     isWelcomeBubble={bubble.type === 'WELCOME_MSG'}
+                    copyType={
+                      bubble &&
+                      bubble.info &&
+                      bubble.info.user_query &&
+                      bubble.info.user_query.toLowerCase().trim() ===
+                        'summarize this opportunity'
+                        ? 'text/html'
+                        : 'text/plain'
+                    }
                     buttonProps={
                       bubble?.buttonProps?.map((button, i) => ({
                         label: button.label,
@@ -414,7 +454,7 @@ const ChatBot = () => {
             })}
           >
             <ChatBotFooter
-              disabled={loading || fetchingHistory}
+              disabled={loading || fetchingHistory || disableChat}
               onSendClick={() => {
                 if (
                   !inputRef.current.value ||
