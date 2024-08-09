@@ -3484,7 +3484,11 @@ describe('search-actions test', () => {
         taskHistoryLoading: false,
         showMine: true,
         canReorder: false
-      }
+      },
+      proposal: fromJS({
+        eventflag: {},
+        selectedBid: {}
+      })
     };
 
     let store;
