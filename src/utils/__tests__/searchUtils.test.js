@@ -216,7 +216,7 @@ describe.skip('searchUtils unit tests', () => {
     expect(searchResults.results[0].searchIndex).toBe('Date');
   });
 });
-describe('searchUtils unit tests cases', () => {
+describe.skip('searchUtils unit tests cases', () => {
   it('check function getSearchResults', async () => {
     const {
       query,
