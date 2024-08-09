@@ -39,6 +39,7 @@ function sanitizeResponse(response, prefix = null) {
       ''
     );
   }
+  sanitizedResponse = sanitizedResponse.replaceAll(/\\n/g, '\n');
   sanitizedResponse = sanitizedResponse.split(/\n/).join(' ');
   return sanitizedResponse.trim();
 }
@@ -62,6 +63,17 @@ function extractBidInfo(bidNo) {
   }
 
   return { targetBidNumber, targetBidType };
+}
+
+function getAnswerAsText(answer) {
+  if (Array.isArray(answer)) {
+    return answer.reduce((acc, item, idx) => {
+      if (idx === 0) return acc + item.result;
+      else return acc + '\n' + item.result;
+    }, '');
+  } else {
+    return answer;
+  }
 }
 
 function extractContext(bubbles, maxNumOfCount) {
@@ -100,7 +112,7 @@ function extractContext(bubbles, maxNumOfCount) {
       if (bubble.variant === 'user') {
         context.push({
           question: bubble.children,
-          answer: bubbles[i + 1].children
+          answer: getAnswerAsText(bubbles[i + 1].children)
         });
         count++;
       }
@@ -113,7 +125,7 @@ function getContentAsText(content) {
   if (Array.isArray(content)) {
     let text = '';
     content.forEach((item, idx, arr) => {
-      if (item.result) {
+      if (typeof item.result === 'string' && item.result.length > 0) {
         if (arr.length > 1) {
           text += `${idx + 1}. `;
         }
@@ -134,7 +146,7 @@ function getContentAsText(content) {
 function getSourceDocTooltipInfo(source) {
   let title = '';
   let content = '';
-  let page = '';
+  let subtitle = '';
 
   if (source) {
     if (source.metadata && source.metadata.doc_class) {
@@ -150,10 +162,19 @@ function getSourceDocTooltipInfo(source) {
           source.metadata.section_name.toLowerCase() === 'questions'
         ) {
           title = 'Unity Question';
+        } else if (
+          source.metadata.section_name &&
+          source.metadata.section_name.toLowerCase() === 'pricemodular'
+        ) {
+          title = 'Unity';
+          subtitle = 'Retrieved from price modeler section';
+        } else {
+          title = 'Unity';
+          subtitle = 'Retrieved from opportunity info';
         }
       } else {
         title = source.metadata.source || '';
-        page = source.metadata.page || '';
+        subtitle = source.metadata.page ? `Page: ${source.metadata.page}` : '';
         if (
           source.metadata.box_file_id &&
           source.metadata.box_file_id.trim() &&
@@ -168,7 +189,71 @@ function getSourceDocTooltipInfo(source) {
     }
   }
 
-  return { title, content, page };
+  return { title, content, subtitle };
+}
+
+function isConnected(socket) {
+  if (socket instanceof WebSocket) {
+    return socket.readyState === WebSocket.OPEN;
+  } else {
+    console.info('[CHATBOT] socket is not an instance of WebSocket Object.');
+    return null;
+  }
+}
+
+function isConnecting(socket) {
+  if (socket instanceof WebSocket) {
+    return socket.readyState === WebSocket.CONNECTING;
+  } else {
+    console.info('[CHATBOT] socket is not an instance of WebSocket Object.');
+    return null;
+  }
+}
+
+async function sendWSMsgWithRetry(
+  socket,
+  message,
+  initiateConnection,
+  attempt = 0
+) {
+  if (attempt <= 10) {
+    try {
+      if (isConnected(socket)) {
+        socket.send(message);
+        return Promise.resolve(socket);
+      } else if (isConnecting(socket)) {
+        console.info(`[CHATBOT] Waiting for ${(1000 * (attempt + 1)) / 1000}s`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+        console.info(`[CHATBOT] Retrying...`);
+        return await sendWSMsgWithRetry(
+          socket,
+          message,
+          initiateConnection,
+          attempt++
+        );
+      } else {
+        // Either WebSocket.CLOSING or WebSocket.CLOSED
+        // Reconnect and retry again
+        console.info(`[CHATBOT] Waiting for ${(1000 * (attempt + 1)) / 1000}s`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+        console.info(`[CHATBOT] Retrying...`);
+        return await sendWSMsgWithRetry(
+          initiateConnection(),
+          message,
+          initiateConnection,
+          attempt++
+        );
+      }
+    } catch (e) {
+      console.info('[CHATBOT] Error in sending msg through Websocket: ', e);
+      return Promise.resolve(null);
+    }
+  } else {
+    console.info(
+      '[CHATBOT] Maximum retry achieved. Could not send msg through WebSocket.'
+    );
+    return Promise.resolve(null);
+  }
 }
 
 export {
@@ -177,5 +262,6 @@ export {
   extractBidInfo,
   extractContext,
   getContentAsText,
-  getSourceDocTooltipInfo
+  getSourceDocTooltipInfo,
+  sendWSMsgWithRetry
 };

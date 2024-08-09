@@ -13,6 +13,7 @@ import FeedbackModal, {
   FeedbackSubmitModal
 } from '../../ChatBot/FeedbackModal';
 import * as ChatboatApi from '../../../../api/chatbot';
+import { CHATBOT } from '../../../../constants/app';
 
 const mockStore = configureMockStore([thunk]);
 const store = mockStore({});
@@ -74,7 +75,7 @@ describe('FeedbackModal', () => {
 
     fireEvent.click(screen.getByTestId('submit-button'));
     await waitFor(() => {
-      expect(screen.getByText('Something went wrong!')).toBeInTheDocument();
+      expect(screen.getByText(CHATBOT.FEEDBACK_ERROR_MSG)).toBeInTheDocument();
     });
   });
 });

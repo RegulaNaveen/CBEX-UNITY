@@ -6,7 +6,7 @@ const SourceDocument = ({
   buttonLabel,
   title,
   content,
-  pageNo
+  subTitle
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef(null);
@@ -93,9 +93,9 @@ const SourceDocument = ({
       <Tooltip
         id="answer-tooltip"
         title={
-          <div>
+          <div className="tooltip-title">
             <div>{title}</div>
-            <div>{pageNo !== '' ? `Page: ${pageNo}` : ''}</div>
+            {subTitle && <div>{subTitle}</div>}
           </div>
         }
         body={content}

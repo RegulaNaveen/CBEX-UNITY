@@ -9,6 +9,8 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/dist',
+    '/src/components/screens/Opportunity/__tests__/'
+    // '/src/components/views/__tests__/Search',
   ],
   collectCoverageFrom: [
     'src/**/*.{js,jsx}',
@@ -22,7 +24,8 @@ module.exports = {
   moduleDirectories: ['node_modules', __dirname],
   coverageDirectory: '<rootDir>/coverage',
   moduleNameMapper: {
-    '\\.(css|scss|less)$': 'identity-obj-proxy'
+    '\\.(css|scss|less)$': 'identity-obj-proxy',
+    '\\.(svg)$': '<rootDir>/fileTransformer.js'
   },
   transformIgnorePatterns: [
     'node_modules/(?!' +

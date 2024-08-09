@@ -9,3 +9,7 @@ export const selectChatBotBubbles = state => {
 export const selectChatBotFetchingHistory = state => {
   return selectChatBot(state).fetchingHistory;
 };
+
+export const selectMessageWatchersMap = state => {
+  return selectChatBot(state).messageWatchersMap;
+};
