@@ -38,20 +38,27 @@ export const MultiResponseChat = ({
   return (
     <div className={className}>
       {list?.map((response, i) => {
+        const responseText =
+          (response && response.result && response.result.replace(/\"$/, '')) ||
+          '';
+        let isError = false;
+        const lines = responseText.split('\n');
+        while (lines.length && lines[0] === '') {
+          lines.shift();
+        }
+        while (lines.length && lines.slice(-1)[0] === '') {
+          lines.pop();
+        }
+        if (lines.length === 0) {
+          isError = true;
+        }
         return (
           <div>
             {' '}
             <>
               {list.length > 1 && `${i + 1}. `}
-              <ResponseRenderer
-                response={
-                  (response &&
-                    response.result &&
-                    response.result.replace(/\"$/, '')) ||
-                  ''
-                }
-              />
-              {Array.isArray(response.source_documents) && (
+              <ResponseRenderer response={lines} isError={isError} />
+              {Array.isArray(response.source_documents) && !isError && (
                 <div className="src-doc-list">
                   {response.source_documents.map((sourceDoc, i) => {
                     const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
@@ -73,6 +80,7 @@ export const MultiResponseChat = ({
               )}
             </>
             {Array.isArray(response.source_documents) &&
+              !isError &&
               response.source_documents
                 .filter(sourceDoc => {
                   // Do not show Go to Unity button when query is 'Summarize this opportunity'

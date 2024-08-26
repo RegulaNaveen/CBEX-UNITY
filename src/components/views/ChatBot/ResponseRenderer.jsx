@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CHATBOT } from '../../../constants/app';
 
-function ResponseRenderer({ response }) {
+function ResponseRenderer({ response, isError = false }) {
   const [breakDowns, setBreakDowns] = useState([]);
 
   useEffect(() => {
-    if (response) {
+    if (response.length === 0 || isError) {
+      setBreakDowns([<>{CHATBOT.NO_ANSWER_MSG}</>]);
+    } else {
       setBreakDowns(
-        response.split('\n').map(line => {
+        response.map(line => {
           const headingInfo = CHATBOT.HEADINGS_REGEXP.exec(line);
           if (headingInfo !== null) {
             const headingLevel = headingInfo.groups['hcnt'].length;
@@ -39,8 +41,6 @@ function ResponseRenderer({ response }) {
           }
         })
       );
-    } else {
-      setBreakDowns([<>{CHATBOT.NO_ANSWER_MSG}</>]);
     }
   }, [response]);
 
