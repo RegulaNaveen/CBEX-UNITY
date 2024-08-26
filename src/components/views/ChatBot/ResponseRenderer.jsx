@@ -11,6 +11,14 @@ function ResponseRenderer({ response, isError = false }) {
     } else {
       setBreakDowns(
         response.map(line => {
+          const styledLine = [];
+          let charIndex = 0;
+          for (const boldMatch of line.matchAll(CHATBOT.BOLD_REGEXP)) {
+            styledLine.push(line.substring(charIndex, boldMatch.index));
+            styledLine.push(<strong>{boldMatch[1]}</strong>);
+            charIndex = boldMatch.index + boldMatch[0].length;
+          }
+          styledLine.push(line.substring(charIndex));
           const headingInfo = CHATBOT.HEADINGS_REGEXP.exec(line);
           if (headingInfo !== null) {
             const headingLevel = headingInfo.groups['hcnt'].length;
@@ -37,7 +45,12 @@ function ResponseRenderer({ response, isError = false }) {
           } else if (line.trim() === '') {
             return <>{'\n'}</>;
           } else {
-            return <>{line + '\n'}</>;
+            return (
+              <>
+                {styledLine}
+                {'\n'}
+              </>
+            );
           }
         })
       );

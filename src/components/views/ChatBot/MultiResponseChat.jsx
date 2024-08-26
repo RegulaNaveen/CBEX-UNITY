@@ -62,12 +62,28 @@ export const MultiResponseChat = ({
                 <div className="src-doc-list">
                   {response.source_documents.map((sourceDoc, i) => {
                     const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
+                    const sourceContentLines = (sourceInfo.content || '')
+                      .replaceAll(/\\n/g, '\n')
+                      .split('\n');
+                    while (
+                      sourceContentLines.length &&
+                      sourceContentLines[0] === ''
+                    ) {
+                      sourceContentLines.shift();
+                    }
+                    while (
+                      sourceContentLines.length &&
+                      sourceContentLines.slice(-1)[0] === ''
+                    ) {
+                      sourceContentLines.pop();
+                    }
+
                     return (
                       <SourceDocument
                         key={`source-doc-${bubbleId}-${i}`}
                         title={sourceInfo.title}
                         subTitle={sourceInfo.subtitle}
-                        content={sanitizeResponse(sourceInfo.content, null)}
+                        content={sourceContentLines}
                         buttonLabel={(() => {
                           sourceIndex++;
                           return `[${sourceIndex}]`;

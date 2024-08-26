@@ -474,6 +474,9 @@
 
 #answer-tooltip {
   @include tooltip;
+  .tooltip-body {
+    white-space: pre-line;
+  }
 }
 
 .multiresponse-list {
