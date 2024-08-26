@@ -56,7 +56,11 @@ const ChatBubbleActions = ({
             getContentAsText(content)
               .split('\n')
               .map(line => {
-                const headingInfo = CHATBOT.HEADINGS_REGEXP.exec(line);
+                const styledLine = line.replaceAll(
+                  CHATBOT.BOLD_REGEXP,
+                  '<strong>$<boldtext></strong>'
+                );
+                const headingInfo = CHATBOT.HEADINGS_REGEXP.exec(styledLine);
                 if (headingInfo !== null) {
                   const headingLevel = headingInfo.groups['hcnt'].length;
                   let heading = `<h6>${headingInfo.groups['hname']}</h6>`;
@@ -79,10 +83,10 @@ const ChatBubbleActions = ({
                     default:
                   }
                   return heading;
-                } else if (line.trim() === '') {
+                } else if (styledLine.trim() === '') {
                   return '\n';
                 } else {
-                  return `${line}<br/>`;
+                  return `${styledLine}<br/>`;
                 }
               })
               .join('')

@@ -154,6 +154,7 @@ const TASKS = {
 
 const CHATBOT = {
   HEADINGS_REGEXP: /^(?<ws1>\s*)(?<!#)(?<hcnt>#{2,6})(?<ws2>\s+)(?<hname>.*)/,
+  BOLD_REGEXP: /\*{2}([^\*]*)\*{2}/g,
   DEFAULT_ERROR_REPLY: '',
   SUPPORTED_GO_TO_UNITY_SECTIONS_MAP: {
     notepad: 'notepad',

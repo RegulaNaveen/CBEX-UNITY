@@ -2,13 +2,23 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CHATBOT } from '../../../constants/app';
 
-function ResponseRenderer({ response }) {
+function ResponseRenderer({ response, isError = false }) {
   const [breakDowns, setBreakDowns] = useState([]);
 
   useEffect(() => {
-    if (response) {
+    if (response.length === 0 || isError) {
+      setBreakDowns([<>{CHATBOT.NO_ANSWER_MSG}</>]);
+    } else {
       setBreakDowns(
-        response.split('\n').map(line => {
+        response.map(line => {
+          const styledLine = [];
+          let charIndex = 0;
+          for (const boldMatch of line.matchAll(CHATBOT.BOLD_REGEXP)) {
+            styledLine.push(line.substring(charIndex, boldMatch.index));
+            styledLine.push(<strong>{boldMatch[1]}</strong>);
+            charIndex = boldMatch.index + boldMatch[0].length;
+          }
+          styledLine.push(line.substring(charIndex));
           const headingInfo = CHATBOT.HEADINGS_REGEXP.exec(line);
           if (headingInfo !== null) {
             const headingLevel = headingInfo.groups['hcnt'].length;
@@ -35,12 +45,15 @@ function ResponseRenderer({ response }) {
           } else if (line.trim() === '') {
             return <>{'\n'}</>;
           } else {
-            return <>{line + '\n'}</>;
+            return (
+              <>
+                {styledLine}
+                {'\n'}
+              </>
+            );
           }
         })
       );
-    } else {
-      setBreakDowns([<>{CHATBOT.NO_ANSWER_MSG}</>]);
     }
   }, [response]);
 
