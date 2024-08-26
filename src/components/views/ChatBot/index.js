@@ -272,17 +272,35 @@ const ChatBot = () => {
   );
 
   const handleGotoQuestion = useCallback(
-    (paramBidNo, questionText) => {
+    (paramBidNo, questionText, isNotepad = false) => {
       const { targetBidNumber, targetBidType } = extractBidInfo(paramBidNo);
       if (bidNo == targetBidNumber && bidType == targetBidType) {
-        findBidObjAndChangeBid({
-          targetBidNumber,
-          targetBidType,
-          questionText
-        });
+        if (isNotepad) {
+          history.replace(
+            `?bidNo=${targetBidNumber}&bidType=${targetBidType}&notepad_highlight=true`
+          );
+          setExpanded(false);
+        } else {
+          findBidObjAndChangeBid({
+            targetBidNumber,
+            targetBidType,
+            questionText
+          });
+        }
       } else {
         setOpenDifferentBidModal(() => {
-          setGotoQuestionData({ targetBidNumber, targetBidType, questionText });
+          if (isNotepad) {
+            history.replace(
+              `?bidNo=${targetBidNumber}&bidType=${targetBidType}&notepad_highlight=true`
+            );
+            setExpanded(false);
+          } else {
+            setGotoQuestionData({
+              targetBidNumber,
+              targetBidType,
+              questionText
+            });
+          }
           return true;
         });
       }

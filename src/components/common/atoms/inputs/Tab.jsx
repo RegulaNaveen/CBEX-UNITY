@@ -218,6 +218,18 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
   const autoNavigatedToCurrentResult = useSelector(
     selectAutoNavigatedToCurrentResult
   );
+  const [highlightNotepad, setHighlightNotepad] = useState(false);
+
+  const notepadHighlight = Boolean(
+    new URLSearchParams(window.location.search).get('notepad_highlight')
+  );
+
+  useEffect(() => {
+    if (notepadHighlight) {
+      setHighlightNotepad(true);
+      setTimeout(() => setHighlightNotepad(false), 60 * 1000);
+    }
+  }, [notepadHighlight]);
 
   const calculateTab = val => {
     const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
@@ -397,6 +409,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
+    const notepadHighlight = Boolean(searchParams.get('notepad_highlight'));
     if (
       tabs.length > 4 &&
       (selectedView !== 'documents' ||
@@ -430,6 +443,13 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
           searchParams.delete('viewType');
         }
       }
+    }
+    if (
+      notepadHighlight &&
+      ['documents', 'approval', 'timelines'].includes(selectedView)
+    ) {
+      dispatch(setActiveTabIndexAction(0));
+      searchParams.delete('viewType');
     }
     history.replace(`${window.location.pathname}?${searchParams.toString()}`);
   }, [tabs]);
@@ -815,6 +835,7 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
           className={classNames({
             'show-highlight':
               currentSearchResult !== null && currentSearchResult.vTab === 1,
+            'explicit-highlight': highlightNotepad,
             collapsed: vtabCollpased
           })}
           ref={refVal => setPanelRef(refVal)}

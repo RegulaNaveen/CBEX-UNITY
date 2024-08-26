@@ -123,6 +123,14 @@
     //   border: 2px solid #0557d559;
     // }
   }
+  &.explicit-highlight {
+    & > div {
+      border: 2px solid #0557d5 !important;
+    }
+    #panel-notepad-header {
+      background-color: #0557d559 !important;
+    }
+  }
 }
 
 #panel-questions-list {

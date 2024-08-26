@@ -126,7 +126,7 @@ class Toolbar extends Component<{}, State> {
             {results && (
               <>
                 <div
-                  onClick={() => window.location.replace('/ubuild')}
+                  onClick={() => window.location.replace('/ubuild/v2')}
                   aria-hidden="true"
                   style={{ cursor: 'pointer' }}
                   className={

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Tooltip from 'apollo-react/components/Tooltip';
+import ResponseRenderer from './ResponseRenderer';
 
 const SourceDocument = ({
   className = '',
@@ -98,7 +99,11 @@ const SourceDocument = ({
             {subTitle && <div>{subTitle}</div>}
           </div>
         }
-        body={content}
+        body={
+          <div className="tooltip-body">
+            <ResponseRenderer response={content} />
+          </div>
+        }
         placement="top-start"
         variant="light"
         open={showTooltip}

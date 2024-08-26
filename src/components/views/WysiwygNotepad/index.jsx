@@ -38,6 +38,7 @@ import {
 } from '../../../redux/selectors/search';
 import { NOTEPAD_UI_ID } from '../../../constants/app';
 import { SearchHighlight } from './SearchHighlightExtension';
+import { useHistory } from 'react-router-dom';
 
 const matamoObj = {};
 const WysiwygNotepad = ({
@@ -59,6 +60,9 @@ const WysiwygNotepad = ({
   const query = useSelector(selectQuery);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const usercolor = randomColor({ luminosity: 'light' });
+  const queryParams = new URLSearchParams(window.location.search);
+  const history = useHistory();
+
   useEffect(() => {
     const ldApiCall = async () => {
       setNotesUserTag(allFlags.notesUserTag || false);
@@ -507,6 +511,17 @@ const WysiwygNotepad = ({
       (editor && query === null)
     ) {
       !editor.isDestroyed && editor.commands.reset();
+    }
+    const queryParams = new URLSearchParams(window.location.search);
+    const notepadHighlight = Boolean(queryParams.get('notepad_highlight'));
+    if (editor && notepadHighlight) {
+      document.getElementById('panel-notepad').scrollIntoView({
+        behaviour: 'smooth',
+        block: 'center',
+        inline: 'nearest'
+      });
+      queryParams.delete('notepad_highlight');
+      history.replace(`${window.location.pathname}?${queryParams.toString()}`);
     }
   }, [query, currentSearchResult, editor, dataSynced]);
 

@@ -38,29 +38,52 @@ export const MultiResponseChat = ({
   return (
     <div className={className}>
       {list?.map((response, i) => {
+        const responseText =
+          (response && response.result && response.result.replace(/\"$/, '')) ||
+          '';
+        let isError = false;
+        const lines = responseText.split('\n');
+        while (lines.length && lines[0] === '') {
+          lines.shift();
+        }
+        while (lines.length && lines.slice(-1)[0] === '') {
+          lines.pop();
+        }
+        if (lines.length === 0) {
+          isError = true;
+        }
         return (
           <div>
             {' '}
             <>
               {list.length > 1 && `${i + 1}. `}
-              <ResponseRenderer
-                response={
-                  (response &&
-                    response.result &&
-                    response.result.replace(/\"$/, '')) ||
-                  ''
-                }
-              />
-              {Array.isArray(response.source_documents) && (
+              <ResponseRenderer response={lines} isError={isError} />
+              {Array.isArray(response.source_documents) && !isError && (
                 <div className="src-doc-list">
                   {response.source_documents.map((sourceDoc, i) => {
                     const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
+                    const sourceContentLines = (sourceInfo.content || '')
+                      .replaceAll(/\\n/g, '\n')
+                      .split('\n');
+                    while (
+                      sourceContentLines.length &&
+                      sourceContentLines[0] === ''
+                    ) {
+                      sourceContentLines.shift();
+                    }
+                    while (
+                      sourceContentLines.length &&
+                      sourceContentLines.slice(-1)[0] === ''
+                    ) {
+                      sourceContentLines.pop();
+                    }
+
                     return (
                       <SourceDocument
                         key={`source-doc-${bubbleId}-${i}`}
                         title={sourceInfo.title}
                         subTitle={sourceInfo.subtitle}
-                        content={sanitizeResponse(sourceInfo.content, null)}
+                        content={sourceContentLines}
                         buttonLabel={(() => {
                           sourceIndex++;
                           return `[${sourceIndex}]`;
@@ -73,6 +96,7 @@ export const MultiResponseChat = ({
               )}
             </>
             {Array.isArray(response.source_documents) &&
+              !isError &&
               response.source_documents
                 .filter(sourceDoc => {
                   // Do not show Go to Unity button when query is 'Summarize this opportunity'
@@ -111,32 +135,40 @@ export const MultiResponseChat = ({
                           if (
                             sourceDoc.metadata.section_name.toLowerCase() ===
                             'notepad'
-                          )
+                          ) {
                             dispatch(setVTabActiveIndexAction(1));
-                          handleGotoQuestion(
-                            sourceDoc.metadata.bid_no,
-                            [
-                              'questions',
-                              'custom_questions',
-                              'question_for_customers'
-                            ].includes(
-                              sourceDoc.metadata.section_name.toLowerCase()
-                            )
-                              ? parseQuestionReference(
-                                  sanitizeResponse(
+                            handleGotoQuestion(
+                              sourceDoc.metadata.bid_no,
+                              null,
+                              true
+                            );
+                          } else {
+                            handleGotoQuestion(
+                              sourceDoc.metadata.bid_no,
+                              [
+                                'questions',
+                                'custom_questions',
+                                'question_for_customers'
+                              ].includes(
+                                sourceDoc.metadata.section_name.toLowerCase()
+                              )
+                                ? parseQuestionReference(
+                                    sanitizeResponse(
+                                      sourceDoc.page_content || '',
+                                      CHATBOT
+                                        .SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                        sourceDoc.metadata.section_name.toLowerCase()
+                                      ]
+                                    )
+                                  )
+                                : sanitizeResponse(
                                     sourceDoc.page_content || '',
                                     CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
                                       sourceDoc.metadata.section_name.toLowerCase()
                                     ]
                                   )
-                                )
-                              : sanitizeResponse(
-                                  sourceDoc.page_content || '',
-                                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                                    sourceDoc.metadata.section_name.toLowerCase()
-                                  ]
-                                )
-                          );
+                            );
+                          }
                         }}
                         title={btnLabel}
                       >

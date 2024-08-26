@@ -163,8 +163,7 @@ const App = () => (
               <Route path="/" exact component={Login} />
               <Route exact path={LOGIN} component={Login} />
               <PrivateRoute
-                exact
-                path={UBUILD}
+                path={`${UBUILD_V2}*`}
                 component={UbuildShellComponent}
               />
               {/* <PrivateRoute
