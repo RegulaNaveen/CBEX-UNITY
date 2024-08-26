@@ -135,32 +135,40 @@ export const MultiResponseChat = ({
                           if (
                             sourceDoc.metadata.section_name.toLowerCase() ===
                             'notepad'
-                          )
+                          ) {
                             dispatch(setVTabActiveIndexAction(1));
-                          handleGotoQuestion(
-                            sourceDoc.metadata.bid_no,
-                            [
-                              'questions',
-                              'custom_questions',
-                              'question_for_customers'
-                            ].includes(
-                              sourceDoc.metadata.section_name.toLowerCase()
-                            )
-                              ? parseQuestionReference(
-                                  sanitizeResponse(
+                            handleGotoQuestion(
+                              sourceDoc.metadata.bid_no,
+                              null,
+                              true
+                            );
+                          } else {
+                            handleGotoQuestion(
+                              sourceDoc.metadata.bid_no,
+                              [
+                                'questions',
+                                'custom_questions',
+                                'question_for_customers'
+                              ].includes(
+                                sourceDoc.metadata.section_name.toLowerCase()
+                              )
+                                ? parseQuestionReference(
+                                    sanitizeResponse(
+                                      sourceDoc.page_content || '',
+                                      CHATBOT
+                                        .SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
+                                        sourceDoc.metadata.section_name.toLowerCase()
+                                      ]
+                                    )
+                                  )
+                                : sanitizeResponse(
                                     sourceDoc.page_content || '',
                                     CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
                                       sourceDoc.metadata.section_name.toLowerCase()
                                     ]
                                   )
-                                )
-                              : sanitizeResponse(
-                                  sourceDoc.page_content || '',
-                                  CHATBOT.SUPPORTED_GO_TO_UNITY_SECTIONS_MAP[
-                                    sourceDoc.metadata.section_name.toLowerCase()
-                                  ]
-                                )
-                          );
+                            );
+                          }
                         }}
                         title={btnLabel}
                       >
