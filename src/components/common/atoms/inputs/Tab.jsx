@@ -224,13 +224,6 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
     new URLSearchParams(window.location.search).get('notepad_highlight')
   );
 
-  useEffect(() => {
-    if (notepadHighlight) {
-      setHighlightNotepad(true);
-      setTimeout(() => setHighlightNotepad(false), 60 * 1000);
-    }
-  }, [notepadHighlight]);
-
   const calculateTab = val => {
     const questionCount = val.some(v => v?.UnityTabSectionQuestions.length > 0);
     if (questionCount) {
@@ -409,7 +402,6 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const notepadHighlight = Boolean(searchParams.get('notepad_highlight'));
     if (
       tabs.length > 4 &&
       (selectedView !== 'documents' ||
@@ -443,13 +435,6 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
           searchParams.delete('viewType');
         }
       }
-    }
-    if (
-      notepadHighlight &&
-      ['documents', 'approval', 'timelines'].includes(selectedView)
-    ) {
-      dispatch(setActiveTabIndexAction(0));
-      searchParams.delete('viewType');
     }
     history.replace(`${window.location.pathname}?${searchParams.toString()}`);
   }, [tabs]);
@@ -739,6 +724,43 @@ const UnityTab = ({ id, selectedView, onChangeSelectedTab }) => {
       }
     }
   }, [tabLoaded, tabStatus]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (notepadHighlight) {
+      if (selectedView === 'timelines') {
+        dispatch(setActiveTabIndexAction(0));
+        searchParams.delete('viewType');
+        history.replace(
+          `${window.location.pathname}?${searchParams.toString()}`
+        );
+      }
+      setHighlightNotepad(true);
+      if (vtabCollpased) {
+        setVTabCollapsed(false);
+        if (panelRef !== null) {
+          setTimeout(() => {
+            const toggleButton = panelRef.children[0].children[1];
+            toggleButton.click();
+          }, 500);
+        }
+      }
+    }
+  }, [selectedView, vtabCollpased, notepadHighlight]);
+
+  useEffect(() => {
+    let timeoutId = null;
+    if (highlightNotepad) {
+      timeoutId = setTimeout(() => setHighlightNotepad(false), 60 * 1000);
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [highlightNotepad]);
 
   const winLocationSearch = window.location.search;
   const handleChangeTab = (event, val) => {

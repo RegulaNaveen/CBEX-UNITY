@@ -224,7 +224,7 @@ export const selectActiveTeamQuestions = createSelector(
     proposalQuestions
       .filter(
         question =>
-          question.section.sectionName === 'Proposal Team' &&
+          question.answerConfiguration.type === 'contact' &&
           question.visible === true &&
           (question.active === true || question.isCustomQuestion === true) &&
           !question.notApplicable &&

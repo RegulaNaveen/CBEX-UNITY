@@ -10,7 +10,7 @@ import ThumbsDown from '../../svg/ThumbsDown';
 import FeedbackModal, { FeedbackSubmitModal } from './FeedbackModal';
 import { useSelector } from 'react-redux';
 import { selectChatBotFeedbackFlag } from '../../../redux/selectors/proposal';
-import { getContentAsText } from './utils';
+import { getContentAsText, getSantizedResponse } from './utils';
 import { CHATBOT } from '../../../constants/app';
 
 const ChatBubbleActions = ({
@@ -38,7 +38,9 @@ const ChatBubbleActions = ({
 
   const copyToClipBoard = () => {
     setCopied(true);
-    navigator.clipboard.writeText(getContentAsText(content));
+    navigator.clipboard.writeText(
+      getContentAsText(getSantizedResponse(content))
+    );
     setTimeout(() => setCopied(false), 1000);
   };
 
@@ -53,7 +55,7 @@ const ChatBubbleActions = ({
       try {
         const responseHtmlBlob = new Blob(
           [
-            getContentAsText(content)
+            getContentAsText(getSantizedResponse(content))
               .split('\n')
               .map(line => {
                 const styledLine = line.replaceAll(

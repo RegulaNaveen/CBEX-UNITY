@@ -1,6 +1,7 @@
 import jwt_decode from 'jwt-decode';
 import { getAccessTokenFromLocalStorage } from '../../../SessionHandler';
 import moment from 'moment';
+import { CHATBOT } from '../../../constants/app';
 
 function parseQuestionReference(response) {
   // find if response has : and then extract the text before it
@@ -256,6 +257,60 @@ async function sendWSMsgWithRetry(
   }
 }
 
+function getSantizedResponse(response) {
+  if (Array.isArray(response)) {
+    const results = response.map(res => {
+      if (res && typeof res.result === 'string') {
+        const lines = res.result.split('\n');
+        while (lines.length > 0 && lines[0] === '') {
+          lines.shift();
+        }
+        while (lines.length > 0 && lines.slice(-1)[0] === '') {
+          lines.pop();
+        }
+        if (lines.length === 0) {
+          res.result = CHATBOT.NO_ANSWER_MSG;
+        } else {
+          res.result = lines.join('\n');
+        }
+      }
+      return res;
+    });
+    return results;
+  } else if (typeof response === 'object') {
+    if (response && typeof response.result === 'string') {
+      const lines = response.result.split('\n');
+      while (lines.length > 0 && lines[0] === '') {
+        lines.shift();
+      }
+      while (lines.length > 0 && lines.slice(-1)[0] === '') {
+        lines.pop();
+      }
+      if (lines.length === 0) {
+        response.result = CHATBOT.NO_ANSWER_MSG;
+      } else {
+        response.result = lines.join('\n');
+      }
+    }
+    return response;
+  } else if (typeof response === 'string') {
+    const lines = response.split('\n');
+    while (lines.length > 0 && lines[0] === '') {
+      lines.shift();
+    }
+    while (lines.length > 0 && lines.slice(-1)[0] === '') {
+      lines.pop();
+    }
+    if (lines.length === 0) {
+      return CHATBOT.NO_ANSWER_MSG;
+    } else {
+      return lines.join('\n');
+    }
+  } else {
+    return CHATBOT.NO_ANSWER_MSG;
+  }
+}
+
 export {
   parseQuestionReference,
   sanitizeResponse,
@@ -263,5 +318,6 @@ export {
   extractContext,
   getContentAsText,
   getSourceDocTooltipInfo,
-  sendWSMsgWithRetry
+  sendWSMsgWithRetry,
+  getSantizedResponse
 };
