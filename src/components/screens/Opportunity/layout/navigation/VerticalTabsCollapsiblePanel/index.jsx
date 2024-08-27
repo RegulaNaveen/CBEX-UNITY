@@ -77,6 +77,9 @@ function VerticalTabsCollapsiblePanel({
   const activeTabIndex = useSelector(selectActiveVTabIndex);
   const currentSearchResult = useSelector(selectCurrentSearchResult);
 
+  const queryParams = new URLSearchParams(window.location.search);
+  const notepadHighlight = Boolean(queryParams.get('notepad_highlight'));
+
   const dispatch = useDispatch();
 
   const tabArr = [
@@ -114,6 +117,13 @@ function VerticalTabsCollapsiblePanel({
       dispatch(setVTabActiveIndexAction(-1));
     }
   }, []);
+
+  // Effect to force to Notepad vertical tab if highlight required
+  useEffect(() => {
+    if (notepadHighlight && showNotepadTab) {
+      dispatch(setVTabActiveIndexAction(1));
+    }
+  }, [notepadHighlight]);
 
   function handleTabChange(event, newActiveTab) {
     dispatch(setVTabActiveIndexAction(newActiveTab));
