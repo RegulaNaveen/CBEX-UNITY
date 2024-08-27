@@ -58,42 +58,44 @@ export const MultiResponseChat = ({
             <>
               {list.length > 1 && `${i + 1}. `}
               <ResponseRenderer response={lines} isError={isError} />
-              {Array.isArray(response.source_documents) && !isError && (
-                <div className="src-doc-list">
-                  {response.source_documents.map((sourceDoc, i) => {
-                    const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
-                    const sourceContentLines = (sourceInfo.content || '')
-                      .replaceAll(/\\n/g, '\n')
-                      .split('\n');
-                    while (
-                      sourceContentLines.length &&
-                      sourceContentLines[0] === ''
-                    ) {
-                      sourceContentLines.shift();
-                    }
-                    while (
-                      sourceContentLines.length &&
-                      sourceContentLines.slice(-1)[0] === ''
-                    ) {
-                      sourceContentLines.pop();
-                    }
+              {Array.isArray(response.source_documents) &&
+                !isError &&
+                response.source_documents.length > 0 && (
+                  <div className="src-doc-list">
+                    {response.source_documents.map((sourceDoc, i) => {
+                      const sourceInfo = getSourceDocTooltipInfo(sourceDoc);
+                      const sourceContentLines = (sourceInfo.content || '')
+                        .replaceAll(/\\n/g, '\n')
+                        .split('\n');
+                      while (
+                        sourceContentLines.length &&
+                        sourceContentLines[0] === ''
+                      ) {
+                        sourceContentLines.shift();
+                      }
+                      while (
+                        sourceContentLines.length &&
+                        sourceContentLines.slice(-1)[0] === ''
+                      ) {
+                        sourceContentLines.pop();
+                      }
 
-                    return (
-                      <SourceDocument
-                        key={`source-doc-${bubbleId}-${i}`}
-                        title={sourceInfo.title}
-                        subTitle={sourceInfo.subtitle}
-                        content={sourceContentLines}
-                        buttonLabel={(() => {
-                          sourceIndex++;
-                          return `[${sourceIndex}]`;
-                        })()}
-                        className="source-doc-btn"
-                      />
-                    );
-                  })}
-                </div>
-              )}
+                      return (
+                        <SourceDocument
+                          key={`source-doc-${bubbleId}-${i}`}
+                          title={sourceInfo.title}
+                          subTitle={sourceInfo.subtitle}
+                          content={sourceContentLines}
+                          buttonLabel={(() => {
+                            sourceIndex++;
+                            return `[${sourceIndex}]`;
+                          })()}
+                          className="source-doc-btn"
+                        />
+                      );
+                    })}
+                  </div>
+                )}
             </>
             {Array.isArray(response.source_documents) &&
               !isError &&

@@ -61,6 +61,7 @@ const WysiwygNotepad = ({
   const currentSearchResult = useSelector(selectCurrentSearchResult);
   const usercolor = randomColor({ luminosity: 'light' });
   const queryParams = new URLSearchParams(window.location.search);
+  const notepadHighlight = Boolean(queryParams.get('notepad_highlight'));
   const history = useHistory();
 
   useEffect(() => {
@@ -512,8 +513,6 @@ const WysiwygNotepad = ({
     ) {
       !editor.isDestroyed && editor.commands.reset();
     }
-    const queryParams = new URLSearchParams(window.location.search);
-    const notepadHighlight = Boolean(queryParams.get('notepad_highlight'));
     if (editor && notepadHighlight) {
       document.getElementById('panel-notepad').scrollIntoView({
         behaviour: 'smooth',
@@ -523,7 +522,7 @@ const WysiwygNotepad = ({
       queryParams.delete('notepad_highlight');
       history.replace(`${window.location.pathname}?${queryParams.toString()}`);
     }
-  }, [query, currentSearchResult, editor, dataSynced]);
+  }, [query, currentSearchResult, editor, dataSynced, notepadHighlight]);
 
   if (!firstSyncDone) {
     return (

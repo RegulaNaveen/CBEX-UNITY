@@ -59,24 +59,28 @@ export function fetchHistory(opportunityNumber) {
           // Replace the existing bubbles with the chat history
           const history = [];
           response.data.reverse().forEach(bubble => {
-            history.push({
-              info: {
-                id: bubble.id,
-                feedback: bubble.feedback,
-                is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                ...bubble.response,
-                result: {
-                  ...((bubble.response &&
+            const info = {
+              id: bubble.id,
+              feedback: bubble.feedback,
+              is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+              ...bubble.response,
+              result: {
+                ...((bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result) ||
+                  {}),
+                result:
+                  (bubble.response &&
                     bubble.response.result &&
-                    bubble.response.result) ||
-                    {}),
-                  result:
-                    (bubble.response &&
-                      bubble.response.result &&
-                      bubble.response.result.result) ||
-                    CHATBOT.DEFAULT_ERROR_REPLY
-                }
-              },
+                    bubble.response.result.result) ||
+                  CHATBOT.NO_ANSWER_MSG
+              }
+            };
+            if (info.result.result === CHATBOT.NO_ANSWER_MSG) {
+              info.result.source_documents = [];
+            }
+            history.push({
+              info,
               variant: 'user',
               copyContent: bubble.user_query,
               children: bubble.user_query,
@@ -87,36 +91,41 @@ export function fetchHistory(opportunityNumber) {
               replySuggestionMessage: '',
               isWelcomeBubble: false
             });
-            history.push({
-              info: {
-                id: bubble.id,
-                feedback: bubble.feedback,
-                is_ecoa_or_cd: bubble.is_ecoa_or_cd,
-                ...bubble.response,
-                user_query: bubble.user_query,
-                result: {
-                  ...((bubble.response &&
+            const systemInfo = {
+              id: bubble.id,
+              feedback: bubble.feedback,
+              is_ecoa_or_cd: bubble.is_ecoa_or_cd,
+              ...bubble.response,
+              user_query: bubble.user_query,
+              result: {
+                ...((bubble.response &&
+                  bubble.response.result &&
+                  bubble.response.result) ||
+                  {}),
+                result:
+                  (bubble.response &&
                     bubble.response.result &&
-                    bubble.response.result) ||
-                    {}),
-                  result:
-                    (bubble.response &&
-                      bubble.response.result &&
-                      bubble.response.result.result) ||
-                    CHATBOT.DEFAULT_ERROR_REPLY
-                }
-              },
+                    bubble.response.result.result) ||
+                  CHATBOT.NO_ANSWER_MSG
+              }
+            };
+
+            if (systemInfo.result.result === CHATBOT.NO_ANSWER_MSG) {
+              systemInfo.result.source_documents = [];
+            }
+            history.push({
+              info: systemInfo,
               variant: 'system',
               copyContent:
                 (bubble.response &&
                   bubble.response.result &&
                   bubble.response.result.result) ||
-                CHATBOT.DEFAULT_ERROR_REPLY,
+                CHATBOT.NO_ANSWER_MSG,
               children:
                 (bubble.response &&
                   bubble.response.result &&
                   bubble.response.result.result) ||
-                CHATBOT.DEFAULT_ERROR_REPLY,
+                CHATBOT.NO_ANSWER_MSG,
               sentOrReceivedAt: bubble.response_received_at
                 ? new Date(bubble.response_received_at).getTime()
                 : new Date(bubble.created_at).getTime(),
@@ -236,14 +245,14 @@ export function addResponseToChat(responseData) {
                   responseData.response &&
                   responseData.response.result &&
                   responseData.response.result.result) ||
-                CHATBOT.DEFAULT_ERROR_REPLY,
+                CHATBOT.NO_ANSWER_MSG,
 
               children:
                 (responseData &&
                   responseData.response &&
                   responseData.response.result &&
                   responseData.response.result.result) ||
-                CHATBOT.DEFAULT_ERROR_REPLY,
+                CHATBOT.NO_ANSWER_MSG,
               sentOrReceivedAt: responseData.response_received_at
                 ? new Date(responseData.response_received_at).getTime()
                 : new Date(responseData.created_at).getTime(),
@@ -268,14 +277,14 @@ export function addResponseToChat(responseData) {
                 responseData.response &&
                 responseData.response.result &&
                 responseData.response.result.result) ||
-              CHATBOT.DEFAULT_ERROR_REPLY,
+              CHATBOT.NO_ANSWER_MSG,
 
             children:
               (responseData &&
                 responseData.response &&
                 responseData.response.result &&
                 responseData.response.result.result) ||
-              CHATBOT.DEFAULT_ERROR_REPLY,
+              CHATBOT.NO_ANSWER_MSG,
             sentOrReceivedAt: responseData.response_received_at
               ? new Date(responseData.response_received_at)
               : new Date(responseData.created_at).getTime(),
@@ -353,8 +362,8 @@ function onWatchTimeout(messageId, userQuery, attempt = null) {
         };
         bubbles.splice(userBubbleIndex + 1, 0, {
           variant: 'system',
-          copyContent: CHATBOT.DEFAULT_ERROR_REPLY,
-          children: CHATBOT.DEFAULT_ERROR_REPLY,
+          copyContent: CHATBOT.TIMEOUT_ERROR_MSG,
+          children: CHATBOT.TIMEOUT_ERROR_MSG,
           sentOrReceivedAt: Date.now(),
           info: {
             id: messageId,
