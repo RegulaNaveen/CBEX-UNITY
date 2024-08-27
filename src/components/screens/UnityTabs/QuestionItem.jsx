@@ -4,7 +4,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-unused-expressions */
 import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
-import { isEmpty } from 'lodash';
+import { isEmpty, xor } from 'lodash';
 import Grid from 'apollo-react/components/Grid';
 import PropTypes from 'prop-types';
 import InfoIcon from 'apollo-react-icons/Info';
@@ -33,8 +33,10 @@ import {
   getPanelStatus
 } from '../../../redux/selectors/proposal';
 import {
+  deleteProposalUserFromDB,
   setEditQuestionData,
-  setProposalAnswerData
+  setProposalAnswerData,
+  setProposalAnswerLoading
 } from '../../../redux/actions/proposal-actions';
 import { getIntegrations, getQuestion } from '../../../redux/selectors';
 import { getLastAnswer, shouldShowQuestion } from './utils';
@@ -60,19 +62,28 @@ import { Edit } from '../../svg';
 import { TableAnswer } from '../../common/atoms/TableAnswer';
 import { cloneDeep, isEqual, merge } from 'lodash';
 import { diffArrays } from 'diff';
+import Autocomplete from '../../common/atoms/inputs/AutoComplete';
 
 const DateQuestionWithIdleStateDetection = withIdleStateDetection(DateQuestion);
-const SelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(SelectQuestion);
-const MultiSelectQuestionWithIdleStateDetection =
-  withIdleStateDetection(MultiSelectQuestion);
-const YesNoQuestionWithIdleStateDetection =
-  withIdleStateDetection(YesNoQuestion);
+const SelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  SelectQuestion
+);
+const MultiSelectQuestionWithIdleStateDetection = withIdleStateDetection(
+  MultiSelectQuestion
+);
+const YesNoQuestionWithIdleStateDetection = withIdleStateDetection(
+  YesNoQuestion
+);
 
-const CheckBoxQuestionWithIdleStateDetection =
-  withIdleStateDetection(CheckBoxQuestion);
+const CheckBoxQuestionWithIdleStateDetection = withIdleStateDetection(
+  CheckBoxQuestion
+);
 
 const TableAnswerWithIdleStateDetection = withIdleStateDetection(TableAnswer);
+
+const ContactAnswerWithIdleStateDetection = withIdleStateDetection(
+  Autocomplete
+);
 
 const QuestionItem = ({
   questionId = '',
@@ -312,6 +323,54 @@ const QuestionItem = ({
     }
   }
 
+  const handlePropsalChange = (
+    textValue,
+    multiSelectRef = '',
+    lastValue,
+    reason
+  ) => {
+    try {
+      const { proposalId, questionId, section } = question;
+      if (multiSelectRef && multiSelectRef?.current) {
+        multiSelectRef?.current?.blur();
+      }
+      dispatch(
+        setProposalAnswerData(
+          socketContext,
+          proposalId,
+          questionId,
+          textValue,
+          getUserData()
+        )
+      ).then(() => {
+        const [deletedVal] = xor(
+          textValue?.trim() ? textValue?.trim().split(',') : [],
+          lastValue?.trim() ? lastValue?.trim().split(',') : []
+        );
+        const [deletedEmail] = String(deletedVal).match(
+          /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+        );
+        if (reason === 'remove-option' && deletedEmail) {
+          setProposalAnswerLoading(questionId, false);
+          const { sectionName, sectionOrder } = section.toJS();
+          dispatch(
+            deleteProposalUserFromDB(
+              proposalId,
+              deletedEmail,
+              sectionOrder,
+              sectionName
+            )
+          ).then(() => {
+            dispatch(setProposalAnswerLoading(questionId, false));
+          });
+        }
+      });
+      trackEventSubmitAnswer(textValue);
+    } catch (error) {
+      console.log('error :>> ', error);
+    }
+  };
+
   const renderQuestion = () => {
     const lastAnswer = getLastAnswer(question);
     const lastAnswerMap = IMap(lastAnswer);
@@ -548,6 +607,24 @@ const QuestionItem = ({
           />
         );
       }
+
+      case ANSWER_TYPES.CONTACT: {
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={question.hasDifferentSFanswer}
+            sfObject={question.sfObject}
+          >
+            <ContactAnswerWithIdleStateDetection
+              {...inputProps}
+              onChange={handlePropsalChange}
+              onFocus={() => {
+                questionLockWrapper(questionId);
+              }}
+              onBlur={() => questionUnlockWrapper(questionId)}
+            />
+          </SFAnswerValidationWrapper>
+        );
+      }
       default:
         return <FallbackComponent />;
     }
@@ -647,7 +724,12 @@ const QuestionItem = ({
       if (List.isList(answer.get('answer'))) {
         return Boolean(answer.get('answer').size);
       }
-      return Boolean(answer.get('answer').toString().trim());
+      return Boolean(
+        answer
+          .get('answer')
+          .toString()
+          .trim()
+      );
     }
     return false;
   };
