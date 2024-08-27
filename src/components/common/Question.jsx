@@ -990,98 +990,6 @@ export class TaskRow extends React.PureComponent<Props, State> {
       }
     }
 
-    // if (sectionName === 'Proposal Team') {
-    //   return (
-    //     <SFAnswerValidationWrapper
-    //       hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
-    //       sfObject={sfObject}
-    //     >
-    //       <span
-    //         style={
-    //           `${this.props.showNaCheckbox}`
-    //             ? {
-    //                 display: 'flex',
-    //                 alignItems: 'stretch'
-    //                 // border: '1px solid blue',
-    //               }
-    //             : ''
-    //         }
-    //       >
-    //         <span
-    //           className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
-    //         >
-    //           {this.renderNACheckbox(checkDisableFlag, 'Autocomplete')}
-    //         </span>
-    //         <span
-    //           style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
-    //         >
-    //           <Autocomplete
-    //             sectionName={sectionName}
-    //             onFocus={() => {
-    //               // call question lock
-    //               this.context.questionLockWrapper(this.props.questionId);
-    //               this.setSelectRow(true);
-    //             }}
-    //             onBlur={() => {
-    //               this.context?.questionUnlockWrapper(this.props.questionId);
-    //               this.setSelectRow(false);
-    //             }}
-    //             onChange={this.handlePropsalChange}
-    //             text={answerValue}
-    //             disabled={checkDisableFlag() || isNotApplicable}
-    //           />
-    //         </span>
-    //       </span>
-    //     </SFAnswerValidationWrapper>
-    //   );
-    // }
-
-    if (type === ANSWER_TYPES.CONTACT) {
-      return (
-        <SFAnswerValidationWrapper
-          hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
-          sfObject={sfObject}
-        >
-          <span
-            style={
-              `${this.props.showNaCheckbox}`
-                ? {
-                    display: 'flex',
-                    alignItems: 'stretch'
-                    // border: '1px solid blue',
-                  }
-                : ''
-            }
-          >
-            <span
-              className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
-            >
-              {this.renderNACheckbox(checkDisableFlag, 'Autocomplete')}
-            </span>
-            <span
-              style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
-            >
-              <Autocomplete
-                sectionName={sectionName}
-                onFocus={() => {
-                  // call question lock
-                  this.context.questionLockWrapper(this.props.questionId);
-                  this.setSelectRow(true);
-                }}
-                onBlur={() => {
-                  this.context?.questionUnlockWrapper(this.props.questionId);
-                  this.setSelectRow(false);
-                }}
-                onChange={this.handlePropsalChange}
-                text={answerValue}
-                disabled={checkDisableFlag() || isNotApplicable}
-              />
-            </span>
-          </span>
-        </SFAnswerValidationWrapper>
-      );
-    }
-
     if (
       (type === ANSWER_TYPES.PICKLIST ||
         type === ANSWER_TYPES.PICKLIST_LOOKUP) &&
@@ -1659,6 +1567,50 @@ export class TaskRow extends React.PureComponent<Props, State> {
             />
           </span>
           // </SFAnswerValidationWrapper>
+        );
+      case ANSWER_TYPES.CONTACT:
+        return (
+          <SFAnswerValidationWrapper
+            hasDifferentSFanswer={hasDifferentSFanswer && isEditableBid}
+            sfObject={sfObject}
+          >
+            <span
+              style={
+                `${this.props.showNaCheckbox}`
+                  ? {
+                      display: 'flex',
+                      alignItems: 'stretch'
+                      // border: '1px solid blue',
+                    }
+                  : ''
+              }
+            >
+              <span
+                className={this.props.showNaCheckbox ? 'markNaAutoActive' : ''}
+              >
+                {this.renderNACheckbox(checkDisableFlag, 'Autocomplete')}
+              </span>
+              <span
+                style={`${this.props.showNaCheckbox}` ? { flexGrow: 10 } : ''}
+              >
+                <Autocomplete
+                  sectionName={sectionName}
+                  onFocus={() => {
+                    // call question lock
+                    this.context.questionLockWrapper(this.props.questionId);
+                    this.setSelectRow(true);
+                  }}
+                  onBlur={() => {
+                    this.context?.questionUnlockWrapper(this.props.questionId);
+                    this.setSelectRow(false);
+                  }}
+                  onChange={this.handlePropsalChange}
+                  text={answerValue}
+                  disabled={checkDisableFlag() || isNotApplicable}
+                />
+              </span>
+            </span>
+          </SFAnswerValidationWrapper>
         );
       default:
         return <div id="no-configuration">Click to answer</div>;
