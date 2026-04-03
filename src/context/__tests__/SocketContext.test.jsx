@@ -1,25 +1,4 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import WS from 'jest-websocket-mock';
-import { render, waitFor, cleanup } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
-import SocketContext from '../SocketContext';
-import { store } from '../../store';
-import * as constants from '../../constants/api';
-import PriceModeler from '../../components/common/PriceModeler';
-import { setSession } from '../../SessionHandler';
-import { REDUX_TYPES } from '../../constants';
-import proposalData from '../../components/views/__tests__/Search/data.json';
-import {
-  setProposalAnswerDatafromSocket,
-  editProposalQuestionfromSocket,
-  deleteProposalQuestionFromSocket,
-  updateAnswerFromWebSocket,
-  setProposalQuestionFromSocket,
-  updateProposalDetailFromWebSocket,
-  updatePriceModelerEstimateAction
-} from '../../redux/actions/proposal-actions';
 import {
   onApprovalSectionDeletingAction,
   onApprovalSectionDuplicatedAction,
