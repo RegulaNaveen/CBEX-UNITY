@@ -9,7 +9,7 @@ export const getApprovalsApi = proposalId => {
   return axiosInstance.get(`${APPROVALS_URL}?proposal_id=${proposalId}`, {
     headers: {
       'x-api-key': PROPOSAL.API_KEY,
-      'x-access-token': getAccessToken()
+      //'x-access-token': getAccessToken()
     }
   });
 };
